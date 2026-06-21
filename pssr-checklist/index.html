@@ -104,6 +104,9 @@ body {
 .btn-success:hover { background: var(--brand-red-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(122,24,37,.25); }
 .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text-primary); }
 .btn-outline:hover { border-color: var(--brand-red); color: var(--brand-red); background: var(--brand-red-light); }
+#btnUndoMark { border-color: var(--brand-red); color: var(--brand-red); }
+#btnUndoMark:hover { background: var(--brand-red); color: #fff; }
+#btnResetAll:hover { background: var(--text-primary); color: #fff; border-color: var(--text-primary); }
 .btn-danger { background: var(--text-secondary); color: #fff; }
 .btn-danger:hover { background: var(--text-primary); }
 .btn-warn { background: var(--brand-red); color: #fff; }
@@ -534,7 +537,9 @@ body {
 
   <button class="btn btn-outline" onclick="expandAll()"><i class="fa-solid fa-angles-down"></i> 展开全部</button>
   <button class="btn btn-outline" onclick="collapseAll()"><i class="fa-solid fa-angles-up"></i> 收起全部</button>
-  <button class="btn btn-success" onclick="markAllYes()"><i class="fa-solid fa-check-double"></i> 全部标记完成</button>
+  <button class="btn btn-success" id="btnMarkAll" onclick="markAllYes()"><i class="fa-solid fa-check-double"></i> 全部标记完成</button>
+  <button class="btn btn-outline" id="btnUndoMark" style="display:none" onclick="undoMarkAll()"><i class="fa-solid fa-rotate-left"></i> 撤销全部标记</button>
+  <button class="btn btn-outline" id="btnResetAll" onclick="resetAllMarks()"><i class="fa-solid fa-arrows-rotate"></i> 全部重置</button>
   <button class="btn btn-primary" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印</button>
 </div>
 
@@ -1066,9 +1071,26 @@ function collapseAll() {
   });
 }
 
-// ===== 全部标记 =====
+// ===== 全部标记 / 撤销 / 重置 =====
+let markAllBackup = null; // 标记前的状态快照
+
+function deepCloneState() {
+  const clone = {};
+  for (const secId in state) {
+    clone[secId] = {};
+    for (const idx in state[secId]) {
+      clone[secId][idx] = { status: state[secId][idx].status, note: state[secId][idx].note };
+    }
+  }
+  return clone;
+}
+
 function markAllYes() {
-  if (!confirm('确认将所有未填写的检查项标记为"是（已完成）"？')) return;
+  if (!confirm('确认将所有未填写的检查项标记为"是（已完成）"？\n\n标记后可通过"撤销全部标记"按钮恢复。')) return;
+
+  // 保存快照
+  markAllBackup = deepCloneState();
+
   sections.forEach(sec => {
     const total = sec.items.length + (customItems[sec.id] || []).length;
     for (let i = 0; i < total; i++) {
@@ -1079,6 +1101,43 @@ function markAllYes() {
   });
   saveToStorage();
   renderAll();
+
+  // 显示撤销按钮，隐藏标记按钮
+  document.getElementById('btnMarkAll').style.display = 'none';
+  document.getElementById('btnUndoMark').style.display = '';
+}
+
+function undoMarkAll() {
+  if (!markAllBackup) return;
+  if (!confirm('确认撤销全部标记，恢复到标记前的状态？')) return;
+
+  state = markAllBackup;
+  markAllBackup = null;
+  saveToStorage();
+  renderAll();
+
+  // 恢复按钮状态
+  document.getElementById('btnMarkAll').style.display = '';
+  document.getElementById('btnUndoMark').style.display = 'none';
+}
+
+function resetAllMarks() {
+  if (!confirm('确认清除所有检查项的状态和备注？\n\n此操作不可撤销，将清空全部标记和备注内容。')) return;
+
+  markAllBackup = null;
+  sections.forEach(sec => {
+    const total = sec.items.length + (customItems[sec.id] || []).length;
+    for (let i = 0; i < total; i++) {
+      if (!state[sec.id]) state[sec.id] = {};
+      state[sec.id][i] = { status: '', note: '' };
+    }
+  });
+  saveToStorage();
+  renderAll();
+
+  // 恢复按钮状态
+  document.getElementById('btnMarkAll').style.display = '';
+  document.getElementById('btnUndoMark').style.display = 'none';
 }
 
 // ===== 筛选 =====
