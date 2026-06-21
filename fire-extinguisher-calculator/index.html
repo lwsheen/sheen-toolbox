@@ -84,6 +84,7 @@
 
         /* 打印品牌页脚 */
         .print-footer { display: none; }
+        .print-time { display: none; }
 
         .badge-version {
             background: rgba(255, 255, 255, 0.12);
@@ -380,6 +381,7 @@
             .result-value .number { font-size: 28pt; color: #000 !important; }
             .result-detail { background: none !important; border: 1px solid #ccc; border-radius: 0; font-size: 10.5pt; color: #000; }
             .detail-row { border-bottom: 1px dashed #ccc !important; }
+            .print-time { display: block !important; font-size: 9pt; color: #666; text-align: right; margin-bottom: 12px; }
             .print-footer { display: block !important; margin-top: 30px; border-top: 1px solid #000; padding-top: 8px; text-align: center; font-size: 9pt; color: #333; }
             @page { size: A4; margin: 18mm 15mm 20mm 15mm;
                 @bottom-center { content: "SHEEN Toolbox · 灭火器配置计算器"; font-size: 8pt; color: #666; }
@@ -526,6 +528,7 @@
                     </div>
 
                     <div class="result-card" id="resultPanel">
+                        <div class="print-time" id="printTime"></div>
                         <div class="result-title"><i class="fa-solid fa-file-invoice"></i> 计算结果</div>
                         <div class="result-value" id="resultValueBox">
                             <div class="number" id="resultCount">-- <span class="unit">具</span></div>
@@ -959,6 +962,9 @@
             });
 
             // ===== 8. 初始化 =====
+            const now = new Date();
+            const ptEl = $('printTime');
+            if (ptEl) ptEl.textContent = `打印时间：${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
             applyScene('office');
             areaInput.value = 2000;
             setPointInput.value = 1;
