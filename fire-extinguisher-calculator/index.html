@@ -79,6 +79,7 @@
             align-items: center;
             gap: 10px;
             color: #fff;
+            text-decoration: none;
         }
 
         .brand-icon { font-size: 26px; line-height: 1; }
@@ -87,6 +88,25 @@
             font-size: 20px;
             font-weight: 700;
             letter-spacing: 0.5px;
+        }
+
+        /* SHEEN Toolbox 工具切换导航 */
+        .sheen-nav-tools { display: flex; gap: 4px; flex-wrap: wrap; }
+        .sheen-nav-tool {
+            display: flex; align-items: center; gap: 6px;
+            padding: 8px 16px; color: rgba(255,255,255,0.75);
+            text-decoration: none; font-size: 13px; font-weight: 500;
+            border-radius: 8px; transition: all var(--transition); white-space: nowrap;
+        }
+        .sheen-nav-tool:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .sheen-nav-tool.active { background: rgba(255,255,255,0.15); color: #fff; font-weight: 600; }
+        .sheen-nav-tool i { font-size: 14px; }
+
+        /* 打印品牌页脚 */
+        .print-footer { display: none; }
+        .print-header .ph-brand {
+            font-size: 12pt; font-weight: 700; color: var(--green-deep);
+            display: flex; align-items: center; gap: 6px; margin-bottom: 4px;
         }
 
         .badge-version {
@@ -610,6 +630,27 @@
                 display: flex;
                 justify-content: space-between;
             }
+
+            /* 打印页脚 */
+            .print-footer {
+                display: block !important;
+                margin-top: 30px;
+                border-top: 1px solid #ccc;
+                padding-top: 8px;
+                text-align: center;
+                font-size: 9pt;
+                color: #777;
+            }
+
+            @page {
+                size: A4;
+                margin: 18mm 15mm 20mm 15mm;
+                @bottom-center {
+                    content: "SHEEN Toolbox · 灭火器配置计算器";
+                    font-size: 8pt;
+                    color: #999;
+                }
+            }
         }
     </style>
 </head>
@@ -619,10 +660,15 @@
 
         <!-- ===== 顶部导航栏 ===== -->
         <header class="navbar">
-            <div class="brand">
-                <span class="brand-icon">🧯</span>
-                <span class="brand-name">灭火器配置计算器</span>
-            </div>
+            <a href="/sheen-toolbox/" class="brand">
+                <i class="fa-solid fa-shield-halved" style="font-size:24px;color:var(--amber);"></i>
+                <span class="brand-name">SHEEN Toolbox</span>
+            </a>
+            <nav class="sheen-nav-tools">
+                <a href="/sheen-toolbox/pssr-checklist/" class="sheen-nav-tool"><i class="fa-solid fa-clipboard-check"></i> PSSR 检查表</a>
+                <a href="/sheen-toolbox/fire-extinguisher-calculator/" class="sheen-nav-tool active"><i class="fa-solid fa-fire-extinguisher"></i> 灭火器计算器</a>
+                <a href="/sheen-toolbox/safety-production-cost-calculator/" class="sheen-nav-tool"><i class="fa-solid fa-calculator"></i> 安产费用</a>
+            </nav>
             <div class="badge-version">GB 50140-2005</div>
         </header>
 
@@ -748,6 +794,7 @@
 
                     <!-- 打印专用页眉（仅打印时显示） -->
                     <div class="print-header">
+                        <div class="ph-brand"><i class="fa-solid fa-shield-halved"></i> SHEEN Toolbox</div>
                         <div class="ph-title">灭火器配置计算报告</div>
                         <div class="ph-info">
                             <span>依据：GB 50140-2005《建筑灭火器配置设计规范》</span>
@@ -775,8 +822,9 @@
         </div>
 
         <footer class="footer">
-            <i class="fa-solid fa-shield-halved"></i> &nbsp;Sheen Toolbox
+            <i class="fa-solid fa-shield-halved"></i> &nbsp;<span>SHEEN Toolbox</span> · 灭火器配置计算器
         </footer>
+        <div class="print-footer">SHEEN Toolbox · 灭火器配置计算器</div>
 
     </div>
 
