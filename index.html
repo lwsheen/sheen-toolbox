@@ -173,6 +173,53 @@
             margin-top: auto;
         }
 
+        /* ===== 占位卡片 ===== */
+        .tool-card.placeholder {
+            border-style: dashed;
+            opacity: 0.6;
+            cursor: default;
+            pointer-events: none;
+            user-select: none;
+        }
+        .tool-card.placeholder:hover {
+            transform: none;
+            box-shadow: none;
+            border-color: var(--border);
+        }
+        .tool-card.placeholder .tool-icon {
+            background: var(--border);
+            color: var(--text-secondary);
+        }
+        .tool-card.placeholder h3 {
+            color: var(--text-secondary);
+        }
+        .tool-card.placeholder .coming-badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 12px;
+            border-radius: 60px;
+            background: var(--bg-page);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            margin-top: auto;
+        }
+
+        /* ===== 分隔标题 ===== */
+        .section-divider {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 8px 24px 16px;
+            width: 100%;
+        }
+        .section-divider span {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
         /* ===== 页脚 ===== */
         .footer {
             text-align: center;
@@ -251,6 +298,20 @@
             </div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
+
+        <!-- 预留工具位 -->
+        <div class="tool-card placeholder">
+            <div class="tool-icon"><i class="fa-solid fa-plus"></i></div>
+            <h3>更多工具即将推出</h3>
+            <p class="desc">后续将陆续上线事故树分析、LEC风险评估、JSA工作安全分析等专业EHS工具，敬请期待。</p>
+            <span class="coming-badge"><i class="fa-solid fa-clock"></i> 即将推出</span>
+        </div>
+        <div class="tool-card placeholder">
+            <div class="tool-icon"><i class="fa-solid fa-diagram-project"></i></div>
+            <h3>更多工具即将推出</h3>
+            <p class="desc">后续将陆续上线隐患排查治理台账、职业健康档案管理、应急物资清单等实用工具模块。</p>
+            <span class="coming-badge"><i class="fa-solid fa-clock"></i> 即将推出</span>
+        </div>
     </div>
 
     <footer class="footer">
