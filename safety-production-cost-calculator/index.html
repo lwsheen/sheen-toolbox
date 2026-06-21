@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="依据财企〔2022〕136号自动计算企业安全生产费用提取金额，支持12类行业" />
+    <title>安全生产费用计算器 · 财企〔2022〕136号</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --green-deep: #0b3b2c;
+            --green-mid: #1a6b4a;
+            --green-light: #e2f0ea;
+            --green-bg: #f0fdf4;
+            --amber: #fbbf24;
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e9edf4;
+            --slate-300: #dce2ec;
+            --slate-400: #94a3b8;
+            --slate-500: #64748b;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --transition: 0.2s ease;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: #f1f5f9;
+            color: var(--slate-800);
+            padding: 24px 16px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            line-height: 1.5;
+        }
+
+        .app-wrapper {
+            width: 100%;
+            max-width: 1300px;
+            background: #fff;
+            border-radius: var(--radius-xl);
+            box-shadow: 0 30px 60px -20px rgba(0,0,0,0.25);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== 头部 ===== */
+        .header {
+            background: linear-gradient(145deg, var(--green-deep) 0%, var(--green-mid) 100%);
+            padding: 22px 32px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 5px solid var(--amber);
+            gap: 14px;
+        }
+        .brand { display: flex; align-items: center; gap: 14px; color: #fff; }
+        .brand i { font-size: 32px; color: var(--amber); }
+        .brand-text { font-size: 24px; font-weight: 700; letter-spacing: 0.3px; }
+        .brand-text small { font-weight: 400; font-size: 14px; opacity: 0.85; display: block; line-height: 1.4; }
+        .badge-version {
+            background: rgba(255,255,255,0.12);
+            padding: 6px 18px; border-radius: 60px; font-size: 13px; color: #fff;
+            border: 1px solid rgba(255,255,255,0.15); white-space: nowrap;
+        }
+
+        /* ===== 主体布局 ===== */
+        .main-body { display: flex; flex-direction: row; flex-wrap: wrap; }
+
+        /* ===== 行业导航侧栏 ===== */
+        .industry-nav {
+            width: 260px; background: var(--slate-50);
+            border-right: 1px solid var(--slate-200);
+            padding: 20px 0; flex-shrink: 0;
+            max-height: 780px; overflow-y: auto;
+        }
+        .industry-nav::-webkit-scrollbar { width: 5px; }
+        .industry-nav::-webkit-scrollbar-track { background: var(--slate-100); }
+        .industry-nav::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+        .nav-section-title {
+            padding: 0 18px 8px; font-size: 12px; font-weight: 600;
+            color: var(--slate-400); text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        .nav-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 18px; cursor: pointer; transition: all var(--transition);
+            border-left: 4px solid transparent; font-size: 14px; font-weight: 500;
+            color: var(--slate-700); background: transparent; width: 100%;
+            text-align: left; border-top: none; border-right: none; border-bottom: none;
+            font-family: inherit;
+        }
+        .nav-item i { width: 20px; color: var(--slate-500); font-size: 15px; transition: color var(--transition); }
+        .nav-item:hover { background: #eef2f6; color: var(--green-deep); }
+        .nav-item.active { background: var(--green-light); border-left-color: var(--green-mid); color: var(--green-deep); font-weight: 600; }
+        .nav-item.active i { color: var(--green-mid); }
+
+        /* ===== 内容区 ===== */
+        .content-area { flex: 1; padding: 28px 32px; min-width: 0; }
+        .panel { display: none; animation: fadeSlide 0.3s ease; }
+        .panel.active { display: block; }
+        @keyframes fadeSlide { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        .panel-header { margin-bottom: 24px; }
+        .panel-header h2 { font-size: 24px; font-weight: 700; color: var(--green-deep); display: flex; align-items: center; gap: 12px; }
+        .panel-header h2 i { color: var(--green-mid); }
+        .panel-header .sub {
+            color: var(--slate-500); font-size: 14px; margin-top: 8px;
+            border-left: 4px solid var(--amber); padding: 8px 16px;
+            background: var(--slate-50); border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+        .panel-header .sub strong { color: var(--green-deep); }
+
+        /* ===== 表单卡片 ===== */
+        .form-card {
+            background: var(--slate-50); border-radius: var(--radius-lg);
+            padding: 24px 28px; border: 1px solid var(--slate-200); margin-bottom: 24px;
+        }
+        .form-card .card-title { font-size: 16px; font-weight: 600; color: var(--slate-800); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 24px; }
+        .form-group { margin-bottom: 6px; }
+        .form-group label { display: block; font-size: 14px; font-weight: 500; color: var(--slate-700); margin-bottom: 4px; }
+        .form-group .hint { font-size: 12px; color: var(--slate-400); margin-top: 2px; }
+
+        .form-control {
+            width: 100%; padding: 10px 14px; border: 1.5px solid var(--slate-300);
+            border-radius: var(--radius-md); font-size: 15px; transition: border var(--transition), box-shadow var(--transition);
+            background: #fff; color: var(--slate-800); font-family: inherit;
+        }
+        .form-control:focus { outline: none; border-color: var(--green-mid); box-shadow: 0 0 0 4px rgba(26,107,74,0.10); }
+        select.form-control { appearance: auto; cursor: pointer; }
+
+        .btn-primary {
+            background: var(--green-mid); color: #fff; border: none;
+            padding: 12px 32px; border-radius: 60px; font-size: 16px; font-weight: 600;
+            cursor: pointer; transition: all 0.25s ease; display: inline-flex;
+            align-items: center; gap: 10px; margin-top: 8px;
+        }
+        .btn-primary:hover { background: #0f543b; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(26,107,74,0.25); }
+        .btn-primary:active { transform: translateY(0); }
+
+        .btn-print {
+            background: #fff; color: var(--green-mid); border: 1.5px solid var(--green-mid);
+            padding: 12px 28px; border-radius: 60px; font-size: 16px; font-weight: 600;
+            cursor: pointer; transition: all 0.25s ease; display: inline-flex;
+            align-items: center; gap: 10px; margin-top: 8px; margin-left: 12px;
+        }
+        .btn-print:hover { background: var(--green-light); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(26,107,74,0.15); }
+        .btn-print:active { transform: translateY(0); }
+
+        .btn-row { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+
+        /* ===== 结果展示 ===== */
+        .result-card { background: #fff; border-radius: var(--radius-lg); padding: 24px 28px; border: 2px solid var(--slate-200); }
+        .result-card .result-title { font-size: 16px; font-weight: 600; color: var(--slate-800); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+
+        .result-placeholder {
+            color: var(--slate-400); text-align: center; padding: 40px 12px;
+            font-size: 15px; border: 2px dashed var(--slate-300); border-radius: 16px; background: #fafbfc;
+        }
+        .result-placeholder .big-icon { font-size: 40px; display: block; margin-bottom: 12px; }
+
+        .result-value {
+            background: linear-gradient(135deg, var(--green-bg), #dcfce7);
+            border-radius: 16px; padding: 20px 24px; border-left: 6px solid var(--green-mid);
+            transition: background 0.4s ease;
+        }
+        .result-value.flash { background: linear-gradient(135deg, #fef9c3, #fde68a); border-left-color: var(--amber); }
+        .result-value .number { font-size: 36px; font-weight: 700; color: var(--green-deep); }
+        .result-value .number .unit { font-size: 18px; font-weight: 400; color: var(--slate-600); margin-left: 4px; }
+        .result-value .label { font-size: 14px; color: var(--slate-600); margin-top: 2px; }
+
+        .result-detail {
+            background: var(--slate-50); border-radius: 14px; padding: 16px 20px;
+            margin-top: 16px; font-size: 14px; color: var(--slate-700); line-height: 1.8;
+        }
+        .result-detail strong { color: var(--green-deep); }
+
+        .footnote { margin-top: 12px; font-size: 13px; color: var(--slate-400); border-top: 1px solid var(--slate-200); padding-top: 12px; }
+
+        /* ===== 打印页眉（仅打印显示） ===== */
+        .print-header { display: none; }
+
+        /* ===== 页脚 ===== */
+        .footer {
+            text-align: center; padding: 16px 32px; font-size: 13px; color: var(--slate-400);
+            border-top: 1px solid var(--slate-200); background: #fafbfc;
+        }
+        .footer span { color: var(--green-mid); font-weight: 500; }
+        .footer i { color: var(--amber); }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 720px) {
+            body { padding: 0; }
+            .app-wrapper { border-radius: 0; }
+            .form-row { grid-template-columns: 1fr; }
+            .industry-nav {
+                width: 100%; border-right: none; border-bottom: 1px solid var(--slate-200);
+                max-height: 200px; display: flex; flex-wrap: wrap; padding: 12px 16px; gap: 4px; overflow-x: auto;
+            }
+            .nav-section-title { display: none; }
+            .nav-item {
+                padding: 8px 14px; font-size: 13px; border-left: none;
+                border-bottom: 3px solid transparent; width: auto; flex: 0 1 auto; white-space: nowrap;
+            }
+            .nav-item.active { border-left-color: transparent; border-bottom-color: var(--green-mid); }
+            .main-body { flex-direction: column; }
+            .content-area { padding: 20px; }
+            .header { padding: 16px 20px; }
+            .brand-text { font-size: 20px; }
+            .result-value .number { font-size: 28px; }
+        }
+
+        /* ===== 打印样式 ===== */
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm 15mm; }
+            body { background: #fff !important; padding: 0 !important; font-size: 12pt; }
+            .app-wrapper { box-shadow: none !important; border-radius: 0 !important; max-width: 100% !important; }
+            .header, .industry-nav, .btn-primary, .btn-print, .form-card, .footer, .footnote, .no-print { display: none !important; }
+            .main-body { flex-direction: column; }
+            .content-area { padding: 0 !important; }
+            .panel-header h2 { font-size: 18pt; }
+            .panel-header .sub { background: none !important; border-left: 3px solid #000; font-size: 10pt; }
+            .result-card { border: 1.5px solid #333 !important; border-radius: 0 !important; padding: 16px 0 !important; page-break-inside: avoid; }
+            .result-value { background: var(--green-bg) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border-radius: 8px; }
+            .result-value .number { font-size: 28pt; }
+            .result-detail { background: none !important; border: 1px solid #ccc; border-radius: 0; font-size: 10.5pt; }
+            .print-header { display: block !important; margin-bottom: 20px; border-bottom: 2px solid var(--green-deep); padding-bottom: 10px; }
+            .print-header .ph-title { font-size: 16pt; font-weight: 700; color: var(--green-deep); }
+            .print-header .ph-info { font-size: 10pt; color: #555; margin-top: 4px; display: flex; justify-content: space-between; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-wrapper">
+        <header class="header">
+            <div class="brand">
+                <i class="fa-solid fa-shield-halved"></i>
+                <div class="brand-text">
+                    安全生产费用计算器
+                    <small>财企〔2022〕136号 · 企业安全生产费用提取和使用管理办法</small>
+                </div>
+            </div>
+            <div class="badge-version"><i class="fa-solid fa-book-open"></i> v2.0</div>
+        </header>
+
+        <div class="main-body">
+            <nav class="industry-nav" id="industryNav" aria-label="行业分类">
+                <div class="nav-section-title">🏭 行业分类</div>
+                <button class="nav-item active" data-panel="coal" type="button"><i class="fa-solid fa-mountain"></i> 煤炭生产</button>
+                <button class="nav-item" data-panel="noncoal" type="button"><i class="fa-solid fa-gem"></i> 非煤矿山</button>
+                <button class="nav-item" data-panel="oilgas" type="button"><i class="fa-solid fa-oil-can"></i> 石油天然气</button>
+                <button class="nav-item" data-panel="construction" type="button"><i class="fa-solid fa-helmet-safety"></i> 建设工程施工</button>
+                <button class="nav-item" data-panel="hazardous" type="button"><i class="fa-solid fa-flask"></i> 危险品生产储存</button>
+                <button class="nav-item" data-panel="transport" type="button"><i class="fa-solid fa-truck"></i> 交通运输</button>
+                <button class="nav-item" data-panel="metallurgy" type="button"><i class="fa-solid fa-industry"></i> 冶金</button>
+                <button class="nav-item" data-panel="machinery" type="button"><i class="fa-solid fa-gears"></i> 机械制造</button>
+                <button class="nav-item" data-panel="fireworks" type="button"><i class="fa-solid fa-fire"></i> 烟花爆竹</button>
+                <button class="nav-item" data-panel="explosives" type="button"><i class="fa-solid fa-bomb"></i> 民用爆炸物品</button>
+                <button class="nav-item" data-panel="weapon" type="button"><i class="fa-solid fa-rocket"></i> 武器装备研制</button>
+                <button class="nav-item" data-panel="power" type="button"><i class="fa-solid fa-bolt"></i> 电力生产供应</button>
+            </nav>
+
+            <div class="content-area" id="contentArea">
+
+                <!-- 打印专用页眉 -->
+                <div class="print-header">
+                    <div class="ph-title">企业安全生产费用计算报告</div>
+                    <div class="ph-info">
+                        <span>依据：财企〔2022〕136号《企业安全生产费用提取和使用管理办法》</span>
+                        <span id="printDate"></span>
+                    </div>
+                </div>
+
+                <!-- 1. 煤炭生产 -->
+                <section class="panel active" id="panel-coal">
+                    <div class="panel-header">
+                        <h2><i class="fa-solid fa-mountain"></i> 煤炭生产企业</h2>
+                        <div class="sub">依据当月开采的原煤产量，于月末提取。<strong>多种灾害并存矿井，从高提取。</strong></div>
+                    </div>
+                    <div class="form-card">
+                        <div class="card-title"><i class="fa-solid fa-sliders"></i> 输入参数</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="coal_type">矿井类型</label>
+                                <select id="coal_type" class="form-control">
+                                    <option value="突出冲击">煤(岩)与瓦斯突出 / 冲击地压矿井</option>
+                                    <option value="高瓦斯">高瓦斯 / 水文地质复杂 / 容易自燃</option>
+                                    <option value="其他井工">其他井工矿</option>
+                                    <option value="露天">露天矿</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="coal_output">当月原煤产量 (吨)</label>
+                                <input type="number" id="coal_output" class="form-control" value="50000" min="0" step="1" />
+                                <div class="hint">按当月实际开采量填写</div>
+                            </div>
+                        </div>
+                        <div class="btn-row">
+                            <button class="btn-primary" onclick="calcCoal()" type="button"><i class="fa-solid fa-calculator"></i> 计算提取金额</button>
+                            <button class="btn-print" onclick="window.print()" type="button"><i class="fa-solid fa-print"></i> 打印</button>
+                        </div>
+                    </div>
+                    <div class="result-card" id="result-coal">
+                        <div class="result-title"><i class="fa-solid fa-file-invoice"></i> 计算结果</div>
+                        <div class="result-placeholder" id="placeholder-coal"><span class="big-icon">⛏️</span> 输入参数后点击计算</div>
+                        <div id="coal-result-content" style="display:none;"></div>
+                    </div>
+                </section>
+
+                <!-- 2. 非煤矿山 -->
+                <section class="panel" id="panel-noncoal">
+                    <div class="panel-header">
+                        <h2><i class="fa-solid fa-gem"></i> 非煤矿山开采企业</h2>
+                        <div class="sub">金属矿山、核工业、非金属矿山、小型采石场及尾矿库运行/回采。地质勘探按项目总费用2%提取。</div>
+                    </div>
+                    <div class="form-card">
+                        <div class="card-title"><i class="fa-solid fa-sliders"></i> 输入参数</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="noncoal_type">矿山类型</label>
+                                <select id="noncoal_type" class="form-control">
+                                    <option value="金属露天">金属矿山 · 露天</option>
+                                    <option value="金属地下">金属矿山 · 地下</option>
+                                    <option value="核工业">核工业矿山</option>
+                                    <option value="非金属露天">非金属矿山 · 露天</option>
+                                    <option value="非金属地下">非金属矿山 · 地下</option>
+                                    <option value="小型采石场">小型露天采石场 (≤50万吨/年)</option>
+                                    <option value="尾矿库运行三等">尾矿库运行 · 三等及以上</option>
+                                    <option value="尾矿库运行四五等">尾矿库运行 · 四等及五等</option>
+                                    <option value="尾矿库回采三等">尾矿库回采 · 三等及以上</option>
+                                    <option value="尾矿库回采四五等">尾矿库回采 · 四等及五等</option>
+                                    <option value="地质勘探">地质勘探 (按项目总费用)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="noncoal_volume">当月产量 / 项目总费用</label>
+                                <input type="number" id="noncoal_volume" class="form-control" value="10000" min="0" step="1" />
+                                <div class="hint">原矿产量(吨) 或 地质勘探项目总费用(万元)</div>
+                            </div>
+                        </div>
+                        <div class="btn-row">
+                            <button class="btn-primary" onclick="calcNoncoal()" type="button"><i class="fa-solid fa-calculator"></i> 计算提取金额</button>
+                            <button class="btn-print" onclick="window.print()" type="button"><i class="fa-solid fa-print"></i> 打印</button>
+                        </div>
+                    </div>
+                    <div class="result-card" id="result-noncoal">
+                        <div class="result-title"><i class="fa-solid fa-file-invoice"></i> 计算结果</div>
+                        <div class="result-placeholder" id="placeholder-noncoal"><span class="big-icon">⛰️</span> 输入参数后点击计算</div>
+                        <div id="noncoal-result-content" style="display:none;"></div>
+                    </div>
+                </section>
+
+                <!-- 3. 石油天然气 -->
+                <section class="panel" id="panel-oilgas">
+                    <div class="panel-header">
+                        <h2><i class="fa-solid fa-oil-can"></i> 石油天然气开采企业</h2>
+                        <div class="sub">原油 20元/吨，天然气 7.5元/千立方米；钻井、物探等按直接工程成本2%提取。</div>
+                    </div>
+                    <div class="form-card">
+                        <div class="card-title"><i class="fa-solid fa-sliders"></i> 输入参数</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="oilgas_type">业务类型</label>
+                                <select id="oilgas_type" class="form-control">
+                                    <option value="原油">原油开采</option>
+                                    <option value="天然气">天然气开采</option>
+                                    <option value="钻井">钻井 / 物探 / 测井 / 井下作业 / 油建 / 海油工程</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="oilgas_volume">当月产量 / 工程直接成本</label>
+                                <input type="number" id="oilgas_volume" class="form-control" value="5000" min="0" step="1" />
+                                <div class="hint">原油(吨) / 天然气(千立方米) / 直接工程成本(万元)</div>
+                            </div>
+                        </div>
+                        <div class="btn-row">
+                            <button class="btn-primary" onclick="calcOilgas()" type="button"><i class="fa-solid fa-calculator"></i> 计算提取金额</button>
+                            <button class="btn-print" onclick="window.print()" type="button"><i class="fa-solid fa-print"></i> 打印</button>
+                        </div>
+                    </div>
+                    <div class="result-card" id="result-oilgas">
+                        <div class="result-title"><i class="fa-solid fa-file-invoice"></i> 计算结果</div>
+                        <div class="result-placeholder" id="placeholder-oilgas"><span class="big-icon">🛢️</span> 输入参数后点击计算</div>
+                        <div id="oilgas-result-content" style="display:none;"></div>
+                    </div>
+                </section>
+
+                <!-- 4. 建设工程 -->
+                <section class="panel" id="panel-construction">
+                    <div class="panel-header">
+                        <h2><i class="fa-solid fa-helmet-safety"></i> 建设工程施工企业</h2>
+                        <div class="sub">以建筑安装工程造价为依据，按工程进度提取。竞标时不得删减安全费用。</div>
+                    </div>
+                    <div class="form-card">
+                        <div class="card-title"><i class="fa-solid fa-sliders"></i> 输入参数</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="const_type">工程类型</label>
+                                <select id="const_type" class="form-control">
+                                    <option value="矿山工程">矿山工程</option>
+                                    <option value="铁路工程">铁路工程</option>
+                                    <option value="房屋工程">房屋建筑工程</option>
+                                    <option value="城市轨道">城市轨道交通工程</option>
+                                    <option value="水利水电">水利水电工程</option>
+                                    <option value="电力工程">电力工程</option>
+                                    <option value="冶炼工程">冶炼工程</option>
+                                    <option value="机电安装">机电安装工程</option>
+                                    <option value="化工石油">化工石油工程</option>
+                                    <option value="通信工程">通信工程</option>
+                                    <option value="市政公用">市政公用工程</option>
+                                    <option value="港口航道">港口与航道工程</option>
+                                    <option value="公路工程">公路工程</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="const_cost">建筑安装工程造价 (万元)</label>
+                                <input type="number" id="const_cost" class="form-control" value="5000" min="0" step="10" />
+                                <div class="hint">按合同总价或工程进度估算</div>
+                            </div>
+                        </div>
+                        <div class="btn-row">
+                            <button class="btn-primary" onclick="calcConstruction()" type="button"><i class="fa-solid fa-calculator"></i> 计算提取金额</button>
+                            <button class="btn-print" onclick="window.print()" type="button"><i class="fa-solid fa-print"></i> 打印</button>
+                        </div>
+                    </div>
+                    <div class="result-card" id="result-construction">
+                        <div class="result-title"><i class="fa-solid fa-file-invoice"></i> 计算结果</div>
+                        <div class="result-placeholder" id="placeholder-construction"><span class="big-icon">🏗️</span> 输入参数后点击计算</div>
+                        <div id="construction-result-content" style="display:none;"></div>
+                    </div>
+                </section>
+
+                <!-- 5. 危险品生产储存 -->
+                <section class="panel" id="panel-hazardous">
+                    <div class="panel-header">
+                        <h2><i class="fa-solid fa-flask"></i> 危险品生产与储存企业</h2>
+                        <div class="sub">以上一年度营业收入为依据，超额累退方式提取，逐月平均计提。</div>
+                    </div>
+                    <div class="form-card">
+                        <div class="card-title"><i class="fa-solid fa-sliders"></i> 输入参数</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="hazardous_revenue">上一年度营业收入 (万元)</label>
+                                <input type="number" id="hazardous_revenue" class="form-control" value="8000" min="0" step="100" />
+                                <div class="hint">按年度财务数据填写</div>
+                            </div>
+                        </div>
+                        <div class="btn-row">
+                            <button class="btn-primary" onclick="calcHazardous()" type="button"><i class="fa-solid fa-calculator"></i> 计算应计提金额</button>
+                            <button class="btn-print" onclick="window.print()" type="button"><i class="fa-solid fa-print"></i> 打印</button>
+                        </div>
+                    </div>
+                    <div class="result-card" id="result-hazardous">
+                        <div class="result-title"><i class="fa-solid fa-file-invoice"></i> 计算结果</div>
+                        <div class="result-placeholder" id="placeholder-hazardous"><span class="big-icon">🧪</span> 输入参数后点击计算</div>
+                        <div id="hazardous-result-content" style="display:none;"></div>
+                    </div>
+                </section>
+
+                <!-- 6. 交通运输 -->
+                <section class="panel" id="panel-transport">
+                    <div class="panel-header">
+                        <h2><i class="fa-solid fa-truck"></i> 交通运输企业</h2>
+                        <div class="sub">以上一年度营业收入为依据，按月平均提取。普通货运1%，客运/管道/危险品货运1.5%。</div>
+                    </div>
+                    <div class="form-card">
+                        <div class="card-title"><i class="fa-solid fa-sliders"></i> 输入参数</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="transport_type">业务类型</label>
+                                <select id="transport_type" class="form-control">
+                                    <option value="普通货运">普通货运</option>
+                                    <option value="客运">客运业务</option>
+                                    <option value="管道运输">管道运输</option>
+                                    <option value="危险品货运">危险品等特殊货运</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="transport_revenue">上一年度营业收入 (万元)</label>
+                                <input type="number" id="transport_revenue" class="form-control" value="5000" min="0" step="100" />
+                            </div>
+                        </div>
+                        <div class="btn-row">
+                            <button class="btn-primary" onclick="calcTransport()" type="button"><i class="fa-solid fa-calculator"></i> 计算应计提金额</button>
+                            <button class="btn-print" onclick="window.print()" type="button"><i class="fa-solid fa-print"></i> 打印</button>
+                        </div>
+                    </div>
+                    <div class="result-card" id="result-transport">
+                        <div class="result-title"><i class="fa-solid fa-file-invoice"></i> 计算结果</div>
+                        <div class="result-placeholder" id="placeholder-transport"><span class="big-icon">🚛</span> 输入参数后点击计算</div>
+                        <div id="transport-result-content" style="display:none;"></div>
+                    </div>
+                </section>
+
+                <!-- 7. 冶金 -->
+                <section class="panel" id="panel-metallurgy">
+                    <div class="panel-header">
+                        <h2><i class="fa-solid fa-industry"></i> 冶金企业</h2>
+                        <div class="sub">黑色金属和有色金属冶炼及压延加工。超额累退方式提取。</div>
+                    </div>
+                    <div class="form-card">
+                        <div class="card-title"><i class="fa-solid fa-sliders"></i> 输入参数</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="metallurgy_revenue">上一年度营业收入 (万元)</label>
+                                <input type="number" id="metallurgy_revenue" class="form-control" value="20000" min="0" step="100" />
+                            </div>
+                        </div>
+                        <div class="btn-row">
+                            <button class="btn-primary" onclick="calcMetallurgy()" type="button"><i class="fa-solid fa-calculator"></i> 计算应计提金额</button>
+                            <button class="btn-print" onclick="window.print()" type="button"><i class="fa-solid fa-print"></i> 打印</button>
+                        </div>
+                    </div>
+                    <div class="result-card" id="result-metallurgy">
+                        <div class="result-title"><i class="fa-solid fa-file-invoice"></i> 计算结果</div>
+                        <div class="result-placeholder" id="placeholder-metallurgy"><span class="big-icon">🔥</span> 输入参数后点击计算</div>
+                        <div id="metallurgy-result-content" style="display:none;"></div>
+                    </div>
+                </section>
+
+                <!-- 8. 机械制造 -->
+                <section class="panel" id="panel-machinery">
+                    <div class="panel-header">
+                        <h2><i class="fa-solid fa-gears"></i> 机械制造企业</h2>
+                        <div class="sub">通用设备、专用设备、汽车、电子设备等8类。超额累退方式提取。</div>
+                    </div>
+                    <div class="form-card">
+                        <div class="card-title"><i class="fa-solid fa-sliders"></i> 输入参数</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="machinery_revenue">上一年度营业收入 (万元)</label>
+                                <input type="number" id="machinery_revenue" class="form-control" value="8000" min="0" step="100" />
+                            </div>
+                        </div>
+                        <div class="btn-row">
+                            <button class="btn-primary" onclick="calcMachinery()" type="button"><i class="fa-solid fa-calculator"></i> 计算应计提金额</button>
+                            <button class="btn-print" onclick="window.print()" type="button"><i class="fa-solid fa-print"></i> 打印</button>
+                        </div>
+                    </div>
+                    <div class="result-card" id="result-machinery">
+                        <div class="result-title"><i class="fa-solid fa-file-invoice"></i> 计算结果</div>
+                        <div class="result-placeholder" id="placeholder-machinery"><span class="big-icon">⚙️</span> 输入参数后点击计算</div>
+                        <div id="machinery-result-content" style="display:none;"></div>
+                    </div>
+                </section>
+
+                <!-- 9. 烟花爆竹 -->
+                <section class="panel" id="panel-fireworks">
+                    <div class="panel-header">
+                        <h2><i class="fa-solid fa-fire"></i> 烟花爆竹生产企业</h2>
+                        <div class="sub">含烟花爆竹制品、黑火药、烟火药、引火线。超额累退方式提取。</div>
+                    </div>
+                    <div class="form-card">
+                        <div class="card-title"><i class="fa-solid fa-sliders"></i> 输入参数</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fireworks_revenue">上一年度营业收入 (万元)</label>
+                                <input type="number" id="fireworks_revenue" class="form-control" value="1500" min="0" step="10" />
+                            </div>
+                        </div>
+                        <div class="btn-row">
+                            <button class="btn-primary" onclick="calcFireworks()" type="button"><i class="fa-solid fa-calculator"></i> 计算应计提金额</button>
+                            <button class="btn-print" onclick="window.print()" type="button"><i class="fa-solid fa-print"></i> 打印</button>
+                        </div>
+                    </div>
+                    <div class="result-card" id="result-fireworks">
+                        <div class="result-title"><i class="fa-solid fa-file-invoice"></i> 计算结果</div>
+                        <div class="result-placeholder" id="placeholder-fireworks"><span class="big-icon">🎆</span> 输入参数后点击计算</div>
+                        <div id="fireworks-result-content" style="display:none;"></div>
+                    </div>
+                </section>
+
+                <!-- 10. 民用爆炸物品 -->
+                <section class="panel" id="panel-explosives">
+                    <div class="panel-header">
+                        <h2><i class="fa-solid fa-bomb"></i> 民用爆炸物品生产企业</h2>
+                        <div class="sub">列入《民用爆炸物品品名表》的物品。超额累退方式提取。</div>
+                    </div>
+                    <div class="form-card">
+                        <div class="card-title"><i class="fa-solid fa-sliders"></i> 输入参数</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="explosives_revenue">上一年度营业收入 (万元)</label>
+                                <input type="number" id="explosives_revenue" class="form-control" value="8000" min="0" step="100" />
+                            </div>
+                        </div>
+                        <div class="btn-row">
+                            <button class="btn-primary" onclick="calcExplosives()" type="button"><i class="fa-solid fa-calculator"></i> 计算应计提金额</button>
+                            <button class="btn-print" onclick="window.print()" type="button"><i class="fa-solid fa-print"></i> 打印</button>
+                        </div>
+                    </div>
+                    <div class="result-card" id="result-explosives">
+                        <div class="result-title"><i class="fa-solid fa-file-invoice"></i> 计算结果</div>
+                        <div class="result-placeholder" id="placeholder-explosives"><span class="big-icon">💣</span> 输入参数后点击计算</div>
+                        <div id="explosives-result-content" style="display:none;"></div>
+                    </div>
+                </section>
+
+                <!-- 11. 武器装备研制 -->
+                <section class="panel" id="panel-weapon">
+                    <div class="panel-header">
+                        <h2><i class="fa-solid fa-rocket"></i> 武器装备研制生产与试验企业</h2>
+                        <div class="sub">含军工危险化学品、核装备、舰船、飞机、其他军用危险品等。超额累退提取。</div>
+                    </div>
+                    <div class="form-card">
+                        <div class="card-title"><i class="fa-solid fa-sliders"></i> 输入参数</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="weapon_type">武器装备类型</label>
+                                <select id="weapon_type" class="form-control">
+                                    <option value="军工危险化学品">军工危险化学品 (火炸药/推进剂/弹药等)</option>
+                                    <option value="核装备">核装备及核燃料</option>
+                                    <option value="军用舰船">军用舰船 (含修理)</option>
+                                    <option value="飞船飞机">飞船 / 卫星 / 军用飞机 / 坦克 / 火炮 / 轻武器</option>
+                                    <option value="其他军用危险品">其他军用危险品</option>
+                                    <option value="核工程">核工程 (按工程造价)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="weapon_revenue">上一年度军品营业收入 / 工程造价 (万元)</label>
+                                <input type="number" id="weapon_revenue" class="form-control" value="5000" min="0" step="100" />
+                                <div class="hint">核工程请填写工程造价 (万元)</div>
+                            </div>
+                        </div>
+                        <div class="btn-row">
+                            <button class="btn-primary" onclick="calcWeapon()" type="button"><i class="fa-solid fa-calculator"></i> 计算应计提金额</button>
+                            <button class="btn-print" onclick="window.print()" type="button"><i class="fa-solid fa-print"></i> 打印</button>
+                        </div>
+                    </div>
+                    <div class="result-card" id="result-weapon">
+                        <div class="result-title"><i class="fa-solid fa-file-invoice"></i> 计算结果</div>
+                        <div class="result-placeholder" id="placeholder-weapon"><span class="big-icon">🛡️</span> 输入参数后点击计算</div>
+                        <div id="weapon-result-content" style="display:none;"></div>
+                    </div>
+                </section>
+
+                <!-- 12. 电力生产供应 -->
+                <section class="panel" id="panel-power">
+                    <div class="panel-header">
+                        <h2><i class="fa-solid fa-bolt"></i> 电力生产与供应企业</h2>
+                        <div class="sub">火力、水力、核力、风力、太阳能等发电，及输变配电。超额累退提取。</div>
+                    </div>
+                    <div class="form-card">
+                        <div class="card-title"><i class="fa-solid fa-sliders"></i> 输入参数</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="power_type">企业类型</label>
+                                <select id="power_type" class="form-control">
+                                    <option value="生产">电力生产企业</option>
+                                    <option value="供应">电力供应企业</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="power_revenue">上一年度营业收入 (万元)</label>
+                                <input type="number" id="power_revenue" class="form-control" value="200000" min="0" step="1000" />
+                            </div>
+                        </div>
+                        <div class="btn-row">
+                            <button class="btn-primary" onclick="calcPower()" type="button"><i class="fa-solid fa-calculator"></i> 计算应计提金额</button>
+                            <button class="btn-print" onclick="window.print()" type="button"><i class="fa-solid fa-print"></i> 打印</button>
+                        </div>
+                    </div>
+                    <div class="result-card" id="result-power">
+                        <div class="result-title"><i class="fa-solid fa-file-invoice"></i> 计算结果</div>
+                        <div class="result-placeholder" id="placeholder-power"><span class="big-icon">⚡</span> 输入参数后点击计算</div>
+                        <div id="power-result-content" style="display:none;"></div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <i class="fa-solid fa-shield-halved"></i> Sheen Toolbox · 安全生产费用计算器 | <span>财企〔2022〕136号</span> · 数据仅供估算参考
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            const $ = id => document.getElementById(id);
+
+            // ===== 导航切换 =====
+            const navItems = document.querySelectorAll('.nav-item');
+            const panels = {};
+            document.querySelectorAll('.panel').forEach(el => { panels[el.id] = el; });
+
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    navItems.forEach(n => n.classList.remove('active'));
+                    this.classList.add('active');
+                    Object.values(panels).forEach(p => p.classList.remove('active'));
+                    const panelId = 'panel-' + this.dataset.panel;
+                    if (panels[panelId]) panels[panelId].classList.add('active');
+                });
+            });
+
+            // ===== 超额累退计算器 =====
+            function calcTiered(revenue, tiers) {
+                let total = 0, prev = 0;
+                for (const tier of tiers) {
+                    if (revenue > prev) {
+                        total += (Math.min(revenue, tier.limit) - prev) * (tier.rate / 100);
+                    }
+                    prev = tier.limit;
+                    if (revenue <= tier.limit) break;
+                }
+                return total;
+            }
+
+            // ===== 显示结果 =====
+            function displayResult(placeholderId, contentId, data) {
+                $(placeholderId).style.display = 'none';
+                const content = $(contentId);
+                content.style.display = 'block';
+
+                let detailHtml = data.detail ? `<div class="result-detail">${data.detail}</div>` : '';
+                let extra = data.extra ? `<div class="footnote">${data.extra}</div>` : '';
+
+                content.innerHTML = `
+                    <div class="result-value">
+                        <div class="number">${data.amount} <span class="unit">${data.unit}</span></div>
+                        <div class="label">${data.label}</div>
+                    </div>
+                    ${detailHtml}
+                    ${extra}
+                `;
+
+                // 闪烁动画
+                const valueBox = content.querySelector('.result-value');
+                if (valueBox) {
+                    valueBox.classList.add('flash');
+                    setTimeout(() => valueBox.classList.remove('flash'), 400);
+                }
+            }
+
+            // ===== 1. 煤炭生产 =====
+            window.calcCoal = function() {
+                const type = $('coal_type').value;
+                const output = parseFloat($('coal_output').value) || 0;
+                const rates = { '突出冲击': 50, '高瓦斯': 30, '其他井工': 15, '露天': 5 };
+                const rate = rates[type] || 15;
+                const amount = output * rate;
+                const typeMap = { '突出冲击': '煤(岩)与瓦斯突出 / 冲击地压矿井', '高瓦斯': '高瓦斯 / 水文地质复杂 / 容易自燃', '其他井工': '其他井工矿', '露天': '露天矿' };
+
+                displayResult('placeholder-coal', 'coal-result-content', {
+                    amount: amount.toFixed(0), unit: '元',
+                    label: `当月应提取安全生产费用 (产量 ${output.toLocaleString()} 吨)`,
+                    detail: `<strong>📌 计算依据</strong><br>• 矿井类型：${typeMap[type]}<br>• 提取标准：${rate} 元/吨<br>• 计算公式：${output.toLocaleString()} 吨 × ${rate} 元/吨 = ${amount.toFixed(0)} 元<br>• 依据《企业安全生产费用提取和使用管理办法》第七条`,
+                    extra: '⛏️ 多种灾害并存矿井，从高提取。'
+                });
+            };
+
+            // ===== 2. 非煤矿山 =====
+            window.calcNoncoal = function() {
+                const type = $('noncoal_type').value;
+                const volume = parseFloat($('noncoal_volume').value) || 0;
+                const rates = { '金属露天': 5, '金属地下': 15, '核工业': 25, '非金属露天': 3, '非金属地下': 8, '小型采石场': 2, '尾矿库运行三等': 4, '尾矿库运行四五等': 5, '尾矿库回采三等': 1, '尾矿库回采四五等': 1.5 };
+
+                if (type === '地质勘探') {
+                    const amount = volume * 0.02 * 10000;
+                    displayResult('placeholder-noncoal', 'noncoal-result-content', {
+                        amount: amount.toFixed(0), unit: '元', label: '地质勘探项目应提取安全生产费用',
+                        detail: `<strong>📌 计算依据</strong><br>• 项目总费用：${volume.toLocaleString()} 万元<br>• 提取标准：2%<br>• 计算公式：${volume.toLocaleString()} 万元 × 2% = ${(volume * 0.02).toFixed(2)} 万元`,
+                        extra: '⛰️ 尾矿库运行/回采按入库/回采尾矿量计提。'
+                    });
+                    return;
+                }
+
+                const rate = rates[type] || 0;
+                const amount = volume * rate;
+                const typeMap = { '金属露天': '金属矿山 · 露天', '金属地下': '金属矿山 · 地下', '核工业': '核工业矿山', '非金属露天': '非金属矿山 · 露天', '非金属地下': '非金属矿山 · 地下', '小型采石场': '小型露天采石场 (≤50万吨/年)', '尾矿库运行三等': '尾矿库运行 (三等及以上)', '尾矿库运行四五等': '尾矿库运行 (四等及五等)', '尾矿库回采三等': '尾矿库回采 (三等及以上)', '尾矿库回采四五等': '尾矿库回采 (四等及五等)' };
+
+                displayResult('placeholder-noncoal', 'noncoal-result-content', {
+                    amount: amount.toFixed(0), unit: '元', label: `当月应提取安全生产费用 (${typeMap[type]})`,
+                    detail: `<strong>📌 计算依据</strong><br>• 矿山类型：${typeMap[type]}<br>• 提取标准：${rate} 元/吨<br>• 当月产量：${volume.toLocaleString()} 吨<br>• 计算公式：${volume.toLocaleString()} 吨 × ${rate} 元/吨 = ${amount.toFixed(0)} 元`,
+                    extra: '⛰️ 尾矿库运行/回采按入库/回采尾矿量计提。'
+                });
+            };
+
+            // ===== 3. 石油天然气 =====
+            window.calcOilgas = function() {
+                const type = $('oilgas_type').value;
+                const volume = parseFloat($('oilgas_volume').value) || 0;
+                let amount, label, detail;
+
+                if (type === '原油') {
+                    amount = volume * 20;
+                    label = '当月原油开采应提取安全生产费用';
+                    detail = `• 提取标准：20 元/吨<br>• 当月产量：${volume.toLocaleString()} 吨<br>• 计算公式：${volume.toLocaleString()} 吨 × 20 元/吨 = ${amount.toFixed(0)} 元`;
+                } else if (type === '天然气') {
+                    amount = volume * 7.5;
+                    label = '当月天然气开采应提取安全生产费用';
+                    detail = `• 提取标准：7.5 元/千立方米<br>• 当月产量：${volume.toLocaleString()} 千立方米<br>• 计算公式：${volume.toLocaleString()} 千立方米 × 7.5 元/千立方米 = ${amount.toFixed(0)} 元`;
+                } else {
+                    amount = volume * 0.02 * 10000;
+                    label = '钻井/物探/井下作业等应提取安全生产费用';
+                    detail = `• 提取标准：直接工程成本的 2%<br>• 直接工程成本：${volume.toLocaleString()} 万元<br>• 计算公式：${volume.toLocaleString()} 万元 × 2% = ${(volume * 0.02).toFixed(2)} 万元`;
+                }
+
+                displayResult('placeholder-oilgas', 'oilgas-result-content', {
+                    amount: amount.toFixed(0), unit: '元', label,
+                    detail: `<strong>📌 计算依据</strong><br>${detail}`,
+                    extra: '🛢️ 储备油、地下储气库参照危险品储存企业执行。'
+                });
+            };
+
+            // ===== 4. 建设工程 =====
+            window.calcConstruction = function() {
+                const type = $('const_type').value;
+                const cost = parseFloat($('const_cost').value) || 0;
+                const rates = { '矿山工程': 3.5, '铁路工程': 3, '房屋工程': 3, '城市轨道': 3, '水利水电': 2.5, '电力工程': 2.5, '冶炼工程': 2, '机电安装': 2, '化工石油': 2, '通信工程': 2, '市政公用': 1.5, '港口航道': 1.5, '公路工程': 1.5 };
+                const rate = rates[type] || 2;
+                const amount = cost * (rate / 100);
+                const typeMap = { '矿山工程': '矿山工程', '铁路工程': '铁路工程', '房屋工程': '房屋建筑工程', '城市轨道': '城市轨道交通工程', '水利水电': '水利水电工程', '电力工程': '电力工程', '冶炼工程': '冶炼工程', '机电安装': '机电安装工程', '化工石油': '化工石油工程', '通信工程': '通信工程', '市政公用': '市政公用工程', '港口航道': '港口与航道工程', '公路工程': '公路工程' };
+
+                displayResult('placeholder-construction', 'construction-result-content', {
+                    amount: amount.toFixed(2), unit: '万元', label: `应提取安全生产费用 (${typeMap[type]})`,
+                    detail: `<strong>📌 计算依据</strong><br>• 工程类型：${typeMap[type]}<br>• 提取标准：${rate}%<br>• 工程造价：${cost.toLocaleString()} 万元<br>• 计算公式：${cost.toLocaleString()} 万元 × ${rate}% = ${amount.toFixed(2)} 万元`,
+                    extra: '🏗️ 建设单位应在开工日1个月内向承包单位支付至少50%安全费用。'
+                });
+            };
+
+            // ===== 5. 危险品生产储存 =====
+            window.calcHazardous = function() {
+                const revenue = parseFloat($('hazardous_revenue').value) || 0;
+                const tiers = [{ limit: 1000, rate: 4.5 }, { limit: 10000, rate: 2.25 }, { limit: 100000, rate: 0.55 }, { limit: Infinity, rate: 0.2 }];
+                const total = calcTiered(revenue, tiers);
+
+                displayResult('placeholder-hazardous', 'hazardous-result-content', {
+                    amount: total.toFixed(2), unit: '万元', label: '年度应计提安全生产费用总额 (逐月平均提取)',
+                    detail: `<strong>📌 超额累退明细</strong><br>• 上一年度营业收入：${revenue.toLocaleString()} 万元<br>• ≤1000万元部分：4.5% → ${(Math.min(revenue,1000)*0.045).toFixed(2)} 万元<br>• 1000万-1亿部分：2.25% → ${(Math.max(0,Math.min(revenue,10000)-1000)*0.0225).toFixed(2)} 万元<br>• 1亿-10亿部分：0.55% → ${(Math.max(0,Math.min(revenue,100000)-10000)*0.0055).toFixed(2)} 万元<br>• >10亿部分：0.2% → ${(Math.max(0,revenue-100000)*0.002).toFixed(2)} 万元<br>• <strong>合计：${total.toFixed(2)} 万元</strong>`,
+                    extra: '🧪 逐月平均提取：每月提取 ' + (total/12).toFixed(2) + ' 万元'
+                });
+            };
+
+            // ===== 6. 交通运输 =====
+            window.calcTransport = function() {
+                const type = $('transport_type').value;
+                const revenue = parseFloat($('transport_revenue').value) || 0;
+                const rates = { '普通货运': 1, '客运': 1.5, '管道运输': 1.5, '危险品货运': 1.5 };
+                const rate = rates[type] || 1;
+                const amount = revenue * (rate / 100);
+                const typeMap = { '普通货运': '普通货运业务', '客运': '客运业务', '管道运输': '管道运输', '危险品货运': '危险品等特殊货运' };
+
+                displayResult('placeholder-transport', 'transport-result-content', {
+                    amount: amount.toFixed(2), unit: '万元', label: `年度应计提安全生产费用 (${typeMap[type]})`,
+                    detail: `<strong>📌 计算依据</strong><br>• 业务类型：${typeMap[type]}<br>• 提取标准：${rate}%<br>• 上一年度营业收入：${revenue.toLocaleString()} 万元<br>• 计算公式：${revenue.toLocaleString()} 万元 × ${rate}% = ${amount.toFixed(2)} 万元`,
+                    extra: '🚛 逐月平均提取，月度应提 ' + (amount/12).toFixed(2) + ' 万元'
+                });
+            };
+
+            // ===== 7. 冶金 =====
+            window.calcMetallurgy = function() {
+                const revenue = parseFloat($('metallurgy_revenue').value) || 0;
+                const tiers = [{ limit: 1000, rate: 3 }, { limit: 10000, rate: 1.5 }, { limit: 100000, rate: 0.5 }, { limit: 500000, rate: 0.2 }, { limit: 1000000, rate: 0.1 }, { limit: Infinity, rate: 0.05 }];
+                const total = calcTiered(revenue, tiers);
+
+                displayResult('placeholder-metallurgy', 'metallurgy-result-content', {
+                    amount: total.toFixed(2), unit: '万元', label: '年度应计提安全生产费用总额',
+                    detail: `<strong>📌 超额累退明细</strong><br>• 上一年度营业收入：${revenue.toLocaleString()} 万元<br>• ≤1000万：3% → ${(Math.min(revenue,1000)*0.03).toFixed(2)} 万元<br>• 1000万-1亿：1.5% → ${(Math.max(0,Math.min(revenue,10000)-1000)*0.015).toFixed(2)} 万元<br>• 1亿-10亿：0.5% → ${(Math.max(0,Math.min(revenue,100000)-10000)*0.005).toFixed(2)} 万元<br>• 10亿-50亿：0.2% → ${(Math.max(0,Math.min(revenue,500000)-100000)*0.002).toFixed(2)} 万元<br>• 50亿-100亿：0.1% → ${(Math.max(0,Math.min(revenue,1000000)-500000)*0.001).toFixed(2)} 万元<br>• >100亿：0.05% → ${(Math.max(0,revenue-1000000)*0.0005).toFixed(2)} 万元<br>• <strong>合计：${total.toFixed(2)} 万元</strong>`,
+                    extra: '🔥 逐月平均提取：每月 ' + (total/12).toFixed(2) + ' 万元'
+                });
+            };
+
+            // ===== 8. 机械制造 =====
+            window.calcMachinery = function() {
+                const revenue = parseFloat($('machinery_revenue').value) || 0;
+                const tiers = [{ limit: 1000, rate: 2.35 }, { limit: 10000, rate: 1.25 }, { limit: 100000, rate: 0.25 }, { limit: 500000, rate: 0.1 }, { limit: Infinity, rate: 0.05 }];
+                const total = calcTiered(revenue, tiers);
+
+                displayResult('placeholder-machinery', 'machinery-result-content', {
+                    amount: total.toFixed(2), unit: '万元', label: '年度应计提安全生产费用总额',
+                    detail: `<strong>📌 超额累退明细</strong><br>• 上一年度营业收入：${revenue.toLocaleString()} 万元<br>• ≤1000万：2.35% → ${(Math.min(revenue,1000)*0.0235).toFixed(2)} 万元<br>• 1000万-1亿：1.25% → ${(Math.max(0,Math.min(revenue,10000)-1000)*0.0125).toFixed(2)} 万元<br>• 1亿-10亿：0.25% → ${(Math.max(0,Math.min(revenue,100000)-10000)*0.0025).toFixed(2)} 万元<br>• 10亿-50亿：0.1% → ${(Math.max(0,Math.min(revenue,500000)-100000)*0.001).toFixed(2)} 万元<br>• >50亿：0.05% → ${(Math.max(0,revenue-500000)*0.0005).toFixed(2)} 万元<br>• <strong>合计：${total.toFixed(2)} 万元</strong>`,
+                    extra: '⚙️ 包含8类机械制造企业，逐月平均提取。'
+                });
+            };
+
+            // ===== 9. 烟花爆竹 =====
+            window.calcFireworks = function() {
+                const revenue = parseFloat($('fireworks_revenue').value) || 0;
+                const tiers = [{ limit: 1000, rate: 4 }, { limit: 2000, rate: 3 }, { limit: Infinity, rate: 2.5 }];
+                const total = calcTiered(revenue, tiers);
+
+                displayResult('placeholder-fireworks', 'fireworks-result-content', {
+                    amount: total.toFixed(2), unit: '万元', label: '年度应计提安全生产费用总额',
+                    detail: `<strong>📌 超额累退明细</strong><br>• 上一年度营业收入：${revenue.toLocaleString()} 万元<br>• ≤1000万：4% → ${(Math.min(revenue,1000)*0.04).toFixed(2)} 万元<br>• 1000万-2000万：3% → ${(Math.max(0,Math.min(revenue,2000)-1000)*0.03).toFixed(2)} 万元<br>• >2000万：2.5% → ${(Math.max(0,revenue-2000)*0.025).toFixed(2)} 万元<br>• <strong>合计：${total.toFixed(2)} 万元</strong>`,
+                    extra: '🎆 逐月平均提取：每月 ' + (total/12).toFixed(2) + ' 万元'
+                });
+            };
+
+            // ===== 10. 民用爆炸物品 =====
+            window.calcExplosives = function() {
+                const revenue = parseFloat($('explosives_revenue').value) || 0;
+                const tiers = [{ limit: 1000, rate: 4 }, { limit: 10000, rate: 2 }, { limit: 100000, rate: 0.5 }, { limit: Infinity, rate: 0.2 }];
+                const total = calcTiered(revenue, tiers);
+
+                displayResult('placeholder-explosives', 'explosives-result-content', {
+                    amount: total.toFixed(2), unit: '万元', label: '年度应计提安全生产费用总额',
+                    detail: `<strong>📌 超额累退明细</strong><br>• 上一年度营业收入：${revenue.toLocaleString()} 万元<br>• ≤1000万：4% → ${(Math.min(revenue,1000)*0.04).toFixed(2)} 万元<br>• 1000万-1亿：2% → ${(Math.max(0,Math.min(revenue,10000)-1000)*0.02).toFixed(2)} 万元<br>• 1亿-10亿：0.5% → ${(Math.max(0,Math.min(revenue,100000)-10000)*0.005).toFixed(2)} 万元<br>• >10亿：0.2% → ${(Math.max(0,revenue-100000)*0.002).toFixed(2)} 万元<br>• <strong>合计：${total.toFixed(2)} 万元</strong>`,
+                    extra: '💣 逐月平均提取：每月 ' + (total/12).toFixed(2) + ' 万元'
+                });
+            };
+
+            // ===== 11. 武器装备研制 =====
+            window.calcWeapon = function() {
+                const type = $('weapon_type').value;
+                const revenue = parseFloat($('weapon_revenue').value) || 0;
+
+                if (type === '核工程') {
+                    const amount = revenue * 0.03;
+                    displayResult('placeholder-weapon', 'weapon-result-content', {
+                        amount: amount.toFixed(2), unit: '万元', label: '核工程应提取安全生产费用 (标外管理)',
+                        detail: `<strong>📌 计算依据</strong><br>• 核工程造价：${revenue.toLocaleString()} 万元<br>• 提取标准：3%<br>• 计算公式：${revenue.toLocaleString()} 万元 × 3% = ${amount.toFixed(2)} 万元<br>• 依据《办法》第四十条，在竞标时列为标外管理`,
+                        extra: '🛡️ 核工程安全费用专款专用，不参与竞标。'
+                    });
+                    return;
+                }
+
+                const tierMap = {
+                    '军工危险化学品': { label: '军工危险化学品 (火炸药/推进剂/弹药等)', tiers: [{ limit: 1000, rate: 5 }, { limit: 10000, rate: 3 }, { limit: 100000, rate: 1 }, { limit: Infinity, rate: 0.5 }] },
+                    '核装备': { label: '核装备及核燃料', tiers: [{ limit: 1000, rate: 3 }, { limit: 10000, rate: 2 }, { limit: 100000, rate: 0.5 }, { limit: Infinity, rate: 0.2 }] },
+                    '军用舰船': { label: '军用舰船 (含修理)', tiers: [{ limit: 1000, rate: 2.5 }, { limit: 10000, rate: 1.75 }, { limit: 100000, rate: 0.8 }, { limit: Infinity, rate: 0.4 }] },
+                    '飞船飞机': { label: '飞船/卫星/军用飞机/坦克/火炮/轻武器', tiers: [{ limit: 1000, rate: 2 }, { limit: 10000, rate: 1.5 }, { limit: 100000, rate: 0.5 }, { limit: 1000000, rate: 0.2 }, { limit: Infinity, rate: 0.1 }] },
+                    '其他军用危险品': { label: '其他军用危险品', tiers: [{ limit: 1000, rate: 4 }, { limit: 10000, rate: 2 }, { limit: 100000, rate: 0.5 }, { limit: Infinity, rate: 0.2 }] }
+                };
+
+                const config = tierMap[type];
+                const total = calcTiered(revenue, config.tiers);
+                const detailLines = config.tiers.map((t, i) => {
+                    const prev = i === 0 ? 0 : config.tiers[i-1].limit;
+                    const seg = Math.max(0, Math.min(revenue, t.limit) - prev);
+                    return `• ${prev.toLocaleString()}-${t.limit === Infinity ? '∞' : t.limit.toLocaleString()}：${t.rate}% → ${(seg * t.rate / 100).toFixed(2)} 万元`;
+                }).join('<br>');
+
+                displayResult('placeholder-weapon', 'weapon-result-content', {
+                    amount: total.toFixed(2), unit: '万元', label: `年度应计提安全生产费用 (${config.label})`,
+                    detail: `<strong>📌 超额累退明细 (${config.label})</strong><br>• 上一年度军品营业收入：${revenue.toLocaleString()} 万元<br>• 各分段累计提取：<br>${detailLines}<br>• <strong>合计：${total.toFixed(2)} 万元</strong>`,
+                    extra: '🛡️ 逐月平均提取：每月 ' + (total/12).toFixed(2) + ' 万元'
+                });
+            };
+
+            // ===== 12. 电力生产供应 =====
+            window.calcPower = function() {
+                const type = $('power_type').value;
+                const revenue = parseFloat($('power_revenue').value) || 0;
+                const configs = {
+                    '生产': { label: '电力生产企业', tiers: [{ limit: 1000, rate: 3 }, { limit: 10000, rate: 1.5 }, { limit: 100000, rate: 1 }, { limit: 500000, rate: 0.8 }, { limit: 1000000, rate: 0.6 }, { limit: Infinity, rate: 0.2 }] },
+                    '供应': { label: '电力供应企业', tiers: [{ limit: 5000000, rate: 0.5 }, { limit: 10000000, rate: 0.4 }, { limit: 20000000, rate: 0.3 }, { limit: Infinity, rate: 0.2 }] }
+                };
+                const config = configs[type];
+                const total = calcTiered(revenue, config.tiers);
+                const detailLines = config.tiers.map((t, i) => {
+                    const prev = i === 0 ? 0 : config.tiers[i-1].limit;
+                    const seg = Math.max(0, Math.min(revenue, t.limit) - prev);
+                    return `• ${prev.toLocaleString()}-${t.limit === Infinity ? '∞' : t.limit.toLocaleString()}：${t.rate}% → ${(seg * t.rate / 100).toFixed(2)} 万元`;
+                }).join('<br>');
+
+                displayResult('placeholder-power', 'power-result-content', {
+                    amount: total.toFixed(2), unit: '万元', label: `年度应计提安全生产费用 (${config.label})`,
+                    detail: `<strong>📌 超额累退明细 (${config.label})</strong><br>• 上一年度营业收入：${revenue.toLocaleString()} 万元<br>${detailLines}<br>• <strong>合计：${total.toFixed(2)} 万元</strong>`,
+                    extra: '⚡ 逐月平均提取：每月 ' + (total/12).toFixed(2) + ' 万元'
+                });
+            };
+
+            // ===== 设置打印日期 =====
+            const now = new Date();
+            const printDateEl = $('printDate');
+            if (printDateEl) {
+                printDateEl.textContent = `打印日期：${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`;
+            }
+
+            // ===== 初始化：自动计算煤炭 =====
+            calcCoal();
+        })();
+    </script>
+</body>
+</html>
