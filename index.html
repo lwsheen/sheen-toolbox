@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <title>SHEEN Toolbox · 环境健康安全工具箱</title>
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --brand-deep: #0b3b2c;
+            --brand-mid: #1a6b4a;
+            --brand-light: #e2f0ea;
+            --brand-bg: #f0fdf4;
+            --accent: #fbbf24;
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e9edf4;
+            --slate-300: #dce2ec;
+            --slate-500: #64748b;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+            --transition: 0.2s ease;
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        body {
+            font-family: var(--font-family);
+            background: var(--slate-100);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        /* 导航栏 */
+        .sheen-nav {
+            background: linear-gradient(135deg, var(--brand-deep) 0%, var(--brand-mid) 100%);
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 4px solid var(--accent);
+            min-height: 56px;
+        }
+        .sheen-nav-brand {
+            display: flex; align-items: center; gap: 10px;
+            color: #fff; text-decoration: none; padding: 14px 0;
+        }
+        .sheen-nav-brand i { font-size: 24px; color: var(--accent); }
+        .sheen-nav-brand-text { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; }
+        .sheen-nav-tools { display: flex; gap: 4px; }
+        .sheen-nav-tool {
+            display: flex; align-items: center; gap: 6px;
+            padding: 8px 16px; color: rgba(255,255,255,0.75);
+            text-decoration: none; font-size: 13px; font-weight: 500;
+            border-radius: 8px; transition: all var(--transition); white-space: nowrap;
+        }
+        .sheen-nav-tool:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .sheen-nav-tool.active { background: rgba(255,255,255,0.15); color: #fff; font-weight: 600; }
+        .sheen-nav-tool i { font-size: 14px; }
+        /* 主体 */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 24px;
+        }
+        .hero {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        .hero-icon {
+            font-size: 56px;
+            color: var(--brand-mid);
+            margin-bottom: 16px;
+        }
+        .hero h1 {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--brand-deep);
+            margin-bottom: 12px;
+        }
+        .hero p {
+            font-size: 16px;
+            color: var(--slate-500);
+            max-width: 560px;
+            line-height: 1.7;
+        }
+        /* 工具卡片 */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+            max-width: 1100px;
+            width: 100%;
+        }
+        .tool-card {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            padding: 32px 28px;
+            border: 1px solid var(--slate-200);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .tool-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -12px rgba(11, 59, 44, 0.15);
+            border-color: var(--brand-mid);
+        }
+        .tool-card-icon {
+            width: 56px; height: 56px;
+            border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 26px;
+            margin-bottom: 4px;
+        }
+        .tool-card-icon.green { background: var(--brand-light); color: var(--brand-mid); }
+        .tool-card-icon.amber { background: #fef3c7; color: #d97706; }
+        .tool-card-icon.blue { background: #dbeafe; color: #2563eb; }
+        .tool-card h3 {
+            font-size: 20px; font-weight: 700; color: var(--slate-800);
+        }
+        .tool-card p {
+            font-size: 14px; color: var(--slate-500); line-height: 1.6;
+        }
+        .tool-card-badge {
+            display: inline-block;
+            font-size: 12px; font-weight: 600;
+            padding: 3px 12px; border-radius: 20px;
+            background: var(--brand-bg); color: var(--brand-mid);
+            margin-top: 4px;
+        }
+        .tool-card-arrow {
+            margin-top: 8px;
+            color: var(--brand-mid);
+            font-size: 14px;
+            display: flex; align-items: center; gap: 6px;
+            font-weight: 600;
+        }
+        /* 页脚 */
+        .sheen-footer {
+            text-align: center;
+            padding: 16px 32px;
+            font-size: 13px;
+            color: var(--slate-500);
+            border-top: 1px solid var(--slate-200);
+            background: var(--slate-50);
+        }
+        .sheen-footer i { color: var(--accent); margin-right: 4px; }
+        .sheen-footer strong { color: var(--brand-mid); }
+        /* 响应式 */
+        @media (max-width: 720px) {
+            .sheen-nav { padding: 0 16px; flex-wrap: wrap; }
+            .sheen-nav-tools { order: 3; width: 100%; padding-bottom: 8px; overflow-x: auto; }
+            .hero h1 { font-size: 28px; }
+            .tools-grid { grid-template-columns: 1fr; }
+            .main { padding: 32px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="sheen-nav">
+        <a href="/sheen-toolbox/" class="sheen-nav-brand">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span class="sheen-nav-brand-text">SHEEN Toolbox</span>
+        </a>
+        <nav class="sheen-nav-tools">
+            <a href="/sheen-toolbox/pssr-checklist/" class="sheen-nav-tool"><i class="fa-solid fa-clipboard-check"></i> PSSR 检查表</a>
+            <a href="/sheen-toolbox/fire-extinguisher-calculator/" class="sheen-nav-tool"><i class="fa-solid fa-fire-extinguisher"></i> 灭火器计算器</a>
+            <a href="/sheen-toolbox/safety-production-cost-calculator/" class="sheen-nav-tool"><i class="fa-solid fa-calculator"></i> 安产费用</a>
+        </nav>
+    </header>
+
+    <div class="main">
+        <div class="hero">
+            <div class="hero-icon"><i class="fa-solid fa-shield-halved"></i></div>
+            <h1>SHEEN Toolbox</h1>
+            <p>环境健康安全（EHS）工具箱 · 为安全管理提供专业计算与检查工具，依据国家标准与行业规范，助力企业安全合规。</p>
+        </div>
+
+        <div class="tools-grid">
+            <a href="/sheen-toolbox/pssr-checklist/" class="tool-card">
+                <div class="tool-card-icon green"><i class="fa-solid fa-clipboard-check"></i></div>
+                <h3>PSSR 开车前安全审查检查表</h3>
+                <p>多行业增强版检查表，覆盖制药、化工、油气等领域，支持动态增删、筛选、进度追踪与打印。</p>
+                <span class="tool-card-badge">9 章节 · 79 检查项</span>
+                <div class="tool-card-arrow">打开工具 <i class="fa-solid fa-arrow-right"></i></div>
+            </a>
+
+            <a href="/sheen-toolbox/fire-extinguisher-calculator/" class="tool-card">
+                <div class="tool-card-icon amber"><i class="fa-solid fa-fire-extinguisher"></i></div>
+                <h3>灭火器配置计算器</h3>
+                <p>依据 GB 50140-2005 自动计算灭火器配置数量，支持危险等级分类、场景预设与修正系数。</p>
+                <span class="tool-card-badge">GB 50140-2005</span>
+                <div class="tool-card-arrow">打开工具 <i class="fa-solid fa-arrow-right"></i></div>
+            </a>
+
+            <a href="/sheen-toolbox/safety-production-cost-calculator/" class="tool-card">
+                <div class="tool-card-icon blue"><i class="fa-solid fa-calculator"></i></div>
+                <h3>安全生产费用计算器</h3>
+                <p>依据财企〔2022〕136号自动计算企业安全生产费用提取金额，支持12类行业超额累退计算。</p>
+                <span class="tool-card-badge">财企〔2022〕136号 · 12 行业</span>
+                <div class="tool-card-arrow">打开工具 <i class="fa-solid fa-arrow-right"></i></div>
+            </a>
+        </div>
+    </div>
+
+    <footer class="sheen-footer">
+        <i class="fa-solid fa-shield-halved"></i><strong>SHEEN Toolbox</strong> · 环境健康安全工具箱 · 公众号「SHEEN环境健康安全」
+    </footer>
+
+</body>
+</html>
