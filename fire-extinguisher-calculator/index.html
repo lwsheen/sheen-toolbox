@@ -83,6 +83,7 @@
         .sheen-nav-tool i { font-size: 14px; }
 
         .print-time { display: none; }
+        .print-footer { display: none; }
 
         .badge-version {
             background: rgba(255, 255, 255, 0.12);
@@ -380,7 +381,10 @@
             .result-detail { background: none !important; border: 1px solid #ccc; border-radius: 0; font-size: 10.5pt; color: #000; }
             .detail-row { border-bottom: 1px dashed #ccc !important; }
             .print-time { display: block !important; font-size: 9pt; color: #666; text-align: right; margin-bottom: 12px; }
-            @page { size: A4; margin: 18mm 15mm 20mm 15mm; }
+            .print-footer { display: block !important; margin-top: 30px; border-top: 1px solid #000; padding-top: 8px; text-align: center; font-size: 9pt; color: #333; }
+            @page { size: A4; margin: 18mm 15mm 20mm 15mm;
+                @bottom-center { content: "SHEEN Toolbox · 灭火器配置计算器"; font-size: 8pt; color: #666; }
+            }
             }
         }
     </style>
@@ -546,6 +550,7 @@
         <footer class="footer">
             <i class="fa-solid fa-shield-halved"></i> &nbsp;<span>SHEEN Toolbox</span> · 灭火器配置计算器
         </footer>
+        <div class="print-footer">SHEEN Toolbox · 灭火器配置计算器</div>
 
     </div>
 
