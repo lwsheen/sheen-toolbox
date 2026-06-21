@@ -3,35 +3,91 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PSSR 开车前安全审查检查表（多行业增强版）</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<title>PSSR 开车前安全审查检查表 · SHEEN Toolbox</title>
 <style>
 /* ===== 基础变量 ===== */
 :root {
-  --brand: #1a56a0;
-  --brand-light: #e8f0fb;
-  --danger: #c0392b;
-  --warn: #e67e22;
-  --ok: #27ae60;
+  --brand: #1a6b4a;
+  --brand-deep: #0b3b2c;
+  --brand-light: #e2f0ea;
+  --brand-bg: #f0fdf4;
+  --accent: #fbbf24;
+  --danger: #dc2626;
+  --warn: #f97316;
+  --ok: #16a34a;
   --na: #7f8c8d;
-  --border: #d0d7e3;
-  --row-alt: #f7f9fd;
-  --text: #1c2535;
+  --border: #dce2ec;
+  --row-alt: #f8fafc;
+  --text: #1e293b;
   --tag-pharma-bg: #e8f8f0; --tag-pharma: #1a7a4a;
   --tag-chem-bg: #fff4e5; --tag-chem: #c06000;
   --tag-oil-bg: #e5f0ff; --tag-oil: #1a4fa0;
   --radius: 8px;
-  --shadow: 0 2px 12px rgba(26,86,160,.10);
+  --shadow: 0 2px 12px rgba(11,59,44,.08);
+  --slate-50: #f8fafc;
+  --slate-200: #e9edf4;
+  --slate-500: #64748b;
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-family: var(--font-family);
   font-size: 14px;
   color: var(--text);
-  background: #f0f4fa;
+  background: #f1f5f9;
   min-height: 100vh;
 }
+
+/* ===== SHEEN Toolbox 统一导航栏 ===== */
+.sheen-nav {
+  background: linear-gradient(135deg, var(--brand-deep) 0%, var(--brand) 100%);
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 4px solid var(--accent);
+  flex-wrap: wrap;
+  min-height: 56px;
+}
+.sheen-nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  text-decoration: none;
+  padding: 14px 0;
+}
+.sheen-nav-brand i { font-size: 24px; color: var(--accent); }
+.sheen-nav-brand-text { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; }
+.sheen-nav-tools { display: flex; gap: 4px; flex-wrap: wrap; }
+.sheen-nav-tool {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 16px; color: rgba(255,255,255,0.75);
+  text-decoration: none; font-size: 13px; font-weight: 500;
+  border-radius: 8px; transition: all .2s ease; white-space: nowrap;
+}
+.sheen-nav-tool:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.sheen-nav-tool.active { background: rgba(255,255,255,0.15); color: #fff; font-weight: 600; }
+.sheen-nav-tool i { font-size: 14px; }
+
+/* ===== SHEEN Toolbox 统一页脚 ===== */
+.sheen-footer {
+  text-align: center;
+  padding: 16px 32px;
+  font-size: 13px;
+  color: var(--slate-500);
+  border-top: 1px solid var(--slate-200);
+  background: var(--slate-50);
+  letter-spacing: 0.5px;
+}
+.sheen-footer i { color: var(--accent); margin-right: 4px; }
+.sheen-footer strong { color: var(--brand); }
+
+/* ===== 打印品牌（仅打印显示） ===== */
+.sheen-print-header, .sheen-print-footer { display: none; }
 
 /* ===== 顶部工具栏 ===== */
 .toolbar {
@@ -39,12 +95,12 @@ body {
   top: 0;
   z-index: 100;
   background: #fff;
-  border-bottom: 2px solid var(--brand);
+  border-bottom: 1px solid var(--border);
   padding: 10px 24px;
   display: flex;
   align-items: center;
   gap: 12px;
-  box-shadow: 0 2px 8px rgba(26,86,160,.12);
+  box-shadow: 0 1px 6px rgba(11,59,44,.06);
   flex-wrap: wrap;
 }
 
@@ -210,7 +266,7 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 12px 20px;
-  background: linear-gradient(90deg, var(--brand) 0%, #2a70d0 100%);
+  background: linear-gradient(90deg, var(--brand-deep) 0%, var(--brand) 100%);
   cursor: pointer;
   user-select: none;
 }
@@ -453,11 +509,30 @@ body {
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 
   body { background: #fff; font-size: 11pt; }
-  .toolbar, .filter-bar, .add-row-area, .del-row-btn, .btn-group-actions,
+  .sheen-nav, .toolbar, .filter-bar, .add-row-area, .del-row-btn, .btn-group-actions,
   .status-btn:not(.active-yes):not(.active-no):not(.active-na),
-  #filterBar, .add-row-area { display: none !important; }
+  #filterBar, .add-row-area, .sheen-footer { display: none !important; }
 
   .main { max-width: 100%; padding: 0; margin: 0; }
+
+  /* 打印品牌页眉 */
+  .sheen-print-header {
+    display: block !important;
+    margin-bottom: 16px;
+    border-bottom: 2px solid var(--brand-deep);
+    padding-bottom: 10px;
+  }
+  .sheen-print-header .sph-brand {
+    font-size: 12pt; font-weight: 700; color: var(--brand-deep);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .sheen-print-header .sph-title {
+    font-size: 16pt; font-weight: 700; color: var(--brand-deep); margin-top: 6px;
+  }
+  .sheen-print-header .sph-info {
+    font-size: 10pt; color: #555; margin-top: 4px;
+    display: flex; justify-content: space-between;
+  }
 
   .header-card, .section, .sign-card, .note-card {
     box-shadow: none !important;
@@ -467,12 +542,12 @@ body {
   }
 
   .section { margin-bottom: 8pt; border: 1pt solid #ccc; }
-  .section-header { background: #e0e8f5 !important; padding: 6pt 10pt; }
-  .section-title { color: #1a56a0 !important; font-size: 11pt; }
+  .section-header { background: #d6e8df !important; padding: 6pt 10pt; }
+  .section-title { color: #0b3b2c !important; font-size: 11pt; }
   .section-stats { color: #444 !important; }
   .section-toggle { display: none; }
 
-  .check-table th { background: #f0f4fa !important; font-size: 9pt; padding: 4pt 6pt; }
+  .check-table th { background: #f0fdf4 !important; font-size: 9pt; padding: 4pt 6pt; }
   .check-table td { padding: 5pt 6pt; font-size: 10pt; }
 
   .status-btn { font-size: 9pt; padding: 2pt 5pt; }
@@ -483,23 +558,23 @@ body {
   .header-fields { grid-template-columns: repeat(3, 1fr); }
   .field-group input { border: none; border-bottom: 1pt solid #aaa; border-radius: 0; background: transparent; padding: 2pt 0; }
 
-  /* 页眉页脚 */
+  /* 打印品牌页脚 */
+  .sheen-print-footer {
+    display: block !important;
+    margin-top: 30px;
+    border-top: 1px solid #ccc;
+    padding-top: 8px;
+    text-align: center;
+    font-size: 9pt;
+    color: #777;
+  }
+
   @page {
     margin: 15mm 12mm 20mm;
-    @top-center {
-      content: "PSSR 开车前安全审查检查表（多行业增强版）";
-      font-size: 9pt;
-      color: #555;
-    }
-    @bottom-left {
-      content: "生成日期：" attr(data-date);
+    @bottom-center {
+      content: "SHEEN Toolbox · PSSR 检查表";
       font-size: 8pt;
-      color: #777;
-    }
-    @bottom-right {
-      content: "第 " counter(page) " 页 / 共 " counter(pages) " 页";
-      font-size: 8pt;
-      color: #777;
+      color: #999;
     }
   }
 }
@@ -519,9 +594,22 @@ body {
 </head>
 <body>
 
+<!-- ===== SHEEN Toolbox 统一导航栏 ===== -->
+<header class="sheen-nav">
+  <a href="/sheen-toolbox/" class="sheen-nav-brand">
+    <i class="fa-solid fa-shield-halved"></i>
+    <span class="sheen-nav-brand-text">SHEEN Toolbox</span>
+  </a>
+  <nav class="sheen-nav-tools">
+    <a href="/sheen-toolbox/pssr-checklist/" class="sheen-nav-tool active"><i class="fa-solid fa-clipboard-check"></i> PSSR 检查表</a>
+    <a href="/sheen-toolbox/fire-extinguisher-calculator/" class="sheen-nav-tool"><i class="fa-solid fa-fire-extinguisher"></i> 灭火器计算器</a>
+    <a href="/sheen-toolbox/safety-production-cost-calculator/" class="sheen-nav-tool"><i class="fa-solid fa-calculator"></i> 安产费用</a>
+  </nav>
+</header>
+
 <!-- ===== 工具栏 ===== -->
 <div class="toolbar" id="mainToolbar">
-  <div class="toolbar-title">📋 PSSR 检查表</div>
+  <div class="toolbar-title"><i class="fa-solid fa-clipboard-check"></i> PSSR 检查表</div>
 
   <div class="progress-wrap">
     <div class="progress-bar-outer">
@@ -543,14 +631,24 @@ body {
     <div class="filter-chip tag-oil" style="border-color:#80aadd" data-filter="oil" onclick="setFilter('oil',this)">🔵 油气</div>
   </div>
 
-  <button class="btn btn-outline" onclick="expandAll()">展开全部</button>
-  <button class="btn btn-outline" onclick="collapseAll()">收起全部</button>
-  <button class="btn btn-success" onclick="markAllYes()">全部标记完成</button>
-  <button class="btn btn-primary" onclick="window.print()">🖨️ 打印</button>
+  <button class="btn btn-outline" onclick="expandAll()"><i class="fa-solid fa-angles-down"></i> 展开全部</button>
+  <button class="btn btn-outline" onclick="collapseAll()"><i class="fa-solid fa-angles-up"></i> 收起全部</button>
+  <button class="btn btn-success" onclick="markAllYes()"><i class="fa-solid fa-check-double"></i> 全部标记完成</button>
+  <button class="btn btn-primary" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印</button>
 </div>
 
 <!-- ===== 主体 ===== -->
 <div class="main">
+
+  <!-- 打印品牌页眉（仅打印时显示） -->
+  <div class="sheen-print-header">
+    <div class="sph-brand"><i class="fa-solid fa-shield-halved"></i> SHEEN Toolbox</div>
+    <div class="sph-title">PSSR 开车前安全审查检查表（多行业增强版）</div>
+    <div class="sph-info">
+      <span>依据：化工企业安全管理体系 · PSSR 开车前安全审查规范</span>
+      <span id="printDate"></span>
+    </div>
+  </div>
 
   <!-- 表头信息 -->
   <div class="header-card">
@@ -651,6 +749,14 @@ body {
   </div>
 
 </div><!-- end .main -->
+
+<!-- 打印品牌页脚 -->
+<div class="sheen-print-footer">SHEEN Toolbox · PSSR 开车前安全审查检查表</div>
+
+<!-- ===== SHEEN Toolbox 统一页脚 ===== -->
+<footer class="sheen-footer">
+  <i class="fa-solid fa-shield-halved"></i><strong>SHEEN Toolbox</strong> · PSSR 开车前安全审查检查表 · 数据仅供安全审查参考
+</footer>
 
 <script>
 // ===== 数据定义 =====
@@ -1132,6 +1238,13 @@ renderAll();
 if (!document.getElementById('reviewDate').value) {
   const today = new Date();
   document.getElementById('reviewDate').value = today.toISOString().split('T')[0];
+}
+
+// 打印日期
+var printDateEl = document.getElementById('printDate');
+if (printDateEl) {
+  var now = new Date();
+  printDateEl.textContent = '打印日期：' + now.getFullYear() + '年' + (now.getMonth()+1) + '月' + now.getDate() + '日';
 }
 </script>
 </body>
