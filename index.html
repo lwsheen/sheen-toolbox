@@ -307,16 +307,18 @@
         }
 
         /* ===== 页脚 ===== */
-        .footer {
+        .sheen-footer {
             text-align: center;
-            padding: 20px 24px;
+            padding: 16px 32px;
             font-size: 13px;
             color: var(--text-secondary);
             border-top: 1px solid var(--border);
             background: var(--bg-card);
             margin-top: auto;
+            letter-spacing: 0.5px;
         }
-        .footer i { color: var(--amber); margin-right: 4px; }
+        .sheen-footer i { color: var(--amber); margin-right: 4px; }
+        .sheen-footer strong { color: var(--text-primary); }
 
         @media (max-width: 720px) {
             .navbar { padding: 12px 16px; }
@@ -328,6 +330,26 @@
             .footer-extras { flex-direction: column; align-items: flex-start; gap: 16px; padding: 24px 16px 0; }
             .footer-visitor { width: 100%; }
             .visitor-item { width: 100%; }
+        }
+
+        @media (max-width: 480px) {
+            .navbar { padding: 10px 12px; flex-direction: column; gap: 6px; }
+            .brand-text { font-size: 16px; }
+            .hero { padding: 24px 12px 16px; }
+            .hero h1 { font-size: 20px; }
+            .hero p { font-size: 13px; }
+            .tool-grid { padding: 0 12px 32px; gap: 12px; }
+            .tool-card { padding: 20px 16px; }
+            .tool-card h3 { font-size: 16px; }
+            .tool-card .desc { font-size: 12px; }
+            .tool-card .tool-icon { width: 44px; height: 44px; font-size: 20px; }
+            .footer-extras { padding: 16px 12px 0; }
+            .footer-qr { gap: 12px; }
+            .qr-img-wrap { width: 70px; height: 70px; }
+            .qr-label { font-size: 12px; }
+            .qr-label strong { font-size: 13px; }
+            .visitor-count { font-size: 22px; }
+            .sheen-footer { padding: 12px 16px; font-size: 12px; }
         }
     </style>
 </head>
@@ -429,8 +451,8 @@
         </div>
     </div>
 
-    <footer class="footer">
-        <i class="fa-solid fa-shield-halved"></i> SHEEN Toolbox · 环境健康安全专业工具箱
+    <footer class="sheen-footer">
+        <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 环境健康安全专业工具箱
     </footer>
 
     <script>

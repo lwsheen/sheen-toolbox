@@ -320,13 +320,13 @@
         }
 
         /* ===== 页脚 ===== */
-        .footer {
-            text-align: center; padding: 16px 32px; font-size: 14px;
+        .sheen-footer {
+            text-align: center; padding: 16px 32px; font-size: 13px;
             color: var(--text-secondary); border-top: 1px solid var(--border);
-            background: var(--bg-page); letter-spacing: 0.5px;
+            background: var(--bg-card); letter-spacing: 0.5px;
         }
-        .footer span { color: var(--brand-red); font-weight: 600; }
-        .footer i { color: var(--amber); }
+        .sheen-footer i { color: var(--amber); }
+        .sheen-footer strong { color: var(--text-primary); }
 
         /* ===== 响应式 ===== */
         @media (max-width: 820px) {
@@ -364,11 +364,27 @@
             .result-value .number { font-size: 28px; }
         }
 
+        @media (max-width: 480px) {
+            .navbar { padding: 10px 12px; flex-direction: column; gap: 8px; }
+            .brand-name { font-size: 16px; }
+            .sheen-nav-tools { justify-content: center; }
+            .sheen-nav-tool { padding: 6px 10px; font-size: 12px; }
+            .badge-version { display: none; }
+            .content-area { padding: 12px; }
+            .panel-header h2 { font-size: 18px; }
+            .form-control { font-size: 13px; padding: 8px 10px; }
+            .btn-primary, .btn-print { width: 100%; padding: 10px 16px; font-size: 14px; }
+            .side-nav { padding: 8px; }
+            .nav-item { padding: 6px 8px; font-size: 11px; }
+            .result-value .number { font-size: 22px; }
+            .sheen-footer { padding: 12px 16px; font-size: 12px; }
+        }
+
         @media print {
             @page { size: A4; margin: 18mm 15mm 20mm 15mm; }
             body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
             .app-wrapper { box-shadow: none !important; border-radius: 0 !important; max-width: 100% !important; border: none !important; }
-            .navbar, .side-nav, .btn-primary, .btn-print, .form-card, .footer, .footnote, .disclaimer, .no-print { display: none !important; }
+            .navbar, .side-nav, .btn-primary, .btn-print, .form-card, .sheen-footer, .footnote, .disclaimer, .no-print { display: none !important; }
             .main-body { flex-direction: column; }
             .content-area { padding: 0 !important; }
             .panel-header h2 { font-size: 18pt; color: #000 !important; }
@@ -546,8 +562,8 @@
             </div>
         </div>
 
-        <footer class="footer">
-            <i class="fa-solid fa-shield-halved"></i> &nbsp;<span>SHEEN Toolbox</span> · 灭火器配置计算器
+        <footer class="sheen-footer">
+            <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 灭火器配置计算器
         </footer>
 
     </div>
