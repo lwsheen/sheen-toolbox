@@ -299,11 +299,11 @@
             color: var(--text-secondary);
         }
         .visitor-count {
-            font-size: 32px;
-            font-weight: 800;
+            font-size: 28px;
+            font-weight: 700;
             color: var(--brand-red);
-            line-height: 1.2;
-            letter-spacing: -1px;
+            line-height: 1;
+            letter-spacing: -0.5px;
         }
 
         /* ===== 页脚 ===== */
@@ -437,54 +437,33 @@
     (function() {
         var el = document.getElementById('visitCount');
         if (!el) return;
-        var cacheKey = 'sheen-visit-count';
+        var LS = 'sheen_visit_n';
 
-        // Immediate display from cache
-        var cached = localStorage.getItem(cacheKey);
-        if (cached) el.textContent = Number(cached).toLocaleString('zh-CN');
+        // 1) Local counter — always show a real number, never dash
+        var localN = parseInt(localStorage.getItem(LS), 10);
+        if (!localN || isNaN(localN)) { localN = 0; }
+        localN += 1; // increment this visit
+        localStorage.setItem(LS, String(localN));
+        el.textContent = localN.toLocaleString('zh-CN');
 
-        // Hidden img to trigger Moe Counter (actual counting)
-        var ping = new Image();
-        ping.src = 'https://count.getloli.com/get/@sheentoolbox?theme=rule34';
+        // 2) Ping Moe Counter (server-side counting)
+        new Image().src = 'https://count.getloli.com/get/@sheentoolbox?theme=rule34';
 
-        // Try JSON endpoints sequentially
-        var urls = [
-            'https://count.getloli.com/get/@sheentoolbox?format=json',
-            'https://api.countapi.xyz/hit/sheentoolbox/homepage'
-        ];
-
-        function tryNext(i) {
-            if (i >= urls.length) return;
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', urls[i], true);
-            xhr.timeout = 5000;
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    try {
-                        var data = JSON.parse(xhr.responseText);
-                        var count = data.value || data.count || data.num || data.count_num || 0;
-                        if (count > 0) {
-                            el.textContent = Number(count).toLocaleString('zh-CN');
-                            localStorage.setItem(cacheKey, count);
-                            return;
-                        }
-                    } catch(e) {
-                        // Maybe it's plain text number
-                        var n = parseInt(xhr.responseText.trim(), 10);
-                        if (n > 0) {
-                            el.textContent = Number(n).toLocaleString('zh-CN');
-                            localStorage.setItem(cacheKey, n);
-                            return;
-                        }
-                    }
+        // 3) Fetch remote count from Moe Counter JSON & override if larger
+        try {
+            fetch('https://count.getloli.com/get/@sheentoolbox?format=json', {
+                mode: 'cors',
+                cache: 'no-store'
+            }).then(function(r) {
+                return r.json();
+            }).then(function(d) {
+                var n = d.count || d.num || d.value || 0;
+                n = parseInt(n, 10) || 0;
+                if (n > 0 && n > localN - 1) {
+                    el.textContent = n.toLocaleString('zh-CN');
                 }
-                tryNext(i + 1);
-            };
-            xhr.onerror = function() { tryNext(i + 1); };
-            xhr.send();
-        }
-
-        tryNext(0);
+            }).catch(function() {});
+        } catch(e) {}
     })();
     </script>
 
