@@ -216,7 +216,7 @@
             padding: 0 24px;
             width: 100%;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: stretch;
             flex-wrap: wrap;
             gap: 24px;
@@ -224,17 +224,12 @@
         .footer-qr {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 18px;
+            gap: 16px;
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 14px;
             padding: 18px 28px;
             flex: 0 1 auto;
-            transition: box-shadow 0.25s;
-        }
-        .footer-qr:hover {
-            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
         }
         .qr-img-wrap {
             width: 90px;
@@ -282,32 +277,40 @@
         }
         .footer-visitor {
             display: flex;
-            align-items: center;
-            gap: 16px;
+            align-items: stretch;
         }
         .visitor-item {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 16px;
             font-size: 13px;
             color: var(--text-secondary);
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 14px;
-            padding: 18px 28px;
-            transition: box-shadow 0.25s;
+            padding: 18px 32px;
         }
-        .visitor-item:hover {
-            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        .visitor-divider {
+            width: 1px;
+            height: 40px;
+            background: var(--border);
+            flex-shrink: 0;
         }
-        .visitor-item i {
+        .visitor-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .visitor-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .visitor-count {
+            font-size: 32px;
+            font-weight: 800;
             color: var(--brand-red);
-            font-size: 18px;
-        }
-        .counter-badge {
-            height: 32px;
-            max-width: 180px;
-            border-radius: 4px;
+            line-height: 1.2;
+            letter-spacing: -1px;
         }
 
         /* ===== 页脚 ===== */
@@ -329,9 +332,9 @@
             .hero { padding: 32px 16px 24px; }
             .hero h1 { font-size: 22px; }
             .tool-grid { grid-template-columns: 1fr; padding: 0 16px 40px; }
-            .footer-extras { flex-direction: column; align-items: center; gap: 16px; padding: 24px 16px 0; }
-            .footer-qr { width: 100%; max-width: 400px; justify-content: flex-start; }
-            .footer-visitor { width: 100%; max-width: 400px; }
+            .footer-extras { flex-direction: column; align-items: stretch; gap: 16px; padding: 24px 16px 0; }
+            .footer-qr { justify-content: flex-start; }
+            .footer-visitor { width: 100%; }
             .visitor-item { width: 100%; justify-content: center; }
         }
     </style>
@@ -424,9 +427,12 @@
         </div>
         <div class="footer-visitor">
             <div class="visitor-item">
-                <i class="fa-solid fa-eye"></i>
-                <span>页面访问</span>
-                <img class="counter-badge" src="https://count.getloli.com/get/@sheentoolbox?theme=rule34" alt="访问量" />
+                <i class="fa-solid fa-eye" style="color:var(--brand-red);font-size:18px"></i>
+                <div class="visitor-divider"></div>
+                <div class="visitor-text">
+                    <span class="visitor-label">页面访问量</span>
+                    <span class="visitor-count" id="visitCount">—</span>
+                </div>
             </div>
         </div>
     </div>
@@ -434,6 +440,44 @@
     <footer class="footer">
         <i class="fa-solid fa-shield-halved"></i> SHEEN Toolbox · 环境健康安全专业工具箱
     </footer>
+
+    <script>
+    (function() {
+        var el = document.getElementById('visitCount');
+        if (!el) return;
+
+        // Moe Counter JSON API
+        var url = 'https://count.getloli.com/get/@sheentoolbox?format=json';
+        var cacheKey = 'sheen-visit-count';
+
+        // Show cached count immediately
+        var cached = localStorage.getItem(cacheKey);
+        if (cached) {
+            el.textContent = Number(cached).toLocaleString('zh-CN');
+        }
+
+        // Fetch latest count
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.timeout = 5000;
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                try {
+                    var data = JSON.parse(xhr.responseText);
+                    var count = data.count || data.value || data.num || 0;
+                    if (count > 0) {
+                        el.textContent = Number(count).toLocaleString('zh-CN');
+                        localStorage.setItem(cacheKey, count);
+                    }
+                } catch(e) {}
+            }
+        };
+        xhr.onerror = function() {
+            // keep cached or dash
+        };
+        xhr.send();
+    })();
+    </script>
 
 </body>
 </html>
