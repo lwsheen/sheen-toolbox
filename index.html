@@ -228,26 +228,20 @@
             display: flex;
             align-items: center;
             gap: 16px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 18px 28px;
+            padding: 0;
             flex: 0 1 auto;
         }
         .qr-img-wrap {
             width: 90px;
             height: 90px;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid var(--border);
             flex-shrink: 0;
-            background: #fff;
         }
         .qr-img-wrap img {
             width: 100%;
             height: 100%;
             object-fit: contain;
             display: block;
+            border-radius: 6px;
         }
         .qr-upload-hint {
             width: 90px;
@@ -260,7 +254,6 @@
             font-size: 10px;
             color: var(--text-secondary);
             text-align: center;
-            background: var(--bg-page);
         }
         .qr-upload-hint i {
             font-size: 28px;
@@ -288,14 +281,11 @@
             gap: 16px;
             font-size: 13px;
             color: var(--text-secondary);
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 18px 32px;
+            padding: 0;
         }
         .visitor-divider {
             width: 1px;
-            height: 40px;
+            height: 36px;
             background: var(--border);
             flex-shrink: 0;
         }
@@ -335,10 +325,9 @@
             .hero { padding: 32px 16px 24px; }
             .hero h1 { font-size: 22px; }
             .tool-grid { grid-template-columns: 1fr; padding: 0 16px 40px; }
-            .footer-extras { flex-direction: column; align-items: stretch; gap: 16px; padding: 24px 16px 0; }
-            .footer-qr { justify-content: flex-start; }
+            .footer-extras { flex-direction: column; align-items: flex-start; gap: 16px; padding: 24px 16px 0; }
             .footer-visitor { width: 100%; }
-            .visitor-item { width: 100%; justify-content: center; }
+            .visitor-item { width: 100%; }
         }
     </style>
 </head>
@@ -448,42 +437,54 @@
     (function() {
         var el = document.getElementById('visitCount');
         if (!el) return;
-
         var cacheKey = 'sheen-visit-count';
-        var fallbackUrl = 'https://count.getloli.com/get/@sheentoolbox?format=json';
 
-        // Show cached count immediately
+        // Immediate display from cache
         var cached = localStorage.getItem(cacheKey);
-        if (cached) {
-            el.textContent = Number(cached).toLocaleString('zh-CN');
-        }
+        if (cached) el.textContent = Number(cached).toLocaleString('zh-CN');
 
-        function tryFetch(url, fallback) {
+        // Hidden img to trigger Moe Counter (actual counting)
+        var ping = new Image();
+        ping.src = 'https://count.getloli.com/get/@sheentoolbox?theme=rule34';
+
+        // Try JSON endpoints sequentially
+        var urls = [
+            'https://count.getloli.com/get/@sheentoolbox?format=json',
+            'https://api.countapi.xyz/hit/sheentoolbox/homepage'
+        ];
+
+        function tryNext(i) {
+            if (i >= urls.length) return;
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', url, true);
+            xhr.open('GET', urls[i], true);
             xhr.timeout = 5000;
             xhr.onload = function() {
                 if (xhr.status === 200) {
                     try {
                         var data = JSON.parse(xhr.responseText);
-                        var count = data.value || data.count || data.num || 0;
+                        var count = data.value || data.count || data.num || data.count_num || 0;
                         if (count > 0) {
                             el.textContent = Number(count).toLocaleString('zh-CN');
                             localStorage.setItem(cacheKey, count);
                             return;
                         }
-                    } catch(e) {}
+                    } catch(e) {
+                        // Maybe it's plain text number
+                        var n = parseInt(xhr.responseText.trim(), 10);
+                        if (n > 0) {
+                            el.textContent = Number(n).toLocaleString('zh-CN');
+                            localStorage.setItem(cacheKey, n);
+                            return;
+                        }
+                    }
                 }
-                if (fallback) tryFetch(fallback, null);
+                tryNext(i + 1);
             };
-            xhr.onerror = function() {
-                if (fallback) tryFetch(fallback, null);
-            };
+            xhr.onerror = function() { tryNext(i + 1); };
             xhr.send();
         }
 
-        // Primary: countapi.xyz (pure JSON), fallback: Moe Counter JSON
-        tryFetch('https://api.countapi.xyz/hit/sheentoolbox/homepage', fallbackUrl);
+        tryNext(0);
     })();
     </script>
 
