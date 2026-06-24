@@ -212,40 +212,48 @@
         /* ===== 页脚前扩展：公众号 & 访问量 ===== */
         .footer-extras {
             max-width: 1080px;
-            margin: 0 auto 0;
-            padding: 24px 24px 0;
+            margin: 40px auto 0;
+            padding: 0 24px;
             width: 100%;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            justify-content: center;
+            align-items: stretch;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 24px;
         }
         .footer-qr {
             display: flex;
             align-items: center;
-            gap: 14px;
+            justify-content: center;
+            gap: 18px;
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 14px 20px;
+            border-radius: 14px;
+            padding: 18px 28px;
+            flex: 0 1 auto;
+            transition: box-shadow 0.25s;
+        }
+        .footer-qr:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
         }
         .qr-img-wrap {
-            width: 80px;
-            height: 80px;
-            border-radius: 8px;
+            width: 90px;
+            height: 90px;
+            border-radius: 10px;
             overflow: hidden;
             border: 1px solid var(--border);
             flex-shrink: 0;
+            background: #fff;
         }
         .qr-img-wrap img {
             width: 100%;
             height: 100%;
             object-fit: contain;
+            display: block;
         }
         .qr-upload-hint {
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -263,12 +271,14 @@
         .qr-label {
             font-size: 13px;
             color: var(--text-secondary);
-            line-height: 1.5;
-            white-space: nowrap;
+            line-height: 1.6;
+            text-align: center;
         }
         .qr-label strong {
             color: var(--text-primary);
-            font-size: 14px;
+            font-size: 15px;
+            display: block;
+            margin-top: 2px;
         }
         .footer-visitor {
             display: flex;
@@ -278,20 +288,25 @@
         .visitor-item {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             font-size: 13px;
             color: var(--text-secondary);
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 14px 20px;
+            border-radius: 14px;
+            padding: 18px 28px;
+            transition: box-shadow 0.25s;
+        }
+        .visitor-item:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
         }
         .visitor-item i {
             color: var(--brand-red);
-            font-size: 16px;
+            font-size: 18px;
         }
         .counter-badge {
-            height: 24px;
+            height: 28px;
+            max-width: 140px;
             border-radius: 4px;
         }
 
@@ -314,9 +329,10 @@
             .hero { padding: 32px 16px 24px; }
             .hero h1 { font-size: 22px; }
             .tool-grid { grid-template-columns: 1fr; padding: 0 16px 40px; }
-            .footer-extras { flex-direction: column; align-items: stretch; padding: 16px 16px 0; }
-            .footer-qr { justify-content: center; }
-            .footer-visitor { justify-content: center; }
+            .footer-extras { flex-direction: column; align-items: center; gap: 16px; padding: 24px 16px 0; }
+            .footer-qr { width: 100%; max-width: 400px; justify-content: flex-start; }
+            .footer-visitor { width: 100%; max-width: 400px; }
+            .visitor-item { width: 100%; justify-content: center; }
         }
     </style>
 </head>
@@ -401,12 +417,10 @@
     <!-- 公众号 & 访问量 -->
     <div class="footer-extras">
         <div class="footer-qr">
-            <div class="qr-placeholder" id="qrBox">
-                <div class="qr-img-wrap">
-                    <img src="assets/qrcode-mp.jpg" alt="SHEEN环境健康安全公众号" id="qrImg" onerror="this.parentElement.innerHTML='<div class=qr-upload-hint><i class=\'fa-solid fa-qrcode\'></i><span>请将公众号二维码图片<br>保存为 assets/qrcode-mp.jpg</span></div>'" />
-                </div>
-                <span class="qr-label">关注公众号<br><strong>SHEEN 环境健康安全</strong></span>
+            <div class="qr-img-wrap">
+                <img src="assets/qrcode-mp.jpg" alt="SHEEN环境健康安全公众号" id="qrImg" onerror="this.parentElement.innerHTML='<div class=qr-upload-hint><i class=fa-solid fa-qrcode></i><span>二维码加载失败</span></div>'" />
             </div>
+            <span class="qr-label">关注公众号<br><strong>SHEEN 环境健康安全</strong></span>
         </div>
         <div class="footer-visitor">
             <div class="visitor-item">
