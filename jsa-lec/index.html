@@ -664,7 +664,7 @@ function exportWord() {
   if (data.rows.length === 0) { alert('暂无数据可导出，请先添加工作步骤和危害因素。'); return; }
 
   var now = new Date().toISOString().replace('T',' ').slice(0,16);
-  var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"><title>JSA+LEC 风险分析</title><style>@page{size:A4 landscape;margin:20mm 18mm 20mm 18mm}body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;font-size:11pt;color:#000}h2{font-size:16pt;text-align:center;margin-bottom:12pt}table{border-collapse:collapse;width:100%;margin-bottom:12pt}td,th{border:1px solid #333;padding:5pt 6pt;font-size:10pt;vertical-align:top}th{background:#eee;font-weight:bold;text-align:center}.label{font-weight:bold;white-space:nowrap;width:80pt}.sig{font-size:11pt}</style></head><body>';
+  var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"><title>JSA+LEC 作业安全分析与风险评估</title><style>@page{size:A4 landscape;margin:20mm 18mm 20mm 18mm}body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;font-size:11pt;color:#000}h2{font-size:16pt;text-align:center;margin-bottom:12pt}table{border-collapse:collapse;width:100%;margin-bottom:12pt}td,th{border:1px solid #333;padding:5pt 6pt;font-size:10pt;vertical-align:top}th{background:#eee;font-weight:bold;text-align:center}.label{font-weight:bold;white-space:nowrap;width:80pt}.sig{font-size:11pt}</style></head><body>';
 
   html += '<h2>JSA+LEC 作业安全分析与风险评估记录表</h2>';
 
