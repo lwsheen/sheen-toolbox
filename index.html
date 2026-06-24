@@ -461,31 +461,37 @@
         if (!el) return;
         var LS = 'sheen_visit_n';
 
-        // 1) Local counter — always show a real number, never dash
+        // 1) Show local cached count immediately (no flicker)
         var localN = parseInt(localStorage.getItem(LS), 10);
-        if (!localN || isNaN(localN)) { localN = 0; }
-        localN += 1; // increment this visit
-        localStorage.setItem(LS, String(localN));
+        if (!localN || isNaN(localN)) localN = 0;
         el.textContent = localN.toLocaleString('zh-CN');
 
-        // 2) Ping Moe Counter (server-side counting)
-        new Image().src = 'https://count.getloli.com/get/@sheentoolbox?theme=rule34';
+        // 2) Hit the server-side counter (auto-increments)
+        // Try in order, stop at first success
+        var endpoints = [
+            'https://api.countapi.xyz/hit/sheentoolbox/visits',
+            'https://count.getloli.com/get/@sheentoolbox?format=json'
+        ];
 
-        // 3) Fetch remote count from Moe Counter JSON & override if larger
-        try {
-            fetch('https://count.getloli.com/get/@sheentoolbox?format=json', {
-                mode: 'cors',
-                cache: 'no-store'
-            }).then(function(r) {
-                return r.json();
-            }).then(function(d) {
-                var n = d.count || d.num || d.value || 0;
-                n = parseInt(n, 10) || 0;
-                if (n > 0 && n > localN - 1) {
-                    el.textContent = n.toLocaleString('zh-CN');
-                }
-            }).catch(function() {});
-        } catch(e) {}
+        function tryHit(i) {
+            if (i >= endpoints.length) return;
+            var url = endpoints[i];
+            fetch(url, { mode: 'cors', cache: 'no-store' })
+                .then(function(r) { return r.json(); })
+                .then(function(d) {
+                    var n = d.value || d.count || d.num || 0;
+                    n = parseInt(n, 10) || 0;
+                    if (n > 0) {
+                        el.textContent = n.toLocaleString('zh-CN');
+                        if (n > localN) localStorage.setItem(LS, String(n));
+                        return;
+                    }
+                    tryHit(i + 1);
+                })
+                .catch(function() { tryHit(i + 1); });
+        }
+
+        tryHit(0);
     })();
     </script>
 
