@@ -422,6 +422,18 @@
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
 
+        <a href="/sheen-toolbox/industry-classification/" class="tool-card">
+            <div class="tool-icon"><i class="fa-solid fa-sitemap"></i></div>
+            <h3>行业分类查询</h3>
+            <p class="desc">基于 GB/T 4754-2017 国民经济行业分类标准，支持 4 级树形浏览、关键词检索、代码反查与一键复制打印。</p>
+            <div class="tag-row">
+                <span class="tag red">行业分类</span>
+                <span class="tag">GB/T 4754</span>
+                <span class="tag">国家经济分类</span>
+            </div>
+            <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
         <!-- 预留工具位 -->
         <div class="tool-card placeholder">
             <div class="tool-icon"><i class="fa-solid fa-diagram-project"></i></div>
@@ -466,32 +478,64 @@
         if (!localN || isNaN(localN)) localN = 0;
         el.textContent = localN.toLocaleString('zh-CN');
 
-        // 2) Hit the server-side counter (auto-increments)
-        // Try in order, stop at first success
-        var endpoints = [
-            'https://api.countapi.xyz/hit/sheentoolbox/visits',
-            'https://count.getloli.com/get/@sheentoolbox?format=json'
-        ];
+        // ====== GitHub Gist 计数器配置 ======
+        // 把下方两个常量替换成你的真实值
+        var GIST_ID = 'YOUR_GIST_ID';           // 例: abc123def456...
+        var GH_TOKEN = 'YOUR_GH_TOKEN';         // 例: ghp_xxxxxxxxxxxx
+        var FILE_NAME = 'sheen-counter.json';
+        var TIMEOUT_MS = 8000;                  // Gist API 较慢, 给 8 秒
 
-        function tryHit(i) {
-            if (i >= endpoints.length) return;
-            var url = endpoints[i];
-            fetch(url, { mode: 'cors', cache: 'no-store' })
-                .then(function(r) { return r.json(); })
-                .then(function(d) {
-                    var n = d.value || d.count || d.num || 0;
-                    n = parseInt(n, 10) || 0;
-                    if (n > 0) {
-                        el.textContent = n.toLocaleString('zh-CN');
-                        if (n > localN) localStorage.setItem(LS, String(n));
-                        return;
-                    }
-                    tryHit(i + 1);
-                })
-                .catch(function() { tryHit(i + 1); });
+        function abortableFetch(url, opts) {
+            var ctl = new AbortController();
+            var t = setTimeout(function() { ctl.abort(); }, TIMEOUT_MS);
+            opts = opts || {};
+            opts.signal = ctl.signal;
+            opts.cache = 'no-store';
+            return fetch(url, opts).finally(function() { clearTimeout(t); });
         }
 
-        tryHit(0);
+        function ghHeaders() {
+            return {
+                Accept: 'application/vnd.github+json',
+                Authorization: 'Bearer ' + GH_TOKEN,
+                'X-GitHub-Api-Version': '2022-11-28',
+            };
+        }
+
+        function tryHit() {
+            el.textContent = '...';  // loading state
+            abortableFetch('https://api.github.com/gists/' + GIST_ID, { headers: ghHeaders() })
+                .then(function(r) { if (!r.ok) throw new Error('read fail ' + r.status); return r.json(); })
+                .then(function(d) {
+                    var file = d.files[FILE_NAME];
+                    if (!file) throw new Error('file not found');
+                    var v = 0;
+                    try { v = parseInt(JSON.parse(file.content).value, 10) || 0; } catch (e) {}
+                    var next = v + 1;
+                    // 写回
+                    var body = { files: {} };
+                    body.files[FILE_NAME] = { content: JSON.stringify({ value: next, updatedAt: new Date().toISOString() }, null, 2) };
+                    if (file.sha) body.files[FILE_NAME].sha = file.sha;
+                    return abortableFetch('https://api.github.com/gists/' + GIST_ID, {
+                        method: 'PATCH',
+                        headers: Object.assign(ghHeaders(), { 'Content-Type': 'application/json' }),
+                        body: JSON.stringify(body),
+                    }).then(function(r2) {
+                        if (!r2.ok) throw new Error('write fail ' + r2.status);
+                        return next;
+                    });
+                })
+                .then(function(n) {
+                    el.textContent = n.toLocaleString('zh-CN');
+                    if (n > localN) localStorage.setItem(LS, String(n));
+                })
+                .catch(function() {
+                    // 回退到本地缓存
+                    el.textContent = localN.toLocaleString('zh-CN');
+                });
+        }
+
+        tryHit();
     })();
     </script>
 
