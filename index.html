@@ -105,6 +105,7 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
+            position: relative;
         }
         .tool-card:hover {
             transform: translateY(-2px);
@@ -195,6 +196,23 @@
             border: 1px solid var(--border);
             margin-top: auto;
         }
+
+        /* 拖动排序 */
+        .tool-card.dragging { opacity: 0.4; transform: scale(0.95); }
+        .tool-card.drag-over { border-color: var(--brand-red); border-style: solid; }
+        .tool-card[draggable="true"] { cursor: grab; }
+        .tool-card[draggable="true"]:active { cursor: grabbing; }
+        .tool-card .drag-handle {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            color: #ccc;
+            font-size: 14px;
+            cursor: grab;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .tool-card:hover .drag-handle { opacity: 1; }
 
         /* ===== 分隔标题 ===== */
         .section-divider {
@@ -373,7 +391,8 @@
     </section>
 
     <div class="tool-grid">
-        <a href="/sheen-toolbox/pssr-checklist/" class="tool-card">
+        <a href="/sheen-toolbox/pssr-checklist/" class="tool-card" draggable="true">
+            <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-clipboard-check"></i></div>
             <h3>PSSR 开车前安全检查表</h3>
             <p class="desc">多行业增强版检查表，涵盖制药、化工、油气等专项。支持勾选状态追踪、动态增删检查项与进度统计。</p>
@@ -381,7 +400,8 @@
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
 
-        <a href="/sheen-toolbox/fire-extinguisher-calculator/" class="tool-card">
+        <a href="/sheen-toolbox/fire-extinguisher-calculator/" class="tool-card" draggable="true">
+            <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-fire-extinguisher"></i></div>
             <h3>灭火器配置计算器</h3>
             <p class="desc">依据 GB 50140-2005 自动计算灭火器配置数量。场景预设、危险等级自动匹配、修正系数联动。</p>
@@ -389,7 +409,8 @@
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
 
-        <a href="/sheen-toolbox/safety-production-cost-calculator/" class="tool-card">
+        <a href="/sheen-toolbox/safety-production-cost-calculator/" class="tool-card" draggable="true">
+            <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-calculator"></i></div>
             <h3>安全生产费用计算器</h3>
             <p class="desc">依据财企〔2022〕136号，覆盖煤炭、非煤矿山、建筑施工、危险品等12类行业。超额累退精准计提。</p>
@@ -397,7 +418,8 @@
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
 
-        <a href="/sheen-toolbox/jsa-lec/" class="tool-card">
+        <a href="/sheen-toolbox/jsa-lec/" class="tool-card" draggable="true">
+            <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
             <h3>JSA + LEC 风险分析</h3>
             <p class="desc">工作安全分析 + 作业条件危险性评价。拆解作业步骤、识别危害、LEC自动评分、制定控制措施。</p>
@@ -405,7 +427,8 @@
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
 
-        <a href="/sheen-toolbox/industry-classification/" class="tool-card">
+        <a href="/sheen-toolbox/industry-classification/" class="tool-card" draggable="true">
+            <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-sitemap"></i></div>
             <h3>行业分类查询</h3>
             <p class="desc">基于 GB/T 4754-2017 国民经济行业分类标准，支持 4 级树形浏览、关键词检索、代码反查与一键复制打印。</p>
@@ -413,21 +436,24 @@
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
 
-        <a href="/sheen-toolbox/dangerous-goods-query/" class="tool-card">
+        <a href="/sheen-toolbox/dangerous-goods-query/" class="tool-card" draggable="true">
+            <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-skull-crossbones"></i></div>
             <h3>危险货物查询</h3>
             <p class="desc">基于 GB 12268-2012 危险货物品名表，支持 UN编号、中文品名、危险类别多维检索，覆盖 9 大类 767 项常见危险货物。2025版数据待更新。</p>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
 
-        <a href="/sheen-toolbox/hazardous-chemicals-query/" class="tool-card">
+        <a href="/sheen-toolbox/hazardous-chemicals-query/" class="tool-card" draggable="true">
+            <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-flask"></i></div>
             <h3>危险化学品查询</h3>
             <p class="desc">基于《危险化学品目录（2025调整版）》，支持序号、品名、别名、CAS号、备注多维检索，覆盖 2830 项危险化学品。</p>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
 
-        <a href="/sheen-toolbox/hazardous-waste-query/" class="tool-card">
+        <a href="/sheen-toolbox/hazardous-waste-query/" class="tool-card" draggable="true">
+            <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-recycle"></i></div>
             <h3>危险废物查询</h3>
             <p class="desc">基于《国家危险废物名录（2025年版）》，支持废物代码、废物名称、废物类别、行业来源、危险特性多维检索，覆盖 470 项危险废物。</p>
@@ -469,27 +495,99 @@
 
     <script>
     (function() {
+        // ===== 访问计数器 =====
         var el = document.getElementById('visitCount');
-        if (!el) return;
-        var LS = 'sheen_visit_n';
+        if (el) {
+            var LS = 'sheen_visit_n';
+            var localN = parseInt(localStorage.getItem(LS), 10) || 0;
+            el.textContent = localN.toLocaleString('zh-CN');
+            fetch('https://api.counterapi.dev/v1/lwsheen-sheen-toolbox/homepage/up')
+                .then(function(r) { return r.json(); })
+                .then(function(d) {
+                    var n = d.count || 0;
+                    el.textContent = n.toLocaleString('zh-CN');
+                    localStorage.setItem(LS, String(n));
+                })
+                .catch(function() {});
+        }
 
-        // 先用缓存值占位
-        var localN = parseInt(localStorage.getItem(LS), 10) || 0;
-        el.textContent = localN.toLocaleString('zh-CN');
+        // ===== 卡片拖动排序 =====
+        var grid = document.querySelector('.tool-grid');
+        if (!grid) return;
 
-        // 从 CounterAPI 获取真实全站计数（零注册免费服务）
-        var namespace = 'lwsheen-sheen-toolbox';
-        var key = 'homepage';
-        fetch('https://api.counterapi.dev/v1/' + namespace + '/' + key + '/up')
-            .then(function(r) { return r.json(); })
-            .then(function(d) {
-                var n = d.count || 0;
-                el.textContent = n.toLocaleString('zh-CN');
-                localStorage.setItem(LS, String(n));
-            })
-            .catch(function() {
-                // API 不可用时保持本地值
+        var cards = grid.querySelectorAll('.tool-card:not(.placeholder)');
+        var orderKey = 'sheen_card_order';
+
+        // 加载保存的顺序
+        var saved = localStorage.getItem(orderKey);
+        if (saved) {
+            var order = JSON.parse(saved);
+            var cardMap = {};
+            cards.forEach(function(c) { cardMap[c.getAttribute('href')] = c; });
+            var frag = document.createDocumentFragment();
+            order.forEach(function(href) {
+                if (cardMap[href]) { frag.appendChild(cardMap[href]); delete cardMap[href]; }
             });
+            // 未保存的卡片追加到最后
+            Object.keys(cardMap).forEach(function(k) { frag.appendChild(cardMap[k]); });
+            grid.insertBefore(frag, grid.querySelector('.placeholder'));
+        }
+
+        // 重新获取卡片引用
+        cards = grid.querySelectorAll('.tool-card:not(.placeholder)');
+
+        var draggedItem = null;
+        cards.forEach(function(card) {
+            card.addEventListener('dragstart', function(e) {
+                draggedItem = this;
+                this.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/plain', '');
+            });
+            card.addEventListener('dragend', function() {
+                this.classList.remove('dragging');
+                cards = grid.querySelectorAll('.tool-card:not(.placeholder)');
+                cards.forEach(function(c) { c.classList.remove('drag-over'); });
+                saveOrder();
+            });
+            card.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                if (this !== draggedItem) this.classList.add('drag-over');
+            });
+            card.addEventListener('dragleave', function() {
+                this.classList.remove('drag-over');
+            });
+            card.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('drag-over');
+                if (this !== draggedItem) {
+                    var placeholder = grid.querySelector('.placeholder');
+                    grid.insertBefore(draggedItem, placeholder);
+                    grid.insertBefore(this, placeholder);
+                    grid.insertBefore(draggedItem, this);
+                }
+            });
+        });
+
+        // 也允许拖到占位卡前
+        var placeholder = grid.querySelector('.placeholder');
+        if (placeholder) {
+            placeholder.addEventListener('dragover', function(e) { e.preventDefault(); });
+            placeholder.addEventListener('drop', function(e) {
+                e.preventDefault();
+                grid.insertBefore(draggedItem, placeholder);
+                saveOrder();
+            });
+        }
+
+        function saveOrder() {
+            var hrefs = [];
+            grid.querySelectorAll('.tool-card:not(.placeholder)').forEach(function(c) {
+                hrefs.push(c.getAttribute('href'));
+            });
+            localStorage.setItem(orderKey, JSON.stringify(hrefs));
+        }
     })();
     </script>
 
