@@ -474,10 +474,23 @@
         if (!el) return;
         var LS = 'sheen_visit_n';
 
+        // 先用缓存值占位
         var localN = parseInt(localStorage.getItem(LS), 10) || 0;
-        localN += 1;
-        localStorage.setItem(LS, String(localN));
         el.textContent = localN.toLocaleString('zh-CN');
+
+        // 从 CounterAPI 获取真实全站计数（零注册免费服务）
+        var namespace = 'lwsheen-sheen-toolbox';
+        var key = 'homepage';
+        fetch('https://api.counterapi.dev/v1/' + namespace + '/' + key + '/up')
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+                var n = d.count || 0;
+                el.textContent = n.toLocaleString('zh-CN');
+                localStorage.setItem(LS, String(n));
+            })
+            .catch(function() {
+                // API 不可用时保持本地值
+            });
     })();
     </script>
 
