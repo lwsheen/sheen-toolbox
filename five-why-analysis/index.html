@@ -88,8 +88,12 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
 .report-section h4 { font-size:15px; font-weight:700; color:var(--brand-red); margin-bottom:8px; }
 .report-action { padding:8px 12px; background:#F0FDF4; border-left:3px solid #16A34A; margin-bottom:6px; font-size:13px; border-radius:0 4px 4px 0; }
 
-/* API Setup */
-.api-setup { display:none; }
+/* Demo */
+.demo-banner { background: linear-gradient(135deg, #FEF2F2, #FFF7ED); border: 1.5px dashed var(--brand-red); border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--text-primary); flex-wrap: wrap; }
+.demo-banner i.fa-lightbulb { color: var(--amber); font-size: 20px; }
+.demo-banner span { flex: 1; min-width: 200px; }
+.btn-demo { background: var(--brand-red); color: #fff; border: none; padding: 10px 20px; border-radius: 60px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.25s; white-space: nowrap; }
+.btn-demo:hover { background: var(--brand-red-hover); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(122,24,37,0.25); }
 .api-setup.show { display:block; }
 .api-status { display:inline-flex; align-items:center; gap:4px; font-size:12px; padding:4px 10px; border-radius:60px; }
 .api-status.ok { background:#F0FDF4; color:#16A34A; }
@@ -145,7 +149,14 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
     <div class="card">
       <h2><i class="fa-solid fa-magnifying-glass-chart"></i> 第1步：5M1E 维度分析</h2>
       <p class="sub">描述事故，然后从6个维度中勾选相关因素并填写初步观察。AI将根据你的选择引导后续5Why分析。</p>
-      <textarea id="incidentDesc" placeholder="描述事故：如"叉车在转弯时撞到货架导致物资掉落""></textarea>
+
+      <div class="demo-banner" id="demoBanner">
+        <i class="fa-solid fa-lightbulb"></i>
+        <span>不熟悉怎么用？试试 Demo 事故案例，体验 AI 如何像资深 EHS 工程师一样思考</span>
+        <button class="btn-demo" onclick="loadDemo()"><i class="fa-solid fa-play"></i> 试试 Demo 事故</button>
+      </div>
+
+      <textarea id="incidentDesc" placeholder='描述事故：如"叉车在转弯时撞到货架导致物资掉落"'></textarea>
       <div style="margin-top:20px;"><h3>选择相关维度（建议2-4个）</h3></div>
       <div class="matrix" id="m1eMatrix"></div>
       <div style="text-align:center;margin-top:16px;">
@@ -547,6 +558,37 @@ function generateReport() {
   document.getElementById('reportCard').innerHTML = html;
 }
 
+// ===== Demo =====
+var DEMO_DATA = {
+  incident: '2024年3月12日上午9:30，某建材厂制砂车间，操作工李某发现3号皮带输送机辊筒异响。李某未通知值班长，自行按下现场"急停"按钮后，钻入皮带下方检修。因缺乏工具，他违规戴着手套去清理辊筒上的结料。此时，中控室操作员张某发现3号线信号丢失，通过监控看到皮带停了但辊筒处有人影（被设备遮挡），因对讲机无人回应，张某以为设备跳停或信号故障，直接在中控远程复位了急停并重启。皮带瞬间启动，李某右手连同手套被卷入辊筒，造成右手尺桡骨骨折。',
+  dimensions: [
+    { key:'人', obs:'李某前一天夜班疲劳作业，存在侥幸心理；张某沟通习惯差，未执行复述确认' },
+    { key:'机', obs:'辊筒防护网缺失；急停按钮无物理锁定装置；中控复位无强制声光报警；监控存在盲区' },
+    { key:'料', obs:'原料含泥量大，辊筒结料频繁，需经常人工清理' },
+    { key:'法', obs:'缺少LOTO上锁挂牌操作规程；中控远程复位操作指引不明确；沟通未执行复述确认制' },
+    { key:'环', obs:'输送带底部空间狭窄；照明不足；噪音大导致对讲机听不清' },
+    { key:'测', obs:'缺乏急停状态的强制措施检验；缺乏违章操作的有效监控手段' }
+  ]
+};
+
+function loadDemo() {
+  document.getElementById('incidentDesc').value = DEMO_DATA.incident;
+  DEMO_DATA.dimensions.forEach(function(d) {
+    var el = document.querySelector('.matrix-item[data-key="'+d.key+'"]');
+    if (el) {
+      el.classList.add('selected');
+      var ta = el.querySelector('textarea');
+      ta.style.display = 'block';
+      ta.value = d.obs;
+    }
+  });
+  document.getElementById('demoBanner').style.opacity = '0.5';
+  document.getElementById('demoBanner').querySelector('span').textContent = 'Demo 事故已加载，可直接点击"开始分析"体验完整流程';
+  document.getElementById('demoBanner').querySelector('.btn-demo').textContent = '已加载';
+  document.getElementById('demoBanner').querySelector('.btn-demo').disabled = true;
+  document.getElementById('incidentDesc').scrollIntoView({ behavior: 'smooth' });
+}
+
 function resetAll() {
   state = {
     currentStep: 1, incident: '', dimensions: [], currentDim: 0,
@@ -561,6 +603,13 @@ function resetAll() {
   });
   document.getElementById('customReason').style.display = 'block';
   document.getElementById('btnSubmit').style.display = 'inline-block';
+  // Restore demo banner
+  var banner = document.getElementById('demoBanner');
+  banner.style.opacity = '1';
+  banner.querySelector('span').textContent = '不熟悉怎么用？试试 Demo 事故案例，体验 AI 如何像资深 EHS 工程师一样思考';
+  var btn = banner.querySelector('.btn-demo');
+  btn.textContent = '试试 Demo 事故';
+  btn.disabled = false;
   delete state._dimSummary;
   delete state._dimActions;
   delete state._currentWhy;
