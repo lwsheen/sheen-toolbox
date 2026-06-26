@@ -1,0 +1,4237 @@
+{
+  "version": "2025年版",
+  "total": 470,
+  "lastUpdate": "2026-06",
+  "items": [
+    {
+      "code": "841-001-01",
+      "name": "感染性废物",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "In",
+      "hazardDesc": "感染性"
+    },
+    {
+      "code": "841-002-01",
+      "name": "损伤性废物",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "In",
+      "hazardDesc": "感染性"
+    },
+    {
+      "code": "841-003-01",
+      "name": "病理性废物",
+      "category": "HW01 医疗废物",
+      "hwCode": "HW01",
+      "source": "卫生",
+      "hazard": "In",
+      "hazardDesc": "感染性"
+    },
+    {
+      "code": "841-004-01",
+      "name": "化学性废物",
+      "category": "HW01 医疗废物",
+      "hwCode": "HW01",
+      "source": "卫生",
+      "hazard": "T/C/I/R",
+      "hazardDesc": "毒性、腐蚀性、易燃性、反应性"
+    },
+    {
+      "code": "841-005-01",
+      "name": "药物性废物",
+      "category": "HW01 医疗废物",
+      "hwCode": "HW01",
+      "source": "卫生",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "271-001-02",
+      "name": "化学合成原料药生产过程中产生的蒸馏及反 应残余物",
+      "category": "HW01 医疗废物",
+      "hwCode": "HW01",
+      "source": "卫生",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "271-002-02",
+      "name": "化学合成原料药生产过程中产生的废母液及 反应基废物",
+      "category": "HW01 医疗废物",
+      "hwCode": "HW01",
+      "source": "卫生",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "271-003-02",
+      "name": "化学合成原料药生产过程中产生的废脱色过 滤介质",
+      "category": "HW01 医疗废物",
+      "hwCode": "HW01",
+      "source": "化学药品原 料药制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "271-004-02",
+      "name": "化学合成原料药生产过程中产生的废吸附剂",
+      "category": "HW01 医疗废物",
+      "hwCode": "HW01",
+      "source": "化学药品原 料药制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "271-005-02",
+      "name": "化学合成原料药及中间体生产过程中的废弃 的产品及中间体",
+      "category": "HW01 医疗废物",
+      "hwCode": "HW01",
+      "source": "化学药品原 料药制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "272-001-02",
+      "name": "化学药品制剂生产过程中原料药提纯精制、 再加工产生的蒸馏及反应残余物",
+      "category": "HW02 医药废物",
+      "hwCode": "HW02",
+      "source": "化学药品原 料药制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "272-003-02",
+      "name": "化学药品制剂生产过程中产生的废脱色过滤 介质及吸附剂",
+      "category": "HW02 医药废物",
+      "hwCode": "HW02",
+      "source": "化学药品制 剂制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "272-005-02",
+      "name": "化学药品制剂生产过程中产生的废弃的产品 及原料药",
+      "category": "HW02 医药废物",
+      "hwCode": "HW02",
+      "source": "化学药品制 剂制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "275-001-02",
+      "name": "使用砷或者有机砷化合物生产兽药过程中产 生的废水处理污泥",
+      "category": "HW02 医药废物",
+      "hwCode": "HW02",
+      "source": "化学药品制 剂制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "275-002-02",
+      "name": "使用砷或者有机砷化合物生产兽药过程中产 生的蒸馏残余物",
+      "category": "HW02 医药废物",
+      "hwCode": "HW02",
+      "source": "兽用药品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "275-003-02",
+      "name": "使用砷或者有机砷化合物生产兽药过程中产 生的废脱色过滤介质及吸附剂",
+      "category": "HW02 医药废物",
+      "hwCode": "HW02",
+      "source": "兽用药品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "275-004-02",
+      "name": "其他兽药生产过程中产生的蒸馏及反应残余物",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "275-005-02",
+      "name": "其他兽药生产过程中产生的废脱色过滤介质 及吸附剂",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "275-006-02",
+      "name": "兽药生产过程中产生的废母液、反应基和培 养基废物",
+      "category": "",
+      "hwCode": "",
+      "source": "兽用药品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "275-008-02",
+      "name": "兽药生产过程中产生的废弃的产品及原料药",
+      "category": "",
+      "hwCode": "",
+      "source": "兽用药品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "276-001-02",
+      "name": "利用生物技术生产生物化学药品、基因工程 药物过程中产生的蒸馏及反应残余物",
+      "category": "",
+      "hwCode": "",
+      "source": "兽用药品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "276-002-02",
+      "name": "利用生物技术生产生物化学药品、基因工程 药物（不包括利用生物技术合成他汀类降脂 药物、降糖类药物）过程中产生的废母液、 反应基和培养基废物",
+      "category": "HW02 医药废物",
+      "hwCode": "HW02",
+      "source": "兽用药品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "276-003-02",
+      "name": "利用生物技术生产生物化学药品、基因工 程药物（不包括利用生物技术合成他汀类 降脂药物、降糖类药物）过程中产生的废 脱色过滤介质",
+      "category": "HW02 医药废物",
+      "hwCode": "HW02",
+      "source": "生物药品制 品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "276-004-02",
+      "name": "利用生物技术生产生物化学药品、基因工程 药物过程中产生的废吸附剂",
+      "category": "HW02 医药废物",
+      "hwCode": "HW02",
+      "source": "生物药品制 品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "276-005-02",
+      "name": "利用生物技术生产生物化学药品、基因工程药 物及中间体过程中产生的废弃的产品、原料药 和中间体",
+      "category": "HW02 医药废物",
+      "hwCode": "HW02",
+      "source": "生物药品制 品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-002-03",
+      "name": "销售及使用过程中产生的失效、变质、不合格、 淘汰、伪劣的化学药品和生物制品，以及《医 疗用毒性药品管理办法》中所列的毒性中药",
+      "category": "HW03 废药物、药品",
+      "hwCode": "HW03",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "263-001-04",
+      "name": "氯丹生产过程中六氯环戊二烯过滤产生的残余 物，及氯化反应器真空汽提产生的废物",
+      "category": "HW03 废药物、药品",
+      "hwCode": "HW03",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "263-002-04",
+      "name": "乙拌磷生产过程中甲苯回收工艺产生的蒸馏 残渣",
+      "category": "HW03 废药物、药品",
+      "hwCode": "HW03",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "263-003-04",
+      "name": "甲拌磷生产过程中二乙基二硫代磷酸过滤产 生的残余物",
+      "category": "HW04 农药废物",
+      "hwCode": "HW04",
+      "source": "农药制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "263-004-04",
+      "name": "2,4,5-三氯苯氧乙酸生产过程中四氯苯蒸馏 产生的重馏分及蒸馏残余物",
+      "category": "HW04 农药废物",
+      "hwCode": "HW04",
+      "source": "农药制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "263-005-04",
+      "name": "2,4-二氯苯氧乙酸生产过程中苯酚氯化工段 产生的含 2,6-二氯苯酚精馏残渣",
+      "category": "HW04 农药废物",
+      "hwCode": "HW04",
+      "source": "农药制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "263-006-04",
+      "name": "乙烯基双二硫代氨基甲酸及其盐类生产过程 中产生的过滤、蒸发和离心分离残余物及废 水处理污泥，产品研磨和包装工序集（除） 尘装置收集的粉尘和地面清扫废物",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "263-007-04",
+      "name": "溴甲烷生产过程中产生的废吸附剂、反应器 产生的蒸馏残液和废水分离器产生的废物",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "263-008-04",
+      "name": "其他农药生产过程中产生的蒸馏及反应残余物 （不包括赤霉酸发酵滤渣）",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "263-009-04",
+      "name": "农药生产过程中产生的废母液、反应罐及容 器清洗废液",
+      "category": "HW04",
+      "hwCode": "HW04",
+      "source": "农药制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "263-010-04",
+      "name": "农药生产过程中产生的废滤料及吸附剂",
+      "category": "农药废物",
+      "hwCode": "",
+      "source": "农药制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "263-011-04",
+      "name": "农药生产过程中产生的废水处理污泥（不包 括赤霉酸生产废水生化处理污泥）和蒸发处 理残渣（液）",
+      "category": "农药废物",
+      "hwCode": "",
+      "source": "农药制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "263-012-04",
+      "name": "农药生产、配制过程中产生的过期原料和废 弃产品",
+      "category": "农药废物",
+      "hwCode": "",
+      "source": "农药制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-003-04",
+      "name": "销售及使用过程中产生的失效、变质、不合 格、淘汰、伪劣的农药产品，以及废弃的与 农药直接接触或者含有农药残余物的包装物",
+      "category": "农药废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "201-001-05",
+      "name": "使用五氯酚进行木材防腐过程中产生的废水 处理污泥，以及木材防腐处理过程中产生的 沾染该防腐剂的废弃木材残片",
+      "category": "农药废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "201-002-05",
+      "name": "使用杂酚油进行木材防腐过程中产生的废水 处理污泥，以及木材防腐处理过程中产生的 沾染该防腐剂的废弃木材残片",
+      "category": "农药废物",
+      "hwCode": "",
+      "source": "木材加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "201-003-05",
+      "name": "使用含砷、铬等无机防腐剂进行木材防腐过程 中产生的废水处理污泥，以及木材防腐处理过 程中产生的沾染该防腐剂的废弃木材残片",
+      "category": "HW05 木材防腐剂废物",
+      "hwCode": "HW05",
+      "source": "木材加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "266-001-05",
+      "name": "木材防腐化学品生产过程中产生的反应残余 物、废过滤介质及吸附剂",
+      "category": "HW05 木材防腐剂废物",
+      "hwCode": "HW05",
+      "source": "木材加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "266-002-05",
+      "name": "木材防腐化学品生产过程中产生的废水处理 污泥",
+      "category": "HW05 木材防腐剂废物",
+      "hwCode": "HW05",
+      "source": "专用化学产 品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "266-003-05",
+      "name": "木材防腐化学品生产、配制过程中产生的过 期原料和废弃产品",
+      "category": "HW05 木材防腐剂废物",
+      "hwCode": "HW05",
+      "source": "专用化学产 品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-004-05",
+      "name": "销售及使用过程中产生的失效、变质、不合 格、淘汰、伪劣的木材防腐化学药品",
+      "category": "HW05 木材防腐剂废物",
+      "hwCode": "HW05",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-401-06",
+      "name": "工业生产中作为清洗剂、萃取剂、溶剂或者反 应介质使用后废弃的四氯化碳、二氯甲烷、1,1- 二氯乙烷、1,2-二氯乙烷、1,1,1-三氯乙烷、 1,1,2-三氯乙烷、三氯乙烯、四氯乙烯，以及 在使用前混合的含有一种或者多种上述卤化溶 剂的混合/调和溶剂",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "900-402-06",
+      "name": "工业生产中作为清洗剂、萃取剂、溶剂或者 反应介质使用后废弃的有机溶剂，包括苯、 苯乙烯、丁醇、丙酮、正己烷、甲苯、邻二 甲苯、间二甲苯、对二甲苯、1,2,4-三甲苯、 T，I，R 乙苯、乙醇、异丙醇、乙醚、丙醚、乙酸甲",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "",
+      "hazardDesc": ""
+    },
+    {
+      "code": "900-404-06",
+      "name": "反应介质使用后废弃的其他列入《危险化学 品目录》的有机溶剂，以及在使用前混合的",
+      "category": "含有机溶剂废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T，I，R",
+      "hazardDesc": "T，I，R"
+    },
+    {
+      "code": "900-405-06",
+      "name": "900-401-06、900-402-06、900-404-06 中所 列废有机溶剂再生处理过程中产生的废活性 炭及其他过滤吸附介质",
+      "category": "含有机溶剂废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T，I，R",
+      "hazardDesc": "T，I，R"
+    },
+    {
+      "code": "900-407-06",
+      "name": "900-401-06、900-402-06、900-404-06 中所 列废有机溶剂分馏再生过程中产生的高沸物 和釜底残渣",
+      "category": "含有机溶剂废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T，I，R",
+      "hazardDesc": "T，I，R"
+    },
+    {
+      "code": "900-409-06",
+      "name": "900-401-06、900-402-06、900-404-06 中所 列废有机溶剂再生处理过程中产生的废水处 理浮渣和污泥（不包括废水生化处理污泥）",
+      "category": "含有机溶剂废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "336-001-07",
+      "name": "使用氰化物进行金属热处理产生的淬火池残渣",
+      "category": "含有机溶剂废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T，R",
+      "hazardDesc": "T，R"
+    },
+    {
+      "code": "336-002-07",
+      "name": "使用氰化物进行金属热处理产生的淬火废水 处理污泥",
+      "category": "含有机溶剂废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T，R",
+      "hazardDesc": "T，R"
+    },
+    {
+      "code": "336-003-07",
+      "name": "含氰热处理炉维修过程中产生的废内衬",
+      "category": "HW07",
+      "hwCode": "HW07",
+      "source": "金属表面处",
+      "hazard": "T，R",
+      "hazardDesc": "T，R"
+    },
+    {
+      "code": "336-004-07",
+      "name": "热处理渗碳炉产生的热处理渗碳氰渣",
+      "category": "热处理含氰废物",
+      "hwCode": "",
+      "source": "理及热处理 加工",
+      "hazard": "T，R",
+      "hazardDesc": "T，R"
+    },
+    {
+      "code": "336-005-07",
+      "name": "金属热处理工艺盐浴槽（釜）清洗产生的含 氰残渣和含氰废液",
+      "category": "热处理含氰废物",
+      "hwCode": "",
+      "source": "理及热处理 加工",
+      "hazard": "T，R",
+      "hazardDesc": "T，R"
+    },
+    {
+      "code": "336-049-07",
+      "name": "氰化物热处理和退火作业过程中产生的残渣",
+      "category": "热处理含氰废物",
+      "hwCode": "",
+      "source": "理及热处理 加工",
+      "hazard": "T，R",
+      "hazardDesc": "T，R"
+    },
+    {
+      "code": "071-001-08",
+      "name": "石油开采和联合站贮存产生的油泥和油脚",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "071-002-08",
+      "name": "以矿物油为连续相配制钻井泥浆用于石油开 采所产生的钻井岩屑和废弃钻井泥浆",
+      "category": "",
+      "hwCode": "",
+      "source": "石油开采",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "072-001-08",
+      "name": "以矿物油为连续相配制钻井泥浆用于天然气 开采所产生的钻井岩屑和废弃钻井泥浆",
+      "category": "",
+      "hwCode": "",
+      "source": "天然气开采",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "251-001-08",
+      "name": "清洗矿物油储存、输送设施过程中产生的油/ 水和烃/水混合物",
+      "category": "",
+      "hwCode": "",
+      "source": "天然气开采",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "251-002-08",
+      "name": "石油初炼过程中储存设施、油-水-固态物质 分离器、积水槽、沟渠及其他输送管道、污 水池、雨水收集管道产生的含油污泥",
+      "category": "",
+      "hwCode": "",
+      "source": "天然气开采",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "251-003-08",
+      "name": "石油炼制过程中含油废水隔油、气浮、沉淀 等处理过程中产生的浮油、浮渣和污泥（不 包括废水生化处理污泥）",
+      "category": "",
+      "hwCode": "",
+      "source": "天然气开采",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "251-004-08",
+      "name": "石油炼制过程中溶气浮选工艺产生的浮渣",
+      "category": "",
+      "hwCode": "",
+      "source": "精炼石油 产品制造",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "251-005-08",
+      "name": "石油炼制过程中产生的溢出废油或者乳剂",
+      "category": "",
+      "hwCode": "",
+      "source": "精炼石油 产品制造",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "251-006-08",
+      "name": "石油炼制换热器管束清洗过程中产生的含油 污泥",
+      "category": "HW08",
+      "hwCode": "HW08",
+      "source": "精炼石油 产品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "251-010-08",
+      "name": "石油炼制过程中澄清油浆槽底沉积物",
+      "category": "矿物油废物",
+      "hwCode": "",
+      "source": "精炼石油 产品制造",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "251-011-08",
+      "name": "石油炼制过程中进油管路过滤或者分离装置 产生的残渣",
+      "category": "矿物油废物",
+      "hwCode": "",
+      "source": "精炼石油 产品制造",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "251-012-08",
+      "name": "石油炼制过程中产生的废过滤介质",
+      "category": "矿物油废物",
+      "hwCode": "",
+      "source": "精炼石油 产品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "398-001-08",
+      "name": "锂电池隔膜生产过程中产生的废白油",
+      "category": "矿物油废物",
+      "hwCode": "",
+      "source": "电子元件及专 用材料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "291-001-08",
+      "name": "橡胶生产过程中产生的废溶剂油",
+      "category": "矿物油废物",
+      "hwCode": "",
+      "source": "橡胶制品业",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "900-199-08",
+      "name": "内燃机、汽车、轮船等集中拆解过程产生的 废矿物油及油泥",
+      "category": "矿物油废物",
+      "hwCode": "",
+      "source": "橡胶制品业",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "900-200-08",
+      "name": "珩磨、研磨、打磨过程产生的废矿物油及油泥",
+      "category": "矿物油废物",
+      "hwCode": "",
+      "source": "橡胶制品业",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "900-201-08",
+      "name": "清洗金属零部件过程中产生的废弃的煤油、柴 油、汽油及其他由石油和煤炼制生产的溶剂油",
+      "category": "矿物油废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "900-203-08",
+      "name": "使用淬火油进行表面硬化处理产生的废矿物油",
+      "category": "矿物油废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-204-08",
+      "name": "使用轧制油、冷却剂及酸进行金属轧制产生 的废矿物油",
+      "category": "矿物油废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-205-08",
+      "name": "镀锡及焊锡回收工艺产生的废矿物油",
+      "category": "矿物油废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-209-08",
+      "name": "金属、塑料的定型和物理机械表面处理过程 中产生的废石蜡和润滑油",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "900-210-08",
+      "name": "中产生的浮油、浮渣和污泥（不包括废水生化",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "900-213-08",
+      "name": "废矿物油再生净化过程中产生的沉淀残渣、 过滤残渣、废过滤吸附介质",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "900-214-08",
+      "name": "车辆、轮船及其它机械维修过程中产生的废 发动机油、制动器油、自动变速器油、齿轮 油等废润滑油",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "900-215-08",
+      "name": "废矿物油裂解再生过程中产生的裂解残渣",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "900-216-08",
+      "name": "使用防锈油进行铸件表面防锈处理过程中产 生的废防锈油",
+      "category": "HW08 废矿物油与含 矿物油废物",
+      "hwCode": "HW08",
+      "source": "非特定行业",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "900-217-08",
+      "name": "使用工业齿轮油进行机械设备润滑过程中产 生的废润滑油",
+      "category": "HW08 废矿物油与含 矿物油废物",
+      "hwCode": "HW08",
+      "source": "非特定行业",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "900-218-08",
+      "name": "液压设备维护、更换和拆解过程中产生的废 液压油",
+      "category": "HW08 废矿物油与含 矿物油废物",
+      "hwCode": "HW08",
+      "source": "非特定行业",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "900-219-08",
+      "name": "冷冻压缩设备维护、更换和拆解过程中产生 的废冷冻机油",
+      "category": "HW08 废矿物油与含 矿物油废物",
+      "hwCode": "HW08",
+      "source": "非特定行业",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "900-220-08",
+      "name": "变压器维护、更换和拆解过程中产生的废变 压器油",
+      "category": "HW08 废矿物油与含 矿物油废物",
+      "hwCode": "HW08",
+      "source": "非特定行业",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "900-221-08",
+      "name": "废燃料油及燃料油储存过程中产生的油泥",
+      "category": "HW08 废矿物油与含 矿物油废物",
+      "hwCode": "HW08",
+      "source": "非特定行业",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "900-249-08",
+      "name": "其他生产、销售、使用过程中产生的废矿物 油及沾染矿物油的废弃包装物",
+      "category": "HW08 废矿物油与含 矿物油废物",
+      "hwCode": "HW08",
+      "source": "非特定行业",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "900-005-09",
+      "name": "水压机维护、更换和拆解过程中产生的油/ 水、烃/水混合物或者乳化液",
+      "category": "HW09",
+      "hwCode": "HW09",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-006-09",
+      "name": "使用切削油或者切削液进行机械加工过程中 产生的油/水、烃/水混合物或者乳化液",
+      "category": "油/水、烃/水 混合物或者乳",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-007-09",
+      "name": "其他工艺过程中产生的废弃的油/水、烃/水 混合物或者乳化液",
+      "category": "化液",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-008-10",
+      "name": "含有多氯联苯（PCBs）、多氯三联苯（PCTs） 和多溴联苯（PBBs）的废弃的电容器、变压器",
+      "category": "化液",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-009-10",
+      "name": "含有 PCBs、PCTs 和 PBBs 的电力设备的清洗液",
+      "category": "HW10",
+      "hwCode": "HW10",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-010-10",
+      "name": "含有 PCBs、PCTs 和 PBBs 的电力设备中废弃 的介质油、绝缘油、冷却油及导热油",
+      "category": "多氯（溴）联 苯类废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-011-10",
+      "name": "含有或者沾染 PCBs、PCTs 和 PBBs 的废弃的 包装物及容器",
+      "category": "多氯（溴）联 苯类废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "251-013-11",
+      "name": "石油精炼过程中产生的酸焦油和其他焦油",
+      "category": "",
+      "hwCode": "",
+      "source": "精炼石油产 品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "252-001-11",
+      "name": "炼焦过程中蒸氨塔残渣和洗油再生残渣",
+      "category": "",
+      "hwCode": "",
+      "source": "精炼石油产 品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "252-002-11",
+      "name": "煤气净化过程氨水分离设施底部的废焦油和 焦油渣",
+      "category": "",
+      "hwCode": "",
+      "source": "精炼石油产 品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "252-003-11",
+      "name": "炼焦副产品回收过程中萘精制产生的残渣",
+      "category": "",
+      "hwCode": "",
+      "source": "精炼石油产 品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "252-004-11",
+      "name": "炼焦过程中焦油储存设施中的焦油渣",
+      "category": "",
+      "hwCode": "",
+      "source": "精炼石油产 品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "252-005-11",
+      "name": "煤焦油加工过程中焦油储存设施中的焦油渣",
+      "category": "",
+      "hwCode": "",
+      "source": "精炼石油产 品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "252-007-11",
+      "name": "炼焦及煤焦油加工过程中的废水池残渣",
+      "category": "",
+      "hwCode": "",
+      "source": "精炼石油产 品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "252-009-11",
+      "name": "轻油回收过程中的废水池残渣",
+      "category": "",
+      "hwCode": "",
+      "source": "精炼石油产 品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "252-010-11",
+      "name": "炼焦、煤焦油加工和苯精制过程中产生的废 水处理污泥（不包括废水生化处理污泥）",
+      "category": "",
+      "hwCode": "",
+      "source": "煤炭加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "252-011-11",
+      "name": "焦炭生产过程中硫铵工段煤气除酸净化产生 的酸焦油",
+      "category": "",
+      "hwCode": "",
+      "source": "煤炭加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "252-012-11",
+      "name": "焦化粗苯酸洗法精制过程产生的酸焦油及其 他精制过程产生的蒸馏残渣",
+      "category": "HW11",
+      "hwCode": "HW11",
+      "source": "煤炭加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "252-013-11",
+      "name": "焦炭生产过程中产生的脱硫废液",
+      "category": "精（蒸）馏残渣",
+      "hwCode": "",
+      "source": "煤炭加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "252-016-11",
+      "name": "煤沥青改质过程中产生的闪蒸油",
+      "category": "精（蒸）馏残渣",
+      "hwCode": "",
+      "source": "煤炭加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "252-017-11",
+      "name": "固定床气化技术生产化工合成原料气、燃料 油合成原料气过程中粗煤气冷凝产生的废焦 油和焦油渣",
+      "category": "精（蒸）馏残渣",
+      "hwCode": "",
+      "source": "煤炭加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "451-001-11",
+      "name": "煤气生产行业煤气净化过程中产生的煤焦油渣",
+      "category": "精（蒸）馏残渣",
+      "hwCode": "",
+      "source": "煤炭加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "451-002-11",
+      "name": "固定床气化技术制煤气过程中产生的废水处 理污泥（不包括废水生化处理污泥）",
+      "category": "精（蒸）馏残渣",
+      "hwCode": "",
+      "source": "燃气生产和 供应业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "451-003-11",
+      "name": "煤气生产过程中煤气冷凝产生的废煤焦油",
+      "category": "精（蒸）馏残渣",
+      "hwCode": "",
+      "source": "燃气生产和 供应业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-007-11",
+      "name": "乙烯法制乙醛生产过程中产生的蒸馏残渣",
+      "category": "精（蒸）馏残渣",
+      "hwCode": "",
+      "source": "燃气生产和 供应业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-008-11",
+      "name": "乙烯法制乙醛生产过程中产生的蒸馏次要馏分",
+      "category": "精（蒸）馏残渣",
+      "hwCode": "",
+      "source": "燃气生产和 供应业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-009-11",
+      "name": "苄基氯生产过程中苄基氯蒸馏产生的蒸馏残渣",
+      "category": "精（蒸）馏残渣",
+      "hwCode": "",
+      "source": "基础化学原",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-010-11",
+      "name": "四氯化碳生产过程中产生的蒸馏残渣和重馏分",
+      "category": "精（蒸）馏残渣",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-011-11",
+      "name": "表氯醇生产过程中精制塔产生的蒸馏残渣",
+      "category": "精（蒸）馏残渣",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-012-11",
+      "name": "异丙苯生产过程中精馏塔产生的重馏分",
+      "category": "精（蒸）馏残渣",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-013-11",
+      "name": "萘法生产邻苯二甲酸酐过程中产生的蒸馏残 渣和轻馏分",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-014-11",
+      "name": "邻二甲苯法生产邻苯二甲酸酐过程中产生的 蒸馏残渣和轻馏分",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-015-11",
+      "name": "苯硝化法生产硝基苯过程中产生的蒸馏残渣",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-016-11",
+      "name": "甲苯二异氰酸酯生产过程中产生的蒸馏残渣 和离心分离残渣",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-017-11",
+      "name": "1,1,1-三氯乙烷生产过程中产生的蒸馏残渣",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-018-11",
+      "name": "三氯乙烯和四氯乙烯联合生产过程中产生的 蒸馏残渣",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-019-11",
+      "name": "苯胺生产过程中产生的蒸馏残渣",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-020-11",
+      "name": "苯胺生产过程中苯胺萃取工序产生的蒸馏残渣",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-021-11",
+      "name": "二硝基甲苯加氢法生产甲苯二胺过程中干燥 塔产生的反应残余物",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-022-11",
+      "name": "二硝基甲苯加氢法生产甲苯二胺过程中产品 精制产生的轻馏分",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-023-11",
+      "name": "二硝基甲苯加氢法生产甲苯二胺过程中产品 精制产生的废液",
+      "category": "HW11 精（蒸）馏残渣",
+      "hwCode": "HW11",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-024-11",
+      "name": "二硝基甲苯加氢法生产甲苯二胺过程中产品 精制产生的重馏分",
+      "category": "HW11 精（蒸）馏残渣",
+      "hwCode": "HW11",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-025-11",
+      "name": "甲苯二胺光气化法生产甲苯二异氰酸酯过程 中溶剂回收塔产生的有机冷凝物",
+      "category": "HW11 精（蒸）馏残渣",
+      "hwCode": "HW11",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-026-11",
+      "name": "氯苯、二氯苯生产过程中的蒸馏及分馏残渣",
+      "category": "HW11 精（蒸）馏残渣",
+      "hwCode": "HW11",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-027-11",
+      "name": "使用羧酸肼生产 1,1-二甲基肼过程中产品 分离产生的残渣",
+      "category": "HW11 精（蒸）馏残渣",
+      "hwCode": "HW11",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-028-11",
+      "name": "乙烯溴化法生产二溴乙烯过程中产品精制产 生的蒸馏残渣",
+      "category": "HW11 精（蒸）馏残渣",
+      "hwCode": "HW11",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-029-11",
+      "name": "α-氯甲苯、苯甲酰氯和含此类官能团的化学 品生产过程中产生的蒸馏残渣",
+      "category": "HW11 精（蒸）馏残渣",
+      "hwCode": "HW11",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-030-11",
+      "name": "四氯化碳生产过程中的重馏分",
+      "category": "HW11 精（蒸）馏残渣",
+      "hwCode": "HW11",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-031-11",
+      "name": "二氯乙烯单体生产过程中蒸馏产生的重馏分",
+      "category": "HW11 精（蒸）馏残渣",
+      "hwCode": "HW11",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-032-11",
+      "name": "氯乙烯单体生产过程中蒸馏产生的重馏分",
+      "category": "HW11 精（蒸）馏残渣",
+      "hwCode": "HW11",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-033-11",
+      "name": "1,1,1-三氯乙烷生产过程中蒸汽汽提塔产生 的残余物",
+      "category": "HW11 精（蒸）馏残渣",
+      "hwCode": "HW11",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-034-11",
+      "name": "1,1,1-三氯乙烷生产过程中蒸馏产生的重馏分",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-035-11",
+      "name": "三氯乙烯和四氯乙烯联合生产过程中产生的 重馏分",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-101-11",
+      "name": "苯泵式硝化生产硝基苯过程中产生的重馏分",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T，R",
+      "hazardDesc": "T，R"
+    },
+    {
+      "code": "261-102-11",
+      "name": "铁粉还原硝基苯生产苯胺过程中产生的重馏分",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-103-11",
+      "name": "以苯胺、乙酸酐或者乙酰苯胺为原料生产对 硝基苯胺过程中产生的重馏分",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-104-11",
+      "name": "对硝基氯苯氨解生产对硝基苯胺过程中产生 的重馏分",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T，R",
+      "hazardDesc": "T，R"
+    },
+    {
+      "code": "261-105-11",
+      "name": "氨化法、还原法生产邻苯二胺过程中产生的 重馏分",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-106-11",
+      "name": "苯和乙烯直接催化、乙苯和丙烯共氧化、乙 苯催化脱氢生产苯乙烯过程中产生的重馏分",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-107-11",
+      "name": "二硝基甲苯还原催化生产甲苯二胺过程中产 生的重馏分",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-108-11",
+      "name": "对苯二酚氧化生产二甲氧基苯胺过程中产生",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-109-11",
+      "name": "萘磺化生产萘酚过程中产生的重馏分",
+      "category": "精（蒸）馏残渣",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-110-11",
+      "name": "苯酚、三甲苯水解生产 4,4-二羟基二苯砜过 程中产生的重馏分",
+      "category": "精（蒸）馏残渣",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-111-11",
+      "name": "甲苯硝基化合物羰基化法、甲苯碳酸二甲酯 法生产甲苯二异氰酸酯过程中产生的重馏分",
+      "category": "精（蒸）馏残渣",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-113-11",
+      "name": "乙烯直接氯化生产二氯乙烷过程中产生的重 馏分",
+      "category": "精（蒸）馏残渣",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-114-11",
+      "name": "甲烷氯化生产甲烷氯化物过程中产生的重馏分",
+      "category": "精（蒸）馏残渣",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-115-11",
+      "name": "甲醇氯化生产甲烷氯化物过程中产生的釜底 残液",
+      "category": "精（蒸）馏残渣",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-116-11",
+      "name": "乙烯氯醇法、氧化法生产环氧乙烷过程中产 生的重馏分",
+      "category": "精（蒸）馏残渣",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-117-11",
+      "name": "乙炔气相合成、氧氯化生产氯乙烯过程中产 生的重馏分",
+      "category": "精（蒸）馏残渣",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-118-11",
+      "name": "乙烯直接氯化生产三氯乙烯、四氯乙烯过程 中产生的重馏分",
+      "category": "精（蒸）馏残渣",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-119-11",
+      "name": "乙烯氧氯化法生产三氯乙烯、四氯乙烯过程 中产生的重馏分",
+      "category": "精（蒸）馏残渣",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-120-11",
+      "name": "甲苯光气法生产苯甲酰氯产品精制过程中产 生的重馏分",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-121-11",
+      "name": "甲苯苯甲酸法生产苯甲酰氯产品精制过程中 产生的重馏分",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-122-11",
+      "name": "甲苯连续光氯化法、无光热氯化法生产氯化 苄过程中产生的重馏分",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-123-11",
+      "name": "偏二氯乙烯氢氯化法生产 1,1,1-三氯乙烷 过程中产生的重馏分",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-124-11",
+      "name": "醋酸丙烯酯法生产环氧氯丙烷过程中产生的 重馏分",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-125-11",
+      "name": "异戊烷（异戊烯）脱氢法生产异戊二烯过程 中产生的重馏分",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-126-11",
+      "name": "化学合成法生产异戊二烯过程中产生的重馏分",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-127-11",
+      "name": "碳五馏分分离生产异戊二烯过程中产生的重 馏分",
+      "category": "",
+      "hwCode": "",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-128-11",
+      "name": "合成气加压催化生产甲醇过程中产生的重馏分",
+      "category": "",
+      "hwCode": "",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-129-11",
+      "name": "水合法、发酵法生产乙醇过程中产生的重馏分",
+      "category": "HW11",
+      "hwCode": "HW11",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-130-11",
+      "name": "重馏分",
+      "category": "渣",
+      "hwCode": "",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-131-11",
+      "name": "乙醛缩合加氢生产丁二醇过程中产生的重馏分",
+      "category": "渣",
+      "hwCode": "",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-132-11",
+      "name": "乙醛氧化生产醋酸蒸馏过程中产生的重馏分",
+      "category": "渣",
+      "hwCode": "",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-133-11",
+      "name": "丁烷液相氧化生产醋酸过程中产生的重馏分",
+      "category": "渣",
+      "hwCode": "",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-134-11",
+      "name": "电石乙炔法生产醋酸乙烯酯过程中产生的重 馏分",
+      "category": "渣",
+      "hwCode": "",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-135-11",
+      "name": "氢氰酸法生产原甲酸三甲酯过程中产生的重 馏分",
+      "category": "渣",
+      "hwCode": "",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-136-11",
+      "name": "β-苯胺乙醇法生产靛蓝过程中产生的重馏分",
+      "category": "渣",
+      "hwCode": "",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "309-001-11",
+      "name": "电解铝及其他有色金属电解精炼过程中预焙 阳极、碳块及其它碳素制品制造过程烟气处 理所产生的含焦油废物",
+      "category": "渣",
+      "hwCode": "",
+      "source": "石墨及其他 非金属矿物 制品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "772-001-11",
+      "name": "废矿物油再生过程中产生的酸焦油",
+      "category": "渣",
+      "hwCode": "",
+      "source": "环境治理业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-013-11",
+      "name": "其他化工生产过程（不包括以生物质为主要 原料的加工过程）中精馏、蒸馏和热解工艺 产生的高沸点釜底残余物",
+      "category": "渣",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "264-002-12",
+      "name": "铬黄和铬橙颜料生产过程中产生的废水处理 污泥",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "264-003-12",
+      "name": "钼酸橙颜料生产过程中产生的废水处理污泥",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "264-004-12",
+      "name": "锌黄颜料生产过程中产生的废水处理污泥",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "264-005-12",
+      "name": "铬绿颜料生产过程中产生的废水处理污泥",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "264-006-12",
+      "name": "氧化铬绿颜料生产过程中产生的废水处理污泥",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "264-007-12",
+      "name": "氧化铬绿颜料生产过程中烘干产生的残渣",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "264-008-12",
+      "name": "铁蓝颜料生产过程中产生的废水处理污泥",
+      "category": "",
+      "hwCode": "",
+      "source": "涂料、油墨、",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "264-009-12",
+      "name": "使用含铬、铅的稳定剂配制油墨过程中，设 备清洗产生的洗涤废液和废水处理污泥",
+      "category": "",
+      "hwCode": "",
+      "source": "颜料及类似 产品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "264-010-12",
+      "name": "油墨生产、配制过程中产生的废蚀刻液",
+      "category": "",
+      "hwCode": "",
+      "source": "颜料及类似 产品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "264-011-12",
+      "name": "染料、颜料及中间体生产过程中产生的废母 液、残渣、废吸附剂和中间体",
+      "category": "",
+      "hwCode": "",
+      "source": "颜料及类似 产品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "264-012-12",
+      "name": "漆）生产过程中产生的废水处理污泥和蒸发",
+      "category": "",
+      "hwCode": "",
+      "source": "颜料及类似 产品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "264-013-12",
+      "name": "油漆、油墨生产、配制和使用过程中产生的 含颜料、油墨的废有机溶剂",
+      "category": "HW12 染料、涂料废物",
+      "hwCode": "HW12",
+      "source": "颜料及类似 产品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-250-12",
+      "name": "使用有机溶剂、光漆进行光漆涂布、喷漆工 艺过程中产生的废物",
+      "category": "HW12 染料、涂料废物",
+      "hwCode": "HW12",
+      "source": "颜料及类似 产品制造",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "900-251-12",
+      "name": "使用油漆（不包括水性漆）、有机溶剂进行 阻挡层涂敷过程中产生的废物",
+      "category": "HW12 染料、涂料废物",
+      "hwCode": "HW12",
+      "source": "颜料及类似 产品制造",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "900-252-12",
+      "name": "使用油漆（不包括水性漆）、有机溶剂进行 喷漆、上漆过程中过喷漆雾湿法捕集产生的 漆渣、以及喷涂工位和管道清理过程产生的",
+      "category": "HW12 染料、涂料废物",
+      "hwCode": "HW12",
+      "source": "颜料及类似 产品制造",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "900-253-12",
+      "name": "使用油墨和有机溶剂进行印刷、涂布过程中 产生的废物",
+      "category": "HW12 染料、涂料废物",
+      "hwCode": "HW12",
+      "source": "非特定行业",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "900-254-12",
+      "name": "使用遮盖油、有机溶剂进行遮盖油的涂敷过 程中产生的废物",
+      "category": "HW12 染料、涂料废物",
+      "hwCode": "HW12",
+      "source": "非特定行业",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "900-255-12",
+      "name": "使用各种颜料进行着色过程中产生的废颜料",
+      "category": "HW12 染料、涂料废物",
+      "hwCode": "HW12",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-256-12",
+      "name": "使用酸、碱或者有机溶剂清洗容器设备过程 中剥离下的废油漆、废染料、废涂料",
+      "category": "HW12 染料、涂料废物",
+      "hwCode": "HW12",
+      "source": "非特定行业",
+      "hazard": "T，I，C",
+      "hazardDesc": "T，I，C"
+    },
+    {
+      "code": "900-299-12",
+      "name": "生产、销售及使用过程中产生的失效、变质、 不合格、淘汰、伪劣的油墨、染料、颜料、 油漆（不包括水性漆）",
+      "category": "HW12 染料、涂料废物",
+      "hwCode": "HW12",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "265-101-13",
+      "name": "树脂、合成乳胶、增塑剂、胶水/胶合剂合成 过程产生的不合格产品（不包括热塑型树脂 生产过程中聚合产物经脱除单体、低聚物、 溶剂及其他助剂后产生的废料，以及热固型 树脂固化后的固化体）",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "265-102-13",
+      "name": "树脂、合成乳胶、增塑剂、胶水/胶合剂生产 过程中合成、酯化、缩合等工序产生的废母液",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "265-103-13",
+      "name": "乳胶、增塑剂、胶水/胶合剂生产过程中精馏、",
+      "category": "",
+      "hwCode": "",
+      "source": "合成材料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "265-104-13",
+      "name": "乳液、水性聚氨酯丙烯酸复合乳液）、合成 乳胶、增塑剂、胶水/胶合剂合成过程中产生",
+      "category": "有机树脂类废物",
+      "hwCode": "",
+      "source": "合成材料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-014-13",
+      "name": "废弃的粘合剂和密封剂（不包括水基型和热 熔型粘合剂和密封剂）",
+      "category": "有机树脂类废物",
+      "hwCode": "",
+      "source": "合成材料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-015-13",
+      "name": "生素提取、分离过程产生的废弃离子交换树 脂，以及工业废水处理过程产生的废弃离子 交换树脂",
+      "category": "有机树脂类废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-016-13",
+      "name": "使用酸、碱或者有机溶剂清洗容器设备剥离 下的树脂状、粘稠杂物",
+      "category": "有机树脂类废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-451-13",
+      "name": "废覆铜板、印刷线路板、电路板破碎分选回 收金属后产生的废树脂粉",
+      "category": "有机树脂类废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-017-14",
+      "name": "研究、开发和教学活动中产生的对人类或者 环境影响不明的化学物质废物",
+      "category": "HW14 新化学物质废物",
+      "hwCode": "HW14",
+      "source": "非特定行业",
+      "hazard": "T/C/I/R",
+      "hazardDesc": "毒性、腐蚀性、易燃性、反应性"
+    },
+    {
+      "code": "267-001-15",
+      "name": "炸药生产和加工过程中产生的废水处理污泥",
+      "category": "HW14 新化学物质废物",
+      "hwCode": "HW14",
+      "source": "非特定行业",
+      "hazard": "R，T",
+      "hazardDesc": "R，T"
+    },
+    {
+      "code": "267-002-15",
+      "name": "含爆炸品废水处理过程中产生的废活性炭",
+      "category": "HW14 新化学物质废物",
+      "hwCode": "HW14",
+      "source": "非特定行业",
+      "hazard": "R，T",
+      "hazardDesc": "R，T"
+    },
+    {
+      "code": "267-003-15",
+      "name": "的废水处理污泥",
+      "category": "爆炸性废物",
+      "hwCode": "",
+      "source": "焰火产品制造",
+      "hazard": "R，T",
+      "hazardDesc": "R，T"
+    },
+    {
+      "code": "267-004-15",
+      "name": "三硝基甲苯生产过程中产生的粉红水、红水， 以及废水处理污泥",
+      "category": "爆炸性废物",
+      "hwCode": "",
+      "source": "焰火产品制造",
+      "hazard": "T，R",
+      "hazardDesc": "T，R"
+    },
+    {
+      "code": "266-009-16",
+      "name": "显（定）影剂、正负胶片、像纸、感光材料 生产过程中产生的不合格产品和过期产品",
+      "category": "HW16",
+      "hwCode": "HW16",
+      "source": "专用化学产",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "266-010-16",
+      "name": "显（定）影剂、正负胶片、像纸、感光材料",
+      "category": "感光材料 废物",
+      "hwCode": "",
+      "source": "品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "231-001-16",
+      "name": "使用显影剂进行胶卷显影，使用定影剂进行 胶卷定影，以及使用铁氰化钾、硫代硫酸盐 进行影像减薄（漂白）产生的废显（定）影 剂、胶片和废像纸",
+      "category": "",
+      "hwCode": "",
+      "source": "印刷",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "231-002-16",
+      "name": "使用显影剂进行印刷显影、抗蚀图形显影， 以及凸版印刷产生的废显（定）影剂、胶片 和废像纸",
+      "category": "",
+      "hwCode": "",
+      "source": "印刷",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "398-001-16",
+      "name": "酸进行胶卷显影产生的废显（定）影剂、胶",
+      "category": "废物",
+      "hwCode": "",
+      "source": "电子专用材",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "873-001-16",
+      "name": "电影厂产生的废显（定）影剂、胶片及废像纸",
+      "category": "废物",
+      "hwCode": "",
+      "source": "影视节目制作",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "806-001-16",
+      "name": "摄影扩印服务行业产生的废显（定）影剂、 胶片和废像纸",
+      "category": "废物",
+      "hwCode": "",
+      "source": "摄影扩印服务",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-019-16",
+      "name": "其他行业产生的废显（定）影剂、胶片和废 像纸",
+      "category": "废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "336-050-17",
+      "name": "使用氯化亚锡进行敏化处理产生的废渣和废 水处理污泥",
+      "category": "废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "336-051-17",
+      "name": "使用氯化锌、氯化铵进行敏化处理产生的废 渣和废水处理污泥",
+      "category": "废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "336-052-17",
+      "name": "使用锌和电镀化学品进行镀锌产生的废槽 液、槽渣和废水处理污泥",
+      "category": "废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "336-053-17",
+      "name": "使用镉和电镀化学品进行镀镉产生的废槽 液、槽渣和废水处理污泥",
+      "category": "废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "336-054-17",
+      "name": "使用镍和电镀化学品进行镀镍产生的废槽 液、槽渣和废水处理污泥",
+      "category": "HW17",
+      "hwCode": "HW17",
+      "source": "金属表面处",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "336-055-17",
+      "name": "使用镀镍液进行镀镍产生的废槽液、槽渣和 废水处理污泥",
+      "category": "废物",
+      "hwCode": "",
+      "source": "加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "336-056-17",
+      "name": "使用硝酸银、碱、甲醛进行敷金属法镀银产 生的废槽液、槽渣和废水处理污泥",
+      "category": "废物",
+      "hwCode": "",
+      "source": "加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "336-057-17",
+      "name": "使用金和电镀化学品进行镀金产生的废槽 液、槽渣和废水处理污泥",
+      "category": "废物",
+      "hwCode": "",
+      "source": "加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "336-058-17",
+      "name": "使用镀铜液进行化学镀铜产生的废槽液、槽 渣和废水处理污泥",
+      "category": "废物",
+      "hwCode": "",
+      "source": "加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "336-059-17",
+      "name": "使用钯和锡盐进行活化处理产生的废渣和废 水处理污泥",
+      "category": "废物",
+      "hwCode": "",
+      "source": "加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "336-060-17",
+      "name": "使用铬和电镀化学品进行镀黑铬产生的废槽 液、槽渣和废水处理污泥",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "336-061-17",
+      "name": "使用高锰酸钾进行钻孔除胶处理产生的废渣 和废水处理污泥",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "336-062-17",
+      "name": "使用铜和电镀化学品进行镀铜产生的废槽 液、槽渣和废水处理污泥",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "336-063-17",
+      "name": "其他电镀工艺产生的废槽液、槽渣和废水处 理污泥",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "336-064-17",
+      "name": "金属或者塑料表面酸（碱）洗、除油、除锈 （不包括喷砂除锈）、洗涤、磷化、出光、化抛 工艺产生的废腐蚀液、废洗涤液、废槽液、槽 渣和废水处理污泥（不包括：铝、镁材（板） 表面酸（碱）洗、粗化、硫酸阳极处理、磷 酸化学抛光废水处理污泥，铝电解电容器用 铝电极箔化学腐蚀、非硼酸系化成液化成废水 处理污泥，铝材挤压加工模具碱洗（煲模）废 水处理污泥，碳钢酸洗除锈废水处理污泥）",
+      "category": "HW17 表面处理 废物",
+      "hwCode": "HW17",
+      "source": "金属表面处 理及热处理 加工",
+      "hazard": "T/C",
+      "hazardDesc": "毒性、腐蚀性"
+    },
+    {
+      "code": "336-066-17",
+      "name": "镀层剥除过程中产生的废槽液、槽渣和废水 处理污泥",
+      "category": "HW17 表面处理 废物",
+      "hwCode": "HW17",
+      "source": "金属表面处 理及热处理 加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "336-067-17",
+      "name": "使用含重铬酸盐的胶体、有机溶剂、黏合剂进 行漩流式抗蚀涂布产生的废渣和废水处理污泥",
+      "category": "HW17 表面处理 废物",
+      "hwCode": "HW17",
+      "source": "金属表面处 理及热处理 加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "336-068-17",
+      "name": "使用铬化合物进行抗蚀层化学硬化产生的废 渣和废水处理污泥",
+      "category": "HW17 表面处理 废物",
+      "hwCode": "HW17",
+      "source": "金属表面处 理及热处理 加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "336-069-17",
+      "name": "使用铬酸镀铬产生的废槽液、槽渣和废水处 理污泥",
+      "category": "HW17 表面处理 废物",
+      "hwCode": "HW17",
+      "source": "金属表面处 理及热处理 加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "336-100-17",
+      "name": "使用铬酸进行阳极氧化产生的废槽液、槽渣 和废水处理污泥",
+      "category": "HW17 表面处理 废物",
+      "hwCode": "HW17",
+      "source": "金属表面处 理及热处理 加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "336-101-17",
+      "name": "使用铬酸进行塑料表面粗化产生的废槽液、 槽渣和废水处理污泥",
+      "category": "HW17 表面处理 废物",
+      "hwCode": "HW17",
+      "source": "金属表面处 理及热处理 加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "772-002-18",
+      "name": "生活垃圾焚烧飞灰",
+      "category": "HW17 表面处理 废物",
+      "hwCode": "HW17",
+      "source": "金属表面处 理及热处理 加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "772-003-18",
+      "name": "具有毒性、感染性中一种或者两种危险特性 的危险废物焚烧、热解等处置过程产生的飞 灰、废水处理污泥和底渣（不包括生活垃圾焚 烧炉协同处置感染性医疗废物产生的底渣）",
+      "category": "HW18",
+      "hwCode": "HW18",
+      "source": "环境治理业",
+      "hazard": "T/In",
+      "hazardDesc": "毒性、感染性"
+    },
+    {
+      "code": "772-004-18",
+      "name": "危险废物等离子体、高温熔融等处置过程产 生的非玻璃态物质和飞灰",
+      "category": "焚烧处置残渣",
+      "hwCode": "",
+      "source": "环境治理业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "772-005-18",
+      "name": "固体废物焚烧处置过程中废气处理产生的废 活性炭",
+      "category": "焚烧处置残渣",
+      "hwCode": "",
+      "source": "环境治理业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-020-19",
+      "name": "金属羰基化合物生产、使用过程中产生的含 有羰基化合物成分的废物",
+      "category": "HW19 含金属羰基化 合物废物",
+      "hwCode": "HW19",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-040-20",
+      "name": "铍及其化合物生产过程中产生的熔渣、集 （除）尘装置收集的粉尘和废水处理污泥",
+      "category": "HW20 含铍废物",
+      "hwCode": "HW20",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "193-001-21",
+      "name": "使用铬鞣剂进行铬鞣、复鞣工艺产生的废水 处理污泥和残渣",
+      "category": "HW20 含铍废物",
+      "hwCode": "HW20",
+      "source": "毛皮鞣制及",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "193-002-21",
+      "name": "皮革、毛皮鞣制及切削过程产生的含铬废碎料",
+      "category": "HW20 含铍废物",
+      "hwCode": "HW20",
+      "source": "制品加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-041-21",
+      "name": "铬铁矿生产铬盐过程中产生的铬渣",
+      "category": "HW20 含铍废物",
+      "hwCode": "HW20",
+      "source": "制品加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-042-21",
+      "name": "铬铁矿生产铬盐过程中产生的铝泥",
+      "category": "HW20 含铍废物",
+      "hwCode": "HW20",
+      "source": "制品加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-043-21",
+      "name": "铬铁矿生产铬盐过程中产生的芒硝",
+      "category": "HW20 含铍废物",
+      "hwCode": "HW20",
+      "source": "制品加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-044-21",
+      "name": "铬铁矿生产铬盐过程中产生的废水处理污泥",
+      "category": "HW20 含铍废物",
+      "hwCode": "HW20",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-137-21",
+      "name": "铬铁矿生产铬盐过程中产生的其他废物",
+      "category": "HW20 含铍废物",
+      "hwCode": "HW20",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-138-21",
+      "name": "以重铬酸钠和浓硫酸为原料生产铬酸酐过程 中产生的含铬废液",
+      "category": "含铬废物",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "314-001-21",
+      "name": "铬铁硅合金生产过程中集（除）尘装置收集 的粉尘",
+      "category": "含铬废物",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "314-002-21",
+      "name": "铁铬合金生产过程中集（除）尘装置收集的 粉尘",
+      "category": "含铬废物",
+      "hwCode": "",
+      "source": "铁合金冶炼",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "314-003-21",
+      "name": "铁铬合金生产过程中金属铬铝热法冶炼产生 的冶炼渣",
+      "category": "含铬废物",
+      "hwCode": "",
+      "source": "铁合金冶炼",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "398-002-21",
+      "name": "使用铬酸进行钻孔除胶处理产生的废渣和废 水处理污泥",
+      "category": "含铬废物",
+      "hwCode": "",
+      "source": "电子元件及 电子专用材 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "304-001-22",
+      "name": "使用硫酸铜进行敷金属法镀铜产生的废槽 液、槽渣和废水处理污泥",
+      "category": "含铬废物",
+      "hwCode": "",
+      "source": "玻璃制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "398-004-22",
+      "name": "线路板生产过程中产生的废蚀铜液",
+      "category": "含铬废物",
+      "hwCode": "",
+      "source": "玻璃制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "398-005-22",
+      "name": "使用酸进行铜氧化处理产生的废液和废水处 理污泥",
+      "category": "含铜废物",
+      "hwCode": "",
+      "source": "电子元件及 电子专用材",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "398-051-22",
+      "name": "污泥",
+      "category": "含铜废物",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "336-103-23",
+      "name": "热镀锌过程中产生的废助镀熔（溶）剂和集 （除）尘装置收集的粉尘",
+      "category": "HW23 含锌废物",
+      "hwCode": "HW23",
+      "source": "金属表面处 理及热处理 加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "384-001-23",
+      "name": "碱性锌锰电池、锌氧化银电池、锌空气电池 生产过程中产生的废锌浆",
+      "category": "",
+      "hwCode": "",
+      "source": "电池制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "312-001-23",
+      "name": "废钢电炉炼钢过程中集（除）尘装置收集的 粉尘和废水处理污泥",
+      "category": "HW23 含锌废物",
+      "hwCode": "HW23",
+      "source": "炼钢",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-021-23",
+      "name": "使用氢氧化钠、锌粉进行贵金属沉淀过程中 产生的废液和废水处理污泥",
+      "category": "HW23 含锌废物",
+      "hwCode": "HW23",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-139-24",
+      "name": "硫铁矿制酸过程中烟气净化产生的酸泥",
+      "category": "HW24 含砷废物",
+      "hwCode": "HW24",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-045-25",
+      "name": "硒及其化合物生产过程中产生的熔渣、集 （除）尘装置收集的粉尘和废水处理污泥",
+      "category": "HW25 含硒废物",
+      "hwCode": "HW25",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "384-002-26",
+      "name": "镍镉电池生产过程中产生的废渣和废水处理 污泥",
+      "category": "HW26 含镉废物",
+      "hwCode": "HW26",
+      "source": "电池制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-046-27",
+      "name": "锑金属及粗氧化锑生产过程中产生的熔渣和 集（除）尘装置收集的粉尘",
+      "category": "HW27",
+      "hwCode": "HW27",
+      "source": "基础化学原",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-048-27",
+      "name": "氧化锑生产过程中产生的熔渣",
+      "category": "含锑废物",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-050-28",
+      "name": "碲及其化合物生产过程中产生的熔渣、集 （除）尘装置收集的粉尘和废水处理污泥",
+      "category": "HW28 含碲废物",
+      "hwCode": "HW28",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "072-002-29",
+      "name": "天然气除汞净化过程中产生的含汞废物",
+      "category": "HW28 含碲废物",
+      "hwCode": "HW28",
+      "source": "天然气开采",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "091-003-29",
+      "name": "汞矿采选过程中产生的尾砂和集（除）尘装 置收集的粉尘",
+      "category": "HW28 含碲废物",
+      "hwCode": "HW28",
+      "source": "常用有色金 属矿采选",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "322-002-29",
+      "name": "混汞法提金工艺产生的含汞粉尘、残渣",
+      "category": "HW28 含碲废物",
+      "hwCode": "HW28",
+      "source": "贵金属冶炼",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "231-007-29",
+      "name": "使用显影剂、汞化合物进行影像加厚（物理 沉淀）以及使用显影剂、氨氯化汞进行影像 加厚（氧化）产生的废液和残渣",
+      "category": "HW28 含碲废物",
+      "hwCode": "HW28",
+      "source": "印刷",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-051-29",
+      "name": "水银电解槽法生产氯气过程中盐水精制产生 的盐水提纯污泥",
+      "category": "HW29",
+      "hwCode": "HW29",
+      "source": "印刷",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-052-29",
+      "name": "水银电解槽法生产氯气过程中产生的废水处 理污泥",
+      "category": "含汞废物",
+      "hwCode": "",
+      "source": "基础化学原",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-053-29",
+      "name": "水银电解槽法生产氯气过程中产生的废活性炭",
+      "category": "含汞废物",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-054-29",
+      "name": "卤素和卤素化学品生产过程中产生的含汞硫 酸钡污泥",
+      "category": "含汞废物",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "265-001-29",
+      "name": "氯乙烯生产过程中含汞废水处理产生的废活 性炭",
+      "category": "含汞废物",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T，C",
+      "hazardDesc": "T，C"
+    },
+    {
+      "code": "265-002-29",
+      "name": "氯乙烯生产过程中吸附汞产生的废活性炭",
+      "category": "含汞废物",
+      "hwCode": "",
+      "source": "合成材料制造",
+      "hazard": "T，C",
+      "hazardDesc": "T，C"
+    },
+    {
+      "code": "265-003-29",
+      "name": "电石乙炔法生产氯乙烯单体过程中产生的废酸",
+      "category": "含汞废物",
+      "hwCode": "",
+      "source": "合成材料制造",
+      "hazard": "T，C",
+      "hazardDesc": "T，C"
+    },
+    {
+      "code": "265-004-29",
+      "name": "电石乙炔法生产氯乙烯单体过程中产生的废 水处理污泥",
+      "category": "",
+      "hwCode": "",
+      "source": "合成材料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-030-29",
+      "name": "汞再生过程中集（除）尘装置收集的粉尘， 汞再生工艺产生的废水处理污泥",
+      "category": "",
+      "hwCode": "",
+      "source": "合成材料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-033-29",
+      "name": "铅锌冶炼烟气净化产生的酸泥",
+      "category": "",
+      "hwCode": "",
+      "source": "常用有色金 属冶炼",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-103-29",
+      "name": "铜、锌、铅冶炼过程中烟气氯化汞法脱汞工艺 产生的废甘汞",
+      "category": "",
+      "hwCode": "",
+      "source": "常用有色金 属冶炼",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "384-003-29",
+      "name": "含汞电池生产过程中产生的含汞废浆层纸、 含汞废锌膏、含汞废活性炭和废水处理污泥",
+      "category": "",
+      "hwCode": "",
+      "source": "电池制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "387-001-29",
+      "name": "电光源用固汞及含汞电光源生产过程中产生 的废活性炭和废水处理污泥",
+      "category": "",
+      "hwCode": "",
+      "source": "照明器具制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "401-001-29",
+      "name": "含汞温度计生产过程中产生的废渣",
+      "category": "",
+      "hwCode": "",
+      "source": "通用仪器仪 表制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-022-29",
+      "name": "废弃的含汞催化剂",
+      "category": "含汞废物",
+      "hwCode": "",
+      "source": "通用仪器仪 表制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-023-29",
+      "name": "生产、销售及使用过程中产生的废含汞荧光 灯管及其他废含汞电光源，及废弃含汞电光 源处理处置过程中产生的废荧光粉、废活性 炭和废水处理污泥",
+      "category": "含汞废物",
+      "hwCode": "",
+      "source": "通用仪器仪 表制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-024-29",
+      "name": "生产、销售及使用过程中产生的废含汞温度 计、废含汞血压计、废含汞真空表、废含汞 压力计、废氧化汞电池和废汞开关，以及《关 于汞的水俣公约》管控的其他废含汞非电子 测量仪器",
+      "category": "含汞废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-054-29",
+      "name": "已禁止使用的，所有者申报废弃的，以及有 关部门依法收缴或者接收且需要销毁的《关 于汞的水俣公约》管控的汞和汞化合物",
+      "category": "含汞废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-452-29",
+      "name": "含汞废水处理过程中产生的废树脂、废活性 炭和污泥",
+      "category": "含汞废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-055-30",
+      "name": "铊及其化合物生产过程中产生的熔渣、集 （除）尘装置收集的粉尘和废水处理污泥",
+      "category": "HW30 含铊废物",
+      "hwCode": "HW30",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "304-002-31",
+      "name": "使用铅盐和铅氧化物进行显像管玻璃熔炼过 程中产生的废渣",
+      "category": "HW30 含铊废物",
+      "hwCode": "HW30",
+      "source": "玻璃制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "398-052-31",
+      "name": "线路板制造过程中电镀铅锡合金产生的废液",
+      "category": "HW31 含铅废物",
+      "hwCode": "HW31",
+      "source": "电子元件及 电子专用材 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "384-004-31",
+      "name": "铅蓄电池生产过程中产生的废渣、集（除） 尘装置收集的粉尘和废水处理污泥",
+      "category": "HW31 含铅废物",
+      "hwCode": "HW31",
+      "source": "电池制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "243-001-31",
+      "name": "使用铅箔进行烤钵试金法工艺产生的废烤钵",
+      "category": "",
+      "hwCode": "",
+      "source": "工艺美术及礼 仪用品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-052-31",
+      "name": "废铅蓄电池及废铅蓄电池拆解过程中产生的 废铅板、废铅膏和酸液",
+      "category": "HW31 含铅废物",
+      "hwCode": "HW31",
+      "source": "非特定行业",
+      "hazard": "T，C",
+      "hazardDesc": "T，C"
+    },
+    {
+      "code": "900-025-31",
+      "name": "使用硬脂酸铅进行抗黏涂层过程中产生的废物",
+      "category": "HW31 含铅废物",
+      "hwCode": "HW31",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-026-32",
+      "name": "使用氢氟酸进行蚀刻产生的废蚀刻液",
+      "category": "HW32 无机氟化物 废物",
+      "hwCode": "HW32",
+      "source": "非特定行业",
+      "hazard": "T，C",
+      "hazardDesc": "T，C"
+    },
+    {
+      "code": "092-003-33",
+      "name": "采用氰化物进行黄金选矿过程中产生的含氰 废水处理污泥和金精矿氰化尾渣",
+      "category": "HW32 无机氟化物 废物",
+      "hwCode": "HW32",
+      "source": "贵金属矿采选",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "336-104-33",
+      "name": "使用氰化物进行浸洗过程中产生的废液",
+      "category": "HW33",
+      "hwCode": "HW33",
+      "source": "金属表面处 理及热处理 加工",
+      "hazard": "T，R",
+      "hazardDesc": "T，R"
+    },
+    {
+      "code": "900-027-33",
+      "name": "使用氰化物进行表面硬化、碱性除油、电解 除油产生的废物",
+      "category": "废物",
+      "hwCode": "",
+      "source": "金属表面处 理及热处理 加工",
+      "hazard": "T，R",
+      "hazardDesc": "T，R"
+    },
+    {
+      "code": "900-028-33",
+      "name": "使用氰化物剥落金属镀层产生的废物",
+      "category": "废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T，R",
+      "hazardDesc": "T，R"
+    },
+    {
+      "code": "900-029-33",
+      "name": "使用氰化物和双氧水进行化学抛光产生的废物",
+      "category": "废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T，R",
+      "hazardDesc": "T，R"
+    },
+    {
+      "code": "251-014-34",
+      "name": "石油炼制过程产生的废酸及酸泥",
+      "category": "废物",
+      "hwCode": "",
+      "source": "精炼石油产 品制造",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "264-013-34",
+      "name": "硫酸法生产钛白粉（二氧化钛）过程中产生 的废酸",
+      "category": "废物",
+      "hwCode": "",
+      "source": "涂料、油墨、 颜料及类似 产品制造",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "261-057-34",
+      "name": "硫酸和亚硫酸、盐酸、氢氟酸、磷酸和亚磷 酸、硝酸和亚硝酸等的生产、配制过程中产 生的废酸及酸渣",
+      "category": "废物",
+      "hwCode": "",
+      "source": "基础化学原 料制造",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "261-058-34",
+      "name": "卤素和卤素化学品生产过程中产生的废酸",
+      "category": "HW34",
+      "hwCode": "HW34",
+      "source": "基础化学原 料制造",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "313-001-34",
+      "name": "钢的精加工过程中产生的废酸性洗液",
+      "category": "废酸",
+      "hwCode": "",
+      "source": "钢压延加工",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "336-105-34",
+      "name": "青铜生产过程中浸酸工序产生的废酸液",
+      "category": "废酸",
+      "hwCode": "",
+      "source": "金属表面处 理及热处理 加工",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "398-005-34",
+      "name": "使用酸进行电解除油、酸蚀、活化前表面敏 化、催化、浸亮产生的废酸液",
+      "category": "废酸",
+      "hwCode": "",
+      "source": "电子元件及",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "398-006-34",
+      "name": "使用硝酸进行钻孔蚀胶处理产生的废酸液",
+      "category": "废酸",
+      "hwCode": "",
+      "source": "电子专用材",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "398-007-34",
+      "name": "用酸浸蚀剂进行氧化物浸蚀产生的废酸液",
+      "category": "废酸",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "900-300-34",
+      "name": "使用酸进行清洗产生的废酸液",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "900-301-34",
+      "name": "使用硫酸进行酸性碳化产生的废酸液",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "900-302-34",
+      "name": "使用硫酸进行酸蚀产生的废酸液",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "900-303-34",
+      "name": "使用磷酸进行磷化产生的废酸液",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "900-304-34",
+      "name": "使用酸进行电解除油、金属表面敏化产生的 废酸液",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "900-305-34",
+      "name": "使用硝酸剥落不合格镀层及挂架金属镀层产 生的废酸液",
+      "category": "HW34 废酸",
+      "hwCode": "HW34",
+      "source": "非特定行业",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "900-306-34",
+      "name": "使用硝酸进行钝化产生的废酸液",
+      "category": "HW34 废酸",
+      "hwCode": "HW34",
+      "source": "非特定行业",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "900-307-34",
+      "name": "使用酸进行电解抛光处理产生的废酸液",
+      "category": "HW34 废酸",
+      "hwCode": "HW34",
+      "source": "非特定行业",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "900-308-34",
+      "name": "使用酸进行催化（化学镀）产生的废酸液",
+      "category": "HW34 废酸",
+      "hwCode": "HW34",
+      "source": "非特定行业",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "900-349-34",
+      "name": "生产、销售及使用过程中产生的失效、变质、 不合格、淘汰、伪劣的强酸性擦洗粉、清洁 剂、污迹去除剂以及其他强酸性废酸液和酸渣",
+      "category": "HW34 废酸",
+      "hwCode": "HW34",
+      "source": "非特定行业",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "251-015-35",
+      "name": "石油炼制过程产生的废碱液和碱渣",
+      "category": "HW34 废酸",
+      "hwCode": "HW34",
+      "source": "精炼石油产 品制造",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "261-059-35",
+      "name": "氢氧化钙、氨水、氢氧化钠、氢氧化钾等的 生产、配制中产生的废碱液、固态碱和碱渣",
+      "category": "HW34 废酸",
+      "hwCode": "HW34",
+      "source": "基础化学原 料制造",
+      "hazard": "C",
+      "hazardDesc": "腐蚀性"
+    },
+    {
+      "code": "193-003-35",
+      "name": "使用氢氧化钙、硫化钠进行浸灰产生的废碱液",
+      "category": "HW34 废酸",
+      "hwCode": "HW34",
+      "source": "毛皮鞣制及 制品加工",
+      "hazard": "C，R",
+      "hazardDesc": "C，R"
+    },
+    {
+      "code": "221-002-35",
+      "name": "碱法制浆过程中蒸煮制浆产生的废碱液",
+      "category": "HW34 废酸",
+      "hwCode": "HW34",
+      "source": "纸浆制造",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "900-350-35",
+      "name": "使用氢氧化钠进行煮炼过程中产生的废碱液",
+      "category": "HW34 废酸",
+      "hwCode": "HW34",
+      "source": "纸浆制造",
+      "hazard": "C",
+      "hazardDesc": "腐蚀性"
+    },
+    {
+      "code": "900-351-35",
+      "name": "使用氢氧化钠进行丝光处理过程中产生的废 碱液",
+      "category": "HW35 废碱",
+      "hwCode": "HW35",
+      "source": "纸浆制造",
+      "hazard": "C",
+      "hazardDesc": "腐蚀性"
+    },
+    {
+      "code": "900-352-35",
+      "name": "使用碱进行清洗产生的废碱液",
+      "category": "HW35 废碱",
+      "hwCode": "HW35",
+      "source": "纸浆制造",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "900-353-35",
+      "name": "使用碱进行清洗除蜡、碱性除油、电解除油 产生的废碱液",
+      "category": "HW35 废碱",
+      "hwCode": "HW35",
+      "source": "非特定行业",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "900-354-35",
+      "name": "使用碱进行电镀阻挡层或者抗蚀层的脱除产 生的废碱液",
+      "category": "HW35 废碱",
+      "hwCode": "HW35",
+      "source": "非特定行业",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "900-355-35",
+      "name": "使用碱进行氧化膜浸蚀产生的废碱液",
+      "category": "HW35 废碱",
+      "hwCode": "HW35",
+      "source": "非特定行业",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "900-356-35",
+      "name": "使用碱溶液进行碱性清洗、图形显影产生的 废碱液",
+      "category": "HW35 废碱",
+      "hwCode": "HW35",
+      "source": "非特定行业",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "900-399-35",
+      "name": "生产、销售及使用过程中产生的失效、变质、 不合格、淘汰、伪劣的强碱性擦洗粉、清洁 剂、污迹去除剂以及其他强碱性废碱液、固 态碱和碱渣",
+      "category": "HW35 废碱",
+      "hwCode": "HW35",
+      "source": "非特定行业",
+      "hazard": "C，T",
+      "hazardDesc": "C，T"
+    },
+    {
+      "code": "109-001-36",
+      "name": "石棉矿选矿过程中产生的废渣",
+      "category": "HW35 废碱",
+      "hwCode": "HW35",
+      "source": "石棉及其他非 金属矿采选",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-060-36",
+      "name": "卤素和卤素化学品生产过程中电解装置拆换 产生的含石棉废物",
+      "category": "HW35 废碱",
+      "hwCode": "HW35",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "302-001-36",
+      "name": "石棉建材生产过程中产生的石棉尘、废石棉",
+      "category": "HW35 废碱",
+      "hwCode": "HW35",
+      "source": "石膏、水泥制 品及类似制 品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "308-001-36",
+      "name": "石棉制品生产过程中产生的石棉尘、废石棉",
+      "category": "HW36",
+      "hwCode": "HW36",
+      "source": "耐火材料制 品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "367-001-36",
+      "name": "车辆制动器衬片生产过程中产生的石棉废物",
+      "category": "石棉废物",
+      "hwCode": "",
+      "source": "汽车零部件 及配件制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "373-002-36",
+      "name": "拆船过程中产生的石棉废物",
+      "category": "石棉废物",
+      "hwCode": "",
+      "source": "船舶及相关 装置制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-030-36",
+      "name": "其他生产过程中产生的石棉废物",
+      "category": "石棉废物",
+      "hwCode": "",
+      "source": "船舶及相关 装置制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-031-36",
+      "name": "废石棉建材、废石棉绝缘材料",
+      "category": "石棉废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-032-36",
+      "name": "含有隔膜、热绝缘体等石棉材料的设施保养拆 换及车辆制动器衬片的更换产生的石棉废物",
+      "category": "石棉废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-061-37",
+      "name": "除农药以外其他有机磷化合物生产、配制过 程中产生的反应残余物",
+      "category": "石棉废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-062-37",
+      "name": "除农药以外其他有机磷化合物生产、配制过 程中产生的废过滤吸附介质",
+      "category": "HW37",
+      "hwCode": "HW37",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-063-37",
+      "name": "除农药以外其他有机磷化合物生产过程中产",
+      "category": "有机磷化合物 废物",
+      "hwCode": "",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-033-37",
+      "name": "生产、销售及使用过程中产生的废弃磷酸酯 抗燃油",
+      "category": "有机磷化合物 废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-064-38",
+      "name": "丙烯腈生产过程中废水汽提器塔底的残余物",
+      "category": "有机磷化合物 废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T，R",
+      "hazardDesc": "T，R"
+    },
+    {
+      "code": "261-065-38",
+      "name": "丙烯腈生产过程中乙腈蒸馏塔底的残余物",
+      "category": "有机磷化合物 废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T，R",
+      "hazardDesc": "T，R"
+    },
+    {
+      "code": "261-066-38",
+      "name": "丙烯腈生产过程中乙腈精制塔底的残余物",
+      "category": "HW38",
+      "hwCode": "HW38",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-067-38",
+      "name": "有机氰化物生产过程中产生的废母液和反应 残余物",
+      "category": "废物",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-068-38",
+      "name": "有机氰化物生产过程中催化、精馏和过滤工 序产生的废催化剂、釜底残余物和过滤介质",
+      "category": "废物",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-069-38",
+      "name": "有机氰化物生产过程中产生的废水处理污泥",
+      "category": "HW38",
+      "hwCode": "HW38",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-140-38",
+      "name": "废腈纶高温高压水解生产聚丙烯腈-铵盐过 程中产生的过滤残渣",
+      "category": "有机氰化物 废物",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-070-39",
+      "name": "酚及酚类化合物生产过程中产生的废母液和 反应残余物",
+      "category": "HW39",
+      "hwCode": "HW39",
+      "source": "基础化学原",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-071-39",
+      "name": "酚及酚类化合物生产过程中产生的废过滤吸 附介质、废催化剂、精馏残余物",
+      "category": "含酚废物",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-072-40",
+      "name": "醚及醚类化合物生产过程（不包括成醚反应 之前的合成过程）中产生的醚类残液、反应 残余物、废水处理污泥（不包括废水生化处 理污泥）",
+      "category": "HW40 含醚废物",
+      "hwCode": "HW40",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-078-45",
+      "name": "乙烯溴化法生产二溴乙烯过程中废气净化产 生的废液",
+      "category": "HW40 含醚废物",
+      "hwCode": "HW40",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-079-45",
+      "name": "乙烯溴化法生产二溴乙烯过程中产品精制产 生的废吸附剂",
+      "category": "HW40 含醚废物",
+      "hwCode": "HW40",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-080-45",
+      "name": "芳烃及其衍生物氯代反应过程中氯气和盐酸 回收工艺产生的废液和废吸附剂",
+      "category": "HW40 含醚废物",
+      "hwCode": "HW40",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-081-45",
+      "name": "芳烃及其衍生物氯代反应过程中产生的废水 处理污泥",
+      "category": "HW40 含醚废物",
+      "hwCode": "HW40",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-082-45",
+      "name": "氯乙烷生产过程中的塔底残余物",
+      "category": "HW45",
+      "hwCode": "HW45",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-084-45",
+      "name": "生产工段）中产生的残液、废过滤吸附介质、 反应残余物、废水处理污泥（不包括环氧氯丙 烷皂化液处理产生的石灰渣）、废催化剂（不 包括本名录 HW04、HW06、HW11、HW12、HW13、",
+      "category": "废物",
+      "hwCode": "",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-085-45",
+      "name": "其他有机卤化物的生产过程中产生的不合 格、淘汰、废弃的产品（不包括本名录 HW06、 HW39 类别的危险废物）",
+      "category": "废物",
+      "hwCode": "",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-086-45",
+      "name": "石墨作阳极隔膜法生产氯气和烧碱过程中产 生的废水处理污泥",
+      "category": "废物",
+      "hwCode": "",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-087-46",
+      "name": "镍化合物生产过程中产生的反应残余物及不 合格、淘汰、废弃的产品",
+      "category": "废物",
+      "hwCode": "",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "384-005-46",
+      "name": "镍氢电池生产过程中产生的废渣和废水处理 污泥",
+      "category": "HW46 含镍废物",
+      "hwCode": "HW46",
+      "source": "电池制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-037-46",
+      "name": "废弃的镍催化剂",
+      "category": "HW46 含镍废物",
+      "hwCode": "HW46",
+      "source": "非特定行业",
+      "hazard": "T，I",
+      "hazardDesc": "T，I"
+    },
+    {
+      "code": "261-088-47",
+      "name": "钡化合物（不包括硫酸钡）生产过程中产生 的熔渣、集（除）尘装置收集的粉尘、反应 残余物、废水处理污泥",
+      "category": "HW47",
+      "hwCode": "HW47",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "336-106-47",
+      "name": "热处理工艺中产生的含钡盐浴渣",
+      "category": "含钡废物",
+      "hwCode": "",
+      "source": "金属表面处 理及热处理 加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "091-001-48",
+      "name": "硫化铜矿、氧化铜矿等铜矿物采选过程中集 （除）尘装置收集的粉尘",
+      "category": "含钡废物",
+      "hwCode": "",
+      "source": "金属表面处 理及热处理 加工",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "091-002-48",
+      "name": "硫砷化合物（雌黄、雄黄及硫砷铁矿）或者 其他含砷化合物的金属矿石采选过程中集 （除）尘装置收集的粉尘",
+      "category": "含钡废物",
+      "hwCode": "",
+      "source": "属矿采选",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-002-48",
+      "name": "铜火法冶炼过程中烟气处理集（除）尘装置 收集的粉尘",
+      "category": "含钡废物",
+      "hwCode": "",
+      "source": "属矿采选",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-031-48",
+      "name": "铜火法冶炼烟气净化产生的酸泥（铅滤饼）",
+      "category": "含钡废物",
+      "hwCode": "",
+      "source": "属矿采选",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-032-48",
+      "name": "铜火法冶炼烟气净化产生的污酸处理过程产 生的砷渣",
+      "category": "含钡废物",
+      "hwCode": "",
+      "source": "属矿采选",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-003-48",
+      "name": "粗锌精炼加工过程中湿法除尘产生的废水处 理污泥",
+      "category": "含钡废物",
+      "hwCode": "",
+      "source": "属矿采选",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-004-48",
+      "name": "铅锌冶炼过程中，锌焙烧矿、锌氧化矿常规 浸出法产生的浸出渣",
+      "category": "含钡废物",
+      "hwCode": "",
+      "source": "属矿采选",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-005-48",
+      "name": "铅锌冶炼过程中，锌焙烧矿热酸浸出黄钾铁 矾法产生的铁矾渣",
+      "category": "HW48 有色金属采选 和冶炼废物",
+      "hwCode": "HW48",
+      "source": "属矿采选",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-006-48",
+      "name": "硫化锌矿常压氧浸或者加压氧浸产生的硫渣 （浸出渣）",
+      "category": "HW48 有色金属采选 和冶炼废物",
+      "hwCode": "HW48",
+      "source": "常用有色金 属冶炼",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-007-48",
+      "name": "铅锌冶炼过程中，锌焙烧矿热酸浸出针铁矿 法产生的针铁矿渣",
+      "category": "HW48 有色金属采选 和冶炼废物",
+      "hwCode": "HW48",
+      "source": "常用有色金 属冶炼",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-008-48",
+      "name": "铅锌冶炼过程中，锌浸出液净化产生的净化 渣，包括锌粉-黄药法、砷盐法、反向锑盐法、 铅锑合金锌粉法等工艺除铜、锑、镉、钴、 镍等杂质过程中产生的废渣",
+      "category": "HW48 有色金属采选 和冶炼废物",
+      "hwCode": "HW48",
+      "source": "常用有色金 属冶炼",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-009-48",
+      "name": "铅锌冶炼过程中，阴极锌熔铸产生的熔铸浮渣",
+      "category": "HW48 有色金属采选 和冶炼废物",
+      "hwCode": "HW48",
+      "source": "常用有色金 属冶炼",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-010-48",
+      "name": "铅锌冶炼过程中，氧化锌浸出处理产生的氧 化锌浸出渣",
+      "category": "HW48 有色金属采选 和冶炼废物",
+      "hwCode": "HW48",
+      "source": "常用有色金 属冶炼",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-011-48",
+      "name": "铅锌冶炼过程中，鼓风炉炼锌锌蒸气冷凝分 离系统产生的鼓风炉浮渣",
+      "category": "HW48 有色金属采选 和冶炼废物",
+      "hwCode": "HW48",
+      "source": "常用有色金 属冶炼",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-012-48",
+      "name": "铅锌冶炼过程中，锌精馏炉产生的锌渣",
+      "category": "HW48 有色金属采选 和冶炼废物",
+      "hwCode": "HW48",
+      "source": "常用有色金 属冶炼",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-013-48",
+      "name": "铅锌冶炼过程中，提取金、银、铋、镉、钴、 铟、锗、铊、碲等金属过程中产生的废渣",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-014-48",
+      "name": "铅锌冶炼过程中，集（除）尘装置收集的粉尘",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-016-48",
+      "name": "粗铅精炼过程中产生的浮渣和底渣",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-017-48",
+      "name": "铅锌冶炼过程中，炼铅鼓风炉产生的黄渣",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-018-48",
+      "name": "铅锌冶炼过程中，粗铅火法精炼产生的精炼渣",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-019-48",
+      "name": "铅锌冶炼过程中，铅电解产生的阳极泥及阳 极泥处理后产生的含铅废渣和废水处理污泥",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-020-48",
+      "name": "铅锌冶炼过程中，阴极铅精炼产生的氧化铅 渣及碱渣",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-021-48",
+      "name": "铅锌冶炼过程中，锌焙烧矿热酸浸出黄钾铁 矾法、热酸浸出针铁矿法产生的铅银渣",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-022-48",
+      "name": "铅锌冶炼烟气净化产生的污酸除砷处理过程 产生的砷渣",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-023-48",
+      "name": "电解铝生产过程电解槽阴极内衬维修、更换 产生的废渣（大修渣）",
+      "category": "HW48",
+      "hwCode": "HW48",
+      "source": "常用有色金",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-024-48",
+      "name": "熔体表面产生的铝灰渣，以及回收铝过程产",
+      "category": "和冶炼废物",
+      "hwCode": "",
+      "source": "属冶炼",
+      "hazard": "R，T",
+      "hazardDesc": "R，T"
+    },
+    {
+      "code": "321-025-48",
+      "name": "电解铝生产过程产生的炭渣",
+      "category": "和冶炼废物",
+      "hwCode": "",
+      "source": "属冶炼",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-026-48",
+      "name": "再生铝和铝材加工过程中，废铝及铝锭重 熔、精炼、合金化、铸造熔体表面产生的 铝灰渣，及其回收铝过程产生的盐渣和二次 铝灰",
+      "category": "和冶炼废物",
+      "hwCode": "",
+      "source": "属冶炼",
+      "hazard": "R",
+      "hazardDesc": "反应性"
+    },
+    {
+      "code": "321-034-48",
+      "name": "铝灰热回收铝过程烟气处理集（除）尘装置 收集的粉尘，铝冶炼和再生过程烟气（包括： 再生铝熔炼烟气、铝液熔体净化、除杂、合 金化、铸造烟气）处理集（除）尘装置收集 的粉尘",
+      "category": "和冶炼废物",
+      "hwCode": "",
+      "source": "属冶炼",
+      "hazard": "T，R",
+      "hazardDesc": "T，R"
+    },
+    {
+      "code": "321-027-48",
+      "name": "铜再生过程中集（除）尘装置收集的粉尘和 湿法除尘产生的废水处理污泥",
+      "category": "和冶炼废物",
+      "hwCode": "",
+      "source": "属冶炼",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-028-48",
+      "name": "锌再生过程中集（除）尘装置收集的粉尘和 湿法除尘产生的废水处理污泥",
+      "category": "和冶炼废物",
+      "hwCode": "",
+      "source": "属冶炼",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-029-48",
+      "name": "铅再生过程中集（除）尘装置收集的粉尘和 湿法除尘产生的废水处理污泥",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-035-48",
+      "name": "锡火法冶炼过程中烟气处理集（除）尘装置 收集的粉尘",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-036-48",
+      "name": "锡火法冶炼烟气净化产生的酸泥",
+      "category": "",
+      "hwCode": "",
+      "source": "常用有色金",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-037-48",
+      "name": "锡火法冶炼烟气净化产生的污酸处理过程产 生的砷渣",
+      "category": "有色金属采选 和冶炼废物",
+      "hwCode": "",
+      "source": "属冶炼",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "321-038-48",
+      "name": "锡再生过程中集（除）尘装置收集的粉尘和 湿法除尘产生的废水处理污泥",
+      "category": "有色金属采选 和冶炼废物",
+      "hwCode": "",
+      "source": "属冶炼",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "323-001-48",
+      "name": "以钨精矿为原料生产仲钨酸铵过程中碱分解产 生的碱煮渣（钨渣）、除钼过程中产生的除钼 渣和废水处理污泥",
+      "category": "有色金属采选 和冶炼废物",
+      "hwCode": "",
+      "source": "稀有稀土金 属冶炼",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "309-001-49",
+      "name": "多晶硅生产过程中废弃的三氯化硅及四氯化硅",
+      "category": "有色金属采选 和冶炼废物",
+      "hwCode": "",
+      "source": "石墨及其他 非金属矿物 制品制造",
+      "hazard": "R，C",
+      "hazardDesc": "R，C"
+    },
+    {
+      "code": "772-006-49",
+      "name": "采用物理、化学、物理化学或者生物方法处 理或者处置毒性或者感染性危险废物过程中 产生的废水处理污泥和废水处理残渣（液）",
+      "category": "有色金属采选 和冶炼废物",
+      "hwCode": "",
+      "source": "环境治理",
+      "hazard": "T/In",
+      "hazardDesc": "毒性、感染性"
+    },
+    {
+      "code": "900-039-49",
+      "name": "色）、除杂、净化过程产生的废活性炭（不",
+      "category": "有色金属采选 和冶炼废物",
+      "hwCode": "",
+      "source": "环境治理",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-041-49",
+      "name": "含有或者沾染毒性、感染性危险废物的废弃",
+      "category": "HW49 其他废物",
+      "hwCode": "HW49",
+      "source": "环境治理",
+      "hazard": "T/In",
+      "hazardDesc": "毒性、感染性"
+    },
+    {
+      "code": "900-042-49",
+      "name": "环境事件及其处理过程中产生的沾染危险化 学品、危险废物的废物",
+      "category": "HW49 其他废物",
+      "hwCode": "HW49",
+      "source": "非特定行业",
+      "hazard": "T/C/I/R/I n",
+      "hazardDesc": "毒性、腐蚀性、易燃性、反应性、I n"
+    },
+    {
+      "code": "900-044-49",
+      "name": "废弃的镉镍电池、荧光粉和阴极射线管",
+      "category": "HW49 其他废物",
+      "hwCode": "HW49",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-045-49",
+      "name": "废电路板（包括已拆除或者未拆除元器件的 废弃电路板），及废电路板拆解过程产生的 废弃的 CPU、显卡、声卡、内存、含电解液 的电容器、含金等贵金属的连接件",
+      "category": "HW49 其他废物",
+      "hwCode": "HW49",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-046-49",
+      "name": "离子交换装置（不包括饮用水、工业纯水和 锅炉软化水制备装置以及废水处理成套工艺 中的离子交换装置）再生过程中产生的废水 处理污泥",
+      "category": "HW49 其他废物",
+      "hwCode": "HW49",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-047-49",
+      "name": "生产、研究、开发、教学、环境检测（监测） 活动中，化学和生物实验室（不包含感染性 医学实验室及医疗机构化验室）产生的含氰、 氟、重金属无机废液及无机废液处理产生的 残渣、残液，含矿物油、有机溶剂、甲醛有 机废液，废酸、废碱，具有危险特性的残留 样品，以及沾染上述物质的一次性实验用品 （不包括按实验室管理要求进行清洗后的废 弃的烧杯、量器、漏斗等实验室用品）、包 装物（不包括按实验室管理要求进行清洗后 的试剂包装物、容器）、过滤吸附介质等",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T/C/I/R",
+      "hazardDesc": "毒性、腐蚀性、易燃性、反应性"
+    },
+    {
+      "code": "900-053-49",
+      "name": "久性有机污染物的斯德哥尔摩公约》管控的化",
+      "category": "其他废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-999-49",
+      "name": "被所有者申报废弃的，或者未申报废弃但被非 法排放、倾倒、利用、处置的，以及有关部门 依法收缴或者接收且需要销毁的列入《危险化 学品目录》的危险化学品（不含该目录中仅具 有“加压气体”物理危险性的危险化学品）",
+      "category": "其他废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T/C/I/R",
+      "hazardDesc": "毒性、腐蚀性、易燃性、反应性"
+    },
+    {
+      "code": "251-016-50",
+      "name": "石油产品加氢精制过程中产生的废催化剂",
+      "category": "其他废物",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "251-017-50",
+      "name": "石油炼制中采用钝镍剂进行催化裂化产生的 废催化剂",
+      "category": "其他废物",
+      "hwCode": "",
+      "source": "精炼石油产",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "251-018-50",
+      "name": "石油产品加氢裂化过程中产生的废催化剂",
+      "category": "其他废物",
+      "hwCode": "",
+      "source": "品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "251-019-50",
+      "name": "石油产品催化重整过程中产生的废催化剂",
+      "category": "其他废物",
+      "hwCode": "",
+      "source": "品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-151-50",
+      "name": "树脂、乳胶、增塑剂、胶水/胶合剂生产过程 中合成、酯化、缩合等工序产生的废催化剂",
+      "category": "HW50",
+      "hwCode": "HW50",
+      "source": "品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-152-50",
+      "name": "有机溶剂生产过程中产生的废催化剂",
+      "category": "废催化剂",
+      "hwCode": "",
+      "source": "品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-153-50",
+      "name": "丙烯腈合成过程中产生的废催化剂",
+      "category": "废催化剂",
+      "hwCode": "",
+      "source": "品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-154-50",
+      "name": "聚乙烯合成过程中产生的废催化剂",
+      "category": "废催化剂",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-155-50",
+      "name": "聚丙烯合成过程中产生的废催化剂",
+      "category": "废催化剂",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-156-50",
+      "name": "烷烃脱氢过程中产生的废催化剂",
+      "category": "废催化剂",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-157-50",
+      "name": "乙苯脱氢生产苯乙烯过程中产生的废催化剂",
+      "category": "废催化剂",
+      "hwCode": "",
+      "source": "料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-158-50",
+      "name": "采用烷基化反应（歧化）生产苯、二甲苯过 程中产生的废催化剂",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-159-50",
+      "name": "二甲苯临氢异构化反应过程中产生的废催化剂",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-160-50",
+      "name": "乙烯氧化生产环氧乙烷过程中产生的废催化剂",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-161-50",
+      "name": "硝基苯催化加氢法制备苯胺过程中产生的废 催化剂",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-162-50",
+      "name": "以乙烯和丙烯为原料，采用茂金属催化体系 生产乙丙橡胶过程中产生的废催化剂",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-163-50",
+      "name": "乙炔法生产醋酸乙烯酯过程中产生的废催化剂",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-164-50",
+      "name": "甲醇和氨气催化合成、蒸馏制备甲胺过程中 产生的废催化剂",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-165-50",
+      "name": "催化重整生产高辛烷值汽油和轻芳烃过程中 产生的废催化剂",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-166-50",
+      "name": "采用碳酸二甲酯法生产甲苯二异氰酸酯过程 中产生的废催化剂",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-167-50",
+      "name": "合成气合成、甲烷氧化和液化石油气氧化生 产甲醇过程中产生的废催化剂",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-168-50",
+      "name": "甲苯氯化水解生产邻甲酚过程中产生的废催",
+      "category": "HW50 废催化剂",
+      "hwCode": "HW50",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-169-50",
+      "name": "异丙苯催化脱氢生产α-甲基苯乙烯过程中 产生的废催化剂",
+      "category": "HW50 废催化剂",
+      "hwCode": "HW50",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-170-50",
+      "name": "异丁烯和甲醇催化生产甲基叔丁基醚过程中 产生的废催化剂",
+      "category": "HW50 废催化剂",
+      "hwCode": "HW50",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-171-50",
+      "name": "以甲醇为原料采用铁钼法生产甲醛过程中产 生的废铁钼催化剂",
+      "category": "HW50 废催化剂",
+      "hwCode": "HW50",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-172-50",
+      "name": "邻二甲苯氧化法生产邻苯二甲酸酐过程中产 生的废催化剂",
+      "category": "HW50 废催化剂",
+      "hwCode": "HW50",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-173-50",
+      "name": "二氧化硫氧化生产硫酸过程中产生的废催化剂",
+      "category": "HW50 废催化剂",
+      "hwCode": "HW50",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-174-50",
+      "name": "四氯乙烷催化脱氯化氢生产三氯乙烯过程中 产生的废催化剂",
+      "category": "HW50 废催化剂",
+      "hwCode": "HW50",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-175-50",
+      "name": "苯氧化法生产顺丁烯二酸酐过程中产生的废 催化剂",
+      "category": "HW50 废催化剂",
+      "hwCode": "HW50",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-176-50",
+      "name": "甲苯空气氧化生产苯甲酸过程中产生的废催 化剂",
+      "category": "HW50 废催化剂",
+      "hwCode": "HW50",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-177-50",
+      "name": "羟丙腈氨化、加氢生产 3-氨基-1-丙醇过程 中产生的废催化剂",
+      "category": "HW50 废催化剂",
+      "hwCode": "HW50",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-178-50",
+      "name": "β-羟基丙腈催化加氢生产 3-氨基-1-丙醇 过程中产生的废催化剂",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-179-50",
+      "name": "甲乙酮与氨催化加氢生产 2-氨基丁烷过程 中产生的废催化剂",
+      "category": "",
+      "hwCode": "",
+      "source": "",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-180-50",
+      "name": "苯酚和甲醇合成 2,6-二甲基苯酚过程中产 生的废催化剂",
+      "category": "",
+      "hwCode": "",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-181-50",
+      "name": "糠醛脱羰制备呋喃过程中产生的废催化剂",
+      "category": "",
+      "hwCode": "",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-182-50",
+      "name": "过氧化法生产环氧丙烷过程中产生的废催化剂",
+      "category": "",
+      "hwCode": "",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "261-183-50",
+      "name": "除农药以外其他有机磷化合物生产过程中产 生的废催化剂",
+      "category": "HW50",
+      "hwCode": "HW50",
+      "source": "基础化学原 料制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "263-013-50",
+      "name": "化学合成农药生产过程中产生的废催化剂",
+      "category": "废催化剂",
+      "hwCode": "",
+      "source": "农药制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "271-006-50",
+      "name": "化学合成原料药生产过程中产生的废催化剂",
+      "category": "废催化剂",
+      "hwCode": "",
+      "source": "化学药品原 料药制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "275-009-50",
+      "name": "兽药生产过程中产生的废催化剂",
+      "category": "废催化剂",
+      "hwCode": "",
+      "source": "兽用药品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "276-006-50",
+      "name": "生物药品生产过程中产生的废催化剂",
+      "category": "废催化剂",
+      "hwCode": "",
+      "source": "生物药品制 品制造",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "772-007-50",
+      "name": "烟气脱硝过程中产生的废钒钛系催化剂",
+      "category": "废催化剂",
+      "hwCode": "",
+      "source": "环境治理业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-048-50",
+      "name": "废液体催化剂",
+      "category": "废催化剂",
+      "hwCode": "",
+      "source": "环境治理业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    },
+    {
+      "code": "900-049-50",
+      "name": "机动车和非道路移动机械尾气净化废催化剂",
+      "category": "废催化剂",
+      "hwCode": "",
+      "source": "非特定行业",
+      "hazard": "T",
+      "hazardDesc": "毒性"
+    }
+  ]
+}
