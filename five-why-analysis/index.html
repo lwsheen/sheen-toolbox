@@ -198,11 +198,12 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
 </footer>
 
 <div class="api-toggle no-print" onclick="toggleApiSetup()" title="API设置"><i class="fa-solid fa-key"></i></div>
+<span class="api-status no no-print" id="apiStatusInline" style="position:fixed;bottom:24px;right:68px;z-index:100;font-size:11px;">API配置：未设置</span>
 
 <!-- API Setup Modal -->
 <div class="card api-setup" id="apiSetup" style="position:fixed;bottom:70px;right:20px;width:380px;z-index:100;max-height:80vh;overflow-y:auto;">
   <h3 style="margin-bottom:4px;">API 配置</h3>
-  <p style="font-size:11px;color:var(--text-secondary);margin-bottom:12px;">二者选一即可。推荐 Cloudflare Worker（免费）</p>
+  <p style="font-size:11px;color:var(--text-secondary);margin-bottom:12px;">配置后 AI 将实时引导分析。二者选一即可，推荐 Cloudflare Worker（免费）</p>
   <label style="font-size:12px;font-weight:600;">Cloudflare Worker URL（推荐）</label>
   <input type="text" id="workerUrl" placeholder="https://your-worker.workers.dev" style="margin-bottom:10px;">
   <label style="font-size:12px;font-weight:600;">或 DeepSeek API（备选）</label>
@@ -683,10 +684,14 @@ function saveApiConfig() {
 
 function updateApiStatus() {
   var st = document.getElementById('apiStatus');
+  var stInline = document.getElementById('apiStatusInline');
   var cfg = getApiConfig();
-  if (cfg.workerUrl) { st.textContent = 'Worker 已配置'; st.className = 'api-status ok'; }
-  else if (cfg.key) { st.textContent = 'DeepSeek 已配置'; st.className = 'api-status ok'; }
-  else { st.textContent = '未配置（离线模式）'; st.className = 'api-status no'; }
+  var text, cls;
+  if (cfg.workerUrl) { text = 'Worker 已配置'; cls = 'ok'; }
+  else if (cfg.key) { text = 'DeepSeek 已配置'; cls = 'ok'; }
+  else { text = '未配置（离线模式）'; cls = 'no'; }
+  if (st) { st.textContent = text; st.className = 'api-status ' + cls; }
+  if (stInline) { stInline.textContent = 'API配置：' + (cfg.workerUrl||cfg.key ? '已设置' : '未设置'); stInline.className = 'api-status no-print ' + cls; stInline.style.display = 'inline-flex'; }
 }
 
 function toggleApiSetup() {
