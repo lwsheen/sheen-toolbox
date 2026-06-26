@@ -329,13 +329,15 @@
             <table>
                 <thead>
                     <tr>
-                        <th style="width:120px;">废物代码</th>
+                        <th style="width:110px;">废物代码</th>
                         <th>危险废物</th>
+                        <th style="width:90px;">废物类别</th>
+                        <th style="width:90px;">行业来源</th>
                         <th style="width:80px;">危险特性</th>
                     </tr>
                 </thead>
                 <tbody id="tbody">
-                    <tr><td colspan="3" style="text-align:center;padding:40px;color:var(--text-secondary);">请输入查询条件</td></tr>
+                    <tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-secondary);">请输入查询条件</td></tr>
                 </tbody>
             </table>
         </div>
@@ -362,7 +364,7 @@
                     sel.innerHTML += '<option value="'+h+'">'+h+'</option>';
                 });
             } catch(e) {
-                document.getElementById('tbody').innerHTML = '<tr><td colspan="3" style="text-align:center;padding:40px;color:#DC2626;">数据加载失败</td></tr>';
+                document.getElementById('tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:#DC2626;">数据加载失败</td></tr>';
             }
         }
 
@@ -374,7 +376,7 @@
             if(!kw && !hw && !haz) {
                 document.getElementById('resultStats').style.display = 'none';
                 document.getElementById('pagination').style.display = 'none';
-                document.getElementById('tbody').innerHTML = '<tr><td colspan="3" style="text-align:center;padding:40px;color:var(--text-secondary);">请输入查询条件或选择筛选</td></tr>';
+                document.getElementById('tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-secondary);">请输入查询条件或选择筛选</td></tr>';
                 return;
             }
 
@@ -394,7 +396,7 @@
         function render() {
             const tbody = document.getElementById('tbody');
             if(!filtered.length) {
-                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;padding:40px;color:var(--text-secondary);">未找到匹配记录</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-secondary);">未找到匹配记录</td></tr>';
                 document.getElementById('pagination').style.display = 'none';
                 return;
             }
@@ -402,12 +404,14 @@
             const start = (page-1)*perPage, end = Math.min(start+perPage, filtered.length);
             tbody.innerHTML = filtered.slice(start, end).map(d => {
                 const hazBadges = (d.hazardDesc||'').split('、').map(h => '<span class="hazard-badge">'+h+'</span>').join('');
+                const hwCode = d.category ? d.category.replace('HW','').trim().split(' ')[0] : '';
                 return '<tr>' +
                     '<td><span class="hw-code-badge">'+d.code+'</span></td>' +
                     '<td>' +
                         '<div class="waste-name">'+d.name+'</div>' +
-                        '<div class="waste-category">'+d.category+(d.source?' · '+d.source:'')+'</div>' +
                     '</td>' +
+                    '<td>'+(d.hwCode||'')+'</td>' +
+                    '<td>'+(d.source||'')+'</td>' +
                     '<td>'+hazBadges+'</td>' +
                 '</tr>';
             }).join('');
