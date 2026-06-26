@@ -199,10 +199,14 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
 <div class="api-toggle no-print" onclick="toggleApiSetup()" title="API设置"><i class="fa-solid fa-key"></i></div>
 
 <!-- API Setup Modal -->
-<div class="card api-setup" id="apiSetup" style="position:fixed;bottom:70px;right:20px;width:340px;z-index:100;">
-  <h3 style="margin-bottom:12px;">DeepSeek API 配置</h3>
-  <input type="password" id="apiKey" placeholder="sk-xxxxxxxx" style="margin-bottom:8px;">
-  <input type="text" id="apiUrl" value="https://api.deepseek.com/v1/chat/completions" style="margin-bottom:8px;">
+<div class="card api-setup" id="apiSetup" style="position:fixed;bottom:70px;right:20px;width:380px;z-index:100;max-height:80vh;overflow-y:auto;">
+  <h3 style="margin-bottom:4px;">API 配置</h3>
+  <p style="font-size:11px;color:var(--text-secondary);margin-bottom:12px;">二者选一即可。推荐 Cloudflare Worker（免费）</p>
+  <label style="font-size:12px;font-weight:600;">Cloudflare Worker URL（推荐）</label>
+  <input type="text" id="workerUrl" placeholder="https://your-worker.workers.dev" style="margin-bottom:10px;">
+  <label style="font-size:12px;font-weight:600;">或 DeepSeek API（备选）</label>
+  <input type="password" id="apiKey" placeholder="sk-xxxxxxxx" style="margin-bottom:6px;">
+  <input type="text" id="apiUrl" value="https://api.deepseek.com/v1/chat/completions" style="margin-bottom:6px;">
   <input type="text" id="apiModel" value="deepseek-chat" style="margin-bottom:12px;">
   <div style="display:flex;gap:8px;">
     <button class="btn-primary" onclick="saveApiConfig()" style="padding:8px 20px;font-size:13px;">保存</button>
@@ -342,9 +346,15 @@ function renderChain(key) {
 
 // ===== AI Interaction =====
 var API_HISTORY = [];
+var CONVERSATION = []; // full chat history for Worker
+
+function hasAPI() {
+  var cfg = getApiConfig();
+  return !!(cfg.workerUrl || cfg.key);
+}
 
 function askAI(dim) {
-  if (!getApiConfig().key) {
+  if (!hasAPI()) {
     showNoAPIMode(dim);
     return;
   }
@@ -355,10 +365,9 @@ function askAI(dim) {
 
   var done = state.chains[dim.key].length;
   var prompt = buildPrompt(dim, done);
-  callDeepSeek(prompt).then(function(data) {
+  callAI(prompt).then(function(data) {
     document.getElementById('aiLoading').style.display = 'none';
     if (data.isComplete || done >= state.maxWhy) {
-      // Generate summary for this dimension
       showDimSummary(dim);
     } else {
       displayAIResponse(data, dim);
@@ -373,42 +382,68 @@ function buildPrompt(dim, done) {
   var chain = state.chains[dim.key];
   var chainText = chain.map(function(c, i) { return 'Why'+(i+1)+': '+c.whyQ+' 答案: '+c.whyA; }).join('\n');
 
-  var sysPrompt = '你是一位有20年经验的EHS根本原因分析专家，擅长用"5Why"方法挖掘事故的系统性原因。' +
-    '事故：' + state.incident + '\n' +
-    '当前分析维度：' + dim.label + (dim.obs ? '（观察：'+dim.obs+'）' : '') + '\n' +
+  // 列出当前要分析的所有维度
+  var dimsList = state.dimensions.map(function(d) { return d.key+'('+d.label+')'; }).join('、');
+
+  var sysPrompt = '你是EHS根本原因分析专家，精通5M1E分析法。' +
+    '你需要引导用户完成"5 Why"分析，每一步的提问和答案必须归类到以下维度之一：' + dimsList + '。\n' +
+    '事故描述：' + state.incident + '\n' +
+    '当前分析维度：' + dim.label + (dim.obs ? '（初步观察：'+dim.obs+'）' : '') + '\n' +
     '已完成的分析：\n' + (chainText || '（尚未开始）') + '\n' +
-    '当前是第' + (done+1) + '个Why。' +
     '规则：\n' +
-    '1. 如果是第5个Why，输出根因总结和改进措施\n' +
-    '2. 否则提出下一个Why问题+2-3个备选答案\n' +
-    '3. 答案必须基于事故逻辑递进，避免"人员疏忽""制度不全"，指向设备/环境/流程/培训等可控因素\n' +
-    '4. 输出严格JSON：\n' +
+    '1. 不要超出上述维度范围提问\n' +
+    '2. 如果已完成5个Why，输出根因总结和改进措施\n' +
+    '3. 否则提出下一个Why问题+2-3个备选答案\n' +
+    '4. 答案基于事故逻辑递进，指向设备/环境/流程/培训等可控因素\n' +
+    '5. 严格JSON格式：\n' +
     (done >= state.maxWhy-1 ?
-    '{"isComplete":true,"summary":"根因总结","actions":["措施1","措施2","措施3"]}' :
-    '{"currentWhy":"为什么...？","suggestions":["答案A","答案B","答案C"],"isComplete":false}');
+    '{"isComplete":true,"summary":"根因总结（按5M1E分类）","actions":["措施1","措施2"],"dimension":"'+dim.key+'"}' :
+    '{"dimension":"'+dim.key+'","question":"为什么...？","suggestions":["答案A","答案B","答案C"],"stage":'+(done+1)+',"isComplete":false}');
 
   return [
     { role: 'system', content: sysPrompt },
-    { role: 'user', content: '请给出下一个分析步骤' }
+    { role: 'user', content: chainText ? '请给出下一个分析步骤' : state.incident }
   ];
 }
 
-async function callDeepSeek(messages) {
+async function callAI(messages) {
   var cfg = getApiConfig();
-  var resp = await fetch(cfg.url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + cfg.key },
-    body: JSON.stringify({ model: cfg.model, messages: messages, response_format: { type: 'json_object' }, temperature: 0.7 })
-  });
-  if (!resp.ok) throw new Error('API error: ' + resp.status);
-  var data = await resp.json();
-  return JSON.parse(data.choices[0].message.content);
+
+  // Cloudflare Worker (free, recommended)
+  if (cfg.workerUrl) {
+    var resp = await fetch(cfg.workerUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: messages })
+    });
+    if (!resp.ok) throw new Error('Worker error: ' + resp.status);
+    return await resp.json();
+  }
+
+  // DeepSeek API (fallback)
+  if (cfg.key) {
+    var resp = await fetch(cfg.url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + cfg.key },
+      body: JSON.stringify({ model: cfg.model, messages: messages, response_format: { type: 'json_object' }, temperature: 0.7 })
+    });
+    if (!resp.ok) throw new Error('API error: ' + resp.status);
+    var data = await resp.json();
+    return JSON.parse(data.choices[0].message.content);
+  }
+
+  throw new Error('No API configured');
 }
 
 function displayAIResponse(data, dim) {
-  document.getElementById('aiQuestion').innerHTML = '<h3 style="color:var(--brand-red);margin-bottom:8px;">' +
-    '<i class="fa-solid fa-circle-question"></i> ' + data.currentWhy + '</h3>';
-  state._currentWhy = data.currentWhy;
+  // 兼容两种API的JSON字段
+  var question = data.question || data.currentWhy || ('Why #' + (state.chains[dim.key].length+1));
+  var dimension = data.dimension || dim.key;
+  document.getElementById('aiQuestion').innerHTML = '<h3 style="color:var(--brand-red);margin-bottom:4px;">' +
+    '<span style="font-size:11px;background:var(--brand-red-light);padding:2px 8px;border-radius:4px;margin-right:8px;">' +
+    dimension + '</span>' +
+    '<i class="fa-solid fa-circle-question"></i> ' + question + '</h3>';
+  state._currentWhy = question;
 
   var sugDiv = document.getElementById('suggestions');
   sugDiv.innerHTML = '';
@@ -462,9 +497,9 @@ function submitReason() {
 
 function finishDimension() {
   var dim = state.dimensions[state.currentDim];
-  if (getApiConfig().key) {
+  if (hasAPI()) {
     document.getElementById('aiLoading').style.display = 'flex';
-    callDeepSeek(buildPrompt(dim, state.maxWhy)).then(function(data) {
+    callAI(buildPrompt(dim, state.maxWhy)).then(function(data) {
       document.getElementById('aiLoading').style.display = 'none';
       state._dimSummary = data.summary || '已完成5Why分析';
       state._dimActions = data.actions || [];
@@ -619,6 +654,7 @@ function resetAll() {
 // ===== API Config =====
 function getApiConfig() {
   return {
+    workerUrl: localStorage.getItem('sheen_5why_worker') || '',
     key: localStorage.getItem('sheen_5why_apikey') || '',
     url: localStorage.getItem('sheen_5why_apiurl') || 'https://api.deepseek.com/v1/chat/completions',
     model: localStorage.getItem('sheen_5why_apimodel') || 'deepseek-chat'
@@ -627,6 +663,7 @@ function getApiConfig() {
 
 function loadApiConfig() {
   var cfg = getApiConfig();
+  document.getElementById('workerUrl').value = cfg.workerUrl;
   document.getElementById('apiKey').value = cfg.key;
   document.getElementById('apiUrl').value = cfg.url;
   document.getElementById('apiModel').value = cfg.model;
@@ -634,6 +671,7 @@ function loadApiConfig() {
 }
 
 function saveApiConfig() {
+  localStorage.setItem('sheen_5why_worker', document.getElementById('workerUrl').value.trim());
   localStorage.setItem('sheen_5why_apikey', document.getElementById('apiKey').value.trim());
   localStorage.setItem('sheen_5why_apiurl', document.getElementById('apiUrl').value.trim());
   localStorage.setItem('sheen_5why_apimodel', document.getElementById('apiModel').value.trim());
@@ -645,8 +683,9 @@ function saveApiConfig() {
 function updateApiStatus() {
   var st = document.getElementById('apiStatus');
   var cfg = getApiConfig();
-  if (cfg.key) { st.textContent = '已配置'; st.className = 'api-status ok'; }
-  else { st.textContent = '未配置'; st.className = 'api-status no'; }
+  if (cfg.workerUrl) { st.textContent = 'Worker 已配置'; st.className = 'api-status ok'; }
+  else if (cfg.key) { st.textContent = 'DeepSeek 已配置'; st.className = 'api-status ok'; }
+  else { st.textContent = '未配置（离线模式）'; st.className = 'api-status no'; }
 }
 
 function toggleApiSetup() {
