@@ -474,69 +474,10 @@
         if (!el) return;
         var LS = 'sheen_visit_n';
 
-        // 1) Show local cached count immediately (no flicker)
-        var localN = parseInt(localStorage.getItem(LS), 10);
-        if (!localN || isNaN(localN)) localN = 0;
+        var localN = parseInt(localStorage.getItem(LS), 10) || 0;
+        localN += 1;
+        localStorage.setItem(LS, String(localN));
         el.textContent = localN.toLocaleString('zh-CN');
-
-        // ====== GitHub Gist 计数器配置 ======
-        // 把下方两个常量替换成你的真实值
-        var GIST_ID = 'YOUR_GIST_ID';           // 例: abc123def456...
-        var GH_TOKEN = 'YOUR_GH_TOKEN';         // 例: ghp_xxxxxxxxxxxx
-        var FILE_NAME = 'sheen-counter.json';
-        var TIMEOUT_MS = 8000;                  // Gist API 较慢, 给 8 秒
-
-        function abortableFetch(url, opts) {
-            var ctl = new AbortController();
-            var t = setTimeout(function() { ctl.abort(); }, TIMEOUT_MS);
-            opts = opts || {};
-            opts.signal = ctl.signal;
-            opts.cache = 'no-store';
-            return fetch(url, opts).finally(function() { clearTimeout(t); });
-        }
-
-        function ghHeaders() {
-            return {
-                Accept: 'application/vnd.github+json',
-                Authorization: 'Bearer ' + GH_TOKEN,
-                'X-GitHub-Api-Version': '2022-11-28',
-            };
-        }
-
-        function tryHit() {
-            el.textContent = '...';  // loading state
-            abortableFetch('https://api.github.com/gists/' + GIST_ID, { headers: ghHeaders() })
-                .then(function(r) { if (!r.ok) throw new Error('read fail ' + r.status); return r.json(); })
-                .then(function(d) {
-                    var file = d.files[FILE_NAME];
-                    if (!file) throw new Error('file not found');
-                    var v = 0;
-                    try { v = parseInt(JSON.parse(file.content).value, 10) || 0; } catch (e) {}
-                    var next = v + 1;
-                    // 写回
-                    var body = { files: {} };
-                    body.files[FILE_NAME] = { content: JSON.stringify({ value: next, updatedAt: new Date().toISOString() }, null, 2) };
-                    if (file.sha) body.files[FILE_NAME].sha = file.sha;
-                    return abortableFetch('https://api.github.com/gists/' + GIST_ID, {
-                        method: 'PATCH',
-                        headers: Object.assign(ghHeaders(), { 'Content-Type': 'application/json' }),
-                        body: JSON.stringify(body),
-                    }).then(function(r2) {
-                        if (!r2.ok) throw new Error('write fail ' + r2.status);
-                        return next;
-                    });
-                })
-                .then(function(n) {
-                    el.textContent = n.toLocaleString('zh-CN');
-                    if (n > localN) localStorage.setItem(LS, String(n));
-                })
-                .catch(function() {
-                    // 回退到本地缓存
-                    el.textContent = localN.toLocaleString('zh-CN');
-                });
-        }
-
-        tryHit();
     })();
     </script>
 
