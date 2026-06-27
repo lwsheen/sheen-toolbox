@@ -70,6 +70,10 @@ body {
 .sheen-footer i { color: var(--amber); margin-right: 4px; }
 .sheen-footer strong { color: var(--text-primary); }
 
+/* Spinner */
+.spinner-inline{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--brand-red);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:4px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
 /* ===== 打印品牌（仅打印显示） ===== */
 .sheen-print-header, .sheen-print-footer { display: none; }
 
@@ -567,6 +571,8 @@ body {
   <button class="btn btn-outline" id="btnUndoMark" style="display:none" onclick="undoMarkAll()"><i class="fa-solid fa-rotate-left"></i> 撤销全部标记</button>
   <button class="btn btn-outline" id="btnResetAll" onclick="resetAllMarks()"><i class="fa-solid fa-arrows-rotate"></i> 全部重置</button>
   <button class="btn btn-primary" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印</button>
+  <button class="btn btn-primary" onclick="aiReport()" id="btnAiReport"><i class="fa-solid fa-wand-magic-sparkles"></i> 生成报告</button>
+  <span id="aiLoadingPssr" style="display:none;font-size:12px;color:var(--text-secondary);"><span class="spinner-inline"></span> AI生成中…</span>
 </div>
 
 <!-- ===== 主体 ===== -->
@@ -1230,6 +1236,91 @@ var printDateEl = document.getElementById('printDate');
 if (printDateEl) {
   var now = new Date();
   printDateEl.textContent = '打印日期：' + now.getFullYear() + '年' + (now.getMonth()+1) + '月' + now.getDate() + '日';
+}
+
+// ===== AI Report =====
+function getApi() {
+  return {
+    mode: localStorage.getItem('sheen_5why_mode') || 'own',
+    key: localStorage.getItem('sheen_5why_apikey') || '',
+    proxy: localStorage.getItem('sheen_5why_proxy') || ''
+  };
+}
+
+var reportModal = document.createElement('div');
+reportModal.id = 'reportModal';
+reportModal.style.cssText = 'display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:999;overflow:auto;';
+reportModal.innerHTML = '<div style="max-width:700px;margin:40px auto;background:var(--bg-card);border-radius:12px;padding:32px;box-shadow:0 20px 60px rgba(0,0,0,0.3);" id="reportContent"><h2 style="margin-bottom:16px;color:var(--brand-red);"><i class="fa-solid fa-file-lines"></i> PSSR 审查报告</h2><div id="reportBody"></div><div style="margin-top:20px;display:flex;gap:8px;justify-content:flex-end;"><button class="btn btn-primary btn-sm" onclick="window.print()">打印</button><button class="btn btn-outline btn-sm" onclick="document.getElementById(\'reportModal\').style.display=\'none\'">关闭</button></div></div>';
+document.body.appendChild(reportModal);
+
+async function aiReport() {
+  var api = getApi();
+  if(api.mode==='own'&&!api.key){alert('请先在5Why页面配置API Key');return;}
+  if(api.mode==='proxy'&&!api.proxy){alert('请先在5Why页面配置代理地址');return;}
+
+  document.getElementById('btnAiReport').disabled=true;
+  document.getElementById('aiLoadingPssr').style.display='inline';
+
+  // Collect data
+  var pn = document.getElementById('projectName')?.value||'';
+  var rd = document.getElementById('reviewDate')?.value||'';
+  var rows = [];
+  document.querySelectorAll('.check-row').forEach(function(r){
+    var chk = r.querySelector('.check-item-text');
+    var ref = r.querySelector('.check-ref');
+    var status = '';
+    if(r.classList.contains('status-yes')) status='已完成';
+    else if(r.classList.contains('status-no')) status='未完成';
+    else if(r.classList.contains('status-na')) status='不适用';
+    else status='待填写';
+    var remark = r.querySelector('.remark-input')?.value||'';
+    rows.push({item:chk?chk.textContent:'',ref:ref?ref.textContent:'',status:status,remark:remark});
+  });
+
+  var prompt = '你是PSSR开车前安全审查专家。请根据以下检查结果生成审查报告。\n\n'+
+    '项目：'+pn+'\n审查日期：'+rd+'\n\n检查结果：\n'+
+    rows.map(function(r){return '- ['+r.status+'] '+r.item+(r.remark?' - 备注：'+r.remark:'');}).join('\n')+'\n\n'+
+    '请生成JSON：{"summary":"项目整体结论(2-3句)","issues":[{"item":"问题项","severity":"高/中/低","suggestion":"整改建议"}],"readiness":"可开车/有条件开车/不可开车","recommendations":["建议1","建议2"]}';
+
+  try {
+    var url, headers;
+    if(api.mode==='proxy'){url=api.proxy;headers={'Content-Type':'application/json'};}
+    else {url='https://open.bigmodel.cn/api/paas/v4/chat/completions';headers={'Content-Type':'application/json','Authorization':'Bearer '+api.key};}
+    var resp = await fetch(url,{method:'POST',headers:headers,body:JSON.stringify({model:'glm-4-flash',messages:[{role:'user',content:prompt}],temperature:0.5,max_tokens:2000})});
+    var data = await resp.json();
+    var txt = data.choices[0].message.content;
+    var m = txt.match(/\{[\s\S]*\}/);
+    var rpt = JSON.parse(m?m[0]:txt);
+
+    var body = '';
+    body += '<div style="margin-bottom:12px;font-size:13px;color:var(--text-secondary);">项目：'+pn+' | 日期：'+rd+' | 共 '+rows.length+' 项</div>';
+    body += '<div style="background:var(--brand-red-light);padding:16px;border-radius:8px;margin-bottom:16px;border-left:4px solid var(--brand-red);">';
+    body += '<strong>审查结论：</strong>'+(rpt.summary||'')+'<br>';
+    body += '<strong style="margin-top:4px;display:inline-block;">开车建议：</strong><span style="font-weight:700;color:'+(rpt.readiness==='可开车'?'#16A34A':'#DC2626')+';">'+(rpt.readiness||'')+'</span></div>';
+
+    if(rpt.issues&&rpt.issues.length){
+      body += '<h4 style="margin-bottom:8px;">待整改问题</h4>';
+      rpt.issues.forEach(function(i){
+        body += '<div style="padding:10px;margin-bottom:6px;background:var(--bg-page);border-radius:6px;display:flex;gap:8px;align-items:flex-start;font-size:13px;">';
+        body += '<span style="background:'+(i.severity==='高'?'#DC2626':'#EA580C')+';color:#fff;padding:2px 8px;border-radius:4px;font-size:11px;flex-shrink:0;">'+i.severity+'</span>';
+        body += '<div><strong>'+i.item+'</strong><br><span style="color:var(--text-secondary);">'+i.suggestion+'</span></div></div>';
+      });
+    }
+
+    if(rpt.recommendations&&rpt.recommendations.length){
+      body += '<h4 style="margin:12px 0 8px;">改进建议</h4>';
+      rpt.recommendations.forEach(function(r){body += '<div style="padding:8px;margin-bottom:4px;font-size:13px;background:#F0FDF4;border-radius:4px;border-left:3px solid #16A34A;">'+r+'</div>';});
+    }
+
+    document.getElementById('reportBody').innerHTML = body;
+    document.getElementById('reportModal').style.display = 'block';
+  } catch(e) {
+    var msg = e.message;
+    if(msg.indexOf('401')>-1||msg.indexOf('invalid')>-1) msg='API Key无效，请在5Why页面重新配置';
+    alert('报告生成失败：'+msg);
+  }
+  document.getElementById('btnAiReport').disabled=false;
+  document.getElementById('aiLoadingPssr').style.display='none';
 }
 </script>
 </body>
