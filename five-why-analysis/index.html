@@ -104,12 +104,37 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
 .api-toggle { position:fixed; bottom:20px; right:20px; z-index:100; width:40px; height:40px; border-radius:50%; background:var(--bg-card); border:1.5px solid var(--border); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; color:var(--text-secondary); box-shadow:0 2px 8px rgba(0,0,0,0.08); }
 .api-toggle:hover { border-color:var(--brand-red); color:var(--brand-red); }
 
+/* Mode toggle */
+.mode-btn { transition:all .25s; }
+.mode-btn:hover { opacity:0.9; }
+
+/* Auto-analysis report styles */
+.report-card { background:var(--bg-card); border-radius:var(--radius-xl); padding:28px; margin-bottom:20px; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+.report-card h2 { font-size:20px; font-weight:700; margin-bottom:8px; }
+.report-meta { color:var(--text-secondary); font-size:13px; margin-bottom:20px; }
+.report-dim { margin-bottom:16px; padding:16px; background:var(--bg-page); border-radius:var(--radius-md); border-left:4px solid var(--brand-red); }
+.report-dim .dim-label { font-size:15px; font-weight:700; color:var(--brand-red); margin-bottom:8px; }
+.report-dim .dim-obs { font-size:12px; color:var(--text-secondary); margin-bottom:10px; padding-left:8px; border-left:2px solid var(--border); }
+.report-chain { padding-left:8px; }
+.report-chain-item { display:flex; gap:8px; margin-bottom:6px; font-size:13px; align-items:flex-start; }
+.report-chain-item .rc-num { min-width:20px; height:20px; line-height:20px; border-radius:50%; background:var(--brand-red); color:#fff; text-align:center; font-size:10px; font-weight:700; flex-shrink:0; margin-top:1px; }
+.report-chain-item .rc-why { font-weight:600; flex-shrink:0; }
+.report-chain-item .rc-ans { color:var(--text-primary); }
+.report-actions-list { margin-top:8px; }
+.report-actions-list li { font-size:13px; margin-bottom:4px; }
+.report-cross { padding:16px; background:var(--brand-red-light); border-radius:var(--radius-md); margin-top:16px; }
+.report-cross h4 { color:var(--brand-red); margin-bottom:8px; }
+.report-cross p { font-size:14px; line-height:1.7; }
+
 @media print {
   @page { size:A4; margin:18mm 15mm 20mm 15mm; @bottom-center { content:"SHEEN Toolbox · 5Why+5M1E 根因分析"; font-size:8pt; color:#666; } }
   body { background:#fff!important; font-size:12pt; color:#000!important; }
   .sheen-nav, .sheen-footer, .btn-primary, .btn-secondary, .btn-print, .step-indicator, .api-toggle, .no-print { display:none!important; }
   .app-wrapper { padding:0!important; }
-  .card { box-shadow:none!important; border-radius:0!important; border:1.5px solid #333!important; page-break-inside:avoid; }
+  .card, .report-card { box-shadow:none!important; border-radius:0!important; border:1.5px solid #333!important; page-break-inside:avoid; }
+  .report-dim { background:#f9f9f9!important; border-left-color:#000!important; }
+  .report-cross { background:#fefefe!important; border:1px solid #ccc!important; }
+  .rc-num { background:#000!important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
 }
 @media (max-width:768px) {
   .sheen-nav { padding:8px 12px; }
@@ -166,11 +191,36 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
       </div>
 
       <textarea id="incidentDesc" placeholder='描述事故：如"叉车在转弯时撞到货架导致物资掉落"'></textarea>
-      <div style="margin-top:20px;"><h3>选择相关维度（建议2-4个）</h3></div>
-      <div class="matrix" id="m1eMatrix"></div>
+
+      <!-- 分析模式切换 -->
+      <div style="margin-top:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <h3 style="margin:0;">分析模式</h3>
+        <div style="display:flex;border-radius:60px;overflow:hidden;border:1.5px solid var(--border);">
+          <button id="modeInteractive" class="mode-btn active" onclick="switchMode('interactive')" style="padding:8px 18px;border:none;background:var(--brand-red);color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;"><i class="fa-solid fa-comments"></i> 交互引导</button>
+          <button id="modeAuto" class="mode-btn" onclick="switchMode('auto')" style="padding:8px 18px;border:none;background:var(--bg-card);color:var(--text-secondary);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;"><i class="fa-solid fa-wand-magic-sparkles"></i> 一键成文</button>
+        </div>
+      </div>
+
+      <!-- 交互模式维度选择 -->
+      <div id="dimensionSection">
+        <div style="margin-top:20px;"><h3>选择相关维度（建议2-4个）</h3></div>
+        <div class="matrix" id="m1eMatrix"></div>
+      </div>
+
+      <!-- 按钮区域 -->
       <div style="text-align:center;margin-top:16px;">
         <button class="btn-primary" onclick="start5M1E()" id="btnStart">开始分析 <i class="fa-solid fa-arrow-right"></i></button>
+        <button class="btn-primary" onclick="autoAnalyze()" id="btnAuto" style="display:none;"><i class="fa-solid fa-wand-magic-sparkles"></i> 一键生成事故报告</button>
       </div>
+
+      <!-- 一键分析进度 -->
+      <div id="autoProgress" style="display:none;text-align:center;padding:20px;">
+        <div class="loading" style="justify-content:center;"><div class="spinner"></div> <span id="autoProgressText">AI 正在分析事故并生成报告…</span></div>
+        <p style="font-size:12px;color:var(--text-secondary);margin-top:8px;">首次调用约需10-20秒，请耐心等待</p>
+      </div>
+
+      <!-- 一键分析错误 -->
+      <div id="autoError" style="display:none;text-align:center;padding:16px;background:#FEF2F2;border-radius:var(--radius-md);margin-top:16px;"></div>
     </div>
   </div>
 
@@ -244,7 +294,9 @@ var state = {
   currentDim: 0,
   chains: {}, // { '人': [{whyQ, whyA}, ...], '机': [...], ... }
   currentWhyNum: 1,
-  maxWhy: 5
+  maxWhy: 5,
+  mode: 'interactive', // 'interactive' or 'auto'
+  autoReport: null // auto-generated report data
 };
 
 // 5M1E definitions
@@ -323,6 +375,148 @@ function start5M1E() {
   state.currentWhyNum = 1;
   setStep(2);
   startDimensionAnalysis();
+}
+
+// ===== Mode Switch =====
+function switchMode(mode) {
+  state.mode = mode;
+  var btnI = document.getElementById('modeInteractive');
+  var btnA = document.getElementById('modeAuto');
+  var dimSection = document.getElementById('dimensionSection');
+  var btnStart = document.getElementById('btnStart');
+  var btnAuto = document.getElementById('btnAuto');
+
+  if (mode === 'auto') {
+    btnI.style.background = 'var(--bg-card)';
+    btnI.style.color = 'var(--text-secondary)';
+    btnA.style.background = 'var(--brand-red)';
+    btnA.style.color = '#fff';
+    dimSection.style.display = 'none';
+    btnStart.style.display = 'none';
+    btnAuto.style.display = 'inline-block';
+  } else {
+    btnI.style.background = 'var(--brand-red)';
+    btnI.style.color = '#fff';
+    btnA.style.background = 'var(--bg-card)';
+    btnA.style.color = 'var(--text-secondary)';
+    dimSection.style.display = 'block';
+    btnStart.style.display = 'inline-block';
+    btnAuto.style.display = 'none';
+  }
+}
+
+// ===== One-Click Auto Analysis =====
+async function autoAnalyze() {
+  var desc = document.getElementById('incidentDesc').value.trim();
+  if (!desc) { alert('请先描述事故'); return; }
+  if (!hasAPI()) {
+    alert('请先配置 API Key（点击右下角钥匙图标）');
+    return;
+  }
+
+  state.incident = desc;
+
+  // Show progress
+  document.getElementById('btnAuto').disabled = true;
+  document.getElementById('autoProgress').style.display = 'block';
+  document.getElementById('autoError').style.display = 'none';
+  var progressText = document.getElementById('autoProgressText');
+
+  // Reset report data
+  state.autoReport = null;
+
+  // Build one-click prompt
+  var sysPrompt = '你是一位有20年经验的EHS事故调查专家，精通"5Why"和"5M1E"根本原因分析法。\n\n' +
+    '【事故描述】\n' + desc + '\n\n' +
+    '【你的任务】对上述事故进行完整的5Why+5M1E根因分析。\n\n' +
+    '分析要求：\n' +
+    '1. 从人(Man)、机(Machine)、料(Material)、法(Method)、环(Environment)、测(Measurement)六个维度中，识别3-4个最相关的维度\n' +
+    '2. 对每个相关维度，执行3层Why追问（深挖到系统根因），为每一层写出"为什么问题"和"回答"\n' +
+    '3. 禁止使用"人员疏忽""运气不好""领导不重视"等无效归因\n' +
+    '4. 优先指向设备缺陷、流程漏洞、培训不足、管理制度缺失等可控系统因素\n' +
+    '5. 最后进行跨维度交叉对比，识别系统性缺陷\n\n' +
+    '请严格按照以下JSON格式输出（不要输出其他内容）：\n' +
+    '{\n' +
+    '  "dimensions": [\n' +
+    '    {"dimension":"人","label":"人 (Man)","observation":"初步观察","chain":[{"whyQ":"为什么1","whyA":"因为1"},{"whyQ":"为什么2","whyA":"因为2"},{"whyQ":"为什么3","whyA":"因为3"}],"rootCause":"根本原因总结","actions":["改进措施1","改进措施2"]},\n' +
+    '    {"dimension":"机","label":"机 (Machine)","observation":"","chain":[...],"rootCause":"...","actions":[...]}\n' +
+    '  ],\n' +
+    '  "crossAnalysis":"跨维度交叉对比分析（识别系统性缺陷和维度间交互作用）",\n' +
+    '  "conclusion":"事故总体结论与防范建议"\n' +
+    '}\n\n' +
+    '注意：只输出JSON，不要有任何前缀或后缀文本。每个维度chain数组包含3个{whyQ,whyA}对象，actions数组包含2-3条具体措施。';
+
+  try {
+    progressText.textContent = 'AI 正在识别5M1E相关维度…';
+    var cfg = getApiConfig();
+    var resp = await fetch(cfg.url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + cfg.key },
+      body: JSON.stringify({
+        model: cfg.model,
+        messages: [{ role: 'user', content: sysPrompt }],
+        temperature: 0.5,
+        max_tokens: 4000
+      })
+    });
+
+    if (!resp.ok) {
+      var errText = await resp.text();
+      throw new Error('API error ' + resp.status + ': ' + errText.substring(0, 200));
+    }
+
+    progressText.textContent = 'AI 正在执行5Why深度分析…';
+    var data = await resp.json();
+    var content = data.choices[0].message.content;
+
+    // Parse JSON
+    progressText.textContent = '正在生成事故报告…';
+    var jsonMatch = content.match(/\{[\s\S]*\}/);
+    var jsonStr = jsonMatch ? jsonMatch[0] : content;
+
+    try {
+      state.autoReport = JSON.parse(jsonStr);
+    } catch(e) {
+      throw new Error('AI返回格式异常，请重试。原文片段：' + content.substring(0, 100));
+    }
+
+    // Validate report structure
+    if (!state.autoReport.dimensions || !Array.isArray(state.autoReport.dimensions) || state.autoReport.dimensions.length === 0) {
+      throw new Error('AI未返回有效维度分析，请重试');
+    }
+
+    // Populate state for generateReport
+    state.dimensions = [];
+    state.chains = {};
+    state.autoReport.dimensions.forEach(function(d) {
+      state.dimensions.push({ key: d.dimension, label: d.label, obs: d.observation || '' });
+      state.chains[d.dimension] = d.chain || [];
+    });
+
+    // Ensure each dimension has a root cause and actions
+    state.autoReport.dimensions.forEach(function(d) {
+      if (!d.rootCause) d.rootCause = '未深入分析';
+      if (!d.actions) d.actions = ['制定改进措施', '加强培训'];
+    });
+
+    // Generate the report directly
+    progressText.textContent = '报告生成完毕';
+    setTimeout(function() {
+      document.getElementById('autoProgress').style.display = 'none';
+      document.getElementById('btnAuto').disabled = false;
+      generateReport();
+    }, 500);
+
+  } catch(e) {
+    document.getElementById('autoProgress').style.display = 'none';
+    document.getElementById('btnAuto').disabled = false;
+    var errEl = document.getElementById('autoError');
+    errEl.style.display = 'block';
+    errEl.innerHTML = '<p style="color:#DC2626;font-weight:600;margin-bottom:6px;"><i class="fa-solid fa-triangle-exclamation"></i> 分析失败</p>' +
+      '<p style="font-size:12px;color:var(--text-secondary);">' + (e.message || '未知错误') + '</p>' +
+      '<button class="btn-primary" style="font-size:12px;padding:8px 16px;margin-top:8px;" onclick="autoAnalyze()">重试</button>';
+    console.error('Auto analysis error:', e);
+  }
 }
 
 // ===== Dimension Analysis =====
@@ -586,6 +780,80 @@ function skipDimension() {
 // ===== Final Report =====
 function generateReport() {
   setStep(3);
+
+  if (state.mode === 'auto' && state.autoReport) {
+    // Auto-generated report with richer formatting
+    var r = state.autoReport;
+    var html = '<h2 style="font-size:20px;font-weight:700;margin-bottom:4px;"><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--brand-red);"></i> 5Why + 5M1E 根因分析报告</h2>';
+    html += '<p class="report-meta"><i class="fa-solid fa-calendar"></i> ' +
+      new Date().toISOString().replace('T',' ').slice(0,16) +
+      ' &nbsp;|&nbsp; <i class="fa-solid fa-robot"></i> AI 自动生成 &nbsp;|&nbsp; 模型：' + getApiConfig().model + '</p>';
+
+    // Accident description
+    html += '<div class="report-section"><h4>事故描述</h4>' +
+      '<p style="font-size:14px;line-height:1.8;color:var(--text-primary);">' + state.incident + '</p></div>';
+
+    // 5M1E dimension overview
+    html += '<div class="report-section"><h4>5M1E 维度识别</h4>';
+    html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;">';
+    r.dimensions.forEach(function(d) {
+      var def = M1E_DEFS.find(function(x){return x.key===d.dimension;});
+      var icon = def ? def.icon : 'fa-circle';
+      html += '<div style="padding:10px;background:var(--brand-red-light);border-radius:var(--radius-sm);text-align:center;font-size:13px;font-weight:600;">' +
+        '<i class="fa-solid ' + icon + '" style="color:var(--brand-red);margin-right:4px;"></i>' + d.label + '</div>';
+    });
+    html += '</div></div>';
+
+    // Per-dimension analysis
+    html += '<div class="report-section"><h4>分维度 5Why 根因分析</h4>';
+    r.dimensions.forEach(function(d) {
+      html += '<div class="report-dim">';
+      html += '<div class="dim-label"><i class="fa-solid fa-magnifying-glass-chart"></i> ' + d.label + '</div>';
+      if (d.observation) {
+        html += '<div class="dim-obs"><i class="fa-solid fa-eye"></i> 观察：' + d.observation + '</div>';
+      }
+      html += '<div class="report-chain">';
+      (d.chain || []).forEach(function(c, i) {
+        html += '<div class="report-chain-item">' +
+          '<span class="rc-num">' + (i+1) + '</span>' +
+          '<span class="rc-why">' + c.whyQ + '</span>' +
+          '<span class="rc-ans">→ ' + c.whyA + '</span>' +
+          '</div>';
+      });
+      html += '</div>';
+      if (d.rootCause) {
+        html += '<div style="margin-top:10px;padding:10px;background:#FFF;border-radius:var(--radius-sm);">' +
+          '<strong style="font-size:13px;color:var(--brand-red);">根因：</strong>' +
+          '<span style="font-size:13px;">' + d.rootCause + '</span></div>';
+      }
+      if (d.actions && d.actions.length) {
+        html += '<div style="margin-top:6px;"><strong style="font-size:12px;color:#16A34A;">改进措施：</strong></div>' +
+          '<ul class="report-actions-list">' +
+          d.actions.map(function(a){return '<li>'+a+'</li>';}).join('') + '</ul>';
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+
+    // Cross-dimension analysis
+    if (r.crossAnalysis) {
+      html += '<div class="report-cross">' +
+        '<h4><i class="fa-solid fa-link"></i> 交叉对比与系统根因</h4>' +
+        '<p>' + r.crossAnalysis + '</p></div>';
+    }
+
+    // Conclusion
+    if (r.conclusion) {
+      html += '<div style="margin-top:16px;padding:16px;background:#F0FDF4;border-radius:var(--radius-md);border-left:4px solid #16A34A;">' +
+        '<strong style="color:#16A34A;"><i class="fa-solid fa-clipboard-check"></i> 总体结论与建议</strong>' +
+        '<p style="margin-top:8px;font-size:14px;line-height:1.7;">' + r.conclusion + '</p></div>';
+    }
+
+    document.getElementById('reportCard').innerHTML = html;
+    return;
+  }
+
+  // Original interactive mode report
   var html = '<h2><i class="fa-solid fa-file-lines"></i> 5Why + 5M1E 根因分析报告</h2>';
   html += '<p style="color:var(--text-secondary);font-size:14px;margin-bottom:20px;">' +
     new Date().toISOString().replace('T',' ').slice(0,16) + '</p>';
@@ -656,7 +924,8 @@ function loadDemo() {
 function resetAll() {
   state = {
     currentStep: 1, incident: '', dimensions: [], currentDim: 0,
-    chains: {}, currentWhyNum: 1, maxWhy: 5
+    chains: {}, currentWhyNum: 1, maxWhy: 5,
+    mode: state.mode, autoReport: null
   };
   document.getElementById('incidentDesc').value = '';
   document.querySelectorAll('.matrix-item').forEach(function(el) {
@@ -667,6 +936,9 @@ function resetAll() {
   });
   document.getElementById('customReason').style.display = 'block';
   document.getElementById('btnSubmit').style.display = 'inline-block';
+  document.getElementById('autoProgress').style.display = 'none';
+  document.getElementById('autoError').style.display = 'none';
+  document.getElementById('btnAuto').disabled = false;
   // Restore demo banner
   var banner = document.getElementById('demoBanner');
   banner.style.opacity = '1';
@@ -678,6 +950,8 @@ function resetAll() {
   delete state._dimActions;
   delete state._currentWhy;
   setStep(1);
+  // Reset mode UI
+  switchMode(state.mode);
 }
 
 // ===== API Config =====
@@ -724,7 +998,7 @@ function updateApiStatus() {
   var text = cfg.key ? 'GLM-4-Flash 已配置' : '未配置';
   var cls = cfg.key ? 'ok' : 'no';
   if (st) { st.textContent = text; st.className = 'api-status ' + cls; }
-  if (stInline) { stInline.textContent = '模型：' + cfg.model + (cfg.key ? '' : '（未设置Key）'); stInline.className = 'api-status no-print ' + cls; stInline.style.display = 'inline-flex'; }
+  if (stInline) { stInline.textContent = (cfg.key ? 'AI就绪' : '未配置') + ' · ' + cfg.model; stInline.className = 'api-status no-print ' + cls; stInline.style.display = 'inline-flex'; }
 }
 
 function toggleApiSetup() {
