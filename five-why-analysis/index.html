@@ -510,10 +510,18 @@ async function autoAnalyze() {
   } catch(e) {
     document.getElementById('autoProgress').style.display = 'none';
     document.getElementById('btnAuto').disabled = false;
+    var cfg = getApiConfig();
     var errEl = document.getElementById('autoError');
     errEl.style.display = 'block';
+    var msg = (e.message || '未知错误');
+    // If 401 auth error, show extra help
+    if (msg.indexOf('401') > -1 || msg.indexOf('invalid') > -1 || msg.indexOf('Authentication') > -1) {
+      msg += '\n\n可能原因：\n1. Key 已失效或被吊销（公开仓库会触发智谱自动吊销）\n2. Key 格式不完整（格式为 xxxxxx.xxxxxxxxxxxxxxxx）\n\n解决方法：去 open.bigmodel.cn 重新创建 Key → 复制完整 Key（含点号前后部分）→ 粘贴保存';
+    }
     errEl.innerHTML = '<p style="color:#DC2626;font-weight:600;margin-bottom:6px;"><i class="fa-solid fa-triangle-exclamation"></i> 分析失败</p>' +
-      '<p style="font-size:12px;color:var(--text-secondary);">' + (e.message || '未知错误') + '</p>' +
+      '<p style="font-size:12px;color:var(--text-secondary);white-space:pre-line;">' + msg + '</p>' +
+      '<p style="font-size:11px;color:var(--text-secondary);margin-top:4px;">当前 Key 尾号：****' + cfg.key.slice(-4) + ' | 模型：' + cfg.model + '</p>' +
+      '<button class="btn-secondary" style="font-size:12px;padding:8px 16px;margin-top:8px;margin-right:6px;" onclick="document.getElementById(\'apiSetup\').classList.add(\'show\');document.getElementById(\'apiKey\').focus();">重新配置 Key</button>' +
       '<button class="btn-primary" style="font-size:12px;padding:8px 16px;margin-top:8px;" onclick="autoAnalyze()">重试</button>';
     console.error('Auto analysis error:', e);
   }
@@ -982,13 +990,26 @@ function loadApiConfig() {
 }
 
 function saveApiConfig() {
-  localStorage.setItem('sheen_5why_apikey', document.getElementById('apiKey').value.trim());
-  localStorage.setItem('sheen_5why_apiurl', document.getElementById('apiUrl').value.trim());
+  var key = document.getElementById('apiKey').value.trim();
+  var url = document.getElementById('apiUrl').value.trim();
   var model = document.getElementById('apiModelSelect').value === '__custom__' ? document.getElementById('apiModel').value.trim() : document.getElementById('apiModelSelect').value;
+
+  // Validate key format: must contain a dot (Zhipu format: xxxxxx.xxxxxxxx)
+  if (key && key.indexOf('.') === -1) {
+    alert('Key 格式不正确！\n\n智谱 API Key 格式为：xxxxxx.xxxxxxxxxxxxxxxx\n请检查是否漏掉了前半部分（点号前面的ID）。\n\n在智谱后台 → API Keys → 复制时会同时包含 ID 和 Secret，中间用点号分隔。');
+    return;
+  }
+
+  localStorage.setItem('sheen_5why_apikey', key);
+  localStorage.setItem('sheen_5why_apiurl', url);
   localStorage.setItem('sheen_5why_apimodel', model);
   updateApiStatus();
   document.getElementById('apiSetup').classList.remove('show');
-  alert('配置已保存：' + model);
+  if (key) {
+    alert('已保存：' + model + '\nKey: ' + key.substring(0,6) + '...****（仅你可见）');
+  } else {
+    alert('配置已清除');
+  }
 }
 
 function updateApiStatus() {
