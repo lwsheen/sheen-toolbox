@@ -104,10 +104,6 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
 .api-toggle { position:fixed; bottom:20px; right:20px; z-index:100; width:40px; height:40px; border-radius:50%; background:var(--bg-card); border:1.5px solid var(--border); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; color:var(--text-secondary); box-shadow:0 2px 8px rgba(0,0,0,0.08); }
 .api-toggle:hover { border-color:var(--brand-red); color:var(--brand-red); }
 
-/* Mode toggle */
-.mode-btn { transition:all .25s; }
-.mode-btn:hover { opacity:0.9; }
-
 /* Auto-analysis report styles */
 .report-card { background:var(--bg-card); border-radius:var(--radius-xl); padding:28px; margin-bottom:20px; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
 .report-card h2 { font-size:20px; font-weight:700; margin-bottom:8px; }
@@ -191,26 +187,11 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
       </div>
 
       <textarea id="incidentDesc" placeholder='描述事故：如"叉车在转弯时撞到货架导致物资掉落"'></textarea>
-
-      <!-- 分析模式切换 -->
-      <div style="margin-top:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-        <h3 style="margin:0;">分析模式</h3>
-        <div style="display:flex;border-radius:60px;overflow:hidden;border:1.5px solid var(--border);">
-          <button id="modeInteractive" class="mode-btn active" onclick="switchMode('interactive')" style="padding:8px 18px;border:none;background:var(--brand-red);color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;"><i class="fa-solid fa-comments"></i> 交互引导</button>
-          <button id="modeAuto" class="mode-btn" onclick="switchMode('auto')" style="padding:8px 18px;border:none;background:var(--bg-card);color:var(--text-secondary);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;"><i class="fa-solid fa-wand-magic-sparkles"></i> 一键成文</button>
-        </div>
-      </div>
-
-      <!-- 交互模式维度选择 -->
-      <div id="dimensionSection">
-        <div style="margin-top:20px;"><h3>选择相关维度（建议2-4个）</h3></div>
-        <div class="matrix" id="m1eMatrix"></div>
-      </div>
-
-      <!-- 按钮区域 -->
-      <div style="text-align:center;margin-top:16px;">
-        <button class="btn-primary" onclick="start5M1E()" id="btnStart">开始分析 <i class="fa-solid fa-arrow-right"></i></button>
-        <button class="btn-primary" onclick="autoAnalyze()" id="btnAuto" style="display:none;"><i class="fa-solid fa-wand-magic-sparkles"></i> 一键生成事故报告</button>
+      <div style="margin-top:20px;"><h3>选择相关维度（建议2-4个）</h3></div>
+      <div class="matrix" id="m1eMatrix"></div>
+      <div style="text-align:center;margin-top:16px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn-primary" onclick="start5M1E()" id="btnStart">交互分析 <i class="fa-solid fa-arrow-right"></i></button>
+        <button class="btn-secondary" onclick="autoAnalyze()" id="btnAuto" style="border-color:var(--brand-red);"><i class="fa-solid fa-wand-magic-sparkles"></i> 一键生成事故报告</button>
       </div>
 
       <!-- 一键分析进度 -->
@@ -260,34 +241,14 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
 
 <!-- API Setup Modal -->
 <div class="card api-setup" id="apiSetup" style="position:fixed;bottom:70px;right:20px;width:380px;z-index:100;max-height:80vh;overflow-y:auto;">
-  <h3 style="margin-bottom:4px;">API 配置</h3>
-  <p style="font-size:11px;color:var(--text-secondary);margin-bottom:12px;">
-    <span id="apiSetupHint">请填写智谱 Key 或使用共享代理（<a href="https://open.bigmodel.cn/" target="_blank" style="color:var(--brand-red);">获取免费 Key</a>）</span>
+  <h3 style="margin-bottom:4px;"><i class="fa-solid fa-key" style="color:var(--amber);"></i> API 配置</h3>
+  <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;">
+    GLM-4-Flash 永久免费 | <a href="https://open.bigmodel.cn/" target="_blank" style="color:var(--brand-red);font-weight:600;">点此获取免费 Key <i class="fa-solid fa-external-link-alt"></i></a>
   </p>
 
-  <!-- Mode selector -->
-  <div style="display:flex;gap:6px;margin-bottom:12px;">
-    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 14px;border-radius:60px;font-size:12px;font-weight:600;border:1.5px solid var(--border);" id="lblProxyMode">
-      <input type="radio" name="apiMode" value="proxy" id="radioProxy" onchange="switchApiMode('proxy')" style="accent-color:var(--brand-red);"> 共享代理（免Key）
-    </label>
-    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 14px;border-radius:60px;font-size:12px;font-weight:600;border:1.5px solid var(--border);" id="lblOwnMode">
-      <input type="radio" name="apiMode" value="own" id="radioOwn" onchange="switchApiMode('own')" style="accent-color:var(--brand-red);"> 自有 Key
-    </label>
-  </div>
-
-  <div id="ownKeySection">
-    <label style="font-size:12px;font-weight:600;">API Key（智谱 GLM-4-Flash）</label>
-    <input type="password" id="apiKey" placeholder="xxx.xxxxxxxx" style="margin-bottom:6px;">
-    <label style="font-size:12px;font-weight:600;">API 地址</label>
-    <input type="text" id="apiUrl" value="https://open.bigmodel.cn/api/paas/v4/chat/completions" style="margin-bottom:6px;">
-  </div>
-
-  <div id="proxySection" style="display:none;">
-    <label style="font-size:12px;font-weight:600;">代理地址</label>
-    <input type="text" id="proxyUrl" placeholder="Worker URL" style="margin-bottom:6px;">
-    <p style="font-size:10px;color:var(--text-secondary);margin-bottom:8px;">共享代理由站点维护者部署，所有访问者共享同一个智谱 Key。</p>
-    <div id="proxyStatus" style="font-size:11px;padding:8px;border-radius:6px;margin-bottom:8px;"></div>
-  </div>
+  <label style="font-size:12px;font-weight:600;">粘贴你的 API Key</label>
+  <input type="text" id="apiKey" placeholder="xxxxxx.xxxxxxxxxxxxxxxx" style="margin-bottom:10px;font-family:monospace;font-size:13px;">
+  <p style="font-size:10px;color:var(--text-secondary);margin-bottom:12px;">Key 仅存在你浏览器里，不上传到服务器</p>
 
   <label style="font-size:12px;font-weight:600;">模型</label>
   <div style="display:flex;gap:6px;align-items:center;">
@@ -300,12 +261,32 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
     </select>
   </div>
   <input type="text" id="apiModel" style="display:none;margin-top:6px;" placeholder="输入模型名">
-  <p style="font-size:10px;color:var(--text-secondary);margin:4px 0 12px;">切换模型时需同步修改 API 地址（配套 API Key）</p>
-  <div style="display:flex;gap:8px;">
-    <button class="btn-primary" onclick="saveApiConfig()" style="padding:8px 20px;font-size:13px;">保存</button>
+  <div style="display:flex;gap:8px;margin-top:14px;">
+    <button class="btn-primary" onclick="saveApiConfig()" style="padding:8px 20px;font-size:13px;"><i class="fa-solid fa-check"></i> 保存</button>
     <button class="btn-secondary" onclick="toggleApiSetup()" style="padding:8px 20px;font-size:13px;">关闭</button>
   </div>
-  <span class="api-status no" id="apiStatus">未配置</span>
+  <span class="api-status no" id="apiStatus" style="margin-top:8px;">未配置</span>
+</div>
+
+<!-- Welcome onboarding for first-time users -->
+<div id="welcomeOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;align-items:center;justify-content:center;">
+  <div style="background:var(--bg-card);border-radius:var(--radius-xl);padding:32px;max-width:440px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <div style="font-size:48px;margin-bottom:12px;">&#x1F680;</div>
+    <h2 style="font-size:20px;margin-bottom:8px;">开始使用 AI 分析</h2>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:20px;line-height:1.7;">
+      只需 30 秒获取一个<strong>免费</strong> API Key，即可使用<strong>一键事故报告</strong>功能
+    </p>
+    <div style="background:var(--brand-red-light);border-radius:var(--radius-md);padding:16px;margin-bottom:20px;text-align:left;">
+      <div style="font-weight:700;margin-bottom:8px;color:var(--brand-red);">&#x278A; 获取免费 Key</div>
+      <div style="font-size:13px;margin-bottom:12px;">打开 <a href="https://open.bigmodel.cn/" target="_blank" style="color:var(--brand-red);font-weight:600;">open.bigmodel.cn</a> → 登录 → API Keys → 创建 → 复制整行 Key</div>
+      <div style="font-weight:700;margin-bottom:8px;color:var(--brand-red);">&#x278B; 粘贴到这里</div>
+      <div style="display:flex;gap:8px;">
+        <input type="text" id="welcomeKey" placeholder="粘贴 Key..." style="flex:1;font-family:monospace;font-size:12px;padding:8px;">
+        <button class="btn-primary" onclick="saveWelcomeKey()" style="padding:8px 16px;font-size:13px;white-space:nowrap;">保存</button>
+      </div>
+    </div>
+    <button onclick="closeWelcome()" style="background:none;border:none;color:var(--text-secondary);font-size:13px;cursor:pointer;">跳过，稍后配置</button>
+  </div>
 </div>
 
 <script>
@@ -318,7 +299,6 @@ var state = {
   chains: {}, // { '人': [{whyQ, whyA}, ...], '机': [...], ... }
   currentWhyNum: 1,
   maxWhy: 5,
-  mode: 'interactive', // 'interactive' or 'auto'
   autoReport: null // auto-generated report data
 };
 
@@ -347,6 +327,7 @@ var M1E_DEFS = [
     m.appendChild(div);
   });
   loadApiConfig();
+  checkWelcome();
 })();
 
 function toggleMatrix(el) {
@@ -398,35 +379,6 @@ function start5M1E() {
   state.currentWhyNum = 1;
   setStep(2);
   startDimensionAnalysis();
-}
-
-// ===== Mode Switch =====
-function switchMode(mode) {
-  state.mode = mode;
-  var btnI = document.getElementById('modeInteractive');
-  var btnA = document.getElementById('modeAuto');
-  var dimSection = document.getElementById('dimensionSection');
-  var btnStart = document.getElementById('btnStart');
-  var btnAuto = document.getElementById('btnAuto');
-
-  if (mode === 'auto') {
-    btnI.style.background = 'var(--bg-card)';
-    btnI.style.color = 'var(--text-secondary)';
-    btnA.style.background = 'var(--brand-red)';
-    btnA.style.color = '#fff';
-    dimSection.style.display = 'none';
-    btnStart.style.display = 'none';
-    btnAuto.style.display = 'inline-block';
-  } else {
-    btnI.style.background = 'var(--brand-red)';
-    btnI.style.color = '#fff';
-    btnA.style.background = 'var(--bg-card)';
-    btnA.style.color = 'var(--text-secondary)';
-    dimSection.style.display = 'block';
-    btnStart.style.display = 'inline-block';
-    btnAuto.style.display = 'none';
-  }
-}
 
 // ===== One-Click Auto Analysis =====
 async function autoAnalyze() {
@@ -472,23 +424,11 @@ async function autoAnalyze() {
   try {
     progressText.textContent = 'AI 正在识别5M1E相关维度…';
     var cfg = getApiConfig();
-    var fetchUrl, fetchOpts;
-    if (cfg.mode === 'proxy' && cfg.proxyUrl) {
-      fetchUrl = cfg.proxyUrl;
-      fetchOpts = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ model: cfg.model, messages: [{ role: 'user', content: sysPrompt }], temperature: 0.5, max_tokens: 4000 })
-      };
-    } else {
-      fetchUrl = cfg.url;
-      fetchOpts = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + cfg.key },
-        body: JSON.stringify({ model: cfg.model, messages: [{ role: 'user', content: sysPrompt }], temperature: 0.5, max_tokens: 4000 })
-      };
-    }
-    var resp = await fetch(fetchUrl, fetchOpts);
+    var resp = await fetch('https://open.bigmodel.cn/api/paas/v4/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + cfg.key },
+      body: JSON.stringify({ model: cfg.model, messages: [{ role: 'user', content: sysPrompt }], temperature: 0.5, max_tokens: 4000 })
+    });
 
     if (!resp.ok) {
       var errText = await resp.text();
@@ -550,8 +490,8 @@ async function autoAnalyze() {
     }
     errEl.innerHTML = '<p style="color:#DC2626;font-weight:600;margin-bottom:6px;"><i class="fa-solid fa-triangle-exclamation"></i> 分析失败</p>' +
       '<p style="font-size:12px;color:var(--text-secondary);white-space:pre-line;">' + msg + '</p>' +
-      '<p style="font-size:11px;color:var(--text-secondary);margin-top:4px;">当前 Key 尾号：****' + cfg.key.slice(-4) + ' | 模型：' + cfg.model + '</p>' +
-      '<button class="btn-secondary" style="font-size:12px;padding:8px 16px;margin-top:8px;margin-right:6px;" onclick="document.getElementById(\'apiSetup\').classList.add(\'show\');document.getElementById(\'apiKey\').focus();">重新配置 Key</button>' +
+      '<p style="font-size:11px;color:var(--text-secondary);margin-top:4px;">Key：****' + cfg.key.slice(-4) + ' | 模型：' + cfg.model + '</p>' +
+      '<button class="btn-secondary" style="font-size:12px;padding:8px 16px;margin-top:8px;margin-right:6px;" onclick="document.getElementById(\'apiSetup\').classList.add(\'show\');">重新配置</button>' +
       '<button class="btn-primary" style="font-size:12px;padding:8px 16px;margin-top:8px;" onclick="autoAnalyze()">重试</button>';
     console.error('Auto analysis error:', e);
   }
@@ -666,30 +606,7 @@ function buildPrompt(dim, done) {
 
 async function callAI(messages) {
   var cfg = getApiConfig();
-
-  // Proxy mode: forward to Worker
-  if (cfg.mode === 'proxy' && cfg.proxyUrl) {
-    var resp = await fetch(cfg.proxyUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: cfg.model, messages: messages, temperature: 0.5, max_tokens: 4000 })
-    });
-    if (!resp.ok) {
-      var errText = await resp.text();
-      throw new Error('Proxy error ' + resp.status + ': ' + errText.substring(0, 200));
-    }
-    var data = await resp.json();
-    if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
-    var content = data.choices[0].message.content;
-    var jsonMatch = content.match(/\{[\s\S]*\}/);
-    var jsonStr = jsonMatch ? jsonMatch[0] : content;
-    try { return JSON.parse(jsonStr); } catch(e) {
-      return { dimension:'法', question:content.substring(0,80), suggestions:['设备/工具有缺陷','操作流程未执行到位','环境存在不利因素'], stage:1, isComplete:false };
-    }
-  }
-
-  // Own key mode: direct to Zhipu
-  var resp = await fetch(cfg.url, {
+  var resp = await fetch('https://open.bigmodel.cn/api/paas/v4/chat/completions', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + cfg.key },
     body: JSON.stringify({ model: cfg.model, messages: messages, temperature: 0.5, max_tokens: 1000 })
@@ -840,7 +757,7 @@ function skipDimension() {
 function generateReport() {
   setStep(3);
 
-  if (state.mode === 'auto' && state.autoReport) {
+  if (state.autoReport) {
     // Auto-generated report with richer formatting
     var r = state.autoReport;
     var html = '<h2 style="font-size:20px;font-weight:700;margin-bottom:4px;"><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--brand-red);"></i> 5Why + 5M1E 根因分析报告</h2>';
@@ -983,8 +900,7 @@ function loadDemo() {
 function resetAll() {
   state = {
     currentStep: 1, incident: '', dimensions: [], currentDim: 0,
-    chains: {}, currentWhyNum: 1, maxWhy: 5,
-    mode: state.mode, autoReport: null
+    chains: {}, currentWhyNum: 1, maxWhy: 5, autoReport: null
   };
   document.getElementById('incidentDesc').value = '';
   document.querySelectorAll('.matrix-item').forEach(function(el) {
@@ -1009,44 +925,23 @@ function resetAll() {
   delete state._dimActions;
   delete state._currentWhy;
   setStep(1);
-  // Reset mode UI
-  switchMode(state.mode);
 }
 
-// ===== API Config =====
+// ===== API Config (simplified) =====
 function getApiConfig() {
-  var mode = localStorage.getItem('sheen_5why_mode') || 'own';
   return {
-    mode: mode,
     key: localStorage.getItem('sheen_5why_apikey') || '',
-    url: localStorage.getItem('sheen_5why_apiurl') || 'https://open.bigmodel.cn/api/paas/v4/chat/completions',
-    model: localStorage.getItem('sheen_5why_apimodel') || 'glm-4-flash',
-    proxyUrl: localStorage.getItem('sheen_5why_proxy') || ''
+    model: localStorage.getItem('sheen_5why_apimodel') || 'glm-4-flash'
   };
 }
 
 function hasAPI() {
-  var cfg = getApiConfig();
-  if (cfg.mode === 'proxy') return !!cfg.proxyUrl;
-  return !!cfg.key;
+  return !!getApiConfig().key;
 }
 
 function loadApiConfig() {
   var cfg = getApiConfig();
   document.getElementById('apiKey').value = cfg.key;
-  document.getElementById('apiUrl').value = cfg.url;
-  document.getElementById('apiModel').value = cfg.model;
-  document.getElementById('proxyUrl').value = cfg.proxyUrl;
-
-  // Set radio
-  if (cfg.mode === 'proxy') {
-    document.getElementById('radioProxy').checked = true;
-    switchApiMode('proxy', true);
-  } else {
-    document.getElementById('radioOwn').checked = true;
-    switchApiMode('own', true);
-  }
-
   var sel = document.getElementById('apiModelSelect');
   var known = ['glm-4-flash','glm-4-air','glm-4','deepseek-chat'];
   if (known.indexOf(cfg.model) >= 0) {
@@ -1060,84 +955,60 @@ function loadApiConfig() {
   updateApiStatus();
 }
 
-function switchApiMode(mode, silent) {
-  var ownSec = document.getElementById('ownKeySection');
-  var proxySec = document.getElementById('proxySection');
-  var lblP = document.getElementById('lblProxyMode');
-  var lblO = document.getElementById('lblOwnMode');
-  var hint = document.getElementById('apiSetupHint');
-
-  if (mode === 'proxy') {
-    ownSec.style.display = 'none';
-    proxySec.style.display = 'block';
-    lblP.style.borderColor = 'var(--brand-red)';
-    lblP.style.background = 'var(--brand-red-light)';
-    lblO.style.borderColor = 'var(--border)';
-    lblO.style.background = '';
-    if (!silent) hint.textContent = '使用站点共享代理，无需个人 Key。如代理不可用请切换自有 Key。';
-  } else {
-    ownSec.style.display = 'block';
-    proxySec.style.display = 'none';
-    lblO.style.borderColor = 'var(--brand-red)';
-    lblO.style.background = 'var(--brand-red-light)';
-    lblP.style.borderColor = 'var(--border)';
-    lblP.style.background = '';
-    if (!silent) hint.innerHTML = '请填写智谱 Key（<a href="https://open.bigmodel.cn/" target="_blank" style="color:var(--brand-red);">获取免费 Key</a>）';
-  }
-}
-
 function saveApiConfig() {
-  var mode = document.getElementById('radioProxy').checked ? 'proxy' : 'own';
   var key = document.getElementById('apiKey').value.trim();
-  var url = document.getElementById('apiUrl').value.trim();
-  var proxyUrl = document.getElementById('proxyUrl').value.trim();
-  var model = document.getElementById('apiModelSelect').value === '__custom__' ? document.getElementById('apiModel').value.trim() : document.getElementById('apiModelSelect').value;
-
-  // Validate for own key mode
-  if (mode === 'own' && key && key.indexOf('.') === -1) {
-    alert('Key 格式不正确！\n\n智谱 API Key 格式为：xxxxxx.xxxxxxxxxxxxxxxx\n请检查是否漏掉了前半部分（点号前面的ID）。');
+  if (key && key.indexOf('.') === -1) {
+    alert('Key 格式不正确！请复制完整 Key（含点号前后部分）\n格式：xxxxxx.xxxxxxxxxxxxxxxx');
     return;
   }
-
-  localStorage.setItem('sheen_5why_mode', mode);
   localStorage.setItem('sheen_5why_apikey', key);
-  localStorage.setItem('sheen_5why_apiurl', url);
+  var model = document.getElementById('apiModelSelect').value === '__custom__' ? document.getElementById('apiModel').value.trim() : document.getElementById('apiModelSelect').value;
   localStorage.setItem('sheen_5why_apimodel', model);
-  localStorage.setItem('sheen_5why_proxy', proxyUrl);
-
   updateApiStatus();
   document.getElementById('apiSetup').classList.remove('show');
-
-  if (mode === 'proxy' && proxyUrl) {
-    alert('已切换到共享代理模式\n无需个人 Key 即可使用。');
-  } else if (key) {
-    alert('已保存自有 Key：' + model + '\nKey: ' + key.substring(0,6) + '...****');
-  } else {
-    alert('配置已清除');
-  }
+  if (key) alert('已就绪！Key ' + key.substring(0,6) + '...****');
 }
 
 function updateApiStatus() {
   var st = document.getElementById('apiStatus');
   var stInline = document.getElementById('apiStatusInline');
   var cfg = getApiConfig();
-
-  if (cfg.mode === 'proxy' && cfg.proxyUrl) {
-    if (st) { st.textContent = '共享代理已启用'; st.className = 'api-status ok'; }
-    if (stInline) { stInline.textContent = '免Key · 共享代理'; stInline.className = 'api-status no-print ok'; stInline.style.display = 'inline-flex'; }
-  } else if (cfg.key) {
-    var text = '自有 Key：' + cfg.model;
-    if (st) { st.textContent = text; st.className = 'api-status ok'; }
+  if (cfg.key) {
+    if (st) { st.textContent = '已配置 · ' + cfg.model; st.className = 'api-status ok'; }
     if (stInline) { stInline.textContent = 'AI就绪 · ' + cfg.model; stInline.className = 'api-status no-print ok'; stInline.style.display = 'inline-flex'; }
   } else {
     if (st) { st.textContent = '未配置'; st.className = 'api-status no'; }
-    if (stInline) { stInline.textContent = '点击钥匙配置'; stInline.className = 'api-status no-print no'; stInline.style.display = 'inline-flex'; }
+    if (stInline) { stInline.textContent = '点击钥匙获取免费 Key'; stInline.className = 'api-status no-print no'; stInline.style.display = 'inline-flex'; }
   }
 }
 
 function toggleApiSetup() {
   document.getElementById('apiSetup').classList.toggle('show');
   loadApiConfig();
+}
+
+// Welcome onboarding
+function checkWelcome() {
+  var cfg = getApiConfig();
+  if (!cfg.key && !localStorage.getItem('sheen_5why_welcome_done')) {
+    document.getElementById('welcomeOverlay').style.display = 'flex';
+  }
+}
+
+function saveWelcomeKey() {
+  var key = document.getElementById('welcomeKey').value.trim();
+  if (!key) { alert('请粘贴 Key'); return; }
+  if (key.indexOf('.') === -1) { alert('格式不对，需要包含点号：xxxxxx.xxxx'); return; }
+  localStorage.setItem('sheen_5why_apikey', key);
+  localStorage.setItem('sheen_5why_welcome_done', '1');
+  document.getElementById('welcomeOverlay').style.display = 'none';
+  updateApiStatus();
+  alert('配置成功！现在可以使用了。');
+}
+
+function closeWelcome() {
+  localStorage.setItem('sheen_5why_welcome_done', '1');
+  document.getElementById('welcomeOverlay').style.display = 'none';
 }
 </script>
 </body>
