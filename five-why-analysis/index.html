@@ -377,13 +377,13 @@ function askAI(dim) {
   }).catch(function(e) {
     document.getElementById('aiLoading').style.display = 'none';
     console.error('AI API error:', e);
-    // 显示错误信息给用户
-    document.getElementById('aiQuestion').innerHTML = '<h3 style="color:#DC2626;"><i class="fa-solid fa-triangle-exclamation"></i> API 连接失败</h3>' +
-      '<p style="font-size:12px;color:var(--text-secondary);">原因：' + e.message + '</p>' +
+    var errMsg = e.message || '未知错误';
+    document.getElementById('aiQuestion').innerHTML = '<h3 style="color:#DC2626;">API 连接失败</h3>' +
+      '<p style="font-size:12px;color:var(--text-secondary);">原因：' + errMsg + '</p>' +
       '<p style="font-size:11px;color:var(--text-secondary);">请检查：<br>' +
-      '1. Worker URL 是否正确<br>2. Worker 是否已部署并设置 OPENAI_API_KEY<br>' +
-      '3. Worker 返回格式是否正确（需 JSON）</p>';
-    // 同时提供离线模式继续
+      '1. Cloudflare Workers AI 是否已启用（Dashboard → Workers & Pages → AI）<br>' +
+      '2. Worker 是否正常运行（打开 ' + getApiConfig().workerUrl + ' 看是否返回 <code>{"status":"ok"}</code>）<br>' +
+      '3. 浏览器 F12 Console 查看详细错误</p>';
     setTimeout(function() { showNoAPIMode(dim); }, 3000);
   });
 }
