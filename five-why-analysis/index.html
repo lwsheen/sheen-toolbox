@@ -209,7 +209,17 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
   <label style="font-size:12px;font-weight:600;">API 地址</label>
   <input type="text" id="apiUrl" value="https://open.bigmodel.cn/api/paas/v4/chat/completions" style="margin-bottom:6px;">
   <label style="font-size:12px;font-weight:600;">模型</label>
-  <input type="text" id="apiModel" value="glm-4-flash" style="margin-bottom:12px;">
+  <div style="display:flex;gap:6px;align-items:center;">
+    <select id="apiModelSelect" onchange="document.getElementById('apiModel').value=this.value=='__custom__'?'':this.value;document.getElementById('apiModel').style.display=this.value=='__custom__'?'block':'none'" style="flex:1;padding:8px 10px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;background:var(--bg-card);">
+      <option value="glm-4-flash">GLM-4-Flash（免费·快速）</option>
+      <option value="glm-4-air">GLM-4-Air（均衡·推荐）</option>
+      <option value="glm-4">GLM-4（最强）</option>
+      <option value="deepseek-chat">DeepSeek-V3</option>
+      <option value="__custom__">⤹ 自定义输入</option>
+    </select>
+  </div>
+  <input type="text" id="apiModel" style="display:none;margin-top:6px;" placeholder="输入模型名">
+  <p style="font-size:10px;color:var(--text-secondary);margin:4px 0 12px;">切换模型时需同步修改 API 地址（配套 API Key）</p>
   <div style="display:flex;gap:8px;">
     <button class="btn-primary" onclick="saveApiConfig()" style="padding:8px 20px;font-size:13px;">保存</button>
     <button class="btn-secondary" onclick="toggleApiSetup()" style="padding:8px 20px;font-size:13px;">关闭</button>
@@ -676,16 +686,27 @@ function loadApiConfig() {
   document.getElementById('apiKey').value = cfg.key;
   document.getElementById('apiUrl').value = cfg.url;
   document.getElementById('apiModel').value = cfg.model;
+  var sel = document.getElementById('apiModelSelect');
+  var known = ['glm-4-flash','glm-4-air','glm-4','deepseek-chat'];
+  if (known.indexOf(cfg.model) >= 0) {
+    sel.value = cfg.model;
+    document.getElementById('apiModel').style.display = 'none';
+  } else {
+    sel.value = '__custom__';
+    document.getElementById('apiModel').style.display = 'block';
+    document.getElementById('apiModel').value = cfg.model;
+  }
   updateApiStatus();
 }
 
 function saveApiConfig() {
   localStorage.setItem('sheen_5why_apikey', document.getElementById('apiKey').value.trim());
   localStorage.setItem('sheen_5why_apiurl', document.getElementById('apiUrl').value.trim());
-  localStorage.setItem('sheen_5why_apimodel', document.getElementById('apiModel').value.trim());
+  var model = document.getElementById('apiModelSelect').value === '__custom__' ? document.getElementById('apiModel').value.trim() : document.getElementById('apiModelSelect').value;
+  localStorage.setItem('sheen_5why_apimodel', model);
   updateApiStatus();
   document.getElementById('apiSetup').classList.remove('show');
-  alert('API 配置已保存');
+  alert('配置已保存：' + model);
 }
 
 function updateApiStatus() {
@@ -695,7 +716,7 @@ function updateApiStatus() {
   var text = cfg.key ? 'GLM-4-Flash 已配置' : '未配置';
   var cls = cfg.key ? 'ok' : 'no';
   if (st) { st.textContent = text; st.className = 'api-status ' + cls; }
-  if (stInline) { stInline.textContent = 'API配置：' + (cfg.key ? '已设置（智谱免费）' : '未设置'); stInline.className = 'api-status no-print ' + cls; stInline.style.display = 'inline-flex'; }
+  if (stInline) { stInline.textContent = '模型：' + cfg.model + (cfg.key ? '' : '（未设置Key）'); stInline.className = 'api-status no-print ' + cls; stInline.style.display = 'inline-flex'; }
 }
 
 function toggleApiSetup() {
