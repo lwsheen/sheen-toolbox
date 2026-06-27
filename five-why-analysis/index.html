@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI 事故根因分析 — SHEEN Toolbox</title>
+<title>5Why + 5M1E 根因分析 — SHEEN Toolbox</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
 :root {
@@ -105,7 +105,7 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
 .api-toggle:hover { border-color:var(--brand-red); color:var(--brand-red); }
 
 @media print {
-  @page { size:A4; margin:18mm 15mm 20mm 15mm; @bottom-center { content:"SHEEN Toolbox · AI 事故根因分析"; font-size:8pt; color:#666; } }
+  @page { size:A4; margin:18mm 15mm 20mm 15mm; @bottom-center { content:"SHEEN Toolbox · 5Why+5M1E 根因分析"; font-size:8pt; color:#666; } }
   body { background:#fff!important; font-size:12pt; color:#000!important; }
   .sheen-nav, .sheen-footer, .btn-primary, .btn-secondary, .btn-print, .step-indicator, .api-toggle, .no-print { display:none!important; }
   .app-wrapper { padding:0!important; }
@@ -134,7 +134,7 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
     <a href="/sheen-toolbox/dangerous-goods-query/" class="sheen-nav-tool">危险货物</a>
     <a href="/sheen-toolbox/hazardous-chemicals-query/" class="sheen-nav-tool">危化品</a>
     <a href="/sheen-toolbox/hazardous-waste-query/" class="sheen-nav-tool">危废</a>
-    <a href="/sheen-toolbox/five-why-analysis/" class="sheen-nav-tool active">AI 根因分析</a>
+    <a href="/sheen-toolbox/five-why-analysis/" class="sheen-nav-tool active">5Why</a>
   </div>
 </header>
 
@@ -148,7 +148,7 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
   <!-- Step 1: 5M1E -->
   <div id="step1">
     <div class="card">
-      <h2><i class="fa-solid fa-magnifying-glass-chart"></i> 第1步：多维因素分析</h2>
+      <h2><i class="fa-solid fa-magnifying-glass-chart"></i> 第1步：5M1E 维度分析</h2>
       <p class="sub">描述事故，然后从6个维度中勾选相关因素并填写初步观察。AI将根据你的选择引导后续5Why分析。</p>
 
       <div class="demo-banner" id="demoBanner">
@@ -194,7 +194,7 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
 </main>
 
 <footer class="sheen-footer">
-  <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · AI 事故根因分析
+  <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 5Why+5M1E 根因分析
 </footer>
 
 <div class="api-toggle no-print" onclick="toggleApiSetup()" title="API设置"><i class="fa-solid fa-key"></i></div>
