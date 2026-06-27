@@ -380,7 +380,13 @@
             .sheen-footer { padding: 12px 16px; font-size: 12px; }
         }
 
-        @media print {
+        
+@media (max-width:768px) {
+  .sheen-nav { padding:8px 12px; }
+  .sheen-nav-tool { padding:6px 10px; font-size:11px; }
+  .sheen-nav-tool i { font-size:12px; }
+}
+@media print {
             @page { size: A4; margin: 18mm 15mm 20mm 15mm; }
             body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
             .app-wrapper { box-shadow: none !important; border-radius: 0 !important; max-width: 100% !important; border: none !important; }

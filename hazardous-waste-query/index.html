@@ -249,7 +249,13 @@
 
         .sheen-footer strong { color: var(--text-primary); }
 
-        @media print {
+        
+@media (max-width:768px) {
+  .sheen-nav { padding:8px 12px; }
+  .sheen-nav-tool { padding:6px 10px; font-size:11px; }
+  .sheen-nav-tool i { font-size:12px; }
+}
+@media print {
             @page {
                 size: A4;
                 margin: 18mm 15mm 20mm 15mm;
@@ -279,17 +285,17 @@
             <span class="sheen-nav-brand-text">SHEEN Toolbox</span>
         </a>
         <div class="sheen-nav-tools">
-            <a href="/sheen-toolbox/pssr-checklist/" class="sheen-nav-tool">PSSR检查表</a>
-            <a href="/sheen-toolbox/fire-extinguisher-calculator/" class="sheen-nav-tool">灭火器计算器</a>
-            <a href="/sheen-toolbox/safety-production-cost-calculator/" class="sheen-nav-tool">安产费用</a>
-            <a href="/sheen-toolbox/jsa-lec/" class="sheen-nav-tool">JSA+LEC</a>
-            <a href="/sheen-toolbox/industry-classification/" class="sheen-nav-tool">行业分类</a>
-            <a href="/sheen-toolbox/dangerous-goods-query/" class="sheen-nav-tool">危险货物</a>
-            <a href="/sheen-toolbox/hazardous-chemicals-query/" class="sheen-nav-tool">危险化学品</a>
-                        <a href="/sheen-toolbox/five-why-analysis/" class="sheen-nav-tool">5Why</a>
-            a href="/sheen-toolbox/hazardous-waste-query/" class="sheen-nav-tool active">危险废物</a>
-        </div>
-    </header>
+      <a href="/sheen-toolbox/pssr-checklist/" class="sheen-nav-tool"><i class="fa-solid fa-clipboard-check"></i> PSSR检查表</a>
+      <a href="/sheen-toolbox/fire-extinguisher-calculator/" class="sheen-nav-tool"><i class="fa-solid fa-fire-extinguisher"></i> 灭火器</a>
+      <a href="/sheen-toolbox/safety-production-cost-calculator/" class="sheen-nav-tool"><i class="fa-solid fa-calculator"></i> 安产费用</a>
+      <a href="/sheen-toolbox/jsa-lec/" class="sheen-nav-tool"><i class="fa-solid fa-magnifying-glass-chart"></i> JSA+LEC</a>
+      <a href="/sheen-toolbox/industry-classification/" class="sheen-nav-tool"><i class="fa-solid fa-sitemap"></i> 行业分类</a>
+      <a href="/sheen-toolbox/dangerous-goods-query/" class="sheen-nav-tool"><i class="fa-solid fa-skull-crossbones"></i> 危险货物</a>
+      <a href="/sheen-toolbox/hazardous-chemicals-query/" class="sheen-nav-tool"><i class="fa-solid fa-flask"></i> 危化品</a>
+      <a href="/sheen-toolbox/hazardous-waste-query/" class="sheen-nav-tool active"><i class="fa-solid fa-recycle"></i> 危废</a>
+      <a href="/sheen-toolbox/five-why-analysis/" class="sheen-nav-tool"><i class="fa-solid fa-circle-question"></i> 5Why</a>
+    </div>
+  </header>
 
     <main class="app-wrapper">
         <div class="page-header">
