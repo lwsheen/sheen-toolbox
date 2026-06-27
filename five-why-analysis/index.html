@@ -664,7 +664,7 @@ function resetAll() {
 // ===== API Config =====
 function getApiConfig() {
   return {
-    workerUrl: localStorage.getItem('sheen_5why_worker') || '',
+    workerUrl: localStorage.getItem('sheen_5why_worker') || 'https://sheen-5why.walleo.workers.dev',
     key: localStorage.getItem('sheen_5why_apikey') || '',
     url: localStorage.getItem('sheen_5why_apiurl') || 'https://api.deepseek.com/v1/chat/completions',
     model: localStorage.getItem('sheen_5why_apimodel') || 'deepseek-chat'
