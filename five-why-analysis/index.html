@@ -112,7 +112,9 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
   .card { box-shadow:none!important; border-radius:0!important; border:1.5px solid #333!important; page-break-inside:avoid; }
 }
 @media (max-width:768px) {
-  .sheen-nav { padding:0 16px; }
+  .sheen-nav { padding:8px 12px; flex-direction:column; gap:8px; }
+  .sheen-nav-tools { justify-content:center; overflow-x:auto; flex-wrap:nowrap; white-space:nowrap; }
+  .sheen-nav-tool { padding:6px 10px; font-size:11px; }
   .app-wrapper { padding:16px; }
   .matrix { grid-template-columns:repeat(2,1fr); }
 }
