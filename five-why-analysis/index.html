@@ -254,10 +254,6 @@ var M1E_DEFS = [
     m.appendChild(div);
   });
   loadApiConfig();
-  // Auto-open setup if no key
-  if (!getApiConfig().key) {
-    setTimeout(function() { document.getElementById('apiSetup').classList.add('show'); }, 500);
-  }
 })();
 
 function toggleMatrix(el) {
@@ -669,8 +665,7 @@ function resetAll() {
 // ===== API Config =====
 function getApiConfig() {
   return {
-    workerUrl: localStorage.getItem('sheen_5why_worker') || '',
-    key: localStorage.getItem('sheen_5why_apikey') || '',
+    key: localStorage.getItem('sheen_5why_apikey') || '2ffa31c325dd43f5b2fa27e36cb0cc3d.YcJC9C0VhAo0MLT8',
     url: localStorage.getItem('sheen_5why_apiurl') || 'https://open.bigmodel.cn/api/paas/v4/chat/completions',
     model: localStorage.getItem('sheen_5why_apimodel') || 'glm-4-flash'
   };
