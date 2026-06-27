@@ -501,6 +501,35 @@
         <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 环境健康安全专业工具箱
     </footer>
 
+    <!-- API 配置按钮 -->
+    <div id="apiToggle" onclick="toggleApi()" title="API配置" style="position:fixed;bottom:24px;right:24px;z-index:99;width:44px;height:44px;border-radius:50%;background:var(--bg-card);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,0.1);"><i class="fa-solid fa-key"></i></div>
+    <span id="apiStatusH" style="position:fixed;bottom:28px;right:76px;z-index:99;font-size:11px;padding:4px 10px;border-radius:60px;background:#FEF2F2;color:#DC2626;">未配置</span>
+
+    <!-- API 配置弹窗 -->
+    <div id="apiModalH" style="display:none;position:fixed;bottom:80px;right:24px;width:360px;z-index:100;background:var(--bg-card);border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.15);padding:20px;">
+      <h3 style="margin-bottom:12px;font-size:15px;">全局 API 配置</h3>
+      <p style="font-size:11px;color:var(--text-secondary);margin-bottom:10px;">所有 AI 工具共享此配置</p>
+      <div style="display:flex;gap:6px;margin-bottom:10px;">
+        <label style="flex:1;text-align:center;padding:7px;border-radius:60px;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);" id="lblOwnH">
+          <input type="radio" name="apiModeH" value="own" onchange="switchApiH('own')" style="accent-color:var(--brand-red);margin-right:4px;">自有 Key
+        </label>
+        <label style="flex:1;text-align:center;padding:7px;border-radius:60px;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);" id="lblProxyH">
+          <input type="radio" name="apiModeH" value="proxy" onchange="switchApiH('proxy')" style="accent-color:var(--brand-red);margin-right:4px;">共享代理
+        </label>
+      </div>
+      <div id="ownSectionH">
+        <input type="text" id="apiKeyH" placeholder="API Key (xxxxxx.xxxx)" style="width:100%;padding:8px;border:1.5px solid var(--border);border-radius:8px;font-family:monospace;font-size:12px;margin-bottom:8px;">
+        <p style="font-size:10px;color:var(--text-secondary);margin-bottom:8px;"><a href="https://open.bigmodel.cn/" target="_blank" style="color:var(--brand-red);">获取智谱免费 Key →</a></p>
+      </div>
+      <div id="proxySectionH" style="display:none;">
+        <input type="text" id="proxyUrlH" placeholder="代理地址" style="width:100%;padding:8px;border:1.5px solid var(--border);border-radius:8px;font-family:monospace;font-size:12px;margin-bottom:8px;">
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-primary" onclick="saveApiH()" style="padding:8px 20px;border-radius:60px;font-size:13px;background:var(--brand-red);color:#fff;border:none;cursor:pointer;">保存</button>
+        <button class="btn btn-outline" onclick="document.getElementById('apiModalH').style.display='none'" style="padding:8px 20px;border-radius:60px;font-size:13px;background:var(--bg-card);border:1.5px solid var(--border);cursor:pointer;">关闭</button>
+      </div>
+    </div>
+
     <script>
     (function() {
         // ===== 访问计数器 =====
@@ -596,6 +625,45 @@
             });
             localStorage.setItem(orderKey, JSON.stringify(hrefs));
         }
+
+        // ===== API 配置（全局共享） =====
+        window.toggleApi = function() {
+          var el = document.getElementById('apiModalH');
+          el.style.display = el.style.display === 'block' ? 'none' : 'block';
+          loadApiH();
+        };
+        window.switchApiH = function(m) {
+          document.getElementById('ownSectionH').style.display = (m==='proxy'?'none':'block');
+          document.getElementById('proxySectionH').style.display = (m==='proxy'?'block':'none');
+          var p=document.getElementById('lblProxyH'), o=document.getElementById('lblOwnH');
+          if(m==='proxy') { p.style.borderColor='var(--brand-red)'; p.style.background='#FEF2F2'; o.style.borderColor='var(--border)'; o.style.background=''; }
+          else { o.style.borderColor='var(--brand-red)'; o.style.background='#FEF2F2'; p.style.borderColor='var(--border)'; p.style.background=''; }
+        };
+        function loadApiH() {
+          var m = localStorage.getItem('sheen_5why_mode') || 'own';
+          document.getElementById('apiKeyH').value = localStorage.getItem('sheen_5why_apikey') || '';
+          document.getElementById('proxyUrlH').value = localStorage.getItem('sheen_5why_proxy') || '';
+          document.querySelector('input[name=apiModeH][value='+m+']').checked = true;
+          window.switchApiH(m);
+        }
+        window.saveApiH = function() {
+          var m = document.querySelector('input[name=apiModeH]:checked').value;
+          localStorage.setItem('sheen_5why_mode', m);
+          localStorage.setItem('sheen_5why_apikey', document.getElementById('apiKeyH').value.trim());
+          localStorage.setItem('sheen_5why_proxy', document.getElementById('proxyUrlH').value.trim());
+          document.getElementById('apiModalH').style.display = 'none';
+          updateApiStatusH();
+        };
+        function updateApiStatusH() {
+          var k = localStorage.getItem('sheen_5why_apikey');
+          var p = localStorage.getItem('sheen_5why_proxy');
+          var m = localStorage.getItem('sheen_5why_mode');
+          var el = document.getElementById('apiStatusH');
+          if (m==='proxy' && p) { el.textContent = '免Key'; el.style.cssText = 'position:fixed;bottom:28px;right:76px;z-index:99;font-size:11px;padding:4px 10px;border-radius:60px;background:#F0FDF4;color:#16A34A;'; }
+          else if (k) { el.textContent = 'AI就绪'; el.style.cssText = 'position:fixed;bottom:28px;right:76px;z-index:99;font-size:11px;padding:4px 10px;border-radius:60px;background:#F0FDF4;color:#16A34A;'; }
+          else { el.textContent = '未配置'; el.style.cssText = 'position:fixed;bottom:28px;right:76px;z-index:99;font-size:11px;padding:4px 10px;border-radius:60px;background:#FEF2F2;color:#DC2626;'; }
+        }
+        updateApiStatusH();
     })();
     </script>
 
