@@ -1,1 +1,8 @@
-{"name":"sheen-5why-proxy","version":2,"builds":[{"src":"api/proxy.js","use":"@vercel/node"}],"routes":[{"src":"/(.*)","dest":"/api/proxy"}]}
+{
+  "functions": {
+    "api/proxy.js": { "runtime": "@vercel/node" }
+  },
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/api/proxy" }
+  ]
+}
