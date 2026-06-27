@@ -380,15 +380,7 @@
             .sheen-footer { padding: 12px 16px; font-size: 12px; }
         }
 
-        
-.nav-toggle { display:none; background:none; border:none; color:#fff; font-size:22px; cursor:pointer; padding:4px 8px; line-height:1; }
-@media (max-width:768px) {
-  .nav-toggle { display:block; }
-  .sheen-nav { padding:8px 12px; }
-  .sheen-nav-tools { display:none!important; flex-direction:column; width:100%; padding-top:4px; }
-  .sheen-nav-tools.open { display:flex!important; }
-}
-@media print {
+        @media print {
             @page { size: A4; margin: 18mm 15mm 20mm 15mm; }
             body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
             .app-wrapper { box-shadow: none !important; border-radius: 0 !important; max-width: 100% !important; border: none !important; }
@@ -578,9 +570,6 @@
         <footer class="sheen-footer">
             <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 灭火器配置计算器
         </footer>
-<script>
-function toggleNav() { document.querySelector('.sheen-nav-tools').classList.toggle('open'); }
-</script>
 
     </div>
 

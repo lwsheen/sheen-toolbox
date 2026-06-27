@@ -104,14 +104,6 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
 .api-toggle { position:fixed; bottom:20px; right:20px; z-index:100; width:40px; height:40px; border-radius:50%; background:var(--bg-card); border:1.5px solid var(--border); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; color:var(--text-secondary); box-shadow:0 2px 8px rgba(0,0,0,0.08); }
 .api-toggle:hover { border-color:var(--brand-red); color:var(--brand-red); }
 
-
-.nav-toggle { display:none; background:none; border:none; color:#fff; font-size:22px; cursor:pointer; padding:4px 8px; line-height:1; }
-@media (max-width:768px) {
-  .nav-toggle { display:block; }
-  .sheen-nav { padding:8px 12px; }
-  .sheen-nav-tools { display:none!important; flex-direction:column; width:100%; padding-top:4px; }
-  .sheen-nav-tools.open { display:flex!important; }
-}
 @media print {
   @page { size:A4; margin:18mm 15mm 20mm 15mm; @bottom-center { content:"SHEEN Toolbox · 5Why+5M1E 根因分析"; font-size:8pt; color:#666; } }
   body { background:#fff!important; font-size:12pt; color:#000!important; }
@@ -135,8 +127,7 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
     <i class="fa-solid fa-shield-halved"></i>
     <span class="sheen-nav-brand-text">SHEEN Toolbox</span>
   </a>
-      <button class="nav-toggle" onclick="toggleNav()" aria-label="菜单">☰</button>
-    
+  <div class="sheen-nav-tools">
     <a href="/sheen-toolbox/pssr-checklist/" class="sheen-nav-tool">PSSR检查表</a>
     <a href="/sheen-toolbox/fire-extinguisher-calculator/" class="sheen-nav-tool">灭火器</a>
     <a href="/sheen-toolbox/safety-production-cost-calculator/" class="sheen-nav-tool">安产费用</a>
@@ -207,9 +198,6 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
 <footer class="sheen-footer">
   <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 5Why+5M1E 根因分析
 </footer>
-<script>
-function toggleNav() { document.querySelector('.sheen-nav-tools').classList.toggle('open'); }
-</script>
 
 <div class="api-toggle no-print" onclick="toggleApiSetup()" title="API设置"><i class="fa-solid fa-key"></i></div>
 <span class="api-status no no-print" id="apiStatusInline" style="position:fixed;bottom:24px;right:68px;z-index:100;font-size:11px;">API配置：未设置</span>

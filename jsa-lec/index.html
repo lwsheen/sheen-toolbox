@@ -131,14 +131,6 @@ textarea.form-control{min-height:72px;resize:vertical}
 .empty-hint{text-align:center;padding:20px;color:var(--text-secondary);font-size:13px}
 
 /* Print */
-
-.nav-toggle { display:none; background:none; border:none; color:#fff; font-size:22px; cursor:pointer; padding:4px 8px; line-height:1; }
-@media (max-width:768px) {
-  .nav-toggle { display:block; }
-  .sheen-nav { padding:8px 12px; }
-  .sheen-nav-tools { display:none!important; flex-direction:column; width:100%; padding-top:4px; }
-  .sheen-nav-tools.open { display:flex!important; }
-}
 @media print{
   @page{size:A4 landscape;margin:12mm 14mm 18mm 14mm;@bottom-center{content:"SHEEN Toolbox \00b7 JSA+LEC 作业安全分析与风险评估记录表";font-size:8pt;color:#666}}
   body{background:#fff!important;font-size:10pt;color:#000!important}
@@ -202,8 +194,7 @@ textarea.form-control{min-height:72px;resize:vertical}
     <i class="fa-solid fa-shield-halved"></i>
     <span class="sheen-nav-brand-text">SHEEN Toolbox</span>
   </a>
-      <button class="nav-toggle" onclick="toggleNav()" aria-label="菜单">☰</button>
-    
+  <div class="sheen-nav-tools">
     <a href="/sheen-toolbox/pssr-checklist/" class="sheen-nav-tool">PSSR 检查表</a>
     <a href="/sheen-toolbox/fire-extinguisher-calculator/" class="sheen-nav-tool">灭火器计算器</a>
     <a href="/sheen-toolbox/safety-production-cost-calculator/" class="sheen-nav-tool">安产费用</a>
@@ -363,9 +354,6 @@ textarea.form-control{min-height:72px;resize:vertical}
 <footer class="sheen-footer">
   <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · JSA+LEC 作业安全分析与风险评估
 </footer>
-<script>
-function toggleNav() { document.querySelector('.sheen-nav-tools').classList.toggle('open'); }
-</script>
 <div class="print-time" id="printTime"></div>
 
 <script>
