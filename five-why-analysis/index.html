@@ -203,13 +203,13 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
 <!-- API Setup Modal -->
 <div class="card api-setup" id="apiSetup" style="position:fixed;bottom:70px;right:20px;width:380px;z-index:100;max-height:80vh;overflow-y:auto;">
   <h3 style="margin-bottom:4px;">API 配置</h3>
-  <p style="font-size:11px;color:var(--text-secondary);margin-bottom:12px;">配置后 AI 将实时引导分析。二者选一即可，推荐 Cloudflare Worker（免费）</p>
-  <label style="font-size:12px;font-weight:600;">Cloudflare Worker URL（推荐）</label>
-  <input type="text" id="workerUrl" placeholder="https://your-worker.workers.dev" style="margin-bottom:10px;">
-  <label style="font-size:12px;font-weight:600;">或 DeepSeek API（备选）</label>
-  <input type="password" id="apiKey" placeholder="sk-xxxxxxxx" style="margin-bottom:6px;">
-  <input type="text" id="apiUrl" value="https://api.deepseek.com/v1/chat/completions" style="margin-bottom:6px;">
-  <input type="text" id="apiModel" value="deepseek-chat" style="margin-bottom:12px;">
+  <p style="font-size:11px;color:var(--text-secondary);margin-bottom:12px;">默认使用智谱 GLM-4-Flash（永久免费），开箱即用</p>
+  <label style="font-size:12px;font-weight:600;">API Key（智谱 GLM-4-Flash）</label>
+  <input type="password" id="apiKey" placeholder="xxx.xxxxxxxx" style="margin-bottom:6px;">
+  <label style="font-size:12px;font-weight:600;">API 地址</label>
+  <input type="text" id="apiUrl" value="https://open.bigmodel.cn/api/paas/v4/chat/completions" style="margin-bottom:6px;">
+  <label style="font-size:12px;font-weight:600;">模型</label>
+  <input type="text" id="apiModel" value="glm-4-flash" style="margin-bottom:12px;">
   <div style="display:flex;gap:8px;">
     <button class="btn-primary" onclick="saveApiConfig()" style="padding:8px 20px;font-size:13px;">保存</button>
     <button class="btn-secondary" onclick="toggleApiSetup()" style="padding:8px 20px;font-size:13px;">关闭</button>
@@ -352,7 +352,7 @@ var CONVERSATION = []; // full chat history for Worker
 
 function hasAPI() {
   var cfg = getApiConfig();
-  return !!(cfg.workerUrl || cfg.key);
+  return !!(cfg.key); // Zhipu key is built-in default
 }
 
 function askAI(dim) {
@@ -420,30 +420,33 @@ function buildPrompt(dim, done) {
 async function callAI(messages) {
   var cfg = getApiConfig();
 
-  // Cloudflare Worker (free, recommended)
-  if (cfg.workerUrl) {
-    var resp = await fetch(cfg.workerUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: messages })
-    });
-    if (!resp.ok) throw new Error('Worker error: ' + resp.status);
-    return await resp.json();
+  // Zhipu GLM-4-Flash (free, recommended, China direct)
+  var resp = await fetch(cfg.url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + cfg.key },
+    body: JSON.stringify({ model: cfg.model, messages: messages, temperature: 0.5, max_tokens: 1000 })
+  });
+  if (!resp.ok) {
+    var errText = await resp.text();
+    throw new Error('API error ' + resp.status + ': ' + errText.substring(0, 200));
   }
+  var data = await resp.json();
+  var content = data.choices[0].message.content;
 
-  // DeepSeek API (fallback)
-  if (cfg.key) {
-    var resp = await fetch(cfg.url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + cfg.key },
-      body: JSON.stringify({ model: cfg.model, messages: messages, response_format: { type: 'json_object' }, temperature: 0.7 })
-    });
-    if (!resp.ok) throw new Error('API error: ' + resp.status);
-    var data = await resp.json();
-    return JSON.parse(data.choices[0].message.content);
+  // Parse JSON from response
+  var jsonMatch = content.match(/\{[\s\S]*\}/);
+  var jsonStr = jsonMatch ? jsonMatch[0] : content;
+  try {
+    return JSON.parse(jsonStr);
+  } catch(e) {
+    return {
+      dimension: '法',
+      question: content.substring(0, 80),
+      suggestions: ['设备/工具有缺陷', '操作流程未执行到位', '环境存在不利因素'],
+      stage: 1,
+      isComplete: false
+    };
   }
-
-  throw new Error('No API configured');
 }
 
 function displayAIResponse(data, dim) {
@@ -665,16 +668,15 @@ function resetAll() {
 // ===== API Config =====
 function getApiConfig() {
   return {
-    workerUrl: localStorage.getItem('sheen_5why_worker') || 'https://sheen-5why.walleo.workers.dev',
-    key: localStorage.getItem('sheen_5why_apikey') || '',
-    url: localStorage.getItem('sheen_5why_apiurl') || 'https://api.deepseek.com/v1/chat/completions',
-    model: localStorage.getItem('sheen_5why_apimodel') || 'deepseek-chat'
+    workerUrl: localStorage.getItem('sheen_5why_worker') || '',
+    key: localStorage.getItem('sheen_5why_apikey') || '15cbd5184eef44e699fda8bfc3080ac6.MTgd2TwCb4VShC9L',
+    url: localStorage.getItem('sheen_5why_apiurl') || 'https://open.bigmodel.cn/api/paas/v4/chat/completions',
+    model: localStorage.getItem('sheen_5why_apimodel') || 'glm-4-flash'
   };
 }
 
 function loadApiConfig() {
   var cfg = getApiConfig();
-  document.getElementById('workerUrl').value = cfg.workerUrl;
   document.getElementById('apiKey').value = cfg.key;
   document.getElementById('apiUrl').value = cfg.url;
   document.getElementById('apiModel').value = cfg.model;
@@ -682,7 +684,6 @@ function loadApiConfig() {
 }
 
 function saveApiConfig() {
-  localStorage.setItem('sheen_5why_worker', document.getElementById('workerUrl').value.trim());
   localStorage.setItem('sheen_5why_apikey', document.getElementById('apiKey').value.trim());
   localStorage.setItem('sheen_5why_apiurl', document.getElementById('apiUrl').value.trim());
   localStorage.setItem('sheen_5why_apimodel', document.getElementById('apiModel').value.trim());
@@ -695,12 +696,10 @@ function updateApiStatus() {
   var st = document.getElementById('apiStatus');
   var stInline = document.getElementById('apiStatusInline');
   var cfg = getApiConfig();
-  var text, cls;
-  if (cfg.workerUrl) { text = 'Worker 已配置'; cls = 'ok'; }
-  else if (cfg.key) { text = 'DeepSeek 已配置'; cls = 'ok'; }
-  else { text = '未配置（离线模式）'; cls = 'no'; }
+  var text = cfg.key ? 'GLM-4-Flash 已配置' : '未配置';
+  var cls = cfg.key ? 'ok' : 'no';
   if (st) { st.textContent = text; st.className = 'api-status ' + cls; }
-  if (stInline) { stInline.textContent = 'API配置：' + (cfg.workerUrl||cfg.key ? '已设置' : '未设置'); stInline.className = 'api-status no-print ' + cls; stInline.style.display = 'inline-flex'; }
+  if (stInline) { stInline.textContent = 'API配置：' + (cfg.key ? '已设置（智谱免费）' : '未设置'); stInline.className = 'api-status no-print ' + cls; stInline.style.display = 'inline-flex'; }
 }
 
 function toggleApiSetup() {
