@@ -242,13 +242,31 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
 <!-- API Setup Modal -->
 <div class="card api-setup" id="apiSetup" style="position:fixed;bottom:70px;right:20px;width:380px;z-index:100;max-height:80vh;overflow-y:auto;">
   <h3 style="margin-bottom:4px;"><i class="fa-solid fa-key" style="color:var(--amber);"></i> API 配置</h3>
-  <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;">
-    GLM-4-Flash 永久免费 | <a href="https://open.bigmodel.cn/" target="_blank" style="color:var(--brand-red);font-weight:600;">点此获取免费 Key <i class="fa-solid fa-external-link-alt"></i></a>
+  <p style="font-size:11px;color:var(--text-secondary);margin-bottom:12px;">
+    <span id="apiSetupHint">共享代理（免Key）或自有 Key 二选一</span>
   </p>
 
-  <label style="font-size:12px;font-weight:600;">粘贴你的 API Key</label>
-  <input type="text" id="apiKey" placeholder="xxxxxx.xxxxxxxxxxxxxxxx" style="margin-bottom:10px;font-family:monospace;font-size:13px;">
-  <p style="font-size:10px;color:var(--text-secondary);margin-bottom:12px;">Key 仅存在你浏览器里，不上传到服务器</p>
+  <!-- Mode selector -->
+  <div style="display:flex;gap:6px;margin-bottom:12px;">
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 14px;border-radius:60px;font-size:12px;font-weight:600;border:1.5px solid var(--border);" id="lblProxyMode">
+      <input type="radio" name="apiMode" value="proxy" id="radioProxy" onchange="switchApiMode('proxy')" style="accent-color:var(--brand-red);"> 共享代理
+    </label>
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 14px;border-radius:60px;font-size:12px;font-weight:600;border:1.5px solid var(--border);" id="lblOwnMode">
+      <input type="radio" name="apiMode" value="own" id="radioOwn" onchange="switchApiMode('own')" style="accent-color:var(--brand-red);"> 自有 Key
+    </label>
+  </div>
+
+  <div id="ownKeySection">
+    <label style="font-size:12px;font-weight:600;">API Key（<a href="https://open.bigmodel.cn/" target="_blank" style="color:var(--brand-red);">获取免费 Key</a>）</label>
+    <input type="text" id="apiKey" placeholder="xxxxxx.xxxxxxxxxxxxxxxx" style="margin-bottom:6px;font-family:monospace;font-size:12px;">
+    <p style="font-size:10px;color:var(--text-secondary);margin-bottom:8px;">Key 仅存你浏览器，不上传服务器</p>
+  </div>
+
+  <div id="proxySection" style="display:none;">
+    <label style="font-size:12px;font-weight:600;">代理地址</label>
+    <input type="text" id="proxyUrl" placeholder="https://xxx.vercel.app" style="margin-bottom:6px;font-family:monospace;font-size:12px;">
+    <p style="font-size:10px;color:var(--text-secondary);margin-bottom:8px;">由站点部署者维护，访问者无需配置 Key</p>
+  </div>
 
   <label style="font-size:12px;font-weight:600;">模型</label>
   <div style="display:flex;gap:6px;align-items:center;">
@@ -266,27 +284,6 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
     <button class="btn-secondary" onclick="toggleApiSetup()" style="padding:8px 20px;font-size:13px;">关闭</button>
   </div>
   <span class="api-status no" id="apiStatus" style="margin-top:8px;">未配置</span>
-</div>
-
-<!-- Welcome onboarding for first-time users -->
-<div id="welcomeOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;align-items:center;justify-content:center;">
-  <div style="background:var(--bg-card);border-radius:var(--radius-xl);padding:32px;max-width:440px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-    <div style="font-size:48px;margin-bottom:12px;">&#x1F680;</div>
-    <h2 style="font-size:20px;margin-bottom:8px;">开始使用 AI 分析</h2>
-    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:20px;line-height:1.7;">
-      只需 30 秒获取一个<strong>免费</strong> API Key，即可使用<strong>一键事故报告</strong>功能
-    </p>
-    <div style="background:var(--brand-red-light);border-radius:var(--radius-md);padding:16px;margin-bottom:20px;text-align:left;">
-      <div style="font-weight:700;margin-bottom:8px;color:var(--brand-red);">&#x278A; 获取免费 Key</div>
-      <div style="font-size:13px;margin-bottom:12px;">打开 <a href="https://open.bigmodel.cn/" target="_blank" style="color:var(--brand-red);font-weight:600;">open.bigmodel.cn</a> → 登录 → API Keys → 创建 → 复制整行 Key</div>
-      <div style="font-weight:700;margin-bottom:8px;color:var(--brand-red);">&#x278B; 粘贴到这里</div>
-      <div style="display:flex;gap:8px;">
-        <input type="text" id="welcomeKey" placeholder="粘贴 Key..." style="flex:1;font-family:monospace;font-size:12px;padding:8px;">
-        <button class="btn-primary" onclick="saveWelcomeKey()" style="padding:8px 16px;font-size:13px;white-space:nowrap;">保存</button>
-      </div>
-    </div>
-    <button onclick="closeWelcome()" style="background:none;border:none;color:var(--text-secondary);font-size:13px;cursor:pointer;">跳过，稍后配置</button>
-  </div>
 </div>
 
 <script>
@@ -327,7 +324,6 @@ var M1E_DEFS = [
     m.appendChild(div);
   });
   loadApiConfig();
-  checkWelcome();
 })();
 
 function toggleMatrix(el) {
@@ -425,9 +421,17 @@ async function autoAnalyze() {
   try {
     progressText.textContent = 'AI 正在识别5M1E相关维度…';
     var cfg = getApiConfig();
-    var resp = await fetch('https://open.bigmodel.cn/api/paas/v4/chat/completions', {
+    var url, headers;
+    if (cfg.mode === 'proxy' && cfg.proxyUrl) {
+      url = cfg.proxyUrl;
+      headers = { 'Content-Type': 'application/json' };
+    } else {
+      url = 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
+      headers = { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + cfg.key };
+    }
+    var resp = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + cfg.key },
+      headers: headers,
       body: JSON.stringify({ model: cfg.model, messages: [{ role: 'user', content: sysPrompt }], temperature: 0.5, max_tokens: 4000 })
     });
 
@@ -541,11 +545,6 @@ function renderChain(key) {
 var API_HISTORY = [];
 var CONVERSATION = []; // full chat history for Worker
 
-function hasAPI() {
-  var cfg = getApiConfig();
-  return !!(cfg.key); // Zhipu key is built-in default
-}
-
 function askAI(dim) {
   if (!hasAPI()) {
     showNoAPIMode(dim);
@@ -607,9 +606,17 @@ function buildPrompt(dim, done) {
 
 async function callAI(messages) {
   var cfg = getApiConfig();
-  var resp = await fetch('https://open.bigmodel.cn/api/paas/v4/chat/completions', {
+  var url, headers;
+  if (cfg.mode === 'proxy' && cfg.proxyUrl) {
+    url = cfg.proxyUrl;
+    headers = { 'Content-Type': 'application/json' };
+  } else {
+    url = 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
+    headers = { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + cfg.key };
+  }
+  var resp = await fetch(url, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + cfg.key },
+    headers: headers,
     body: JSON.stringify({ model: cfg.model, messages: messages, temperature: 0.5, max_tokens: 1000 })
   });
   if (!resp.ok) {
@@ -928,21 +935,34 @@ function resetAll() {
   setStep(1);
 }
 
-// ===== API Config (simplified) =====
+// ===== API Config =====
 function getApiConfig() {
+  var mode = localStorage.getItem('sheen_5why_mode') || 'own';
   return {
+    mode: mode,
     key: localStorage.getItem('sheen_5why_apikey') || '',
-    model: localStorage.getItem('sheen_5why_apimodel') || 'glm-4-flash'
+    model: localStorage.getItem('sheen_5why_apimodel') || 'glm-4-flash',
+    proxyUrl: localStorage.getItem('sheen_5why_proxy') || ''
   };
 }
 
 function hasAPI() {
-  return !!getApiConfig().key;
+  var cfg = getApiConfig();
+  if (cfg.mode === 'proxy') return !!cfg.proxyUrl;
+  return !!cfg.key;
 }
 
 function loadApiConfig() {
   var cfg = getApiConfig();
   document.getElementById('apiKey').value = cfg.key;
+  document.getElementById('proxyUrl').value = cfg.proxyUrl;
+  if (cfg.mode === 'proxy') {
+    document.getElementById('radioProxy').checked = true;
+    switchApiMode('proxy', true);
+  } else {
+    document.getElementById('radioOwn').checked = true;
+    switchApiMode('own', true);
+  }
   var sel = document.getElementById('apiModelSelect');
   var known = ['glm-4-flash','glm-4-air','glm-4','deepseek-chat'];
   if (known.indexOf(cfg.model) >= 0) {
@@ -956,60 +976,64 @@ function loadApiConfig() {
   updateApiStatus();
 }
 
-function saveApiConfig() {
-  var key = document.getElementById('apiKey').value.trim();
-  if (key && key.indexOf('.') === -1) {
-    alert('Key 格式不正确！请复制完整 Key（含点号前后部分）\n格式：xxxxxx.xxxxxxxxxxxxxxxx');
-    return;
+function switchApiMode(mode, silent) {
+  var ownSec = document.getElementById('ownKeySection');
+  var proxySec = document.getElementById('proxySection');
+  var lblP = document.getElementById('lblProxyMode');
+  var lblO = document.getElementById('lblOwnMode');
+  var hint = document.getElementById('apiSetupHint');
+  if (mode === 'proxy') {
+    ownSec.style.display = 'none';
+    proxySec.style.display = 'block';
+    lblP.style.borderColor = 'var(--brand-red)'; lblP.style.background = 'var(--brand-red-light)';
+    lblO.style.borderColor = 'var(--border)'; lblO.style.background = '';
+    if (!silent) hint.textContent = '使用代理后访问者无需个人 Key';
+  } else {
+    ownSec.style.display = 'block';
+    proxySec.style.display = 'none';
+    lblO.style.borderColor = 'var(--brand-red)'; lblO.style.background = 'var(--brand-red-light)';
+    lblP.style.borderColor = 'var(--border)'; lblP.style.background = '';
+    if (!silent) hint.innerHTML = '使用自有 Key（<a href="https://open.bigmodel.cn/" target="_blank" style="color:var(--brand-red);">获取免费 Key</a>）';
   }
-  localStorage.setItem('sheen_5why_apikey', key);
+}
+
+function saveApiConfig() {
+  var mode = document.getElementById('radioProxy').checked ? 'proxy' : 'own';
+  var key = document.getElementById('apiKey').value.trim();
+  var proxyUrl = document.getElementById('proxyUrl').value.trim();
   var model = document.getElementById('apiModelSelect').value === '__custom__' ? document.getElementById('apiModel').value.trim() : document.getElementById('apiModelSelect').value;
+  if (mode === 'own' && key && key.indexOf('.') === -1) {
+    alert('Key 格式不正确，需要包含点号（xxxxxx.xxxx）'); return;
+  }
+  localStorage.setItem('sheen_5why_mode', mode);
+  localStorage.setItem('sheen_5why_apikey', key);
   localStorage.setItem('sheen_5why_apimodel', model);
+  localStorage.setItem('sheen_5why_proxy', proxyUrl);
   updateApiStatus();
   document.getElementById('apiSetup').classList.remove('show');
-  if (key) alert('已就绪！Key ' + key.substring(0,6) + '...****');
+  if (mode === 'proxy' && proxyUrl) alert('共享代理已启用');
+  else if (key) alert('Key 已保存: ' + key.substring(0,6) + '...');
 }
 
 function updateApiStatus() {
   var st = document.getElementById('apiStatus');
   var stInline = document.getElementById('apiStatusInline');
   var cfg = getApiConfig();
-  if (cfg.key) {
+  if (cfg.mode === 'proxy' && cfg.proxyUrl) {
+    if (st) { st.textContent = '共享代理'; st.className = 'api-status ok'; }
+    if (stInline) { stInline.textContent = '免Key · 代理'; stInline.className = 'api-status no-print ok'; stInline.style.display = 'inline-flex'; }
+  } else if (cfg.key) {
     if (st) { st.textContent = '已配置 · ' + cfg.model; st.className = 'api-status ok'; }
     if (stInline) { stInline.textContent = 'AI就绪 · ' + cfg.model; stInline.className = 'api-status no-print ok'; stInline.style.display = 'inline-flex'; }
   } else {
     if (st) { st.textContent = '未配置'; st.className = 'api-status no'; }
-    if (stInline) { stInline.textContent = '点击钥匙获取免费 Key'; stInline.className = 'api-status no-print no'; stInline.style.display = 'inline-flex'; }
+    if (stInline) { stInline.textContent = '点击配置'; stInline.className = 'api-status no-print no'; stInline.style.display = 'inline-flex'; }
   }
 }
 
 function toggleApiSetup() {
   document.getElementById('apiSetup').classList.toggle('show');
   loadApiConfig();
-}
-
-// Welcome onboarding
-function checkWelcome() {
-  var cfg = getApiConfig();
-  if (!cfg.key && !localStorage.getItem('sheen_5why_welcome_done')) {
-    document.getElementById('welcomeOverlay').style.display = 'flex';
-  }
-}
-
-function saveWelcomeKey() {
-  var key = document.getElementById('welcomeKey').value.trim();
-  if (!key) { alert('请粘贴 Key'); return; }
-  if (key.indexOf('.') === -1) { alert('格式不对，需要包含点号：xxxxxx.xxxx'); return; }
-  localStorage.setItem('sheen_5why_apikey', key);
-  localStorage.setItem('sheen_5why_welcome_done', '1');
-  document.getElementById('welcomeOverlay').style.display = 'none';
-  updateApiStatus();
-  alert('配置成功！现在可以使用了。');
-}
-
-function closeWelcome() {
-  localStorage.setItem('sheen_5why_welcome_done', '1');
-  document.getElementById('welcomeOverlay').style.display = 'none';
 }
 </script>
 </body>
