@@ -112,10 +112,10 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
   .card { box-shadow:none!important; border-radius:0!important; border:1.5px solid #333!important; page-break-inside:avoid; }
 }
 @media (max-width:768px) {
-  .sheen-nav { padding:8px 12px; flex-direction:column; gap:8px; }
-  .sheen-nav-tools { justify-content:center; overflow-x:auto; flex-wrap:nowrap; white-space:nowrap; }
+  .sheen-nav { padding:8px 12px; }
   .sheen-nav-tool { padding:6px 10px; font-size:11px; }
   .app-wrapper { padding:16px; }
+  .card { padding:20px; }
   .matrix { grid-template-columns:repeat(2,1fr); }
 }
 </style>
@@ -124,7 +124,7 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
 
 <header class="sheen-nav">
   <a href="/sheen-toolbox/" class="sheen-nav-brand">
-    <i class="fa-solid fa-shield-halved"></i>
+    <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i>
     <span class="sheen-nav-brand-text">SHEEN Toolbox</span>
   </a>
   <div class="sheen-nav-tools">
@@ -141,6 +141,12 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
   </header>
 
 <main class="app-wrapper">
+  <h1 style="font-size:24px;font-weight:700;color:var(--text-primary);margin-bottom:8px;text-align:center;">
+    <i class="fa-solid fa-magnifying-glass-chart" style="color:var(--brand-red);"></i> 5Why + 5M1E 根因分析
+  </h1>
+  <p style="font-size:14px;color:var(--text-secondary);text-align:center;margin-bottom:28px;line-height:1.6;">
+    AI驱动的事故根因分析工具，结合5M1E维度分类+5Why深度追问，系统化溯源
+  </p>
   <div id="step-indicator" class="step-indicator">
     <div class="step-dot active" data-step="1">1</div>
     <div class="step-dot" data-step="2">2</div>
@@ -196,7 +202,7 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
 </main>
 
 <footer class="sheen-footer">
-  <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 5Why+5M1E 根因分析
+  <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 5Why+5M1E 根因分析
 </footer>
 
 <div class="api-toggle no-print" onclick="toggleApiSetup()" title="API设置"><i class="fa-solid fa-key"></i></div>
