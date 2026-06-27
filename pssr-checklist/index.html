@@ -426,6 +426,14 @@ body {
 .note-card strong { color: #bf6f00; }
 
 /* ===== 打印样式 ===== */
+
+.nav-toggle { display:none; background:none; border:none; color:#fff; font-size:22px; cursor:pointer; padding:4px 8px; line-height:1; }
+@media (max-width:768px) {
+  .nav-toggle { display:block; }
+  .sheen-nav { padding:8px 12px; }
+  .sheen-nav-tools { display:none!important; flex-direction:column; width:100%; padding-top:4px; }
+  .sheen-nav-tools.open { display:flex!important; }
+}
 @media print {
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 
@@ -685,6 +693,9 @@ body {
 <footer class="sheen-footer">
   <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · PSSR 开车前安全审查检查表
 </footer>
+<script>
+function toggleNav() { document.querySelector('.sheen-nav-tools').classList.toggle('open'); }
+</script>
 
 <script>
 // ===== 数据定义 =====
