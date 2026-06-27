@@ -59,16 +59,17 @@
         }
 
         /* ===== 顶部导航栏 ===== */
-        .navbar {
+        .sheen-nav {
             background: var(--black);
-            padding: 16px 32px;
+            padding: 0 32px;
             display: flex; align-items: center; justify-content: space-between;
-            flex-wrap: wrap; gap: 12px;
             border-bottom: 4px solid var(--brand-red);
+            flex-wrap: wrap;
+            min-height: 56px;
         }
-        .brand { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; }
-        .brand-icon { font-size: 26px; line-height: 1; }
-        .brand-name { font-size: 20px; font-weight: 700; letter-spacing: 0.5px; }
+        .sheen-nav-brand { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; padding: 14px 0; }
+        .sheen-nav-brand i { font-size: 24px; color: var(--amber); }
+        .sheen-nav-brand-text { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; }
 
         /* SHEEN Toolbox 工具切换导航 */
         .sheen-nav-tools { display: flex; gap: 4px; flex-wrap: wrap; }
@@ -357,14 +358,14 @@
             }
             .main-body { flex-direction: column; }
             .content-area { padding: 20px; }
-            .navbar { padding: 12px 16px; }
-            .brand-name { font-size: 17px; }
+            .sheen-nav { padding: 8px 12px; }
+            .sheen-nav-brand-text { font-size: 17px; }
             .result-value .number { font-size: 28px; }
         }
 
         @media (max-width: 480px) {
-            .navbar { padding: 10px 12px; flex-direction: column; gap: 8px; }
-            .brand-name { font-size: 16px; }
+            .sheen-nav { padding: 8px 12px; flex-direction: column; gap: 8px; }
+            .sheen-nav-brand-text { font-size: 16px; }
             .sheen-nav-tools { justify-content: center; }
             .sheen-nav-tool { padding: 6px 10px; font-size: 12px; }
             .badge-version { display: none; }
@@ -377,17 +378,11 @@
             .result-value .number { font-size: 22px; }
             .sheen-footer { padding: 12px 16px; font-size: 12px; }
         }
-
-        
-@media (max-width:768px) {
-  .sheen-nav { padding:8px 12px; }
-  .sheen-nav-tool { padding:6px 10px; font-size:11px; }
-  }
 @media print {
             @page { size: A4; margin: 18mm 15mm 20mm 15mm; }
             body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
             .app-wrapper { box-shadow: none !important; border-radius: 0 !important; max-width: 100% !important; border: none !important; }
-            .navbar, .side-nav, .btn-primary, .btn-print, .form-card, .sheen-footer, .footnote, .disclaimer, .no-print { display: none !important; }
+            .sheen-nav, .side-nav, .btn-primary, .btn-print, .form-card, .sheen-footer, .footnote, .disclaimer, .no-print { display: none !important; }
             .main-body { flex-direction: column; }
             .content-area { padding: 0 !important; }
             .panel-header h2 { font-size: 18pt; color: #000 !important; }
@@ -411,10 +406,10 @@
     <div class="app-wrapper">
 
         <!-- ===== 顶部导航栏 ===== -->
-        <header class="navbar">
-            <a href="/sheen-toolbox/" class="brand">
-                <i class="fa-solid fa-shield-halved" style="font-size:24px;color:var(--amber);"></i>
-                <span class="brand-name">SHEEN Toolbox</span>
+        <header class="sheen-nav">
+            <a href="/sheen-toolbox/" class="sheen-nav-brand">
+                <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i>
+                <span class="sheen-nav-brand-text">SHEEN Toolbox</span>
             </a>
             <div class="sheen-nav-tools">
       <a href="/sheen-toolbox/pssr-checklist/" class="sheen-nav-tool">PSSR检查表</a>

@@ -51,21 +51,18 @@
             border: 1px solid var(--border);
         }
 
-        /* ===== 头部 ===== */
-        .header {
+        /* ===== SHEEN Toolbox 顶部导航栏 ===== */
+        .sheen-nav {
             background: var(--black);
-            padding: 22px 32px;
-            display: flex;
+            padding: 0 32px;
+            display: flex; align-items: center; justify-content: space-between;
             flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 5px solid var(--brand-red);
-            gap: 14px;
+            border-bottom: 4px solid var(--brand-red);
+            min-height: 56px;
         }
-        .brand { display: flex; align-items: center; gap: 14px; color: #fff; text-decoration: none; }
-        .brand i { font-size: 32px; color: var(--amber); }
-        .brand-text { font-size: 24px; font-weight: 700; letter-spacing: 0.3px; }
-        .brand-text small { font-weight: 400; font-size: 14px; opacity: 0.85; display: block; line-height: 1.4; }
+        .sheen-nav-brand { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; padding: 14px 0; }
+        .sheen-nav-brand i { font-size: 24px; color: var(--amber); }
+        .sheen-nav-brand-text { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; }
 
         /* SHEEN Toolbox 工具切换导航 */
         .sheen-nav-tools { display: flex; gap: 4px; flex-wrap: wrap; }
@@ -230,15 +227,14 @@
             .nav-item.active { border-left-color: transparent; border-bottom-color: var(--brand-red); }
             .main-body { flex-direction: column; }
             .content-area { padding: 20px; }
-            .header { padding: 16px 20px; }
-            .brand-text { font-size: 20px; }
+            .sheen-nav { padding: 8px 12px; }
+            .sheen-nav-brand-text { font-size: 17px; }
             .result-value .number { font-size: 28px; }
         }
 
         @media (max-width: 480px) {
-            .header { padding: 12px; flex-direction: column; gap: 8px; }
-            .brand-text { font-size: 18px; }
-            .brand-text small { font-size: 12px; }
+            .sheen-nav { padding: 8px 12px; flex-direction: column; gap: 8px; }
+            .sheen-nav-brand-text { font-size: 16px; }
             .sheen-nav-tools { justify-content: center; }
             .sheen-nav-tool { padding: 6px 10px; font-size: 12px; }
             .badge-version { display: none; }
@@ -262,7 +258,7 @@
             @page { size: A4; margin: 18mm 15mm 20mm 15mm; }
             body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
             .app-wrapper { box-shadow: none !important; border-radius: 0 !important; max-width: 100% !important; border: none !important; }
-            .header, .industry-nav, .btn-primary, .btn-print, .form-card, .sheen-footer, .footnote, .no-print { display: none !important; }
+            .sheen-nav, .industry-nav, .btn-primary, .btn-print, .form-card, .sheen-footer, .footnote, .no-print { display: none !important; }
             .main-body { flex-direction: column; }
             .content-area { padding: 0 !important; }
             .panel-header h2 { font-size: 18pt; color: #000 !important; }
@@ -285,13 +281,10 @@
 <body>
 
     <div class="app-wrapper">
-        <header class="header">
-            <a href="/sheen-toolbox/" class="brand">
-                <i class="fa-solid fa-shield-halved"></i>
-                <div class="brand-text">
-                    SHEEN Toolbox
-                    <small>安全生产费用计算器 · 财企〔2022〕136号</small>
-                </div>
+        <header class="sheen-nav">
+            <a href="/sheen-toolbox/" class="sheen-nav-brand">
+                <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i>
+                <span class="sheen-nav-brand-text">SHEEN Toolbox</span>
             </a>
             <div class="sheen-nav-tools">
       <a href="/sheen-toolbox/pssr-checklist/" class="sheen-nav-tool">PSSR检查表</a>
@@ -735,7 +728,7 @@
         </div>
 
         <footer class="sheen-footer">
-            <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 安全生产费用计算器
+            <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 安全生产费用计算器
         </footer>
         <div class="print-footer">SHEEN Toolbox · 安全生产费用计算器</div>
     </div>
