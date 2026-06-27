@@ -380,15 +380,12 @@ function askAI(dim) {
     }
   }).catch(function(e) {
     document.getElementById('aiLoading').style.display = 'none';
-    console.error('AI API error:', e);
-    var errMsg = e.message || '未知错误';
+    var cfg = getApiConfig();
+    var masked = cfg.key ? cfg.key.substring(0,4) + '****' + cfg.key.slice(-4) : '(empty)';
     document.getElementById('aiQuestion').innerHTML = '<h3 style="color:#DC2626;">API 连接失败</h3>' +
-      '<p style="font-size:12px;color:var(--text-secondary);">原因：' + errMsg + '</p>' +
-      '<p style="font-size:11px;color:var(--text-secondary);">请检查：<br>' +
-      '1. Cloudflare Workers AI 是否已启用（Dashboard → Workers & Pages → AI）<br>' +
-      '2. Worker 是否正常运行（打开 ' + getApiConfig().workerUrl + ' 看是否返回 <code>{"status":"ok"}</code>）<br>' +
-      '3. 浏览器 F12 Console 查看详细错误</p>';
-    setTimeout(function() { showNoAPIMode(dim); }, 3000);
+      '<p style="font-size:12px;color:var(--text-secondary);">使用 Key：<code>' + masked + '</code></p>' +
+      '<p style="font-size:12px;color:var(--text-secondary);">错误：' + (e.message || '') + '</p>' +
+      '<button class="btn-primary" style="font-size:12px;padding:8px 16px;margin-top:8px;" onclick="document.getElementById(\'apiSetup\').classList.add(\'show\');document.getElementById(\'apiKey\').value=\'\';document.getElementById(\'apiKey\').focus();">重新设置 API Key</button>';
   });
 }
 
