@@ -157,16 +157,8 @@ textarea.form-control{min-height:72px;resize:vertical}
 .print-time{display:none}
 
 /* Responsive */
-@media(max-width:768px){
-  .sheen-nav{padding:0 16px;flex-direction:column}
-  
-  .main{padding:16px}
-  .page-header h1{font-size:20px}
-  .form-group{min-width:100%}
-  .hz-row{flex-direction:column}
-  .hz-field{min-width:100%!important}
-  .lec-block{flex-wrap:wrap}
-  .lec-block .lec-item{min-width:80px}
+
+item{min-width:80px}
 }
 
 @media(max-width:480px){
@@ -196,7 +188,7 @@ textarea.form-control{min-height:72px;resize:vertical}
 
 <header class="sheen-nav">
   <a href="/sheen-toolbox/" class="sheen-nav-brand">
-    <i class="fa-solid fa-shield-halved"></i>
+    <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i>
     <span class="sheen-nav-brand-text">SHEEN Toolbox</span>
   </a>
   <div class="sheen-nav-tools">
@@ -357,7 +349,7 @@ textarea.form-control{min-height:72px;resize:vertical}
 </main>
 
 <footer class="sheen-footer">
-  <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · JSA+LEC 作业安全分析与风险评估
+  <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · JSA+LEC 作业安全分析与风险评估
 </footer>
 <div class="print-time" id="printTime"></div>
 

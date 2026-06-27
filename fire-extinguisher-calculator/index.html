@@ -83,15 +83,7 @@
         .sheen-nav-tool.active { background: rgba(255,255,255,0.15); color: #fff; font-weight: 600; }
         .print-time { display: none; }
 
-        .badge-version {
-            background: rgba(255, 255, 255, 0.12);
-            padding: 4px 16px;
-            border-radius: 60px;
-            font-size: 12px;
-            color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            white-space: nowrap;
-        }
+        
 
         /* ===== 主体 ===== */
         .main-body {
@@ -328,6 +320,12 @@
         .sheen-footer strong { color: var(--text-primary); }
 
         /* ===== 响应式 ===== */
+        
+        /* Mobile nav sizing */
+        @media (max-width:768px) {
+          .sheen-nav { padding:8px 12px; }
+          .sheen-nav-tool { padding:6px 10px; font-size:11px; }
+        }
         @media (max-width: 820px) {
             body { padding: 0; }
             .app-wrapper { border-radius: 0; }
@@ -368,7 +366,7 @@
             .sheen-nav-brand-text { font-size: 16px; }
             
             .sheen-nav-tool { padding: 6px 10px; font-size: 12px; }
-            .badge-version { display: none; }
+            
             .content-area { padding: 12px; }
             .panel-header h2 { font-size: 18px; }
             .form-control { font-size: 13px; padding: 8px 10px; }
