@@ -122,6 +122,10 @@ textarea.form-control{min-height:72px;resize:vertical}
 .ref-notes p{margin:4px 0}
 .ref-notes ul{margin:4px 0 4px 18px}
 
+/* Spinner */
+.spinner-inline{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--brand-red);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:4px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
 /* Footer */
 .sheen-footer{text-align:center;padding:16px 32px;font-size:13px;color:var(--text-secondary);border-top:1px solid var(--border);background:var(--bg-card);letter-spacing:.5px}
 .sheen-footer i{color:var(--amber)}
@@ -256,6 +260,10 @@ item{min-width:80px}
   <!-- Action buttons -->
   <div class="btn-group no-print" style="margin-bottom:20px">
     <button class="btn btn-outline" onclick="addDemo()"><i class="fa-solid fa-lightbulb"></i> 加载示例数据</button>
+    <button class="btn btn-primary" id="btnAiFill" onclick="aiFill()"><i class="fa-solid fa-wand-magic-sparkles"></i> AI 自动填写</button>
+    <span id="aiLoading" style="display:none;font-size:13px;color:var(--text-secondary);margin-left:4px;"><span class="spinner-inline"></span> AI 分析中…</span>
+    <div style="flex:1"></div>
+    <button class="btn btn-outline btn-sm" onclick="toggleApi2()" title="API配置" style="padding:7px 12px;"><i class="fa-solid fa-key"></i></button>
     <button class="btn btn-outline" onclick="resetAll()"><i class="fa-solid fa-arrows-rotate"></i> 重置全部</button>
     <button class="btn btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印</button>
     <button class="btn btn-file" onclick="exportExcel()"><i class="fa-solid fa-file-excel"></i> 导出 Excel</button>
@@ -352,6 +360,32 @@ item{min-width:80px}
   <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · JSA+LEC 作业安全分析与风险评估
 </footer>
 <div class="print-time" id="printTime"></div>
+
+<!-- API Config -->
+<div id="apiModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:999;align-items:center;justify-content:center;">
+  <div class="card" style="max-width:400px;width:90%;margin:0;">
+    <h3 style="margin-bottom:12px;">API 配置</h3>
+    <div style="display:flex;gap:6px;margin-bottom:12px;">
+      <label style="flex:1;text-align:center;padding:8px;border-radius:60px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);" id="lblOwnMode2">
+        <input type="radio" name="apiMode2" value="own" id="radioOwn2" onchange="switchApiMode2('own')" style="accent-color:var(--brand-red);margin-right:4px;">自有 Key
+      </label>
+      <label style="flex:1;text-align:center;padding:8px;border-radius:60px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);" id="lblProxyMode2">
+        <input type="radio" name="apiMode2" value="proxy" id="radioProxy2" onchange="switchApiMode2('proxy')" style="accent-color:var(--brand-red);margin-right:4px;">共享代理
+      </label>
+    </div>
+    <div id="ownSection2">
+      <input type="text" id="apiKey2" placeholder="API Key (xxxxxx.xxxx)" style="width:100%;margin-bottom:8px;font-family:monospace;font-size:12px;padding:8px;border:1.5px solid var(--border);border-radius:var(--radius-sm);">
+      <p style="font-size:10px;color:var(--text-secondary);margin-bottom:8px;"><a href="https://open.bigmodel.cn/" target="_blank" style="color:var(--brand-red);">获取免费 Key</a></p>
+    </div>
+    <div id="proxySection2" style="display:none;">
+      <input type="text" id="proxyUrl2" placeholder="代理地址 https://xxx.vercel.app" style="width:100%;margin-bottom:8px;font-family:monospace;font-size:12px;padding:8px;border:1.5px solid var(--border);border-radius:var(--radius-sm);">
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-primary btn-sm" onclick="saveApi2()">保存</button>
+      <button class="btn btn-outline btn-sm" onclick="document.getElementById('apiModal').style.display='none'">关闭</button>
+    </div>
+  </div>
+</div>
 
 <script>
 (function(){
@@ -803,6 +837,102 @@ window.addDemo = addDemo;
 window.resetAll = resetAll;
 window.exportExcel = exportExcel;
 window.exportWord = exportWord;
+window.aiFill = aiFill;
+window.toggleApi2 = toggleApi2;
+window.switchApiMode2 = switchApiMode2;
+window.saveApi2 = saveApi2;
+
+// ===== AI Auto Fill =====
+function getApiConfig2() {
+  return {
+    mode: localStorage.getItem('sheen_5why_mode') || 'own',
+    key: localStorage.getItem('sheen_5why_apikey') || '',
+    proxy: localStorage.getItem('sheen_5why_proxy') || ''
+  };
+}
+function toggleApi2() { var el=document.getElementById('apiModal'); el.style.display = el.style.display==='flex'?'none':'flex'; loadApi2(); }
+function switchApiMode2(m) {
+  document.getElementById('ownSection2').style.display = (m==='proxy'?'none':'block');
+  document.getElementById('proxySection2').style.display = (m==='proxy'?'block':'none');
+  var p=document.getElementById('lblProxyMode2'), o=document.getElementById('lblOwnMode2');
+  if(m==='proxy'){ p.style.borderColor='var(--brand-red)'; p.style.background='var(--brand-red-light)'; o.style.borderColor='var(--border)'; o.style.background=''; }
+  else { o.style.borderColor='var(--brand-red)'; o.style.background='var(--brand-red-light)'; p.style.borderColor='var(--border)'; p.style.background=''; }
+}
+function loadApi2() {
+  var c=getApiConfig2();
+  document.getElementById('apiKey2').value=c.key;
+  document.getElementById('proxyUrl2').value=c.proxy;
+  document.getElementById(c.mode==='proxy'?'radioProxy2':'radioOwn2').checked=true;
+  switchApiMode2(c.mode);
+}
+function saveApi2() {
+  var m=document.getElementById('radioProxy2').checked?'proxy':'own';
+  localStorage.setItem('sheen_5why_mode',m);
+  localStorage.setItem('sheen_5why_apikey',document.getElementById('apiKey2').value.trim());
+  localStorage.setItem('sheen_5why_proxy',document.getElementById('proxyUrl2').value.trim());
+  document.getElementById('apiModal').style.display='none';
+  alert('已保存');
+}
+
+async function aiFill() {
+  var name = document.getElementById('jobName').value.trim();
+  var area = document.getElementById('jobArea').value.trim();
+  if(!name){ alert('请先填写「作业活动」和「区域/设备」'); return; }
+
+  if(steps.length>1||(steps.length===1&&steps[0].desc)){
+    if(!confirm('当前已有分析数据，AI填写将覆盖，确认？')) return;
+  }
+
+  var cfg = getApiConfig2();
+  if(cfg.mode==='own'&&!cfg.key){
+    alert('请先配置 API Key'); document.getElementById('apiModal').style.display='flex'; loadApi2(); return;
+  }
+  if(cfg.mode==='proxy'&&!cfg.proxy){
+    alert('请先填写代理地址'); document.getElementById('apiModal').style.display='flex'; loadApi2(); return;
+  }
+
+  document.getElementById('btnAiFill').disabled=true;
+  document.getElementById('aiLoading').style.display='inline';
+
+  var prompt = '你是EHS安全工程师。请为以下作业做JSA+LEC分析。\n作业：'+name+'\n区域：'+area+'\n\n要求：\n1. 分解为3-6个工作步骤\n2. 每步识别1-2个危害因素\n3. 给出L(0.1/0.2/0.5/1/3/6/10)、E(0.5/1/2/3/6/10)、C(1/3/7/15/40/100)分值\n4. 填写现有控制措施和建议改进措施\n5. D=L×E×C，风险等级按D≥320为5级，≥160为4级，≥70为3级，≥20为2级，<20为1级\n\n严格按JSON输出：\n[{"desc":"步骤","hazards":[{"factor":"危害","consequence":"后果","existingControl":"现有措施","l":1,"e":6,"c":7,"improvement":"建议措施"}]}]';
+
+  try {
+    var url, headers;
+    if(cfg.mode==='proxy'){
+      url = cfg.proxy;
+      headers = {'Content-Type':'application/json'};
+    } else {
+      url = 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
+      headers = {'Content-Type':'application/json','Authorization':'Bearer '+cfg.key};
+    }
+    var resp = await fetch(url, {
+      method:'POST', headers:headers,
+      body:JSON.stringify({model:'glm-4-flash',messages:[{role:'user',content:prompt}],temperature:0.5,max_tokens:3000})
+    });
+    var data = await resp.json();
+    var txt = data.choices[0].message.content;
+    var m = txt.match(/\[[\s\S]*\]/);
+    var arr = JSON.parse(m?m[0]:txt);
+
+    steps = arr.map(function(s){
+      return {
+        desc: s.desc||'',
+        hazards: (s.hazards||[]).map(function(h){
+          var l=parseFloat(h.l)||1, e=parseFloat(h.e)||6, c=parseFloat(h.c)||7, d=l*e*c;
+          var r = getRisk(d);
+          return {factor:h.factor||'',consequence:h.consequence||'',existingControl:h.existingControl||'',l:l,e:e,c:c,d:d,level:r.label,cls:r.cls,improvement:h.improvement||''};
+        })
+      };
+    });
+
+    renderAll(); saveState();
+  } catch(e) {
+    var msg=e.message; if(msg.indexOf('401')>-1||msg.indexOf('invalid')>-1||msg.indexOf('Authentication')>-1) msg+='\nKey无效，请重新获取';
+    alert('AI分析失败：'+msg); document.getElementById('apiModal').style.display='flex'; loadApi2();
+  }
+  document.getElementById('btnAiFill').disabled=false;
+  document.getElementById('aiLoading').style.display='none';
+}
 
 // ===== LEC 事件委托（一次性挂载，动态元素自动生效） =====
 document.getElementById('stepsContainer').addEventListener('change', function(e) {
