@@ -54,27 +54,41 @@ textarea.form-control{min-height:72px;resize:vertical}
 .step-block .step-actions button:hover{background:var(--brand-red-light);color:var(--brand-red);border-color:var(--brand-red)}
 
 /* Hazard cards within step */
-.hz-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;margin-top:10px;position:relative}
-.hz-card .hz-num{position:absolute;top:-9px;left:12px;background:var(--text-secondary);color:#fff;font-size:11px;font-weight:600;padding:1px 8px;border-radius:10px}
-.hz-card .hz-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}
-.hz-card .hz-row:last-child{margin-bottom:0}
-.hz-field{flex:1;min-width:140px}
-.hz-field.w-lg{flex:2;min-width:200px}
+.hz-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-md);padding:16px 18px;margin-top:12px;position:relative;display:grid;grid-template-columns:1fr 300px;gap:14px}
+.hz-card .hz-num{position:absolute;top:-10px;left:14px;background:var(--brand-red);color:#fff;font-size:11px;font-weight:700;padding:2px 10px;border-radius:10px}
+.hz-card .hz-main{display:flex;flex-direction:column;gap:10px}
+.hz-card .hz-score{display:flex;flex-direction:column}
 .hz-field label{display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:3px}
 .hz-field label .hint{font-weight:400;font-size:11px;color:#9CA3AF}
-.hz-field input,.hz-field textarea{width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;background:var(--bg-card);color:var(--text-primary)}
+.hz-field input,.hz-field textarea{width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;background:var(--bg-card);color:var(--text-primary)}
 .hz-field textarea{min-height:44px;resize:vertical}
 .hz-field input:focus,.hz-field textarea:focus{outline:none;border-color:var(--brand-red);box-shadow:0 0 0 3px rgba(122,24,37,.06)}
 
-/* LEC inline block */
-.lec-block{display:flex;align-items:flex-end;gap:6px;flex-wrap:wrap}
-.lec-block .lec-item{flex:1;min-width:90px}
-.lec-block .lec-item select{width:100%;padding:7px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:12px;background:var(--bg-card);font-family:inherit;cursor:pointer}
-.lec-block .lec-item select:focus{outline:none;border-color:var(--brand-red)}
-.lec-block .lec-item .lec-lbl{font-size:11px;font-weight:600;color:var(--text-secondary);margin-bottom:2px;display:block}
-.lec-result{flex-shrink:0;min-width:100px;text-align:center;padding:4px 8px;border-radius:8px;background:var(--brand-red-light)}
-.lec-result .d-score{font-size:20px;font-weight:700;color:var(--brand-red);line-height:1.2}
-.lec-result .d-level{font-size:11px;font-weight:600;padding:1px 6px;border-radius:4px;display:inline-block}
+/* LEC scoring panel */
+.lec-panel{background:var(--bg-page);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:14px;display:flex;flex-direction:column;gap:10px}
+.lec-panel-title{font-size:12px;font-weight:700;color:var(--text-primary);display:flex;align-items:center;gap:6px;margin-bottom:0}
+.lec-panel-title i{color:var(--brand-red);font-size:13px}
+.lec-selects{display:flex;flex-direction:column;gap:8px}
+.lec-selects .lec-row{display:flex;align-items:center;gap:8px}
+.lec-selects .lec-row label{width:88px;font-size:12px;font-weight:600;color:var(--text-secondary);flex-shrink:0;text-align:right}
+.lec-selects .lec-row select{flex:1;padding:7px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:12px;background:var(--bg-card);font-family:inherit;cursor:pointer;min-width:0}
+.lec-selects .lec-row select:focus{outline:none;border-color:var(--brand-red)}
+.lec-result{text-align:center;border-radius:var(--radius-md);padding:12px 10px}
+.lec-result .d-score{font-size:28px;font-weight:700;line-height:1.1;margin-bottom:4px}
+.lec-result .d-eq{font-size:12px;color:var(--text-secondary);margin-bottom:2px}
+.lec-result .d-level{font-size:13px;font-weight:700;padding:3px 12px;border-radius:6px;display:inline-block}
+
+/* Risk result bg */
+.lec-r-critical{background:linear-gradient(135deg,#FEE2E2,#FECACA)}
+.lec-r-critical .d-score{color:#991B1B}
+.lec-r-high{background:linear-gradient(135deg,#FEE2E2,#FECACA)}
+.lec-r-high .d-score{color:#991B1B}
+.lec-r-moderate{background:linear-gradient(135deg,#FFEDD5,#FED7AA)}
+.lec-r-moderate .d-score{color:#9A3412}
+.lec-r-minor{background:linear-gradient(135deg,#FEF9C3,#FEF3C7)}
+.lec-r-minor .d-score{color:#854D0E}
+.lec-r-low{background:linear-gradient(135deg,#ECFDF5,#DCFCE7)}
+.lec-r-low .d-score{color:#166534}
 
 /* Risk colors */
 .risk-critical{background:#FCA5A5;color:#7F1D1D}
@@ -83,8 +97,24 @@ textarea.form-control{min-height:72px;resize:vertical}
 .risk-minor{background:#FEF9C3;color:#854D0E}
 .risk-low{background:#DCFCE7;color:#166534}
 
-.hz-del{position:absolute;top:8px;right:10px;width:26px;height:26px;border-radius:50%;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:11px;color:var(--text-secondary);display:flex;align-items:center;justify-content:center;transition:all .2s}
+.hz-del{position:absolute;top:10px;right:12px;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-size:12px;color:var(--text-secondary);display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:1}
 .hz-del:hover{background:#FEF2F2;color:#DC2626;border-color:#DC2626}
+
+/* Divider */
+.hz-divider{border:none;border-top:1px dashed var(--border);margin:0}
+
+/* Responsive */
+@media(max-width:860px){
+  .hz-card{grid-template-columns:1fr;gap:10px}
+  .lec-panel{flex-direction:row;flex-wrap:wrap;align-items:flex-end;gap:6px}
+  .lec-panel-title{width:100%}
+  .lec-selects{flex:1;flex-direction:row;gap:4px}
+  .lec-selects .lec-row{flex-direction:column;align-items:stretch}
+  .lec-selects .lec-row label{width:auto;text-align:left;font-size:10px}
+  .lec-selects .lec-row select{font-size:11px;padding:6px 4px}
+  .lec-result{flex:1;min-width:120px}
+  .lec-result .d-score{font-size:22px}
+}
 
 /* Buttons */
 .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 24px;border-radius:60px;font-size:14px;font-weight:600;cursor:pointer;transition:all .25s;border:none;font-family:inherit;white-space:nowrap}
@@ -147,11 +177,15 @@ textarea.form-control{min-height:72px;resize:vertical}
   .main{padding:0!important;max-width:100%!important}
   .card{box-shadow:none!important;border-radius:0!important;border:1.5px solid #333!important;page-break-inside:avoid;padding:12px!important;margin-bottom:10px!important}
   .step-block{background:#fff!important;border:1px solid #ccc!important;page-break-inside:avoid;padding:12px!important;margin-bottom:10px!important}
-  .hz-card{background:#fff!important;border:1px solid #ccc!important;page-break-inside:avoid;padding:8px 10px!important;margin-top:6px!important}
+  .hz-card{background:#fff!important;border:1px solid #ccc!important;page-break-inside:avoid;padding:8px 10px!important;margin-top:6px!important;grid-template-columns:1fr 240px!important;gap:8px!important}
   .hz-field input,.hz-field textarea{border:1px solid #ccc!important;font-size:10pt!important;padding:4px 6px!important}
-  .lec-block .lec-item select{border:1px solid #ccc!important;font-size:9pt!important}
+  .lec-panel{background:#f5f5f5!important;border:1px solid #ccc!important}
+  .lec-selects .lec-row select{border:1px solid #ccc!important;font-size:9pt!important}
   .lec-result{background:#f5f5f5!important}
-  .lec-result .d-score{color:#000!important;font-size:16pt!important}
+  .lec-result .d-score{color:#000!important;font-size:18pt!important}
+  .lec-r-critical,.lec-r-high,.lec-r-moderate,.lec-r-minor,.lec-r-low{background:#f5f5f5!important}
+  .lec-r-critical .d-score,.lec-r-high .d-score,.lec-r-moderate .d-score,.lec-r-minor .d-score,.lec-r-low .d-score{color:#000!important}
+  .hz-divider{border-top-color:#ccc!important}
   .result-bar{background:#f5f5f5!important}
   .result-bar .summary-item .num{color:#000!important;font-size:20pt!important}
   .ref-section{display:none!important}
@@ -161,10 +195,6 @@ textarea.form-control{min-height:72px;resize:vertical}
 .print-time{display:none}
 
 /* Responsive */
-
-item{min-width:80px}
-}
-
 @media(max-width:480px){
   .sheen-nav{padding:0 12px;flex-direction:column}
   .sheen-nav-brand-text{font-size:16px}
@@ -177,11 +207,7 @@ item{min-width:80px}
   .form-control{font-size:13px;padding:8px 10px}
   .btn{padding:8px 14px;font-size:13px;width:100%}
   .btn-group{flex-direction:column;gap:8px}
-  .hz-row{flex-direction:column;gap:6px}
   .hz-field{min-width:100%!important}
-  .lec-block{flex-direction:column;align-items:stretch}
-  .lec-block .lec-item{min-width:100%}
-  .lec-select{font-size:13px}
   .ref-table{font-size:11px}
   .ref-table th,.ref-table td{padding:4px 6px}
   .sheen-footer{padding:12px 16px;font-size:12px}
@@ -521,14 +547,18 @@ function handleLecChange(selectEl) {
   h[field] = val;
   calcHazard(h);
   // 精准更新当前卡片的 D 值和风险等级
-  var lecBlock = selectEl.closest('.lec-block');
-  if (lecBlock) {
-    var dEl = lecBlock.querySelector('.d-score');
-    var lEl = lecBlock.querySelector('.d-level');
-    if (dEl) dEl.textContent = 'D=' + h.d.toFixed(1);
+  var card = selectEl.closest('.hz-card');
+  if (card) {
+    var dEl = card.querySelector('.d-score');
+    var lEl = card.querySelector('.d-level');
+    var rEl = card.querySelector('.lec-result');
+    if (dEl) dEl.textContent = 'D = ' + h.d.toFixed(1);
     if (lEl) {
       lEl.textContent = h.level;
       lEl.className = 'd-level ' + h.cls;
+    }
+    if (rEl) {
+      rEl.className = 'lec-result lec-r-' + h.cls.replace('risk-','');
     }
   }
   saveState();
@@ -585,36 +615,37 @@ function renderAll() {
       h+='<div class="empty-hint">点击 <i class="fa-solid fa-triangle-exclamation" style="color:var(--brand-red)"></i> 添加危害因素</div>';
     } else {
       step.hazards.forEach(function(hz, hi) {
+        var dVal = (hz.d||hz.l*hz.e*hz.c).toFixed(1);
+        var dNum = parseFloat(dVal);
+        var rCls = hz.cls||'risk-moderate';
+        var pCls = 'lec-r-'+rCls.replace('risk-','');
         h+='<div class="hz-card">';
         h+='<span class="hz-num">危害 '+(hi+1)+'</span>';
         h+='<button class="hz-del no-print" onclick="removeHazard('+si+','+hi+')" title="删除危害"><i class="fa-solid fa-xmark"></i></button>';
 
-        // Row 1: 危害因素 | 主要后果
-        h+='<div class="hz-row">';
-        h+='<div class="hz-field w-lg"><label>危害因素/潜在事件 <span class="hint">（人 / 物 / 环境 / 管理）</span></label><input type="text" value="'+esc(hz.factor)+'" onchange="updateHazardText('+si+','+hi+',\'factor\',this.value)" placeholder="例：高处坠落、触电…"></div>';
-        h+='<div class="hz-field w-lg"><label>主要后果</label><input type="text" value="'+esc(hz.consequence)+'" onchange="updateHazardText('+si+','+hi+',\'consequence\',this.value)" placeholder="例：人员伤亡、设备损坏…"></div>';
+        // Left column: main content
+        h+='<div class="hz-main">';
+        h+='<div class="hz-field"><label>危害因素 / 潜在事件 <span class="hint">人 · 物 · 环境 · 管理</span></label><input type="text" value="'+esc(hz.factor)+'" onchange="updateHazardText('+si+','+hi+',\'factor\',this.value)" placeholder="例：高处坠落、触电…"></div>';
+        h+='<div class="hz-field"><label>主要后果</label><input type="text" value="'+esc(hz.consequence)+'" onchange="updateHazardText('+si+','+hi+',\'consequence\',this.value)" placeholder="例：人员伤亡、设备损坏…"></div>';
+        h+='<div class="hz-field"><label>现有控制措施</label><input type="text" value="'+esc(hz.existingControl)+'" onchange="updateHazardText('+si+','+hi+',\'existingControl\',this.value)" placeholder="当前已实施的安全防护、操作规定…"></div>';
+        h+='<hr class="hz-divider">';
+        h+='<div class="hz-field"><label>建议改进措施 <span class="hint">风险等级 ≥3 级时必须填写</span></label><input type="text" value="'+esc(hz.improvement||'')+'" onchange="updateHazardText('+si+','+hi+',\'improvement\',this.value)" placeholder="补充控制措施，明确责任人与完成时限…"></div>';
         h+='</div>';
 
-        // Row 2: 现有控制措施 | LEC评分+D值+风险等级
-        h+='<div class="hz-row">';
-        h+='<div class="hz-field w-lg"><label>现有控制措施</label><input type="text" value="'+esc(hz.existingControl)+'" onchange="updateHazardText('+si+','+hi+',\'existingControl\',this.value)" placeholder="当前已实施的安全防护、操作规定…"></div>';
-        h+='<div class="hz-field">';
-        h+='<label>L / E / C 评分</label>';
-        h+='<div class="lec-block">';
-        h+='<div class="lec-item"><span class="lec-lbl">L 可能性</span><select class="lec-select" data-si="'+si+'" data-hi="'+hi+'" data-field="l">'+mOpts(L_OPTS,hz.l)+'</select></div>';
-        h+='<div class="lec-item"><span class="lec-lbl">E 暴露频率</span><select class="lec-select" data-si="'+si+'" data-hi="'+hi+'" data-field="e">'+mOpts(E_OPTS,hz.e)+'</select></div>';
-        h+='<div class="lec-item"><span class="lec-lbl">C 后果严重度</span><select class="lec-select" data-si="'+si+'" data-hi="'+hi+'" data-field="c">'+mOpts(C_OPTS,hz.c)+'</select></div>';
-        h+='<div class="lec-result">';
-        h+='<div class="d-score">D='+(hz.d||hz.l*hz.e*hz.c).toFixed(1)+'</div>';
-        h+='<div class="d-level '+(hz.cls||'risk-moderate')+'">'+(hz.level||'')+'</div>';
+        // Right column: LEC scoring panel
+        h+='<div class="hz-score">';
+        h+='<div class="lec-panel">';
+        h+='<div class="lec-panel-title"><i class="fa-solid fa-gauge-high"></i>LEC 风险评分</div>';
+        h+='<div class="lec-selects">';
+        h+='<div class="lec-row"><label>L 可能性</label><select class="lec-select" data-si="'+si+'" data-hi="'+hi+'" data-field="l">'+mOpts(L_OPTS,hz.l)+'</select></div>';
+        h+='<div class="lec-row"><label>E 暴露频率</label><select class="lec-select" data-si="'+si+'" data-hi="'+hi+'" data-field="e">'+mOpts(E_OPTS,hz.e)+'</select></div>';
+        h+='<div class="lec-row"><label>C 后果严重度</label><select class="lec-select" data-si="'+si+'" data-hi="'+hi+'" data-field="c">'+mOpts(C_OPTS,hz.c)+'</select></div>';
         h+='</div>';
-        h+='</div></div>';
-        h+='</div>';
-
-        // Row 3: 建议改进措施
-        h+='<div class="hz-row">';
-        h+='<div class="hz-field w-lg"><label>建议改进措施 <span class="hint">（风险等级≥3级时必须填写）</span></label><input type="text" value="'+esc(hz.improvement||'')+'" onchange="updateHazardText('+si+','+hi+',\'improvement\',this.value)" placeholder="补充控制措施，明确责任人与完成时限…"></div>';
-        h+='</div>';
+        h+='<div class="lec-result '+pCls+'">';
+        h+='<div class="d-score">D = '+dVal+'</div>';
+        h+='<div class="d-eq">L × E × C</div>';
+        h+='<div class="d-level '+rCls+'">'+(hz.level||'')+'</div>';
+        h+='</div></div></div>';
 
         h+='</div>';
       });
