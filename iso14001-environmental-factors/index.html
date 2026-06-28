@@ -35,7 +35,7 @@ h1 i{color:var(--red)}.sub{font-size:12px;color:var(--text2);margin-bottom:14px}
 .btn-d{background:#DC2626;color:#fff}.btn-d:hover{background:#B91C1C}
 .btn-bad{background:var(--card);color:var(--red);border:1.5px solid var(--red)}.btn-bad:hover{background:var(--redL)}.btn-sm{padding:5px 10px;font-size:10px}
 .tbl-w{overflow-x:auto}
-.dt{min-width:1300px;border-collapse:collapse;font-size:11px}
+.dt{min-width:1500px;border-collapse:collapse;font-size:11px}
 .dt th,.dt td{padding:5px 6px;border:1px solid var(--bd);vertical-align:middle;white-space:nowrap}
 .dt th{background:#1F4E79;color:#fff;font-weight:700;font-size:10px}.dt td{background:var(--card)}
 .dt td input,.dt td select{width:95px;border:1px solid var(--bd);padding:3px 4px;font-size:10px;font-family:inherit;border-radius:3px}.dt td input:focus,.dt td select:focus{outline:none;border-color:var(--red)}
@@ -111,7 +111,7 @@ h1 i{color:var(--red)}.sub{font-size:12px;color:var(--text2);margin-bottom:14px}
 <div class="sg">
 <div class="rc"><strong>规则1 — 法规严重不符</strong>法规得分 = 4分 → 直接判定</div>
 <div class="rc"><strong>规则2 — 影响严重</strong>影响程度 = 4分 → 直接判定</div>
-<div class="rc"><strong>规则3 — 总分阈值</strong>四项总分 ≥ 12分 → 累计达标</div>
+<div class="rc"><strong>规则3 — 总分阈值</strong>六项总分 ≥ 16分 → 累计达标</div>
 <div class="rc"><strong>🔥 规则4 — 火灾/爆炸</strong>涉及火灾爆炸风险 → 直接判定</div>
 <div class="rc"><strong>⚖ 规则5 — 违规项</strong>存在行政处罚或明确违规 → 直接判定</div>
 <div class="rc" style="border-color:var(--red);background:#FFF0F0;"><strong>✋ 规则6 — 手动标记</strong>评价人手动指定 → 覆盖自动计算结果</div>
@@ -135,7 +135,7 @@ h1 i{color:var(--red)}.sub{font-size:12px;color:var(--text2);margin-bottom:14px}
 <span style="font-size:11px;color:var(--text2);">共<strong id="nRow">0</strong>条 | 重要<strong id="nMj" style="color:#DC2626;">0</strong></span>
 </div>
 <div class="tbl-w"><table class="dt" id="mt">
-<thead><tr><th>#</th><th>部门</th><th>工序/活动</th><th>状态</th><th>环境因素</th><th>影响类型</th><th>适用法规</th><th>量化数据</th><th>a影响</th><th>b法规</th><th>c数量</th><th>d频率</th><th>总分</th><th>重要因素</th><th>控制措施</th><th>评价人</th><th>日期</th><th></th></tr></thead>
+<thead><tr><th>#</th><th>部门</th><th>工序/活动</th><th>状态</th><th>环境因素</th><th>影响类型</th><th>适用法规</th><th>量化数据</th><th>a影响</th><th>b法规</th><th>c数量</th><th>d频率</th><th>e关注</th><th>f能耗</th><th>总分</th><th>重要因素</th><th>控制措施</th><th>评价人</th><th>日期</th><th></th></tr></thead>
 <tbody id="tb"></tbody></table></div></div>
 
 <!-- TAB 2: 统计看板 -->
@@ -177,7 +177,7 @@ let T=JSON.parse(localStorage.getItem('isoT')||'[]');
 let ci={}, fl='all';
 
 function sv(){localStorage.setItem('isoR',JSON.stringify(R));localStorage.setItem('isoT',JSON.stringify(T))}
-function nR(){return{dept:'',process:'',state:'正常',factor:'',impType:'',law:'',qty:'',s1:'',s2:'',s3:'',s4:'',major:'',manual:'',control:'',person:'',date:'',total:0}}
+function nR(){return{dept:'',process:'',state:'正常',factor:'',impType:'',law:'',qty:'',s1:'',s2:'',s3:'',s4:'',s5:'',s6:'',major:'',manual:'',control:'',person:'',date:'',total:0}}
 function e(s){return(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
 
 // ===== TABS =====
@@ -191,8 +191,8 @@ function sw(n){
 // ===== MAIN TABLE =====
 function ren(){
   R.forEach(function(r,i){
-    r.total=(+r.s1||0)+(+r.s2||0)+(+r.s3||0)+(+r.s4||0);
-    var auto=(r.s1==4||r.s2==4||r.total>=12)?'是':'否';
+    r.total=(+r.s1||0)+(+r.s2||0)+(+r.s3||0)+(+r.s4||0)+(+r.s5||0)+(+r.s6||0);
+    var auto=(r.s1==4||r.s2==4||r.total>=16)?'是':'否';
     r.major=(r.manual==='是')?'是':(r.manual==='否')?'否':auto;
   });
   var h='';
@@ -209,11 +209,11 @@ function ren(){
     h+='<td><input value="'+e(r.impType)+'" onchange="uc('+i+',\'impType\',this.value)"></td>';
     h+='<td><input value="'+e(r.law)+'" onchange="uc('+i+',\'law\',this.value)"></td>';
     h+='<td><input value="'+e(r.qty)+'" onchange="uc('+i+',\'qty\',this.value)" style="width:70px"></td>';
-    ['s1','s2','s3','s4'].forEach(function(k){
-      h+='<td class="sc"><input type="number" min="1" max="4" value="'+e(r[k])+'" onchange="uc('+i+',\''+k+'\',this.value);ren()"></td>';
+    ['s1','s2','s3','s4','s5','s6'].forEach(function(k){
+      h+='<td class="sc"><input type="number" min="1" max="4" value="'+e(r[k]||'')+'" onchange="uc('+i+',\''+k+'\',this.value);ren()"></td>';
     });
     h+='<td style="font-weight:700;">'+r.total+'</td>';
-    h+='<td class="'+(r.major==='是'?'mj-y':'mj-n')+'" style="cursor:pointer" title="点击切换手动标记" onclick="tgm('+i+')">'+r.major+'</td>';
+    h+='<td class="'+(r.major==='是'?'mj-y':'mj-n')+'" style="cursor:pointer;font-weight:700;'+(r.major==='是'?'color:var(--red);':'')+'" title="点击切换手动标记" onclick="tgm('+i+')">'+(r.major||'—')+'</td>';
     h+='<td><input value="'+e(r.control)+'" onchange="uc('+i+',\'control\',this.value)"></td>';
     h+='<td><input value="'+e(r.person)+'" onchange="uc('+i+',\'person\',this.value)" style="width:60px"></td>';
     h+='<td><input type="date" value="'+e(r.date)+'" onchange="uc('+i+',\'date\',this.value)" style="width:100px"></td>';
@@ -266,7 +266,7 @@ async function ai(){
   if(a.mode==='own'&&!a.key){sap();return}
   if(a.mode==='proxy'&&!a.proxy){sap();return}
   document.getElementById('bAI').disabled=true;document.getElementById('aiLd').style.display='inline';
-  var p='你是ISO 14001审核专家。为制造业识别10-15条典型环境因素。返回JSON数组，每项含dept,process,state(正常/异常/紧急),factor,impType(大气污染/水体污染/土壤污染/噪声/固废危废/资源消耗),law,qty,s1~s4(1-4分 影响/法规/数量/频率),control。覆盖涂装、动力、仓储、废水、办公场景。';
+  var p='你是ISO 14001审核专家。为制造业识别10-15条典型环境因素。返回JSON数组，每项含dept,process,state(正常/异常/紧急),factor,impType(大气污染/水体污染/土壤污染/噪声/固废危废/资源消耗),law,qty,s1~s6(1-4分:a影响/b法规/c数量/d频率/e关注/f能耗),control。覆盖涂装、动力、仓储、废水、办公场景。';
   try{
     var url,hdr,body=JSON.stringify({model:'glm-4-flash',messages:[{role:'user',content:p}],temperature:0.5,max_tokens:3000});
     if(a.mode==='proxy'){url=a.proxy;hdr={'Content-Type':'application/json'}}
@@ -274,7 +274,7 @@ async function ai(){
     var r=await fetch(url,{method:'POST',headers:hdr,body:body});
     var d=await r.json();var t=d.choices[0].message.content;
     var m=t.match(/\[[\s\S]*\]/);var arr=JSON.parse(m?m[0]:t);
-    R=arr.map(function(o){return{dept:o.dept||'',process:o.process||'',state:o.state||'正常',factor:o.factor||'',impType:o.impType||'',law:o.law||'',qty:o.qty||'',s1:String(o.s1||''),s2:String(o.s2||''),s3:String(o.s3||''),s4:String(o.s4||''),control:o.control||'',major:'',manual:'',person:'',date:'',total:0}});
+    R=arr.map(function(o){return{dept:o.dept||'',process:o.process||'',state:o.state||'正常',factor:o.factor||'',impType:o.impType||'',law:o.law||'',qty:o.qty||'',s1:String(o.s1||''),s2:String(o.s2||''),s3:String(o.s3||''),s4:String(o.s4||''),s5:String(o.s5||''),s6:String(o.s6||''),control:o.control||'',major:'',manual:'',person:'',date:'',total:0}});
     ren();
   }catch(e){alert('AI失败: '+(e.message||''))}
   document.getElementById('bAI').disabled=false;document.getElementById('aiLd').style.display='none';
@@ -328,8 +328,8 @@ function xls(rows,cols,fn){
   var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=fn;a.click();URL.revokeObjectURL(a.href);
 }
 function xls1(){
-  var d=[];R.forEach(function(r,i){d.push([i+1,r.dept,r.process,r.state,r.factor,r.impType,r.law,r.qty,r.s1,r.s2,r.s3,r.s4,r.total,r.major,r.control,r.person,r.date])});
-  xls(d,['#','部门','工序/活动','状态','环境因素','影响类型','适用法规','量化数据','a影响','b法规','c数量','d频率','总分','重要因素','控制措施','评价人','日期'],'环境因素识别与评价.xls');
+  var d=[];R.forEach(function(r,i){d.push([i+1,r.dept,r.process,r.state,r.factor,r.impType,r.law,r.qty,r.s1,r.s2,r.s3,r.s4,r.s5,r.s6,r.total,r.major,r.control,r.person,r.date])});
+  xls(d,['#','部门','工序/活动','状态','环境因素','影响类型','适用法规','量化数据','a影响','b法规','c数量','d频率','e关注','f能耗','总分','重要因素','控制措施','评价人','日期'],'环境因素识别与评价.xls');
 }
 function xls3(){
   var d=[];T.forEach(function(t,i){d.push([i+1,t.factor,t.dept,t.goal,t.action,t.respDept,t.person,t.budget,t.planDate,t.actualDate,t.status])});
@@ -358,11 +358,11 @@ function prt3(){
 
 // ===== DEMO =====
 function demo(){
-  R=[{dept:'涂装车间',process:'喷漆作业',state:'正常',factor:'VOCs排放(二甲苯/甲苯)',impType:'大气污染',law:'大气污染防治法、GB 16297',qty:'2.5',s1:'3',s2:'2',s3:'3',s4:'4',manual:'',control:'活性炭吸附+UV光解',person:'张三',date:'2026-01-15'},
-     {dept:'动力部',process:'柴油发电机运行',state:'异常',factor:'柴油燃烧废气(SO₂/NOx)',impType:'大气污染',law:'大气污染防治法',qty:'0.8',s1:'2',s2:'3',s3:'2',s4:'2',manual:'',control:'低硫柴油;每月试机',person:'赵六',date:'2026-01-15'},
-     {dept:'全厂',process:'办公照明/空调',state:'正常',factor:'电力消耗',impType:'资源消耗',law:'节约能源法',qty:'120',s1:'2',s2:'1',s3:'3',s4:'4',manual:'',control:'LED改造;分区控制',person:'钱七',date:'2026-01-14'},
-     {dept:'仓库',process:'化学品存储',state:'紧急',factor:'化学品泄漏(油漆/溶剂)',impType:'土壤污染',law:'水污染防治法、固废法',qty:'—',s1:'4',s2:'3',s3:'1',s4:'1',manual:'',control:'防渗托盘+二次围堰',person:'周八',date:'2026-01-15'},
-     {dept:'污水处理站',process:'废水处理',state:'正常',factor:'COD/氨氮/SS排放超标',impType:'水体污染',law:'水污染防治法、GB 8978',qty:'3.2',s1:'3',s2:'4',s3:'3',s4:'3',manual:'',control:'A/O生化+MBR膜过滤',person:'吴九',date:'2026-01-14'}];
+  R=[{dept:'涂装车间',process:'喷漆作业',state:'正常',factor:'VOCs排放(二甲苯/甲苯)',impType:'大气污染',law:'大气污染防治法、GB 16297',qty:'2.5',s1:'3',s2:'2',s3:'3',s4:'4',s5:'3',s6:'3',manual:'',control:'活性炭吸附+UV光解',person:'张三',date:'2026-01-15'},
+     {dept:'动力部',process:'柴油发电机运行',state:'异常',factor:'柴油燃烧废气(SO₂/NOx)',impType:'大气污染',law:'大气污染防治法',qty:'0.8',s1:'2',s2:'3',s3:'2',s4:'2',s5:'2',s6:'2',manual:'',control:'低硫柴油;每月试机',person:'赵六',date:'2026-01-15'},
+     {dept:'全厂',process:'办公照明/空调',state:'正常',factor:'电力消耗',impType:'资源消耗',law:'节约能源法',qty:'120',s1:'2',s2:'1',s3:'3',s4:'4',s5:'1',s6:'4',manual:'',control:'LED改造;分区控制',person:'钱七',date:'2026-01-14'},
+     {dept:'仓库',process:'化学品存储',state:'紧急',factor:'化学品泄漏(油漆/溶剂)',impType:'土壤污染',law:'水污染防治法、固废法',qty:'—',s1:'4',s2:'3',s3:'1',s4:'1',s5:'4',s6:'1',manual:'',control:'防渗托盘+二次围堰',person:'周八',date:'2026-01-15'},
+     {dept:'污水处理站',process:'废水处理',state:'正常',factor:'COD/氨氮/SS排放超标',impType:'水体污染',law:'水污染防治法、GB 8978',qty:'3.2',s1:'3',s2:'4',s3:'3',s4:'3',s5:'3',s6:'3',manual:'',control:'A/O生化+MBR膜过滤',person:'吴九',date:'2026-01-14'}];
   T=[{factor:'VOCs排放超标',dept:'涂装车间',goal:'VOCs降至≤40mg/m³',action:'更换活性炭+在线监测',respDept:'安环部',person:'张三',budget:'15',planDate:'2026-03-31',actualDate:'2026-03-25',status:'已验证'},
      {factor:'化学品泄漏风险',dept:'仓库',goal:'全年泄漏事故为0',action:'备品防漏托盘+季度演练',respDept:'安环部',person:'周八',budget:'8',planDate:'2026-04-30',actualDate:'',status:'实施中'}];
   ren();tk();sv();
