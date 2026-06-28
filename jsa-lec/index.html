@@ -8,209 +8,184 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--black:#000000;--text-primary:#111827;--text-secondary:#6B7280;--bg-page:#F8FAFC;--bg-card:#FFFFFF;--border:#E5E7EB;--border-light:#F3F4F6;--brand-red:#7A1825;--brand-red-hover:#5C121C;--brand-red-light:#FEF2F2;--amber:#FBBF24;--radius-lg:20px;--radius-xl:28px;--radius-md:12px;--radius-sm:8px;--transition:0.2s ease}
-body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg-page);color:var(--text-primary);min-height:100vh;line-height:1.6;padding-bottom:0}
+:root{--black:#000;--text:#111827;--text2:#6B7280;--bg:#F8FAFC;--card:#fff;--bd:#E5E7EB;--bdL:#F3F4F6;--red:#7A1825;--redH:#5C121C;--redL:#FEF2F2;--amb:#FBBF24;--r:12px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
 
 /* Nav */
-.sheen-nav{background:var(--black);padding:0 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:4px solid var(--brand-red);flex-wrap:wrap;min-height:56px}
-.sheen-nav-brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;padding:14px 0}
-.sheen-nav-brand i{font-size:24px;color:var(--amber)}
-.sheen-nav-brand-text{font-size:18px;font-weight:700;letter-spacing:.5px}
-.sheen-nav-tools{display:flex;gap:4px;flex-wrap:wrap}
-.sheen-nav-tool{display:flex;align-items:center;gap:6px;padding:8px 16px;color:rgba(255,255,255,.7);text-decoration:none;font-size:13px;font-weight:500;border-radius:60px;transition:all .2s ease;white-space:nowrap}
+.sheen-nav{background:var(--black);padding:0 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:4px solid var(--red);flex-wrap:wrap;min-height:52px}
+.sheen-nav-brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;padding:12px 0}
+.sheen-nav-brand i{font-size:22px;color:var(--amb)}
+.sheen-nav-brand-text{font-size:15px;font-weight:700;letter-spacing:.5px}
+.sheen-nav-tools{display:flex;gap:2px;flex-wrap:wrap}
+.sheen-nav-tool{display:flex;align-items:center;gap:4px;padding:5px 10px;color:rgba(255,255,255,.7);text-decoration:none;font-size:11px;font-weight:500;border-radius:60px;transition:all .2s;white-space:nowrap}
 .sheen-nav-tool:hover{background:rgba(255,255,255,.1);color:#fff}
 .sheen-nav-tool.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600}
 
 /* Layout */
-.main{padding:24px 32px;max-width:1200px;margin:0 auto;width:100%}
-.page-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:24px}
-.page-header h1{font-size:24px;font-weight:700;color:var(--text-primary)}
-.page-header .badge{display:flex;align-items:center;gap:8px;background:var(--brand-red-light);color:var(--brand-red);padding:8px 18px;border-radius:60px;font-size:13px;font-weight:600}
+.app-wrap{max-width:100%;margin:0 auto;padding:16px 12px}
+h1{font-size:20px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+h1 i{color:var(--red)}.sub{font-size:12px;color:var(--text2);margin-bottom:14px}
 
 /* Cards */
-.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin-bottom:20px}
-.card-title{font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:16px;display:flex;align-items:center;gap:10px}
-.card-title i{color:var(--brand-red);font-size:16px;width:20px;text-align:center}
-.card-title .num{background:var(--brand-red);color:#fff;width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.card h3{font-size:14px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.card h3 i{color:var(--red)}
+.card h3 .num{background:var(--red);color:#fff;min-width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.hint{font-size:11px;color:var(--text2);margin-bottom:10px;padding:6px 10px;background:var(--bg);border-radius:6px}
 
 /* Form */
-.form-row{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:12px}
+.form-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
 .form-row:last-child{margin-bottom:0}
-.form-group{flex:1;min-width:160px}
-.form-group.w-sm{flex:0.7;min-width:120px}
-.form-group label{display:block;font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:4px}
-.form-control{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:var(--bg-card);color:var(--text-primary);font-family:inherit}
-.form-control:focus{outline:none;border-color:var(--brand-red);box-shadow:0 0 0 4px rgba(122,24,37,.08)}
-select.form-control{cursor:pointer}
-textarea.form-control{min-height:72px;resize:vertical}
+.form-group{flex:1;min-width:140px}
+.form-group.w-sm{flex:0.7;min-width:100px}
+.form-group label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:3px}
+.form-control{width:100%;padding:8px 10px;border:1.5px solid var(--bd);border-radius:6px;font-size:13px;background:var(--card);color:var(--text);font-family:inherit}
+.form-control:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 4px rgba(122,24,37,.08)}
+textarea.form-control{min-height:56px;resize:vertical}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:60px;font-size:12px;font-weight:600;cursor:pointer;transition:all .25s;border:none;font-family:inherit;white-space:nowrap}
+.btn-p{background:var(--red);color:#fff}.btn-p:hover{background:var(--redH)}
+.btn-o{background:var(--card);border:1.5px solid var(--bd);color:var(--text)}.btn-o:hover{border-color:var(--red);color:var(--red)}
+.btn-d{background:#DC2626;color:#fff}.btn-d:hover{background:#B91C1C}
+.btn-bad{background:var(--card);color:var(--red);border:1.5px solid var(--red)}.btn-bad:hover{background:var(--redL)}
+.btn-success{background:#16A34A;color:#fff}.btn-success:hover{background:#15803D}
+.btn-file{background:#2563EB;color:#fff}.btn-file:hover{background:#1D4ED8}
+.btn-sm{padding:5px 10px;font-size:10px}
+.btn-group{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
 
 /* Steps */
-.step-block{background:var(--bg-page);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:20px 20px 16px;margin-bottom:16px}
-.step-block .step-header{display:flex;align-items:center;gap:12px;margin-bottom:8px}
-.step-block .step-num{background:var(--text-primary);color:#fff;min-width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+.step-block{background:var(--bg);border:1px solid var(--bdL);border-radius:var(--r);padding:14px 16px;margin-bottom:12px}
+.step-block .step-header{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.step-block .step-num{background:var(--text);color:#fff;min-width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
 .step-block .step-input{flex:1}
 .step-block .step-actions{display:flex;gap:4px}
-.step-block .step-actions button{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:13px;color:var(--text-secondary);display:flex;align-items:center;justify-content:center;transition:all .2s}
-.step-block .step-actions button:hover{background:var(--brand-red-light);color:var(--brand-red);border-color:var(--brand-red)}
+.step-block .step-actions button{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--bd);background:var(--card);cursor:pointer;font-size:11px;color:var(--text2);display:flex;align-items:center;justify-content:center;transition:all .2s}
+.step-block .step-actions button:hover{background:var(--redL);color:var(--red);border-color:var(--red)}
 
-/* Hazard cards within step */
-.hz-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-md);padding:16px 18px;margin-top:12px;position:relative;display:grid;grid-template-columns:1fr 300px;gap:14px}
-.hz-card .hz-num{position:absolute;top:-10px;left:14px;background:var(--brand-red);color:#fff;font-size:11px;font-weight:700;padding:2px 10px;border-radius:10px}
-.hz-card .hz-main{display:flex;flex-direction:column;gap:10px}
+/* Hazard cards */
+.hz-card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:14px 16px;margin-top:10px;position:relative;display:grid;grid-template-columns:1fr 280px;gap:12px}
+.hz-card .hz-num{position:absolute;top:-9px;left:12px;background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:1px 8px;border-radius:10px}
+.hz-card .hz-main{display:flex;flex-direction:column;gap:8px}
 .hz-card .hz-score{display:flex;flex-direction:column}
-.hz-field label{display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:3px}
-.hz-field label .hint{font-weight:400;font-size:11px;color:#9CA3AF}
-.hz-field input,.hz-field textarea{width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;background:var(--bg-card);color:var(--text-primary)}
-.hz-field textarea{min-height:44px;resize:vertical}
-.hz-field input:focus,.hz-field textarea:focus{outline:none;border-color:var(--brand-red);box-shadow:0 0 0 3px rgba(122,24,37,.06)}
+.hz-field label{display:block;font-size:11px;font-weight:600;color:var(--text2);margin-bottom:2px}
+.hz-field label .hint{font-weight:400;font-size:10px;color:#9CA3AF}
+.hz-field input{width:100%;padding:7px 9px;border:1.5px solid var(--bd);border-radius:5px;font-size:12px;font-family:inherit;background:var(--card);color:var(--text)}
+.hz-field input:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(122,24,37,.06)}
+.hz-del{position:absolute;top:8px;right:10px;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--bd);background:var(--card);cursor:pointer;font-size:11px;color:var(--text2);display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:1}
+.hz-del:hover{background:var(--redL);color:#DC2626;border-color:#DC2626}
+.hz-divider{border:none;border-top:1px dashed var(--bd);margin:0}
 
 /* LEC scoring panel */
-.lec-panel{background:var(--bg-page);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:14px;display:flex;flex-direction:column;gap:10px}
-.lec-panel-title{font-size:12px;font-weight:700;color:var(--text-primary);display:flex;align-items:center;gap:6px;margin-bottom:0}
-.lec-panel-title i{color:var(--brand-red);font-size:13px}
-.lec-selects{display:flex;flex-direction:column;gap:8px}
-.lec-selects .lec-row{display:flex;align-items:center;gap:8px}
-.lec-selects .lec-row label{width:88px;font-size:12px;font-weight:600;color:var(--text-secondary);flex-shrink:0;text-align:right}
-.lec-selects .lec-row select{flex:1;padding:7px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:12px;background:var(--bg-card);font-family:inherit;cursor:pointer;min-width:0}
-.lec-selects .lec-row select:focus{outline:none;border-color:var(--brand-red)}
-.lec-result{text-align:center;border-radius:var(--radius-md);padding:12px 10px}
-.lec-result .d-score{font-size:28px;font-weight:700;line-height:1.1;margin-bottom:4px}
-.lec-result .d-eq{font-size:12px;color:var(--text-secondary);margin-bottom:2px}
-.lec-result .d-level{font-size:13px;font-weight:700;padding:3px 12px;border-radius:6px;display:inline-block}
+.lec-panel{background:var(--bg);border:1px solid var(--bdL);border-radius:var(--r);padding:12px;display:flex;flex-direction:column;gap:8px}
+.lec-panel-title{font-size:11px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:5px}
+.lec-panel-title i{color:var(--red);font-size:12px}
+.lec-selects{display:flex;flex-direction:column;gap:6px}
+.lec-selects .lec-row{display:flex;align-items:center;gap:6px}
+.lec-selects .lec-row label{width:82px;font-size:11px;font-weight:600;color:var(--text2);flex-shrink:0;text-align:right}
+.lec-selects .lec-row select{flex:1;padding:6px 7px;border:1.5px solid var(--bd);border-radius:5px;font-size:11px;background:var(--card);font-family:inherit;cursor:pointer;min-width:0}
+.lec-selects .lec-row select:focus{outline:none;border-color:var(--red)}
+.lec-result{text-align:center;border-radius:8px;padding:10px 8px}
+.lec-result .d-score{font-size:24px;font-weight:700;line-height:1.1;margin-bottom:2px}
+.lec-result .d-eq{font-size:10px;color:var(--text2);margin-bottom:1px}
+.lec-result .d-level{font-size:11px;font-weight:700;padding:2px 10px;border-radius:4px;display:inline-block}
 
 /* Risk result bg */
-.lec-r-critical{background:linear-gradient(135deg,#FEE2E2,#FECACA)}
-.lec-r-critical .d-score{color:#991B1B}
-.lec-r-high{background:linear-gradient(135deg,#FEE2E2,#FECACA)}
-.lec-r-high .d-score{color:#991B1B}
-.lec-r-moderate{background:linear-gradient(135deg,#FFEDD5,#FED7AA)}
-.lec-r-moderate .d-score{color:#9A3412}
-.lec-r-minor{background:linear-gradient(135deg,#FEF9C3,#FEF3C7)}
-.lec-r-minor .d-score{color:#854D0E}
-.lec-r-low{background:linear-gradient(135deg,#ECFDF5,#DCFCE7)}
-.lec-r-low .d-score{color:#166534}
+.lec-r-critical{background:linear-gradient(135deg,#FEE2E2,#FECACA)}.lec-r-critical .d-score{color:#991B1B}
+.lec-r-high{background:linear-gradient(135deg,#FEE2E2,#FECACA)}.lec-r-high .d-score{color:#991B1B}
+.lec-r-moderate{background:linear-gradient(135deg,#FFEDD5,#FED7AA)}.lec-r-moderate .d-score{color:#9A3412}
+.lec-r-minor{background:linear-gradient(135deg,#FEF9C3,#FEF3C7)}.lec-r-minor .d-score{color:#854D0E}
+.lec-r-low{background:linear-gradient(135deg,#ECFDF5,#DCFCE7)}.lec-r-low .d-score{color:#166534}
 
-/* Risk colors */
+/* Risk badge colors */
 .risk-critical{background:#FCA5A5;color:#7F1D1D}
 .risk-high{background:#FECACA;color:#991B1B}
 .risk-moderate{background:#FED7AA;color:#9A3412}
 .risk-minor{background:#FEF9C3;color:#854D0E}
 .risk-low{background:#DCFCE7;color:#166534}
 
-.hz-del{position:absolute;top:10px;right:12px;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-size:12px;color:var(--text-secondary);display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:1}
-.hz-del:hover{background:#FEF2F2;color:#DC2626;border-color:#DC2626}
-
-/* Divider */
-.hz-divider{border:none;border-top:1px dashed var(--border);margin:0}
-
-/* Responsive */
-@media(max-width:860px){
-  .hz-card{grid-template-columns:1fr;gap:10px}
-  .lec-panel{flex-direction:row;flex-wrap:wrap;align-items:flex-end;gap:6px}
-  .lec-panel-title{width:100%}
-  .lec-selects{flex:1;flex-direction:row;gap:4px}
-  .lec-selects .lec-row{flex-direction:column;align-items:stretch}
-  .lec-selects .lec-row label{width:auto;text-align:left;font-size:10px}
-  .lec-selects .lec-row select{font-size:11px;padding:6px 4px}
-  .lec-result{flex:1;min-width:120px}
-  .lec-result .d-score{font-size:22px}
-}
-
-/* Buttons */
-.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 24px;border-radius:60px;font-size:14px;font-weight:600;cursor:pointer;transition:all .25s;border:none;font-family:inherit;white-space:nowrap}
-.btn-primary{background:var(--brand-red);color:#fff}
-.btn-primary:hover{background:var(--brand-red-hover);transform:translateY(-2px);box-shadow:0 8px 20px rgba(122,24,37,.25)}
-.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text-primary)}
-.btn-outline:hover{border-color:var(--brand-red);color:var(--brand-red);background:var(--brand-red-light)}
-.btn-print{background:var(--bg-card);color:var(--brand-red);border:1.5px solid var(--brand-red)}
-.btn-print:hover{background:var(--brand-red-light);transform:translateY(-2px);box-shadow:0 8px 20px rgba(122,24,37,.15)}
-.btn-success{background:#16A34A;color:#fff}
-.btn-success:hover{background:#15803D;transform:translateY(-2px);box-shadow:0 8px 20px rgba(22,163,74,.25)}
-.btn-file{background:#2563EB;color:#fff}
-.btn-file:hover{background:#1D4ED8;transform:translateY(-2px);box-shadow:0 8px 20px rgba(37,99,235,.25)}
-.btn-sm{padding:7px 16px;font-size:13px}
-.btn-group{display:flex;gap:10px;flex-wrap:wrap}
-
-/* Summary */
-.result-bar{background:var(--brand-red-light);border-radius:var(--radius-md);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px}
-.result-bar .summary-item{text-align:center;flex:1;min-width:70px}
-.result-bar .summary-item .num{font-size:28px;font-weight:700;color:var(--brand-red)}
-.result-bar .summary-item .lbl{font-size:12px;color:var(--text-secondary);margin-top:2px}
+/* Summary KPI cards */
+.kg{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-bottom:14px}
+.kc{background:var(--card);border-radius:var(--r);padding:12px;text-align:center;border:1px solid var(--bd)}
+.kc .kn{font-size:24px;font-weight:700}.kc .kl{font-size:11px;color:var(--text2);margin-top:2px}
 
 /* Reference tables */
-.ref-section{margin-top:20px}
-.ref-section summary{font-size:14px;font-weight:600;color:var(--text-secondary);cursor:pointer;padding:10px 0;user-select:none;display:flex;align-items:center;gap:6px}
-.ref-section summary i{font-size:12px;color:var(--brand-red)}
-.ref-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;margin-bottom:16px}
-.ref-table th,.ref-table td{padding:8px 10px;border:1px solid var(--border);text-align:center;vertical-align:middle}
-.ref-table th{background:var(--bg-page);font-weight:600;color:var(--text-primary);font-size:12px}
-.ref-table td{color:var(--text-secondary);font-size:12px;line-height:1.5}
-.ref-table .na{color:#D1D5DB}
-.ref-notes{font-size:12px;color:var(--text-secondary);background:var(--bg-page);padding:12px 16px;border-radius:var(--radius-sm);line-height:1.8;margin-bottom:16px}
-.ref-notes h4{font-size:13px;font-weight:600;color:var(--text-primary);margin:12px 0 6px}
+.ref-section{margin-top:12px}
+.ref-section summary{font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;padding:8px 0;user-select:none;display:flex;align-items:center;gap:5px}
+.ref-section summary i{font-size:11px;color:var(--red)}
+.tbl-w{overflow-x:auto}
+.dt{min-width:600px;border-collapse:collapse;font-size:11px}
+.dt th,.dt td{padding:6px 8px;border:1px solid var(--bd);vertical-align:middle;font-size:11px}
+.dt th{background:#1F4E79;color:#fff;font-weight:700;font-size:10px}.dt td{background:var(--card);color:var(--text)}
+.ref-notes{font-size:11px;color:var(--text2);background:var(--bg);padding:10px 14px;border-radius:6px;line-height:1.8;margin-bottom:12px}
+.ref-notes h4{font-size:12px;font-weight:600;color:var(--text);margin:10px 0 4px}
 .ref-notes h4:first-child{margin-top:0}
-.ref-notes p{margin:4px 0}
-.ref-notes ul{margin:4px 0 4px 18px}
 
 /* Spinner */
-.spinner-inline{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--brand-red);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:4px}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--bd);border-top-color:var(--red);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:4px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* Footer */
-.sheen-footer{text-align:center;padding:16px 32px;font-size:13px;color:var(--text-secondary);border-top:1px solid var(--border);background:var(--bg-card);letter-spacing:.5px}
-.sheen-footer i{color:var(--amber)}
-.sheen-footer strong{color:var(--text-primary)}
+.sheen-footer{text-align:center;padding:14px 24px;font-size:12px;color:var(--text2);border-top:1px solid var(--bd);background:var(--card)}
+.sheen-footer i{color:var(--amb)}.sheen-footer strong{color:var(--text)}
 
-/* Empty state */
-.empty-hint{text-align:center;padding:20px;color:var(--text-secondary);font-size:13px}
+/* Empty */
+.empty-hint{text-align:center;padding:16px;color:var(--text2);font-size:12px}
 
 /* Print */
-
-@media (max-width:768px) {
-  .sheen-nav { padding:8px 12px; }
-  .sheen-nav-tool { padding:6px 10px; font-size:11px; }
-  }
 @media print{
-  @page{size:A4 landscape;margin:12mm 14mm 18mm 14mm;@bottom-center{content:"SHEEN Toolbox \00b7 JSA+LEC 作业安全分析与风险评估记录表";font-size:8pt;color:#666}}
+  @page{size:A4 landscape;margin:12mm 14mm 18mm 14mm;@bottom-center{content:"SHEEN Toolbox \00b7 JSA+LEC 作业安全分析与风险评估";font-size:8pt;color:#666}}
   body{background:#fff!important;font-size:10pt;color:#000!important}
-  .sheen-nav,.sheen-footer,.btn,.btn-group,.no-print,.step-actions,.hz-del{display:none!important}
-  .main{padding:0!important;max-width:100%!important}
-  .card{box-shadow:none!important;border-radius:0!important;border:1.5px solid #333!important;page-break-inside:avoid;padding:12px!important;margin-bottom:10px!important}
-  .step-block{background:#fff!important;border:1px solid #ccc!important;page-break-inside:avoid;padding:12px!important;margin-bottom:10px!important}
-  .hz-card{background:#fff!important;border:1px solid #ccc!important;page-break-inside:avoid;padding:8px 10px!important;margin-top:6px!important;grid-template-columns:1fr 240px!important;gap:8px!important}
-  .hz-field input,.hz-field textarea{border:1px solid #ccc!important;font-size:10pt!important;padding:4px 6px!important}
+  .sheen-nav,.sheen-footer,.btn,.btn-group,.no-print,.step-actions,.hz-del,.ref-section{display:none!important}
+  .app-wrap{padding:0!important;max-width:100%!important}
+  .card{box-shadow:none!important;border-radius:0!important;border:1.5px solid #333!important;page-break-inside:avoid;padding:10px!important;margin-bottom:8px!important}
+  .step-block{background:#fff!important;border:1px solid #ccc!important;page-break-inside:avoid;padding:10px!important;margin-bottom:8px!important}
+  .hz-card{background:#fff!important;border:1px solid #ccc!important;page-break-inside:avoid;padding:6px 8px!important;margin-top:4px!important;grid-template-columns:1fr 200px!important;gap:6px!important}
+  .hz-field input{border:1px solid #ccc!important;font-size:9pt!important;padding:3px 5px!important}
   .lec-panel{background:#f5f5f5!important;border:1px solid #ccc!important}
-  .lec-selects .lec-row select{border:1px solid #ccc!important;font-size:9pt!important}
-  .lec-result{background:#f5f5f5!important}
-  .lec-result .d-score{color:#000!important;font-size:18pt!important}
-  .lec-r-critical,.lec-r-high,.lec-r-moderate,.lec-r-minor,.lec-r-low{background:#f5f5f5!important}
-  .lec-r-critical .d-score,.lec-r-high .d-score,.lec-r-moderate .d-score,.lec-r-minor .d-score,.lec-r-low .d-score{color:#000!important}
+  .lec-selects .lec-row select{border:1px solid #ccc!important;font-size:8pt!important}
+  .lec-result,.lec-r-critical,.lec-r-high,.lec-r-moderate,.lec-r-minor,.lec-r-low{background:#f5f5f5!important}
+  .lec-result .d-score,.lec-r-critical .d-score,.lec-r-high .d-score,.lec-r-moderate .d-score,.lec-r-minor .d-score,.lec-r-low .d-score{color:#000!important;font-size:16pt!important}
   .hz-divider{border-top-color:#ccc!important}
-  .result-bar{background:#f5f5f5!important}
-  .result-bar .summary-item .num{color:#000!important;font-size:20pt!important}
-  .ref-section{display:none!important}
-  .print-time{display:block!important;font-size:9pt;color:#666;text-align:right;margin-bottom:10px}
-  .card-title .num{background:#333!important}
+  .kg{gap:4px!important}.kc{padding:8px!important;border:1px solid #ccc!important}.kc .kn{font-size:18px!important}
+  .print-time{display:block!important;font-size:9pt;color:#666;text-align:right;margin-bottom:8px}
+  .card h3 .num{background:#333!important}
 }
 .print-time{display:none}
 
 /* Responsive */
+@media(max-width:860px){
+  .hz-card{grid-template-columns:1fr;gap:8px}
+  .lec-panel{flex-direction:row;flex-wrap:wrap;align-items:flex-end;gap:6px}
+  .lec-panel-title{width:100%}
+  .lec-selects{flex:1;flex-direction:row;gap:4px}
+  .lec-selects .lec-row{flex-direction:column;align-items:stretch}
+  .lec-selects .lec-row label{width:auto;text-align:left;font-size:9px}
+  .lec-selects .lec-row select{font-size:10px;padding:5px 4px}
+  .lec-result{flex:1;min-width:100px}
+  .lec-result .d-score{font-size:18px}
+}
+@media(max-width:768px){
+  .sheen-nav{padding:6px 8px}.sheen-nav-tool{padding:5px 8px;font-size:10px}
+  .app-wrap{padding:8px 4px}.form-group{min-width:100%}
+}
 @media(max-width:480px){
   .sheen-nav{padding:0 12px;flex-direction:column}
   .sheen-nav-brand-text{font-size:16px}
-  .sheen-nav-tools{gap:2px;}
+  .sheen-nav-tools{gap:2px}
   .sheen-nav-tool{padding:6px 10px;font-size:12px}
-  .main{padding:10px}
-  .page-header h1{font-size:18px}
-  .card{padding:12px}
+  .app-wrap{padding:8px}
+  h1{font-size:16px}
+  .card{padding:10px}
   .form-group{min-width:100%}
-  .form-control{font-size:13px;padding:8px 10px}
-  .btn{padding:8px 14px;font-size:13px;width:100%}
-  .btn-group{flex-direction:column;gap:8px}
+  .form-control{font-size:12px;padding:7px 9px}
+  .btn{padding:6px 12px;font-size:11px}
+  .btn-group{flex-direction:column;gap:6px}
   .hz-field{min-width:100%!important}
-  .ref-table{font-size:11px}
-  .ref-table th,.ref-table td{padding:4px 6px}
-  .sheen-footer{padding:12px 16px;font-size:12px}
+  .dt{font-size:10px}
+  .dt th,.dt td{padding:4px 5px;font-size:9px}
+  .sheen-footer{padding:10px 14px;font-size:11px}
 }
 </style>
 </head>
@@ -218,7 +193,7 @@ textarea.form-control{min-height:72px;resize:vertical}
 
 <header class="sheen-nav">
   <a href="/sheen-toolbox/" class="sheen-nav-brand">
-    <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i>
+    <i class="fa-solid fa-shield-halved" style="color:var(--amb);font-size:24px"></i>
     <span class="sheen-nav-brand-text">SHEEN Toolbox</span>
   </a>
   <div class="sheen-nav-tools">
@@ -235,16 +210,14 @@ textarea.form-control{min-height:72px;resize:vertical}
     </div>
   </header>
 
-<main class="main">
+<main class="app-wrap">
 
-  <div class="page-header">
-    <h1><i class="fa-solid fa-magnifying-glass-chart" style="color:var(--brand-red);margin-right:10px"></i>JSA + LEC 作业安全分析与风险评估记录表</h1>
-    <div class="badge"><i class="fa-solid fa-triangle-exclamation"></i> 工序分解 · 危害识别 · LEC定量评分</div>
-  </div>
+  <h1><i class="fa-solid fa-magnifying-glass-chart"></i> JSA + LEC 作业安全分析与风险评估</h1>
+  <p class="sub">工序分解 · 危害识别 · LEC定量评分 · 风险等级判定 · 控制措施制定</p>
 
   <!-- 1. 表头信息 -->
   <div class="card">
-    <div class="card-title"><span class="num">1</span> 记录表头</div>
+    <h3><span class="num">1</span> 表头信息</h3>
     <div class="form-row">
       <div class="form-group w-lg"><label>作业活动</label><input type="text" class="form-control" id="jobName" placeholder="例：高处更换车间照明灯具"></div>
       <div class="form-group"><label>区域 / 设备</label><input type="text" class="form-control" id="jobArea" placeholder="例：总装车间A区/移动式铝合金人字梯"></div>
@@ -264,46 +237,46 @@ textarea.form-control{min-height:72px;resize:vertical}
 
   <!-- 2. 分析表格 -->
   <div class="card" id="analysisCard">
-    <div class="card-title"><span class="num">2</span> 分析表格（工作步骤 → 危害识别 → LEC评分 → 控制措施）</div>
+    <h3><span class="num">2</span> 工作步骤 → 危害识别 → LEC评分 → 控制措施</h3>
     <div id="stepsContainer"></div>
-    <div class="no-print" style="margin-top:16px">
-      <button class="btn btn-outline btn-sm" onclick="addStep()"><i class="fa-solid fa-plus"></i> 新增工作步骤</button>
+    <div class="no-print" style="margin-top:12px">
+      <button class="btn btn-o btn-sm" onclick="addStep()"><i class="fa-solid fa-plus"></i> 新增工作步骤</button>
     </div>
   </div>
 
   <!-- 3. 风险汇总 -->
   <div class="card" id="summaryCard" style="display:none">
-    <div class="card-title"><span class="num">3</span> 风险等级汇总</div>
-    <div class="result-bar" id="resultBar">
-      <div class="summary-item"><div class="num" id="totalHazards">0</div><div class="lbl">危害总数</div></div>
-      <div class="summary-item"><div class="num" style="color:#DC2626" id="l5Count">0</div><div class="lbl">5级 极其危险</div></div>
-      <div class="summary-item"><div class="num" style="color:#EA580C" id="l4Count">0</div><div class="lbl">4级 高度危险</div></div>
-      <div class="summary-item"><div class="num" style="color:#CA8A04" id="l3Count">0</div><div class="lbl">3级 显著危险</div></div>
-      <div class="summary-item"><div class="num" style="color:#854D0E" id="l2Count">0</div><div class="lbl">2级 一般危险</div></div>
-      <div class="summary-item"><div class="num" style="color:#16A34A" id="l1Count">0</div><div class="lbl">1级 稍有危险</div></div>
+    <h3><span class="num">3</span> 风险等级汇总</h3>
+    <div class="kg" id="resultBar">
+      <div class="kc"><div class="kn" id="totalHazards">0</div><div class="kl">危害总数</div></div>
+      <div class="kc"><div class="kn" style="color:#DC2626" id="l5Count">0</div><div class="kl">5级 极其危险</div></div>
+      <div class="kc"><div class="kn" style="color:#EA580C" id="l4Count">0</div><div class="kl">4级 高度危险</div></div>
+      <div class="kc"><div class="kn" style="color:#CA8A04" id="l3Count">0</div><div class="kl">3级 显著危险</div></div>
+      <div class="kc"><div class="kn" style="color:#854D0E" id="l2Count">0</div><div class="kl">2级 一般危险</div></div>
+      <div class="kc"><div class="kn" style="color:#16A34A" id="l1Count">0</div><div class="kl">1级 稍有危险</div></div>
     </div>
   </div>
 
   <!-- Action buttons -->
-  <div class="btn-group no-print" style="margin-bottom:20px">
-    <button class="btn btn-outline" onclick="addDemo()"><i class="fa-solid fa-lightbulb"></i> 加载示例数据</button>
-    <button class="btn btn-primary" id="btnAiFill" onclick="aiFill()"><i class="fa-solid fa-wand-magic-sparkles"></i> AI 自动填写</button>
-    <span id="aiLoading" style="display:none;font-size:13px;color:var(--text-secondary);margin-left:4px;"><span class="spinner-inline"></span> AI 分析中…</span>
+  <div class="btn-group no-print">
+    <button class="btn btn-o" onclick="addDemo()"><i class="fa-solid fa-lightbulb"></i> 加载示例</button>
+    <button class="btn btn-p" id="btnAiFill" onclick="aiFill()"><i class="fa-solid fa-wand-magic-sparkles"></i> AI 自动填写</button>
+    <span id="aiLoading" style="display:none;font-size:11px;color:var(--text2);margin-left:4px;"><span class="spin"></span> AI分析中…</span>
     <div style="flex:1"></div>
-    <button class="btn btn-outline btn-sm" onclick="toggleApi2()" title="API配置" style="padding:7px 12px;"><i class="fa-solid fa-key"></i></button>
-    <button class="btn btn-outline" onclick="resetAll()"><i class="fa-solid fa-arrows-rotate"></i> 重置全部</button>
-    <button class="btn btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印</button>
+    <button class="btn btn-o btn-sm" onclick="toggleApi2()" title="API配置"><i class="fa-solid fa-key"></i></button>
+    <button class="btn btn-o" onclick="resetAll()"><i class="fa-solid fa-arrows-rotate"></i> 重置</button>
+    <button class="btn btn-bad" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印</button>
     <button class="btn btn-file" onclick="exportExcel()"><i class="fa-solid fa-file-excel"></i> 导出 Excel</button>
     <button class="btn btn-file" onclick="exportWord()"><i class="fa-solid fa-file-word"></i> 导出 Word</button>
   </div>
 
-  <!-- 4. 评分参考 & 注意事项 -->
+  <!-- 4. 评分标准 -->
   <div class="card no-print">
-    <div class="card-title"><span class="num">4</span> 评分标准与实施要点</div>
+    <h3><span class="num">4</span> LEC 评分标准与实施要点</h3>
+    <div class="hint">评分人员现场参考 — 根据实际情况对标选择最匹配的分值</div>
 
-    <!-- LEC 评分取值标准 — 三个独立表格 -->
-    <h4 style="font-size:14px;font-weight:600;color:var(--text-primary);margin:16px 0 8px">一、L —— 事故发生的可能性</h4>
-    <table class="ref-table">
+    <h4 style="font-size:13px;font-weight:600;color:var(--text);margin:12px 0 6px;">一、L — 事故发生的可能性</h4>
+    <div class="tbl-w"><table class="dt">
       <thead><tr><th style="width:60px">分值</th><th>事故发生的可能性</th></tr></thead>
       <tbody>
         <tr><td>10</td><td>完全可以预料</td></tr>
@@ -314,10 +287,10 @@ textarea.form-control{min-height:72px;resize:vertical}
         <tr><td>0.2</td><td>极不可能</td></tr>
         <tr><td>0.1</td><td>实际不可能</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
-    <h4 style="font-size:14px;font-weight:600;color:var(--text-primary);margin:16px 0 8px">二、E —— 人员暴露于危险环境的频繁程度</h4>
-    <table class="ref-table">
+    <h4 style="font-size:13px;font-weight:600;color:var(--text);margin:12px 0 6px;">二、E — 人员暴露于危险环境的频繁程度</h4>
+    <div class="tbl-w"><table class="dt">
       <thead><tr><th style="width:60px">分值</th><th>暴露于危险环境的频繁程度</th></tr></thead>
       <tbody>
         <tr><td>10</td><td>连续暴露</td></tr>
@@ -327,10 +300,10 @@ textarea.form-control{min-height:72px;resize:vertical}
         <tr><td>1</td><td>每年几次暴露</td></tr>
         <tr><td>0.5</td><td>非常罕见地暴露</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
-    <h4 style="font-size:14px;font-weight:600;color:var(--text-primary);margin:16px 0 8px">三、C —— 发生事故可能产生的后果</h4>
-    <table class="ref-table">
+    <h4 style="font-size:13px;font-weight:600;color:var(--text);margin:12px 0 6px;">三、C — 发生事故可能产生的后果</h4>
+    <div class="tbl-w"><table class="dt">
       <thead><tr><th style="width:60px">分值</th><th>发生事故可能产生的后果</th></tr></thead>
       <tbody>
         <tr><td>100</td><td>大灾难，许多人死亡</td></tr>
@@ -340,10 +313,10 @@ textarea.form-control{min-height:72px;resize:vertical}
         <tr><td>3</td><td>重大，致残</td></tr>
         <tr><td>1</td><td>引人注目，需要救护</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
-    <h4 style="font-size:14px;font-weight:600;color:var(--text-primary);margin:16px 0 8px">四、风险等级划分（D = L × E × C）</h4>
-    <table class="ref-table">
+    <h4 style="font-size:13px;font-weight:600;color:var(--text);margin:12px 0 6px;">四、风险等级划分（D = L × E × C）</h4>
+    <div class="tbl-w"><table class="dt">
       <thead><tr><th>D 值范围</th><th>风险等级</th><th>风险程度</th><th>应对措施</th></tr></thead>
       <tbody>
         <tr><td>D ≥ 320</td><td><span style="display:inline-block;padding:2px 10px;border-radius:4px;font-weight:700" class="risk-critical">5级</span></td><td>极其危险，不能继续作业</td><td>立即整改</td></tr>
@@ -352,7 +325,7 @@ textarea.form-control{min-height:72px;resize:vertical}
         <tr><td>20 ≤ D &lt; 70</td><td><span style="display:inline-block;padding:2px 10px;border-radius:4px;font-weight:700" class="risk-minor">2级</span></td><td>一般危险，需要注意</td><td>需要关注</td></tr>
         <tr><td>D &lt; 20</td><td><span style="display:inline-block;padding:2px 10px;border-radius:4px;font-weight:700" class="risk-low">1级</span></td><td>稍有危险，可以接受</td><td>保持现状</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <details class="ref-section">
       <summary><i class="fa-solid fa-circle-info"></i> 实施要点与注意事项</summary>
@@ -384,7 +357,7 @@ textarea.form-control{min-height:72px;resize:vertical}
 </main>
 
 <footer class="sheen-footer">
-  <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · JSA+LEC 作业安全分析与风险评估
+  <i class="fa-solid fa-shield-halved" style="color:var(--amb);font-size:22px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · JSA+LEC 作业安全分析与风险评估
 </footer>
 <div class="print-time" id="printTime"></div>
 
@@ -393,19 +366,19 @@ textarea.form-control{min-height:72px;resize:vertical}
   <div class="card" style="max-width:400px;width:90%;margin:0;">
     <h3 style="margin-bottom:12px;">API 配置</h3>
     <div style="display:flex;gap:6px;margin-bottom:12px;">
-      <label style="flex:1;text-align:center;padding:8px;border-radius:60px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);" id="lblOwnMode2">
-        <input type="radio" name="apiMode2" value="own" id="radioOwn2" onchange="switchApiMode2('own')" style="accent-color:var(--brand-red);margin-right:4px;">自有 Key
+      <label style="flex:1;text-align:center;padding:8px;border-radius:60px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--bd);" id="lblOwnMode2">
+        <input type="radio" name="apiMode2" value="own" id="radioOwn2" onchange="switchApiMode2('own')" style="accent-color:var(--red);margin-right:4px;">自有 Key
       </label>
-      <label style="flex:1;text-align:center;padding:8px;border-radius:60px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);" id="lblProxyMode2">
-        <input type="radio" name="apiMode2" value="proxy" id="radioProxy2" onchange="switchApiMode2('proxy')" style="accent-color:var(--brand-red);margin-right:4px;">共享代理
+      <label style="flex:1;text-align:center;padding:8px;border-radius:60px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--bd);" id="lblProxyMode2">
+        <input type="radio" name="apiMode2" value="proxy" id="radioProxy2" onchange="switchApiMode2('proxy')" style="accent-color:var(--red);margin-right:4px;">共享代理
       </label>
     </div>
     <div id="ownSection2">
-      <input type="text" id="apiKey2" placeholder="API Key (xxxxxx.xxxx)" style="width:100%;margin-bottom:8px;font-family:monospace;font-size:12px;padding:8px;border:1.5px solid var(--border);border-radius:var(--radius-sm);">
-      <p style="font-size:10px;color:var(--text-secondary);margin-bottom:8px;"><a href="https://open.bigmodel.cn/" target="_blank" style="color:var(--brand-red);">获取免费 Key</a></p>
+      <input type="text" id="apiKey2" placeholder="API Key (xxxxxx.xxxx)" style="width:100%;margin-bottom:8px;font-family:monospace;font-size:12px;padding:8px;border:1.5px solid var(--bd);border-radius:6px;">
+      <p style="font-size:10px;color:var(--text2);margin-bottom:8px;"><a href="https://open.bigmodel.cn/" target="_blank" style="color:var(--red);">获取免费 Key</a></p>
     </div>
     <div id="proxySection2" style="display:none;">
-      <input type="text" id="proxyUrl2" placeholder="代理地址 https://xxx.vercel.app" style="width:100%;margin-bottom:8px;font-family:monospace;font-size:12px;padding:8px;border:1.5px solid var(--border);border-radius:var(--radius-sm);">
+      <input type="text" id="proxyUrl2" placeholder="代理地址 https://xxx.vercel.app" style="width:100%;margin-bottom:8px;font-family:monospace;font-size:12px;padding:8px;border:1.5px solid var(--bd);border-radius:6px;">
     </div>
     <div style="display:flex;gap:8px;">
       <button class="btn btn-primary btn-sm" onclick="saveApi2()">保存</button>
@@ -612,7 +585,7 @@ function renderAll() {
     h+='</div></div>';
 
     if (step.hazards.length === 0) {
-      h+='<div class="empty-hint">点击 <i class="fa-solid fa-triangle-exclamation" style="color:var(--brand-red)"></i> 添加危害因素</div>';
+      h+='<div class="empty-hint">点击 <i class="fa-solid fa-triangle-exclamation" style="color:var(--red)"></i> 添加危害因素</div>';
     } else {
       step.hazards.forEach(function(hz, hi) {
         var dVal = (hz.d||hz.l*hz.e*hz.c).toFixed(1);
@@ -716,7 +689,7 @@ function exportExcel() {
 
   var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>JSA+LEC</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body>';
 
-  html += '<h2>JSA+LEC 作业安全分析与风险评估记录表</h2>';
+  html += '<h2>JSA+LEC 作业安全分析与风险评估</h2>';
   html += '<tr><td><b>分析：</b></td><td>'+esc(data.analyst)+'</td><td><b>时间：</b></td><td>'+esc(data.analystDate)+'</td><td><b>复核（工序负责人）：</b></td><td>'+esc(data.reviewer)+'</td><td><b>时间：</b></td><td>'+esc(data.reviewerDate)+'</td></tr>';
   html += '<tr><td><b>批准（上级负责人）：</b></td><td>'+esc(data.approver)+'</td><td><b>时间：</b></td><td colspan="5">'+esc(data.approverDate)+'</td></tr></table><br>';
 
@@ -887,8 +860,8 @@ function switchApiMode2(m) {
   document.getElementById('ownSection2').style.display = (m==='proxy'?'none':'block');
   document.getElementById('proxySection2').style.display = (m==='proxy'?'block':'none');
   var p=document.getElementById('lblProxyMode2'), o=document.getElementById('lblOwnMode2');
-  if(m==='proxy'){ p.style.borderColor='var(--brand-red)'; p.style.background='var(--brand-red-light)'; o.style.borderColor='var(--border)'; o.style.background=''; }
-  else { o.style.borderColor='var(--brand-red)'; o.style.background='var(--brand-red-light)'; p.style.borderColor='var(--border)'; p.style.background=''; }
+  if(m==='proxy'){ p.style.borderColor='var(--red)'; p.style.background='var(--redL)'; o.style.borderColor='var(--bd)'; o.style.background=''; }
+  else { o.style.borderColor='var(--red)'; o.style.background='var(--redL)'; p.style.borderColor='var(--bd)'; p.style.background=''; }
 }
 function loadApi2() {
   var c=getApiConfig2();
