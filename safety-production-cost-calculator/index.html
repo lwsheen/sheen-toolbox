@@ -54,22 +54,22 @@
         /* ===== SHEEN Toolbox 顶部导航栏 ===== */
         .sheen-nav {
             background: var(--black);
-            padding: 0 32px;
+            padding:0 24px;
             display: flex; align-items: center; justify-content: space-between;
             flex-wrap: wrap;
             border-bottom: 4px solid var(--brand-red);
-            min-height: 56px;
+            min-height:52px;
         }
-        .sheen-nav-brand { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; padding: 14px 0; }
-        .sheen-nav-brand i { font-size: 24px; color: var(--amber); }
-        .sheen-nav-brand-text { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; }
+        .sheen-nav-brand { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; padding:12px 0; }
+        .sheen-nav-brand i { font-size:22px; color: var(--amber); }
+        .sheen-nav-brand-text { font-size:15px; font-weight: 700; letter-spacing: 0.5px; }
 
         /* SHEEN Toolbox 工具切换导航 */
         .sheen-nav-tools { display: flex; gap: 4px; flex-wrap: wrap; }
         .sheen-nav-tool {
-            display: flex; align-items: center; gap: 6px;
-            padding: 8px 16px; color: rgba(255,255,255,0.7);
-            text-decoration: none; font-size: 13px; font-weight: 500;
+            display: flex; align-items: center; gap:4px;
+            padding:5px 10px; color: rgba(255,255,255,0.7);
+            text-decoration: none; font-size:11px; font-weight: 500;
             border-radius: 60px; transition: all var(--transition); white-space: nowrap;
         }
         .sheen-nav-tool:hover { background: rgba(255,255,255,0.1); color: #fff; }
@@ -117,11 +117,11 @@
         @keyframes fadeSlide { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
         .panel-header { margin-bottom: 24px; }
-        .panel-header h2 { font-size: 24px; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 12px; }
+        .panel-header h2 { font-size:22px; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 12px; }
         .panel-header h2 i { color: var(--brand-red); }
         .panel-header .sub {
             color: var(--text-secondary); font-size: 14px; margin-top: 8px;
-            border-left: 4px solid var(--brand-red); padding: 8px 16px;
+            border-left: 4px solid var(--brand-red); padding:5px 10px;
             background: var(--bg-page); border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
         }
         .panel-header .sub strong { color: var(--text-primary); }
@@ -183,7 +183,7 @@
         }
         .result-value.flash { background: #fef9c3; border-left-color: var(--amber); }
         .result-value .number { font-size: 36px; font-weight: 700; color: var(--brand-red); }
-        .result-value .number .unit { font-size: 18px; font-weight: 400; color: var(--text-secondary); margin-left: 4px; }
+        .result-value .number .unit { font-size:15px; font-weight: 400; color: var(--text-secondary); margin-left: 4px; }
         .result-value .label { font-size: 14px; color: var(--text-secondary); margin-top: 2px; }
 
         .result-detail {
@@ -192,14 +192,14 @@
         }
         .result-detail strong { color: var(--brand-red); }
 
-        .footnote { margin-top: 12px; font-size: 13px; color: var(--text-secondary); border-top: 1px solid var(--border); padding-top: 12px; }
+        .footnote { margin-top: 12px; font-size:11px; color: var(--text-secondary); border-top: 1px solid var(--border); padding-top: 12px; }
 
         /* ===== 打印页眉（仅打印显示） ===== */
         .print-header { display: none; }
 
         /* ===== 页脚 ===== */
         .sheen-footer {
-            text-align: center; padding: 16px 32px; font-size: 13px;
+            text-align: center; padding: 16px 32px; font-size:11px;
             color: var(--text-secondary); border-top: 1px solid var(--border);
             background: var(--bg-card); letter-spacing: 0.5px;
         }
@@ -217,7 +217,7 @@
             }
             .nav-section-title { display: none; }
             .nav-item {
-                padding: 8px 14px; font-size: 13px; border-left: none;
+                padding: 8px 14px; font-size:11px; border-left: none;
                 border-bottom: 3px solid transparent; width: auto; flex: 0 1 auto; white-space: nowrap;
             }
             .nav-item.active { border-left-color: transparent; border-bottom-color: var(--brand-red); }
@@ -235,20 +235,20 @@
             .sheen-nav-tool { padding: 6px 10px; font-size: 12px; }
             
             .content-area { padding: 12px; }
-            .panel-header h2 { font-size: 18px; }
-            .form-control { font-size: 13px; padding: 8px 10px; }
+            .panel-header h2 { font-size:15px; }
+            .form-control { font-size:11px; padding: 8px 10px; }
             .btn-primary, .btn-print { width: 100%; padding: 10px 16px; font-size: 14px; }
             .industry-nav { max-height: 160px; padding: 8px; }
             .nav-item { padding: 6px 8px; font-size: 11px; }
-            .result-value .number { font-size: 22px; }
+            .result-value .number { font-size:22px; }
             .sheen-footer { padding: 12px 16px; font-size: 12px; }
         }
 
         /* ===== 打印样式 ===== */
         
 @media (max-width:768px) {
-  .sheen-nav { padding:8px 12px; }
-  .sheen-nav-tool { padding:6px 10px; font-size:11px; }
+  .sheen-nav{padding:6px 8px}
+  .sheen-nav-tool{padding:5px 8px;font-size:10px}
   }
 @media print {
             @page { size: A4; margin: 18mm 15mm 20mm 15mm; }

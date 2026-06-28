@@ -41,29 +41,29 @@ body {
 /* ===== SHEEN Toolbox 统一导航栏 ===== */
 .sheen-nav {
   background: var(--black);
-  padding: 0 32px;
+  padding:0 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 4px solid var(--brand-red);
   flex-wrap: wrap;
-  min-height: 56px;
+  min-height:52px;
 }
-.sheen-nav-brand { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; padding: 14px 0; }
-.sheen-nav-brand i { font-size: 24px; color: var(--amber); }
-.sheen-nav-brand-text { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; }
+.sheen-nav-brand { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; padding:12px 0; }
+.sheen-nav-brand i { font-size:22px; color: var(--amber); }
+.sheen-nav-brand-text { font-size:15px; font-weight: 700; letter-spacing: 0.5px; }
 .sheen-nav-tools { display: flex; gap: 4px; flex-wrap: wrap; }
 .sheen-nav-tool {
-  display: flex; align-items: center; gap: 6px;
-  padding: 8px 16px; color: rgba(255,255,255,0.7);
-  text-decoration: none; font-size: 13px; font-weight: 500;
-  border-radius: 60px; transition: all .2s ease; white-space: nowrap;
+  display: flex; align-items: center; gap:4px;
+  padding:5px 10px; color: rgba(255,255,255,0.7);
+  text-decoration: none; font-size:11px; font-weight: 500;
+  border-radius: 60px; transition:all .2s; white-space: nowrap;
 }
 .sheen-nav-tool:hover { background: rgba(255,255,255,0.1); color: #fff; }
 .sheen-nav-tool.active { background: rgba(255,255,255,0.15); color: #fff; font-weight: 600; }
 /* ===== SHEEN Toolbox 统一页脚 ===== */
 .sheen-footer {
-  text-align: center; padding: 16px 32px; font-size: 13px;
+  text-align: center; padding: 16px 32px; font-size:11px;
   color: var(--text-secondary); border-top: 1px solid var(--border);
   background: var(--bg-card); letter-spacing: 0.5px;
 }
@@ -89,12 +89,12 @@ body {
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap:4px;
   padding: 7px 18px;
   border-radius: 60px;
   border: none;
   cursor: pointer;
-  font-size: 13px;
+  font-size:11px;
   font-weight: 600;
   transition: all .18s;
   white-space: nowrap;
@@ -193,7 +193,7 @@ body {
 }
 .field-group input {
   border: 1.5px solid var(--border); border-radius: 6px;
-  padding: 7px 10px; font-size: 13px; color: var(--text-primary);
+  padding: 7px 10px; font-size:11px; color: var(--text-primary);
   transition: border-color .15s; background: var(--bg-page);
 }
 .field-group input:focus { outline: none; border-color: var(--brand-red); background: #fff; }
@@ -233,7 +233,7 @@ body {
   font-size: 12px;
   color: rgba(255,255,255,.85);
 }
-.section-toggle { font-size: 18px; color: #fff; transition: transform .2s; }
+.section-toggle { font-size:15px; color: #fff; transition: transform .2s; }
 .section-toggle.collapsed { transform: rotate(-90deg); }
 .section-body { padding: 0; }
 
@@ -350,7 +350,7 @@ body {
   border: 1.5px dashed var(--border);
   border-radius: 6px;
   padding: 7px 10px;
-  font-size: 13px;
+  font-size:11px;
   background: #fafbfc;
   color: var(--text-primary);
   transition: border-color .15s;
@@ -360,7 +360,7 @@ body {
 .add-row-btn {
   padding: 7px 18px; background: var(--brand-red-light); color: var(--brand-red);
   border: 1.5px solid #f5c6cb; border-radius: 60px;
-  cursor: pointer; font-size: 13px; font-weight: 700; transition: all .15s; font-family: var(--font);
+  cursor: pointer; font-size:11px; font-weight: 700; transition: all .15s; font-family: var(--font);
 }
 .add-row-btn:hover { background: var(--brand-red); color: #fff; border-color: var(--brand-red); }
 
@@ -395,20 +395,20 @@ body {
 }
 .conclusion-opt input { display: none; }
 .conclusion-opt:has(input:checked) { border-color: var(--brand-red); background: var(--brand-red-light); color: var(--brand-red); }
-.conclusion-opt .opt-icon { font-size: 18px; }
+.conclusion-opt .opt-icon { font-size:15px; }
 
 .sign-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
 .sign-table th, .sign-table td {
   border: 1.5px solid var(--border);
   padding: 8px 12px;
-  font-size: 13px;
+  font-size:11px;
 }
 .sign-table th { background: #f0f4fa; font-weight: 700; color: #555; }
 .sign-table input {
   border: none;
   outline: none;
   width: 100%;
-  font-size: 13px;
+  font-size:11px;
   background: transparent;
   font-family: inherit;
   color: var(--text-primary);
@@ -430,8 +430,8 @@ body {
 /* ===== 打印样式 ===== */
 
 @media (max-width:768px) {
-  .sheen-nav { padding:8px 12px; }
-  .sheen-nav-tool { padding:6px 10px; font-size:11px; }
+  .sheen-nav{padding:6px 8px}
+  .sheen-nav-tool{padding:5px 8px;font-size:10px}
   }
 @media print {
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
@@ -505,10 +505,10 @@ body {
   .sheen-nav-brand-text { font-size: 16px; }
   .sheen-nav-tools { gap: 2px; }
   .sheen-nav-tool { padding: 6px 10px; font-size: 12px; }
-  .toolbar { padding: 6px 8px; gap: 6px; flex-wrap: wrap; }
+  .toolbar { padding: 6px 8px; gap:4px; flex-wrap: wrap; }
   .btn { padding: 5px 8px; font-size: 11px; }
   .main { padding: 8px 4px 32px; }
-  .header-fields { grid-template-columns: 1fr; gap: 6px; }
+  .header-fields { grid-template-columns: 1fr; gap:4px; }
   .check-table { font-size: 12px; }
   .check-table th, .check-table td { padding: 4px 6px; }
   .check-table th.col-note, .check-table td:nth-child(4) { display: none; }
