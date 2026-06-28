@@ -56,7 +56,7 @@ h1 i{color:var(--red)}.sub{font-size:12px;color:var(--text2);margin-bottom:14px}
 #apiOv{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:999}
 @media print{
   @page{size:A4 landscape;margin:12mm 10mm 15mm 10mm}
-  .sheen-nav,.sheen-footer,.tabs,.btn,.no-pr,#apiMod,#apiOv{display:none!important}
+  .sheen-nav,.sheen-footer,.tabs,.btn,.no-pr,#apiMod,#apiOv,#aiScene{display:none!important}
   .tc{display:block!important}.tc:not(.active-print){display:none!important}
   .app-wrap{padding:0!important;max-width:100%!important}
   .card{box-shadow:none!important;border:1px solid #333!important;break-inside:avoid;padding:8px!important}
@@ -132,10 +132,13 @@ h1 i{color:var(--red)}.sub{font-size:12px;color:var(--text2);margin-bottom:14px}
 <!-- TAB 1: 识别与评价 -->
 <div class="tc" id="t1">
 <div class="pp" id="pt1"></div>
-<div class="card no-pr" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:8px 14px;">
-<button class="btn btn-p" onclick="add()"><i class="fa-solid fa-plus"></i>新增</button>
+<div class="card no-pr" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:8px 14px;margin-bottom:8px;">
+<input id="aiScene" type="text" placeholder="描述分析场景：例 设备部烧锅炉 / 涂装车间喷漆 / 污水处理站…" style="flex:1;min-width:200px;padding:7px 12px;border:1.5px solid var(--bd);border-radius:6px;font-size:12px;font-family:inherit;background:var(--card);">
 <button class="btn btn-p" id="bAI" onclick="ai()"><i class="fa-solid fa-wand-magic-sparkles"></i>AI识别</button>
 <span id="aiLd" style="display:none;font-size:11px;color:var(--text2);"><span class="spin"></span>AI分析中…</span>
+</div>
+<div class="card no-pr" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:8px 14px;margin-bottom:0;">
+<button class="btn btn-p" onclick="add()"><i class="fa-solid fa-plus"></i>新增</button>
 <button class="btn btn-o" onclick="demo()"><i class="fa-solid fa-lightbulb"></i>示例</button>
 <button class="btn btn-o" onclick="rst()"><i class="fa-solid fa-arrows-rotate"></i>重置</button>
 <div style="flex:1"></div>
@@ -277,8 +280,38 @@ async function ai(){
   var a=ga();
   if(a.mode==='own'&&!a.key){sap();return}
   if(a.mode==='proxy'&&!a.proxy){sap();return}
+
+  // 读取用户输入的场景描述 + 已有数据作为上下文
+  var scene=document.getElementById('aiScene').value.trim();
+  var existingData='';
+  if(R.length>0){
+    var depts=[],processes=[];
+    R.forEach(function(r){if(r.dept)depts.push(r.dept);if(r.process)processes.push(r.process)});
+    var uq=function(a){var s={};a.forEach(function(x){s[x]=1});return Object.keys(s).join('、')};
+    existingData='（用户已填写的参考：部门='+uq(depts)+'；工序='+uq(processes)+'）';
+  }
+
+  var sceneDesc=scene||(existingData?'根据用户已填写的内容分析':'制造业工厂典型场景');
   document.getElementById('bAI').disabled=true;document.getElementById('aiLd').style.display='inline';
-  var p='你是一位资深ISO 14001审核专家。请为制造业工厂识别10-15条典型环境因素并评分。\n\n评分标准（每项1-4分，务必基于实际情况打分，避免全部高分或全部低分）：\n- a)环境影响程度：1轻微/2一般/3较重/4严重\n- b)法规符合性：1完全符合/2基本符合/3部分不符合/4严重不符合\n- c)排放消耗数量：1极少/2少量/3中量/4大量\n- d)发生频率：1极少/2间歇/3频繁/4连续\n- e)相关方关注度：1不关注/2一般/3高度/4极度\n- f)能源资源消耗：1低/2中/3较高/4高\n\n请严格按照以下JSON数组格式返回，不要包含任何额外说明文字：\n[\n  {"dept":"部门","process":"工序","state":"正常","factor":"环境因素","impType":"影响类型","law":"适用法规","qty":"量化数据","s1":3,"s2":2,"s3":3,"s4":4,"s5":2,"s6":3,"control":"控制措施"},\n  ...\n]\n\n影响类型可选：大气污染/水体污染/土壤污染/噪声污染/固废危废/资源消耗\n状态可选：正常/异常/紧急\n覆盖场景：涂装车间、动力部、仓储、废水处理站、全厂办公';
+
+  var p='你是一位资深ISO 14001审核专家。请针对以下具体场景，识别5-15条环境因素并逐项评分。\n\n'+
+    '【分析场景】'+sceneDesc+'\n'+existingData+'\n\n'+
+    '【评分标准（每项1-4分，基于场景实际情况打分，避免全部相同分数）】\n'+
+    '- a)环境影响程度：1轻微/2一般/3较重/4严重\n'+
+    '- b)法规符合性：1完全符合/2基本符合/3部分不符合/4严重不符合\n'+
+    '- c)排放消耗数量：1极少/2少量/3中量/4大量\n'+
+    '- d)发生频率：1极少/2间歇/3频繁/4连续\n'+
+    '- e)相关方关注度：1不关注/2一般/3高度/4极度\n'+
+    '- f)能源资源消耗：1低/2中/3较高/4高\n\n'+
+    '【要求】\n'+
+    '1. 每条环境因素必须与【分析场景】强相关，不要生成无关的通用项\n'+
+    '2. 影响类型从以下选择：大气污染/水体污染/土壤污染/噪声污染/固废危废/资源消耗\n'+
+    '3. 状态从以下选择：正常/异常/紧急\n'+
+    '4. 如果场景涉及燃煤/燃气锅炉，必须涵盖：锅炉废气（SO₂/NOx/颗粒物）、燃料消耗、高温噪声、锅炉排污水、固废（炉渣/粉煤灰）等\n'+
+    '5. 如果场景涉及喷漆/涂装，必须涵盖：VOCs排放、漆渣危废、噪声等\n'+
+    '6. 请严格按以下JSON数组格式返回，不要包含任何额外说明文字：\n'+
+    '[\n  {"dept":"部门","process":"工序","state":"正常","factor":"具体环境因素","impType":"影响类型","law":"适用法规","qty":"量化数据","s1":3,"s2":2,"s3":3,"s4":4,"s5":2,"s6":3,"control":"控制措施"},\n  ...\n]';
+
   try{
     var url,hdr,body=JSON.stringify({model:'glm-4-flash',messages:[{role:'user',content:p}],temperature:0.3,max_tokens:4096});
     if(a.mode==='proxy'){url=a.proxy;hdr={'Content-Type':'application/json'}}
@@ -288,7 +321,6 @@ async function ai(){
     var d=await res.json();
     if(!d.choices||!d.choices[0]){throw new Error('API返回异常: '+JSON.stringify(d).slice(0,200))}
     var t=d.choices[0].message.content;
-    // 提取JSON数组
     var m=t.match(/\[[\s\S]*\]/);
     if(!m){throw new Error('AI未返回有效JSON数组。原始响应: '+t.slice(0,300))}
     var arr;
@@ -297,7 +329,7 @@ async function ai(){
     R=arr.map(function(o){return{dept:o.dept||'',process:o.process||'',state:o.state||'正常',factor:o.factor||'',impType:o.impType||'',law:o.law||'',qty:String(o.qty||''),s1:String(o.s1||''),s2:String(o.s2||''),s3:String(o.s3||''),s4:String(o.s4||''),s5:String(o.s5||''),s6:String(o.s6||''),control:o.control||'',major:'',manual:'',person:'',date:'',total:0}});
     ren();
     alert('AI已识别 '+R.length+' 条环境因素，请核对并修正评分。');
-  }catch(e){alert('AI识别失败: '+(e.message||'未知错误')+'\n\n请确认：\n1. API Key 已配置且有效\n2. 网络可访问 open.bigmodel.cn\n3. 可手动输入数据或点击"示例"查看格式')}
+  }catch(e){alert('AI识别失败: '+(e.message||'未知错误')+'\n\n请确认：\n1. API Key 已配置且有效\n2. 网络可访问 open.bigmodel.cn\n3. 请在输入框中描述分析场景后重试')}
   document.getElementById('bAI').disabled=false;document.getElementById('aiLd').style.display='none';
 }
 
