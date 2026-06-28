@@ -55,11 +55,23 @@ h1 i{color:var(--red)}.sub{font-size:12px;color:var(--text2);margin-bottom:14px}
 #apiMod{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--card);border-radius:var(--r);padding:18px;z-index:1000;box-shadow:0 8px 32px rgba(0,0,0,.2);width:340px;max-width:95vw}
 #apiOv{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:999}
 @media print{
+  @page{size:A4 landscape;margin:12mm 10mm 15mm 10mm}
   .sheen-nav,.sheen-footer,.tabs,.btn,.no-pr,#apiMod,#apiOv{display:none!important}
   .tc{display:block!important}.tc:not(.active-print){display:none!important}
-  .app-wrap{padding:0!important}.card{box-shadow:none!important;border:1px solid #333!important;break-inside:avoid}
-  .dt th{background:#eee!important;color:#000!important}.cb canvas{max-height:180px}
+  .app-wrap{padding:0!important;max-width:100%!important}
+  .card{box-shadow:none!important;border:1px solid #333!important;break-inside:avoid;padding:8px!important}
+  .tbl-w{overflow-x:visible!important}
+  .dt{min-width:0!important;width:100%!important;font-size:9px!important;table-layout:auto!important}
+  .dt th,.dt td{padding:3px 4px!important;font-size:8px!important;white-space:normal!important;word-break:break-all!important}
+  .dt th{background:#eee!important;color:#000!important;font-size:7px!important}
+  .dt td input,.dt td select{width:60px!important;border:none!important;padding:0!important;font-size:8px!important;background:transparent!important}
+  .dt .sc input{width:28px!important;height:auto!important}
+  .cb canvas{max-height:180px}
   .pp{display:block;text-align:right;font-size:9pt;color:#666;margin-bottom:6px}
+  body{font-size:10px!important}
+  h1{font-size:16px!important}
+  .sub{font-size:10px!important}
+  .kg{gap:4px!important}.kc{padding:8px!important}.kc .kn{font-size:20px!important}
 }
 @media(max-width:768px){
   .sheen-nav{padding:6px 8px}.sheen-nav-tool{padding:5px 8px;font-size:10px}
@@ -129,7 +141,7 @@ h1 i{color:var(--red)}.sub{font-size:12px;color:var(--text2);margin-bottom:14px}
 <div style="flex:1"></div>
 <span class="filter-chip on" onclick="flt('all',this)">全部</span>
 <span class="filter-chip" onclick="flt('major',this)">重要因素</span>
-<span class="filter-chip" onclick="flt('normal',this)">非重要</span>
+<span class="filter-chip" onclick="flt('normal',this)">一般</span>
 <button class="btn btn-bad btn-sm" onclick="xls1()"><i class="fa-solid fa-file-excel"></i>导出</button>
 <button class="btn btn-bad btn-sm" onclick="prt1()"><i class="fa-solid fa-print"></i>打印</button>
 <span style="font-size:11px;color:var(--text2);">共<strong id="nRow">0</strong>条 | 重要<strong id="nMj" style="color:#DC2626;">0</strong></span>
@@ -266,17 +278,26 @@ async function ai(){
   if(a.mode==='own'&&!a.key){sap();return}
   if(a.mode==='proxy'&&!a.proxy){sap();return}
   document.getElementById('bAI').disabled=true;document.getElementById('aiLd').style.display='inline';
-  var p='你是ISO 14001审核专家。为制造业识别10-15条典型环境因素。返回JSON数组，每项含dept,process,state(正常/异常/紧急),factor,impType(大气污染/水体污染/土壤污染/噪声/固废危废/资源消耗),law,qty,s1~s6(1-4分:a影响/b法规/c数量/d频率/e关注/f能耗),control。覆盖涂装、动力、仓储、废水、办公场景。';
+  var p='你是一位资深ISO 14001审核专家。请为制造业工厂识别10-15条典型环境因素并评分。\n\n评分标准（每项1-4分，务必基于实际情况打分，避免全部高分或全部低分）：\n- a)环境影响程度：1轻微/2一般/3较重/4严重\n- b)法规符合性：1完全符合/2基本符合/3部分不符合/4严重不符合\n- c)排放消耗数量：1极少/2少量/3中量/4大量\n- d)发生频率：1极少/2间歇/3频繁/4连续\n- e)相关方关注度：1不关注/2一般/3高度/4极度\n- f)能源资源消耗：1低/2中/3较高/4高\n\n请严格按照以下JSON数组格式返回，不要包含任何额外说明文字：\n[\n  {"dept":"部门","process":"工序","state":"正常","factor":"环境因素","impType":"影响类型","law":"适用法规","qty":"量化数据","s1":3,"s2":2,"s3":3,"s4":4,"s5":2,"s6":3,"control":"控制措施"},\n  ...\n]\n\n影响类型可选：大气污染/水体污染/土壤污染/噪声污染/固废危废/资源消耗\n状态可选：正常/异常/紧急\n覆盖场景：涂装车间、动力部、仓储、废水处理站、全厂办公';
   try{
-    var url,hdr,body=JSON.stringify({model:'glm-4-flash',messages:[{role:'user',content:p}],temperature:0.5,max_tokens:3000});
+    var url,hdr,body=JSON.stringify({model:'glm-4-flash',messages:[{role:'user',content:p}],temperature:0.3,max_tokens:4096});
     if(a.mode==='proxy'){url=a.proxy;hdr={'Content-Type':'application/json'}}
     else{url='https://open.bigmodel.cn/api/paas/v4/chat/completions';hdr={'Content-Type':'application/json','Authorization':'Bearer '+a.key}}
-    var r=await fetch(url,{method:'POST',headers:hdr,body:body});
-    var d=await r.json();var t=d.choices[0].message.content;
-    var m=t.match(/\[[\s\S]*\]/);var arr=JSON.parse(m?m[0]:t);
-    R=arr.map(function(o){return{dept:o.dept||'',process:o.process||'',state:o.state||'正常',factor:o.factor||'',impType:o.impType||'',law:o.law||'',qty:o.qty||'',s1:String(o.s1||''),s2:String(o.s2||''),s3:String(o.s3||''),s4:String(o.s4||''),s5:String(o.s5||''),s6:String(o.s6||''),control:o.control||'',major:'',manual:'',person:'',date:'',total:0}});
+    var res=await fetch(url,{method:'POST',headers:hdr,body:body});
+    if(!res.ok){var et=await res.text();throw new Error('API HTTP '+res.status+': '+et.slice(0,200))}
+    var d=await res.json();
+    if(!d.choices||!d.choices[0]){throw new Error('API返回异常: '+JSON.stringify(d).slice(0,200))}
+    var t=d.choices[0].message.content;
+    // 提取JSON数组
+    var m=t.match(/\[[\s\S]*\]/);
+    if(!m){throw new Error('AI未返回有效JSON数组。原始响应: '+t.slice(0,300))}
+    var arr;
+    try{arr=JSON.parse(m[0])}catch(e2){throw new Error('JSON解析失败: '+e2.message+'\n响应片段: '+m[0].slice(0,300))}
+    if(!Array.isArray(arr)||arr.length===0){throw new Error('AI返回数据为空或格式不正确')}
+    R=arr.map(function(o){return{dept:o.dept||'',process:o.process||'',state:o.state||'正常',factor:o.factor||'',impType:o.impType||'',law:o.law||'',qty:String(o.qty||''),s1:String(o.s1||''),s2:String(o.s2||''),s3:String(o.s3||''),s4:String(o.s4||''),s5:String(o.s5||''),s6:String(o.s6||''),control:o.control||'',major:'',manual:'',person:'',date:'',total:0}});
     ren();
-  }catch(e){alert('AI失败: '+(e.message||''))}
+    alert('AI已识别 '+R.length+' 条环境因素，请核对并修正评分。');
+  }catch(e){alert('AI识别失败: '+(e.message||'未知错误')+'\n\n请确认：\n1. API Key 已配置且有效\n2. 网络可访问 open.bigmodel.cn\n3. 可手动输入数据或点击"示例"查看格式')}
   document.getElementById('bAI').disabled=false;document.getElementById('aiLd').style.display='none';
 }
 
@@ -290,7 +311,7 @@ function db(){
   document.getElementById('ka').innerHTML='<div class="kc"><div class="kn">'+(R.length||0)+'</div><div class="kl">因素总数</div></div><div class="kc"><div class="kn" style="color:#DC2626;">'+mn+'</div><div class="kl">重要因素</div></div><div class="kc"><div class="kn" style="color:#16A34A;">'+cn+'</div><div class="kl">有控制措施</div></div><div class="kc"><div class="kn">'+(R.length?(cn/R.length*100).toFixed(0):0)+'%</div><div class="kl">措施覆盖率</div></div>';
   var tk=Object.keys(tm).filter(function(k){return tm[k]>0});
   if(tk.length) ci.a=new Chart(document.getElementById('c1'),{type:'pie',data:{labels:tk,datasets:[{data:tk.map(function(k){return tm[k]}),backgroundColor:['#5470C6','#91CC75','#EE6666','#73C0DE','#3BA272','#FAC858','#FC8452']}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:10}}}}}});
-  if(R.length) ci.b=new Chart(document.getElementById('c2'),{type:'pie',data:{labels:['重要','非重要'],datasets:[{data:[mn,R.length-mn],backgroundColor:['#DC2626','#91CC75']}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:10}}}}}});
+  if(R.length) ci.b=new Chart(document.getElementById('c2'),{type:'pie',data:{labels:['重要','一般'],datasets:[{data:[mn,R.length-mn],backgroundColor:['#DC2626','#91CC75']}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:10}}}}}});
   var dk=Object.keys(dm);
   if(dk.length) ci.c=new Chart(document.getElementById('c3'),{type:'bar',data:{labels:dk,datasets:[{label:'数量',data:dk.map(function(k){return dm[k]}),backgroundColor:'#1F4E79'}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}}}}});
   document.getElementById('cov').textContent=R.length?(cn/R.length*100).toFixed(1)+'%':'—';
