@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NIOSH 举升方程计算器 — SHEEN Toolbox</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{--black:#000;--text:#111827;--text2:#6B7280;--bg:#F8FAFC;--card:#fff;--bd:#E5E7EB;--red:#7A1825;--redH:#5C121C;--redL:#FEF2F2;--amb:#FBBF24;--r:12px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.sheen-nav{background:var(--black);padding:0 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:4px solid var(--red);flex-wrap:wrap;min-height:52px}
+.sheen-nav-brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;padding:12px 0}
+.sheen-nav-brand i{font-size:22px;color:var(--amb)}
+.sheen-nav-brand-text{font-size:15px;font-weight:700;letter-spacing:.5px}
+.sheen-nav-tools{display:flex;gap:2px;flex-wrap:wrap}
+.sheen-nav-tool{display:flex;align-items:center;gap:4px;padding:5px 10px;color:rgba(255,255,255,.7);text-decoration:none;font-size:11px;font-weight:500;border-radius:60px;transition:all .2s;white-space:nowrap}
+.sheen-nav-tool:hover{background:rgba(255,255,255,.1);color:#fff}
+.sheen-nav-tool.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600}
+.sheen-footer{text-align:center;padding:14px 24px;font-size:12px;color:var(--text2);border-top:1px solid var(--bd);background:var(--card)}
+.sheen-footer i{color:var(--amb)}.sheen-footer strong{color:var(--text)}
+.app-wrap{max-width:100%;margin:0 auto;padding:16px 12px}
+h1{font-size:20px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+h1 i{color:var(--red)}.sub{font-size:12px;color:var(--text2);margin-bottom:14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.card h3{font-size:14px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.card h3 i{color:var(--red)}
+.hint{font-size:11px;color:var(--text2);margin-bottom:10px;padding:6px 10px;background:var(--bg);border-radius:6px}
+.form-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}
+.form-group{flex:1;min-width:150px}
+.form-group.w-sm{flex:0.6;min-width:110px}
+.form-group label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:3px}
+.form-group label .unit{font-weight:400;font-size:10px;color:#9CA3AF}
+.form-group label .warn{color:#DC2626;font-size:10px;display:none}
+.form-control{width:100%;padding:8px 10px;border:1.5px solid var(--bd);border-radius:6px;font-size:13px;background:var(--card);color:var(--text);font-family:inherit}
+.form-control:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(122,24,37,.06)}
+.form-control.invalid{border-color:#DC2626;background:#FFF5F5}
+select.form-control{cursor:pointer}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:10px 24px;border-radius:60px;font-size:14px;font-weight:600;cursor:pointer;transition:all .25s;border:none;font-family:inherit}
+.btn-p{background:var(--red);color:#fff}.btn-p:hover{background:var(--redH);transform:translateY(-1px);box-shadow:0 6px 16px rgba(122,24,37,.2)}
+.btn-o{background:var(--card);border:1.5px solid var(--bd);color:var(--text)}.btn-o:hover{border-color:var(--red);color:var(--red)}
+.btn-bad{background:var(--card);color:var(--red);border:1.5px solid var(--red)}.btn-bad:hover{background:var(--redL)}
+.btn-sm{padding:5px 10px;font-size:10px}
+
+/* Diagram */
+.diagram{background:var(--bg);border:1px dashed var(--bd);border-radius:var(--r);padding:14px;text-align:center;margin-bottom:10px}
+.diagram img{max-width:100%;max-height:220px}
+.diagram .labels{display:flex;justify-content:space-around;flex-wrap:wrap;gap:8px;margin-top:8px;font-size:11px;color:var(--text2)}
+
+/* Result */
+.result-box{display:none;margin-top:12px}
+.rb-show{display:block}
+.li-card{background:var(--redL);border:2px solid var(--red);border-radius:16px;padding:16px 20px;text-align:center;margin-bottom:10px}
+.li-card .li-val{font-size:48px;font-weight:700;line-height:1.1}
+.li-card .li-label{font-size:12px;color:var(--text2);margin-top:2px}
+.li-card .li-risk{font-size:16px;font-weight:700;margin-top:4px;padding:4px 16px;border-radius:6px;display:inline-block}
+
+.risk-low{border-color:#16A34A!important;background:#ECFDF5!important}.risk-low .li-val{color:#16A34A}
+.risk-low .li-risk{background:#16A34A;color:#fff}
+.risk-med{border-color:#EA580C!important;background:#FFF7ED!important}.risk-med .li-val{color:#EA580C}
+.risk-med .li-risk{background:#EA580C;color:#fff}
+.risk-high{border-color:#DC2626!important;background:#FEF2F2!important}.risk-high .li-val{color:#DC2626}
+.risk-high .li-risk{background:#DC2626;color:#fff}
+
+.breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:10px}
+.bf-item{background:var(--bg);border-radius:8px;padding:10px;text-align:center;border:1px solid var(--bd)}
+.bf-item .bf-label{font-size:10px;color:var(--text2);margin-bottom:2px}
+.bf-item .bf-val{font-size:20px;font-weight:700;color:var(--text)}
+.bf-item .bf-range{font-size:9px;color:#9CA3AF}
+.bf-item.weakest{background:var(--redL);border-color:var(--red)}
+.bf-item.weakest .bf-val{color:var(--red)}
+.weakest-tag{display:inline-block;background:var(--red);color:#fff;font-size:9px;padding:1px 6px;border-radius:4px;margin-top:2px}
+
+.rwl-formula{text-align:center;font-size:12px;color:var(--text2);margin-bottom:10px;padding:8px;background:var(--bg);border-radius:6px}
+.rwl-formula strong{color:var(--text);font-size:16px}
+
+.improve-box{background:var(--bg);border-radius:8px;padding:12px;font-size:12px;line-height:1.8;margin-top:8px}
+.improve-box .im-header{font-weight:700;color:var(--red);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+
+/* Ref tables */
+details{margin-top:6px}
+details summary{font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;padding:6px 0;user-select:none;display:flex;align-items:center;gap:5px}
+details summary i{font-size:11px;color:var(--red)}
+.tbl-w{overflow-x:auto}
+.dt{min-width:500px;border-collapse:collapse;font-size:10px}
+.dt th,.dt td{padding:4px 6px;border:1px solid var(--bd);text-align:center;vertical-align:middle}
+.dt th{background:#1F4E79;color:#fff;font-weight:700;font-size:10px}
+.dt td{background:var(--card);color:var(--text)}
+.dt .zero{color:#DC2626;font-weight:600}
+
+/* CLI hint */
+.cli-hint{background:#FFFBEB;border-left:4px solid #F59E0B;padding:10px 14px;border-radius:0 8px 8px 0;font-size:12px;color:var(--text);margin-top:8px}
+
+@media(max-width:768px){
+  .sheen-nav{padding:6px 8px}.sheen-nav-tool{padding:5px 8px;font-size:10px}
+  .app-wrap{padding:8px 4px}.form-group{min-width:100%}
+  .li-card .li-val{font-size:36px}.breakdown{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+
+<header class="sheen-nav">
+<a href="/sheen-toolbox/" class="sheen-nav-brand"><i class="fa-solid fa-shield-halved" style="color:var(--amb);font-size:22px"></i><span class="sheen-nav-brand-text">SHEEN Toolbox</span></a>
+<div class="sheen-nav-tools">
+<a href="/sheen-toolbox/pssr-checklist/" class="sheen-nav-tool">PSSR检查表</a>
+<a href="/sheen-toolbox/fire-extinguisher-calculator/" class="sheen-nav-tool">灭火器计算器</a>
+<a href="/sheen-toolbox/safety-production-cost-calculator/" class="sheen-nav-tool">安产费用计算器</a>
+<a href="/sheen-toolbox/jsa-lec/" class="sheen-nav-tool">JSA+LEC评价</a>
+<a href="/sheen-toolbox/industry-classification/" class="sheen-nav-tool">行业分类查询</a>
+<a href="/sheen-toolbox/dangerous-goods-query/" class="sheen-nav-tool">危险货物查询</a>
+<a href="/sheen-toolbox/five-why-analysis/" class="sheen-nav-tool">5Why根因分析</a>
+<a href="/sheen-toolbox/hazardous-waste-query/" class="sheen-nav-tool">危险废物查询</a>
+<a href="/sheen-toolbox/hazardous-chemicals-query/" class="sheen-nav-tool">危险化学品查询</a>
+<a href="/sheen-toolbox/iso14001-environmental-factors/" class="sheen-nav-tool">环境因素</a>
+<a href="/sheen-toolbox/heat-stress-classification/" class="sheen-nav-tool">高温分级</a>
+<a href="/sheen-toolbox/niosh-lifting-calculator/" class="sheen-nav-tool active">NIOSH举升</a>
+</div></header>
+
+<main class="app-wrap">
+<h1><i class="fa-solid fa-weight-hanging"></i> NIOSH 举升方程计算器</h1>
+<p class="sub">NIOSH Lifting Equation (1991/2017) · RWL = LC × HM × VM × DM × AM × FM × CM · SHEEN Toolbox — NE Calc</p>
+
+<!-- Diagram -->
+<div class="card no-pr">
+<h3><i class="fa-solid fa-ruler-combined"></i> 测量参数示意</h3>
+<div class="diagram">
+<svg viewBox="0 0 600 260" style="max-width:550px">
+  <!-- Stick figure -->
+  <circle cx="180" cy="50" r="16" fill="none" stroke="#111827" stroke-width="2"/>
+  <line x1="180" y1="66" x2="180" y2="130" stroke="#111827" stroke-width="2"/>
+  <line x1="180" y1="80" x2="140" y2="105" stroke="#111827" stroke-width="2"/>
+  <line x1="180" y1="80" x2="220" y2="105" stroke="#111827" stroke-width="2"/>
+  <line x1="180" y1="130" x2="155" y2="190" stroke="#111827" stroke-width="2"/>
+  <line x1="180" y1="130" x2="205" y2="190" stroke="#111827" stroke-width="2"/>
+  <!-- Ankle midpoint -->
+  <circle cx="180" cy="188" r="3" fill="#7A1825"/>
+  <!-- Hands grip point (origin) -->
+  <circle cx="225" cy="90" r="4" fill="#7A1825"/>
+  <!-- Box -->
+  <rect x="215" y="75" width="50" height="30" rx="3" fill="none" stroke="#7A1825" stroke-width="1.5"/>
+  <!-- H horizontal -->
+  <line x1="180" y1="188" x2="225" y2="188" stroke="#7A1825" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="200" y="205" text-anchor="middle" font-size="10" fill="#7A1825" font-weight="700">H(cm)</text>
+  <!-- V vertical -->
+  <line x1="240" y1="75" x2="240" y2="188" stroke="#7A1825" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="256" y="135" font-size="10" fill="#7A1825" font-weight="700">V(cm)</text>
+  <!-- Ground line -->
+  <line x1="130" y1="195" x2="250" y2="195" stroke="#111827" stroke-width="1"/>
+  <!-- Destination -->
+  <circle cx="420" cy="120" r="4" fill="#F59E0B"/>
+  <rect x="405" y="105" width="50" height="30" rx="3" fill="none" stroke="#F59E0B" stroke-width="1.5"/>
+  <line x1="455" y1="75" x2="455" y2="130" stroke="#F59E0B" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="478" y="105" font-size="9" fill="#F59E0B">D</text>
+  <!-- A angle -->
+  <path d="M 180 195 A 50 50 0 0 0 230 195" fill="none" stroke="#2563EB" stroke-width="1.5"/>
+  <text x="200" y="235" text-anchor="middle" font-size="9" fill="#2563EB">A(°) 躯干扭转角</text>
+  <!-- D label -->
+  <text x="430" y="82" text-anchor="middle" font-size="10" fill="#F59E0B" font-weight="700">V终点</text>
+  <text x="230" y="70" text-anchor="middle" font-size="10" fill="#7A1825" font-weight="700">V起点</text>
+</svg>
+<div class="labels">
+  <span><strong style="color:var(--red)">H</strong> 双手距踝关节中点水平距离</span>
+  <span><strong style="color:var(--red)">V</strong> 双手距地面垂直高度</span>
+  <span><strong style="color:#F59E0B">D</strong> 垂直位移=|V终点−V起点|</span>
+  <span><strong style="color:#2563EB">A</strong> 躯干偏离矢状面角度</span>
+</div>
+</div>
+</div>
+
+<!-- Input -->
+<div class="card" id="inputCard">
+<h3><i class="fa-solid fa-sliders"></i> 参数输入</h3>
+<div class="hint">所有长度参数单位为 cm（厘米），角度单位为 °（度），频率单位为 lifts/min（次/分钟），重量单位为 kg</div>
+
+<div class="form-row">
+  <div class="form-group w-sm"><label>H — 水平距离 <span class="unit">(cm)</span> <span class="warn" id="warnH">越界!</span></label><input type="number" id="H" class="form-control" step="0.1" value="45" min="0" oninput="validate()"></div>
+  <div class="form-group w-sm"><label>V 起点 — 垂直高度 <span class="unit">(cm)</span> <span class="warn" id="warnVo">越界!</span></label><input type="number" id="Vo" class="form-control" step="0.1" value="30" min="0" oninput="validate()"></div>
+  <div class="form-group w-sm"><label>V 终点 — 垂直高度 <span class="unit">(cm)</span> <span class="warn" id="warnVd">越界!</span></label><input type="number" id="Vd" class="form-control" step="0.1" value="110" min="0" oninput="validate()"></div>
+</div>
+<div class="form-row">
+  <div class="form-group w-sm"><label>A — 不对称角度 <span class="unit">(°)</span> <span class="warn" id="warnA">越界!</span></label><input type="number" id="A" class="form-control" step="0.1" value="30" min="0" max="135" oninput="validate()"></div>
+  <div class="form-group w-sm"><label>F — 举升频率 <span class="unit">(次/min)</span></label><input type="number" id="F" class="form-control" step="0.1" value="2" min="0" oninput="validate()"></div>
+  <div class="form-group"><label>工作时长</label><select id="Dur" class="form-control"><option value="0">≤ 1 小时</option><option value="1">1 ~ 2 小时</option><option value="2" selected>2 ~ 8 小时</option></select></div>
+</div>
+<div class="form-row">
+  <div class="form-group"><label>手-物耦合 (Coupling)</label><select id="Cp" class="form-control"><option value="0">良好 (Good) — 提手设计合理</option><option value="1" selected>一般 (Fair) — 容器可抓握但无提手</option><option value="2">差 (Poor) — 难以抓握</option></select></div>
+  <div class="form-group w-sm"><label>实际举升重量 <span class="unit">(kg)</span></label><input type="number" id="Load" class="form-control" step="0.1" value="15" min="0" oninput="validate()"></div>
+</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+  <button class="btn btn-p" onclick="calc()"><i class="fa-solid fa-play"></i> 开始计算</button>
+  <button class="btn btn-o btn-sm" onclick="loadExample(1)">示例1：托盘卸货</button>
+  <button class="btn btn-o btn-sm" onclick="loadExample(2)">示例2：传送带作业</button>
+  <button class="btn btn-bad btn-sm" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印</button>
+</div>
+</div>
+
+<!-- Result -->
+<div class="result-box" id="resultBox"></div>
+
+<!-- Reference Tables -->
+<div class="card no-pr">
+<h3><i class="fa-solid fa-table"></i> 乘数参考表</h3>
+<details open>
+<summary><i class="fa-solid fa-stopwatch"></i> 表5 — 频率乘数 FM</summary>
+<div class="hint">频率 F (次/min) × 工作时长 × V 位置 → FM 值 | 灰色 "0" 表示该频率下不宜举升</div>
+<div class="tbl-w" id="fmTable"></div>
+</details>
+<details>
+<summary><i class="fa-solid fa-hand"></i> 表7 — 耦合乘数 CM</summary>
+<div class="tbl-w"><table class="dt" style="min-width:350px">
+<thead><tr><th>耦合类型</th><th>V &lt; 75 cm</th><th>V ≥ 75 cm</th></tr></thead>
+<tbody>
+<tr><td>良好 (Good)</td><td>1.00</td><td>1.00</td></tr>
+<tr><td>一般 (Fair)</td><td>0.95</td><td>1.00</td></tr>
+<tr><td>差 (Poor)</td><td>0.90</td><td>0.90</td></tr>
+</tbody></table></div>
+</details>
+</div>
+</main>
+
+<footer class="sheen-footer"><i class="fa-solid fa-shield-halved" style="color:var(--amb);font-size:22px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · NIOSH 举升方程计算器</footer>
+
+<script>
+// ===== FM Lookup Table =====
+// [duration][frequencyIndex][V_below_75? 0=below 1=above]
+// duration: 0=≤1h, 1=1-2h, 2=2-8h
+// frequencyIndex maps to: [0.2, 0.5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+var FM_TABLE = [
+  // ≤1 hour
+  [[1.00,1.00],[0.97,0.97],[0.94,0.94],[0.91,0.91],[0.88,0.88],[0.84,0.84],[0.80,0.80],
+   [0.75,0.75],[0.70,0.70],[0.60,0.60],[0.52,0.52],[0.45,0.45],[0.41,0.41],[0.37,0.37],[0.00,0.34],[0.00,0.31],[0.00,0.28]],
+  // 1-2 hours
+  [[0.95,0.95],[0.92,0.92],[0.88,0.88],[0.84,0.84],[0.79,0.79],[0.72,0.72],[0.60,0.60],
+   [0.50,0.50],[0.42,0.42],[0.35,0.35],[0.30,0.30],[0.26,0.26],[0.00,0.23],[0.00,0.21],[0.00,0.00],[0.00,0.00],[0.00,0.00]],
+  // 2-8 hours
+  [[0.85,0.85],[0.81,0.81],[0.75,0.75],[0.65,0.65],[0.55,0.55],[0.45,0.45],[0.35,0.35],
+   [0.27,0.27],[0.22,0.22],[0.18,0.18],[0.00,0.15],[0.00,0.13],[0.00,0.00],[0.00,0.00],[0.00,0.00],[0.00,0.00],[0.00,0.00]]
+];
+var FM_FREQS = [0.2, 0.5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+
+function fmLookup(freq, dur, vBelow75){
+  if(freq > 15) return {fm:0, nextFreq:15};
+  var fi = 0;
+  for(var i = FM_FREQS.length - 1; i >= 0; i--){
+    if(freq <= FM_FREQS[i]) fi = i;
+  }
+  return {fm: FM_TABLE[dur][fi][vBelow75 ? 0 : 1], freqKey: FM_FREQS[fi]};
+}
+
+// Build FM reference table
+(function buildFMTable(){
+  var h = '<table class="dt"><thead><tr><th rowspan="2">频率<br>(次/min)</th>';
+  h += '<th colspan="2">≤ 1 小时</th><th colspan="2">1~2 小时</th><th colspan="2">2~8 小时</th></tr>';
+  h += '<tr><th>V<75</th><th>V≥75</th><th>V<75</th><th>V≥75</th><th>V<75</th><th>V≥75</th></tr></thead><tbody>';
+  for(var i = 0; i < FM_FREQS.length; i++){
+    h += '<tr><td style="font-weight:700">'+FM_FREQS[i]+'</td>';
+    for(var d = 0; d < 3; d++){
+      for(var v = 0; v < 2; v++){
+        var val = FM_TABLE[d][i][v];
+        h += '<td'+(val===0?' class="zero"':'')+'>'+(val===0?'0':val.toFixed(2))+'</td>';
+      }
+    }
+    h += '</tr>';
+  }
+  h += '<tr><td style="font-weight:700">>15</td><td class="zero" colspan="6">0.00 — 不宜举升</td></tr>';
+  h += '</tbody></table>';
+  document.getElementById('fmTable').innerHTML = h;
+})();
+
+// ===== Validation =====
+function validate(){
+  var H = parseFloat(document.getElementById('H').value)||0;
+  var Vo = parseFloat(document.getElementById('Vo').value)||0;
+  var Vd = parseFloat(document.getElementById('Vd').value)||0;
+  var A = parseFloat(document.getElementById('A').value)||0;
+
+  var warnH = document.getElementById('warnH');
+  var warnVo = document.getElementById('warnVo');
+  var warnVd = document.getElementById('warnVd');
+  var warnA = document.getElementById('warnA');
+
+  var inpH = document.getElementById('H'), inpVo = document.getElementById('Vo');
+  var inpVd = document.getElementById('Vd'), inpA = document.getElementById('A');
+
+  if(H<25||H>63){warnH.style.display='inline';inpH.classList.add('invalid')}else{warnH.style.display='none';inpH.classList.remove('invalid')}
+  if(Vo<0||Vo>175){warnVo.style.display='inline';inpVo.classList.add('invalid')}else{warnVo.style.display='none';inpVo.classList.remove('invalid')}
+  if(Vd<0||Vd>175){warnVd.style.display='inline';inpVd.classList.add('invalid')}else{warnVd.style.display='none';inpVd.classList.remove('invalid')}
+  if(A<0||A>135){warnA.style.display='inline';inpA.classList.add('invalid')}else{warnA.style.display='none';inpA.classList.remove('invalid')}
+  calc();
+}
+
+// ===== Calculate =====
+function calc(){
+  var H = parseFloat(document.getElementById('H').value)||45;
+  var Vo = parseFloat(document.getElementById('Vo').value)||30;
+  var Vd = parseFloat(document.getElementById('Vd').value)||110;
+  var A = parseFloat(document.getElementById('A').value)||30;
+  var F = parseFloat(document.getElementById('F').value)||2;
+  var Dur = parseInt(document.getElementById('Dur').value);
+  var Cp = parseInt(document.getElementById('Cp').value);
+  var Load = parseFloat(document.getElementById('Load').value)||15;
+
+  var LC = 23; // kg
+
+  // HM
+  var HM = H < 25 ? 1 : (H > 63 ? 0 : 25/H);
+  var hmNote = H < 25 ? '(H<25 → HM=1)' : (H > 63 ? '(H>63 → HM=0, 不宜举升)' : '25/'+H.toFixed(1)+' = '+HM.toFixed(3));
+
+  // VM (use origin V)
+  var VM = 1 - 0.003 * Math.abs(Vo - 75);
+  var vmNote = '1 − 0.003 × |'+Vo.toFixed(1)+'−75| = '+VM.toFixed(3);
+
+  // D and DM
+  var Dval = Math.abs(Vd - Vo);
+  var DM = 0.82 + 4.5 / Dval;
+  var dmNote = '0.82 + 4.5/'+Dval.toFixed(1)+' = '+DM.toFixed(3);
+
+  // AM
+  var AM = 1 - 0.0032 * A;
+  var amNote = A > 135 ? '(A>135° → AM=0)' : '1 − 0.0032 × '+A.toFixed(1)+'° = '+AM.toFixed(3);
+
+  // FM lookup
+  var vBelow = Vo < 75;
+  var fmResult = fmLookup(F, Dur, vBelow);
+  var FM = fmResult.fm;
+
+  // CM lookup: [Good,Fair,Poor][V<75]
+  var CM_TABLE = [[1.00,1.00],[0.95,1.00],[0.90,0.90]];
+  var CM = CM_TABLE[Cp][vBelow ? 0 : 1];
+
+  // RWL
+  var RWL = LC * HM * VM * DM * AM * FM * CM;
+
+  // LI
+  var LI = FM === 0 || HM === 0 ? Infinity : Load / RWL;
+
+  // Risk assessment
+  var riskCls, riskLabel, riskMsg;
+  if(LI === Infinity){
+    riskCls = 'risk-high'; riskLabel = '禁止举升';
+    riskMsg = '当前条件下 FM=0（频率过高）或 HM=0（水平距离超出范围），NIOSH 方程不建议举升操作。请采取工程措施重新设计作业。';
+  }else if(LI <= 1.0){
+    riskCls = 'risk-low'; riskLabel = '低风险 · 可接受';
+    riskMsg = '当前操作适合大多数健康工人。保持监控，定期复核作业条件。';
+  }else if(LI <= 2.0){
+    riskCls = 'risk-med'; riskLabel = '中等风险 · 需工程控制';
+    riskMsg = '部分工人可能面临过度疲劳或受伤风险。建议实施工程控制（如调整工作台高度、减少水平距离），并加强培训和管理。';
+  }else{
+    riskCls = 'risk-high'; riskLabel = '高风险 · 需立即重新设计';
+    riskMsg = '大多数工人面临显著受伤风险（腰骶部损伤）。必须立即采取工程措施重新设计作业，如使用机械辅助设备、旋转或自动化。';
+  }
+
+  // Find weakest multiplier
+  var multipliers = [
+    {label:'HM 水平', val:HM, fix:'减小水平距离 H（将工件靠近身体）'},
+    {label:'VM 垂直', val:VM, fix:'调整起终点高度至腰部水平（75 cm）'},
+    {label:'DM 位移', val:DM, fix:'减少垂直位移 D（缩小起终点高度差）'},
+    {label:'AM 角度', val:AM, fix:'减少躯干扭转 A（将工件放在正前方）'},
+    {label:'FM 频率', val:FM, fix:'降低举升频率或增加休息时间'},
+    {label:'CM 耦合', val:CM, fix:'改善手物耦合（增加提手、使用容器）'}
+  ];
+  var weakest = multipliers.reduce(function(a,b){return a.val < b.val ? a : b});
+  var weakestFix = weakest.fix;
+
+  // Build result HTML
+  var h = '';
+  h += '<div class="card li-card '+riskCls+'" id="liResult">';
+  h += '<div class="li-label">举升指数 LI = 实际重量 / RWL</div>';
+  var liStr = LI === Infinity ? '∞' : LI.toFixed(2);
+  h += '<div class="li-val">'+liStr+'</div>';
+  var rwlStr = RWL.toFixed(2);
+  if(FM===0)rwlStr='0.00 (FM=0)';
+  if(HM===0)rwlStr='0.00 (HM=0)';
+  h += '<div style="font-size:12px;color:var(--text2);margin-bottom:6px">RWL = '+rwlStr+' kg&emsp;|&emsp;实际举升重量 = '+Load.toFixed(1)+' kg</div>';
+  h += '<div class="li-risk">'+riskLabel+'</div>';
+  h += '</div>';
+
+  // Breakdown
+  h += '<div class="card">';
+  h += '<h3><i class="fa-solid fa-magnifying-glass"></i> 乘数分解</h3>';
+  h += '<div class="breakdown">';
+  var m = [
+    {l:'HM', v:HM, n:hmNote, range:'[25/H, H:25~63]'},
+    {l:'VM', v:VM, n:vmNote, range:'[1−0.003|V−75|]'},
+    {l:'DM', v:DM, n:dmNote, range:'[0.82+4.5/D, D='+Dval.toFixed(1)+']'},
+    {l:'AM', v:AM, n:amNote, range:'[1−0.0032A, A≤135°]'},
+    {l:'FM', v:FM, n:'查表5: F='+F.toFixed(1)+' '+'≤1h/1-2h/2-8h'[Dur]+' V'+(vBelow?'<':'≥')+'75', range:'频率乘数'},
+    {l:'CM', v:CM, n:'查表7: '+'良好/一般/差'[Cp]+' V'+(vBelow?'<':'≥')+'75', range:'耦合乘数'}
+  ];
+  m.forEach(function(mm){
+    var isW = mm.v === weakest.val;
+    h += '<div class="bf-item'+(isW?' weakest':'')+'">';
+    h += '<div class="bf-label">'+mm.l+'</div>';
+    h += '<div class="bf-val">'+mm.v.toFixed(3)+'</div>';
+    h += '<div class="bf-range">'+mm.n+'</div>';
+    if(isW)h+='<div class="weakest-tag">影响最大</div>';
+    h += '</div>';
+  });
+  h += '</div>';
+
+  // RWL formula
+  h += '<div class="rwl-formula">';
+  h += '<strong>RWL</strong> = LC × HM × VM × DM × AM × FM × CM<br>';
+  h += '= 23 × '+HM.toFixed(3)+' × '+VM.toFixed(3)+' × '+DM.toFixed(3)+' × '+AM.toFixed(3)+' × '+FM.toFixed(3)+' × '+CM.toFixed(3);
+  h += ' = <strong style="color:var(--red)">'+(FM===0||HM===0?'0.00（不适用）':RWL.toFixed(2))+' kg</strong>';
+  h += '</div>';
+
+  // Improvement
+  h += '<div class="improve-box">';
+  h += '<div class="im-header"><i class="fa-solid fa-lightbulb"></i> 改善建议</div>';
+  h += '<p>影响最大的因子：<strong style="color:var(--red)">'+weakest.label+' = '+weakest.val.toFixed(3)+'</strong></p>';
+  h += '<p>→ '+weakestFix+'</p>';
+  if(riskCls==='risk-high'){
+    h += '<p style="margin-top:6px;color:#DC2626"><i class="fa-solid fa-triangle-exclamation"></i> 高风险作业需立即采取综合性工程措施，优先考虑使用起重设备或自动化方案。</p>';
+  }
+  h += '</div>';
+
+  // CLI hint
+  h += '<div class="cli-hint">';
+  h += '<strong><i class="fa-solid fa-layer-group"></i> 多任务模式提示：</strong>';
+  h += '若作业包含多种举升任务（如不同箱子规格、不同起终点高度），需进行<b>CLI（复合举升指数）</b>分析：先分别计算每项任务的单任务 LI，再按频率加权合并 → CL<sub>st</sub> = LI<sub>1</sub> + Σ LI<sub>i</sub> × (1/F<sub>1</sub>−1/F<sub>i</sub>)，取 CL<sub>st</sub> 与 CLI = Σ LI<sub>i</sub> 中的较大值。本工具目前支持单任务分析。';
+  h += '</div>';
+
+  h += '</div>'; // close card
+
+  var rb = document.getElementById('resultBox');
+  rb.innerHTML = h;
+  rb.classList.add('rb-show');
+
+  // Scroll to result
+  rb.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ===== Examples =====
+function loadExample(n){
+  if(n===1){
+    // Pallet unloading
+    document.getElementById('H').value = 45;
+    document.getElementById('Vo').value = 30;
+    document.getElementById('Vd').value = 110;
+    document.getElementById('A').value = 30;
+    document.getElementById('F').value = 2;
+    document.getElementById('Dur').value = 2; // 2-8h
+    document.getElementById('Cp').value = 1;  // Fair
+    document.getElementById('Load').value = 15;
+  }else{
+    // Conveyor belt
+    document.getElementById('H').value = 30;
+    document.getElementById('Vo').value = 85;
+    document.getElementById('Vd').value = 90;
+    document.getElementById('A').value = 10;
+    document.getElementById('F').value = 6;
+    document.getElementById('Dur').value = 2;
+    document.getElementById('Cp').value = 0;  // Good
+    document.getElementById('Load').value = 10;
+  }
+  validate();
+  document.getElementById('resultBox').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ===== Init =====
+validate();
+</script>
+</body>
+</html>
