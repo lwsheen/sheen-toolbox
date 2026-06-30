@@ -85,10 +85,25 @@ details summary i{font-size:11px;color:var(--red)}
   .app-wrap{padding:8px 4px}.form-group{min-width:100%}
   .result-card .rc-val{font-size:28px}
 }
+.print-time{display:none}
 @media print{
+  @page{size:A4;margin:18mm 15mm 20mm 15mm;@bottom-center{content:"SHEEN Toolbox · 泄爆面积计算器";font-size:8pt;color:#666}}
+  body{background:#fff!important;font-size:11pt;color:#000!important}
   .sheen-nav,.sheen-footer,.tabs,.btn,.no-pr{display:none!important}
-  .app-wrap{padding:0!important}.card{box-shadow:none!important;border:1.5px solid #333!important;break-inside:avoid;padding:10px!important}
+  .app-wrap{padding:0!important}
+  .card{box-shadow:none!important;border:1.5px solid #333!important;break-inside:avoid;page-break-inside:avoid;padding:10px!important;border-radius:0!important}
+  .result-card{box-shadow:none!important;break-inside:avoid;page-break-inside:avoid;background:#f9f9f9!important;border:1.5px solid #333!important;border-left:6px solid #000!important}
+  .result-card .rc-val{color:#000!important}
   .dt th{background:#eee!important;color:#000!important}
+  .seg-item{border:1px solid #999!important;background:#fff!important;break-inside:avoid}
+  details{display:block!important}
+  details summary{display:none!important}
+  .dt th,.dt td{page-break-inside:auto}
+  .tc{display:none!important}
+  .tc.pt{display:block!important}
+  .form-card{display:none!important}
+  .print-time{display:block!important;font-size:9pt;color:#666;text-align:right;margin-bottom:12px}
+  .steps li.warn{background:#fefefe!important;border-left:3px solid #333!important}
 }
 </style>
 </head>
@@ -123,7 +138,7 @@ details summary i{font-size:11px;color:var(--red)}
 
 <!-- TAB 0: GB 50016 -->
 <div class="tc active" id="t0">
-<div class="card">
+<div class="card form-card">
 <h3><i class="fa-solid fa-ruler"></i> 厂房参数</h3>
 <div class="hint">GB 50016-2014 第 3.6.4 条 · A = 10 × C × V<sup>2/3</sup> · 长径比 λ &gt; 3 时需分段计算</div>
 <div class="form-row">
@@ -132,34 +147,34 @@ details summary i{font-size:11px;color:var(--red)}
   <div class="form-group w-sm"><label>高度 H <span class="unit">(m)</span></label><input type="number" id="gH" class="form-control" step="0.01" value="6" min="0.01" oninput="calcGB()"></div>
 </div>
 <div class="form-row">
-  <div class="form-group"><label>粉尘类型 / C 值</label><select id="gC" class="form-control" onchange="calcGB()">
-    <option value="0.055">谷物粉尘 / 面粉 / 木粉 / 煤粉 (C=0.055)</option>
-    <option value="0.075">中等爆炸危险 (奶粉 / 糖粉 / 淀粉) (C=0.075)</option>
-    <option value="0.10">环氧树脂粉 / 酚醛树脂粉 (C=0.10)</option>
-    <option value="0.11" selected>铝粉 / 镁粉 — 轻金属 (C=0.11)</option>
-    <option value="0.15">乙炔 / 氢气 (C=0.15)</option>
-    <option value="0.20">环氧乙烷 / 二硫化碳 (C=0.20)</option>
+  <div class="form-group"><label>爆炸性危险物质类别 / C 值</label><select id="gC" class="form-control" onchange="calcGB()">
+    <option value="0.030">氨、粮食/纸/皮革/铅/铬/铜粉尘 — K尘&lt;10 (C≥0.030)</option>
+    <option value="0.055">木屑、炭屑、煤粉、锑粉、锡粉等粉尘 (C≥0.055)</option>
+    <option value="0.110" selected>丙酮/汽油/甲醇/LPG/甲烷、铝/镁/锆粉等 (C≥0.110)</option>
+    <option value="0.160">乙烯 (C≥0.160)</option>
+    <option value="0.200">乙炔 (C≥0.200)</option>
+    <option value="0.250">氢气 (C≥0.250)</option>
     <option value="custom">自定义 C 值…</option>
   </select></div>
-  <div class="form-group w-sm" id="gCcustom" style="display:none"><label>自定义 C 值</label><input type="number" id="gCc" class="form-control" step="0.001" value="0.055" min="0.01" max="0.30" oninput="calcGB()"></div>
+  <div class="form-group w-sm" id="gCcustom" style="display:none"><label>自定义 C 值</label><input type="number" id="gCc" class="form-control" step="0.001" value="0.110" min="0.010" max="0.500" oninput="calcGB()"></div>
 </div>
 <button class="btn btn-p btn-sm" onclick="calcGB()"><i class="fa-solid fa-calculator"></i> 计算</button>
 </div>
 <div id="gbResult"></div>
-<details class="card no-pr" open style="margin-top:0"><summary><i class="fa-solid fa-table"></i> GB 50016 C 值参考表</summary><div class="tbl-w"><table class="dt"><thead><tr><th>粉尘类型</th><th>C 值</th></tr></thead><tbody>
-<tr><td>石灰石粉、硅石粉、石英粉</td><td>0.03</td></tr>
-<tr><td>谷物粉尘、面粉、木粉、煤粉、硫磺、PP/PE粉</td><td>0.055</td></tr>
-<tr><td>奶粉、糖粉、淀粉（中等爆炸危险）</td><td>0.075</td></tr>
-<tr><td>环氧树脂粉、酚醛树脂粉</td><td>0.10</td></tr>
-<tr><td>铝粉、镁粉（轻金属粉尘）</td><td>0.11</td></tr>
-<tr><td>乙炔、氢气</td><td>0.15</td></tr>
-<tr><td>环氧乙烷、二硫化碳（极高爆炸危险）</td><td>0.20</td></tr>
-</tbody></table></div></details>
+<details class="card no-pr" open style="margin-top:0"><summary><i class="fa-solid fa-table"></i> GB 50016-2014 表 3.6.4 泄压比 C 值 (m²/m³)</summary><div class="tbl-w"><table class="dt"><thead><tr><th>厂房内爆炸性危险物质的类别</th><th>C 值</th></tr></thead><tbody>
+<tr><td>氨、粮食粉尘、纸粉尘、皮革粉尘、铅粉尘、铬粉尘、铜粉尘等；<br>K<sub>尘</sub> &lt; 10 MPa·m·s<sup>−1</sup> 的粉尘</td><td>≥0.030</td></tr>
+<tr><td>木屑、炭屑、煤粉、锑粉、锡粉等粉尘</td><td>≥0.055</td></tr>
+<tr><td>丙酮、汽油、甲醇、液化石油气、甲烷、喷漆间或干燥室、<br>苯酚树脂、铝粉、镁粉、锆粉等粉尘</td><td>≥0.110</td></tr>
+<tr><td>乙烯</td><td>≥0.160</td></tr>
+<tr><td>乙炔</td><td>≥0.200</td></tr>
+<tr><td>氢气</td><td>≥0.250</td></tr>
+</tbody></table></div>
+<div class="hint" style="margin-top:8px;font-size:10px">注：1. 长径比为建筑平面几何外形尺寸中的最长尺寸与其横截面周长的积和 4.0 倍的建筑横截面积之比。<br>2. K<sub>尘</sub> 是指粉尘爆炸指数 (MPa·m/s)。</div></details>
 </div>
 
 <!-- TAB 1: EN 14491 -->
 <div class="tc" id="t1">
-<div class="card">
+<div class="card form-card">
 <h3><i class="fa-solid fa-flask"></i> 设备参数</h3>
 <div class="hint">EN 14491:2012 · Av = B × [0.127×P<sub>red,max</sub><sup>-0.758</sup>×V<sup>0.753</sup> + 0.175×P<sub>red,max</sub><sup>-0.497</sup>×(P<sub>stat</sub>−0.1)×V<sup>0.723</sup>]</div>
 <div class="form-row">
@@ -272,6 +287,7 @@ details summary i{font-size:11px;color:var(--red)}
 </main>
 
 <footer class="sheen-footer"><i class="fa-solid fa-shield-halved" style="color:var(--amb);font-size:22px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 泄爆面积计算器</footer>
+<div class="print-time" id="printTime"></div>
 
 <script>
 // ===== Tabs =====
@@ -294,10 +310,39 @@ function sw(n){
 })();
 
 // ===== Print / Export =====
-function prt(id){var d=document.getElementById(id);d.classList.add('active-print');window.print();setTimeout(function(){d.classList.remove('active-print')},500)}
+function prt(id){
+  // Show only the relevant tab content, hide the other
+  var t0=document.getElementById('t0'), t1=document.getElementById('t1');
+  if(id==='gbResult'){
+    t0.classList.add('pt'); t1.classList.add('no-pr');
+  } else {
+    t1.classList.add('pt'); t0.classList.add('no-pr');
+  }
+  // Open all details for print
+  document.querySelectorAll('details').forEach(function(d){d.setAttribute('open','')});
+  window.print();
+  setTimeout(function(){
+    t0.classList.remove('pt','no-pr');
+    t1.classList.remove('pt','no-pr');
+  },500);
+}
 function exp(id,title){
   var d=document.getElementById(id);if(!d)return;
-  var h='<html><head><meta charset="UTF-8"><title>'+title+'</title><style>body{font-family:sans-serif;padding:20px}.rc-val{font-size:24px;font-weight:700;color:#7A1825}.seg-item{border:1px solid #ccc;padding:8px;margin:4px 0;border-radius:8px}</style></head><body>'+d.innerHTML+'</body></html>';
+  // Get the parent tab content for reference table inclusion
+  var tabId=id==='gbResult'?'t0':'t1';
+  var tab=document.getElementById(tabId);
+  // Clone the result + reference details
+  var clone=document.createElement('div');
+  clone.innerHTML=d.innerHTML;
+  var ref=tab.querySelector('details');
+  if(ref){
+    var refClone=ref.cloneNode(true);refClone.open=true;
+    // Strip interactive elements
+    refClone.querySelectorAll('summary').forEach(function(s){s.style.display='none'});
+    clone.appendChild(refClone);
+  }
+  var printTime=new Date().toISOString().replace('T',' ').slice(0,16);
+  var h='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+title+'</title><style>body{font-family:sans-serif;padding:16px;color:#111;font-size:11pt}@media print{@page{size:A4;margin:18mm 15mm 20mm 15mm;@bottom-center{content:"SHEEN Toolbox · '+title+'";font-size:8pt;color:#666}}}.rc-val{font-size:28px;font-weight:700;color:#7A1825}.rc-label{font-size:11px;color:#666}.rc-note{font-size:10px;color:#666;margin-top:4px}.seg-item{border:1px solid #ccc;padding:8px;margin:4px 0;border-radius:8px}.steps{list-style:none;font-size:10pt}.steps li{padding:4px 0 4px 12px;border-left:3px solid #ddd;margin-bottom:4px}.steps li.warn{border-left-color:#EA580C;background:#FFF7ED}.dt{border-collapse:collapse;width:100%;font-size:9pt}.dt th,.dt td{border:1px solid #999;padding:5px 8px;text-align:center}.dt th{background:#eee}.print-time{font-size:9pt;color:#666;text-align:right;margin-bottom:12px}.btn,.no-pr{display:none}</style></head><body><div class="print-time">'+printTime+'</div>'+clone.innerHTML+'</body></html>';
   var b=new Blob(['\uFEFF'+h],{type:'application/vnd.ms-excel'});
   var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=title+'.xls';a.click();URL.revokeObjectURL(a.href);
 }
@@ -308,7 +353,7 @@ function calcGB(){
   var W=parseFloat(document.getElementById('gW').value)||12;
   var H=parseFloat(document.getElementById('gH').value)||6;
   var cSel=document.getElementById('gC').value;
-  var C=cSel==='custom'?(parseFloat(document.getElementById('gCc').value)||0.055):parseFloat(cSel);
+  var C=cSel==='custom'?(parseFloat(document.getElementById('gCc').value)||0.110):parseFloat(cSel);
 
   var V=L*W*H;
   var lambda=L*(W+H)/(2*W*H);
@@ -392,5 +437,6 @@ function calcEN(){
 }
 
 // ===== Init =====
+document.getElementById('printTime').textContent=new Date().toISOString().replace('T',' ').slice(0,16);
 calcGB();calcEN();
 </script>
