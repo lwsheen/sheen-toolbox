@@ -398,7 +398,7 @@ function prt1(){
   document.getElementById('t0').classList.remove('active-print');
   document.getElementById('t2').classList.remove('active-print');
   document.getElementById('t3').classList.remove('active-print');
-  document.getElementById('pt1').textContent='打印时间：'+new Date().toLocaleString('zh-CN');
+  document.getElementById('pt1').textContent='打印时间：'+new Date().toLocaleString('zh-CN', {timeZone:'Asia/Shanghai'});
   window.print();
   setTimeout(function(){document.querySelectorAll('.tc').forEach(function(c){c.classList.remove('active-print')})},500);
 }
@@ -407,7 +407,7 @@ function prt3(){
   document.getElementById('t0').classList.remove('active-print');
   document.getElementById('t1').classList.remove('active-print');
   document.getElementById('t2').classList.remove('active-print');
-  document.getElementById('pt3').textContent='打印时间：'+new Date().toLocaleString('zh-CN');
+  document.getElementById('pt3').textContent='打印时间：'+new Date().toLocaleString('zh-CN', {timeZone:'Asia/Shanghai'});
   window.print();
   setTimeout(function(){document.querySelectorAll('.tc').forEach(function(c){c.classList.remove('active-print')})},500);
 }

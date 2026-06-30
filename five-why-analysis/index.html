@@ -774,7 +774,7 @@ function generateReport() {
     var r = state.autoReport;
     var html = '<h2 style="font-size:20px;font-weight:700;margin-bottom:4px;"><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--brand-red);"></i> 5Why + 5M1E 根因分析报告</h2>';
     html += '<p class="report-meta"><i class="fa-solid fa-calendar"></i> ' +
-      new Date().toISOString().replace('T',' ').slice(0,16) +
+      new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000).toISOString().replace('T',' ').slice(0,16) +
       ' &nbsp;|&nbsp; <i class="fa-solid fa-robot"></i> AI 自动生成 &nbsp;|&nbsp; 模型：' + getApiConfig().model + '</p>';
 
     // Accident description
@@ -844,7 +844,7 @@ function generateReport() {
   // Original interactive mode report
   var html = '<h2><i class="fa-solid fa-file-lines"></i> 5Why + 5M1E 根因分析报告</h2>';
   html += '<p style="color:var(--text-secondary);font-size:14px;margin-bottom:20px;">' +
-    new Date().toISOString().replace('T',' ').slice(0,16) + '</p>';
+    new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000).toISOString().replace('T',' ').slice(0,16) + '</p>';
 
   // Incident
   html += '<div class="report-section"><h4>事故描述</h4><p>' + state.incident + '</p></div>';

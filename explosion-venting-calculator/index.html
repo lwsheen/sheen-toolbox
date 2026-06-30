@@ -341,7 +341,7 @@ function exp(id,title){
     refClone.querySelectorAll('summary').forEach(function(s){s.style.display='none'});
     clone.appendChild(refClone);
   }
-  var printTime=new Date().toISOString().replace('T',' ').slice(0,16);
+  var printTime=new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000).toISOString().replace('T',' ').slice(0,16);
   var h='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+title+'</title><style>body{font-family:sans-serif;padding:16px;color:#111;font-size:11pt}@media print{@page{size:A4;margin:18mm 15mm 20mm 15mm;@bottom-center{content:"SHEEN Toolbox · '+title+'";font-size:8pt;color:#666}}}.rc-val{font-size:28px;font-weight:700;color:#7A1825}.rc-label{font-size:11px;color:#666}.rc-note{font-size:10px;color:#666;margin-top:4px}.seg-item{border:1px solid #ccc;padding:8px;margin:4px 0;border-radius:8px}.steps{list-style:none;font-size:10pt}.steps li{padding:4px 0 4px 12px;border-left:3px solid #ddd;margin-bottom:4px}.steps li.warn{border-left-color:#EA580C;background:#FFF7ED}.dt{border-collapse:collapse;width:100%;font-size:9pt}.dt th,.dt td{border:1px solid #999;padding:5px 8px;text-align:center}.dt th{background:#eee}.print-time{font-size:9pt;color:#666;text-align:right;margin-bottom:12px}.btn,.no-pr{display:none}</style></head><body><div class="print-time">'+printTime+'</div>'+clone.innerHTML+'</body></html>';
   var b=new Blob(['\uFEFF'+h],{type:'application/vnd.ms-excel'});
   var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=title+'.xls';a.click();URL.revokeObjectURL(a.href);
@@ -437,6 +437,6 @@ function calcEN(){
 }
 
 // ===== Init =====
-document.getElementById('printTime').textContent=new Date().toISOString().replace('T',' ').slice(0,16);
+document.getElementById('printTime').textContent=new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000).toISOString().replace('T',' ').slice(0,16);
 calcGB();calcEN();
 </script>

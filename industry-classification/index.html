@@ -261,7 +261,7 @@
 <script>
 (function() {
 'use strict';
-document.getElementById('printTime').textContent = new Date().toISOString().replace('T',' ').slice(0,16);
+document.getElementById('printTime').textContent = new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000).toISOString().replace('T',' ').slice(0,16);
 </script>
 
 

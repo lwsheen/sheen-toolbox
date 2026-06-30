@@ -1022,7 +1022,7 @@
             };
 
             // ===== 设置打印日期 =====
-            const now = new Date();
+            const now = new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000);
             const printDateEl = $('printDate');
             if (printDateEl) {
                 printDateEl.textContent = `打印日期：${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`;

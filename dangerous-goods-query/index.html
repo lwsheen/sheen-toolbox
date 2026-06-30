@@ -483,7 +483,7 @@
 
       // Print timestamp
       document.getElementById('printTime').textContent =
-        new Date().toISOString().replace('T',' ').slice(0,16);
+        new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000).toISOString().replace('T',' ').slice(0,16);
 
       // Init
       buildClassChips();

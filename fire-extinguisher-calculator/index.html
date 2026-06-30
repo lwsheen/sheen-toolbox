@@ -980,7 +980,7 @@
             });
 
             // ===== 8. 初始化 =====
-            const now = new Date();
+            const now = new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000);
             const ptEl = $('printTime');
             if (ptEl) ptEl.textContent = `打印时间：${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
             applyScene('office');

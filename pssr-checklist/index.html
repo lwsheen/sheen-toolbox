@@ -1231,14 +1231,14 @@ renderAll();
 
 // 默认日期
 if (!document.getElementById('reviewDate').value) {
-  const today = new Date();
+  const today = new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000);
   document.getElementById('reviewDate').value = today.toISOString().split('T')[0];
 }
 
 // 打印日期
 var printDateEl = document.getElementById('printDate');
 if (printDateEl) {
-  var now = new Date();
+  var now = new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000);
   printDateEl.textContent = '打印日期：' + now.getFullYear() + '年' + (now.getMonth()+1) + '月' + now.getDate() + '日';
 }
 
