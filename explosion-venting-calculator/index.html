@@ -119,7 +119,6 @@ details summary i{font-size:11px;color:var(--red)}
 <div class="tabs no-pr">
 <button class="tab active" onclick="sw(0)"><i class="fa-solid fa-warehouse"></i>GB 50016 厂房泄压</button>
 <button class="tab" onclick="sw(1)"><i class="fa-solid fa-industry"></i>EN 14491 设备泄爆</button>
-<button class="tab" onclick="sw(2)"><i class="fa-solid fa-clock-rotate-left"></i>历史记录 <span id="histCount" style="font-size:10px;color:var(--text2)">(0)</span></button>
 </div>
 
 <!-- TAB 0: GB 50016 -->
@@ -270,15 +269,6 @@ details summary i{font-size:11px;color:var(--red)}
 <div class="hint" style="margin-top:8px"><strong>等级速查：</strong>St1 ≤ 200 | St2 200~300 | St3 > 300 (bar·m/s)</div></details>
 </div>
 
-<!-- TAB 2: History -->
-<div class="tc" id="t2">
-<div class="card"><h3><i class="fa-solid fa-clock-rotate-left"></i> 计算历史记录</h3>
-<div id="historyList" class="history-list"><div class="empty-state">暂无记录</div></div>
-<div style="margin-top:10px;display:flex;gap:6px" class="no-pr">
-  <button class="btn btn-o btn-sm" onclick="exportHistory()"><i class="fa-solid fa-file-export"></i> 导出报告</button>
-  <button class="btn btn-d btn-sm" onclick="clearHistory()"><i class="fa-solid fa-trash"></i> 清空记录</button>
-</div></div>
-</div>
 </main>
 
 <footer class="sheen-footer"><i class="fa-solid fa-shield-halved" style="color:var(--amb);font-size:22px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 泄爆面积计算器</footer>
@@ -288,10 +278,9 @@ details summary i{font-size:11px;color:var(--red)}
 function sw(n){
   document.querySelectorAll('.tab').forEach(function(t,i){t.classList.toggle('active',i===n)});
   document.querySelectorAll('.tc').forEach(function(c,i){c.classList.toggle('active',i===n)});
-  if(n===2)renderHistory();
 }
 
-// ===== Custom value toggles (unified) =====
+// ===== Custom value toggles =====
 (function(){
   var customs={gC:'gCcustom',eKSt:'eKStCustom',ePred:'ePredCustom',eB:'eBCustom'};
   Object.keys(customs).forEach(function(id){
@@ -299,60 +288,19 @@ function sw(n){
     if(!sel||!document.getElementById(customs[id]))return;
     sel.addEventListener('change',function(){
       document.getElementById(customs[id]).style.display=sel.value==='custom'?'block':'none';
-      if(id==='gC')calcGB();else if(id.slice(0,1)==='e')calcEN();
+      if(id.slice(0,1)==='g')calcGB();else calcEN();
     });
   });
-  // gC special: also toggle gCcustom when changing custom selection
-  var gCsel=document.getElementById('gC');
 })();
 
-// ===== History =====
-var history=JSON.parse(localStorage.getItem('evHistory')||'[]');
-
-function saveHistory(type,summary,detail){
-  history.unshift({type:type,summary:summary,detail:detail,time:new Date().toISOString().replace('T',' ').slice(0,16)});
-  if(history.length>50)history.length=50;
-  localStorage.setItem('evHistory',JSON.stringify(history));
-  document.getElementById('histCount').textContent='('+history.length+')';
+// ===== Print / Export =====
+function prt(id){var d=document.getElementById(id);d.classList.add('active-print');window.print();setTimeout(function(){d.classList.remove('active-print')},500)}
+function exp(id,title){
+  var d=document.getElementById(id);if(!d)return;
+  var h='<html><head><meta charset="UTF-8"><title>'+title+'</title><style>body{font-family:sans-serif;padding:20px}.rc-val{font-size:24px;font-weight:700;color:#7A1825}.seg-item{border:1px solid #ccc;padding:8px;margin:4px 0;border-radius:8px}</style></head><body>'+d.innerHTML+'</body></html>';
+  var b=new Blob(['\uFEFF'+h],{type:'application/vnd.ms-excel'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=title+'.xls';a.click();URL.revokeObjectURL(a.href);
 }
-function renderHistory(){
-  var h='';
-  if(history.length===0){h='<div class="empty-state">暂无记录</div>'}
-  else{
-    history.forEach(function(item,i){
-      h+='<div class="history-item" onclick="restoreHistory('+i+')">';
-      h+='<span class="hi-type '+(item.type==='GB'?'hi-gb':'hi-en')+'">'+item.type+'</span>';
-      h+='<span class="hi-sum">'+esc(item.summary)+'</span>';
-      h+='<span class="hi-val">'+esc(item.detail)+'</span>';
-      h+='<span class="hi-time">'+item.time+'</span>';
-      h+='</div>';
-    });
-  }
-  document.getElementById('historyList').innerHTML=h;
-}
-function restoreHistory(i){
-  var item=history[i];
-  // Just show details - not practical to restore complex inputs
-  alert(item.summary+'\n\n'+item.detail+'\n\n计算时间: '+item.time);
-}
-function exportHistory(){
-  if(history.length===0){alert('暂无记录可导出');return}
-  var lines=['泄爆面积计算器 — 历史记录报告','','生成时间: '+new Date().toLocaleString('zh-CN'),''];
-  history.forEach(function(item,i){
-    lines.push('【'+(i+1)+'】 '+item.type+' | '+item.time);
-    lines.push(item.summary);
-    lines.push(item.detail);
-    lines.push('');
-  });
-  var blob=new Blob(['\uFEFF'+lines.join('\n')],{type:'text/plain;charset=utf-8'});
-  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='泄爆面积计算记录.txt';a.click();URL.revokeObjectURL(a.href);
-}
-function clearHistory(){
-  if(!confirm('确认清空所有历史记录？'))return;
-  history=[];localStorage.setItem('evHistory','[]');
-  renderHistory();document.getElementById('histCount').textContent='(0)';
-}
-function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')}
 
 // ===== GB 50016 =====
 function calcGB(){
@@ -369,48 +317,40 @@ function calcGB(){
   html+='<div class="card"><h3><i class="fa-solid fa-chart-line"></i> 计算过程</h3>';
   html+='<ul class="steps">';
   html+='<li>厂房尺寸：L='+L.toFixed(2)+' m, W='+W.toFixed(2)+' m, H='+H.toFixed(2)+' m</li>';
-  html+='<li>厂房容积：<span>V = L × W × H = '+V.toFixed(2)+' m³</span></li>';
-  html+='<li>长径比：<span>λ = L × (W+H) / (2 × W × H) = '+L.toFixed(1)+'×('+W.toFixed(1)+'+'+H.toFixed(1)+')/(2×'+W.toFixed(1)+'×'+H.toFixed(1)+') = '+lambda.toFixed(2)+'</span></li>';
+  html+='<li>厂房容积：<span>V = '+V.toFixed(2)+' m³</span></li>';
+  html+='<li>长径比：<span>λ = L×(W+H)/(2×W×H) = '+lambda.toFixed(2)+'</span></li>';
 
   if(lambda<=3){
     var A=10*C*Math.pow(V,2/3);
-    html+='<li style="border-left-color:#16A34A;background:#ECFDF5;padding:4px 12px;border-radius:0 6px 6px 0">λ = '+lambda.toFixed(2)+' ≤ 3 → <span style="color:#16A34A">无需分段</span></li>';
-    html+='<li>泄压面积：<span>A = 10 × C × V<sup>2/3</sup> = 10 × '+C.toFixed(3)+' × '+V.toFixed(1)+'<sup>2/3</sup> = '+A.toFixed(2)+' m²</span></li>';
+    html+='<li style="border-left-color:#16A34A;background:#ECFDF5;padding:4px 12px;border-radius:0 6px 6px 0">λ='+lambda.toFixed(2)+' ≤ 3 → <span style="color:#16A34A">无需分段</span></li>';
+    html+='<li>泄压面积：<span>A = 10×C×V<sup>2/3</sup> = '+A.toFixed(2)+' m²</span></li>';
     html+='</ul></div>';
-
     html+='<div class="result-card"><div class="rc-label">总泄压面积</div>';
     html+='<div class="rc-val">'+A.toFixed(2)+' m²</div>';
-    html+='<div class="rc-note">C = '+C.toFixed(3)+' | V = '+V.toFixed(1)+' m³ | λ = '+lambda.toFixed(2)+' ≤ 3</div></div>';
-
-    saveHistory('GB','厂房 '+L.toFixed(1)+'×'+W.toFixed(1)+'×'+H.toFixed(1)+'m C='+C.toFixed(3),'A='+A.toFixed(2)+' m² V='+V.toFixed(1)+'m³ λ='+lambda.toFixed(2));
+    html+='<div class="rc-note">C='+C.toFixed(3)+' | V='+V.toFixed(1)+' m³ | λ='+lambda.toFixed(2)+'</div>';
+    html+='<div class="no-pr" style="margin-top:10px"><button class="btn btn-bad btn-sm" onclick="prt(\'gbResult\')"><i class="fa-solid fa-print"></i> 打印</button> <button class="btn btn-o btn-sm" onclick="exp(\'gbResult\',\'厂房泄压面积\')"><i class="fa-solid fa-file-export"></i> 导出</button></div>';
+    html+='</div>';
   }else{
     var Lmax=3*2*W*H/(W+H);
     var n=Math.ceil(L/Lmax);
     var Lseg=L/n;
     var segAreas=[],totalA=0;
-
-    html+='<li class="warn">λ = '+lambda.toFixed(2)+' > 3 → <span style="color:#EA580C">需要分段计算！</span></li>';
-    html+='<li>每段最大长度：<span>L<sub>max</sub> = 3 × 2WH/(W+H) = '+Lmax.toFixed(2)+' m</span></li>';
-    html+='<li>分段数量：<span>n = ceil('+L.toFixed(1)+'/'+Lmax.toFixed(2)+') = '+n+' 段</span></li>';
-    html+='<li>每段长度：<span>L<sub>seg</sub> = '+L.toFixed(1)+'/'+n+' = '+Lseg.toFixed(2)+' m</span></li>';
-    html+='</ul>';
-
-    html+='<div class="seg-grid">';
+    html+='<li class="warn">λ='+lambda.toFixed(2)+' > 3 → <span style="color:#EA580C">需要分段！</span></li>';
+    html+='<li>每段最大长度：<span>L<sub>max</sub>='+Lmax.toFixed(2)+' m</span></li>';
+    html+='<li>段数：<span>n='+n+'</span> | 每段长：<span>'+Lseg.toFixed(2)+' m</span></li>';
+    html+='</ul><div class="seg-grid">';
     for(var i=0;i<n;i++){
       var VL=Lseg*W*H;
       var Ai=10*C*Math.pow(VL,2/3);
       segAreas.push(Ai);totalA+=Ai;
-      html+='<div class="seg-item"><div class="seg-lbl">第 '+(i+1)+' 段</div>';
-      html+='<div class="seg-val">'+Ai.toFixed(2)+' m²</div>';
-      html+='<div style="font-size:10px;color:var(--text2)">V='+VL.toFixed(1)+'m³</div></div>';
+      html+='<div class="seg-item"><div class="seg-lbl">第'+(i+1)+'段</div><div class="seg-val">'+Ai.toFixed(2)+' m²</div><div style="font-size:10px;color:var(--text2)">V='+VL.toFixed(1)+'m³</div></div>';
     }
     html+='</div></div>';
-
     html+='<div class="result-card"><div class="rc-label">总泄压面积</div>';
     html+='<div class="rc-val">'+totalA.toFixed(2)+' m²</div>';
-    html+='<div class="rc-note">C='+C.toFixed(3)+' | '+n+'段 × '+Lseg.toFixed(2)+'m | 各段面'+segAreas.map(function(a){return a.toFixed(2)}).join('+')+'m²</div></div>';
-
-    saveHistory('GB','厂房 '+L.toFixed(1)+'×'+W.toFixed(1)+'×'+H.toFixed(1)+'m C='+C.toFixed(3)+' (分段×'+n+')','A='+totalA.toFixed(2)+' m² λ='+lambda.toFixed(2)+' '+n+'段');
+    html+='<div class="rc-note">C='+C.toFixed(3)+' | '+n+'段×'+Lseg.toFixed(2)+'m | '+segAreas.map(function(a){return a.toFixed(2)}).join('+')+' m²</div>';
+    html+='<div class="no-pr" style="margin-top:10px"><button class="btn btn-bad btn-sm" onclick="prt(\'gbResult\')"><i class="fa-solid fa-print"></i> 打印</button> <button class="btn btn-o btn-sm" onclick="exp(\'gbResult\',\'厂房泄压面积\')"><i class="fa-solid fa-file-export"></i> 导出</button></div>';
+    html+='</div>';
   }
   document.getElementById('gbResult').innerHTML=html;
 }
@@ -425,49 +365,32 @@ function calcEN(){
   var pRed=pRedSel==='custom'?(parseFloat(document.getElementById('ePredc').value)||1.5):parseFloat(pRedSel);
   var bSel=document.getElementById('eB').value;
   var B=bSel==='custom'?(parseFloat(document.getElementById('eBc').value)||1.0):parseFloat(bSel);
-  var pMax=parseFloat(document.getElementById('ePmax').value)||9.0;
 
-  // Determine St class
   var stClass=KSt<=200?'St1（弱爆炸）':(KSt<=300?'St2（强爆炸）':'St3（极强爆炸）');
   var stColor=KSt<=200?'#16A34A':(KSt<=300?'#CA8A04':'#DC2626');
 
-  // EN 14491 formula
   var term1=0.127*Math.pow(pRed,-0.758)*Math.pow(V,0.753);
   var term2=0.175*Math.pow(pRed,-0.497)*(pStat-0.1)*Math.pow(V,0.723);
-  var AvRaw=term1+term2;
-  var Av=B*AvRaw;
+  var Av=B*(term1+term2);
 
   var html='';
   html+='<div class="card"><h3><i class="fa-solid fa-chart-line"></i> 计算过程</h3>';
   html+='<ul class="steps">';
-  html+='<li>设备容积：<span>V = '+V.toFixed(2)+' m³</span></li>';
-  html+='<li>粉尘爆炸指数：<span>K<sub>St</sub> = '+KSt+' bar·m/s</span> | 最大爆炸压力 P<sub>max</sub> = '+pMax.toFixed(1)+' bar</li>';
-  html+='<li>粉尘爆炸等级：<span style="color:'+stColor+'">'+stClass+'</span></li>';
-  html+='<li>泄爆装置：P<sub>stat</sub> = '+pStat.toFixed(2)+' bar | P<sub>red,max</sub> = '+pRed.toFixed(1)+' bar</li>';
-  html+='<li>泄爆导管修正：<span>B = '+B.toFixed(1)+'</span></li>';
-  html+='<li style="border-left-color:var(--red)">公式展开：</li>';
-  html+='<li>项 ① = 0.127 × P<sub>red</sub><sup>-0.758</sup> × V<sup>0.753</sup></li>';
-  html+='<li>= 0.127 × '+pRed.toFixed(1)+'<sup>-0.758</sup> × '+V.toFixed(1)+'<sup>0.753</sup></li>';
-  html+='<li>= <span>'+term1.toFixed(4)+' m²</span></li>';
-  html+='<li>项 ② = 0.175 × P<sub>red</sub><sup>-0.497</sup> × (P<sub>stat</sub>−0.1) × V<sup>0.723</sup></li>';
-  html+='<li>= 0.175 × '+pRed.toFixed(1)+'<sup>-0.497</sup> × '+pStat.toFixed(2)+'−0.1 × '+V.toFixed(1)+'<sup>0.723</sup></li>';
-  html+='<li>= <span>'+term2.toFixed(4)+' m²</span></li>';
-  html+='<li>Av（修正前）= <span>'+AvRaw.toFixed(4)+' m²</span></li>';
-  html+='<li>Av（修正后）= B × Av = '+B.toFixed(1)+' × '+AvRaw.toFixed(4)+' = <span style="font-size:16px;color:var(--red)">'+Av.toFixed(4)+' m²</span></li>';
+  html+='<li>设备容积：<span>V='+V.toFixed(2)+' m³</span></li>';
+  html+='<li>粉尘爆炸指数：<span>K<sub>St</sub>='+KSt+' bar·m/s</span> | 等级：<span style="color:'+stColor+'">'+stClass+'</span></li>';
+  html+='<li>泄爆参数：P<sub>stat</sub>='+pStat.toFixed(2)+' bar | P<sub>red,max</sub>='+pRed.toFixed(1)+' bar | B='+B.toFixed(1)+'</li>';
+  html+='<li>项①：0.127×P<sub>red</sub><sup>-0.758</sup>×V<sup>0.753</sup> = <span>'+term1.toFixed(4)+' m²</span></li>';
+  html+='<li>项②：0.175×P<sub>red</sub><sup>-0.497</sup>×(P<sub>stat</sub>−0.1)×V<sup>0.723</sup> = <span>'+term2.toFixed(4)+' m²</span></li>';
+  html+='<li>Av = B×(项①+项②) = '+B.toFixed(1)+'×'+((term1+term2).toFixed(4))+' = <span style="font-size:16px;color:var(--red)">'+Av.toFixed(4)+' m²</span></li>';
   html+='</ul></div>';
-
   html+='<div class="result-card"><div class="rc-label">所需泄爆面积 Av</div>';
   html+='<div class="rc-val">'+Av.toFixed(4)+' m²</div>';
-  html+='<div class="rc-note">K<sub>St</sub>='+KSt+' | '+stClass+' | P<sub>red,max</sub>='+pRed.toFixed(1)+' bar | B='+B.toFixed(1)+'</div></div>';
-
+  html+='<div class="rc-note">K<sub>St</sub>='+KSt+' | '+stClass+' | P<sub>red</sub>='+pRed.toFixed(1)+' bar | B='+B.toFixed(1)+'</div>';
+  html+='<div class="no-pr" style="margin-top:10px"><button class="btn btn-bad btn-sm" onclick="prt(\'enResult\')"><i class="fa-solid fa-print"></i> 打印</button> <button class="btn btn-o btn-sm" onclick="exp(\'enResult\',\'设备泄爆面积\')"><i class="fa-solid fa-file-export"></i> 导出</button></div>';
+  html+='</div>';
   document.getElementById('enResult').innerHTML=html;
-  saveHistory('EN','设备V='+V.toFixed(1)+'m³ KSt='+KSt+' B='+B.toFixed(1),'Av='+Av.toFixed(4)+' m² '+stClass);
 }
 
 // ===== Init =====
-document.getElementById('histCount').textContent='('+history.length+')';
-if(history.length>0)renderHistory();
 calcGB();calcEN();
 </script>
-</body>
-</html>
