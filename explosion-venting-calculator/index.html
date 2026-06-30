@@ -166,13 +166,13 @@ details summary i{font-size:11px;color:var(--red)}
 <div class="form-row">
   <div class="form-group w-sm"><label>设备容积 V <span class="unit">(m³)</span></label><input type="number" id="eV" class="form-control" step="0.01" value="10" min="0.01" oninput="calcEN()"></div>
   <div class="form-group"><label>粉尘类型 / KSt 值</label><select id="eKSt" class="form-control" onchange="calcEN()">
-    <option value="50">褐煤粉 (KSt=50, St1)</option>
-    <option value="100" selected>小麦粉 / 木粉尘 (KSt=100, St1)</option>
-    <option value="130">糖粉 (KSt=130, St1)</option>
-    <option value="150">淀粉 / 纤维素 (KSt=150, St1)</option>
-    <option value="200">有机颜料 / PE粉 (KSt=200, St2)</option>
-    <option value="250">PVC粉 / 酚醛树脂 (KSt=250, St2)</option>
-    <option value="300">镁铝合金粉 (KSt=300, St2)</option>
+    <option value="70">木炭粉 (KSt=70, St1)</option>
+    <option value="100">小麦粉 / 木粉尘 / 纸粉 (KSt≈100, St1)</option>
+    <option value="130">谷物粉尘 / 香料粉 (KSt=130, St1)</option>
+    <option value="150" selected>面粉 / 糖粉 / 煤粉 (KSt=150, St1)</option>
+    <option value="180">玉米淀粉 / 纤维素 (KSt=180, St1/St2)</option>
+    <option value="200">硬脂酸铝 / 硅粉 (KSt=200, St2)</option>
+    <option value="280">钛粉 (KSt=280, St2/St3)</option>
     <option value="400">铝粉 (KSt=400, St3)</option>
     <option value="500">镁粉 (KSt=500, St3)</option>
     <option value="custom">自定义 KSt…</option>
@@ -208,19 +208,66 @@ details summary i{font-size:11px;color:var(--red)}
 <button class="btn btn-p btn-sm" onclick="calcEN()"><i class="fa-solid fa-calculator"></i> 计算</button>
 </div>
 <div id="enResult"></div>
-<details class="card no-pr" open style="margin-top:0"><summary><i class="fa-solid fa-table"></i> KSt 参考表 &amp; 粉尘爆炸等级</summary><div class="tbl-w"><table class="dt"><thead><tr><th>粉尘类型</th><th>KSt (bar·m/s)</th><th>等级</th><th>P<sub>max</sub> (bar)</th></tr></thead><tbody>
-<tr><td>褐煤粉</td><td>50</td><td>St1</td><td>8~9</td></tr>
-<tr><td>小麦粉</td><td>100</td><td>St1</td><td>8~10</td></tr>
-<tr><td>木粉尘</td><td>100~160</td><td>St1</td><td>8~10</td></tr>
-<tr><td>淀粉 / 纤维素</td><td>150~180</td><td>St1</td><td>9~10</td></tr>
-<tr><td>糖粉</td><td>130~140</td><td>St1</td><td>8~9</td></tr>
-<tr><td>有机颜料</td><td>200~300</td><td>St2</td><td>8~10</td></tr>
-<tr><td>聚乙烯 PE</td><td>150~220</td><td>St1/St2</td><td>7~9</td></tr>
-<tr><td>聚氯乙烯 PVC</td><td>100~250</td><td>St1/St2</td><td>7~9</td></tr>
-<tr><td>镁铝合金粉</td><td>300</td><td>St2</td><td>9~13</td></tr>
-<tr><td>铝粉</td><td>400~600</td><td>St3</td><td>10~13</td></tr>
-<tr><td>镁粉</td><td>500~800</td><td>St3</td><td>10~14</td></tr>
-</tbody></table></div></details>
+<details class="card no-pr" open style="margin-top:0"><summary><i class="fa-solid fa-table"></i> KSt 参考查询表 &amp; 粉尘爆炸等级</summary><div class="tbl-w"><table class="dt"><thead><tr><th>粉尘名称</th><th>KSt 范围 (bar·m/s)</th><th>典型值</th><th>爆炸等级</th></tr></thead><tbody>
+<tr><td>面粉</td><td>120～190</td><td>150</td><td>St1</td></tr>
+<tr><td>小麦淀粉</td><td>130～190</td><td>160</td><td>St1</td></tr>
+<tr><td>玉米淀粉</td><td>140～210</td><td>180</td><td>St1/St2</td></tr>
+<tr><td>谷物粉尘</td><td>110～160</td><td>130</td><td>St1</td></tr>
+<tr><td>大米粉</td><td>100～140</td><td>120</td><td>St1</td></tr>
+<tr><td>大豆粉</td><td>100～150</td><td>120</td><td>St1</td></tr>
+<tr><td>可可粉</td><td>80～140</td><td>110</td><td>St1</td></tr>
+<tr><td>糖粉</td><td>130～180</td><td>150</td><td>St1</td></tr>
+<tr><td>奶粉（脱脂）</td><td>90～130</td><td>110</td><td>St1</td></tr>
+<tr><td>咖啡粉</td><td>80～130</td><td>100</td><td>St1</td></tr>
+<tr><td>茶叶粉尘</td><td>80～120</td><td>100</td><td>St1</td></tr>
+<tr><td>烟草粉尘</td><td>70～130</td><td>100</td><td>St1</td></tr>
+<tr><td>香料粉（混合）</td><td>100～160</td><td>130</td><td>St1</td></tr>
+<tr><td>干草/秸秆粉尘</td><td>100～160</td><td>130</td><td>St1</td></tr>
+<tr><td>饲料粉尘</td><td>100～170</td><td>140</td><td>St1</td></tr>
+<tr><td>木粉（混合）</td><td>130～190</td><td>160</td><td>St1</td></tr>
+<tr><td>松木粉</td><td>140～200</td><td>170</td><td>St1/St2</td></tr>
+<tr><td>橡木粉</td><td>120～180</td><td>150</td><td>St1</td></tr>
+<tr><td>刨花板粉尘</td><td>100～170</td><td>140</td><td>St1</td></tr>
+<tr><td>纸粉尘</td><td>60～120</td><td>90</td><td>St1</td></tr>
+<tr><td>纤维素</td><td>140～220</td><td>180</td><td>St1/St2</td></tr>
+<tr><td>棉尘</td><td>70～130</td><td>100</td><td>St1</td></tr>
+<tr><td>煤粉（烟煤）</td><td>100～170</td><td>140</td><td>St1</td></tr>
+<tr><td>褐煤粉</td><td>110～180</td><td>150</td><td>St1</td></tr>
+<tr><td>木炭粉</td><td>50～100</td><td>70</td><td>St1</td></tr>
+<tr><td>活性炭</td><td>80～140</td><td>110</td><td>St1</td></tr>
+<tr><td>碳黑</td><td>80～130</td><td>100</td><td>St1</td></tr>
+<tr><td>石墨粉尘</td><td>60～110</td><td>85</td><td>St1</td></tr>
+<tr><td>石油焦</td><td>100～160</td><td>130</td><td>St1</td></tr>
+<tr><td>聚乙烯 PE</td><td>100～180</td><td>140</td><td>St1</td></tr>
+<tr><td>聚丙烯 PP</td><td>110～190</td><td>150</td><td>St1</td></tr>
+<tr><td>聚氯乙烯 PVC</td><td>100～200</td><td>150</td><td>St1/St2</td></tr>
+<tr><td>聚苯乙烯 PS</td><td>120～190</td><td>160</td><td>St1</td></tr>
+<tr><td>聚氨酯泡沫</td><td>110～200</td><td>160</td><td>St1/St2</td></tr>
+<tr><td>ABS树脂</td><td>90～160</td><td>130</td><td>St1</td></tr>
+<tr><td>环氧树脂</td><td>80～170</td><td>130</td><td>St1</td></tr>
+<tr><td>酚醛树脂</td><td>100～180</td><td>140</td><td>St1</td></tr>
+<tr><td>橡胶粉尘</td><td>100～180</td><td>140</td><td>St1</td></tr>
+<tr><td>聚酯树脂</td><td>100～190</td><td>145</td><td>St1</td></tr>
+<tr><td>铝粉（细）</td><td>300～550</td><td>400</td><td>St3</td></tr>
+<tr><td>铝粉（粗/涂层）</td><td>100～250</td><td>180</td><td>St1/St2</td></tr>
+<tr><td>镁粉</td><td>400～600</td><td>500</td><td>St3</td></tr>
+<tr><td>硅粉</td><td>200～300</td><td>250</td><td>St2/St3</td></tr>
+<tr><td>钛粉</td><td>200～350</td><td>280</td><td>St2/St3</td></tr>
+<tr><td>锌粉</td><td>80～140</td><td>110</td><td>St1</td></tr>
+<tr><td>铁粉</td><td>60～120</td><td>90</td><td>St1</td></tr>
+<tr><td>铝镁合金</td><td>350～500</td><td>430</td><td>St3</td></tr>
+<tr><td>锆粉</td><td>300～500</td><td>400</td><td>St3</td></tr>
+<tr><td>硫磺粉</td><td>120～170</td><td>150</td><td>St1</td></tr>
+<tr><td>硬脂酸钙</td><td>100～160</td><td>130</td><td>St1</td></tr>
+<tr><td>硬脂酸铝</td><td>150～250</td><td>200</td><td>St1/St2</td></tr>
+<tr><td>阿司匹林</td><td>140～220</td><td>180</td><td>St1/St2</td></tr>
+<tr><td>维生素C</td><td>110～170</td><td>140</td><td>St1</td></tr>
+<tr><td>有机染料/颜料</td><td>100～250</td><td>180</td><td>St1/St2</td></tr>
+<tr><td>农药粉</td><td>100～200</td><td>150</td><td>St1/St2</td></tr>
+<tr><td>过氧化苯甲酰</td><td>150～350</td><td>250</td><td>St2/St3</td></tr>
+<tr><td>硝酸铵</td><td>100～200</td><td>150</td><td>St1/St2</td></tr>
+</tbody></table></div>
+<div class="hint" style="margin-top:8px"><strong>等级速查：</strong>St1 ≤ 200 | St2 200~300 | St3 > 300 (bar·m/s)</div></details>
 </div>
 
 <!-- TAB 2: History -->
@@ -244,22 +291,19 @@ function sw(n){
   if(n===2)renderHistory();
 }
 
-// ===== Custom value toggles =====
+// ===== Custom value toggles (unified) =====
 (function(){
-  ['gC','eKSt','ePred','eB'].forEach(function(id){
+  var customs={gC:'gCcustom',eKSt:'eKStCustom',ePred:'ePredCustom',eB:'eBCustom'};
+  Object.keys(customs).forEach(function(id){
     var sel=document.getElementById(id);
-    if(!sel)return;
+    if(!sel||!document.getElementById(customs[id]))return;
     sel.addEventListener('change',function(){
-      var custom=document.getElementById(id+'Custom');
-      if(custom)custom.style.display=sel.value==='custom'?'block':'none';
-      if(id==='gC')document.getElementById('gCc').style.display=sel.value==='custom'?'block':'none';
+      document.getElementById(customs[id]).style.display=sel.value==='custom'?'block':'none';
+      if(id==='gC')calcGB();else if(id.slice(0,1)==='e')calcEN();
     });
   });
-  document.getElementById('gC').addEventListener('change',function(){
-    var v=this.value;
-    if(v==='custom'){document.getElementById('gCcustom').style.display='block'}
-    else{document.getElementById('gCcustom').style.display='none';calcGB()}
-  });
+  // gC special: also toggle gCcustom when changing custom selection
+  var gCsel=document.getElementById('gC');
 })();
 
 // ===== History =====
