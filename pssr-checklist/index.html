@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<title>PSSR 开车前安全审查检查表 · SHEEN Toolbox</title>
+<style>
+/* ===== 基础变量 ===== */
+:root {
+  --black: #000000;
+  --text-primary: #111827;
+  --text-secondary: #6B7280;
+  --bg-page: #F8FAFC;
+  --bg-card: #FFFFFF;
+  --border: #E5E7EB;
+  --border-light: #F3F4F6;
+  --brand-red: #7A1825;
+  --brand-red-hover: #5C121C;
+  --brand-red-light: #FEF2F2;
+  --amber: #FBBF24;
+  --radius: 8px;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  /* 行业标签颜色（保持原色以区分行业） */
+  --tag-pharma-bg: #e8f8f0; --tag-pharma: #1a7a4a;
+  --tag-chem-bg: #fff4e5; --tag-chem: #c06000;
+  --tag-oil-bg: #e5f0ff; --tag-oil: #1a4fa0;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  font-size: 14px;
+  color: var(--text-primary);
+  background: var(--bg-page);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* ===== SHEEN Toolbox 统一导航栏 ===== */
+.sheen-nav {
+  background: var(--black);
+  padding:0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 4px solid var(--brand-red);
+  flex-wrap: wrap;
+  min-height:52px;
+}
+.sheen-nav-brand { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; padding:12px 0; }
+.sheen-nav-brand i { font-size:22px; color: var(--amber); }
+.sheen-nav-brand-text { font-size:15px; font-weight: 700; letter-spacing: 0.5px; }
+.sheen-nav-tools { display: flex; gap: 4px; flex-wrap: wrap; }
+.sheen-nav-tool {
+  display: flex; align-items: center; gap:4px;
+  padding:5px 10px; color: rgba(255,255,255,0.7);
+  text-decoration: none; font-size:11px; font-weight: 500;
+  border-radius: 60px; transition:all .2s; white-space: nowrap;
+}
+.sheen-nav-tool:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.sheen-nav-tool.active { background: rgba(255,255,255,0.15); color: #fff; font-weight: 600; }
+/* ===== SHEEN Toolbox 统一页脚 ===== */
+.sheen-footer {
+  text-align: center; padding: 16px 32px; font-size:11px;
+  color: var(--text-secondary); border-top: 1px solid var(--border);
+  background: var(--bg-card); letter-spacing: 0.5px;
+}
+.sheen-footer i { color: var(--amber); margin-right: 4px; }
+.sheen-footer strong { color: var(--text-primary); }
+
+/* Spinner */
+.spinner-inline{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--brand-red);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:4px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== 打印品牌（仅打印显示） ===== */
+.sheen-print-header, .sheen-print-footer { display: none; }
+
+/* ===== 顶部工具栏 ===== */
+.toolbar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  padding: 10px 24px; display: flex; align-items: center; gap: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.04); flex-wrap: wrap;
+}
+.toolbar-title { font-size: 16px; font-weight: 700; color: var(--text-primary); flex: 1; min-width: 200px; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap:4px;
+  padding: 7px 18px;
+  border-radius: 60px;
+  border: none;
+  cursor: pointer;
+  font-size:11px;
+  font-weight: 600;
+  transition: all .18s;
+  white-space: nowrap;
+  font-family: var(--font);
+}
+.btn-primary { background: var(--brand-red); color: #fff; }
+.btn-primary:hover { background: var(--brand-red-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(122,24,37,.25); }
+.btn-success { background: var(--brand-red); color: #fff; }
+.btn-success:hover { background: var(--brand-red-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(122,24,37,.25); }
+.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text-primary); }
+.btn-outline:hover { border-color: var(--brand-red); color: var(--brand-red); background: var(--brand-red-light); }
+#btnUndoMark { border-color: var(--brand-red); color: var(--brand-red); }
+#btnUndoMark:hover { background: var(--brand-red); color: #fff; }
+#btnResetAll:hover { background: var(--text-primary); color: #fff; border-color: var(--text-primary); }
+.btn-danger { background: var(--text-secondary); color: #fff; }
+.btn-danger:hover { background: var(--text-primary); }
+.btn-warn { background: var(--brand-red); color: #fff; }
+.btn-warn:hover { background: var(--brand-red-hover); }
+
+/* 进度指示 */
+.progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #555;
+  min-width: 160px;
+}
+.progress-bar-outer {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: #e0e7f0;
+  overflow: hidden;
+  min-width: 80px;
+}
+.progress-bar-inner {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--brand-red), #c0392b);
+  transition: width .4s ease;
+}
+.progress-text { font-weight: 700; color: var(--brand-red); min-width: 40px; }
+
+/* 过滤器 */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.filter-chip {
+  padding: 4px 14px;
+  border-radius: 60px;
+  border: 1.5px solid var(--border);
+  background: var(--bg-card);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all .15s;
+  color: var(--text-secondary);
+}
+.filter-chip.active { background: var(--brand-red); border-color: var(--brand-red); color: #fff; }
+.filter-chip:hover:not(.active) { border-color: var(--brand-red); color: var(--brand-red); }
+
+/* ===== 主体 ===== */
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+}
+
+/* 表头信息区 */
+.header-card {
+  background: var(--bg-card); border-radius: var(--radius);
+  box-shadow: 0 1px 3px rgba(0,0,0,.04); padding: 20px 24px;
+  margin-bottom: 20px; border: 1px solid var(--border); border-left: 5px solid var(--brand-red);
+}
+.header-card h1 { font-size: 20px; color: var(--text-primary); margin-bottom: 14px; font-weight: 700; }
+.header-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.field-group label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+.field-group input {
+  border: 1.5px solid var(--border); border-radius: 6px;
+  padding: 7px 10px; font-size:11px; color: var(--text-primary);
+  transition: border-color .15s; background: var(--bg-page);
+}
+.field-group input:focus { outline: none; border-color: var(--brand-red); background: #fff; }
+
+/* 行业标记说明 */
+.legend {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #666;
+}
+.legend-dot {
+  width: 12px; height: 12px;
+  border-radius: 3px;
+}
+
+/* ===== 章节 ===== */
+.section { background: var(--bg-card); border-radius: var(--radius); box-shadow: 0 1px 3px rgba(0,0,0,.04); margin-bottom: 16px; overflow: hidden; border: 1px solid var(--border); }
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 20px; background: var(--black); cursor: pointer; user-select: none;
+}
+.section-title { font-size: 15px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px; }
+.section-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: rgba(255,255,255,.85);
+}
+.section-toggle { font-size:15px; color: #fff; transition: transform .2s; }
+.section-toggle.collapsed { transform: rotate(-90deg); }
+.section-body { padding: 0; }
+
+/* 检查表格 */
+.check-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.check-table thead tr { background: var(--bg-page); border-bottom: 2px solid var(--border); }
+.check-table th { padding: 9px 12px; font-size: 12px; font-weight: 700; color: var(--text-secondary); text-align: left; white-space: nowrap; }
+.check-table th.col-no { width: 56px; }
+.check-table th.col-item { /* takes rest */ }
+.check-table th.col-status { width: 160px; text-align: center; }
+.check-table th.col-note { width: 180px; }
+.check-table th.col-action { width: 60px; text-align: center; }
+
+.check-row { border-bottom: 1px solid var(--border-light); transition: background .12s; }
+.check-row:nth-child(even) { background: #fafbfc; }
+.check-row:hover { background: var(--brand-red-light); }
+.check-row.status-yes { background: #f0fdf4; }
+.check-row.status-no { background: #fff5f5; }
+.check-row.status-na { background: #f8f9fa; opacity: .75; }
+
+.check-table td {
+  padding: 10px 12px;
+  vertical-align: top;
+}
+.td-no { font-size: 12px; color: #888; font-weight: 600; white-space: nowrap; }
+.td-item {
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+.td-status { text-align: center; vertical-align: middle; }
+.td-note { vertical-align: middle; }
+.td-action { text-align: center; vertical-align: middle; }
+
+/* 行业标签 */
+.industry-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.tag-pharma { background: var(--tag-pharma-bg); color: var(--tag-pharma); }
+.tag-chem { background: var(--tag-chem-bg); color: var(--tag-chem); }
+.tag-oil { background: var(--tag-oil-bg); color: var(--tag-oil); }
+
+/* 状态按钮组 */
+.status-group {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  flex-wrap: nowrap;
+}
+.status-btn {
+  padding: 4px 8px;
+  border-radius: 5px;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  transition: all .15s;
+  background: #f0f2f5;
+  color: #888;
+  white-space: nowrap;
+}
+.status-btn:hover { transform: translateY(-1px); }
+.status-btn.active-yes { background: #dcfce7; color: #166534; border-color: #86efac; }
+.status-btn.active-no  { background: #f8d7da; color: #721c24; border-color: #f5a5a9; }
+.status-btn.active-na  { background: #e2e3e5; color: #383d41; border-color: #c8cbd0; }
+
+/* 备注输入 */
+.note-input {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  border-radius: 5px;
+  padding: 5px 8px;
+  font-size: 12px;
+  resize: vertical;
+  min-height: 34px;
+  background: #fafbfc;
+  transition: border-color .15s;
+  font-family: inherit;
+  color: var(--text-primary);
+}
+.note-input:focus { outline: none; border-color: var(--brand-red); background: #fff; }
+
+/* 删除行按钮 */
+.del-row-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #bbb;
+  font-size: 16px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: all .15s;
+}
+.del-row-btn:hover { color: var(--brand-red); background: var(--brand-red-light); }
+
+/* 新增行区域 */
+.add-row-area {
+  padding: 10px 16px;
+  border-top: 1px dashed var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.add-row-input {
+  flex: 1;
+  border: 1.5px dashed var(--border);
+  border-radius: 6px;
+  padding: 7px 10px;
+  font-size:11px;
+  background: #fafbfc;
+  color: var(--text-primary);
+  transition: border-color .15s;
+  font-family: inherit;
+}
+.add-row-input:focus { outline: none; border-color: var(--brand-red); border-style: solid; background: #fff; }
+.add-row-btn {
+  padding: 7px 18px; background: var(--brand-red-light); color: var(--brand-red);
+  border: 1.5px solid #f5c6cb; border-radius: 60px;
+  cursor: pointer; font-size:11px; font-weight: 700; transition: all .15s; font-family: var(--font);
+}
+.add-row-btn:hover { background: var(--brand-red); color: #fff; border-color: var(--brand-red); }
+
+/* ===== 签字区 ===== */
+.sign-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
+  padding: 20px 24px;
+  margin-bottom: 16px;
+}
+.sign-card h2 { color: var(--text-primary); border-bottom: 2px solid var(--border); }
+.conclusion-opt:has(input:checked) { border-color: var(--brand-red); background: var(--brand-red-light); color: var(--brand-red); }
+.conclusion-group {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.conclusion-opt {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 7px;
+  border: 2px solid var(--border);
+  transition: all .15s;
+  user-select: none;
+}
+.conclusion-opt input { display: none; }
+.conclusion-opt:has(input:checked) { border-color: var(--brand-red); background: var(--brand-red-light); color: var(--brand-red); }
+.conclusion-opt .opt-icon { font-size:15px; }
+
+.sign-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+.sign-table th, .sign-table td {
+  border: 1.5px solid var(--border);
+  padding: 8px 12px;
+  font-size:11px;
+}
+.sign-table th { background: #f0f4fa; font-weight: 700; color: #555; }
+.sign-table input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size:11px;
+  background: transparent;
+  font-family: inherit;
+  color: var(--text-primary);
+}
+
+/* 说明区 */
+.note-card {
+  background: #fffde7;
+  border: 1.5px solid #ffe082;
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  font-size: 12.5px;
+  color: #5d4037;
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+.note-card strong { color: #bf6f00; }
+
+/* ===== 打印样式 ===== */
+
+@media (max-width:768px) {
+  .sheen-nav{padding:6px 8px}
+  .sheen-nav-tool{padding:5px 8px;font-size:10px}
+  }
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+  body { background: #fff !important; font-size: 11pt; color: #000 !important; }
+  .sheen-nav, .toolbar, .filter-bar, .add-row-area, .del-row-btn, .btn-group-actions,
+  .status-btn:not(.active-yes):not(.active-no):not(.active-na),
+  #filterBar, .sheen-footer { display: none !important; }
+
+  .main { max-width: 100%; padding: 0; margin: 0; }
+
+  .sheen-print-header {
+    display: block !important; margin-bottom: 16px;
+    border-bottom: 2px solid #000; padding-bottom: 10px;
+  }
+  .sheen-print-header .sph-title {
+    font-size: 16pt; font-weight: 700; color: #000; margin-top: 6px;
+  }
+  .sheen-print-header .sph-info {
+    font-size: 10pt; color: #333; margin-top: 4px;
+    display: flex; justify-content: space-between;
+  }
+
+  .header-card, .section, .sign-card, .note-card {
+    box-shadow: none !important; border-radius: 0 !important;
+    break-inside: avoid; page-break-inside: avoid;
+    border: 1px solid #ccc !important;
+  }
+
+  .section { margin-bottom: 8pt; border: 1pt solid #ccc; }
+  .section-header { background: #000 !important; padding: 6pt 10pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .section-title { color: #fff !important; font-size: 11pt; }
+  .section-stats { color: #ccc !important; }
+  .section-toggle { display: none; }
+
+  .check-table th { background: #f5f5f5 !important; color: #000 !important; font-size: 9pt; padding: 4pt 6pt; }
+  .check-table td { padding: 5pt 6pt; font-size: 10pt; color: #000; }
+
+  .status-btn { font-size: 9pt; padding: 2pt 5pt; }
+  .status-btn.active-yes, .status-btn.active-no, .status-btn.active-na { border: 1pt solid #999; }
+
+  .note-input { border: 1pt solid #999; font-size: 9pt; padding: 2pt 4pt; }
+
+  .header-fields { grid-template-columns: repeat(3, 1fr); }
+  .field-group input { border: none; border-bottom: 1pt solid #999; border-radius: 0; background: transparent; padding: 2pt 0; }
+
+  .sheen-print-footer {
+    display: block !important; margin-top: 30px;
+    border-top: 1px solid #000; padding-top: 8px;
+    text-align: center; font-size: 9pt; color: #333;
+  }
+
+  @page {
+    margin: 15mm 12mm 20mm;
+    @bottom-center { content: "SHEEN Toolbox · PSSR 检查表"; font-size: 8pt; color: #666; }
+  }
+}
+
+/* 响应式 */
+@media (max-width: 700px) {
+  .toolbar { padding: 8px 12px; gap: 8px; }
+  .main { padding: 12px 8px 40px; }
+  .header-fields { grid-template-columns: 1fr; }
+  .check-table th.col-note, .check-table td:nth-child(4) { display: none; }
+  .btn { padding: 6px 10px; font-size: 12px; }
+}
+
+@media (max-width: 480px) {
+  .sheen-nav { padding: 0 12px; flex-direction: column; }
+  .sheen-nav-brand { padding: 10px 0; }
+  .sheen-nav-brand-text { font-size: 16px; }
+  .sheen-nav-tools { gap: 2px; }
+  .sheen-nav-tool { padding: 6px 10px; font-size: 12px; }
+  .toolbar { padding: 6px 8px; gap:4px; flex-wrap: wrap; }
+  .btn { padding: 5px 8px; font-size: 11px; }
+  .main { padding: 8px 4px 32px; }
+  .header-fields { grid-template-columns: 1fr; gap:4px; }
+  .check-table { font-size: 12px; }
+  .check-table th, .check-table td { padding: 4px 6px; }
+  .check-table th.col-note, .check-table td:nth-child(4) { display: none; }
+  .status-btn { padding: 3px 6px; font-size: 11px; }
+  .sheen-footer { padding: 12px 16px; font-size: 12px; }
+}
+
+/* 动画 */
+.section-body.collapsed { display: none; }
+</style>
+</head>
+<body>
+
+<header class="sheen-nav">
+  <a href="/sheen-toolbox-pages" class="sheen-nav-brand">
+    <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i>
+    <span class="sheen-nav-brand-text">SHEEN Toolbox</span>
+  </a>
+  <div class="sheen-nav-tools">
+      <a href="/sheen-toolbox-pagespssr-checklist/" class="sheen-nav-tool active">PSSR检查表</a>
+      <a href="/sheen-toolbox-pagesfire-extinguisher-calculator/" class="sheen-nav-tool">灭火器计算器</a>
+      <a href="/sheen-toolbox-pagessafety-production-cost-calculator/" class="sheen-nav-tool">安产费用计算器</a>
+      <a href="/sheen-toolbox-pagesjsa-lec/" class="sheen-nav-tool">JSA+LEC评价</a>
+      <a href="/sheen-toolbox-pagesindustry-classification/" class="sheen-nav-tool">行业分类查询</a>
+      <a href="/sheen-toolbox-pagesdangerous-goods-query/" class="sheen-nav-tool">危险货物查询</a>
+      <a href="/sheen-toolbox-pagesfive-why-analysis/" class="sheen-nav-tool">5Why根因分析</a>
+      <a href="/sheen-toolbox-pageshazardous-waste-query/" class="sheen-nav-tool">危险废物查询</a>
+      <a href="/sheen-toolbox-pageshazardous-chemicals-query/" class="sheen-nav-tool">危险化学品查询</a>
+      <a href="/sheen-toolbox-pagesiso14001-environmental-factors/" class="sheen-nav-tool">环境因素</a>
+<a href="/sheen-toolbox-pagesheat-stress-classification/" class="sheen-nav-tool">高温分级</a>
+<a href="/sheen-toolbox-pagesniosh-lifting-calculator/" class="sheen-nav-tool">NIOSH举升</a>
+<a href="/sheen-toolbox-pagesexplosion-venting-calculator/" class="sheen-nav-tool">泄爆面积</a>
+<a href="/sheen-toolbox-pagesenvironmental-tax-calculator/" class="sheen-nav-tool">环保税</a>
+    </div>
+</header>
+
+<div class="toolbar" id="mainToolbar">
+  <div class="toolbar-title"><i class="fa-solid fa-clipboard-check"></i> PSSR 检查表</div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar-outer">
+      <div class="progress-bar-inner" id="progressBar" style="width:0%"></div>
+    </div>
+    <span class="progress-text" id="progressText">0%</span>
+    <span id="progressCount" style="font-size:11px;color:#888"></span>
+  </div>
+
+  <div id="filterBar" class="filter-bar">
+    <span style="font-size:11px;color:#888;font-weight:700;">筛选：</span>
+    <div class="filter-chip active" data-filter="all" onclick="setFilter('all',this)">全部</div>
+    <div class="filter-chip" data-filter="yes" onclick="setFilter('yes',this)">✅ 已完成</div>
+    <div class="filter-chip" data-filter="no" onclick="setFilter('no',this)">❌ 未完成</div>
+    <div class="filter-chip" data-filter="na" onclick="setFilter('na',this)">— 不适用</div>
+    <div class="filter-chip" data-filter="pending" onclick="setFilter('pending',this)">⬜ 待填写</div>
+    <div class="filter-chip tag-pharma" style="border-color:var(--border)" data-filter="pharma" onclick="setFilter('pharma',this)">🟢 制药</div>
+    <div class="filter-chip tag-chem" style="border-color:var(--border)" data-filter="chem" onclick="setFilter('chem',this)">🟠 化工</div>
+    <div class="filter-chip tag-oil" style="border-color:var(--border)" data-filter="oil" onclick="setFilter('oil',this)">🔵 油气</div>
+  </div>
+
+  <button class="btn btn-outline" onclick="expandAll()"><i class="fa-solid fa-angles-down"></i> 展开全部</button>
+  <button class="btn btn-outline" onclick="collapseAll()"><i class="fa-solid fa-angles-up"></i> 收起全部</button>
+  <button class="btn btn-success" id="btnMarkAll" onclick="markAllYes()"><i class="fa-solid fa-check-double"></i> 全部标记完成</button>
+  <button class="btn btn-outline" id="btnUndoMark" style="display:none" onclick="undoMarkAll()"><i class="fa-solid fa-rotate-left"></i> 撤销全部标记</button>
+  <button class="btn btn-outline" id="btnResetAll" onclick="resetAllMarks()"><i class="fa-solid fa-arrows-rotate"></i> 全部重置</button>
+  <button class="btn btn-primary" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印</button>
+  <button class="btn btn-primary" onclick="aiReport()" id="btnAiReport"><i class="fa-solid fa-wand-magic-sparkles"></i> 生成报告</button>
+  <span id="aiLoadingPssr" style="display:none;font-size:12px;color:var(--text-secondary);"><span class="spinner-inline"></span> AI生成中…</span>
+</div>
+
+<div class="main">
+
+  <div class="sheen-print-header">
+    <div class="sph-title">PSSR 开车前安全审查检查表（多行业增强版）</div>
+    <div class="sph-info">
+      <span>依据：化工企业安全管理体系 · PSSR 开车前安全审查规范</span>
+      <span id="printDate"></span>
+    </div>
+  </div>
+
+  <div class="header-card">
+    <h1>PSSR 开车前安全审查检查表（多行业增强版）</h1>
+    <div class="header-fields">
+      <div class="field-group">
+        <label>项目 / 装置名称</label>
+        <input type="text" id="projectName" placeholder="请填写项目或装置名称">
+      </div>
+      <div class="field-group">
+        <label>审查日期</label>
+        <input type="date" id="reviewDate">
+      </div>
+      <div class="field-group">
+        <label>PSSR 编号</label>
+        <input type="text" id="pssrNo" placeholder="如：PSSR-2026-001">
+      </div>
+    </div>
+    <div class="legend">
+      <span style="font-size:12px;font-weight:700;color:#666;">行业标记：</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#27ae60"></span> 🟢 制药专项</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#e67e22"></span> 🟠 精细化工专项</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#2980b9"></span> 🔵 油气处理专项</span>
+      <span class="legend-item" style="color:#999">（无标记 = 通用检查项）</span>
+    </div>
+  </div>
+
+  <div class="note-card">
+    <strong>说明：</strong>检查项逐一核实，点击 <strong>✅是 / ❌否 / — 不适用</strong> 三个按钮标记状态；"否"项须在备注栏注明整改措施及跟踪计划。每个章节底部可新增自定义检查项。
+  </div>
+
+  <div id="checkSections"></div>
+
+  <div class="sign-card">
+    <h2>十、签字确认</h2>
+    <div class="conclusion-group">
+      <label class="conclusion-opt">
+        <input type="radio" name="conclusion" value="yes">
+        <span class="opt-icon">✅</span> 准予开车
+      </label>
+      <label class="conclusion-opt">
+        <input type="radio" name="conclusion" value="conditional">
+        <span class="opt-icon">⚠️</span> 有条件准予开车
+      </label>
+      <label class="conclusion-opt">
+        <input type="radio" name="conclusion" value="no">
+        <span class="opt-icon">🚫</span> 不准予开车
+      </label>
+    </div>
+    <table class="sign-table" id="signTable">
+      <thead>
+        <tr>
+          <th style="width:25%">姓名</th>
+          <th style="width:25%">职务</th>
+          <th style="width:25%">签名</th>
+          <th style="width:25%">日期</th>
+        </tr>
+      </thead>
+      <tbody id="signBody">
+        <tr>
+          <td><input type="text" placeholder="姓名"></td>
+          <td><input type="text" placeholder="职务（如：安全负责人）"></td>
+          <td><input type="text" placeholder="手写签名（打印后填写）"></td>
+          <td><input type="date"></td>
+        </tr>
+        <tr>
+          <td><input type="text" placeholder="姓名"></td>
+          <td><input type="text" placeholder="工艺工程师"></td>
+          <td><input type="text" placeholder=""></td>
+          <td><input type="date"></td>
+        </tr>
+        <tr>
+          <td><input type="text" placeholder="姓名"></td>
+          <td><input type="text" placeholder="设备工程师"></td>
+          <td><input type="text" placeholder=""></td>
+          <td><input type="date"></td>
+        </tr>
+        <tr>
+          <td><input type="text" placeholder="姓名"></td>
+          <td><input type="text" placeholder="仪表工程师"></td>
+          <td><input type="text" placeholder=""></td>
+          <td><input type="date"></td>
+        </tr>
+        <tr>
+          <td><input type="text" placeholder="姓名"></td>
+          <td><input type="text" placeholder="操作主任"></td>
+          <td><input type="text" placeholder=""></td>
+          <td><input type="date"></td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="margin-top:10px;display:flex;gap:8px;">
+      <button class="btn btn-outline" onclick="addSignRow()" style="font-size:12px;padding:5px 12px;">＋ 添加签字人</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="sheen-print-footer">SHEEN Toolbox · PSSR 开车前安全审查检查表</div>
+
+<footer class="sheen-footer">
+  <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · PSSR 开车前安全审查检查表
+</footer>
+
+<script>
+// ===== 数据定义 =====
+const sections = [
+  {
+    id: 's1', title: '一、基本信息',
+    items: [
+      { no: '1.1', text: '项目/变更名称及编号是否明确', industry: null },
+      { no: '1.2', text: 'PSSR团队是否涵盖工艺、设备、电气、仪表、安全、操作等专业人员', industry: null },
+      { no: '1.3', text: 'PSSR时间安排是否在正式引入化学品/能量之前完成', industry: null },
+      { no: '1.4', text: '本次审查范围界定是否清晰（装置边界、系统清单）', industry: null },
+      { no: '1.5', text: '验证策略已明确，工艺验证/清洁验证批次计划与开车安排衔接', industry: 'pharma' },
+    ]
+  },
+  {
+    id: 's2', title: '二、变更管理与工艺安全信息',
+    items: [
+      { no: '2.1', text: '所有变更已通过MOC（变更管理）审批并闭环', industry: null },
+      { no: '2.2', text: 'P&ID已更新至竣工状态，版本正确', industry: null },
+      { no: '2.3', text: '工艺安全信息文件已更新（MSDS、反应矩阵、联锁逻辑图等）', industry: null },
+      { no: '2.4', text: '工艺危害分析（PHA/HAZOP）建议项已全部落实或风险接受批准', industry: null },
+      { no: '2.5', text: '设计规范、设备数据表、材质证书齐全且可查阅', industry: null },
+      { no: '2.6', text: '泄压系统设计依据和计算书（安全阀、爆破片、火炬系统）已确认', industry: null },
+      { no: '2.7', text: '工艺化学（反应矩阵、热稳定性、物料相容性）数据完整，溶剂回收回路风险已分析', industry: 'chem' },
+      { no: '2.8', text: '硫化氢/酸性介质风险区域划分明确，材质抗硫化物应力开裂验证文件齐全', industry: 'oil' },
+    ]
+  },
+  {
+    id: 's3', title: '三、操作程序与培训',
+    items: [
+      { no: '3.1', text: '开车、正常操作、停车、紧急停车操作规程已批准发布', industry: null },
+      { no: '3.2', text: '操作程序中的工艺参数与设计一致', industry: null },
+      { no: '3.3', text: '安全操作限值（SOL）与安全联锁设定值匹配，操作人员已知悉', industry: null },
+      { no: '3.4', text: '操作人员已完成专项培训并有考核记录', industry: null },
+      { no: '3.5', text: '操作人员持证情况满足法规要求', industry: null },
+      { no: '3.6', text: '维修、承包商人员已完成入场安全培训', industry: null },
+      { no: '3.7', text: '洁净区人员行为规范、更衣程序已培训，微生物监测计划就位', industry: 'pharma' },
+    ]
+  },
+  {
+    id: 's4', title: '四、机械完整性（设备与管道）',
+    items: [
+      { no: '4.1', text: '静设备已按规范完成试压、清洗、吹扫、钝化等', industry: null },
+      { no: '4.2', text: '动设备单机试车合格，振动/温度正常，润滑到位', industry: null },
+      { no: '4.3', text: '管道系统试压、冲洗、吹干合格，法兰垫片材质等级正确，螺栓扭矩记录完整', industry: null },
+      { no: '4.4', text: '工艺管线按P&ID检查，阀门开关位置正确，盲板状态与方案一致', industry: null },
+      { no: '4.5', text: '安全阀、爆破片已校验铅封，上下游隔离阀状态符合设计，有标签', industry: null },
+      { no: '4.6', text: '设备与管道保温/保冷、防腐、涂色、标识、流向箭头符合规范', industry: null },
+      { no: '4.7', text: '关键设备备品备件已到位并建立清单', industry: null },
+      { no: '4.8', text: '反应釜搅拌联锁（温度/搅拌电流）已测试，断搅拌联锁急冷/卸料功能正常', industry: 'chem' },
+      { no: '4.9', text: '固体物料投料口氮气保护或抑爆措施已投用，粉尘防爆电气等级复核', industry: 'chem' },
+      { no: '4.10', text: '纯化水/注射用水循环回路已钝化、清洗，电导率/TOC在线仪表校验且数据归档', industry: 'pharma' },
+      { no: '4.11', text: '设备内表面抛光符合卫生级要求，无死角，排净口最低点可完全排空', industry: 'pharma' },
+      { no: '4.12', text: '长输/站内管道强度及严密性试压完成，干燥验收（露点合格），焊口无损检测报告可追溯', industry: 'oil' },
+      { no: '4.13', text: '紧急切断阀（ESDV）、超压放空阀行程测试完成，故障安全位置确认（FO/FC/FL）', industry: 'oil' },
+    ]
+  },
+  {
+    id: 's5', title: '五、电气系统',
+    items: [
+      { no: '5.1', text: '供配电系统已调试完成，电压等级、容量满足负荷要求', industry: null },
+      { no: '5.2', text: '防爆区域电气设备防爆等级、温度组别符合区域划分要求', industry: null },
+      { no: '5.3', text: '紧急停止按钮、开关标识清晰，功能测试正常', industry: null },
+      { no: '5.4', text: 'UPS和应急电源投用，切换测试正常，电池放电测试合格', industry: null },
+      { no: '5.5', text: '电气柜、接线箱密封良好，电缆进口防火封堵完成', industry: null },
+      { no: '5.6', text: '接地和防雷接地系统检测合格有报告', industry: null },
+      { no: '5.7', text: '配电室上锁管理，警示标识齐全', industry: null },
+    ]
+  },
+  {
+    id: 's6', title: '六、仪表与自动控制系统',
+    items: [
+      { no: '6.1', text: 'DCS/PLC/SIS系统组态已确认，版本与设计一致，逻辑下装并备份', industry: null },
+      { no: '6.2', text: '所有仪表已校验，量程和报警/联锁设定值正确', industry: null },
+      { no: '6.3', text: '联锁和安全仪表功能（SIF）已完成全回路测试，记录可追溯', industry: null },
+      { no: '6.4', text: '联锁旁路（若需）已按程序审批，明确恢复期限和责任人', industry: null },
+      { no: '6.5', text: '报警管理已组态，优先级合理，无效报警已抑制', industry: null },
+      { no: '6.6', text: '火气系统（F&G）探测器已调试标定，报警与联动测试正常', industry: null },
+      { no: '6.7', text: '控制室人机界面显示正常，历史趋势、操作记录功能正常', industry: null },
+      { no: '6.8', text: '反应量热或绝热温升实验数据已更新，联锁依据最新热风险评估（如RC1数据）', industry: 'chem' },
+      { no: '6.9', text: '洁净室环境监测系统（粒子计数器、温湿度、压差）已调试，报警功能正常', industry: 'pharma' },
+      { no: '6.10', text: '火气系统逻辑矩阵（因果图）与实际执行一致，可燃气体探头防遮挡检查', industry: 'oil' },
+    ]
+  },
+  {
+    id: 's7', title: '七、消防与应急响应',
+    items: [
+      { no: '7.1', text: '消防水系统已调试，压力和流量满足设计要求', industry: null },
+      { no: '7.2', text: '灭火器配置种类、数量、位置符合规范，已检查合格', industry: null },
+      { no: '7.3', text: '固定/半固定泡沫、干粉、气体灭火系统测试合格', industry: null },
+      { no: '7.4', text: '消防电话、手动报警按钮功能正常，消防广播可用', industry: null },
+      { no: '7.5', text: '疏散通道畅通，疏散指示灯、应急照明完好', industry: null },
+      { no: '7.6', text: '急救器材、洗消设施（洗眼器、安全淋浴）到位并测试可用', industry: null },
+      { no: '7.7', text: '应急响应预案已更新，并完成桌面或实战演练', industry: null },
+      { no: '7.8', text: '应急物资清单已更新并现场配备', industry: null },
+      { no: '7.9', text: '防爆区域内人体静电消除器安装到位，可燃粉尘清扫制度已建立并公示', industry: 'chem' },
+      { no: '7.10', text: '泡沫系统、消防泵柴油备用启动测试，消防水炮射程覆盖设备区', industry: 'oil' },
+    ]
+  },
+  {
+    id: 's8', title: '八、职业安全与环境保护',
+    items: [
+      { no: '8.1', text: '危险区域、化学品危害等安全警示标识已张贴', industry: null },
+      { no: '8.2', text: '机械转动部位防护罩、护栏、防坠措施完好', industry: null },
+      { no: '8.3', text: '受限空间标识牌已悬挂，进入管理程序明确', industry: null },
+      { no: '8.4', text: '噪声、照明、通风等职业危害因素检测符合限值', industry: null },
+      { no: '8.5', text: '排气、废水预处理设施已调试，排放口规范，在线监测投用', industry: null },
+      { no: '8.6', text: '危险废物暂存场所合规，有标识及管理制度', industry: null },
+      { no: '8.7', text: '环保"三同时"手续落实，有试生产/排污许可相关批准文件', industry: null },
+      { no: '8.8', text: '尾气处理系统（洗涤塔/RTO）与反应釜联锁正常，紧急放空管道无积液', industry: 'chem' },
+      { no: '8.9', text: '高活性药物（OEB等级）密闭隔离装置已IQ/OQ完成，暴露监测方案已定', industry: 'pharma' },
+      { no: '8.10', text: '火炬点火系统调试，长明灯、消烟蒸汽投用，火炬辐射热计算范围无人员操作点', industry: 'oil' },
+    ]
+  },
+  {
+    id: 's9', title: '九、文档与记录管理',
+    items: [
+      { no: '9.1', text: '竣工资料已归档并可随时调用', industry: null },
+      { no: '9.2', text: '预开车安全审查文件包完整，决议项已分配整改责任人与期限', industry: null },
+      { no: '9.3', text: '所有开车前试验、检验记录已签署并归档', industry: null },
+      { no: '9.4', text: '本次PSSR待整改项已明确跟踪机制', industry: null },
+    ]
+  },
+];
+
+// ===== 状态存储 =====
+// state[sectionId][itemIndex] = { status: 'yes'|'no'|'na'|'', note: '' }
+let state = {};
+let customItems = {}; // sectionId -> [{no, text, industry}]
+
+function initState() {
+  sections.forEach(sec => {
+    state[sec.id] = {};
+    sec.items.forEach((_, i) => { state[sec.id][i] = { status: '', note: '' }; });
+    customItems[sec.id] = [];
+  });
+  loadFromStorage();
+}
+
+function saveToStorage() {
+  try {
+    localStorage.setItem('pssr_state', JSON.stringify(state));
+    localStorage.setItem('pssr_custom', JSON.stringify(customItems));
+    localStorage.setItem('pssr_meta', JSON.stringify({
+      projectName: document.getElementById('projectName').value,
+      reviewDate: document.getElementById('reviewDate').value,
+      pssrNo: document.getElementById('pssrNo').value,
+    }));
+  } catch(e){}
+}
+
+function loadFromStorage() {
+  try {
+    const s = localStorage.getItem('pssr_state');
+    const c = localStorage.getItem('pssr_custom');
+    const m = localStorage.getItem('pssr_meta');
+    if (s) state = JSON.parse(s);
+    if (c) customItems = JSON.parse(c);
+    if (m) {
+      const meta = JSON.parse(m);
+      document.getElementById('projectName').value = meta.projectName || '';
+      document.getElementById('reviewDate').value = meta.reviewDate || '';
+      document.getElementById('pssrNo').value = meta.pssrNo || '';
+    }
+  } catch(e){}
+}
+
+// ===== 渲染 =====
+const industryLabels = {
+  pharma: { cls: 'tag-pharma', text: '制药', emoji: '🟢' },
+  chem:   { cls: 'tag-chem',   text: '精细化工', emoji: '🟠' },
+  oil:    { cls: 'tag-oil',    text: '油气处理', emoji: '🔵' },
+};
+
+function industryTag(ind) {
+  if (!ind) return '';
+  const l = industryLabels[ind];
+  return `<span class="industry-tag ${l.cls}">${l.emoji} ${l.text}</span>`;
+}
+
+function renderRow(secId, itemIndex, item, isCustom) {
+  const st = (state[secId] && state[secId][itemIndex]) ? state[secId][itemIndex] : { status: '', note: '' };
+  const statusClass = st.status ? `status-${st.status}` : '';
+  const indClass = item.industry ? `data-industry="${item.industry}"` : '';
+  return `
+<tr class="check-row ${statusClass}" id="row-${secId}-${itemIndex}" ${indClass}>
+  <td class="td-no">${item.no}</td>
+  <td class="td-item">${item.text}${industryTag(item.industry)}</td>
+  <td class="td-status">
+    <div class="status-group">
+      <button class="status-btn ${st.status==='yes'?'active-yes':''}" onclick="setStatus('${secId}',${itemIndex},'yes')">✅ 是</button>
+      <button class="status-btn ${st.status==='no'?'active-no':''}" onclick="setStatus('${secId}',${itemIndex},'no')">❌ 否</button>
+      <button class="status-btn ${st.status==='na'?'active-na':''}" onclick="setStatus('${secId}',${itemIndex},'na')">— 不适用</button>
+    </div>
+  </td>
+  <td class="td-note">
+    <textarea class="note-input" rows="1" placeholder="备注/依据..." onchange="setNote('${secId}',${itemIndex},this.value)">${st.note||''}</textarea>
+  </td>
+  <td class="td-action">
+    ${isCustom ? `<button class="del-row-btn" title="删除此项" onclick="deleteRow('${secId}',${itemIndex})">🗑</button>` : `<button class="del-row-btn" title="删除此项" onclick="deleteRow('${secId}',${itemIndex})">🗑</button>`}
+  </td>
+</tr>`;
+}
+
+function renderSection(sec) {
+  const allItems = [
+    ...sec.items.map((item, i) => ({ item, i, isCustom: false })),
+    ...(customItems[sec.id] || []).map((item, ci) => ({ item, i: sec.items.length + ci, isCustom: true }))
+  ];
+
+  const totalItems = allItems.length;
+  const doneItems = allItems.filter(({ i }) => {
+    const st = state[sec.id] && state[sec.id][i];
+    return st && (st.status === 'yes' || st.status === 'na');
+  }).length;
+  const pct = totalItems > 0 ? Math.round(doneItems / totalItems * 100) : 0;
+
+  const rowsHtml = allItems.map(({ item, i, isCustom }) => renderRow(sec.id, i, item, isCustom)).join('');
+
+  return `
+<div class="section" id="sec-${sec.id}">
+  <div class="section-header" onclick="toggleSection('${sec.id}')">
+    <div class="section-title">
+      <span>${sec.title}</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="section-stats">${doneItems}/${totalItems} 项已处理 · ${pct}%</div>
+      <div class="section-toggle" id="toggle-${sec.id}">▾</div>
+    </div>
+  </div>
+  <div class="section-body" id="body-${sec.id}">
+    <table class="check-table">
+      <thead>
+        <tr>
+          <th class="col-no">序号</th>
+          <th class="col-item">检查项</th>
+          <th class="col-status">状态</th>
+          <th class="col-note">备注 / 依据</th>
+          <th class="col-action">操作</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-${sec.id}">${rowsHtml}</tbody>
+    </table>
+    <div class="add-row-area">
+      <input class="add-row-input" type="text" id="addInput-${sec.id}" placeholder="输入新检查项内容，按回车或点击"添加"..." 
+             onkeydown="if(event.key==='Enter') addRow('${sec.id}')">
+      <button class="add-row-btn" onclick="addRow('${sec.id}')">＋ 添加</button>
+    </div>
+  </div>
+</div>`;
+}
+
+function renderAll() {
+  const container = document.getElementById('checkSections');
+  container.innerHTML = sections.map(renderSection).join('');
+  updateProgress();
+}
+
+// ===== 交互 =====
+function setStatus(secId, index, status) {
+  if (!state[secId]) state[secId] = {};
+  if (!state[secId][index]) state[secId][index] = { status: '', note: '' };
+  // toggle
+  if (state[secId][index].status === status) {
+    state[secId][index].status = '';
+  } else {
+    state[secId][index].status = status;
+  }
+  saveToStorage();
+  // re-render just the row
+  const sec = sections.find(s => s.id === secId);
+  const allItems = [
+    ...sec.items.map((item, i) => ({ item, i, isCustom: false })),
+    ...(customItems[sec.id] || []).map((item, ci) => ({ item, i: sec.items.length + ci, isCustom: true }))
+  ];
+  const { item, isCustom } = allItems[index];
+  const row = document.getElementById(`row-${secId}-${index}`);
+  if (row) {
+    const tmp = document.createElement('tbody');
+    tmp.innerHTML = renderRow(secId, index, item, isCustom);
+    row.replaceWith(tmp.firstElementChild);
+  }
+  updateSectionStats(secId);
+  updateProgress();
+  applyFilter(currentFilter);
+}
+
+function setNote(secId, index, val) {
+  if (!state[secId]) state[secId] = {};
+  if (!state[secId][index]) state[secId][index] = { status: '', note: '' };
+  state[secId][index].note = val;
+  saveToStorage();
+}
+
+function deleteRow(secId, itemIndex) {
+  const sec = sections.find(s => s.id === secId);
+  const originalCount = sec.items.length;
+  if (itemIndex < originalCount) {
+    // built-in item: just mark deleted (remove from DOM but keep slot)
+    if (!confirm('确认删除此检查项？（仅从当前视图移除，刷新后会重新出现内置项，可使用"不适用"代替删除）')) return;
+  }
+  // For custom items
+  if (itemIndex >= originalCount) {
+    const ci = itemIndex - originalCount;
+    customItems[secId].splice(ci, 1);
+    // re-index state for custom items
+    const newStateSlot = {};
+    for (let k in state[secId]) {
+      const ki = parseInt(k);
+      if (ki < originalCount) { newStateSlot[ki] = state[secId][ki]; }
+      else if (ki > itemIndex) { newStateSlot[ki - 1] = state[secId][ki]; }
+    }
+    state[secId] = newStateSlot;
+    saveToStorage();
+    // re-render section body
+    rerenderSectionBody(secId);
+    updateProgress();
+    return;
+  }
+  const row = document.getElementById(`row-${secId}-${itemIndex}`);
+  if (row) row.remove();
+  updateSectionStats(secId);
+  updateProgress();
+}
+
+function addRow(secId) {
+  const input = document.getElementById(`addInput-${secId}`);
+  const text = input.value.trim();
+  if (!text) return;
+  const sec = sections.find(s => s.id === secId);
+  const ci = (customItems[secId] || []).length;
+  const newIndex = sec.items.length + ci;
+  if (!customItems[secId]) customItems[secId] = [];
+  const newNo = `自定义-${ci + 1}`;
+  customItems[secId].push({ no: newNo, text: text, industry: null });
+  if (!state[secId]) state[secId] = {};
+  state[secId][newIndex] = { status: '', note: '' };
+  saveToStorage();
+  // append row
+  const tbody = document.getElementById(`tbody-${secId}`);
+  const tmp = document.createElement('tbody');
+  tmp.innerHTML = renderRow(secId, newIndex, { no: newNo, text: text, industry: null }, true);
+  tbody.appendChild(tmp.firstElementChild);
+  input.value = '';
+  updateSectionStats(secId);
+  updateProgress();
+}
+
+function rerenderSectionBody(secId) {
+  const sec = sections.find(s => s.id === secId);
+  const allItems = [
+    ...sec.items.map((item, i) => ({ item, i, isCustom: false })),
+    ...(customItems[secId] || []).map((item, ci) => ({ item, i: sec.items.length + ci, isCustom: true }))
+  ];
+  const tbody = document.getElementById(`tbody-${secId}`);
+  tbody.innerHTML = allItems.map(({ item, i, isCustom }) => renderRow(secId, i, item, isCustom)).join('');
+  updateSectionStats(secId);
+}
+
+function updateSectionStats(secId) {
+  const sec = sections.find(s => s.id === secId);
+  if (!sec) return;
+  const totalItems = sec.items.length + (customItems[secId] || []).length;
+  let done = 0;
+  for (let i = 0; i < totalItems; i++) {
+    const st = state[secId] && state[secId][i];
+    if (st && (st.status === 'yes' || st.status === 'na')) done++;
+  }
+  const pct = totalItems > 0 ? Math.round(done / totalItems * 100) : 0;
+  const statsEl = document.querySelector(`#sec-${secId} .section-stats`);
+  if (statsEl) statsEl.textContent = `${done}/${totalItems} 项已处理 · ${pct}%`;
+}
+
+function updateProgress() {
+  let total = 0, done = 0;
+  sections.forEach(sec => {
+    const count = sec.items.length + (customItems[sec.id] || []).length;
+    total += count;
+    for (let i = 0; i < count; i++) {
+      const st = state[sec.id] && state[sec.id][i];
+      if (st && (st.status === 'yes' || st.status === 'na')) done++;
+    }
+  });
+  const pct = total > 0 ? Math.round(done / total * 100) : 0;
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressText').textContent = pct + '%';
+  document.getElementById('progressCount').textContent = `(${done}/${total})`;
+}
+
+// ===== 折叠 =====
+function toggleSection(secId) {
+  const body = document.getElementById(`body-${secId}`);
+  const toggle = document.getElementById(`toggle-${secId}`);
+  body.classList.toggle('collapsed');
+  toggle.classList.toggle('collapsed');
+}
+function expandAll() {
+  sections.forEach(sec => {
+    document.getElementById(`body-${sec.id}`).classList.remove('collapsed');
+    document.getElementById(`toggle-${sec.id}`).classList.remove('collapsed');
+  });
+}
+function collapseAll() {
+  sections.forEach(sec => {
+    document.getElementById(`body-${sec.id}`).classList.add('collapsed');
+    document.getElementById(`toggle-${sec.id}`).classList.add('collapsed');
+  });
+}
+
+// ===== 全部标记 / 撤销 / 重置 =====
+let markAllBackup = null; // 标记前的状态快照
+
+function deepCloneState() {
+  const clone = {};
+  for (const secId in state) {
+    clone[secId] = {};
+    for (const idx in state[secId]) {
+      clone[secId][idx] = { status: state[secId][idx].status, note: state[secId][idx].note };
+    }
+  }
+  return clone;
+}
+
+function markAllYes() {
+  if (!confirm('确认将所有未填写的检查项标记为"是（已完成）"？\n\n标记后可通过"撤销全部标记"按钮恢复。')) return;
+
+  // 保存快照
+  markAllBackup = deepCloneState();
+
+  sections.forEach(sec => {
+    const total = sec.items.length + (customItems[sec.id] || []).length;
+    for (let i = 0; i < total; i++) {
+      if (!state[sec.id]) state[sec.id] = {};
+      if (!state[sec.id][i]) state[sec.id][i] = { status: '', note: '' };
+      if (!state[sec.id][i].status) state[sec.id][i].status = 'yes';
+    }
+  });
+  saveToStorage();
+  renderAll();
+
+  // 显示撤销按钮，隐藏标记按钮
+  document.getElementById('btnMarkAll').style.display = 'none';
+  document.getElementById('btnUndoMark').style.display = '';
+}
+
+function undoMarkAll() {
+  if (!markAllBackup) return;
+  if (!confirm('确认撤销全部标记，恢复到标记前的状态？')) return;
+
+  state = markAllBackup;
+  markAllBackup = null;
+  saveToStorage();
+  renderAll();
+
+  // 恢复按钮状态
+  document.getElementById('btnMarkAll').style.display = '';
+  document.getElementById('btnUndoMark').style.display = 'none';
+}
+
+function resetAllMarks() {
+  if (!confirm('确认清除所有检查项的状态和备注？\n\n此操作不可撤销，将清空全部标记和备注内容。')) return;
+
+  markAllBackup = null;
+  sections.forEach(sec => {
+    const total = sec.items.length + (customItems[sec.id] || []).length;
+    for (let i = 0; i < total; i++) {
+      if (!state[sec.id]) state[sec.id] = {};
+      state[sec.id][i] = { status: '', note: '' };
+    }
+  });
+  saveToStorage();
+  renderAll();
+
+  // 恢复按钮状态
+  document.getElementById('btnMarkAll').style.display = '';
+  document.getElementById('btnUndoMark').style.display = 'none';
+}
+
+// ===== 筛选 =====
+let currentFilter = 'all';
+function setFilter(filter, el) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  applyFilter(filter);
+}
+function applyFilter(filter) {
+  document.querySelectorAll('.check-row').forEach(row => {
+    if (filter === 'all') { row.style.display = ''; return; }
+    const secId = row.id.split('-')[1] + (row.id.split('-')[2] ? '-' + row.id.split('-')[2] : '');
+    // rebuild check
+    if (filter === 'pharma') {
+      row.style.display = row.dataset.industry === 'pharma' ? '' : 'none';
+    } else if (filter === 'chem') {
+      row.style.display = row.dataset.industry === 'chem' ? '' : 'none';
+    } else if (filter === 'oil') {
+      row.style.display = row.dataset.industry === 'oil' ? '' : 'none';
+    } else if (filter === 'yes') {
+      row.style.display = row.classList.contains('status-yes') ? '' : 'none';
+    } else if (filter === 'no') {
+      row.style.display = row.classList.contains('status-no') ? '' : 'none';
+    } else if (filter === 'na') {
+      row.style.display = row.classList.contains('status-na') ? '' : 'none';
+    } else if (filter === 'pending') {
+      row.style.display = (!row.classList.contains('status-yes') && !row.classList.contains('status-no') && !row.classList.contains('status-na')) ? '' : 'none';
+    }
+  });
+}
+
+// ===== 签字行 =====
+function addSignRow() {
+  const tbody = document.getElementById('signBody');
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><input type="text" placeholder="姓名"></td>
+    <td><input type="text" placeholder="职务"></td>
+    <td><input type="text" placeholder=""></td>
+    <td><input type="date"></td>`;
+  tbody.appendChild(tr);
+}
+
+// ===== 元数据自动保存 =====
+['projectName','reviewDate','pssrNo'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('change', saveToStorage);
+});
+
+// ===== 初始化 =====
+initState();
+renderAll();
+
+// 默认日期
+if (!document.getElementById('reviewDate').value) {
+  const today = new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000);
+  document.getElementById('reviewDate').value = today.toISOString().split('T')[0];
+}
+
+// 打印日期
+var printDateEl = document.getElementById('printDate');
+if (printDateEl) {
+  var now = new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000);
+  printDateEl.textContent = '打印日期：' + now.getFullYear() + '年' + (now.getMonth()+1) + '月' + now.getDate() + '日';
+}
+
+// ===== AI Report =====
+function getApi() {
+  return {
+    mode: localStorage.getItem('sheen_5why_mode') || 'own',
+    key: localStorage.getItem('sheen_5why_apikey') || '',
+    proxy: localStorage.getItem('sheen_5why_proxy') || ''
+  };
+}
+
+var reportModal = document.createElement('div');
+reportModal.id = 'reportModal';
+reportModal.style.cssText = 'display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:999;overflow:auto;';
+reportModal.innerHTML = '<div style="max-width:700px;margin:40px auto;background:var(--bg-card);border-radius:12px;padding:32px;box-shadow:0 20px 60px rgba(0,0,0,0.3);" id="reportContent"><h2 style="margin-bottom:16px;color:var(--brand-red);"><i class="fa-solid fa-file-lines"></i> PSSR 审查报告</h2><div id="reportBody"></div><div style="margin-top:20px;display:flex;gap:8px;justify-content:flex-end;"><button class="btn btn-primary btn-sm" onclick="window.print()">打印</button><button class="btn btn-outline btn-sm" onclick="document.getElementById(\'reportModal\').style.display=\'none\'">关闭</button></div></div>';
+document.body.appendChild(reportModal);
+
+async function aiReport() {
+  var api = getApi();
+  if(api.mode==='own'&&!api.key){alert('请先在5Why页面配置API Key');return;}
+  if(api.mode==='proxy'&&!api.proxy){alert('请先在5Why页面配置代理地址');return;}
+
+  document.getElementById('btnAiReport').disabled=true;
+  document.getElementById('aiLoadingPssr').style.display='inline';
+
+  // Collect data
+  var pn = document.getElementById('projectName')?.value||'';
+  var rd = document.getElementById('reviewDate')?.value||'';
+  var rows = [];
+  document.querySelectorAll('.check-row').forEach(function(r){
+    var chk = r.querySelector('.check-item-text');
+    var ref = r.querySelector('.check-ref');
+    var status = '';
+    if(r.classList.contains('status-yes')) status='已完成';
+    else if(r.classList.contains('status-no')) status='未完成';
+    else if(r.classList.contains('status-na')) status='不适用';
+    else status='待填写';
+    var remark = r.querySelector('.remark-input')?.value||'';
+    rows.push({item:chk?chk.textContent:'',ref:ref?ref.textContent:'',status:status,remark:remark});
+  });
+
+  var prompt = '你是PSSR开车前安全审查专家。请根据以下检查结果生成审查报告。\n\n'+
+    '项目：'+pn+'\n审查日期：'+rd+'\n\n检查结果：\n'+
+    rows.map(function(r){return '- ['+r.status+'] '+r.item+(r.remark?' - 备注：'+r.remark:'');}).join('\n')+'\n\n'+
+    '请生成JSON：{"summary":"项目整体结论(2-3句)","issues":[{"item":"问题项","severity":"高/中/低","suggestion":"整改建议"}],"readiness":"可开车/有条件开车/不可开车","recommendations":["建议1","建议2"]}';
+
+  try {
+    var url, headers;
+    if(api.mode==='proxy'){url=api.proxy;headers={'Content-Type':'application/json'};}
+    else {url='https://open.bigmodel.cn/api/paas/v4/chat/completions';headers={'Content-Type':'application/json','Authorization':'Bearer '+api.key};}
+    var resp = await fetch(url,{method:'POST',headers:headers,body:JSON.stringify({model:'glm-4-flash',messages:[{role:'user',content:prompt}],temperature:0.5,max_tokens:2000})});
+    var data = await resp.json();
+    var txt = data.choices[0].message.content;
+    var m = txt.match(/\{[\s\S]*\}/);
+    var rpt = JSON.parse(m?m[0]:txt);
+
+    var body = '';
+    body += '<div style="margin-bottom:12px;font-size:13px;color:var(--text-secondary);">项目：'+pn+' | 日期：'+rd+' | 共 '+rows.length+' 项</div>';
+    body += '<div style="background:var(--brand-red-light);padding:16px;border-radius:8px;margin-bottom:16px;border-left:4px solid var(--brand-red);">';
+    body += '<strong>审查结论：</strong>'+(rpt.summary||'')+'<br>';
+    body += '<strong style="margin-top:4px;display:inline-block;">开车建议：</strong><span style="font-weight:700;color:'+(rpt.readiness==='可开车'?'#16A34A':'#DC2626')+';">'+(rpt.readiness||'')+'</span></div>';
+
+    if(rpt.issues&&rpt.issues.length){
+      body += '<h4 style="margin-bottom:8px;">待整改问题</h4>';
+      rpt.issues.forEach(function(i){
+        body += '<div style="padding:10px;margin-bottom:6px;background:var(--bg-page);border-radius:6px;display:flex;gap:8px;align-items:flex-start;font-size:13px;">';
+        body += '<span style="background:'+(i.severity==='高'?'#DC2626':'#EA580C')+';color:#fff;padding:2px 8px;border-radius:4px;font-size:11px;flex-shrink:0;">'+i.severity+'</span>';
+        body += '<div><strong>'+i.item+'</strong><br><span style="color:var(--text-secondary);">'+i.suggestion+'</span></div></div>';
+      });
+    }
+
+    if(rpt.recommendations&&rpt.recommendations.length){
+      body += '<h4 style="margin:12px 0 8px;">改进建议</h4>';
+      rpt.recommendations.forEach(function(r){body += '<div style="padding:8px;margin-bottom:4px;font-size:13px;background:#F0FDF4;border-radius:4px;border-left:3px solid #16A34A;">'+r+'</div>';});
+    }
+
+    document.getElementById('reportBody').innerHTML = body;
+    document.getElementById('reportModal').style.display = 'block';
+  } catch(e) {
+    var msg = e.message;
+    if(msg.indexOf('401')>-1||msg.indexOf('invalid')>-1) msg='API Key无效，请在5Why页面重新配置';
+    alert('报告生成失败：'+msg);
+  }
+  document.getElementById('btnAiReport').disabled=false;
+  document.getElementById('aiLoadingPssr').style.display='none';
+}
+</script>
+</body>
+</html>
