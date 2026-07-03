@@ -84,66 +84,6 @@
             color: var(--text-secondary);
             line-height: 1.7;
         }
-        /* ===== 搜索栏 & 时间 ===== */
-        .search-wrap {
-            max-width: 600px;
-            margin: 0 auto 16px;
-            padding: 0 20px;
-            position: relative;
-        }
-        .search-input {
-            width: 100%;
-            padding: 10px 16px 10px 42px;
-            border: 1.5px solid var(--border);
-            border-radius: 60px;
-            font-size: 14px;
-            background: var(--bg-card);
-            color: var(--text-primary);
-            font-family: inherit;
-            transition: all 0.2s;
-        }
-        .search-input:focus {
-            outline: none;
-            border-color: var(--brand-red);
-            box-shadow: 0 0 0 4px rgba(122,24,37,0.06);
-        }
-        .search-icon {
-            position: absolute;
-            left: 34px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-            font-size: 16px;
-        }
-        .search-btn {
-            position: absolute;
-            right: 46px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: var(--brand-red);
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            font-size: 13px;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            transition: all 0.2s;
-        }
-        .search-btn:hover { background: var(--brand-red-hover); }
-        .search-clear {
-            position: absolute;
-            right: 82px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-size: 14px;
-            display: none;
-        }
-        .search-clear:hover { color: var(--brand-red); }
         .meta-bar {
             max-width: 600px;
             margin: 0 auto 8px;
@@ -156,7 +96,6 @@
         }
         .meta-bar .update-time i { margin-right: 4px; }
         .meta-bar .tool-count { font-weight: 600; }
-        .tool-card.hidden { display: none; }
         /* ===== 工具卡片 ===== */
         .tool-grid {
             display: grid;
@@ -463,14 +402,8 @@
         </p>
     </section>
 
-    <div class="search-wrap">
-        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        <input type="text" class="search-input" id="searchInput" placeholder="搜索工具…（支持名称 / 描述 / 标准号模糊匹配）" oninput="filterTools()" onkeydown="if(event.key==='Enter')filterTools()">
-        <button class="search-btn" onclick="filterTools()" title="搜索"><i class="fa-solid fa-magnifying-glass"></i></button>
-        <button class="search-clear" id="searchClear" onclick="clearSearch()" title="清除"><i class="fa-solid fa-xmark"></i></button>
-    </div>
     <div class="meta-bar">
-        <span class="update-time"><i class="fa-solid fa-clock-rotate-left"></i> 最近更新：<span id="updateTime">2026-07-03</span></span>
+        <span class="update-time"><i class="fa-solid fa-clock"></i> <span id="liveTime"></span></span>
         <span class="tool-count"><span id="toolCount"></span> 个工具</span>
     </div>
 
@@ -793,34 +726,16 @@
         }
         updateApiStatusH();
 
-        // ===== 搜索过滤 =====
-        function filterTools() {
-            var query = document.getElementById('searchInput').value.trim().toLowerCase();
-            var cards = document.querySelectorAll('.tool-card:not(.placeholder)');
-            var count = 0;
-            cards.forEach(function(card) {
-                var title = (card.querySelector('h3')?.textContent || '').toLowerCase();
-                var desc = (card.querySelector('.desc')?.textContent || '').toLowerCase();
-                var match = !query || title.includes(query) || desc.includes(query);
-                card.classList.toggle('hidden', !match);
-                if (match) count++;
-            });
-            var clearBtn = document.getElementById('searchClear');
-            clearBtn.style.display = query ? 'block' : 'none';
-            document.getElementById('toolCount').textContent = count;
-            // Hide placeholder if searching
-            var ph = document.querySelector('.tool-card.placeholder');
-            if (ph) ph.classList.toggle('hidden', !!query);
-        }
-        function clearSearch() {
-            document.getElementById('searchInput').value = '';
-            filterTools();
-            document.getElementById('searchInput').focus();
-        }
-        // ===== 工具计数 =====
+        // ===== 实时时间 + 工具计数 =====
         (function() {
             var total = document.querySelectorAll('.tool-card:not(.placeholder)').length;
             document.getElementById('toolCount').textContent = total;
+            function tick() {
+                var d = new Date(Date.now() + (480 + new Date().getTimezoneOffset()) * 60000);
+                var ts = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0') + ' ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0') + ':' + String(d.getSeconds()).padStart(2,'0');
+                document.getElementById('liveTime').textContent = ts;
+            }
+            tick(); setInterval(tick, 1000);
         })();
     })();
     </script>
