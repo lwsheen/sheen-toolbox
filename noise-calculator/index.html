@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>噪声计算器 — SHEEN Toolbox</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{--black:#000;--text:#111827;--text2:#6B7280;--bg:#F8FAFC;--card:#fff;--bd:#E5E7EB;--red:#7A1825;--redH:#5C121C;--redL:#FEF2F2;--amb:#FBBF24;--r:12px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.sheen-nav{background:var(--black);padding:0 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:4px solid var(--red);flex-wrap:wrap;min-height:52px}
+.sheen-nav-brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;padding:12px 0}
+.sheen-nav-brand i{font-size:22px;color:var(--amb)}
+.sheen-nav-brand-text{font-size:15px;font-weight:700;letter-spacing:.5px}
+.sheen-nav-tools{display:flex;gap:2px;flex-wrap:wrap}
+.sheen-nav-tool{display:flex;align-items:center;gap:4px;padding:5px 10px;color:rgba(255,255,255,.7);text-decoration:none;font-size:11px;font-weight:500;border-radius:60px;transition:all .2s;white-space:nowrap}
+.sheen-nav-tool:hover{background:rgba(255,255,255,.1);color:#fff}
+.sheen-nav-tool.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600}
+.sheen-footer{text-align:center;padding:14px 24px;font-size:12px;color:var(--text2);border-top:1px solid var(--bd);background:var(--card)}
+.sheen-footer i{color:var(--amb)}.sheen-footer strong{color:var(--text)}
+.app-wrap{max-width:100%;margin:0 auto;padding:16px 12px}
+h1{font-size:20px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+h1 i{color:var(--red)}.sub{font-size:12px;color:var(--text2);margin-bottom:14px}
+
+.tabs{display:flex;gap:2px;margin-bottom:14px;flex-wrap:wrap;border-bottom:2px solid var(--bd)}
+.tab{padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--text2);border-bottom:3px solid transparent;transition:all .2s;font-family:inherit;white-space:nowrap}
+.tab:hover{color:var(--red)}.tab.active{color:var(--red);border-bottom-color:var(--red)}.tab i{margin-right:4px}
+.tc{display:none}.tc.active{display:block}
+
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.card h3{font-size:14px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.card h3 i{color:var(--red)}
+.hint{font-size:11px;color:var(--text2);margin-bottom:10px;padding:6px 10px;background:var(--bg);border-radius:6px}
+
+.form-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}
+.form-group{flex:1;min-width:140px}
+.form-group.w-sm{flex:0.6;min-width:100px}
+.form-group label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:3px}
+.form-group label .unit{font-weight:400;font-size:10px;color:#9CA3AF}
+.form-control{width:100%;padding:8px 10px;border:1.5px solid var(--bd);border-radius:6px;font-size:13px;background:var(--card);color:var(--text);font-family:inherit}
+.form-control:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(122,24,37,.06)}
+select.form-control{cursor:pointer}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:10px 24px;border-radius:60px;font-size:14px;font-weight:600;cursor:pointer;transition:all .25s;border:none;font-family:inherit}
+.btn-p{background:var(--red);color:#fff}.btn-p:hover{background:var(--redH);transform:translateY(-1px);box-shadow:0 6px 16px rgba(122,24,37,.2)}
+.btn-o{background:var(--card);border:1.5px solid var(--bd);color:var(--text)}.btn-o:hover{border-color:var(--red);color:var(--red)}
+.btn-bad{background:var(--card);color:var(--red);border:1.5px solid var(--red)}.btn-bad:hover{background:var(--redL)}
+.btn-sm{padding:5px 10px;font-size:10px}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+
+.result-box{margin-top:12px}
+.result-card{background:var(--redL);border:2px solid var(--red);border-radius:16px;padding:16px 20px;text-align:center;margin-bottom:10px}
+.result-card .rc-val{font-size:36px;font-weight:700;color:var(--red);line-height:1.1}
+.result-card .rc-label{font-size:11px;color:var(--text2);margin-top:2px}
+.result-card .rc-note{font-size:12px;color:var(--text2);margin-top:6px}
+.result-card.green{background:#ECFDF5;border-color:#16A34A}.result-card.green .rc-val{color:#16A34A}
+.result-card.orange{background:#FFF7ED;border-color:#EA580C}.result-card.orange .rc-val{color:#EA580C}
+.result-card.purple{background:#FAF5FF;border-color:#9333EA}.result-card.purple .rc-val{color:#9333EA}
+
+.steps{list-style:none;font-size:12px;color:var(--text2);line-height:2}
+.steps li{padding:3px 0;border-left:3px solid var(--bd);padding-left:12px;margin-bottom:4px}
+.steps li span{color:var(--text);font-weight:600}
+.steps li.formula{font-family:monospace;font-size:13px;color:var(--text);border-left-color:var(--red);background:var(--redL);padding:8px 12px;border-radius:0 6px 6px 0}
+
+.tbl-w{overflow-x:auto}
+.dt{min-width:400px;border-collapse:collapse;font-size:10px}
+.dt th,.dt td{padding:5px 8px;border:1px solid var(--bd);text-align:center;vertical-align:middle}
+.dt th{background:#1F4E79;color:#fff;font-weight:700;font-size:10px}.dt td{background:var(--card)}
+
+details{margin-top:4px}
+details summary{font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;padding:6px 0;user-select:none;display:flex;align-items:center;gap:5px}
+details summary i{font-size:11px;color:var(--red)}
+
+.gauge-wrap{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:8px 0}
+.gauge-bar{width:100%;max-width:400px;height:28px;border-radius:14px;overflow:hidden;display:flex;background:#E5E7EB}
+.gauge-seg{display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:#fff}
+.gauge-seg.g1{background:#16A34A;flex:15}.gauge-seg.g2{background:#CA8A04;flex:10}.gauge-seg.g3{background:#EA580C;flex:7}.gauge-seg.g4{background:#DC2626;flex:8}
+.gauge-marker{width:3px;height:36px;background:#000;position:relative;border-radius:2px}
+.gauge-labels{display:flex;justify-content:space-between;max-width:400px;font-size:9px;color:var(--text2);margin-top:2px}
+
+.source-list{list-style:none;font-size:12px}
+.source-list li{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-bottom:1px solid var(--bd);gap:8px}
+.source-list li .si-info{flex:1}
+.source-list li .si-val{font-weight:600}
+.source-list li button{background:none;border:none;color:#9CA3AF;cursor:pointer;font-size:14px;padding:2px 4px;transition:all .15s}
+.source-list li button:hover{color:#DC2626}
+.empty-state{text-align:center;padding:20px;color:var(--text2);font-size:12px}
+
+.print-time{display:none}
+
+@media(max-width:768px){
+  .sheen-nav{padding:6px 8px}.sheen-nav-tool{padding:5px 8px;font-size:10px}
+  .app-wrap{padding:8px 4px}.form-group{min-width:100%}
+  .result-card .rc-val{font-size:28px}
+}
+@media print{
+  @page{size:A4;margin:18mm 15mm 20mm 15mm;@bottom-center{content:"SHEEN Toolbox · 噪声计算器";font-size:8pt;color:#666}}
+  body{background:#fff!important;font-size:11pt;color:#000!important}
+  .sheen-nav,.sheen-footer,.tabs,.btn,.no-pr{display:none!important}
+  .app-wrap{padding:0!important}
+  .card{box-shadow:none!important;border:1.5px solid #333!important;break-inside:avoid;padding:10px!important;border-radius:0!important}
+  .result-card{box-shadow:none!important;break-inside:avoid;background:#f9f9f9!important;border:1.5px solid #333!important;border-left:6px solid #000!important}
+  .result-card .rc-val{color:#000!important}
+  .result-card.green,.result-card.orange,.result-card.purple{background:#f9f9f9!important;border-color:#333!important;border-left:6px solid #000!important}
+  .result-card.green .rc-val,.result-card.orange .rc-val,.result-card.purple .rc-val{color:#000!important}
+  .dt th{background:#eee!important;color:#000!important}
+  .tc{display:none!important}.tc.pt{display:block!important}
+  .form-card{display:none!important}
+  .print-time{display:block!important;font-size:9pt;color:#666;text-align:right;margin-bottom:12px}
+  details{display:block!important}details summary{display:none!important}
+  .gauge-bar{background:#ddd!important}.gauge-seg.g1,.gauge-seg.g2,.gauge-seg.g3,.gauge-seg.g4{background:#aaa!important}
+}
+</style>
+</head>
+<body>
+
+<header class="sheen-nav">
+<a href="/sheen-toolbox/" class="sheen-nav-brand"><i class="fa-solid fa-shield-halved" style="color:var(--amb);font-size:22px"></i><span class="sheen-nav-brand-text">SHEEN Toolbox</span></a>
+<div class="sheen-nav-tools">
+<a href="/sheen-toolbox/pssr-checklist/" class="sheen-nav-tool">PSSR检查表</a>
+<a href="/sheen-toolbox/fire-extinguisher-calculator/" class="sheen-nav-tool">灭火器计算器</a>
+<a href="/sheen-toolbox/safety-production-cost-calculator/" class="sheen-nav-tool">安产费用计算器</a>
+<a href="/sheen-toolbox/jsa-lec/" class="sheen-nav-tool">JSA+LEC评价</a>
+<a href="/sheen-toolbox/industry-classification/" class="sheen-nav-tool">行业分类查询</a>
+<a href="/sheen-toolbox/dangerous-goods-query/" class="sheen-nav-tool">危险货物查询</a>
+<a href="/sheen-toolbox/five-why-analysis/" class="sheen-nav-tool">5Why根因分析</a>
+<a href="/sheen-toolbox/hazardous-waste-query/" class="sheen-nav-tool">危险废物查询</a>
+<a href="/sheen-toolbox/hazardous-chemicals-query/" class="sheen-nav-tool">危险化学品查询</a>
+<a href="/sheen-toolbox/iso14001-environmental-factors/" class="sheen-nav-tool">环境因素</a>
+<a href="/sheen-toolbox/heat-stress-classification/" class="sheen-nav-tool">高温分级</a>
+<a href="/sheen-toolbox/niosh-lifting-calculator/" class="sheen-nav-tool">NIOSH举升</a>
+<a href="/sheen-toolbox/explosion-venting-calculator/" class="sheen-nav-tool">泄爆面积</a>
+<a href="/sheen-toolbox/environmental-tax-calculator/" class="sheen-nav-tool">环保税</a>
+<a href="/sheen-toolbox/noise-calculator/" class="sheen-nav-tool active">噪声计算</a>
+</div></header>
+
+<main class="app-wrap">
+<h1><i class="fa-solid fa-ear-listen"></i> 噪声计算器</h1>
+<p class="sub">GBZ/T 229.4 职业噪声危害分级 · L<sub>EX,8h</sub> 等效声级 · 噪声剂量 · 多声源合成</p>
+
+<div class="tabs no-pr">
+<button class="tab active" onclick="sw(0)"><i class="fa-solid fa-clock"></i>L<sub>EX,8h</sub></button>
+<button class="tab" onclick="sw(1)"><i class="fa-solid fa-percent"></i>噪声剂量</button>
+<button class="tab" onclick="sw(2)"><i class="fa-solid fa-layer-group"></i>多声源合成</button>
+<button class="tab" onclick="sw(3)"><i class="fa-solid fa-triangle-exclamation"></i>危害分级</button>
+</div>
+
+<div class="tc active" id="t0">
+<div class="card form-card">
+<h3><i class="fa-solid fa-clock"></i> L<sub>EX,8h</sub> 8小时等效声级</h3>
+<div class="hint">L<sub>EX,8h</sub> = L<sub>Aeq,Te</sub> + 10·log<sub>10</sub>(T<sub>e</sub>/8) &nbsp;|&nbsp; 用于评估全天噪声暴露水平</div>
+<div class="form-row">
+  <div class="form-group w-sm">
+    <label>等效连续A声级 L<sub>Aeq,Te</sub> <span class="unit">(dB(A))</span></label>
+    <input type="number" id="leq" class="form-control" step="0.1" value="92" min="40" max="140" oninput="calcLEX()">
+  </div>
+  <div class="form-group w-sm">
+    <label>实际接触时间 T<sub>e</sub> <span class="unit">(小时)</span></label>
+    <input type="number" id="te" class="form-control" step="0.1" value="6" min="0.1" max="24" oninput="calcLEX()">
+  </div>
+  <div class="form-group w-sm">
+    <label>交换率</label>
+    <select id="exRate" class="form-control" onchange="calcLEX()">
+      <option value="3" selected>3 dB (ISO/中国)</option>
+      <option value="5">5 dB (OSHA/美国)</option>
+    </select>
+  </div>
+</div>
+<div id="lexResult"></div>
+</div>
+
+<div class="card">
+<h3><i class="fa-solid fa-circle-info"></i> 计算结果</h3>
+<div id="lexDetail"></div>
+<div class="btn-row no-pr">
+  <button class="btn btn-bad btn-sm" onclick="prt('lex')"><i class="fa-solid fa-print"></i> 打印</button>
+</div>
+</div>
+
+<details class="card no-pr" open style="margin-top:0"><summary><i class="fa-solid fa-table"></i> 常见噪声源声级参考</summary><div class="tbl-w"><table class="dt"><thead><tr><th>场景 / 设备</th><th>声级 dB(A)</th><th>场景 / 设备</th><th>声级 dB(A)</th></tr></thead><tbody>
+<tr><td>正常交谈</td><td>60</td><td>繁忙街道</td><td>80</td></tr>
+<tr><td>冲压机床</td><td>95～105</td><td>空压机</td><td>90～100</td></tr>
+<tr><td>电锯</td><td>100～110</td><td>凿岩机</td><td>105～115</td></tr>
+<tr><td>纺织车间</td><td>95～105</td><td>球磨机</td><td>100～110</td></tr>
+<tr><td>喷气发动机(近)</td><td>120～140</td><td>电焊</td><td>85～95</td></tr>
+<tr><td>柴油发电机</td><td>95～110</td><td>离心机</td><td>90～100</td></tr>
+</tbody></table></div></details>
+</div>
+
+<div class="tc" id="t1">
+<div class="card form-card">
+<h3><i class="fa-solid fa-percent"></i> 日噪声暴露剂量</h3>
+<div class="hint">D = (T<sub>e</sub> ÷ T<sub>允许</sub>) × 100% &nbsp;|&nbsp; T<sub>允许</sub> = 8 ÷ 2<sup>(L−85)/q</sup> &nbsp;(q = 交换率)</div>
+<div class="form-row">
+  <div class="form-group w-sm">
+    <label>等效声级 L <span class="unit">(dB(A))</span></label>
+    <input type="number" id="dLeq" class="form-control" step="0.1" value="92" min="40" max="140" oninput="calcDose()">
+  </div>
+  <div class="form-group w-sm">
+    <label>接触时间 T<sub>e</sub> <span class="unit">(小时)</span></label>
+    <input type="number" id="dTe" class="form-control" step="0.1" value="6" min="0.1" max="24" oninput="calcDose()">
+  </div>
+  <div class="form-group w-sm">
+    <label>交换率 q</label>
+    <select id="dQ" class="form-control" onchange="calcDose()">
+      <option value="3" selected>3 dB (ISO/中国)</option>
+      <option value="5">5 dB (OSHA/美国)</option>
+    </select>
+  </div>
+</div>
+<div id="doseResult"></div>
+</div>
+
+<div class="card">
+<h3><i class="fa-solid fa-circle-info"></i> 噪声剂量详情</h3>
+<ul class="steps" id="doseDetail"></ul>
+<div class="btn-row no-pr">
+  <button class="btn btn-bad btn-sm" onclick="prt('dose')"><i class="fa-solid fa-print"></i> 打印</button>
+</div>
+</div>
+
+<details class="card no-pr" open style="margin-top:0"><summary><i class="fa-solid fa-table"></i> 不同声级下的允许接触时间</summary><div class="tbl-w"><table class="dt" id="doseTable3"></table></div></details>
+</div>
+
+<div class="tc" id="t2">
+<div class="card form-card">
+<h3><i class="fa-solid fa-layer-group"></i> 多声源噪声合成</h3>
+<div class="hint">L<sub>总</sub> = 10·log<sub>10</sub>(10<sup>L1/10</sup> + 10<sup>L2/10</sup> + ... + 10<sup>Ln/10</sup>)</div>
+<div class="form-row">
+  <div class="form-group w-sm">
+    <label>声源声级 <span class="unit">(dB(A))</span></label>
+    <input type="number" id="sLevel" class="form-control" step="0.1" value="90" min="30" max="150" onkeydown="if(event.key==='Enter')addSource()">
+  </div>
+  <div class="form-group w-sm">
+    <label>声源名称（可选）</label>
+    <input type="text" id="sName" class="form-control" placeholder="如：空压机" onkeydown="if(event.key==='Enter')addSource()">
+  </div>
+  <div class="form-group w-sm" style="align-self:flex-end">
+    <button class="btn btn-p btn-sm" onclick="addSource()"><i class="fa-solid fa-plus"></i> 添加</button>
+  </div>
+</div>
+</div>
+
+<div class="card">
+<h3><i class="fa-solid fa-list-check"></i> 声源清单</h3>
+<ul class="source-list" id="sourceList"><li class="empty-state">暂无数据，请添加声源</li></ul>
+<div class="result-box" id="synthResult"></div>
+<div class="btn-row no-pr">
+  <button class="btn btn-bad btn-sm" onclick="prt('synth')"><i class="fa-solid fa-print"></i> 打印</button>
+  <button class="btn btn-o btn-sm" onclick="clearSources()"><i class="fa-solid fa-trash"></i> 清空</button>
+</div>
+</div>
+
+<details class="card no-pr" open style="margin-top:0"><summary><i class="fa-solid fa-table"></i> 两声源合成速查表（差值法）</summary><div class="hint" style="margin-bottom:8px;">两声源声级差 ΔL = L<sub>大</sub> − L<sub>小</sub>，叠加增量 = 表中对应值 &nbsp;→&nbsp; L<sub>合成</sub> = L<sub>大</sub> + 增量</div>
+<div class="tbl-w"><table class="dt" id="synthTable2"></table></div>
+</details>
+</div>
+
+<div class="tc" id="t3">
+<div class="card form-card">
+<h3><i class="fa-solid fa-triangle-exclamation"></i> 噪声作业危害分级（GBZ/T 229.4-2012）</h3>
+<div class="hint">根据 L<sub>EX,8h</sub> 等效声级确定作业危害等级</div>
+<div class="form-row">
+  <div class="form-group w-sm">
+    <label>L<sub>EX,8h</sub> <span class="unit">(dB(A))</span></label>
+    <input type="number" id="gLeq" class="form-control" step="0.1" value="92" min="40" max="140" oninput="calcGrade()">
+  </div>
+  <div class="form-group w-sm">
+    <label>或选择典型场景</label>
+    <select id="gPreset" class="form-control" onchange="onGradePreset()">
+      <option value="">— 自定义输入 —</option>
+      <option value="82">办公室环境 (82 dB)</option>
+      <option value="88">机加工车间 (88 dB)</option>
+      <option value="92">冲压车间 (92 dB)</option>
+      <option value="96">喷砂车间 (96 dB)</option>
+      <option value="100">靠近发动机测试 (100 dB)</option>
+      <option value="105">凿岩作业 (105 dB)</option>
+    </select>
+  </div>
+</div>
+<div id="gradeResult"></div>
+</div>
+
+<div class="card">
+<h3><i class="fa-solid fa-circle-info"></i> 分级详情</h3>
+<div id="gradeDetail"></div>
+<div class="btn-row no-pr">
+  <button class="btn btn-bad btn-sm" onclick="prt('grade')"><i class="fa-solid fa-print"></i> 打印</button>
+</div>
+</div>
+
+<details class="card no-pr" open style="margin-top:0"><summary><i class="fa-solid fa-table"></i> GBZ/T 229.4-2012 噪声作业危害分级表</summary><div class="tbl-w"><table class="dt"><thead><tr><th>危害等级</th><th>分级名称</th><th>L<sub>EX,8h</sub> (dB(A))</th><th>管理措施</th></tr></thead><tbody>
+<tr><td>Ⅰ级</td><td>轻度危害</td><td>85 ≤ L<sub>EX,8h</sub> &lt; 90</td><td>常规监测，发放护听器</td></tr>
+<tr><td>Ⅱ级</td><td>中度危害</td><td>90 ≤ L<sub>EX,8h</sub> &lt; 94</td><td>加强监测，强制佩戴护听器，工程控制</td></tr>
+<tr><td>Ⅲ级</td><td>重度危害</td><td>94 ≤ L<sub>EX,8h</sub> &lt; 97</td><td>限期治理，严格健康监护</td></tr>
+<tr><td>Ⅳ级</td><td>极重危害</td><td>L<sub>EX,8h</sub> ≥ 97</td><td>立即停产整改，高风险管理</td></tr>
+</tbody></table></div>
+<div class="hint" style="margin-top:8px;font-size:10px">注：1. L<sub>EX,8h</sub> &lt; 85 dB(A) 不属于噪声作业，无需分级。<br>2. 交换率 q=3 dB（ISO/中国标准），即声级每增加 3 dB，允许时间减半。</div></details>
+</div>
+
+</main>
+
+<footer class="sheen-footer"><i class="fa-solid fa-shield-halved" style="color:var(--amb);font-size:22px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 噪声计算器</footer>
+<div class="print-time" id="printTime"></div>
+
+<script>
+// ===== Utility =====
+function fmt(n,d){return n.toLocaleString('zh-CN',{minimumFractionDigits:d||1,maximumFractionDigits:d||1})}
+
+// ===== Tabs =====
+function sw(n){
+  document.querySelectorAll('.tab').forEach(function(t,i){t.classList.toggle('active',i===n)});
+  document.querySelectorAll('.tc').forEach(function(c,i){c.classList.toggle('active',i===n)});
+  if(n===0)calcLEX();if(n===1){calcDose();genDoseTable();}if(n===2)calcSynth();if(n===3)calcGrade();
+}
+
+// ===== Time calc =====
+function getCNTime(){return new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000).toISOString().replace('T',' ').slice(0,16)}
+
+// ===== Print =====
+function prt(cat){
+  var tabs={lex:0,dose:1,synth:2,grade:3};
+  document.querySelectorAll('.tc').forEach(function(c,i){c.classList.remove('pt');if(i===tabs[cat])c.classList.add('pt')});
+  document.querySelectorAll('details').forEach(function(d){d.setAttribute('open','')});
+  window.print();
+  setTimeout(function(){document.querySelectorAll('.tc').forEach(function(c){c.classList.remove('pt')})},500);
+}
+
+// ===== TAB 0: LEX,8h =====
+function calcLEX(){
+  var L=parseFloat(document.getElementById('leq').value)||92;
+  var Te=parseFloat(document.getElementById('te').value)||6;
+  var q=parseInt(document.getElementById('exRate').value);
+  var LEX=L+10*Math.log10(Te/8);
+  
+  // Allowed time
+  var Tallowed=8/Math.pow(2,(L-85)/q);
+  
+  var html='<ul class="steps">';
+  html+='<li class="formula">L<sub>EX,8h</sub> = L<sub>Aeq,Te</sub> + 10·log<sub>10</sub>(T<sub>e</sub>/T<sub>0</sub>) = '+L.toFixed(1)+' + 10·log<sub>10</sub>('+Te.toFixed(1)+'/8)</li>';
+  html+='<li>等效连续声级：<span>L<sub>Aeq,Te</sub> = '+L.toFixed(1)+' dB(A)</span></li>';
+  html+='<li>实际接触时间：<span>T<sub>e</sub> = '+Te.toFixed(1)+' 小时</span></li>';
+  html+='<li>交换率：<span>q = '+q+' dB</span>（声级每增加 '+q+' dB，允许时间减半）</li>';
+  html+='<li>允许接触时间：<span>T<sub>允许</sub> = 8 ÷ 2<sup>('+L.toFixed(1)+'−85)/'+q+'</sup> = '+Tallowed.toFixed(2)+' 小时</span></li>';
+  html+='<li>L<sub>EX,8h</sub> 修正项：<span>10·log<sub>10</sub>('+Te.toFixed(1)+'/8) = '+(10*Math.log10(Te/8)).toFixed(2)+' dB</span></li>';
+  html+='</ul>';
+  document.getElementById('lexDetail').innerHTML=html;
+  
+  var cls='',tag='';
+  if(LEX>=97){cls='purple';tag='Ⅳ级 · 极重危害';}
+  else if(LEX>=94){cls='orange';tag='Ⅲ级 · 重度危害';}
+  else if(LEX>=90){cls='';tag='Ⅱ级 · 中度危害';}
+  else if(LEX>=85){cls='green';tag='Ⅰ级 · 轻度危害';}
+  else{cls='green';tag='非噪声作业';}
+  
+  document.getElementById('lexResult').innerHTML=
+    '<div class="result-card'+((cls&&!cls.includes('purple'))?' '+cls:'')+'">'+
+    '<div class="rc-label">8小时等效连续A声级 L<sub>EX,8h</sub></div>'+
+    '<div class="rc-val">'+LEX.toFixed(1)+' dB(A)</div>'+
+    '<div class="rc-note">L<sub>Aeq,Te</sub>='+L.toFixed(1)+' dB(A) | T<sub>e</sub>='+Te.toFixed(1)+'h | 允许接触 '+Tallowed.toFixed(2)+'h | '+tag+'</div>'+
+    '</div>';
+}
+
+// ===== TAB 1: 噪声剂量 =====
+function calcDose(){
+  var L=parseFloat(document.getElementById('dLeq').value)||92;
+  var Te=parseFloat(document.getElementById('dTe').value)||6;
+  var q=parseInt(document.getElementById('dQ').value);
+  var Tallowed=8/Math.pow(2,(L-85)/q);
+  var dose=(Te/Tallowed)*100;
+  
+  var html='<li class="formula">T<sub>允许</sub> = 8 ÷ 2<sup>(L−85)/q</sup> = 8 ÷ 2<sup>('+L.toFixed(1)+'−85)/'+q+'</sup> = '+Tallowed.toFixed(2)+' 小时</li>';
+  html+='<li>允许接触时间：<span>T<sub>允许</sub> = '+Tallowed.toFixed(2)+' 小时</span></li>';
+  html+='<li>实际接触时间：<span>T<sub>e</sub> = '+Te.toFixed(1)+' 小时</span></li>';
+  html+='<li>噪声剂量：<span>D = ('+Te.toFixed(1)+' ÷ '+Tallowed.toFixed(2)+') × 100% = '+dose.toFixed(1)+'%</span></li>';
+  
+  var over='';
+  if(dose>400)over='<li style="border-left-color:#DC2626;background:#FEF2F2;color:#DC2626"><span>⚠ 剂量超过 400%，听力损伤风险极高！</span></li>';
+  else if(dose>100)over='<li style="border-left-color:#EA580C;background:#FFF7ED;color:#EA580C"><span>⚠ 剂量超过 100%，已超出安全限值。</span></li>';
+  else over='<li style="border-left-color:#16A34A;background:#ECFDF5;color:#16A34A"><span>✓ 剂量在安全范围内。</span></li>';
+  
+  document.getElementById('doseDetail').innerHTML=html+over;
+  
+  document.getElementById('doseResult').innerHTML=
+    '<div class="result-card'+(dose>100?' orange':(dose>400?' purple':' green'))+'">'+
+    '<div class="rc-label">日噪声暴露剂量</div>'+
+    '<div class="rc-val">'+dose.toFixed(1)+'%</div>'+
+    '<div class="rc-note">L='+L.toFixed(1)+' dB(A) | T<sub>e</sub>='+Te.toFixed(1)+'h | T<sub>允许</sub>='+Tallowed.toFixed(2)+'h | q='+q+' dB</div>'+
+    '</div>';
+}
+
+function genDoseTable(){
+  var html='<thead><tr><th>声级 dB(A)</th><th>允许时间(h) q=3</th><th>允许时间(h) q=5</th><th>声级 dB(A)</th><th>允许时间(h) q=3</th><th>允许时间(h) q=5</th></tr></thead><tbody>';
+  var levels=[80,83,85,86,88,89,90,91,92,94,95,97,98,100,101,103,104,106,107,109,110,112,113,115];
+  for(var i=0;i<levels.length;i+=2){
+    html+='<tr>';
+    for(var j=0;j<2;j++){
+      if(i+j<levels.length){
+        var lv=levels[i+j];
+        var t3=8/Math.pow(2,(lv-85)/3);
+        var t5=8/Math.pow(2,(lv-85)/5);
+        html+='<td><strong>'+(i+j===5||i+j===7||i+j===9?'':'')+lv+'</strong></td><td>'+t3.toFixed(2)+'</td><td>'+t5.toFixed(2)+'</td>';
+      }else{html+='<td></td><td></td><td></td>';}
+    }
+    html+='</tr>';
+  }
+  html+='</tbody>';
+  document.getElementById('doseTable3').innerHTML=html;
+}
+
+// ===== TAB 2: 多声源合成 =====
+var sources=[];
+function addSource(){
+  var L=parseFloat(document.getElementById('sLevel').value)||0;
+  var name=document.getElementById('sName').value.trim()||'声源 '+(sources.length+1);
+  if(L<30||L>150){alert('请输入有效声级 (30-150 dB)');return;}
+  sources.push({name:name,level:L});
+  document.getElementById('sName').value='';
+  document.getElementById('sLevel').value='';
+  document.getElementById('sLevel').focus();
+  renderSources();
+}
+function renderSources(){
+  var el=document.getElementById('sourceList');
+  if(!sources.length){el.innerHTML='<li class="empty-state">暂无数据，请添加声源</li>';calcSynth();return;}
+  var html='';
+  sources.forEach(function(s,i){
+    html+='<li><div class="si-info"><strong>'+s.name+'</strong> <span style="color:var(--text2)">'+s.level.toFixed(1)+' dB(A)</span></div><div class="si-val">10<sup>'+s.level.toFixed(1)+'/10</sup></div><button onclick="removeSource('+i+')" title="删除"><i class="fa-solid fa-xmark"></i></button></li>';
+  });
+  el.innerHTML=html;
+  calcSynth();
+}
+function removeSource(i){sources.splice(i,1);renderSources()}
+function clearSources(){sources=[];renderSources()}
+function calcSynth(){
+  if(!sources.length){document.getElementById('synthResult').innerHTML='';return;}
+  var sum=0;
+  sources.forEach(function(s){sum+=Math.pow(10,s.level/10)});
+  var total=10*Math.log10(sum);
+  var maxL=sources.reduce(function(a,b){return a.level>b.level?a:b},{level:0}).level;
+  document.getElementById('synthResult').innerHTML=
+    '<div class="result-card">'+
+    '<div class="rc-label">合成声级（'+sources.length+' 个声源）</div>'+
+    '<div class="rc-val">'+total.toFixed(1)+' dB(A)</div>'+
+    '<div class="rc-note">最高单源 '+maxL.toFixed(1)+' dB(A) | 叠加增量 '+(total-maxL).toFixed(2)+' dB</div>'+
+    '</div>';
+}
+
+// Two-source synth table
+(function(){
+  var html='<thead><tr><th>ΔL (dB)</th><th>增量 (dB)</th><th>ΔL (dB)</th><th>增量 (dB)</th><th>ΔL (dB)</th><th>增量 (dB)</th></tr></thead><tbody>';
+  for(var i=0;i<=10;i+=3){
+    html+='<tr>';
+    for(var j=0;j<3;j++){
+      var d=i+j;
+      if(d<=10){
+        var inc=10*Math.log10(1+Math.pow(10,-d/10));
+        html+='<td><strong>'+d+'</strong></td><td>'+inc.toFixed(2)+'</td>';
+      }else{html+='<td></td><td></td>';}
+    }
+    html+='</tr>';
+  }
+  html+='<tr><td colspan="6" style="font-size:9px;color:var(--text2)">注：ΔL = 较大声级 − 较小声级，合成声级 = 较大声级 + 增量</td></tr></tbody>';
+  document.getElementById('synthTable2').innerHTML=html;
+})();
+
+// ===== TAB 3: 危害分级 =====
+function calcGrade(){
+  var L=parseFloat(document.getElementById('gLeq').value)||92;
+  var grade,gradeName,gradeColor,measures,barPct;
+  if(L<85){grade='—';gradeName='非噪声作业';gradeColor='#16A34A';barPct=0;measures='L<sub>EX,8h</sub> 低于 85 dB(A)，根据 GBZ 2.2 不视为噪声作业。';}
+  else if(L<90){grade='Ⅰ';gradeName='轻度危害';gradeColor='#16A34A';barPct=15;measures='<p>• 进行噪声日常监测<br>• 发放护听器并督促使用<br>• 开展听力保护培训<br>• 定期职业健康检查</p>';}
+  else if(L<94){grade='Ⅱ';gradeName='中度危害';gradeColor='#CA8A04';barPct=30;measures='<p>• 加强噪声监测（每季度至少 1 次）<br>• 强制佩戴护听器<br>• 实施工程控制措施（隔声/吸声/消声）<br>• 每年听力检查</p>';}
+  else if(L<97){grade='Ⅲ';gradeName='重度危害';gradeColor='#EA580C';barPct=55;measures='<p>• 限期治理，制定整改方案<br>• 严格作业时间管理<br>• 半年听力检查<br>• 建立个人噪声暴露档案</p>';}
+  else{grade='Ⅳ';gradeName='极重危害';gradeColor='#DC2626';barPct=80;measures='<p>• 立即停产整改<br>• 优先采取工程控制<br>• 严格限制接触时间<br>• 每 3 个月听力检查<br>• 列入高危作业管理</p>';}
+  
+  document.getElementById('gradeResult').innerHTML=
+    '<div class="result-card" style="border-color:'+gradeColor+'!important;background:'+(L<90?'#ECFDF5':L<94?'#FFF7ED':L<97?'#FFF7ED':'#FEF2F2')+'">'+
+    '<div class="rc-label">噪声作业危害等级</div>'+
+    '<div class="rc-val" style="color:'+gradeColor+'">'+grade+' 级 · '+gradeName+'</div>'+
+    '<div class="rc-note">L<sub>EX,8h</sub> = '+L.toFixed(1)+' dB(A)</div>'+
+    '</div>';
+  
+  // Gauge
+  var gauge='<div class="gauge-wrap"><div class="gauge-bar">';
+  if(L<85)gauge+='<div class="gauge-seg g1" style="flex:15">非噪声</div><div class="gauge-seg g2" style="flex:10"></div><div class="gauge-seg g3" style="flex:7"></div><div class="gauge-seg g4" style="flex:8"></div>';
+  else if(L<90)gauge+='<div class="gauge-seg g1" style="flex:15">Ⅰ级</div><div class="gauge-seg g2" style="flex:10"></div><div class="gauge-seg g3" style="flex:7"></div><div class="gauge-seg g4" style="flex:8"></div>';
+  else if(L<94)gauge+='<div class="gauge-seg g1" style="flex:15"></div><div class="gauge-seg g2" style="flex:10">Ⅱ级</div><div class="gauge-seg g3" style="flex:7"></div><div class="gauge-seg g4" style="flex:8"></div>';
+  else if(L<97)gauge+='<div class="gauge-seg g1" style="flex:15"></div><div class="gauge-seg g2" style="flex:10"></div><div class="gauge-seg g3" style="flex:7">Ⅲ级</div><div class="gauge-seg g4" style="flex:8"></div>';
+  else gauge+='<div class="gauge-seg g1" style="flex:15"></div><div class="gauge-seg g2" style="flex:10"></div><div class="gauge-seg g3" style="flex:7"></div><div class="gauge-seg g4" style="flex:8">Ⅳ级</div>';
+  gauge+='</div></div><div class="gauge-labels"><span>←85</span><span>90</span><span>94</span><span>97→</span></div>';
+  
+  document.getElementById('gradeDetail').innerHTML=gauge+'<div style="margin-top:8px;font-size:12px;line-height:1.8">'+measures+'</div>';
+}
+function onGradePreset(){
+  var v=document.getElementById('gPreset').value;
+  if(!v)return;
+  document.getElementById('gLeq').value=v;
+  calcGrade();
+}
+
+// ===== Init =====
+document.getElementById('printTime').textContent=getCNTime();
+calcLEX();genDoseTable();calcDose();calcSynth();
+</script>
+</body>
+</html>
