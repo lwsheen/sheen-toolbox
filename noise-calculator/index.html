@@ -150,6 +150,31 @@ details summary i{font-size:11px;color:var(--red)}
 <h3><i class="fa-solid fa-clock"></i> L<sub>EX,8h</sub> 8小时等效声级</h3>
 <div class="hint">L<sub>EX,8h</sub> = L<sub>Aeq,Te</sub> + 10·log<sub>10</sub>(T<sub>e</sub>/8) &nbsp;|&nbsp; 用于评估全天噪声暴露水平</div>
 <div class="form-row">
+  <div class="form-group">
+    <label>典型场景预设</label>
+    <select id="lexPreset" class="form-control" onchange="onLEXPreset()">
+      <option value="">— 自定义输入 —</option>
+      <optgroup label="一般环境">
+        <option value="65|8">办公室 (65 dB, 8h)</option>
+        <option value="75|8">开放式办公区 (75 dB, 8h)</option>
+        <option value="80|8">繁忙街道 / 餐厅后厨 (80 dB, 8h)</option>
+      </optgroup>
+      <optgroup label="制造业">
+        <option value="88|8">机加工车间 (88 dB, 8h)</option>
+        <option value="90|8">电焊作业 (90 dB, 8h)</option>
+        <option value="92|6" selected>冲压车间 (92 dB, 6h)</option>
+        <option value="95|4">锻压车间 (95 dB, 4h)</option>
+        <option value="98|4">纺织车间 (98 dB, 4h)</option>
+      </optgroup>
+      <optgroup label="高噪声">
+        <option value="100|2">喷砂作业 (100 dB, 2h)</option>
+        <option value="105|1">凿岩作业 (105 dB, 1h)</option>
+        <option value="110|0.5">发动机试车 (110 dB, 0.5h)</option>
+      </optgroup>
+    </select>
+  </div>
+</div>
+<div class="form-row">
   <div class="form-group w-sm">
     <label>等效连续A声级 L<sub>Aeq,Te</sub> <span class="unit">(dB(A))</span></label>
     <input type="number" id="leq" class="form-control" step="0.1" value="92" min="40" max="140" oninput="calcLEX()">
@@ -174,6 +199,7 @@ details summary i{font-size:11px;color:var(--red)}
 <div id="lexDetail"></div>
 <div class="btn-row no-pr">
   <button class="btn btn-bad btn-sm" onclick="prt('lex')"><i class="fa-solid fa-print"></i> 打印</button>
+  <button class="btn btn-o btn-sm" onclick="fillGrade()"><i class="fa-solid fa-arrow-right"></i> 填入危害分级</button>
 </div>
 </div>
 
@@ -191,6 +217,20 @@ details summary i{font-size:11px;color:var(--red)}
 <div class="card form-card">
 <h3><i class="fa-solid fa-percent"></i> 日噪声暴露剂量</h3>
 <div class="hint">D = (T<sub>e</sub> ÷ T<sub>允许</sub>) × 100% &nbsp;|&nbsp; T<sub>允许</sub> = 8 ÷ 2<sup>(L−85)/q</sup> &nbsp;(q = 交换率)</div>
+<div class="form-row">
+  <div class="form-group">
+    <label>典型场景预设</label>
+    <select id="dosePreset" class="form-control" onchange="onDosePreset()">
+      <option value="">— 自定义输入 —</option>
+      <option value="85|8">85 dB 8小时 — 临界点</option>
+      <option value="88|8">88 dB 8小时 — 轻度超标</option>
+      <option value="92|6" selected>92 dB 6小时 — 中度超标</option>
+      <option value="95|8">95 dB 8小时 — 严重超标</option>
+      <option value="100|4">100 dB 4小时 — 高度危险</option>
+      <option value="105|2">105 dB 2小时 — 极高危险</option>
+    </select>
+  </div>
+</div>
 <div class="form-row">
   <div class="form-group w-sm">
     <label>等效声级 L <span class="unit">(dB(A))</span></label>
@@ -216,6 +256,7 @@ details summary i{font-size:11px;color:var(--red)}
 <ul class="steps" id="doseDetail"></ul>
 <div class="btn-row no-pr">
   <button class="btn btn-bad btn-sm" onclick="prt('dose')"><i class="fa-solid fa-print"></i> 打印</button>
+  <button class="btn btn-o btn-sm" onclick="fillGradeFromDose()"><i class="fa-solid fa-arrow-right"></i> 填入危害分级</button>
 </div>
 </div>
 
@@ -359,6 +400,40 @@ function calcLEX(){
     '<div class="rc-val">'+LEX.toFixed(1)+' dB(A)</div>'+
     '<div class="rc-note">L<sub>Aeq,Te</sub>='+L.toFixed(1)+' dB(A) | T<sub>e</sub>='+Te.toFixed(1)+'h | 允许接触 '+Tallowed.toFixed(2)+'h | '+tag+'</div>'+
     '</div>';
+}
+
+// ===== Cross-tab fill & presets =====
+function onLEXPreset(){
+  var v=document.getElementById('lexPreset').value;
+  if(!v)return;
+  var parts=v.split('|');
+  document.getElementById('leq').value=parts[0];
+  document.getElementById('te').value=parts[1];
+  calcLEX();
+}
+function onDosePreset(){
+  var v=document.getElementById('dosePreset').value;
+  if(!v)return;
+  var parts=v.split('|');
+  document.getElementById('dLeq').value=parts[0];
+  document.getElementById('dTe').value=parts[1];
+  calcDose();
+}
+function fillGrade(){
+  var L=parseFloat(document.getElementById('leq').value)||92;
+  var Te=parseFloat(document.getElementById('te').value)||6;
+  var LEX=L+10*Math.log10(Te/8);
+  document.getElementById('gLeq').value=LEX.toFixed(1);
+  document.getElementById('gPreset').value='';
+  sw(3);
+  calcGrade();
+}
+function fillGradeFromDose(){
+  var L=parseFloat(document.getElementById('dLeq').value)||92;
+  document.getElementById('gLeq').value=L.toFixed(1);
+  document.getElementById('gPreset').value='';
+  sw(3);
+  calcGrade();
 }
 
 // ===== TAB 1: 噪声剂量 =====
