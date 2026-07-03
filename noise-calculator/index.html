@@ -140,9 +140,10 @@ details summary i{font-size:11px;color:var(--red)}
 
 <div class="tabs no-pr">
 <button class="tab active" onclick="sw(0)"><i class="fa-solid fa-clock"></i>L<sub>EX,8h</sub></button>
-<button class="tab" onclick="sw(1)"><i class="fa-solid fa-percent"></i>噪声剂量</button>
-<button class="tab" onclick="sw(2)"><i class="fa-solid fa-layer-group"></i>多声源合成</button>
-<button class="tab" onclick="sw(3)"><i class="fa-solid fa-triangle-exclamation"></i>危害分级</button>
+<button class="tab" onclick="sw(1)"><i class="fa-solid fa-layer-group"></i>多段合成</button>
+<button class="tab" onclick="sw(2)"><i class="fa-solid fa-percent"></i>噪声剂量</button>
+<button class="tab" onclick="sw(3)"><i class="fa-solid fa-headphones"></i>多声源合成</button>
+<button class="tab" onclick="sw(4)"><i class="fa-solid fa-triangle-exclamation"></i>危害分级</button>
 </div>
 
 <div class="tc active" id="t0">
@@ -211,6 +212,57 @@ details summary i{font-size:11px;color:var(--red)}
 <tr><td>喷气发动机(近)</td><td>120～140</td><td>电焊</td><td>85～95</td></tr>
 <tr><td>柴油发电机</td><td>95～110</td><td>离心机</td><td>90～100</td></tr>
 </tbody></table></div></details>
+</div>
+
+<div class="tc" id="t1">
+<div class="card form-card">
+<h3><i class="fa-solid fa-layer-group"></i> 多段合成 — 等效连续A声级</h3>
+<div class="hint">L<sub>Aeq,T</sub> = 10·log<sub>10</sub>[ (1/T) × Σ(t<sub>i</sub> × 10<sup>L<sub>i</sub>/10</sup>) ] &nbsp;→&nbsp; L<sub>EX,8h</sub> = L<sub>Aeq,T</sub> + 10·log<sub>10</sub>(T/8)</div>
+<div class="form-row">
+  <div class="form-group w-sm">
+    <label>声级 L<sub>i</sub> <span class="unit">(dB(A))</span></label>
+    <input type="number" id="segLevel" class="form-control" step="0.1" value="92" min="40" max="140" onkeydown="if(event.key==='Enter')addSegment()">
+  </div>
+  <div class="form-group w-sm">
+    <label>持续时间 t<sub>i</sub> <span class="unit">(小时)</span></label>
+    <input type="number" id="segTime" class="form-control" step="0.1" value="2" min="0.1" max="24" onkeydown="if(event.key==='Enter')addSegment()">
+  </div>
+  <div class="form-group w-sm">
+    <label>说明（可选）</label>
+    <input type="text" id="segName" class="form-control" placeholder="如：冲压作业" onkeydown="if(event.key==='Enter')addSegment()">
+  </div>
+  <div class="form-group w-sm" style="align-self:flex-end">
+    <button class="btn btn-p btn-sm" onclick="addSegment()"><i class="fa-solid fa-plus"></i> 添加时段</button>
+  </div>
+</div>
+<div class="form-row">
+  <div class="form-group w-sm">
+    <label>交换率</label>
+    <select id="segQ" class="form-control" onchange="calcSegments()">
+      <option value="3" selected>3 dB (ISO/中国)</option>
+      <option value="5">5 dB (OSHA/美国)</option>
+    </select>
+  </div>
+</div>
+</div>
+
+<div class="card">
+<h3><i class="fa-solid fa-list-check"></i> 时段清单 &amp; 计算结果</h3>
+<ul class="source-list" id="segList"><li class="empty-state">暂无时段，请添加不同噪声环境下的暴露时段</li></ul>
+<div class="result-box" id="segResult"></div>
+<div class="btn-row no-pr">
+  <button class="btn btn-bad btn-sm" onclick="prt('seg')"><i class="fa-solid fa-print"></i> 打印</button>
+  <button class="btn btn-o btn-sm" onclick="clearSegments()"><i class="fa-solid fa-trash"></i> 清空</button>
+  <button class="btn btn-o btn-sm" onclick="fillGradeFromSeg()"><i class="fa-solid fa-arrow-right"></i> 填入危害分级</button>
+</div>
+</div>
+
+<details class="card no-pr" open style="margin-top:0"><summary><i class="fa-solid fa-lightbulb"></i> 使用说明</summary>
+<div class="hint" style="font-size:11px;line-height:1.8">
+<strong>适用场景：</strong>工人在一个班次内经历多个不同噪声环境。<br>
+<strong>示例：</strong>2h 冲压车间(95dB) + 3h 机加工(88dB) + 3h 装配区(78dB) → 计算全天 L<sub>EX,8h</sub>。<br>
+<strong>公式：</strong>先以能量叠加方式合成各时段等效声级 L<sub>Aeq,T</sub>，再归一化到 8 小时得到 L<sub>EX,8h</sub>。
+</div></details>
 </div>
 
 <div class="tc" id="t1">
@@ -352,7 +404,7 @@ function fmt(n,d){return n.toLocaleString('zh-CN',{minimumFractionDigits:d||1,ma
 function sw(n){
   document.querySelectorAll('.tab').forEach(function(t,i){t.classList.toggle('active',i===n)});
   document.querySelectorAll('.tc').forEach(function(c,i){c.classList.toggle('active',i===n)});
-  if(n===0)calcLEX();if(n===1){calcDose();genDoseTable();}if(n===2)calcSynth();if(n===3)calcGrade();
+  if(n===0)calcLEX();if(n===1)calcSegments();if(n===2){calcDose();genDoseTable();}if(n===3)calcSynth();if(n===4)calcGrade();
 }
 
 // ===== Time calc =====
@@ -360,7 +412,7 @@ function getCNTime(){return new Date(Date.now()+(480+new Date().getTimezoneOffse
 
 // ===== Print =====
 function prt(cat){
-  var tabs={lex:0,dose:1,synth:2,grade:3};
+  var tabs={lex:0,seg:1,dose:2,synth:3,grade:4};
   document.querySelectorAll('.tc').forEach(function(c,i){c.classList.remove('pt');if(i===tabs[cat])c.classList.add('pt')});
   document.querySelectorAll('details').forEach(function(d){d.setAttribute('open','')});
   window.print();
@@ -425,18 +477,66 @@ function fillGrade(){
   var LEX=L+10*Math.log10(Te/8);
   document.getElementById('gLeq').value=LEX.toFixed(1);
   document.getElementById('gPreset').value='';
-  sw(3);
+  sw(4);
   calcGrade();
 }
 function fillGradeFromDose(){
   var L=parseFloat(document.getElementById('dLeq').value)||92;
   document.getElementById('gLeq').value=L.toFixed(1);
   document.getElementById('gPreset').value='';
-  sw(3);
+  sw(4);
+  calcGrade();
+}
+function fillGradeFromSeg(){
+  var s=document.getElementById('segResult');
+  if(!s||!s.dataset.lex){alert('请先添加时段并计算');return;}
+  document.getElementById('gLeq').value=s.dataset.lex;
+  document.getElementById('gPreset').value='';
+  sw(4);
   calcGrade();
 }
 
-// ===== TAB 1: 噪声剂量 =====
+// ===== TAB 1: 多段合成 =====
+var segments=[];
+function addSegment(){
+  var L=parseFloat(document.getElementById('segLevel').value)||0;
+  var t=parseFloat(document.getElementById('segTime').value)||0;
+  var n=document.getElementById('segName').value.trim()||'时段 '+(segments.length+1);
+  if(L<40||L>140||t<=0){alert('请输入有效声级 (40-140 dB) 和持续时间 (>0)');return;}
+  segments.push({name:n,level:L,time:t});
+  document.getElementById('segName').value='';
+  document.getElementById('segLevel').value='';
+  document.getElementById('segTime').value='';
+  document.getElementById('segLevel').focus();
+  calcSegments();
+}
+function calcSegments(){
+  var el=document.getElementById('segList');
+  var q=parseInt(document.getElementById('segQ').value);
+  if(!segments.length){el.innerHTML='<li class="empty-state">暂无时段，请添加不同噪声环境下的暴露时段</li>';document.getElementById('segResult').innerHTML='';return;}
+  var totalT=0, sum=0, html='';
+  segments.forEach(function(s,i){
+    totalT+=s.time;
+    sum+=s.time*Math.pow(10,s.level/10);
+    html+='<li><div class="si-info"><strong>'+s.name+'</strong> <span style="color:var(--text2)">'+s.level.toFixed(1)+' dB(A) × '+s.time.toFixed(1)+'h</span></div><div class="si-val">'+s.time.toFixed(1)+'h × 10<sup>'+s.level.toFixed(1)+'/10</sup></div><button onclick="removeSegment('+i+')" title="删除"><i class="fa-solid fa-xmark"></i></button></li>';
+  });
+  el.innerHTML=html;
+  var LAeq=10*Math.log10(sum/totalT);
+  var LEX=LAeq+10*Math.log10(totalT/8);
+  var resultEl=document.getElementById('segResult');
+  resultEl.innerHTML=
+    '<div class="result-card"><div class="rc-label">等效连续A声级 L<sub>Aeq,T</sub>（'+totalT.toFixed(1)+'h）</div>'+
+    '<div class="rc-val">'+LAeq.toFixed(1)+' dB(A)</div>'+
+    '<div class="rc-note">∑t<sub>i</sub>='+totalT.toFixed(1)+'h | '+segments.length+' 个时段</div></div>'+
+    '<div class="result-card"><div class="rc-label">8h 等效声级 L<sub>EX,8h</sub></div>'+
+    '<div class="rc-val">'+LEX.toFixed(1)+' dB(A)</div>'+
+    '<div class="rc-note">交换率 q='+q+' dB | L<sub>Aeq,T</sub>='+LAeq.toFixed(1)+'+10·log<sub>10</sub>('+totalT.toFixed(1)+'/8)</div></div>';
+  resultEl.dataset.lex=LEX.toFixed(1);
+}
+function removeSegment(i){segments.splice(i,1);calcSegments()}
+function clearSegments(){segments=[];calcSegments()}
+
+// ===== TAB 2: 噪声剂量 =====
 function calcDose(){
   var L=parseFloat(document.getElementById('dLeq').value)||92;
   var Te=parseFloat(document.getElementById('dTe').value)||6;
