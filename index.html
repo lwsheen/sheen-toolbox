@@ -84,6 +84,63 @@
             color: var(--text-secondary);
             line-height: 1.7;
         }
+        /* ===== 搜索栏 & 时间 ===== */
+        .search-wrap {
+            max-width: 600px;
+            margin: 0 auto 16px;
+            padding: 0 20px;
+            position: relative;
+        }
+        .search-input {
+            width: 100%;
+            padding: 10px 16px 10px 42px;
+            border: 1.5px solid var(--border);
+            border-radius: 60px;
+            font-size: 14px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: var(--brand-red);
+            box-shadow: 0 0 0 4px rgba(122,24,37,0.06);
+        }
+        .search-icon {
+            position: absolute;
+            left: 34px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+        .search-clear {
+            position: absolute;
+            right: 34px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 14px;
+            display: none;
+        }
+        .search-clear:hover { color: var(--brand-red); }
+        .meta-bar {
+            max-width: 600px;
+            margin: 0 auto 8px;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+        .meta-bar .update-time i { margin-right: 4px; }
+        .meta-bar .tool-count { font-weight: 600; }
+        .tool-card.hidden { display: none; }
         /* ===== 工具卡片 ===== */
         .tool-grid {
             display: grid;
@@ -390,7 +447,17 @@
         </p>
     </section>
 
-    <div class="tool-grid">
+    <div class="search-wrap">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" class="search-input" id="searchInput" placeholder="搜索工具…（支持名称 / 描述 / 标准号拼音模糊匹配）" oninput="filterTools()">
+        <button class="search-clear" id="searchClear" onclick="clearSearch()" title="清除"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="meta-bar">
+        <span class="update-time"><i class="fa-solid fa-clock-rotate-left"></i> 最近更新：<span id="updateTime"></span></span>
+        <span class="tool-count"><span id="toolCount"></span> 个工具</span>
+    </div>
+
+    <div class="tool-grid" id="toolGrid">
         <a href="/sheen-toolbox/pssr-checklist/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-clipboard-check"></i></div>
@@ -708,6 +775,39 @@
           else { el.textContent = '未配置'; el.style.cssText = 'position:fixed;bottom:28px;right:76px;z-index:99;font-size:11px;padding:4px 10px;border-radius:60px;background:#FEF2F2;color:#DC2626;'; }
         }
         updateApiStatusH();
+
+        // ===== 搜索过滤 =====
+        function filterTools() {
+            var query = document.getElementById('searchInput').value.trim().toLowerCase();
+            var cards = document.querySelectorAll('.tool-card:not(.placeholder)');
+            var count = 0;
+            cards.forEach(function(card) {
+                var title = (card.querySelector('h3')?.textContent || '').toLowerCase();
+                var desc = (card.querySelector('.desc')?.textContent || '').toLowerCase();
+                var match = !query || title.includes(query) || desc.includes(query);
+                card.classList.toggle('hidden', !match);
+                if (match) count++;
+            });
+            var clearBtn = document.getElementById('searchClear');
+            clearBtn.style.display = query ? 'block' : 'none';
+            document.getElementById('toolCount').textContent = count;
+            // Hide placeholder if searching
+            var ph = document.querySelector('.tool-card.placeholder');
+            if (ph) ph.classList.toggle('hidden', !!query);
+        }
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            filterTools();
+            document.getElementById('searchInput').focus();
+        }
+        // ===== 更新时间 =====
+        (function() {
+            var d = new Date(Date.now() + (480 + new Date().getTimezoneOffset()) * 60000);
+            var ts = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0') + ' ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+            document.getElementById('updateTime').textContent = ts;
+            var total = document.querySelectorAll('.tool-card:not(.placeholder)').length;
+            document.getElementById('toolCount').textContent = total;
+        })();
     })();
     </script>
 
