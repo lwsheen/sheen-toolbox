@@ -115,9 +115,25 @@
             color: var(--text-secondary);
             font-size: 16px;
         }
+        .search-btn {
+            position: absolute;
+            right: 46px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--brand-red);
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 13px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+        .search-btn:hover { background: var(--brand-red-hover); }
         .search-clear {
             position: absolute;
-            right: 34px;
+            right: 82px;
             top: 50%;
             transform: translateY(-50%);
             background: none;
@@ -449,11 +465,12 @@
 
     <div class="search-wrap">
         <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        <input type="text" class="search-input" id="searchInput" placeholder="搜索工具…（支持名称 / 描述 / 标准号拼音模糊匹配）" oninput="filterTools()">
+        <input type="text" class="search-input" id="searchInput" placeholder="搜索工具…（支持名称 / 描述 / 标准号模糊匹配）" oninput="filterTools()" onkeydown="if(event.key==='Enter')filterTools()">
+        <button class="search-btn" onclick="filterTools()" title="搜索"><i class="fa-solid fa-magnifying-glass"></i></button>
         <button class="search-clear" id="searchClear" onclick="clearSearch()" title="清除"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="meta-bar">
-        <span class="update-time"><i class="fa-solid fa-clock-rotate-left"></i> 最近更新：<span id="updateTime"></span></span>
+        <span class="update-time"><i class="fa-solid fa-clock-rotate-left"></i> 最近更新：<span id="updateTime">2026-07-03</span></span>
         <span class="tool-count"><span id="toolCount"></span> 个工具</span>
     </div>
 
@@ -800,11 +817,8 @@
             filterTools();
             document.getElementById('searchInput').focus();
         }
-        // ===== 更新时间 =====
+        // ===== 工具计数 =====
         (function() {
-            var d = new Date(Date.now() + (480 + new Date().getTimezoneOffset()) * 60000);
-            var ts = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0') + ' ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
-            document.getElementById('updateTime').textContent = ts;
             var total = document.querySelectorAll('.tool-card:not(.placeholder)').length;
             document.getElementById('toolCount').textContent = total;
         })();
