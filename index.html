@@ -35,55 +35,10 @@
             line-height: 1.6;
         }
 
-        /* ===== 导航 ===== */
-        .sheen-nav {
-            background: var(--black);
-            padding: 0 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 4px solid var(--brand-red);
-            flex-wrap: wrap;
-            min-height: 52px;
-        }
-        .sheen-nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #fff;
-            text-decoration: none;
-            padding: 12px 0;
-        }
-        .sheen-nav-brand i { font-size: 22px; color: var(--amber); }
-        .sheen-nav-brand-text {
-            font-size: 15px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-        .sheen-nav-tools { display: flex; gap: 4px; flex-wrap: wrap; }
-        .sheen-nav-tool {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            padding: 5px 10px;
-            color: rgba(255,255,255,0.7);
-            text-decoration: none;
-            font-size: 11px;
-            font-weight: 500;
-            border-radius: 60px;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-        .sheen-nav-tool:hover { background: rgba(255,255,255,0.1); color: #fff; }
-        .sheen-nav-tool.active { background: rgba(255,255,255,0.15); color: #fff; font-weight: 600; }
-        .brand-sub {
-            font-size: 13px;
-            font-weight: 400;
-            opacity: 0.7;
-            margin-left: 0;
-            padding-left: 12px;
-            border-left: 1px solid rgba(255,255,255,0.2);
-        }
+        .breadcrumb { padding: 10px 24px; font-size: 12px; color: var(--text-secondary); border-bottom: 1px solid var(--border); }
+        .breadcrumb a { color: var(--brand-red); text-decoration: none; font-weight: 500; transition: opacity .2s; }
+        .breadcrumb a:hover { opacity: .7; }
+        .breadcrumb span { color: var(--text-secondary); }
 
         /* ===== 主区 ===== */
         .hero {
@@ -371,9 +326,6 @@
         .sheen-footer strong { color: var(--text-primary); }
 
         @media (max-width: 720px) {
-            .sheen-nav { padding: 12px 16px; }
-            .sheen-nav-brand-text { font-size: 18px; }
-            .brand-sub { display: none; }
             .hero { padding: 32px 16px 24px; }
             .hero h1 { font-size: 22px; }
             .tool-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); padding: 0 16px 40px; gap: 10px; }
@@ -383,8 +335,6 @@
         }
 
         @media (max-width: 480px) {
-            .sheen-nav { padding: 10px 12px; flex-direction: column; gap: 6px; }
-            .sheen-nav-brand-text { font-size: 16px; }
             .hero { padding: 24px 12px 16px; }
             .hero h1 { font-size: 20px; }
             .hero p { font-size: 13px; }
@@ -405,20 +355,10 @@
 </head>
 <body>
 
-    <header class="sheen-nav">
-        <a href="/sheen-toolbox/" class="sheen-nav-brand" style="text-decoration:none">
-            <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i>
-            <span class="sheen-nav-brand-text">SHEEN Toolbox</span>
-            <span class="brand-sub">环境健康安全专业工具箱</span>
-        </a>
-        <div class="sheen-nav-tools">
-            <a href="/sheen-toolbox/pssr-checklist/" class="sheen-nav-tool">PSSR</a>
-            <a href="/sheen-toolbox/fire-extinguisher-calculator/" class="sheen-nav-tool">灭火器</a>
-            <a href="/sheen-toolbox/environmental-tax-calculator/" class="sheen-nav-tool">环保税</a>
-            <a href="/sheen-toolbox/noise-calculator/" class="sheen-nav-tool">噪声</a>
-            <a href="/sheen-toolbox/major-hazard-identification/" class="sheen-nav-tool">重大危险源</a>
-        </div>
-    </header>
+    <div class="breadcrumb">
+        <a href="/sheen-toolbox/">&larr; SHEEN Toolbox</a>
+        <span> / 首页</span>
+    </div>
 
     <section class="hero">
         <h1>专业 EHS 工具，一站直达</h1>
