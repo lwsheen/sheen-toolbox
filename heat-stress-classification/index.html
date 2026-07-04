@@ -120,12 +120,14 @@ details summary i{font-size:11px;color:var(--red)}
 <a href="/sheen-toolbox/explosion-venting-calculator/" class="sheen-nav-tool">泄爆面积</a>
 <a href="/sheen-toolbox/environmental-tax-calculator/" class="sheen-nav-tool">环保税</a>
 <a href="/sheen-toolbox/noise-calculator/" class="sheen-nav-tool">噪声计算</a>
+<a href="/sheen-toolbox/major-hazard-identification/" class="sheen-nav-tool">重大危险源</a>
 </div></header>
 
 <main class="app-wrap">
 <h1><i class="fa-solid fa-temperature-high"></i> 高温作业分级计算器</h1>
 <p class="sub">依据 GBZ/T 229.3-2025《职业病危害作业分级标准 第3部分：高温作业》</p>
 
+<!-- Input Card -->
 <div class="card" id="inputCard">
 <h3><i class="fa-solid fa-calculator"></i> 计算参数输入</h3>
 <div class="hint">填写以下参数后点击"开始计算"，系统将自动对照 GBZ/T 229.3-2025 表1 进行分级判定</div>
@@ -181,11 +183,13 @@ details summary i{font-size:11px;color:var(--red)}
 <button class="btn btn-bad btn-sm" onclick="window.print()" style="margin-left:12px"><i class="fa-solid fa-print"></i> 打印</button>
 </div>
 
+<!-- Result Card -->
 <div class="card result-box" id="resultCard">
 <h3 id="resultTitle"><i class="fa-solid fa-clipboard-check"></i> 分级计算结果</h3>
 <div id="resultContent"></div>
 </div>
 
+<!-- Reference Cards -->
 <div class="card no-pr">
 <h3><i class="fa-solid fa-shirt"></i> 附录A — 常见工作服 CAV 表</h3>
 <div class="tbl-w"><table class="dt" style="min-width:400px">
