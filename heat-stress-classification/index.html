@@ -65,8 +65,7 @@ select.form-control{cursor:pointer}
 .rb-x{border-color:#991B1B!important;background:#FEF2F2!important}
 
 /* Tables */
-.tbl-w{overflow-x:auto}
-.dt{min-width:700px;border-collapse:collapse;font-size:10px}
+
 .dt th,.dt td{padding:4px 5px;border:1px solid var(--border);text-align:center;vertical-align:middle}
 .dt th{background:#1F4E79;color:#fff;font-weight:700;font-size:10px}.dt td{background:var(--bg-card)}
 .dt td.dim{color:#9CA3AF}.dt td.star{color:#DC2626;font-weight:700}
@@ -92,7 +91,6 @@ details summary i{font-size:11px;color:var(--brand-red)}
 @media(max-width:768px){
   .app-wrap{padding:8px 4px}.form-group{min-width:100%}
   .result-box .grade{font-size:30px}
-  .dt{min-width:500px}
 }
 </style>
 </head>
@@ -172,7 +170,7 @@ details summary i{font-size:11px;color:var(--brand-red)}
 <!-- Reference Cards -->
 <div class="card no-pr">
 <h3><i class="fa-solid fa-shirt"></i> 附录A — 常见工作服 CAV 表</h3>
-<div class="tbl-w"><table class="dt" style="min-width:400px">
+<div class="table-scroll"><table class="dt" style="min-width:400px">
 <thead><tr><th>工作服类型</th><th>CAV（℃-WBGT）</th></tr></thead>
 <tbody>
 <tr><td>短袖和长裤工作服</td><td>-1.0</td></tr>
@@ -189,7 +187,7 @@ details summary i{font-size:11px;color:var(--brand-red)}
 <div class="card no-pr">
 <h3><i class="fa-solid fa-table-list"></i> 表1 — 高温作业分级对照表</h3>
 <div class="hint">体力劳动强度 × 接触时间率 × WBGTeff → 分级结果 | 括号内数值适用于<b>未产生热习服</b>的劳动者 | "—" 为非高温作业 | "*" 为不宜依据WBGT指数效应值进行分级</div>
-<div class="tbl-w" id="refTable"></div>
+<div class="table-scroll" id="refTable"></div>
 
 <details>
 <summary><i class="fa-solid fa-circle-info"></i> 不宜分级的情形（4.3.3 / 4.3.4）</summary>
