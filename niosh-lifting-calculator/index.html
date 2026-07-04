@@ -9,14 +9,10 @@
 :root{--black:#000;--text:#111827;--text2:#6B7280;--bg:#F8FAFC;--card:#fff;--bd:#E5E7EB;--red:#7A1825;--redH:#5C121C;--redL:#FEF2F2;--amb:#FBBF24;--r:12px}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
-.sheen-nav{background:var(--black);padding:0 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:4px solid var(--red);flex-wrap:wrap;min-height:52px}
-.sheen-nav-brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;padding:12px 0}
-.sheen-nav-brand i{font-size:22px;color:var(--amb)}
-.sheen-nav-brand-text{font-size:15px;font-weight:700;letter-spacing:.5px}
-.sheen-nav-tools{display:flex;gap:2px;flex-wrap:wrap}
-.sheen-nav-tool{display:flex;align-items:center;gap:4px;padding:5px 10px;color:rgba(255,255,255,.7);text-decoration:none;font-size:11px;font-weight:500;border-radius:60px;transition:all .2s;white-space:nowrap}
-.sheen-nav-tool:hover{background:rgba(255,255,255,.1);color:#fff}
-.sheen-nav-tool.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600}
+.breadcrumb{padding:10px 24px;font-size:12px;color:var(--text2);border-bottom:1px solid var(--bd)}
+.breadcrumb a{color:var(--red);text-decoration:none;font-weight:500;transition:opacity .2s}
+.breadcrumb a:hover{opacity:.7}
+.breadcrumb span{color:var(--text2)}
 .sheen-footer{text-align:center;padding:14px 24px;font-size:12px;color:var(--text2);border-top:1px solid var(--bd);background:var(--card)}
 .sheen-footer i{color:var(--amb)}.sheen-footer strong{color:var(--text)}
 .app-wrap{max-width:100%;margin:0 auto;padding:16px 12px}
@@ -96,7 +92,7 @@ details summary i{font-size:11px;color:var(--red)}
 @media print{
   @page{size:A4;margin:15mm}
   body{background:#fff!important;font-size:11pt;color:#000!important}
-  .sheen-nav,.sheen-footer,.btn,.form-row,.hint,.form-group,.no-pr,#inputCard,.cli-hint{display:none!important}
+  .breadcrumb,.sheen-footer,.btn,.form-row,.hint,.form-group,.no-pr,#inputCard,.cli-hint{display:none!important}
   .app-wrap{padding:0!important}
   .card{box-shadow:none!important;border:1.5px solid #333!important;break-inside:avoid;padding:10px!important;border-radius:0!important;background:#fff!important}
   .result-box{display:block!important}
@@ -114,7 +110,6 @@ details summary i{font-size:11px;color:var(--red)}
 }
 
 @media(max-width:768px){
-  .sheen-nav{padding:6px 8px}.sheen-nav-tool{padding:5px 8px;font-size:10px}
   .app-wrap{padding:8px 4px}.form-group{min-width:100%}
   .li-card .li-val{font-size:36px}.breakdown{grid-template-columns:repeat(3,1fr)}
 }
@@ -122,26 +117,10 @@ details summary i{font-size:11px;color:var(--red)}
 </head>
 <body>
 
-<header class="sheen-nav">
-<a href="/sheen-toolbox/" class="sheen-nav-brand"><i class="fa-solid fa-shield-halved" style="color:var(--amb);font-size:22px"></i><span class="sheen-nav-brand-text">SHEEN Toolbox</span></a>
-<div class="sheen-nav-tools">
-<a href="/sheen-toolbox/pssr-checklist/" class="sheen-nav-tool">PSSR检查表</a>
-<a href="/sheen-toolbox/fire-extinguisher-calculator/" class="sheen-nav-tool">灭火器计算器</a>
-<a href="/sheen-toolbox/safety-production-cost-calculator/" class="sheen-nav-tool">安产费用计算器</a>
-<a href="/sheen-toolbox/jsa-lec/" class="sheen-nav-tool">JSA+LEC评价</a>
-<a href="/sheen-toolbox/industry-classification/" class="sheen-nav-tool">行业分类查询</a>
-<a href="/sheen-toolbox/dangerous-goods-query/" class="sheen-nav-tool">危险货物查询</a>
-<a href="/sheen-toolbox/five-why-analysis/" class="sheen-nav-tool">5Why根因分析</a>
-<a href="/sheen-toolbox/hazardous-waste-query/" class="sheen-nav-tool">危险废物查询</a>
-<a href="/sheen-toolbox/hazardous-chemicals-query/" class="sheen-nav-tool">危险化学品查询</a>
-<a href="/sheen-toolbox/iso14001-environmental-factors/" class="sheen-nav-tool">环境因素</a>
-<a href="/sheen-toolbox/heat-stress-classification/" class="sheen-nav-tool">高温分级</a>
-<a href="/sheen-toolbox/niosh-lifting-calculator/" class="sheen-nav-tool active">NIOSH举升</a>
-<a href="/sheen-toolbox/explosion-venting-calculator/" class="sheen-nav-tool">泄爆面积</a>
-<a href="/sheen-toolbox/environmental-tax-calculator/" class="sheen-nav-tool">环保税</a>
-<a href="/sheen-toolbox/noise-calculator/" class="sheen-nav-tool">噪声计算</a>
-<a href="/sheen-toolbox/major-hazard-identification/" class="sheen-nav-tool">重大危险源</a>
-</div></header>
+<div class="breadcrumb">
+    <a href="/sheen-toolbox/">&larr; SHEEN Toolbox</a>
+    <span> / NIOSH 举升方程计算器</span>
+</div>
 
 <main class="app-wrap">
 <h1><i class="fa-solid fa-weight-hanging"></i> NIOSH 举升方程计算器</h1>
