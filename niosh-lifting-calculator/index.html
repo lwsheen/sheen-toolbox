@@ -78,8 +78,7 @@ select.form-control{cursor:pointer}
 details{margin-top:6px}
 details summary{font-size:12px;font-weight:600;color:var(--text-secondary);cursor:pointer;padding:6px 0;user-select:none;display:flex;align-items:center;gap:5px}
 details summary i{font-size:11px;color:var(--brand-red)}
-.tbl-w{overflow-x:auto}
-.dt{min-width:500px;border-collapse:collapse;font-size:10px}
+
 .dt th,.dt td{padding:4px 6px;border:1px solid var(--border);text-align:center;vertical-align:middle}
 .dt th{background:#1F4E79;color:#fff;font-weight:700;font-size:10px}
 .dt td{background:var(--bg-card);color:var(--text-primary)}
@@ -210,11 +209,11 @@ details summary i{font-size:11px;color:var(--brand-red)}
 <details open>
 <summary><i class="fa-solid fa-stopwatch"></i> 表5 — 频率乘数 FM</summary>
 <div class="hint">频率 F (次/min) × 工作时长 × V 位置 → FM 值 | 灰色 "0" 表示该频率下不宜举升</div>
-<div class="tbl-w" id="fmTable"></div>
+<div class="table-scroll" id="fmTable"></div>
 </details>
 <details>
 <summary><i class="fa-solid fa-hand"></i> 表7 — 耦合乘数 CM</summary>
-<div class="tbl-w"><table class="dt" style="min-width:350px">
+<div class="table-scroll"><table class="dt" style="min-width:350px">
 <thead><tr><th>耦合类型</th><th>V &lt; 75 cm</th><th>V ≥ 75 cm</th></tr></thead>
 <tbody>
 <tr><td>良好 (Good)</td><td>1.00</td><td>1.00</td></tr>
