@@ -7,87 +7,87 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="/sheen-toolbox/common.css">
 <style>
-:root{--black:#000;--text:#111827;--text2:#6B7280;--bg:#F8FAFC;--card:#fff;--bd:#E5E7EB;--red:#7A1825;--redH:#5C121C;--redL:#FEF2F2;--amb:#FBBF24;--r:12px}
+:root{--black:#000;--text-primary:#111827;--text-secondary:#6B7280;--bg-page:#F8FAFC;--bg-card:#fff;--border:#E5E7EB;--brand-red:#7A1825;--brand-red-hover:#5C121C;--brand-red-light:#FEF2F2;--amber:#FBBF24;--radius-md:12px}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
-.breadcrumb{padding:12px 24px;font-size:13px;color:var(--text2);border-bottom:1px solid var(--bd);background:var(--card);display:flex;align-items:center;gap:6px}
-.breadcrumb a{color:var(--red);text-decoration:none;font-weight:600;transition:opacity .2s;display:inline-flex;align-items:center;gap:4px}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg-page);color:var(--text-primary);line-height:1.6}
+.breadcrumb{padding:12px 24px;font-size:13px;color:var(--text-secondary);border-bottom:1px solid var(--border);background:var(--bg-card);display:flex;align-items:center;gap:6px}
+.breadcrumb a{color:var(--brand-red);text-decoration:none;font-weight:600;transition:opacity .2s;display:inline-flex;align-items:center;gap:4px}
 .breadcrumb a:hover{opacity:.7;text-decoration:underline}
-.breadcrumb span{color:var(--text2)}
-.sheen-footer{text-align:center;padding:14px 24px;font-size:12px;color:var(--text2);border-top:1px solid var(--bd);background:var(--card)}
-.sheen-footer i{color:var(--amb)}.sheen-footer strong{color:var(--text)}
+.breadcrumb span{color:var(--text-secondary)}
+.sheen-footer{text-align:center;padding:14px 24px;font-size:12px;color:var(--text-secondary);border-top:1px solid var(--border);background:var(--bg-card)}
+.sheen-footer i{color:var(--amber)}.sheen-footer strong{color:var(--text-primary)}
 .app-wrap{max-width:100%;margin:0 auto;padding:16px 12px}
 h1{font-size:20px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
-h1 i{color:var(--red)}.sub{font-size:12px;color:var(--text2);margin-bottom:14px}
+h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);margin-bottom:14px}
 
-.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
 .card h3{font-size:14px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.card h3 i{color:var(--red)}
-.hint{font-size:11px;color:var(--text2);margin-bottom:10px;padding:6px 10px;background:var(--bg);border-radius:6px}
+.card h3 i{color:var(--brand-red)}
+.hint{font-size:11px;color:var(--text-secondary);margin-bottom:10px;padding:6px 10px;background:var(--bg-page);border-radius:6px}
 
 .form-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}
 .form-row:last-child{margin-bottom:0}
 .form-group{flex:1;min-width:170px}
 .form-group.w-sm{flex:0.6;min-width:120px}
-.form-group label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:3px}
-.form-group label .req{color:var(--red)}
-.form-control{width:100%;padding:8px 10px;border:1.5px solid var(--bd);border-radius:6px;font-size:13px;background:var(--card);color:var(--text);font-family:inherit}
-.form-control:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(122,24,37,.06)}
+.form-group label{display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:3px}
+.form-group label .req{color:var(--brand-red)}
+.form-control{width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;background:var(--bg-card);color:var(--text-primary);font-family:inherit}
+.form-control:focus{outline:none;border-color:var(--brand-red);box-shadow:0 0 0 3px rgba(122,24,37,.06)}
 select.form-control{cursor:pointer}
 .radio-group{display:flex;gap:16px;padding-top:6px}
-.radio-group label{display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer;font-weight:400;color:var(--text)}
-.radio-group input[type=radio]{accent-color:var(--red)}
+.radio-group label{display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer;font-weight:400;color:var(--text-primary)}
+.radio-group input[type=radio]{accent-color:var(--brand-red)}
 
 .btn{display:inline-flex;align-items:center;gap:5px;padding:10px 24px;border-radius:60px;font-size:14px;font-weight:600;cursor:pointer;transition:all .25s;border:none;font-family:inherit}
-.btn-p{background:var(--red);color:#fff}.btn-p:hover{background:var(--redH);transform:translateY(-1px);box-shadow:0 6px 16px rgba(122,24,37,.2)}
-.btn-o{background:var(--card);border:1.5px solid var(--bd);color:var(--text)}
-.btn-o:hover{border-color:var(--red);color:var(--red)}
-.btn-bad{background:var(--card);color:var(--red);border:1.5px solid var(--red)}.btn-bad:hover{background:var(--redL)}
+.btn-primary{background:var(--brand-red);color:#fff}.btn-primary:hover{background:var(--brand-red-hover);transform:translateY(-1px);box-shadow:0 6px 16px rgba(122,24,37,.2)}
+.btn-outline{background:var(--bg-card);border:1.5px solid var(--border);color:var(--text-primary)}
+.btn-outline:hover{border-color:var(--brand-red);color:var(--brand-red)}
+.btn-outline{background:var(--bg-card);color:var(--brand-red);border:1.5px solid var(--brand-red)}.btn-outline:hover{background:var(--brand-red-light)}
 .btn-sm{padding:5px 10px;font-size:10px}
 
 /* Result */
-.result-box{display:none;background:var(--redL);border:2px solid var(--red);border-radius:16px;padding:20px 24px;margin-top:12px}
+.result-box{display:none;background:var(--brand-red-light);border:2px solid var(--brand-red);border-radius:16px;padding:20px 24px;margin-top:12px}
 .result-box .grade{font-size:42px;font-weight:700;margin:8px 0}
-.result-box .grade-label{font-size:12px;color:var(--text2)}
+.result-box .grade-label{font-size:12px;color:var(--text-secondary)}
 .result-box .measures{font-size:13px;line-height:1.8;margin-top:8px;padding:12px;background:rgba(255,255,255,.6);border-radius:8px}
-.result-box .measures strong{color:var(--red)}
+.result-box .measures strong{color:var(--brand-red)}
 .result-box .not-grade{font-size:18px;font-weight:700;color:#DC2626}
-.steps{list-style:none;font-size:12px;color:var(--text2);line-height:2}
+.steps{list-style:none;font-size:12px;color:var(--text-secondary);line-height:2}
 .steps li{padding:2px 0}
-.steps li span{color:var(--text);font-weight:600}
+.steps li span{color:var(--text-primary);font-weight:600}
 
 /* Grade colors */
 .g-I{color:#16A34A}.g-II{color:#CA8A04}.g-III{color:#EA580C}.g-IV{color:#DC2626}.g-x{color:#991B1B}
 .rb-I{border-color:#16A34A!important;background:#ECFDF5!important}
 .rb-II{border-color:#CA8A04!important;background:#FFFBEB!important}
 .rb-III{border-color:#EA580C!important;background:#FFF7ED!important}
-.rb-IV{border-color:#DC2626!important;background:var(--redL)!important}
+.rb-IV{border-color:#DC2626!important;background:var(--brand-red-light)!important}
 .rb-x{border-color:#991B1B!important;background:#FEF2F2!important}
 
 /* Tables */
 .tbl-w{overflow-x:auto}
 .dt{min-width:700px;border-collapse:collapse;font-size:10px}
-.dt th,.dt td{padding:4px 5px;border:1px solid var(--bd);text-align:center;vertical-align:middle}
-.dt th{background:#1F4E79;color:#fff;font-weight:700;font-size:10px}.dt td{background:var(--card)}
+.dt th,.dt td{padding:4px 5px;border:1px solid var(--border);text-align:center;vertical-align:middle}
+.dt th{background:#1F4E79;color:#fff;font-weight:700;font-size:10px}.dt td{background:var(--bg-card)}
 .dt td.dim{color:#9CA3AF}.dt td.star{color:#DC2626;font-weight:700}
 .dt td.I{background:#ECFDF5;font-weight:700;color:#16A34A}
 .dt td.II{background:#FFFBEB;font-weight:700;color:#CA8A04}
 .dt td.III{background:#FFF7ED;font-weight:700;color:#EA580C}
 .dt td.IV{background:#FEF2F2;font-weight:700;color:#DC2626}
-.dt td.hl{outline:3px solid var(--red);outline-offset:-2px}
-.mgr-notes{font-size:12px;color:var(--text2);line-height:2;background:var(--bg);padding:10px 14px;border-radius:6px;margin-top:8px}
+.dt td.hl{outline:3px solid var(--brand-red);outline-offset:-2px}
+.mgr-notes{font-size:12px;color:var(--text-secondary);line-height:2;background:var(--bg-page);padding:10px 14px;border-radius:6px;margin-top:8px}
 .mgr-notes .lvl{display:inline-block;padding:1px 8px;border-radius:4px;font-weight:700;font-size:11px;margin-right:4px}
 
 details{margin-top:10px}
-details summary{font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;padding:6px 0;user-select:none;display:flex;align-items:center;gap:5px}
-details summary i{font-size:11px;color:var(--red)}
+details summary{font-size:12px;font-weight:600;color:var(--text-secondary);cursor:pointer;padding:6px 0;user-select:none;display:flex;align-items:center;gap:5px}
+details summary i{font-size:11px;color:var(--brand-red)}
 
 /* Print */
 @media print{
   @page{size:A4;margin:14mm 14mm 18mm 14mm;@bottom-center{content:"SHEEN Toolbox · 高温作业分级计算器";font-size:8pt;color:#666}}
   .breadcrumb,.sheen-footer,.btn,.no-pr{display:none!important}
   .app-wrap{padding:0!important}.card{box-shadow:none!important;border:1.5px solid #333!important;break-inside:avoid;padding:10px!important}
-  .btn-p{display:none!important}.dt th{background:#eee!important;color:#000!important}
+  .btn-primary{display:none!important}.dt th{background:#eee!important;color:#000!important}
 }
 @media(max-width:768px){
   .app-wrap{padding:8px 4px}.form-group{min-width:100%}
@@ -153,7 +153,7 @@ details summary i{font-size:11px;color:var(--red)}
       <label><input type="radio" name="accl" value="1" checked> <i class="fa-solid fa-check-circle" style="color:#16A34A"></i> 已产生热习服</label>
       <label><input type="radio" name="accl" value="0"> <i class="fa-solid fa-circle-exclamation" style="color:#EA580C"></i> 未产生热习服</label>
     </div>
-    <div style="font-size:10px;color:var(--text2);margin-top:4px">热习服界定：近7天中≥5天每日连续≥2h热应激暴露 → 已产生热习服（附录B）</div>
+    <div style="font-size:10px;color:var(--text-secondary);margin-top:4px">热习服界定：近7天中≥5天每日连续≥2h热应激暴露 → 已产生热习服（附录B）</div>
   </div>
 </div>
 
@@ -183,7 +183,7 @@ details summary i{font-size:11px;color:var(--red)}
 <tr><td>双层纺织材料工作服</td><td>3.0</td></tr>
 <tr><td>有限使用的不透蒸气带帽工作服</td><td>11.0</td></tr>
 </tbody></table></div>
-<div style="font-size:11px;color:var(--text2);margin-top:8px">注① 不适用于气密性防护服、多层工作服；注② 适用于工作服内只穿内衣；注③ 佩戴风帽（完全覆盖头颈部，不含脸部），CAV 增加 1℃。</div>
+<div style="font-size:11px;color:var(--text-secondary);margin-top:8px">注① 不适用于气密性防护服、多层工作服；注② 适用于工作服内只穿内衣；注③ 佩戴风帽（完全覆盖头颈部，不含脸部），CAV 增加 1℃。</div>
 </div>
 
 <div class="card no-pr">
@@ -193,7 +193,7 @@ details summary i{font-size:11px;color:var(--red)}
 
 <details>
 <summary><i class="fa-solid fa-circle-info"></i> 不宜分级的情形（4.3.3 / 4.3.4）</summary>
-<div style="font-size:12px;color:var(--text2);line-height:2;padding:8px 0">
+<div style="font-size:12px;color:var(--text-secondary);line-height:2;padding:8px 0">
 <p>① <strong>体力劳动强度Ⅳ级</strong> + 高温作业接触时间率 <strong>50%～100%</strong></p>
 <p>② <strong>体力劳动强度Ⅲ级</strong> + 高温作业接触时间率 <strong>75%～100%</strong></p>
 <p>③ WBGT 指数效应值 <strong>超过极重度危害作业（IV级）对应数值</strong></p>
@@ -209,13 +209,13 @@ details summary i{font-size:11px;color:var(--red)}
 <p><span class="lvl g-II">II 级·中度</span> I级措施 + 强化防暑降温 + 调整劳动-休息制度 → 降低接触时间率</p>
 <p><span class="lvl g-III">III 级·重度</span> II级措施 + 热应激反应监测 + 进一步降低接触时间率</p>
 <p><span class="lvl g-IV">IV 级·极重</span> III级措施 + 强化热应激监测 + 严格限制接触时间率</p>
-<p style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--bd)"><span class="lvl" style="background:#991B1B;color:#fff">不宜分级</span> 优先工程措施降低WBGT。无法降低时，＜strong style="color:#DC2626">确保 ≤15 min/h</strong> 高温接触</p>
+<p style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--border)"><span class="lvl" style="background:#991B1B;color:#fff">不宜分级</span> 优先工程措施降低WBGT。无法降低时，＜strong style="color:#DC2626">确保 ≤15 min/h</strong> 高温接触</p>
 </div>
 </div>
 
 <div class="card no-pr">
 <h3><i class="fa-solid fa-book"></i> 附录B — 热习服界定</h3>
-<div style="font-size:12px;color:var(--text2);line-height:2">
+<div style="font-size:12px;color:var(--text-secondary);line-height:2">
 <p>热习服是机体对高温的生理适应，可提高热应激耐受能力。</p>
 <p><strong>判定标准：</strong>近 7 天中，有 ≥5 天存在每日至少连续 2h 热应激暴露 → 已产生热习服。</p>
 <p><strong>脱失规律：</strong>体力活动中止后 4 天开始显著降低，3 周后完全脱失。突发/偶发的高水平热应激可能无法产生热习服。</p>
@@ -223,7 +223,7 @@ details summary i{font-size:11px;color:var(--red)}
 </div>
 </main>
 
-<footer class="sheen-footer"><i class="fa-solid fa-shield-halved" style="color:var(--amb);font-size:22px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 高温作业分级计算器</footer>
+<footer class="sheen-footer"><i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:22px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 高温作业分级计算器</footer>
 
 <script>
 // ===== Classification Table =====
