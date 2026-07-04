@@ -645,20 +645,75 @@
     };
 
     function getBeta(name, cat) {
+        // 按名称查毒性气体β值
         if (toxicGasBeta[name]) return toxicGasBeta[name];
-        // 从 cat 字段推导: 如果含"爆炸" → W1.1, 含"易燃气体" → W2 等
+        // 也检查cat字段中是否包含已知毒性气体名称
+        for (var tg in toxicGasBeta) {
+            if (cat.indexOf(tg) >= 0) return toxicGasBeta[tg];
+        }
+
+        // 爆炸物 W1
         if (cat.indexOf('爆炸')>=0 || cat.indexOf('1.1项')>=0) return catBeta['W1.1']||2;
-        if (cat.indexOf('1.3项')>=0) return catBeta['W1.2']||2;
+        if (cat.indexOf('1.2')>=0 || cat.indexOf('1.3项')>=0 || cat.indexOf('1.5')>=0 || cat.indexOf('1.6')>=0) return catBeta['W1.2']||2;
+        if (cat.indexOf('1.4项')>=0) return catBeta['W1.3']||2;
+
+        // W2: 易燃气体
         if (cat.indexOf('易燃气体')>=0) return catBeta['W2']||1.5;
+
+        // W4: 氧化性气体
         if (cat.indexOf('氧化性气体')>=0) return catBeta['W4']||1;
-        if (cat.indexOf('易燃液体')>=0) return catBeta['W5.3']||1;
-        if (cat.indexOf('有机过氧化物')>=0) return catBeta['W7.2']||1;
+
+        // W5: 易燃液体 — 按具体类别/工艺区分
+        if (cat.indexOf('易燃液体')>=0) {
+            if (cat.indexOf('类别1')>=0 || cat.indexOf('高温')>=0) return catBeta['W5.1']||1.5;
+            if (cat.indexOf('特殊工艺')>=0) return catBeta['W5.2']||1;
+            if (cat.indexOf('类别3')>=0) return catBeta['W5.4']||1;
+            return catBeta['W5.3']||1; // 类别2 及其他 → W5.3
+        }
+
+        // W6: 自反应物质
+        if (cat.indexOf('自反应')>=0) {
+            if (cat.indexOf('A')>=0 || cat.indexOf('B')>=0) return catBeta['W6.1']||1.5;
+            return catBeta['W6.2']||1;
+        }
+
+        // W7: 有机过氧化物
+        if (cat.indexOf('有机过氧化物')>=0) {
+            if (cat.indexOf('A')>=0 || cat.indexOf('B')>=0) return catBeta['W7.1']||1.5;
+            return catBeta['W7.2']||1;
+        }
+
+        // W8: 自燃
         if (cat.indexOf('自燃')>=0) return catBeta['W8']||1;
-        if (cat.indexOf('氧化性固体')>=0 || cat.indexOf('氧化性液体')>=0) return catBeta['W9.2']||1;
+
+        // W9: 氧化性固体/液体 — 区分类别
+        if (cat.indexOf('氧化性固体')>=0 || cat.indexOf('氧化性液体')>=0) {
+            if (cat.indexOf('类别1')>=0) return catBeta['W9.1']||1;
+            return catBeta['W9.2']||1;
+        }
+
+        // W10: 易燃固体
         if (cat.indexOf('易燃固体')>=0) return catBeta['W10']||1;
+
+        // W11: 遇水
         if (cat.indexOf('遇水')>=0) return catBeta['W11']||1;
-        if (cat.indexOf('急性毒性')>=0 && (cat.indexOf('类别1')>=0||cat.indexOf('经皮')>=0)) return catBeta['J2']||1;
-        if (cat.indexOf('急性毒性')>=0) return catBeta['J5']||1;
+
+        // J: 急性毒性 — 区分气体(吸入)与固体/液体(经皮/经口)
+        if (cat.indexOf('急性毒性')>=0) {
+            var isInhale = cat.indexOf('吸入')>=0;
+            // J1: 急性毒性类别1气体 → β=4
+            if (isInhale && cat.indexOf('类别1')>=0) return catBeta['J1']||4;
+            // J3/J4: 急性毒性类别2/3 气体 → β=2
+            if (isInhale && (cat.indexOf('类别2')>=0 || cat.indexOf('类别3')>=0)) {
+                if (cat.indexOf('沸点')>=0 || (cat.indexOf('液体')>=0 && isInhale)) return catBeta['J4']||2;
+                return catBeta['J3']||2;
+            }
+            // J2: 类别1 固体/液体（经皮/经口）
+            if (cat.indexOf('类别1')>=0 || cat.indexOf('经皮')>=0) return catBeta['J2']||1;
+            // J5: 其他急性毒性
+            return catBeta['J5']||1;
+        }
+
         if (cat.indexOf('皮肤')>=0 || cat.indexOf('腐蚀')>=0) return 1;
         return 1;
     }
