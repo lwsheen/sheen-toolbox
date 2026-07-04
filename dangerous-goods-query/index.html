@@ -142,6 +142,7 @@
     /* Print */
     .print-time { display: none; }
 
+    
 @media (max-width:768px) {
   .sheen-nav{padding:6px 8px}
   .sheen-nav-tool{padding:5px 8px;font-size:10px}
@@ -196,6 +197,7 @@
 <a href="/sheen-toolbox/explosion-venting-calculator/" class="sheen-nav-tool">泄爆面积</a>
 <a href="/sheen-toolbox/environmental-tax-calculator/" class="sheen-nav-tool">环保税</a>
 <a href="/sheen-toolbox/noise-calculator/" class="sheen-nav-tool">噪声计算</a>
+<a href="/sheen-toolbox/major-hazard-identification/" class="sheen-nav-tool">重大危险源</a>
     </div>
   </header>
 
@@ -204,7 +206,7 @@
     <p class="page-subtitle">基于 GB 12268-2025《危险货物品名表》，支持 UN 编号、中文品名、危险类别多维检索，覆盖 9 大类 767 项常见危险货物。</p>
 
     <div class="main-grid">
-      
+      <!-- Sidebar -->
       <aside class="sidebar" id="sidebar">
         <h3><i class="fa-solid fa-filter"></i> 搜索与筛选</h3>
         <div class="search-box">
@@ -223,6 +225,7 @@
         </div>
       </aside>
 
+      <!-- Main -->
       <div class="content-area">
         <div class="result-header">
           <span class="result-count" id="resultCount">显示 <strong>767</strong> 条结果</span>
@@ -243,6 +246,7 @@
           </table>
         </div>
 
+        <!-- Detail Panel -->
         <div class="detail-panel" id="detailPanel">
           <div class="detail-empty" id="detailEmpty">
             <i class="fa-solid fa-circle-info"></i>
