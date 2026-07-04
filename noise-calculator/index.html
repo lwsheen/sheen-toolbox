@@ -140,6 +140,7 @@ details summary i{font-size:11px;color:var(--red)}
 <a href="/sheen-toolbox/explosion-venting-calculator/" class="sheen-nav-tool">泄爆面积</a>
 <a href="/sheen-toolbox/environmental-tax-calculator/" class="sheen-nav-tool">环保税</a>
 <a href="/sheen-toolbox/noise-calculator/" class="sheen-nav-tool active">噪声计算</a>
+<a href="/sheen-toolbox/major-hazard-identification/" class="sheen-nav-tool">重大危险源</a>
 </div></header>
 
 <main class="app-wrap">
@@ -154,6 +155,7 @@ details summary i{font-size:11px;color:var(--red)}
 <button class="tab" onclick="sw(4)"><i class="fa-solid fa-ear-deaf"></i>⑤ 听力防护</button>
 </div>
 
+<!-- ① 多声源合成 (测量物理量) -->
 <div class="tc active" id="t0">
 <div class="card form-card" style="border-left:4px solid var(--red)">
 <div style="font-size:12px;color:var(--text2);margin-bottom:6px;line-height:1.6">📏 <strong>测量物理量</strong> — 在同一时刻测量工人所处位置接收到的多个设备（声源）叠加后的总声压级。这是噪声评估最底层的基础数据。</div>
@@ -173,6 +175,7 @@ details summary i{font-size:11px;color:var(--red)}
 </div>
 </div>
 
+<!-- ② 任务暴露 (分解个体行为) -->
 <div class="tc" id="t1">
 <div class="card form-card" style="border-left:4px solid var(--red)">
 <div style="font-size:12px;color:var(--text2);margin-bottom:6px;line-height:1.6">🔧 <strong>分解个体行为</strong> — 评估工人进行某一个具体工序（如打磨、焊接、巡检）时所承受的噪声暴露剂量（Leq / L<sub>EX,8h</sub>）。上一步合成的总声压级可作为此处的输入。</div>
@@ -219,6 +222,7 @@ details summary i{font-size:11px;color:var(--red)}
 </tbody></table></div></details>
 </div>
 
+<!-- ③ 多任务合成 (计算全天剂量) -->
 <div class="tc" id="t2">
 <div class="card form-card" style="border-left:4px solid var(--red)">
 <div style="font-size:12px;color:var(--text2);margin-bottom:6px;line-height:1.6">📊 <strong>计算全天剂量</strong> — 工人一个班次内可能从事多个不同工序。将各工序的噪声暴露按时间权重进行能量叠加，算出全天 8 小时等效声级 (L<sub>EX,8h</sub>)。</div>
@@ -245,6 +249,7 @@ details summary i{font-size:11px;color:var(--red)}
 </div>
 </div>
 
+<!-- ④ 危害分级 (判定等级) -->
 <div class="tc" id="t3">
 <div class="card form-card" style="border-left:4px solid var(--red)">
 <div style="font-size:12px;color:var(--text2);margin-bottom:6px;line-height:1.6">🏷️ <strong>判定等级</strong> — 根据 GBZ/T 229.4 标准，将前两步计算的 L<sub>EX,8h</sub> 划入对应危害等级（Ⅰ~Ⅳ级），确定管理措施。可从任务暴露或多任务合成一键带入。</div>
@@ -268,6 +273,7 @@ details summary i{font-size:11px;color:var(--red)}
 </tbody></table></div></details>
 </div>
 
+<!-- ⑤ 听力防护 (末端控制) -->
 <div class="tc" id="t4">
 <div class="card form-card" style="border-left:4px solid var(--red)">
 <div style="font-size:12px;color:var(--text2);margin-bottom:6px;line-height:1.6">🛡️ <strong>末端控制</strong> — 根据危害分级结果，选择或验算相应降噪值（SNR/NRR）的耳塞或耳罩。计算实际降噪后的暴露声级，确保防护后降至安全阈值 (≤85 dB)。</div>
