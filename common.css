@@ -42,6 +42,17 @@ body {
   font-size: 14px;
 }
 
+/* ===== 2b. 主内容容器 ===== */
+.app-container {
+  margin: 0 auto;
+  padding: 32px 24px;
+  flex: 1;
+  width: 100%;
+}
+.container-calc  { max-width: 800px; }  /* 计算器类 */
+.container-wf    { max-width: 900px; }  /* 工作流类 */
+.container-query { max-width: 1200px; } /* 查询类 */
+
 /* ===== 3. 面包屑导航 ===== */
 .breadcrumb {
   padding: 10px 24px;
@@ -355,6 +366,8 @@ label {
 
 /* ===== 15. 响应式 ===== */
 @media (max-width: 768px) {
+  .app-container { padding: 20px 16px; }
+  .container-calc, .container-wf, .container-query { max-width: 100%; }
   .breadcrumb { padding: 8px 16px; font-size: 12px; }
   .btn-primary, .btn-print { padding: 10px 24px; font-size: 14px; }
   .btn-outline { padding: 8px 20px; font-size: 13px; }
@@ -369,6 +382,7 @@ label {
 }
 
 @media (max-width: 480px) {
+  .app-container { padding: 14px 10px; }
   .breadcrumb { padding: 6px 12px; font-size: 11px; }
   .btn-primary, .btn-print { padding: 8px 20px; font-size: 13px; border-radius: 50px; }
   .btn-outline { padding: 7px 16px; font-size: 12px; }
