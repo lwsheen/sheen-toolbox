@@ -118,46 +118,48 @@ details summary i{font-size:11px;color:var(--red)}
 <a href="/sheen-toolbox/explosion-venting-calculator/" class="sheen-nav-tool">泄爆面积</a>
 <a href="/sheen-toolbox/environmental-tax-calculator/" class="sheen-nav-tool">环保税</a>
 <a href="/sheen-toolbox/noise-calculator/" class="sheen-nav-tool">噪声计算</a>
+<a href="/sheen-toolbox/major-hazard-identification/" class="sheen-nav-tool">重大危险源</a>
 </div></header>
 
 <main class="app-wrap">
 <h1><i class="fa-solid fa-weight-hanging"></i> NIOSH 举升方程计算器</h1>
 <p class="sub">NIOSH Lifting Equation (1991/2017) · RWL = LC × HM × VM × DM × AM × FM × CM · SHEEN Toolbox — NE Calc</p>
 
+<!-- Diagram -->
 <div class="card no-pr">
 <h3><i class="fa-solid fa-ruler-combined"></i> 测量参数示意</h3>
 <div class="diagram">
 <svg viewBox="0 0 600 260" style="max-width:550px">
-  
+  <!-- Stick figure -->
   <circle cx="180" cy="50" r="16" fill="none" stroke="#111827" stroke-width="2"/>
   <line x1="180" y1="66" x2="180" y2="130" stroke="#111827" stroke-width="2"/>
   <line x1="180" y1="80" x2="140" y2="105" stroke="#111827" stroke-width="2"/>
   <line x1="180" y1="80" x2="220" y2="105" stroke="#111827" stroke-width="2"/>
   <line x1="180" y1="130" x2="155" y2="190" stroke="#111827" stroke-width="2"/>
   <line x1="180" y1="130" x2="205" y2="190" stroke="#111827" stroke-width="2"/>
-  
+  <!-- Ankle midpoint -->
   <circle cx="180" cy="188" r="3" fill="#7A1825"/>
-  
+  <!-- Hands grip point (origin) -->
   <circle cx="225" cy="90" r="4" fill="#7A1825"/>
-  
+  <!-- Box -->
   <rect x="215" y="75" width="50" height="30" rx="3" fill="none" stroke="#7A1825" stroke-width="1.5"/>
-  
+  <!-- H horizontal -->
   <line x1="180" y1="188" x2="225" y2="188" stroke="#7A1825" stroke-width="1.5" stroke-dasharray="4,3"/>
   <text x="200" y="205" text-anchor="middle" font-size="10" fill="#7A1825" font-weight="700">H(cm)</text>
-  
+  <!-- V vertical -->
   <line x1="240" y1="75" x2="240" y2="188" stroke="#7A1825" stroke-width="1.5" stroke-dasharray="4,3"/>
   <text x="256" y="135" font-size="10" fill="#7A1825" font-weight="700">V(cm)</text>
-  
+  <!-- Ground line -->
   <line x1="130" y1="195" x2="250" y2="195" stroke="#111827" stroke-width="1"/>
-  
+  <!-- Destination -->
   <circle cx="420" cy="120" r="4" fill="#F59E0B"/>
   <rect x="405" y="105" width="50" height="30" rx="3" fill="none" stroke="#F59E0B" stroke-width="1.5"/>
   <line x1="455" y1="75" x2="455" y2="130" stroke="#F59E0B" stroke-width="1.5" stroke-dasharray="4,3"/>
   <text x="478" y="105" font-size="9" fill="#F59E0B">D</text>
-  
+  <!-- A angle -->
   <path d="M 180 195 A 50 50 0 0 0 230 195" fill="none" stroke="#2563EB" stroke-width="1.5"/>
   <text x="200" y="235" text-anchor="middle" font-size="9" fill="#2563EB">A(°) 躯干扭转角</text>
-  
+  <!-- D label -->
   <text x="430" y="82" text-anchor="middle" font-size="10" fill="#F59E0B" font-weight="700">V终点</text>
   <text x="230" y="70" text-anchor="middle" font-size="10" fill="#7A1825" font-weight="700">V起点</text>
 </svg>
@@ -170,6 +172,7 @@ details summary i{font-size:11px;color:var(--red)}
 </div>
 </div>
 
+<!-- Input -->
 <div class="card" id="inputCard">
 <h3><i class="fa-solid fa-sliders"></i> 参数输入</h3>
 <div class="hint">所有长度参数单位为 cm（厘米），角度单位为 °（度），频率单位为 lifts/min（次/分钟），重量单位为 kg</div>
@@ -196,8 +199,10 @@ details summary i{font-size:11px;color:var(--red)}
 </div>
 </div>
 
+<!-- Result -->
 <div class="result-box" id="resultBox"></div>
 
+<!-- Reference Tables -->
 <div class="card no-pr">
 <h3><i class="fa-solid fa-table"></i> 乘数参考表</h3>
 <details open>
