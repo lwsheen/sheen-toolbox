@@ -68,8 +68,7 @@ select.form-control{cursor:pointer}
 .steps li span{color:var(--text-primary);font-weight:600}
 .steps li.formula{font-family:monospace;font-size:13px;color:var(--text-primary);border-left-color:var(--brand-red);background:var(--brand-red-light);padding:8px 12px;border-radius:0 6px 6px 0}
 
-.tbl-w{overflow-x:auto}
-.dt{min-width:400px;border-collapse:collapse;font-size:10px}
+
 .dt th,.dt td{padding:5px 8px;border:1px solid var(--border);text-align:center;vertical-align:middle}
 .dt th{background:#1F4E79;color:#fff;font-weight:700;font-size:10px}.dt td{background:var(--bg-card)}
 
@@ -193,7 +192,7 @@ details summary i{font-size:11px;color:var(--brand-red)}
   <button class="btn btn-p btn-sm" onclick="exportReport(1)"><i class="fa-solid fa-file-export"></i> 导出报告</button>
 </div>
 </div>
-<details class="card no-pr" open style="margin-top:0"><summary><i class="fa-solid fa-table"></i> 常见噪声源声级参考</summary><div class="tbl-w"><table class="dt"><thead><tr><th>场景 / 设备</th><th>dB(A)</th><th>场景 / 设备</th><th>dB(A)</th></tr></thead><tbody>
+<details class="card no-pr" open style="margin-top:0"><summary><i class="fa-solid fa-table"></i> 常见噪声源声级参考</summary><div class="table-scroll"><table class="dt"><thead><tr><th>场景 / 设备</th><th>dB(A)</th><th>场景 / 设备</th><th>dB(A)</th></tr></thead><tbody>
 <tr><td>正常交谈</td><td>60</td><td>繁忙街道</td><td>80</td></tr>
 <tr><td>冲压机床</td><td>95~105</td><td>空压机</td><td>90~100</td></tr>
 <tr><td>电锯</td><td>100~110</td><td>凿岩机</td><td>105~115</td></tr>
@@ -245,7 +244,7 @@ details summary i{font-size:11px;color:var(--brand-red)}
 <div id="gradeDetail"></div>
 <div class="btn-row no-pr"><button class="btn btn-bad btn-sm" onclick="prt(3)"><i class="fa-solid fa-print"></i> 打印</button><button class="btn btn-p btn-sm" onclick="exportReport(3)"><i class="fa-solid fa-file-export"></i> 导出报告</button></div>
 </div>
-<details class="card no-pr" open style="margin-top:0"><summary><i class="fa-solid fa-table"></i> GBZ/T 229.4 分级表</summary><div class="tbl-w"><table class="dt"><thead><tr><th>等级</th><th>名称</th><th>范围 dB(A)</th><th>措施</th></tr></thead><tbody>
+<details class="card no-pr" open style="margin-top:0"><summary><i class="fa-solid fa-table"></i> GBZ/T 229.4 分级表</summary><div class="table-scroll"><table class="dt"><thead><tr><th>等级</th><th>名称</th><th>范围 dB(A)</th><th>措施</th></tr></thead><tbody>
 <tr><td>Ⅰ</td><td>轻度</td><td>85~90</td><td>监测，发护听器</td></tr>
 <tr><td>Ⅱ</td><td>中度</td><td>90~94</td><td>强监，工程控制</td></tr>
 <tr><td>Ⅲ</td><td>重度</td><td>94~97</td><td>限期治理</td></tr>
@@ -276,7 +275,7 @@ details summary i{font-size:11px;color:var(--brand-red)}
   <button class="btn btn-p btn-sm" onclick="exportReport(4)"><i class="fa-solid fa-file-export"></i> 导出报告</button>
 </div>
 </div>
-<details class="card no-pr" open style="margin-top:0"><summary><i class="fa-solid fa-table"></i> NRR 与护听器选择参考</summary><div class="tbl-w"><table class="dt"><thead><tr><th>环境声级 dB(A)</th><th>推荐 NRR</th><th>护听器类型建议</th></tr></thead><tbody>
+<details class="card no-pr" open style="margin-top:0"><summary><i class="fa-solid fa-table"></i> NRR 与护听器选择参考</summary><div class="table-scroll"><table class="dt"><thead><tr><th>环境声级 dB(A)</th><th>推荐 NRR</th><th>护听器类型建议</th></tr></thead><tbody>
 <tr><td>85~90</td><td>≥15</td><td>耳塞或轻量耳罩</td></tr>
 <tr><td>90~95</td><td>≥20</td><td>标准耳罩</td></tr>
 <tr><td>95~100</td><td>≥25</td><td>高衰减耳罩</td></tr>
