@@ -31,8 +31,7 @@ h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);marg
 .btn-outline{background:var(--bg-card);border:1.5px solid var(--border);color:var(--text-primary)}.btn-outline:hover{border-color:var(--brand-red);color:var(--brand-red)}
 .btn-danger{background:#DC2626;color:#fff}.btn-danger:hover{background:#B91C1C}
 .btn-outline{background:var(--bg-card);color:var(--brand-red);border:1.5px solid var(--brand-red)}.btn-outline:hover{background:var(--brand-red-light)}.btn-sm{padding:5px 10px;font-size:10px}
-.tbl-w{overflow-x:auto}
-.dt{min-width:1500px;border-collapse:collapse;font-size:11px}
+
 .dt th,.dt td{padding:5px 6px;border:1px solid var(--border);vertical-align:middle;white-space:nowrap}
 .dt th{background:#1F4E79;color:#fff;font-weight:700;font-size:10px}.dt td{background:var(--bg-card)}
 .dt td input,.dt td select{width:95px;border:1px solid var(--border);padding:3px 4px;font-size:10px;font-family:inherit;border-radius:3px}.dt td input:focus,.dt td select:focus{outline:none;border-color:var(--brand-red)}
@@ -56,9 +55,7 @@ h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);marg
   .breadcrumb,.sheen-footer,.tabs,.btn,.no-pr,#apiMod,#apiOv,#aiScene{display:none!important}
   .tc{display:block!important}.tc:not(.active-print){display:none!important}
   .app-wrap{padding:0!important;max-width:900px!important}
-  .card{box-shadow:none!important;border:1px solid #333!important;break-inside:avoid;padding:8px!important}
-  .tbl-w{overflow-x:visible!important}
-  .dt{min-width:0!important;width:100%!important;font-size:9px!important;table-layout:auto!important}
+  .card{box-shadow:none!important;border:1px solid #333!important;break-inside:avoid;padding:8px!important}.dt{min-width:0!important;width:100%!important;font-size:9px!important;table-layout:auto!important}
   .dt th,.dt td{padding:3px 4px!important;font-size:8px!important;white-space:normal!important;word-break:break-all!important}
   .dt th{background:#eee!important;color:#000!important;font-size:7px!important}
   .dt td input,.dt td select{width:60px!important;border:none!important;padding:0!important;font-size:8px!important;background:transparent!important}
@@ -95,7 +92,7 @@ h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);marg
 <!-- TAB 0: 评分标准 -->
 <div class="tc active" id="t0">
 <div class="card"><h3><i class="fa-solid fa-scale-balanced"></i> 评分维度与标准</h3>
-<div class="hint">评价人员现场评分参考卡片 — 根据实际情况对标选择最匹配分值</div><div class="tbl-w">
+<div class="hint">评价人员现场评分参考卡片 — 根据实际情况对标选择最匹配分值</div><div class="table-scroll">
 <table class="dt" style="min-width:850px">
 <thead><tr><th>评价维度</th><th>1分</th><th>2分</th><th>3分</th><th>4分</th></tr></thead>
 <tbody><tr><td><strong>a) 环境影响程度</strong></td><td style="white-space:normal">轻微<br><small>可忽略，短期内自行恢复</small></td><td style="white-space:normal">一般<br><small>需简单治理，1周内恢复</small></td><td style="white-space:normal">较重<br><small>需专项治理，1月内恢复</small></td><td style="background:#FFC7CE;font-weight:700;white-space:normal">严重<br><small>破坏生态，长期不可逆</small></td></tr>
@@ -135,7 +132,7 @@ h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);marg
 <button class="btn btn-bad btn-sm" onclick="prt1()"><i class="fa-solid fa-print"></i>打印</button>
 <span style="font-size:11px;color:var(--text-secondary);">共<strong id="nRow">0</strong>条 | 重要<strong id="nMj" style="color:#DC2626;">0</strong></span>
 </div>
-<div class="tbl-w"><table class="dt" id="mt">
+<div class="table-scroll"><table class="dt" id="mt">
 <thead><tr><th>#</th><th>部门</th><th>工序/活动</th><th>状态</th><th>环境因素</th><th>影响类型</th><th>适用法规</th><th>量化数据</th><th>a影响</th><th>b法规</th><th>c数量</th><th>d频率</th><th>e关注</th><th>f能耗</th><th>总分</th><th>重要因素</th><th>控制措施</th><th>评价人</th><th>日期</th><th></th></tr></thead>
 <tbody id="tb"></tbody></table></div></div>
 
@@ -153,7 +150,7 @@ h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);marg
 <button class="btn btn-bad btn-sm" onclick="prt3()"><i class="fa-solid fa-print"></i>打印</button>
 <span style="font-size:11px;color:var(--text-secondary);">完成率：<strong id="tr" style="color:var(--brand-red);">—</strong></span>
 </div>
-<div class="tbl-w"><table class="dt" id="tt" style="min-width:1000px;">
+<div class="table-scroll"><table class="dt" id="tt" style="min-width:1000px;">
 <thead><tr><th>#</th><th>环境因素</th><th>部门</th><th>目标指标</th><th>整改措施</th><th>责任部门</th><th>责任人</th><th>预算(万)</th><th>计划完成</th><th>实际完成</th><th>验证状态</th><th></th></tr></thead>
 <tbody id="tkb"></tbody></table></div></div>
 </main>
