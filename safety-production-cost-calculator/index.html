@@ -7,6 +7,7 @@
     <title>安全生产费用计算器 · 财企〔2022〕136号</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<link rel="stylesheet" href="/sheen-toolbox/common.css">
 
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -51,10 +52,10 @@
             border: 1px solid var(--border);
         }
 
-        .breadcrumb { padding: 10px 24px; font-size: 12px; color: var(--text-secondary); border-bottom: 1px solid var(--border); }
-        .breadcrumb a { color: var(--brand-red); text-decoration: none; font-weight: 500; transition: opacity .2s; }
-        .breadcrumb a:hover { opacity: .7; }
-        .breadcrumb span { color: var(--text-secondary); }
+.breadcrumb { padding: 12px 24px; font-size: 13px; color: var(--text-secondary); border-bottom: 1px solid var(--border); background: var(--bg-card); display: flex; align-items: center; gap: 6px; }
+.breadcrumb a { color: var(--brand-red); text-decoration: none; font-weight: 600; transition: opacity .2s; display: inline-flex; align-items: center; gap: 4px; }
+.breadcrumb a:hover { opacity: .7; text-decoration: underline; }
+.breadcrumb span { color: var(--text-secondary); }
         /* 打印品牌 */
         .print-footer { display: none; }
         
@@ -248,7 +249,7 @@
 
     <div class="app-wrapper">
         <div class="breadcrumb">
-            <a href="/sheen-toolbox/">&larr; SHEEN Toolbox</a>
+            <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
             <span> / 安全生产费用计算器</span>
         </div>
 
