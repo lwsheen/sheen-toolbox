@@ -412,7 +412,7 @@
     </style>
 </head>
 <body>
-    
+    <!-- 导航栏 -->
     <header class="sheen-nav">
         <a href="/sheen-toolbox/" class="sheen-nav-brand">
             <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i>
@@ -434,15 +434,18 @@
 <a href="/sheen-toolbox/explosion-venting-calculator/" class="sheen-nav-tool">泄爆面积</a>
 <a href="/sheen-toolbox/environmental-tax-calculator/" class="sheen-nav-tool">环保税</a>
 <a href="/sheen-toolbox/noise-calculator/" class="sheen-nav-tool">噪声计算</a>
+<a href="/sheen-toolbox/major-hazard-identification/" class="sheen-nav-tool">重大危险源</a>
     </div>
   </header>
 
+    <!-- 主内容 -->
     <main class="app-wrapper">
         <div class="page-header">
             <h1 class="page-title">危险化学品查询</h1>
             <p class="page-subtitle">基于《危险化学品目录（2025调整版）》，支持序号、品名、别名、CAS号、备注多维检索，覆盖 2830 项危险化学品。</p>
         </div>
 
+        <!-- 搜索区域 -->
         <div class="search-section">
             <div class="search-box">
                 <input type="text" id="searchInput" class="search-input" placeholder="输入序号、品名、别名、CAS号或备注...">
@@ -463,11 +466,13 @@
             </div>
         </div>
 
+        <!-- 结果统计 -->
         <div class="result-stats" id="resultStats" style="display: none;">
             <span>找到 <span class="stats-count" id="resultCount">0</span> 条记录</span>
             <span id="searchTime"></span>
         </div>
 
+        <!-- 结果表格 -->
         <div class="result-table">
             <table>
                 <thead>
@@ -488,9 +493,11 @@
             </table>
         </div>
 
+        <!-- 分页 -->
         <div class="pagination" id="pagination" style="display: none;"></div>
     </main>
 
+    <!-- 页脚 -->
     <footer class="sheen-footer">
         <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 危险化学品查询
     </footer>
