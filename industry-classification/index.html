@@ -170,6 +170,7 @@
 </head>
 <body>
 
+<!-- ── Navigation ── -->
 <header class="sheen-nav">
   <a href="/sheen-toolbox/" class="sheen-nav-brand">
     <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i>
@@ -191,6 +192,7 @@
 <a href="/sheen-toolbox/explosion-venting-calculator/" class="sheen-nav-tool">泄爆面积</a>
 <a href="/sheen-toolbox/environmental-tax-calculator/" class="sheen-nav-tool">环保税</a>
 <a href="/sheen-toolbox/noise-calculator/" class="sheen-nav-tool">噪声计算</a>
+<a href="/sheen-toolbox/major-hazard-identification/" class="sheen-nav-tool">重大危险源</a>
     </div>
   </header>
 
@@ -201,7 +203,7 @@
   <p class="page-subtitle">GB/T 4754-2017 · 20个门类 · 97个大类 · 473个中类 · 按代码/名称/说明检索</p>
 
   <div class="main-grid">
-    
+    <!-- Sidebar -->
     <aside class="sidebar no-print collapsed">
       <h3 onclick="this.parentElement.classList.toggle('collapsed')"><span><i class="fa-solid fa-magnifying-glass"></i> 搜索与筛选</span><i class="fa-solid fa-chevron-down toggle-arrow"></i></h3>
       <div class="sidebar-body">
@@ -226,6 +228,7 @@
       </div>
     </aside>
 
+    <!-- Main Content -->
     <div>
       <div class="tree-container" id="treeContainer">
         <div class="tree-empty"><i class="fa-solid fa-spinner fa-spin"></i>加载中...</div>
@@ -263,6 +266,7 @@
 'use strict';
 document.getElementById('printTime').textContent = new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000).toISOString().replace('T',' ').slice(0,16);
 </script>
+
 
 <script>
 (function() {
