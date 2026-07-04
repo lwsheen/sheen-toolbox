@@ -116,12 +116,15 @@ details summary i{font-size:11px;color:var(--red)}
 <a href="/sheen-toolbox/niosh-lifting-calculator/" class="sheen-nav-tool">NIOSH举升</a>
 <a href="/sheen-toolbox/explosion-venting-calculator/" class="sheen-nav-tool">泄爆面积</a>
 <a href="/sheen-toolbox/environmental-tax-calculator/" class="sheen-nav-tool active">环保税</a>
+<a href="/sheen-toolbox/noise-calculator/" class="sheen-nav-tool">噪声计算</a>
+<a href="/sheen-toolbox/major-hazard-identification/" class="sheen-nav-tool">重大危险源</a>
 </div></header>
 
 <main class="app-wrap">
 <h1><i class="fa-solid fa-leaf"></i> 环保税计算器</h1>
 <p class="sub">基于《中华人民共和国环境保护税法》· 四大类污染物自动计算 · 内置当量值/税率参考表</p>
 
+<!-- Province + Tax Rate selector (shared) -->
 <div class="card form-card" style="margin-bottom:14px">
 <h3><i class="fa-solid fa-map-location-dot"></i> 省份税率参考</h3>
 <div class="hint">选择省份自动填充大气/水污染物适用税额，也可手动修改</div>
@@ -166,6 +169,7 @@ details summary i{font-size:11px;color:var(--red)}
 <button class="tab" onclick="sw(4)"><i class="fa-solid fa-calculator"></i>汇总</button>
 </div>
 
+<!-- TAB 0: 大气污染物 -->
 <div class="tc active" id="t0">
 <div class="card form-card">
 <h3><i class="fa-solid fa-wind"></i> 大气污染物计税</h3>
@@ -265,6 +269,7 @@ details summary i{font-size:11px;color:var(--red)}
 </tbody></table></div></details>
 </div>
 
+<!-- TAB 1: 水污染物 -->
 <div class="tc" id="t1">
 <div class="card form-card">
 <h3><i class="fa-solid fa-droplet"></i> 水污染物计税</h3>
@@ -359,6 +364,7 @@ details summary i{font-size:11px;color:var(--red)}
 </tbody></table></div></details>
 </div>
 
+<!-- TAB 2: 固体废物 -->
 <div class="tc" id="t2">
 <div class="card form-card">
 <h3><i class="fa-solid fa-cubes"></i> 固体废物计税</h3>
@@ -418,6 +424,7 @@ details summary i{font-size:11px;color:var(--red)}
 <div class="hint" style="margin-top:8px;font-size:10px">注：危险废物包括医疗废物、废药品、废农药、废有机溶剂、废矿物油、废酸、废碱、含重金属废物等。</div></details>
 </div>
 
+<!-- TAB 3: 噪声 -->
 <div class="tc" id="t3">
 <div class="card form-card">
 <h3><i class="fa-solid fa-volume-high"></i> 建筑施工噪声计税</h3>
@@ -464,6 +471,7 @@ details summary i{font-size:11px;color:var(--red)}
 <div class="hint" style="margin-top:8px;font-size:10px">注：1. 夜间频繁突发噪声和夜间偶然突发噪声按等效声级和峰值噪声超标分贝数计算，税额标准相同。<br>2. 一个单位有不同地点作业场所的，应当分别计算，合并计征。<br>3. 昼、夜均超标的环境噪声，昼、夜分别计算，累计计征。</div></details>
 </div>
 
+<!-- TAB 4: 汇总 -->
 <div class="tc" id="t4">
 <div class="card">
 <h3><i class="fa-solid fa-calculator"></i> 环保税汇总</h3>
