@@ -1273,15 +1273,16 @@ async function aiReport() {
   var rd = document.getElementById('reviewDate')?.value||'';
   var rows = [];
   document.querySelectorAll('.check-row').forEach(function(r){
-    var chk = r.querySelector('.check-item-text');
-    var ref = r.querySelector('.check-ref');
+    var chk = r.querySelector('.td-item');
+    var no = r.querySelector('.td-no');
     var status = '';
     if(r.classList.contains('status-yes')) status='已完成';
     else if(r.classList.contains('status-no')) status='未完成';
     else if(r.classList.contains('status-na')) status='不适用';
     else status='待填写';
-    var remark = r.querySelector('.remark-input')?.value||'';
-    rows.push({item:chk?chk.textContent:'',ref:ref?ref.textContent:'',status:status,remark:remark});
+    var remark = r.querySelector('.note-input');
+    var remarkVal = remark ? remark.value : '';
+    rows.push({item:chk?chk.textContent:'',ref:no?no.textContent:'',status:status,remark:remarkVal});
   });
 
   var prompt = '你是PSSR开车前安全审查专家。请根据以下检查结果生成审查报告。\n\n'+
