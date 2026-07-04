@@ -99,6 +99,7 @@ h1 i{color:var(--red)}.sub{font-size:12px;color:var(--text2);margin-bottom:14px}
 <a href="/sheen-toolbox/explosion-venting-calculator/" class="sheen-nav-tool">泄爆面积</a>
 <a href="/sheen-toolbox/environmental-tax-calculator/" class="sheen-nav-tool">环保税</a>
 <a href="/sheen-toolbox/noise-calculator/" class="sheen-nav-tool">噪声计算</a>
+<a href="/sheen-toolbox/major-hazard-identification/" class="sheen-nav-tool">重大危险源</a>
 </div></header>
 
 <main class="app-wrap">
@@ -111,6 +112,7 @@ h1 i{color:var(--red)}.sub{font-size:12px;color:var(--text2);margin-bottom:14px}
 <button class="tab" onclick="sw(3)"><i class="fa-solid fa-clipboard-check"></i>整改跟踪</button>
 </div>
 
+<!-- TAB 0: 评分标准 -->
 <div class="tc active" id="t0">
 <div class="card"><h3><i class="fa-solid fa-scale-balanced"></i> 评分维度与标准</h3>
 <div class="hint">评价人员现场评分参考卡片 — 根据实际情况对标选择最匹配分值</div><div class="tbl-w">
@@ -133,6 +135,7 @@ h1 i{color:var(--red)}.sub{font-size:12px;color:var(--text2);margin-bottom:14px}
 <div class="rc" style="border-color:var(--red);background:#FFF0F0;"><strong>✋ 规则6 — 手动标记</strong>评价人手动指定 → 覆盖自动计算结果</div>
 </div></div></div>
 
+<!-- TAB 1: 识别与评价 -->
 <div class="tc" id="t1">
 <div class="pp" id="pt1"></div>
 <div class="card no-pr" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:8px 14px;margin-bottom:8px;">
@@ -156,10 +159,12 @@ h1 i{color:var(--red)}.sub{font-size:12px;color:var(--text2);margin-bottom:14px}
 <thead><tr><th>#</th><th>部门</th><th>工序/活动</th><th>状态</th><th>环境因素</th><th>影响类型</th><th>适用法规</th><th>量化数据</th><th>a影响</th><th>b法规</th><th>c数量</th><th>d频率</th><th>e关注</th><th>f能耗</th><th>总分</th><th>重要因素</th><th>控制措施</th><th>评价人</th><th>日期</th><th></th></tr></thead>
 <tbody id="tb"></tbody></table></div></div>
 
+<!-- TAB 2: 统计看板 -->
 <div class="tc" id="t2"><div class="kg" id="ka"></div>
 <div class="cr"><div class="cb"><h3 style="font-size:13px;margin-bottom:6px;">环境因素类型分布</h3><canvas id="c1"></canvas></div><div class="cb"><h3 style="font-size:13px;margin-bottom:6px;">重要/非重要比例</h3><canvas id="c2"></canvas></div></div>
 <div class="cr"><div class="cb"><h3 style="font-size:13px;margin-bottom:6px;">各部门因素数量</h3><canvas id="c3"></canvas></div><div class="cb"><h3 style="font-size:13px;margin-bottom:6px;">控制措施覆盖率</h3><div id="cov" style="text-align:center;padding:30px;font-size:32px;font-weight:700;color:var(--red);">—</div></div></div></div>
 
+<!-- TAB 3: 整改跟踪 -->
 <div class="tc" id="t3"><div class="pp" id="pt3"></div>
 <div class="card no-pr" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:8px 14px;">
 <button class="btn btn-p" onclick="atk()"><i class="fa-solid fa-plus"></i>新增</button>
