@@ -8,48 +8,48 @@
 <link rel="stylesheet" href="/sheen-toolbox/common.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
-:root{--black:#000;--text:#111827;--text2:#6B7280;--bg:#F8FAFC;--card:#fff;--bd:#E5E7EB;--red:#7A1825;--redH:#5C121C;--redL:#FEF2F2;--amb:#FBBF24;--r:12px}
+:root{--black:#000;--text-primary:#111827;--text-secondary:#6B7280;--bg-page:#F8FAFC;--bg-card:#fff;--border:#E5E7EB;--brand-red:#7A1825;--brand-red-hover:#5C121C;--brand-red-light:#FEF2F2;--amber:#FBBF24;--radius-md:12px}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
-.breadcrumb{padding:12px 24px;font-size:13px;color:var(--text2);border-bottom:1px solid var(--bd);background:var(--card);display:flex;align-items:center;gap:6px}
-.breadcrumb a{color:var(--red);text-decoration:none;font-weight:600;transition:opacity .2s;display:inline-flex;align-items:center;gap:4px}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg-page);color:var(--text-primary);line-height:1.6}
+.breadcrumb{padding:12px 24px;font-size:13px;color:var(--text-secondary);border-bottom:1px solid var(--border);background:var(--bg-card);display:flex;align-items:center;gap:6px}
+.breadcrumb a{color:var(--brand-red);text-decoration:none;font-weight:600;transition:opacity .2s;display:inline-flex;align-items:center;gap:4px}
 .breadcrumb a:hover{opacity:.7;text-decoration:underline}
-.breadcrumb span{color:var(--text2)}
-.sheen-footer{text-align:center;padding:14px 24px;font-size:12px;color:var(--text2);border-top:1px solid var(--bd);background:var(--card)}
-.sheen-footer i{color:var(--amb)}.sheen-footer strong{color:var(--text)}
+.breadcrumb span{color:var(--text-secondary)}
+.sheen-footer{text-align:center;padding:14px 24px;font-size:12px;color:var(--text-secondary);border-top:1px solid var(--border);background:var(--bg-card)}
+.sheen-footer i{color:var(--amber)}.sheen-footer strong{color:var(--text-primary)}
 .app-wrap{max-width:100%;margin:0 auto;padding:16px 12px}
 h1{font-size:20px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
-h1 i{color:var(--red)}.sub{font-size:12px;color:var(--text2);margin-bottom:14px}
-.tabs{display:flex;gap:2px;margin-bottom:14px;flex-wrap:wrap;border-bottom:2px solid var(--bd)}
-.tab{padding:7px 12px;font-size:12px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--text2);border-bottom:3px solid transparent;transition:all .2s;font-family:inherit;white-space:nowrap}
-.tab:hover{color:var(--red)}.tab.active{color:var(--red);border-bottom-color:var(--red)}.tab i{margin-right:4px}
+h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);margin-bottom:14px}
+.tabs{display:flex;gap:2px;margin-bottom:14px;flex-wrap:wrap;border-bottom:2px solid var(--border)}
+.tab{padding:7px 12px;font-size:12px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--text-secondary);border-bottom:3px solid transparent;transition:all .2s;font-family:inherit;white-space:nowrap}
+.tab:hover{color:var(--brand-red)}.tab.active{color:var(--brand-red);border-bottom-color:var(--brand-red)}.tab i{margin-right:4px}
 .tc{display:none}.tc.active{display:block}
-.card{background:var(--card);border-radius:var(--r);padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04);border:1px solid var(--bd)}
-.card h3{font-size:14px;font-weight:700;margin-bottom:8px}.hint{font-size:11px;color:var(--text2);margin-bottom:10px;padding:6px 10px;background:var(--bg);border-radius:6px}
+.card{background:var(--bg-card);border-radius:var(--radius-md);padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04);border:1px solid var(--border)}
+.card h3{font-size:14px;font-weight:700;margin-bottom:8px}.hint{font-size:11px;color:var(--text-secondary);margin-bottom:10px;padding:6px 10px;background:var(--bg-page);border-radius:6px}
 .btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:60px;font-size:12px;font-weight:600;cursor:pointer;transition:all .25s;border:none;font-family:inherit;white-space:nowrap}
-.btn-p{background:var(--red);color:#fff}.btn-p:hover{background:var(--redH)}
-.btn-o{background:var(--card);border:1.5px solid var(--bd);color:var(--text)}.btn-o:hover{border-color:var(--red);color:var(--red)}
-.btn-d{background:#DC2626;color:#fff}.btn-d:hover{background:#B91C1C}
-.btn-bad{background:var(--card);color:var(--red);border:1.5px solid var(--red)}.btn-bad:hover{background:var(--redL)}.btn-sm{padding:5px 10px;font-size:10px}
+.btn-primary{background:var(--brand-red);color:#fff}.btn-primary:hover{background:var(--brand-red-hover)}
+.btn-outline{background:var(--bg-card);border:1.5px solid var(--border);color:var(--text-primary)}.btn-outline:hover{border-color:var(--brand-red);color:var(--brand-red)}
+.btn-danger{background:#DC2626;color:#fff}.btn-danger:hover{background:#B91C1C}
+.btn-outline{background:var(--bg-card);color:var(--brand-red);border:1.5px solid var(--brand-red)}.btn-outline:hover{background:var(--brand-red-light)}.btn-sm{padding:5px 10px;font-size:10px}
 .tbl-w{overflow-x:auto}
 .dt{min-width:1500px;border-collapse:collapse;font-size:11px}
-.dt th,.dt td{padding:5px 6px;border:1px solid var(--bd);vertical-align:middle;white-space:nowrap}
-.dt th{background:#1F4E79;color:#fff;font-weight:700;font-size:10px}.dt td{background:var(--card)}
-.dt td input,.dt td select{width:95px;border:1px solid var(--bd);padding:3px 4px;font-size:10px;font-family:inherit;border-radius:3px}.dt td input:focus,.dt td select:focus{outline:none;border-color:var(--red)}
+.dt th,.dt td{padding:5px 6px;border:1px solid var(--border);vertical-align:middle;white-space:nowrap}
+.dt th{background:#1F4E79;color:#fff;font-weight:700;font-size:10px}.dt td{background:var(--bg-card)}
+.dt td input,.dt td select{width:95px;border:1px solid var(--border);padding:3px 4px;font-size:10px;font-family:inherit;border-radius:3px}.dt td input:focus,.dt td select:focus{outline:none;border-color:var(--brand-red)}
 .dt .sc input{background:#E2EFDA;font-weight:700;width:48px;text-align:center}
-.dt .mj-y{background:var(--redL);color:var(--red);font-weight:700}.mj-n{color:var(--text2)}
+.dt .mj-y{background:var(--brand-red-light);color:var(--brand-red);font-weight:700}.mj-n{color:var(--text-secondary)}
 .dt .ex td{background:#FFF9E6}
 .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px}
-.rc{border-left:4px solid #DC2626;background:var(--redL);padding:10px;border-radius:0 6px 6px 0;font-size:12px}.rc strong{color:var(--red);display:block;margin-bottom:2px}
+.rc{border-left:4px solid #DC2626;background:var(--brand-red-light);padding:10px;border-radius:0 6px 6px 0;font-size:12px}.rc strong{color:var(--brand-red);display:block;margin-bottom:2px}
 .kg{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:14px}
-.kc{background:var(--card);border-radius:var(--r);padding:12px;text-align:center;border:1px solid var(--bd)}
-.kc .kn{font-size:26px;font-weight:700}.kc .kl{font-size:11px;color:var(--text2);margin-top:2px}
+.kc{background:var(--bg-card);border-radius:var(--radius-md);padding:12px;text-align:center;border:1px solid var(--border)}
+.kc .kn{font-size:26px;font-weight:700}.kc .kl{font-size:11px;color:var(--text-secondary);margin-top:2px}
 .cr{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-.cb{background:var(--card);border-radius:var(--r);padding:10px;border:1px solid var(--bd)}.cb canvas{max-height:220px}
+.cb{background:var(--bg-card);border-radius:var(--radius-md);padding:10px;border:1px solid var(--border)}.cb canvas{max-height:220px}
 .pp{display:none}.filter-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
-.filter-chip{padding:4px 10px;border-radius:60px;font-size:11px;border:1px solid var(--bd);cursor:pointer;transition:all .2s}.filter-chip:hover{border-color:var(--red)}.filter-chip.on{background:var(--red);color:#fff;border-color:var(--red)}
-.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--bd);border-top-color:var(--red);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:4px}@keyframes spin{to{transform:rotate(360deg)}}
-#apiMod{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--card);border-radius:var(--r);padding:18px;z-index:1000;box-shadow:0 8px 32px rgba(0,0,0,.2);width:340px;max-width:95vw}
+.filter-chip{padding:4px 10px;border-radius:60px;font-size:11px;border:1px solid var(--border);cursor:pointer;transition:all .2s}.filter-chip:hover{border-color:var(--brand-red)}.filter-chip.on{background:var(--brand-red);color:#fff;border-color:var(--brand-red)}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--brand-red);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:4px}@keyframes spin{to{transform:rotate(360deg)}}
+#apiMod{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg-card);border-radius:var(--radius-md);padding:18px;z-index:1000;box-shadow:0 8px 32px rgba(0,0,0,.2);width:340px;max-width:95vw}
 #apiOv{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:999}
 @media print{
   @page{size:A4 landscape;margin:12mm 10mm 15mm 10mm}
@@ -112,16 +112,16 @@ h1 i{color:var(--red)}.sub{font-size:12px;color:var(--text2);margin-bottom:14px}
 <div class="rc"><strong>规则3 — 总分阈值</strong>六项总分 ≥ 16分 → 累计达标</div>
 <div class="rc"><strong>🔥 规则4 — 火灾/爆炸</strong>涉及火灾爆炸风险 → 直接判定</div>
 <div class="rc"><strong>⚖ 规则5 — 违规项</strong>存在行政处罚或明确违规 → 直接判定</div>
-<div class="rc" style="border-color:var(--red);background:#FFF0F0;"><strong>✋ 规则6 — 手动标记</strong>评价人手动指定 → 覆盖自动计算结果</div>
+<div class="rc" style="border-color:var(--brand-red);background:#FFF0F0;"><strong>✋ 规则6 — 手动标记</strong>评价人手动指定 → 覆盖自动计算结果</div>
 </div></div></div>
 
 <!-- TAB 1: 识别与评价 -->
 <div class="tc" id="t1">
 <div class="pp" id="pt1"></div>
 <div class="card no-pr" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:8px 14px;margin-bottom:8px;">
-<input id="aiScene" type="text" placeholder="描述分析场景：例 设备部烧锅炉 / 涂装车间喷漆 / 污水处理站…" style="flex:1;min-width:200px;padding:7px 12px;border:1.5px solid var(--bd);border-radius:6px;font-size:12px;font-family:inherit;background:var(--card);">
+<input id="aiScene" type="text" placeholder="描述分析场景：例 设备部烧锅炉 / 涂装车间喷漆 / 污水处理站…" style="flex:1;min-width:200px;padding:7px 12px;border:1.5px solid var(--border);border-radius:6px;font-size:12px;font-family:inherit;background:var(--bg-card);">
 <button class="btn btn-p" id="bAI" onclick="ai()"><i class="fa-solid fa-wand-magic-sparkles"></i>AI识别</button>
-<span id="aiLd" style="display:none;font-size:11px;color:var(--text2);"><span class="spin"></span>AI分析中…</span>
+<span id="aiLd" style="display:none;font-size:11px;color:var(--text-secondary);"><span class="spin"></span>AI分析中…</span>
 </div>
 <div class="card no-pr" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:8px 14px;margin-bottom:0;">
 <button class="btn btn-p" onclick="add()"><i class="fa-solid fa-plus"></i>新增</button>
@@ -133,7 +133,7 @@ h1 i{color:var(--red)}.sub{font-size:12px;color:var(--text2);margin-bottom:14px}
 <span class="filter-chip" onclick="flt('normal',this)">一般</span>
 <button class="btn btn-bad btn-sm" onclick="xls1()"><i class="fa-solid fa-file-excel"></i>导出</button>
 <button class="btn btn-bad btn-sm" onclick="prt1()"><i class="fa-solid fa-print"></i>打印</button>
-<span style="font-size:11px;color:var(--text2);">共<strong id="nRow">0</strong>条 | 重要<strong id="nMj" style="color:#DC2626;">0</strong></span>
+<span style="font-size:11px;color:var(--text-secondary);">共<strong id="nRow">0</strong>条 | 重要<strong id="nMj" style="color:#DC2626;">0</strong></span>
 </div>
 <div class="tbl-w"><table class="dt" id="mt">
 <thead><tr><th>#</th><th>部门</th><th>工序/活动</th><th>状态</th><th>环境因素</th><th>影响类型</th><th>适用法规</th><th>量化数据</th><th>a影响</th><th>b法规</th><th>c数量</th><th>d频率</th><th>e关注</th><th>f能耗</th><th>总分</th><th>重要因素</th><th>控制措施</th><th>评价人</th><th>日期</th><th></th></tr></thead>
@@ -142,7 +142,7 @@ h1 i{color:var(--red)}.sub{font-size:12px;color:var(--text2);margin-bottom:14px}
 <!-- TAB 2: 统计看板 -->
 <div class="tc" id="t2"><div class="kg" id="ka"></div>
 <div class="cr"><div class="cb"><h3 style="font-size:13px;margin-bottom:6px;">环境因素类型分布</h3><canvas id="c1"></canvas></div><div class="cb"><h3 style="font-size:13px;margin-bottom:6px;">重要/非重要比例</h3><canvas id="c2"></canvas></div></div>
-<div class="cr"><div class="cb"><h3 style="font-size:13px;margin-bottom:6px;">各部门因素数量</h3><canvas id="c3"></canvas></div><div class="cb"><h3 style="font-size:13px;margin-bottom:6px;">控制措施覆盖率</h3><div id="cov" style="text-align:center;padding:30px;font-size:32px;font-weight:700;color:var(--red);">—</div></div></div></div>
+<div class="cr"><div class="cb"><h3 style="font-size:13px;margin-bottom:6px;">各部门因素数量</h3><canvas id="c3"></canvas></div><div class="cb"><h3 style="font-size:13px;margin-bottom:6px;">控制措施覆盖率</h3><div id="cov" style="text-align:center;padding:30px;font-size:32px;font-weight:700;color:var(--brand-red);">—</div></div></div></div>
 
 <!-- TAB 3: 整改跟踪 -->
 <div class="tc" id="t3"><div class="pp" id="pt3"></div>
@@ -151,7 +151,7 @@ h1 i{color:var(--red)}.sub{font-size:12px;color:var(--text2);margin-bottom:14px}
 <div style="flex:1"></div>
 <button class="btn btn-bad btn-sm" onclick="xls3()"><i class="fa-solid fa-file-excel"></i>导出</button>
 <button class="btn btn-bad btn-sm" onclick="prt3()"><i class="fa-solid fa-print"></i>打印</button>
-<span style="font-size:11px;color:var(--text2);">完成率：<strong id="tr" style="color:var(--red);">—</strong></span>
+<span style="font-size:11px;color:var(--text-secondary);">完成率：<strong id="tr" style="color:var(--brand-red);">—</strong></span>
 </div>
 <div class="tbl-w"><table class="dt" id="tt" style="min-width:1000px;">
 <thead><tr><th>#</th><th>环境因素</th><th>部门</th><th>目标指标</th><th>整改措施</th><th>责任部门</th><th>责任人</th><th>预算(万)</th><th>计划完成</th><th>实际完成</th><th>验证状态</th><th></th></tr></thead>
@@ -162,14 +162,14 @@ h1 i{color:var(--red)}.sub{font-size:12px;color:var(--text2);margin-bottom:14px}
 <div id="apiMod">
 <h3 style="margin-bottom:10px;">AI 配置（全站共享）</h3>
 <div style="display:flex;gap:6px;margin-bottom:10px;">
-<label id="lO" style="flex:1;text-align:center;padding:6px;border-radius:60px;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid var(--bd);"><input type="radio" name="am" value="own" onchange="sa('own')" style="accent-color:var(--red);margin-right:4px;">自有 Key</label>
-<label id="lP" style="flex:1;text-align:center;padding:6px;border-radius:60px;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid var(--bd);"><input type="radio" name="am" value="proxy" onchange="sa('proxy')" style="accent-color:var(--red);margin-right:4px;">共享代理</label>
+<label id="lO" style="flex:1;text-align:center;padding:6px;border-radius:60px;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);"><input type="radio" name="am" value="own" onchange="sa('own')" style="accent-color:var(--brand-red);margin-right:4px;">自有 Key</label>
+<label id="lP" style="flex:1;text-align:center;padding:6px;border-radius:60px;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);"><input type="radio" name="am" value="proxy" onchange="sa('proxy')" style="accent-color:var(--brand-red);margin-right:4px;">共享代理</label>
 </div>
-<div id="oS"><input id="ak" placeholder="Key: xxxxxx.xxxx" style="width:100%;padding:8px;border:1.5px solid var(--bd);border-radius:6px;font-family:monospace;font-size:12px;margin-bottom:8px;"></div>
-<div id="pS" style="display:none;"><input id="pu" placeholder="代理地址" style="width:100%;padding:8px;border:1.5px solid var(--bd);border-radius:6px;font-family:monospace;font-size:12px;margin-bottom:8px;"></div>
+<div id="oS"><input id="ak" placeholder="Key: xxxxxx.xxxx" style="width:100%;padding:8px;border:1.5px solid var(--border);border-radius:6px;font-family:monospace;font-size:12px;margin-bottom:8px;"></div>
+<div id="pS" style="display:none;"><input id="pu" placeholder="代理地址" style="width:100%;padding:8px;border:1.5px solid var(--border);border-radius:6px;font-family:monospace;font-size:12px;margin-bottom:8px;"></div>
 <div style="display:flex;gap:8px;"><button class="btn btn-p btn-sm" onclick="svApi()">保存</button><button class="btn btn-o btn-sm" onclick="document.getElementById('apiMod').style.display='none';document.getElementById('apiOv').style.display='none'">关闭</button></div></div>
 
-<footer class="sheen-footer no-pr"><i class="fa-solid fa-shield-halved" style="color:var(--amb);font-size:22px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 环境因素识别与评价</footer>
+<footer class="sheen-footer no-pr"><i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:22px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 环境因素识别与评价</footer>
 
 <script>
 // ===== DATA =====
@@ -219,7 +219,7 @@ function ren(){
       h+='<td class="sc"><input type="number" id="score_'+i+'_'+k+'" min="1" max="4" value="'+e(r[k]||'')+'" onchange="uc('+i+',\''+k+'\',this.value);ren()"></td>';
     });
     h+='<td style="font-weight:700;">'+r.total+'</td>';
-    h+='<td class="'+(r.major==='是'?'mj-y':'mj-n')+'" style="cursor:pointer;font-weight:700;'+(r.major==='是'?'color:var(--red);':'')+'" title="点击切换手动标记" onclick="tgm('+i+')">'+(r.major||'—')+'</td>';
+    h+='<td class="'+(r.major==='是'?'mj-y':'mj-n')+'" style="cursor:pointer;font-weight:700;'+(r.major==='是'?'color:var(--brand-red);':'')+'" title="点击切换手动标记" onclick="tgm('+i+')">'+(r.major||'—')+'</td>';
     h+='<td><input value="'+e(r.control)+'" onchange="uc('+i+',\'control\',this.value)"></td>';
     h+='<td><input value="'+e(r.person)+'" onchange="uc('+i+',\'person\',this.value)" style="width:60px"></td>';
     h+='<td><input type="date" value="'+e(r.date)+'" onchange="uc('+i+',\'date\',this.value)" style="width:100px"></td>';
@@ -260,10 +260,10 @@ function sap(){
 function sa(m){
   document.getElementById('oS').style.display=m==='proxy'?'none':'block';
   document.getElementById('pS').style.display=m==='proxy'?'block':'none';
-  document.getElementById('lO').style.borderColor=m==='proxy'?'var(--bd)':'var(--red)';
-  document.getElementById('lO').style.background=m==='proxy'?'':'var(--redL)';
-  document.getElementById('lP').style.borderColor=m==='proxy'?'var(--red)':'var(--bd)';
-  document.getElementById('lP').style.background=m==='proxy'?'var(--redL)':'';
+  document.getElementById('lO').style.borderColor=m==='proxy'?'var(--border)':'var(--brand-red)';
+  document.getElementById('lO').style.background=m==='proxy'?'':'var(--brand-red-light)';
+  document.getElementById('lP').style.borderColor=m==='proxy'?'var(--brand-red)':'var(--border)';
+  document.getElementById('lP').style.background=m==='proxy'?'var(--brand-red-light)':'';
 }
 function svApi(){
   var m=document.querySelector('input[name=am]:checked').value;
