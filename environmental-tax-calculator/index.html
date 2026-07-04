@@ -145,7 +145,7 @@ details summary i{font-size:11px;color:var(--red)}
       <option value="hubei">湖北 (大气2.4 / 水2.8)</option>
       <option value="hunan">湖南 (大气2.4 / 水3)</option>
       <option value="fujian">福建 (大气1.2 / 水1.4)</option>
-      <option value="hebei">河北 (大气4.8/6/9.6 / 水5.6/7/11.2)</option>
+      <option value="hebei">河北 (大气4.8/6/9.6 / 水5.6/7/11.2) — 三档阶梯，默认取一档</option>
       <option value="chongqing">重庆 (大气3.5 / 水3)</option>
       <option value="other">其他省份 (大气1.2 / 水1.4)</option>
     </select>
@@ -443,7 +443,7 @@ details summary i{font-size:11px;color:var(--red)}
   </div>
   <div class="form-group w-sm">
     <label>超标月数</label>
-    <input type="number" id="noiseMonths" class="form-control" step="1" value="3" min="0.5" oninput="autoCalc('noise')">
+    <input type="number" id="noiseMonths" class="form-control" step="0.5" value="3" min="0.5" oninput="autoCalc('noise')">
   </div>
   <div class="form-group w-sm" style="align-self:flex-end">
     <button class="btn btn-p btn-sm" onclick="addNoiseItem()"><i class="fa-solid fa-plus"></i> 添加</button>
@@ -641,7 +641,10 @@ function addWaterItem(){
   data.water.push({name:name,qty:q,eq:v,rate:t,equiv:n,tax:tax});
   // Keep only top 5 by equiv number
   data.water.sort(function(a,b){return b.equiv-a.equiv});
-  if(data.water.length>5)data.water=data.water.slice(0,5);
+  if(data.water.length>5){
+    document.getElementById('waterResult').innerHTML='<div class="hint" style="background:#FEF3C7;color:#92400E;font-weight:600"><i class="fa-solid fa-triangle-exclamation"></i> 已超出前5项排序，第6项及之后未被计入应纳税额</div>';
+  }
+  data.water=data.water.slice(0,5);
   renderList('water');
 }
 function addSolidItem(){
