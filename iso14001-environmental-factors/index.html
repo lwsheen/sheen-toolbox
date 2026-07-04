@@ -199,7 +199,7 @@ let ci={}, fl='all';
 
 function sv(){localStorage.setItem('isoR',JSON.stringify(R));localStorage.setItem('isoT',JSON.stringify(T))}
 function nR(){return{dept:'',process:'',state:'正常',factor:'',impType:'',law:'',qty:'',s1:'',s2:'',s3:'',s4:'',s5:'',s6:'',major:'',manual:'',control:'',person:'',date:'',total:0}}
-function e(s){return(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
+function e(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 
 // ===== TABS =====
 function sw(n){
@@ -211,6 +211,11 @@ function sw(n){
 
 // ===== MAIN TABLE =====
 function ren(){
+  // 保存当前焦点元素，防止innerHTML重建导致焦点丢失
+  var activeEl = document.activeElement;
+  var activeId = activeEl ? activeEl.id : '';
+  var activeTag = activeEl ? activeEl.tagName : '';
+
   R.forEach(function(r,i){
     r.total=(+r.s1||0)+(+r.s2||0)+(+r.s3||0)+(+r.s4||0)+(+r.s5||0)+(+r.s6||0);
     var auto=(r.s1==4||r.s2==4||r.total>=16)?'是':'否';
@@ -231,7 +236,7 @@ function ren(){
     h+='<td><input value="'+e(r.law)+'" onchange="uc('+i+',\'law\',this.value)"></td>';
     h+='<td><input value="'+e(r.qty)+'" onchange="uc('+i+',\'qty\',this.value)" style="width:70px"></td>';
     ['s1','s2','s3','s4','s5','s6'].forEach(function(k){
-      h+='<td class="sc"><input type="number" min="1" max="4" value="'+e(r[k]||'')+'" onchange="uc('+i+',\''+k+'\',this.value);ren()"></td>';
+      h+='<td class="sc"><input type="number" id="score_'+i+'_'+k+'" min="1" max="4" value="'+e(r[k]||'')+'" onchange="uc('+i+',\''+k+'\',this.value);ren()"></td>';
     });
     h+='<td style="font-weight:700;">'+r.total+'</td>';
     h+='<td class="'+(r.major==='是'?'mj-y':'mj-n')+'" style="cursor:pointer;font-weight:700;'+(r.major==='是'?'color:var(--red);':'')+'" title="点击切换手动标记" onclick="tgm('+i+')">'+(r.major||'—')+'</td>';
@@ -244,6 +249,11 @@ function ren(){
   document.getElementById('nRow').textContent=R.length;
   document.getElementById('nMj').textContent=R.filter(function(r){return r.major==='是'}).length;
   sv();
+  // 恢复焦点（防止innerHTML重建导致输入框焦点丢失）
+  if (activeId && activeTag === 'INPUT') {
+    var el = document.getElementById(activeId);
+    if (el) { setTimeout(function(){ el.focus(); }, 0); }
+  }
 }
 function uc(i,k,v){R[i][k]=v;sv()}
 function tgm(i){
