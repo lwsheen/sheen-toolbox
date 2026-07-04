@@ -522,6 +522,7 @@ body {
 </head>
 <body>
 
+<!-- ===== SHEEN Toolbox 统一导航栏 ===== -->
 <header class="sheen-nav">
   <a href="/sheen-toolbox/" class="sheen-nav-brand">
     <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i>
@@ -543,9 +544,11 @@ body {
 <a href="/sheen-toolbox/explosion-venting-calculator/" class="sheen-nav-tool">泄爆面积</a>
 <a href="/sheen-toolbox/environmental-tax-calculator/" class="sheen-nav-tool">环保税</a>
 <a href="/sheen-toolbox/noise-calculator/" class="sheen-nav-tool">噪声计算</a>
+<a href="/sheen-toolbox/major-hazard-identification/" class="sheen-nav-tool">重大危险源</a>
     </div>
 </header>
 
+<!-- ===== 工具栏 ===== -->
 <div class="toolbar" id="mainToolbar">
   <div class="toolbar-title"><i class="fa-solid fa-clipboard-check"></i> PSSR 检查表</div>
 
@@ -579,8 +582,10 @@ body {
   <span id="aiLoadingPssr" style="display:none;font-size:12px;color:var(--text-secondary);"><span class="spinner-inline"></span> AI生成中…</span>
 </div>
 
+<!-- ===== 主体 ===== -->
 <div class="main">
 
+  <!-- 打印页眉（仅打印时显示） -->
   <div class="sheen-print-header">
     <div class="sph-title">PSSR 开车前安全审查检查表（多行业增强版）</div>
     <div class="sph-info">
@@ -589,6 +594,7 @@ body {
     </div>
   </div>
 
+  <!-- 表头信息 -->
   <div class="header-card">
     <h1>PSSR 开车前安全审查检查表（多行业增强版）</h1>
     <div class="header-fields">
@@ -614,12 +620,15 @@ body {
     </div>
   </div>
 
+  <!-- 说明 -->
   <div class="note-card">
     <strong>说明：</strong>检查项逐一核实，点击 <strong>✅是 / ❌否 / — 不适用</strong> 三个按钮标记状态；"否"项须在备注栏注明整改措施及跟踪计划。每个章节底部可新增自定义检查项。
   </div>
 
+  <!-- 动态生成的检查章节将插入此处 -->
   <div id="checkSections"></div>
 
+  <!-- 签字确认 -->
   <div class="sign-card">
     <h2>十、签字确认</h2>
     <div class="conclusion-group">
@@ -683,10 +692,12 @@ body {
     </div>
   </div>
 
-</div>
+</div><!-- end .main -->
 
+<!-- 打印品牌页脚 -->
 <div class="sheen-print-footer">SHEEN Toolbox · PSSR 开车前安全审查检查表</div>
 
+<!-- ===== SHEEN Toolbox 统一页脚 ===== -->
 <footer class="sheen-footer">
   <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · PSSR 开车前安全审查检查表
 </footer>
