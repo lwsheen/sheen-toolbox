@@ -35,50 +35,65 @@
             line-height: 1.6;
         }
 
-        .breadcrumb { padding: 10px 24px; font-size: 12px; color: var(--text-secondary); border-bottom: 1px solid var(--border); }
-        .breadcrumb a { color: var(--brand-red); text-decoration: none; font-weight: 500; transition: opacity .2s; }
-        .breadcrumb a:hover { opacity: .7; }
-        .breadcrumb span { color: var(--text-secondary); }
+        /* ===== 顶部品牌栏 ===== */
+        .sheen-header {
+            background: var(--black);
+            padding: 10px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid var(--brand-red);
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .sheen-header-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .sheen-header-brand i { color: var(--amber); font-size: 20px; }
+        .sheen-header-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 11px;
+            color: rgba(255,255,255,0.6);
+        }
+        .sheen-header-info span { white-space: nowrap; }
+        .sheen-header-info .tool-count { color: var(--amber); font-weight: 600; }
 
         /* ===== 主区 ===== */
         .hero {
             text-align: center;
-            padding: 48px 24px 32px;
+            padding: 24px 24px 0;
             max-width: 720px;
             margin: 0 auto;
         }
         .hero h1 {
-            font-size: 28px;
+            font-size: 20px;
             font-weight: 700;
             color: var(--text-primary);
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
         .hero p {
-            font-size: 15px;
+            font-size: 13px;
             color: var(--text-secondary);
-            line-height: 1.7;
+            line-height: 1.6;
         }
-        .meta-bar {
-            max-width: 600px;
-            margin: 0 auto 8px;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 24px;
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-        .meta-bar .update-time { white-space: nowrap; }
-        .meta-bar .update-time i { margin-right: 4px; }
-        .meta-bar .tool-count { font-weight: 600; color: var(--brand-red); white-space: nowrap; }
+
         /* ===== 工具卡片 ===== */
         .tool-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 12px;
-            padding: 0 20px 40px;
-            max-width: 1240px;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 8px;
+            padding: 16px 20px 32px;
+            max-width: 1320px;
             margin: 0 auto;
             width: 100%;
         }
@@ -86,104 +101,70 @@
         .tool-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 18px 16px;
+            border-radius: 8px;
+            padding: 10px 12px;
             text-decoration: none;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
             display: flex;
-            flex-direction: column;
-            gap: 8px;
+            align-items: center;
+            gap: 10px;
             position: relative;
+            min-width: 0;
         }
         .tool-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
             border-color: var(--brand-red);
+            background: var(--bg-page);
         }
+        .tool-card:active { transform: scale(0.98); }
 
         .tool-card .tool-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 14px;
             background: var(--brand-red);
             color: #fff;
             flex-shrink: 0;
         }
 
         .tool-card h3 {
-            font-size: 15px;
-            font-weight: 700;
+            font-size: 13px;
+            font-weight: 600;
             color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-        .tool-card .desc {
-            font-size: 12px;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-        .tool-card .tag-row {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-        .tool-card .tag {
-            font-size: 10px;
-            font-weight: 600;
-            padding: 2px 8px;
-            border-radius: 60px;
-            background: var(--bg-page);
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
-        }
-        .tool-card .tag.red {
-            background: var(--brand-red);
-            color: #fff;
-            border-color: var(--brand-red);
-        }
-        .tool-card .arrow {
-            color: var(--text-secondary);
-            font-size: 12px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            margin-top: auto;
-        }
+        .tool-card .desc { display: none; }
+        .tool-card .arrow { display: none; }
+        .tool-card .tag-row { display: none; }
+        .tool-card .tag { display: none; }
 
         /* ===== 占位卡片 ===== */
         .tool-card.placeholder {
             border-style: dashed;
-            opacity: 0.5;
+            opacity: 0.4;
             cursor: default;
             pointer-events: none;
             user-select: none;
         }
         .tool-card.placeholder:hover {
-            transform: none;
-            box-shadow: none;
             border-color: var(--border);
+            background: var(--bg-card);
         }
+        .tool-card.placeholder:active { transform: none; }
         .tool-card.placeholder .tool-icon {
             background: var(--border);
             color: var(--text-secondary);
         }
         .tool-card.placeholder h3 {
             color: var(--text-secondary);
+            font-size: 12px;
         }
-        .tool-card.placeholder .coming-badge {
-            display: inline-block;
-            font-size: 10px;
-            font-weight: 600;
-            padding: 2px 10px;
-            border-radius: 60px;
-            background: var(--bg-page);
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
-            margin-top: auto;
-        }
+        .tool-card.placeholder .coming-badge { display: none; }
 
         /* 拖动排序 */
         .tool-card.dragging { opacity: 0.4; transform: scale(0.95); }
@@ -191,13 +172,19 @@
         .tool-card[draggable="true"] { cursor: grab; }
         .tool-card[draggable="true"]:active { cursor: grabbing; }
         .tool-card .drag-handle {
+            display: none;
+        }
+        .tool-card:hover .drag-handle,
+        .tool-card.drag-over .drag-handle {
+            display: block;
             position: absolute;
-            top: 8px;
-            right: 8px;
+            top: 2px;
+            right: 4px;
             color: #ccc;
-            font-size: 14px;
+            font-size: 12px;
             cursor: grab;
-            opacity: 0;
+            line-height: 1;
+        }            opacity: 0;
             transition: opacity 0.2s;
         }
         .tool-card:hover .drag-handle { opacity: 1; }
@@ -217,100 +204,6 @@
             letter-spacing: 1.5px;
         }
 
-        /* ===== 页脚前扩展：公众号 & 访问量 ===== */
-        .footer-extras {
-            max-width: 1080px;
-            margin: 40px auto 0;
-            padding: 0 24px;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: stretch;
-            flex-wrap: wrap;
-            gap: 24px;
-        }
-        .footer-qr {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 0;
-            flex: 0 1 auto;
-        }
-        .qr-img-wrap {
-            width: 90px;
-            height: 90px;
-            flex-shrink: 0;
-        }
-        .qr-img-wrap img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            display: block;
-            border-radius: 6px;
-        }
-        .qr-upload-hint {
-            width: 90px;
-            height: 90px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            font-size: 10px;
-            color: var(--text-secondary);
-            text-align: center;
-        }
-        .qr-upload-hint i {
-            font-size: 28px;
-            color: var(--border);
-        }
-        .qr-label {
-            font-size: 13px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            text-align: center;
-        }
-        .qr-label strong {
-            color: var(--text-primary);
-            font-size: 15px;
-            display: block;
-            margin-top: 2px;
-        }
-        .footer-visitor {
-            display: flex;
-            align-items: stretch;
-        }
-        .visitor-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            font-size: 13px;
-            color: var(--text-secondary);
-            padding: 0;
-        }
-        .visitor-divider {
-            width: 1px;
-            height: 36px;
-            background: var(--border);
-            flex-shrink: 0;
-        }
-        .visitor-text {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-        .visitor-label {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-        .visitor-count {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--brand-red);
-            line-height: 1;
-            letter-spacing: -0.5px;
-        }
-
         /* ===== 页脚 ===== */
         .sheen-footer {
             text-align: center;
@@ -326,215 +219,166 @@
         .sheen-footer strong { color: var(--text-primary); }
 
         @media (max-width: 720px) {
-            .hero { padding: 32px 16px 24px; }
-            .hero h1 { font-size: 22px; }
-            .tool-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); padding: 0 16px 40px; gap: 10px; }
-            .footer-extras { flex-direction: column; align-items: flex-start; gap: 16px; padding: 24px 16px 0; }
-            .footer-visitor { width: 100%; }
-            .visitor-item { width: 100%; }
+            .hero { padding: 20px 16px 0; }
+            .hero h1 { font-size: 18px; }
+            .tool-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); padding: 12px 16px 24px; }
+            .sheen-header { padding: 8px 16px; }
+            .sheen-header-brand { font-size: 14px; }
+            .sheen-header-info { font-size: 10px; gap: 10px; }
         }
 
         @media (max-width: 480px) {
-            .hero { padding: 24px 12px 16px; }
-            .hero h1 { font-size: 20px; }
-            .hero p { font-size: 13px; }
-            .tool-grid { padding: 0 12px 32px; gap: 10px; }
-            .tool-card { padding: 14px 12px; }
-            .tool-card h3 { font-size: 14px; }
-            .tool-card .desc { font-size: 11px; }
-            .tool-card .tool-icon { width: 36px; height: 36px; font-size: 18px; }
-            .footer-extras { padding: 16px 12px 0; }
-            .footer-qr { gap: 12px; }
-            .qr-img-wrap { width: 70px; height: 70px; }
-            .qr-label { font-size: 12px; }
-            .qr-label strong { font-size: 13px; }
-            .visitor-count { font-size: 22px; }
+            .hero { padding: 16px 12px 0; }
+            .hero h1 { font-size: 16px; }
+            .hero p { font-size: 12px; }
+            .tool-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); padding: 10px 12px 20px; gap: 6px; }
+            .tool-card { padding: 8px 10px; }
+            .tool-card h3 { font-size: 12px; }
+            .tool-card .tool-icon { width: 24px; height: 24px; font-size: 12px; border-radius: 5px; }
+            .sheen-header { padding: 6px 12px; gap: 8px; }
+            .sheen-header-brand { font-size: 13px; }
+            .sheen-header-info { font-size: 9px; gap: 8px; }
             .sheen-footer { padding: 12px 16px; font-size: 12px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="breadcrumb">
-        <a href="/sheen-toolbox/">&larr; SHEEN Toolbox</a>
-        <span> / 首页</span>
-    </div>
+    <header class="sheen-header">
+        <div class="sheen-header-brand">
+            <i class="fa-solid fa-shield-halved"></i>
+            SHEEN Toolbox
+        </div>
+        <div class="sheen-header-info">
+            <span><i class="fa-solid fa-clock"></i> <span id="liveTime"></span></span>
+            <span class="tool-count"><span id="toolCount"></span> 个工具</span>
+            <span><i class="fa-solid fa-eye"></i> <span id="visitCount">—</span></span>
+        </div>
+    </header>
 
-    <section class="hero">
+    <div class="hero">
         <h1>专业 EHS 工具，一站直达</h1>
-        <p>
-            面向环境健康安全领域的专业计算与检查工具集。
-            依据国家标准与行业规范，提供高精度计算、
-            可视化结果与一键打印输出，
-            满足安全审计、项目归档与日常管理的刚性需求。
-        </p>
-    </section>
-
-    <div class="meta-bar">
-        <span class="update-time"><i class="fa-solid fa-clock"></i> <span id="liveTime"></span></span>
-        <span class="tool-count"><span id="toolCount"></span> 个工具</span>
+        <p>依据国家标准与行业规范，面向环境健康安全领域的专业计算与检查工具集。</p>
     </div>
 
     <div class="tool-grid" id="toolGrid">
         <a href="/sheen-toolbox/pssr-checklist/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-clipboard-check"></i></div>
-            <h3>PSSR 开车前安全检查表</h3>
-            <p class="desc">多行业增强版检查表，涵盖制药、化工、油气等专项。支持勾选状态追踪、动态增删检查项与进度统计。</p>
-
+            <h3>PSSR 检查表</h3>
+            <p class="desc">多行业增强版检查表</p>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-
         <a href="/sheen-toolbox/fire-extinguisher-calculator/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-fire-extinguisher"></i></div>
-            <h3>灭火器配置计算器</h3>
-            <p class="desc">依据 GB 50140-2005 自动计算灭火器配置数量。场景预设、危险等级自动匹配、修正系数联动。</p>
-
+            <h3>灭火器计算器</h3>
+            <p class="desc">依据 GB 50140-2005</p>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-
         <a href="/sheen-toolbox/safety-production-cost-calculator/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-calculator"></i></div>
-            <h3>安全生产费用计算器</h3>
-            <p class="desc">依据财企〔2022〕136号，覆盖煤炭、非煤矿山、建筑施工、危险品等12类行业。超额累退精准计提。</p>
-
+            <h3>安全生产费用</h3>
+            <p class="desc">依据财企〔2022〕136号</p>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-
         <a href="/sheen-toolbox/jsa-lec/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
-            <h3>JSA + LEC 风险分析</h3>
-            <p class="desc">工作安全分析 + 作业条件危险性评价。拆解作业步骤、识别危害、LEC自动评分、制定控制措施。</p>
-
+            <h3>JSA + LEC</h3>
+            <p class="desc">工作安全分析 + 风险评价</p>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-
         <a href="/sheen-toolbox/industry-classification/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-sitemap"></i></div>
-            <h3>行业分类查询</h3>
-            <p class="desc">基于 GB/T 4754-2017 国民经济行业分类标准，支持 4 级树形浏览、关键词检索、代码反查与一键复制打印。</p>
-
+            <h3>行业分类 GB/T 4754</h3>
+            <p class="desc">国民经济行业分类</p>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-
         <a href="/sheen-toolbox/dangerous-goods-query/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-skull-crossbones"></i></div>
-            <h3>危险货物查询</h3>
-            <p class="desc">基于 GB 12268-2012 危险货物品名表，支持 UN编号、中文品名、危险类别多维检索，覆盖 9 大类 767 项常见危险货物。2025版数据待更新。</p>
+            <h3>危险货物 GB 12268</h3>
+            <p class="desc">767 项危险货物查询</p>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-
         <a href="/sheen-toolbox/hazardous-chemicals-query/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-flask"></i></div>
-            <h3>危险化学品查询</h3>
-            <p class="desc">基于《危险化学品目录（2025调整版）》，支持序号、品名、别名、CAS号、备注多维检索，覆盖 2830 项危险化学品。</p>
+            <h3>危险化学品</h3>
+            <p class="desc">2830 项危化品查询</p>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-
         <a href="/sheen-toolbox/hazardous-waste-query/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-recycle"></i></div>
-            <h3>危险废物查询</h3>
-            <p class="desc">基于《国家危险废物名录（2025年版）》，支持废物代码、废物名称、废物类别、行业来源、危险特性多维检索，覆盖 470 项危险废物。</p>
+            <h3>危险废物</h3>
+            <p class="desc">470 项危废查询</p>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-
         <a href="/sheen-toolbox/five-why-analysis/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-circle-question"></i></div>
-            <h3>5Why + 5M1E 根因分析</h3>
-            <p class="desc">AI引导式根本原因分析。事故复盘、5M1E维度盘点、多维度5Why追问、系统根因报告一键生成。</p>
+            <h3>5Why + 5M1E</h3>
+            <p class="desc">AI 引导根因分析</p>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-
         <a href="/sheen-toolbox/iso14001-environmental-factors/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-leaf"></i></div>
-            <h3>环境因素识别与评价</h3>
-            <p class="desc">四大模块（评分标准、识别打分、统计看板、整改跟踪），火灾/违规直接判定重要环境因素，符合 ISO 14001:2026 外部审核要求。</p>
+            <h3>ISO 14001</h3>
+            <p class="desc">环境因素识别与评价</p>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-
         <a href="/sheen-toolbox/heat-stress-classification/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-temperature-high"></i></div>
-            <h3>高温作业分级计算器</h3>
-            <p class="desc">依据 GBZ/T 229.3-2025，输入 WBGT 测量值、服装类型、体力劳动强度与接触时间，自动对照分级表判定 I～IV 级危害，并输出对应管理措施。</p>
+            <h3>高温作业分级</h3>
+            <p class="desc">GBZ/T 229.3-2025</p>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-
         <a href="/sheen-toolbox/niosh-lifting-calculator/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-weight-hanging"></i></div>
-            <h3>NIOSH 举升方程计算器</h3>
-            <p class="desc">NIOSH 1991/2017 举升方程：输入 H/V/D/A/F/耦合/重量，自动计算 HM/VM/DM/AM/FM/CM 六项乘数，输出 RWL 和 LI，判定风险等级并给出改善建议。</p>
+            <h3>NIOSH 举升</h3>
+            <p class="desc">RWL + LI 风险评估</p>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-
         <a href="/sheen-toolbox/explosion-venting-calculator/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-burst"></i></div>
-            <h3>泄爆面积计算器</h3>
-            <p class="desc">双模切换：GB 50016 厂房泄压（长径比分段+自动汇总）与 EN 14491 设备泄爆（KSt/Pred/Pstat/B因子），内置完整粉尘参数表。</p>
+            <h3>泄爆面积</h3>
+            <p class="desc">GB 50016 + EN 14491</p>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-
         <a href="/sheen-toolbox/environmental-tax-calculator/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-leaf"></i></div>
             <h3>环保税计算器</h3>
-            <p class="desc">基于《环境保护税法》：四大类污染物（大气/水/固废/噪声）自动计算，内置污染当量值参考表与省份税率速查。</p>
+            <p class="desc">四大类污染物</p>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-
         <a href="/sheen-toolbox/noise-calculator/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-ear-listen"></i></div>
             <h3>噪声计算器</h3>
-            <p class="desc">GBZ/T 229.4 职业噪声危害分级：L<sub>EX,8h</sub> 等效声级、噪声剂量、多声源合成、危害分级（Ⅰ~Ⅳ级），内置参考表。</p>
+            <p class="desc">GBZ/T 229.4</p>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-
         <a href="/sheen-toolbox/major-hazard-identification/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
-            <h3>重大危险源辨识</h3>
-            <p class="desc">依据 GB 18218-2018，危险化学品重大危险源判定与分级（一~四级）；内置 85 种化学品临界量数据库，支持 R 值计算。</p>
+            <h3>重大危险源</h3>
+            <p class="desc">GB 18218-2018</p>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-
-        <!-- 预留工具位 -->
         <div class="tool-card placeholder">
             <div class="tool-icon"><i class="fa-solid fa-diagram-project"></i></div>
-            <h3>更多工具即将推出</h3>
-            <p class="desc">后续将陆续上线事故树分析、隐患排查治理台账、职业健康档案管理、应急物资清单等实用工具。</p>
-            <span class="coming-badge"><i class="fa-solid fa-clock"></i> 即将推出</span>
-        </div>
-    </div>
-
-    <!-- 公众号 & 访问量 -->
-    <div class="footer-extras">
-        <div class="footer-qr">
-            <div class="qr-img-wrap">
-                <img src="assets/qrcode-mp.jpg" alt="SHEEN环境健康安全公众号" id="qrImg" onerror="this.parentElement.innerHTML='<div class=qr-upload-hint><i class=fa-solid fa-qrcode></i><span>二维码加载失败</span></div>'" />
-            </div>
-            <span class="qr-label">关注公众号<br><strong>SHEEN 环境健康安全</strong></span>
-        </div>
-        <div class="footer-visitor">
-            <div class="visitor-item">
-                <i class="fa-solid fa-eye" style="color:var(--brand-red);font-size:18px"></i>
-                <div class="visitor-divider"></div>
-                <div class="visitor-text">
-                    <span class="visitor-label">页面访问量</span>
-                    <span class="visitor-count" id="visitCount">—</span>
-                </div>
-            </div>
+            <h3>更多工具推出中</h3>
+            <p class="desc"></p>
+            <span class="coming-badge"></span>
         </div>
     </div>
 
