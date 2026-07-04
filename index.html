@@ -204,6 +204,33 @@
             letter-spacing: 1.5px;
         }
 
+        /* ===== 页脚前扩展 ===== */
+        .footer-extras {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 32px;
+            padding: 20px 24px 16px;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+        .footer-qr {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .qr-img-wrap { width: 70px; height: 70px; flex-shrink: 0; }
+        .qr-img-wrap img { width: 100%; height: 100%; object-fit: contain; border-radius: 4px; }
+        .qr-upload-hint { width: 70px; height: 70px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10px; color: var(--text-secondary); }
+        .qr-upload-hint i { font-size: 24px; color: var(--border); }
+        .qr-label { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+        .qr-label strong { color: var(--text-primary); font-size: 13px; }
+        .footer-visitor { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+        .visitor-label { font-size: 11px; color: var(--text-secondary); }
+        .visitor-count { font-size: 22px; font-weight: 700; color: var(--brand-red); line-height: 1; }
+
         /* ===== 页脚 ===== */
         .sheen-footer {
             text-align: center;
@@ -382,6 +409,19 @@
         </div>
     </div>
 
+    <div class="footer-extras">
+        <div class="footer-qr">
+            <div class="qr-img-wrap">
+                <img src="assets/qrcode-mp.jpg" alt="SHEEN环境健康安全公众号" id="qrImg" onerror="this.parentElement.innerHTML='<div class=qr-upload-hint><i class=fa-solid fa-qrcode></i><span>二维码加载失败</span></div>'" />
+            </div>
+            <span class="qr-label">关注公众号<br><strong>SHEEN 环境健康安全</strong></span>
+        </div>
+        <div class="footer-visitor">
+            <span class="visitor-label">页面访问量</span>
+            <span class="visitor-count" id="visitCount2">&mdash;</span>
+        </div>
+    </div>
+
     <footer class="sheen-footer">
         <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 环境健康安全专业工具箱
     </footer>
@@ -420,19 +460,21 @@
         function chinaTime() { return new Date(Date.now() + (480 + new Date().getTimezoneOffset()) * 60000); }
         // ===== 访问计数器 =====
         var el = document.getElementById('visitCount');
-        if (el) {
-            var LS = 'sheen_visit_n';
-            var localN = parseInt(localStorage.getItem(LS), 10) || 0;
-            el.textContent = localN.toLocaleString('zh-CN');
-            fetch('https://api.counterapi.dev/v1/lwsheen-sheen-toolbox/homepage/up')
-                .then(function(r) { return r.json(); })
-                .then(function(d) {
-                    var n = d.count || 0;
-                    el.textContent = n.toLocaleString('zh-CN');
-                    localStorage.setItem(LS, String(n));
-                })
-                .catch(function() {});
-        }
+        var el2 = document.getElementById('visitCount2');
+        var LS = 'sheen_visit_n';
+        var localN = parseInt(localStorage.getItem(LS), 10) || 0;
+        if (el) el.textContent = localN.toLocaleString('zh-CN');
+        if (el2) el2.textContent = localN.toLocaleString('zh-CN');
+        fetch('https://api.counterapi.dev/v1/lwsheen-sheen-toolbox/homepage/up')
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+                var n = d.count || 0;
+                var s = n.toLocaleString('zh-CN');
+                if (el) el.textContent = s;
+                if (el2) el2.textContent = s;
+                localStorage.setItem(LS, String(n));
+            })
+            .catch(function() {});
 
         // ===== 卡片拖动排序 =====
         var grid = document.querySelector('.tool-grid');
