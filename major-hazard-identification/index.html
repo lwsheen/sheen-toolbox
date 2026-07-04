@@ -37,15 +37,10 @@
             line-height: 1.6;
         }
 
-        /* ===== 导航栏 ===== */
-        .sheen-nav { background: var(--black); padding: 0 32px; display: flex; align-items: center; justify-content: space-between; border-bottom: 4px solid var(--brand-red); flex-wrap: wrap; min-height: 56px; }
-        .sheen-nav-brand { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; padding: 14px 0; }
-        .sheen-nav-brand i { font-size: 24px; color: var(--amber); }
-        .sheen-nav-brand-text { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; }
-        .sheen-nav-tools { display: flex; gap: 4px; flex-wrap: wrap; }
-        .sheen-nav-tool { display: flex; align-items: center; gap: 6px; padding: 8px 16px; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 13px; font-weight: 500; border-radius: 60px; transition: all .2s ease; white-space: nowrap; }
-        .sheen-nav-tool:hover { background: rgba(255,255,255,0.1); color: #fff; }
-        .sheen-nav-tool.active { background: rgba(255,255,255,0.15); color: #fff; font-weight: 600; }
+        .breadcrumb { padding: 10px 24px; font-size: 12px; color: var(--text-secondary); border-bottom: 1px solid var(--border); }
+        .breadcrumb a { color: var(--brand-red); text-decoration: none; font-weight: 500; transition: opacity .2s; }
+        .breadcrumb a:hover { opacity: .7; }
+        .breadcrumb span { color: var(--text-secondary); }
 
         /* ===== 页脚 ===== */
         .sheen-footer { text-align: center; padding: 16px 32px; font-size: 13px; color: var(--text-secondary); border-top: 1px solid var(--border); background: var(--bg-card); letter-spacing: 0.5px; }
@@ -174,7 +169,7 @@
                 @bottom-center { content: "SHEEN Toolbox · 重大危险源辨识"; font-size: 8pt; color: #666; }
             }
             body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
-            .sheen-nav, .sheen-footer, .btn-primary, .btn-outline, .btn-print, .btn-sm, .btn-danger, .tab-bar, .no-print { display: none !important; }
+            .breadcrumb, .sheen-footer, .btn-primary, .btn-outline, .btn-print, .btn-sm, .btn-danger, .tab-bar, .no-print { display: none !important; }
             .print-time { display: block !important; font-size: 9pt; color: #666; text-align: right; margin-bottom: 12px; }
             .form-card, .result-card, .verdict-banner { box-shadow: none !important; border-radius: 0 !important; border: 1.5px solid #333 !important; page-break-inside: avoid; }
             .verdict-banner.is-hazard { background: #fff5f5 !important; }
@@ -185,9 +180,6 @@
 
         /* ===== 响应式 ===== */
         @media (max-width: 768px) {
-            .sheen-nav { padding: 0 16px; }
-            .sheen-nav-tools { gap: 2px; }
-            .sheen-nav-tool { padding: 6px 10px; font-size: 11px; }
             .form-row { flex-direction: column; }
             .result-row { flex-direction: column; }
             .level-cards { flex-direction: column; }
@@ -198,22 +190,10 @@
 </head>
 <body>
 
-    <!-- 导航栏 -->
-    <header class="sheen-nav">
-        <a href="/sheen-toolbox/" class="sheen-nav-brand">
-            <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i>
-            <span class="sheen-nav-brand-text">SHEEN Toolbox</span>
-        </a>
-        <div class="sheen-nav-tools">
-            <a href="/sheen-toolbox/" class="sheen-nav-tool"><i class="fa-solid fa-home"></i> 首页</a>
-            <a href="/sheen-toolbox/pssr-checklist/" class="sheen-nav-tool">PSSR</a>
-            <a href="/sheen-toolbox/fire-extinguisher-calculator/" class="sheen-nav-tool">灭火器</a>
-            <a href="/sheen-toolbox/safety-production-cost-calculator/" class="sheen-nav-tool">安产费用</a>
-            <a href="/sheen-toolbox/environmental-tax-calculator/" class="sheen-nav-tool">环保税</a>
-            <a href="/sheen-toolbox/noise-calculator/" class="sheen-nav-tool">噪声</a>
-            <a href="/sheen-toolbox/major-hazard-identification/" class="sheen-nav-tool active">重大危险源</a>
-        </div>
-    </header>
+    <div class="breadcrumb">
+        <a href="/sheen-toolbox/">&larr; SHEEN Toolbox</a>
+        <span> / 重大危险源辨识</span>
+    </div>
 
     <!-- 主内容 -->
     <main class="app-wrapper">
