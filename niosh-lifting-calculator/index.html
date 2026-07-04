@@ -91,6 +91,28 @@ details summary i{font-size:11px;color:var(--red)}
 /* CLI hint */
 .cli-hint{background:#FFFBEB;border-left:4px solid #F59E0B;padding:10px 14px;border-radius:0 8px 8px 0;font-size:12px;color:var(--text);margin-top:8px}
 
+.print-time{display:none}
+
+@media print{
+  @page{size:A4;margin:15mm}
+  body{background:#fff!important;font-size:11pt;color:#000!important}
+  .sheen-nav,.sheen-footer,.btn,.form-row,.hint,.form-group,.no-pr,#inputCard,.cli-hint{display:none!important}
+  .app-wrap{padding:0!important}
+  .card{box-shadow:none!important;border:1.5px solid #333!important;break-inside:avoid;padding:10px!important;border-radius:0!important;background:#fff!important}
+  .result-box{display:block!important}
+  h1{font-size:16pt;color:#000!important}
+  .li-card{background:#f9f9f9!important;border:2px solid #333!important;border-radius:8px!important}
+  .li-card .li-val{font-size:32pt;color:#000!important}
+  .li-card .li-risk{background:#333!important;color:#fff!important}
+  .breakdown .bf-item{border-color:#999!important;background:#fff!important}
+  .breakdown .bf-item .bf-val{color:#000!important}
+  .breakdown .bf-item.weakest{border:2px solid #333!important;background:#f9f9f9!important}
+  .rwl-formula{color:#333!important;font-size:10pt!important}
+  .improve-box{color:#333!important}
+  .diagram img{max-height:180px}
+  .print-time{display:block!important;font-size:9pt;color:#666;text-align:right;margin-bottom:12px}
+}
+
 @media(max-width:768px){
   .sheen-nav{padding:6px 8px}.sheen-nav-tool{padding:5px 8px;font-size:10px}
   .app-wrap{padding:8px 4px}.form-group{min-width:100%}
@@ -224,6 +246,7 @@ details summary i{font-size:11px;color:var(--red)}
 </main>
 
 <footer class="sheen-footer"><i class="fa-solid fa-shield-halved" style="color:var(--amb);font-size:22px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · NIOSH 举升方程计算器</footer>
+<div class="print-time" id="printTime"></div>
 
 <script>
 // ===== FM Lookup Table =====
@@ -231,13 +254,13 @@ details summary i{font-size:11px;color:var(--red)}
 // duration: 0=≤1h, 1=1-2h, 2=2-8h
 // frequencyIndex maps to: [0.2, 0.5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 var FM_TABLE = [
-  // ≤1 hour
+  // ≤1 hour (FM_short — full table for short duration)
   [[1.00,1.00],[0.97,0.97],[0.94,0.94],[0.91,0.91],[0.88,0.88],[0.84,0.84],[0.80,0.80],
    [0.75,0.75],[0.70,0.70],[0.60,0.60],[0.52,0.52],[0.45,0.45],[0.41,0.41],[0.37,0.37],[0.00,0.34],[0.00,0.31],[0.00,0.28]],
   // 1-2 hours
   [[0.95,0.95],[0.92,0.92],[0.88,0.88],[0.84,0.84],[0.79,0.79],[0.72,0.72],[0.60,0.60],
    [0.50,0.50],[0.42,0.42],[0.35,0.35],[0.30,0.30],[0.26,0.26],[0.00,0.23],[0.00,0.21],[0.00,0.00],[0.00,0.00],[0.00,0.00]],
-  // 2-8 hours
+  // 2-8 hours (FM_long — truncated for long duration)
   [[0.85,0.85],[0.81,0.81],[0.75,0.75],[0.65,0.65],[0.55,0.55],[0.45,0.45],[0.35,0.35],
    [0.27,0.27],[0.22,0.22],[0.18,0.18],[0.00,0.15],[0.00,0.13],[0.00,0.00],[0.00,0.00],[0.00,0.00],[0.00,0.00],[0.00,0.00]]
 ];
@@ -288,8 +311,8 @@ function validate(){
   var inpVd = document.getElementById('Vd'), inpA = document.getElementById('A');
 
   if(H<25||H>63){warnH.style.display='inline';inpH.classList.add('invalid')}else{warnH.style.display='none';inpH.classList.remove('invalid')}
-  if(Vo<0||Vo>175){warnVo.style.display='inline';inpVo.classList.add('invalid')}else{warnVo.style.display='none';inpVo.classList.remove('invalid')}
-  if(Vd<0||Vd>175){warnVd.style.display='inline';inpVd.classList.add('invalid')}else{warnVd.style.display='none';inpVd.classList.remove('invalid')}
+  if(Vo<=0||Vo>175){warnVo.style.display='inline';inpVo.classList.add('invalid')}else{warnVo.style.display='none';inpVo.classList.remove('invalid')}
+  if(Vd<=0||Vd>175){warnVd.style.display='inline';inpVd.classList.add('invalid')}else{warnVd.style.display='none';inpVd.classList.remove('invalid')}
   if(A<0||A>135){warnA.style.display='inline';inpA.classList.add('invalid')}else{warnA.style.display='none';inpA.classList.remove('invalid')}
   calc();
 }
@@ -315,13 +338,15 @@ function calc(){
   var VM = 1 - 0.003 * Math.abs(Vo - 75);
   var vmNote = '1 − 0.003 × |'+Vo.toFixed(1)+'−75| = '+VM.toFixed(3);
 
-  // D and DM
+  // D and DM (D clamped to 25-175 cm per NIOSH)
   var Dval = Math.abs(Vd - Vo);
+  Dval = Math.max(25, Math.min(175, Dval));
   var DM = 0.82 + 4.5 / Dval;
   var dmNote = '0.82 + 4.5/'+Dval.toFixed(1)+' = '+DM.toFixed(3);
 
-  // AM
-  var AM = 1 - 0.0032 * A;
+  // AM (clamped: A max 90° for AM>0; AM≥0)
+  var AM = 1 - 0.0032 * Math.min(A, 90);
+  AM = Math.max(0, AM);
   var amNote = A > 135 ? '(A>135° → AM=0)' : '1 − 0.0032 × '+A.toFixed(1)+'° = '+AM.toFixed(3);
 
   // FM lookup
@@ -462,6 +487,7 @@ function loadExample(n){
 }
 
 // ===== Init =====
+document.getElementById('printTime').textContent=new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000).toISOString().replace('T',' ').slice(0,16);
 validate();
 </script>
 </body>
