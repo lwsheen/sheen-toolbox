@@ -484,13 +484,20 @@
         if (item) showDetail(item);
       });
 
+      function chinaTime() { return new Date(Date.now() + (480 + new Date().getTimezoneOffset()) * 60000); }
+
       // Print timestamp
       document.getElementById('printTime').textContent =
-        new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000).toISOString().replace('T',' ').slice(0,16);
+        chinaTime().toISOString().replace('T',' ').slice(0,16);
 
-      // Init
-      buildClassChips();
-      renderTable();
+      // Init with loading indicator
+      document.getElementById('tableBody').innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-secondary);">数据加载中...</td></tr>';
+      try {
+        buildClassChips();
+        renderTable();
+      } catch(e) {
+        document.getElementById('tableBody').innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:#DC2626;">数据加载失败：' + e.message + '</td></tr>';
+      }
     })();
   </script>
 </body>
