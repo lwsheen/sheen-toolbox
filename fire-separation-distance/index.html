@@ -58,18 +58,7 @@
             color: var(--text-secondary);
             margin-top: 2px;
         }
-        .vs-divider {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--brand-red);
-            letter-spacing: 4px;
-            user-select: none;
-        }
-
-        /* ===== 间距结果 ===== */
+        .cond-box h4 {
         .distance-result {
             text-align: center;
             padding: 28px 24px;
@@ -181,8 +170,7 @@
 
         @media (max-width: 768px) {
             .dual-panel { grid-template-columns: 1fr; }
-            .vs-divider { display: none; }
-            .special-conditions { grid-template-columns: 1fr; }
+        .special-conditions { grid-template-columns: 1fr; }
             .distance-result .dist-num { font-size: 44px; }
         }
     </style>
@@ -245,9 +233,6 @@
                 <div class="hint">特殊储量类型影响间距，常规情况下选择"常规储量"</div>
             </div>
         </div>
-
-        <!-- VS 分隔 -->
-        <div class="vs-divider" style="display:none;" id="vsDivider">vs</div>
 
         <!-- 建筑 B -->
         <div class="building-panel">
@@ -545,12 +530,6 @@
         checkVsDivider();
         calcDistance();
     };
-
-    function checkVsDivider() {
-        var a = document.getElementById('typeA').value;
-        var b = document.getElementById('typeB').value;
-        document.getElementById('vsDivider').style.display = (a && b) ? 'flex' : 'none';
-    }
 
     function getCategory(type, height, frr, hazard) {
         if (!type || !height || !frr) return null;
