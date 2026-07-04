@@ -110,8 +110,7 @@ textarea.form-control{min-height:56px;resize:vertical}
 .ref-section{margin-top:12px}
 .ref-section summary{font-size:12px;font-weight:600;color:var(--text-secondary);cursor:pointer;padding:8px 0;user-select:none;display:flex;align-items:center;gap:5px}
 .ref-section summary i{font-size:11px;color:var(--brand-red)}
-.tbl-w{overflow-x:auto}
-.dt{min-width:600px;border-collapse:collapse;font-size:11px}
+
 .dt th,.dt td{padding:6px 8px;border:1px solid var(--border);vertical-align:middle;font-size:11px}
 .dt th{background:#1F4E79;color:#fff;font-weight:700;font-size:10px}.dt td{background:var(--bg-card);color:var(--text-primary)}
 .ref-notes{font-size:11px;color:var(--text-secondary);background:var(--bg-page);padding:10px 14px;border-radius:6px;line-height:1.8;margin-bottom:12px}
@@ -173,9 +172,7 @@ textarea.form-control{min-height:56px;resize:vertical}
   .form-control{font-size:12px;padding:7px 9px}
   .btn{padding:6px 12px;font-size:11px}
   .btn-group{flex-direction:column;gap:6px}
-  .hz-field{min-width:100%!important}
-  .dt{font-size:10px}
-  .dt th,.dt td{padding:4px 5px;font-size:9px}
+  .hz-field{min-width:100%!important}.dt th,.dt td{padding:4px 5px;font-size:9px}
   .sheen-footer{padding:10px 14px;font-size:11px}
 }
 </style>
@@ -253,7 +250,7 @@ textarea.form-control{min-height:56px;resize:vertical}
     <div class="hint">评分人员现场参考 — 根据实际情况对标选择最匹配的分值</div>
 
     <h4 style="font-size:13px;font-weight:600;color:var(--text-primary);margin:12px 0 6px;">一、L — 事故发生的可能性</h4>
-    <div class="tbl-w"><table class="dt">
+    <div class="table-scroll"><table class="dt">
       <thead><tr><th style="width:60px">分值</th><th>事故发生的可能性</th></tr></thead>
       <tbody>
         <tr><td>10</td><td>完全可以预料</td></tr>
@@ -267,7 +264,7 @@ textarea.form-control{min-height:56px;resize:vertical}
     </table></div>
 
     <h4 style="font-size:13px;font-weight:600;color:var(--text-primary);margin:12px 0 6px;">二、E — 人员暴露于危险环境的频繁程度</h4>
-    <div class="tbl-w"><table class="dt">
+    <div class="table-scroll"><table class="dt">
       <thead><tr><th style="width:60px">分值</th><th>暴露于危险环境的频繁程度</th></tr></thead>
       <tbody>
         <tr><td>10</td><td>连续暴露</td></tr>
@@ -280,7 +277,7 @@ textarea.form-control{min-height:56px;resize:vertical}
     </table></div>
 
     <h4 style="font-size:13px;font-weight:600;color:var(--text-primary);margin:12px 0 6px;">三、C — 发生事故可能产生的后果</h4>
-    <div class="tbl-w"><table class="dt">
+    <div class="table-scroll"><table class="dt">
       <thead><tr><th style="width:60px">分值</th><th>发生事故可能产生的后果</th></tr></thead>
       <tbody>
         <tr><td>100</td><td>大灾难，许多人死亡</td></tr>
@@ -293,7 +290,7 @@ textarea.form-control{min-height:56px;resize:vertical}
     </table></div>
 
     <h4 style="font-size:13px;font-weight:600;color:var(--text-primary);margin:12px 0 6px;">四、风险等级划分（D = L × E × C）</h4>
-    <div class="tbl-w"><table class="dt">
+    <div class="table-scroll"><table class="dt">
       <thead><tr><th>D 值范围</th><th>风险等级</th><th>风险程度</th><th>应对措施</th></tr></thead>
       <tbody>
         <tr><td>D ≥ 320</td><td><span style="display:inline-block;padding:2px 10px;border-radius:4px;font-weight:700" class="risk-critical">5级</span></td><td>极其危险，不能继续作业</td><td>立即整改</td></tr>
