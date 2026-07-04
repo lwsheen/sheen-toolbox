@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>环境因素识别与评价 — SHEEN Toolbox</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--black:#000;--text:#111827;--text2:#6B7280;--bg:#F8FAFC;--card:#fff;--bd:#E5E7EB;--red:#7A1825;--redH:#5C121C;--redL:#FEF2F2;--amb:#FBBF24;--r:12px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.breadcrumb{padding:12px 24px;font-size:13px;color:var(--text2);border-bottom:1px solid var(--bd);background:var(--card);display:flex;align-items:center;gap:6px}
+.breadcrumb a{color:var(--red);text-decoration:none;font-weight:600;transition:opacity .2s;display:inline-flex;align-items:center;gap:4px}
+.breadcrumb a:hover{opacity:.7;text-decoration:underline}
+.breadcrumb span{color:var(--text2)}
+.sheen-footer{text-align:center;padding:14px 24px;font-size:12px;color:var(--text2);border-top:1px solid var(--bd);background:var(--card)}
+.sheen-footer i{color:var(--amb)}.sheen-footer strong{color:var(--text)}
+.app-wrap{max-width:100%;margin:0 auto;padding:16px 12px}
+h1{font-size:20px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+h1 i{color:var(--red)}.sub{font-size:12px;color:var(--text2);margin-bottom:14px}
+.tabs{display:flex;gap:2px;margin-bottom:14px;flex-wrap:wrap;border-bottom:2px solid var(--bd)}
+.tab{padding:7px 12px;font-size:12px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--text2);border-bottom:3px solid transparent;transition:all .2s;font-family:inherit;white-space:nowrap}
+.tab:hover{color:var(--red)}.tab.active{color:var(--red);border-bottom-color:var(--red)}.tab i{margin-right:4px}
+.tc{display:none}.tc.active{display:block}
+.card{background:var(--card);border-radius:var(--r);padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04);border:1px solid var(--bd)}
+.card h3{font-size:14px;font-weight:700;margin-bottom:8px}.hint{font-size:11px;color:var(--text2);margin-bottom:10px;padding:6px 10px;background:var(--bg);border-radius:6px}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:60px;font-size:12px;font-weight:600;cursor:pointer;transition:all .25s;border:none;font-family:inherit;white-space:nowrap}
+.btn-p{background:var(--red);color:#fff}.btn-p:hover{background:var(--redH)}
+.btn-o{background:var(--card);border:1.5px solid var(--bd);color:var(--text)}.btn-o:hover{border-color:var(--red);color:var(--red)}
+.btn-d{background:#DC2626;color:#fff}.btn-d:hover{background:#B91C1C}
+.btn-bad{background:var(--card);color:var(--red);border:1.5px solid var(--red)}.btn-bad:hover{background:var(--redL)}.btn-sm{padding:5px 10px;font-size:10px}
+.tbl-w{overflow-x:auto}
+.dt{min-width:1500px;border-collapse:collapse;font-size:11px}
+.dt th,.dt td{padding:5px 6px;border:1px solid var(--bd);vertical-align:middle;white-space:nowrap}
+.dt th{background:#1F4E79;color:#fff;font-weight:700;font-size:10px}.dt td{background:var(--card)}
+.dt td input,.dt td select{width:95px;border:1px solid var(--bd);padding:3px 4px;font-size:10px;font-family:inherit;border-radius:3px}.dt td input:focus,.dt td select:focus{outline:none;border-color:var(--red)}
+.dt .sc input{background:#E2EFDA;font-weight:700;width:48px;text-align:center}
+.dt .mj-y{background:var(--redL);color:var(--red);font-weight:700}.mj-n{color:var(--text2)}
+.dt .ex td{background:#FFF9E6}
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px}
+.rc{border-left:4px solid #DC2626;background:var(--redL);padding:10px;border-radius:0 6px 6px 0;font-size:12px}.rc strong{color:var(--red);display:block;margin-bottom:2px}
+.kg{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:14px}
+.kc{background:var(--card);border-radius:var(--r);padding:12px;text-align:center;border:1px solid var(--bd)}
+.kc .kn{font-size:26px;font-weight:700}.kc .kl{font-size:11px;color:var(--text2);margin-top:2px}
+.cr{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.cb{background:var(--card);border-radius:var(--r);padding:10px;border:1px solid var(--bd)}.cb canvas{max-height:220px}
+.pp{display:none}.filter-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.filter-chip{padding:4px 10px;border-radius:60px;font-size:11px;border:1px solid var(--bd);cursor:pointer;transition:all .2s}.filter-chip:hover{border-color:var(--red)}.filter-chip.on{background:var(--red);color:#fff;border-color:var(--red)}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--bd);border-top-color:var(--red);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:4px}@keyframes spin{to{transform:rotate(360deg)}}
+#apiMod{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--card);border-radius:var(--r);padding:18px;z-index:1000;box-shadow:0 8px 32px rgba(0,0,0,.2);width:340px;max-width:95vw}
+#apiOv{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:999}
+@media print{
+  @page{size:A4 landscape;margin:12mm 10mm 15mm 10mm}
+  .breadcrumb,.sheen-footer,.tabs,.btn,.no-pr,#apiMod,#apiOv,#aiScene{display:none!important}
+  .tc{display:block!important}.tc:not(.active-print){display:none!important}
+  .app-wrap{padding:0!important;max-width:100%!important}
+  .card{box-shadow:none!important;border:1px solid #333!important;break-inside:avoid;padding:8px!important}
+  .tbl-w{overflow-x:visible!important}
+  .dt{min-width:0!important;width:100%!important;font-size:9px!important;table-layout:auto!important}
+  .dt th,.dt td{padding:3px 4px!important;font-size:8px!important;white-space:normal!important;word-break:break-all!important}
+  .dt th{background:#eee!important;color:#000!important;font-size:7px!important}
+  .dt td input,.dt td select{width:60px!important;border:none!important;padding:0!important;font-size:8px!important;background:transparent!important}
+  .dt .sc input{width:28px!important;height:auto!important}
+  .cb canvas{max-height:180px}
+  .pp{display:block;text-align:right;font-size:9pt;color:#666;margin-bottom:6px}
+  body{font-size:10px!important}
+  h1{font-size:16px!important}
+  .sub{font-size:10px!important}
+  .kg{gap:4px!important}.kc{padding:8px!important}.kc .kn{font-size:20px!important}
+}
+@media(max-width:768px){
+  .cr{grid-template-columns:1fr}.app-wrap{padding:8px 4px}
+}
+</style>
+</head>
+<body>
+
+<div class="breadcrumb">
+    <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+    <span> / ISO 14001 环境因素识别</span>
+</div>
+
+<main class="app-wrap">
+<h1><i class="fa-solid fa-leaf"></i> 环境因素识别与评价</h1>
+<p class="sub">依据 ISO 14001:2026 条款 6.1.2 | 重要因素=自动判定+手动标记 | 手动权限＞自动计算</p>
+<div class="tabs no-pr" id="tabs">
+<button class="tab active" onclick="sw(0)"><i class="fa-solid fa-list-check"></i>评分标准</button>
+<button class="tab" onclick="sw(1)"><i class="fa-solid fa-table"></i>识别与评价</button>
+<button class="tab" onclick="sw(2)"><i class="fa-solid fa-chart-pie"></i>统计看板</button>
+<button class="tab" onclick="sw(3)"><i class="fa-solid fa-clipboard-check"></i>整改跟踪</button>
+</div>
+
+<!-- TAB 0: 评分标准 -->
+<div class="tc active" id="t0">
+<div class="card"><h3><i class="fa-solid fa-scale-balanced"></i> 评分维度与标准</h3>
+<div class="hint">评价人员现场评分参考卡片 — 根据实际情况对标选择最匹配分值</div><div class="tbl-w">
+<table class="dt" style="min-width:850px">
+<thead><tr><th>评价维度</th><th>1分</th><th>2分</th><th>3分</th><th>4分</th></tr></thead>
+<tbody><tr><td><strong>a) 环境影响程度</strong></td><td style="white-space:normal">轻微<br><small>可忽略，短期内自行恢复</small></td><td style="white-space:normal">一般<br><small>需简单治理，1周内恢复</small></td><td style="white-space:normal">较重<br><small>需专项治理，1月内恢复</small></td><td style="background:#FFC7CE;font-weight:700;white-space:normal">严重<br><small>破坏生态，长期不可逆</small></td></tr>
+<tr><td><strong>b) 法规符合性</strong></td><td style="white-space:normal">完全符合<br><small>无违规记录，监测达标</small></td><td style="white-space:normal">基本符合<br><small>个别轻微不符合项</small></td><td style="white-space:normal">部分不符合<br><small>多项不符合，责令改正</small></td><td style="background:#FFC7CE;font-weight:700;white-space:normal">严重不符合<br><small>重大违法、行政处罚</small></td></tr>
+<tr><td><strong>c) 排放/消耗数量</strong></td><td style="white-space:normal">极少<br><small>＜行业基准 10%</small></td><td style="white-space:normal">少量<br><small>10%-50%基准值</small></td><td style="white-space:normal">中量<br><small>50%-80%基准值</small></td><td style="background:#FFC7CE;font-weight:700;white-space:normal">大量<br><small>＞基准值 80%</small></td></tr>
+<tr><td><strong>d) 发生频率</strong></td><td style="white-space:normal">极少<br><small>每年≤1次</small></td><td style="white-space:normal">间歇<br><small>每季度1-2次</small></td><td style="white-space:normal">频繁<br><small>每月数次</small></td><td style="background:#FFC7CE;font-weight:700;white-space:normal">连续<br><small>一直存在</small></td></tr>
+<tr><td><strong>e) 相关方关注度</strong></td><td style="white-space:normal">不关注<br><small>无投诉</small></td><td style="white-space:normal">一般<br><small>零星投诉，已处理</small></td><td style="white-space:normal">高度<br><small>群体投诉、媒体关注</small></td><td style="background:#FFC7CE;font-weight:700;white-space:normal">极度<br><small>重大舆情，上级督办</small></td></tr>
+<tr><td><strong>f) 能源资源消耗</strong></td><td style="white-space:normal">低<br><small>＜先进值50%</small></td><td style="white-space:normal">中<br><small>50%-100%先进值</small></td><td style="white-space:normal">较高<br><small>与行业均值持平</small></td><td style="background:#FFC7CE;font-weight:700;white-space:normal">高<br><small>显著高于均值</small></td></tr>
+</tbody></table></div></div>
+<div class="card"><h3><i class="fa-solid fa-triangle-exclamation" style="color:#DC2626;"></i> 重要环境因素判定规则</h3>
+<div class="sg">
+<div class="rc"><strong>规则1 — 法规严重不符</strong>法规得分 = 4分 → 直接判定</div>
+<div class="rc"><strong>规则2 — 影响严重</strong>影响程度 = 4分 → 直接判定</div>
+<div class="rc"><strong>规则3 — 总分阈值</strong>六项总分 ≥ 16分 → 累计达标</div>
+<div class="rc"><strong>🔥 规则4 — 火灾/爆炸</strong>涉及火灾爆炸风险 → 直接判定</div>
+<div class="rc"><strong>⚖ 规则5 — 违规项</strong>存在行政处罚或明确违规 → 直接判定</div>
+<div class="rc" style="border-color:var(--red);background:#FFF0F0;"><strong>✋ 规则6 — 手动标记</strong>评价人手动指定 → 覆盖自动计算结果</div>
+</div></div></div>
+
+<!-- TAB 1: 识别与评价 -->
+<div class="tc" id="t1">
+<div class="pp" id="pt1"></div>
+<div class="card no-pr" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:8px 14px;margin-bottom:8px;">
+<input id="aiScene" type="text" placeholder="描述分析场景：例 设备部烧锅炉 / 涂装车间喷漆 / 污水处理站…" style="flex:1;min-width:200px;padding:7px 12px;border:1.5px solid var(--bd);border-radius:6px;font-size:12px;font-family:inherit;background:var(--card);">
+<button class="btn btn-p" id="bAI" onclick="ai()"><i class="fa-solid fa-wand-magic-sparkles"></i>AI识别</button>
+<span id="aiLd" style="display:none;font-size:11px;color:var(--text2);"><span class="spin"></span>AI分析中…</span>
+</div>
+<div class="card no-pr" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:8px 14px;margin-bottom:0;">
+<button class="btn btn-p" onclick="add()"><i class="fa-solid fa-plus"></i>新增</button>
+<button class="btn btn-o" onclick="demo()"><i class="fa-solid fa-lightbulb"></i>示例</button>
+<button class="btn btn-o" onclick="rst()"><i class="fa-solid fa-arrows-rotate"></i>重置</button>
+<div style="flex:1"></div>
+<span class="filter-chip on" onclick="flt('all',this)">全部</span>
+<span class="filter-chip" onclick="flt('major',this)">重要因素</span>
+<span class="filter-chip" onclick="flt('normal',this)">一般</span>
+<button class="btn btn-bad btn-sm" onclick="xls1()"><i class="fa-solid fa-file-excel"></i>导出</button>
+<button class="btn btn-bad btn-sm" onclick="prt1()"><i class="fa-solid fa-print"></i>打印</button>
+<span style="font-size:11px;color:var(--text2);">共<strong id="nRow">0</strong>条 | 重要<strong id="nMj" style="color:#DC2626;">0</strong></span>
+</div>
+<div class="tbl-w"><table class="dt" id="mt">
+<thead><tr><th>#</th><th>部门</th><th>工序/活动</th><th>状态</th><th>环境因素</th><th>影响类型</th><th>适用法规</th><th>量化数据</th><th>a影响</th><th>b法规</th><th>c数量</th><th>d频率</th><th>e关注</th><th>f能耗</th><th>总分</th><th>重要因素</th><th>控制措施</th><th>评价人</th><th>日期</th><th></th></tr></thead>
+<tbody id="tb"></tbody></table></div></div>
+
+<!-- TAB 2: 统计看板 -->
+<div class="tc" id="t2"><div class="kg" id="ka"></div>
+<div class="cr"><div class="cb"><h3 style="font-size:13px;margin-bottom:6px;">环境因素类型分布</h3><canvas id="c1"></canvas></div><div class="cb"><h3 style="font-size:13px;margin-bottom:6px;">重要/非重要比例</h3><canvas id="c2"></canvas></div></div>
+<div class="cr"><div class="cb"><h3 style="font-size:13px;margin-bottom:6px;">各部门因素数量</h3><canvas id="c3"></canvas></div><div class="cb"><h3 style="font-size:13px;margin-bottom:6px;">控制措施覆盖率</h3><div id="cov" style="text-align:center;padding:30px;font-size:32px;font-weight:700;color:var(--red);">—</div></div></div></div>
+
+<!-- TAB 3: 整改跟踪 -->
+<div class="tc" id="t3"><div class="pp" id="pt3"></div>
+<div class="card no-pr" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:8px 14px;">
+<button class="btn btn-p" onclick="atk()"><i class="fa-solid fa-plus"></i>新增</button>
+<div style="flex:1"></div>
+<button class="btn btn-bad btn-sm" onclick="xls3()"><i class="fa-solid fa-file-excel"></i>导出</button>
+<button class="btn btn-bad btn-sm" onclick="prt3()"><i class="fa-solid fa-print"></i>打印</button>
+<span style="font-size:11px;color:var(--text2);">完成率：<strong id="tr" style="color:var(--red);">—</strong></span>
+</div>
+<div class="tbl-w"><table class="dt" id="tt" style="min-width:1000px;">
+<thead><tr><th>#</th><th>环境因素</th><th>部门</th><th>目标指标</th><th>整改措施</th><th>责任部门</th><th>责任人</th><th>预算(万)</th><th>计划完成</th><th>实际完成</th><th>验证状态</th><th></th></tr></thead>
+<tbody id="tkb"></tbody></table></div></div>
+</main>
+
+<div id="apiOv" onclick="document.getElementById('apiMod').style.display='none';this.style.display='none'"></div>
+<div id="apiMod">
+<h3 style="margin-bottom:10px;">AI 配置（全站共享）</h3>
+<div style="display:flex;gap:6px;margin-bottom:10px;">
+<label id="lO" style="flex:1;text-align:center;padding:6px;border-radius:60px;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid var(--bd);"><input type="radio" name="am" value="own" onchange="sa('own')" style="accent-color:var(--red);margin-right:4px;">自有 Key</label>
+<label id="lP" style="flex:1;text-align:center;padding:6px;border-radius:60px;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid var(--bd);"><input type="radio" name="am" value="proxy" onchange="sa('proxy')" style="accent-color:var(--red);margin-right:4px;">共享代理</label>
+</div>
+<div id="oS"><input id="ak" placeholder="Key: xxxxxx.xxxx" style="width:100%;padding:8px;border:1.5px solid var(--bd);border-radius:6px;font-family:monospace;font-size:12px;margin-bottom:8px;"></div>
+<div id="pS" style="display:none;"><input id="pu" placeholder="代理地址" style="width:100%;padding:8px;border:1.5px solid var(--bd);border-radius:6px;font-family:monospace;font-size:12px;margin-bottom:8px;"></div>
+<div style="display:flex;gap:8px;"><button class="btn btn-p btn-sm" onclick="svApi()">保存</button><button class="btn btn-o btn-sm" onclick="document.getElementById('apiMod').style.display='none';document.getElementById('apiOv').style.display='none'">关闭</button></div></div>
+
+<footer class="sheen-footer no-pr"><i class="fa-solid fa-shield-halved" style="color:var(--amb);font-size:22px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 环境因素识别与评价</footer>
+
+<script>
+// ===== DATA =====
+let R=JSON.parse(localStorage.getItem('isoR')||'[]');
+let T=JSON.parse(localStorage.getItem('isoT')||'[]');
+let ci={}, fl='all';
+
+function sv(){localStorage.setItem('isoR',JSON.stringify(R));localStorage.setItem('isoT',JSON.stringify(T))}
+function nR(){return{dept:'',process:'',state:'正常',factor:'',impType:'',law:'',qty:'',s1:'',s2:'',s3:'',s4:'',s5:'',s6:'',major:'',manual:'',control:'',person:'',date:'',total:0}}
+function e(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+
+// ===== TABS =====
+function sw(n){
+  document.querySelectorAll('.tab').forEach(function(t,i){t.classList.toggle('active',i===n)});
+  document.querySelectorAll('.tc').forEach(function(c,i){c.classList.toggle('active',i===n)});
+  if(n===2) db();
+  if(n===3) tk();
+}
+
+// ===== MAIN TABLE =====
+function ren(){
+  // 保存当前焦点元素，防止innerHTML重建导致焦点丢失
+  var activeEl = document.activeElement;
+  var activeId = activeEl ? activeEl.id : '';
+  var activeTag = activeEl ? activeEl.tagName : '';
+
+  R.forEach(function(r,i){
+    r.total=(+r.s1||0)+(+r.s2||0)+(+r.s3||0)+(+r.s4||0)+(+r.s5||0)+(+r.s6||0);
+    var auto=(r.s1==4||r.s2==4||r.total>=16)?'是':'否';
+    r.major=(r.manual==='是')?'是':(r.manual==='否')?'否':auto;
+  });
+  var h='';
+  R.forEach(function(r,i){
+    var show=true;
+    if(fl==='major'&&r.major!=='是') show=false;
+    if(fl==='normal'&&r.major==='是') show=false;
+    h+='<tr class="'+(i<5?'ex':'')+'" style="'+(show?'':'display:none')+'">';
+    h+='<td>'+(i+1)+'</td>';
+    h+='<td><input value="'+e(r.dept)+'" onchange="uc('+i+',\'dept\',this.value)" data-col="dept"></td>';
+    h+='<td><input value="'+e(r.process)+'" onchange="uc('+i+',\'process\',this.value)"></td>';
+    h+='<td><select onchange="uc('+i+',\'state\',this.value)"><option'+(r.state==='正常'?' selected':'')+'>正常</option><option'+(r.state==='异常'?' selected':'')+'>异常</option><option'+(r.state==='紧急'?' selected':'')+'>紧急</option></select></td>';
+    h+='<td><input value="'+e(r.factor)+'" onchange="uc('+i+',\'factor\',this.value)"></td>';
+    h+='<td><input value="'+e(r.impType)+'" onchange="uc('+i+',\'impType\',this.value)"></td>';
+    h+='<td><input value="'+e(r.law)+'" onchange="uc('+i+',\'law\',this.value)"></td>';
+    h+='<td><input value="'+e(r.qty)+'" onchange="uc('+i+',\'qty\',this.value)" style="width:70px"></td>';
+    ['s1','s2','s3','s4','s5','s6'].forEach(function(k){
+      h+='<td class="sc"><input type="number" id="score_'+i+'_'+k+'" min="1" max="4" value="'+e(r[k]||'')+'" onchange="uc('+i+',\''+k+'\',this.value);ren()"></td>';
+    });
+    h+='<td style="font-weight:700;">'+r.total+'</td>';
+    h+='<td class="'+(r.major==='是'?'mj-y':'mj-n')+'" style="cursor:pointer;font-weight:700;'+(r.major==='是'?'color:var(--red);':'')+'" title="点击切换手动标记" onclick="tgm('+i+')">'+(r.major||'—')+'</td>';
+    h+='<td><input value="'+e(r.control)+'" onchange="uc('+i+',\'control\',this.value)"></td>';
+    h+='<td><input value="'+e(r.person)+'" onchange="uc('+i+',\'person\',this.value)" style="width:60px"></td>';
+    h+='<td><input type="date" value="'+e(r.date)+'" onchange="uc('+i+',\'date\',this.value)" style="width:100px"></td>';
+    h+='<td><button class="btn btn-d btn-sm" onclick="dl('+i+')"><i class="fa-solid fa-trash"></i></button></td></tr>';
+  });
+  document.getElementById('tb').innerHTML=h;
+  document.getElementById('nRow').textContent=R.length;
+  document.getElementById('nMj').textContent=R.filter(function(r){return r.major==='是'}).length;
+  sv();
+  // 恢复焦点（防止innerHTML重建导致输入框焦点丢失）
+  if (activeId && activeTag === 'INPUT') {
+    var el = document.getElementById(activeId);
+    if (el) { setTimeout(function(){ el.focus(); }, 0); }
+  }
+}
+function uc(i,k,v){R[i][k]=v;sv()}
+function tgm(i){
+  var r=R[i];
+  if(r.manual==='是') r.manual='否';
+  else if(r.manual==='否') r.manual='';
+  else r.manual='是';
+  ren();
+}
+function add(){R.push(nR());ren()}
+function dl(i){R.splice(i,1);ren()}
+function rst(){if(confirm('确认清空所有数据？')){R=[];ren()}}
+function flt(f,el){
+  fl=f;document.querySelectorAll('.filter-chip').forEach(function(c){c.classList.remove('on')});el.classList.add('on');ren();
+}
+
+// ===== AI =====
+function ga(){return{mode:localStorage.getItem('sheen_5why_mode')||'own',key:localStorage.getItem('sheen_5why_apikey')||'',proxy:localStorage.getItem('sheen_5why_proxy')||''}}
+function sap(){
+  var a=ga();document.getElementById('ak').value=a.key;document.getElementById('pu').value=a.proxy;
+  document.querySelector('input[name=am][value='+a.mode+']').checked=true;sa(a.mode);
+  document.getElementById('apiMod').style.display='block';document.getElementById('apiOv').style.display='block';
+}
+function sa(m){
+  document.getElementById('oS').style.display=m==='proxy'?'none':'block';
+  document.getElementById('pS').style.display=m==='proxy'?'block':'none';
+  document.getElementById('lO').style.borderColor=m==='proxy'?'var(--bd)':'var(--red)';
+  document.getElementById('lO').style.background=m==='proxy'?'':'var(--redL)';
+  document.getElementById('lP').style.borderColor=m==='proxy'?'var(--red)':'var(--bd)';
+  document.getElementById('lP').style.background=m==='proxy'?'var(--redL)':'';
+}
+function svApi(){
+  var m=document.querySelector('input[name=am]:checked').value;
+  localStorage.setItem('sheen_5why_mode',m);
+  localStorage.setItem('sheen_5why_apikey',document.getElementById('ak').value.trim());
+  localStorage.setItem('sheen_5why_proxy',document.getElementById('pu').value.trim());
+  document.getElementById('apiMod').style.display='none';document.getElementById('apiOv').style.display='none';
+}
+async function ai(){
+  var a=ga();
+  if(a.mode==='own'&&!a.key){sap();return}
+  if(a.mode==='proxy'&&!a.proxy){sap();return}
+
+  // 读取用户输入的场景描述 + 已有数据作为上下文
+  var scene=document.getElementById('aiScene').value.trim();
+  var existingData='';
+  if(R.length>0){
+    var depts=[],processes=[];
+    R.forEach(function(r){if(r.dept)depts.push(r.dept);if(r.process)processes.push(r.process)});
+    var uq=function(a){var s={};a.forEach(function(x){s[x]=1});return Object.keys(s).join('、')};
+    existingData='（用户已填写的参考：部门='+uq(depts)+'；工序='+uq(processes)+'）';
+  }
+
+  var sceneDesc=scene||(existingData?'根据用户已填写的内容分析':'制造业工厂典型场景');
+  document.getElementById('bAI').disabled=true;document.getElementById('aiLd').style.display='inline';
+
+  var p='你是一位资深ISO 14001审核专家。请针对以下具体场景，识别5-15条环境因素并逐项评分。\n\n'+
+    '【分析场景】'+sceneDesc+'\n'+existingData+'\n\n'+
+    '【评分标准（每项1-4分，基于场景实际情况打分，避免全部相同分数）】\n'+
+    '- a)环境影响程度：1轻微/2一般/3较重/4严重\n'+
+    '- b)法规符合性：1完全符合/2基本符合/3部分不符合/4严重不符合\n'+
+    '- c)排放消耗数量：1极少/2少量/3中量/4大量\n'+
+    '- d)发生频率：1极少/2间歇/3频繁/4连续\n'+
+    '- e)相关方关注度：1不关注/2一般/3高度/4极度\n'+
+    '- f)能源资源消耗：1低/2中/3较高/4高\n\n'+
+    '【要求】\n'+
+    '1. 每条环境因素必须与【分析场景】强相关，不要生成无关的通用项\n'+
+    '2. 影响类型从以下选择：大气污染/水体污染/土壤污染/噪声污染/固废危废/资源消耗\n'+
+    '3. 状态从以下选择：正常/异常/紧急\n'+
+    '4. 如果场景涉及燃煤/燃气锅炉，必须涵盖：锅炉废气（SO₂/NOx/颗粒物）、燃料消耗、高温噪声、锅炉排污水、固废（炉渣/粉煤灰）等\n'+
+    '5. 如果场景涉及喷漆/涂装，必须涵盖：VOCs排放、漆渣危废、噪声等\n'+
+    '6. 请严格按以下JSON数组格式返回，不要包含任何额外说明文字：\n'+
+    '[\n  {"dept":"部门","process":"工序","state":"正常","factor":"具体环境因素","impType":"影响类型","law":"适用法规","qty":"量化数据","s1":3,"s2":2,"s3":3,"s4":4,"s5":2,"s6":3,"control":"控制措施"},\n  ...\n]';
+
+  try{
+    var url,hdr,body=JSON.stringify({model:'glm-4-flash',messages:[{role:'user',content:p}],temperature:0.3,max_tokens:4096});
+    if(a.mode==='proxy'){url=a.proxy;hdr={'Content-Type':'application/json'}}
+    else{url='https://open.bigmodel.cn/api/paas/v4/chat/completions';hdr={'Content-Type':'application/json','Authorization':'Bearer '+a.key}}
+    var res=await fetch(url,{method:'POST',headers:hdr,body:body});
+    if(!res.ok){var et=await res.text();throw new Error('API HTTP '+res.status+': '+et.slice(0,200))}
+    var d=await res.json();
+    if(!d.choices||!d.choices[0]){throw new Error('API返回异常: '+JSON.stringify(d).slice(0,200))}
+    var t=d.choices[0].message.content;
+    var m=t.match(/\[[\s\S]*\]/);
+    if(!m){throw new Error('AI未返回有效JSON数组。原始响应: '+t.slice(0,300))}
+    var arr;
+    try{arr=JSON.parse(m[0])}catch(e2){throw new Error('JSON解析失败: '+e2.message+'\n响应片段: '+m[0].slice(0,300))}
+    if(!Array.isArray(arr)||arr.length===0){throw new Error('AI返回数据为空或格式不正确')}
+    R=arr.map(function(o){return{dept:o.dept||'',process:o.process||'',state:o.state||'正常',factor:o.factor||'',impType:o.impType||'',law:o.law||'',qty:String(o.qty||''),s1:String(o.s1||''),s2:String(o.s2||''),s3:String(o.s3||''),s4:String(o.s4||''),s5:String(o.s5||''),s6:String(o.s6||''),control:o.control||'',major:'',manual:'',person:'',date:'',total:0}});
+    ren();
+    alert('AI已识别 '+R.length+' 条环境因素，请核对并修正评分。');
+  }catch(e){alert('AI识别失败: '+(e.message||'未知错误')+'\n\n请确认：\n1. API Key 已配置且有效\n2. 网络可访问 open.bigmodel.cn\n3. 请在输入框中描述分析场景后重试')}
+  document.getElementById('bAI').disabled=false;document.getElementById('aiLd').style.display='none';
+}
+
+// ===== DASHBOARD =====
+function db(){
+  Object.values(ci).forEach(function(c){c.destroy()});ci={};
+  var tm={},dm={};
+  R.forEach(function(r){var t=r.impType||'其他';tm[t]=(tm[t]||0)+1;var d=r.dept||'未指定';dm[d]=(dm[d]||0)+1});
+  var mn=R.filter(function(r){return r.major==='是'}).length;
+  var cn=R.filter(function(r){return r.control&&r.control.trim()}).length;
+  document.getElementById('ka').innerHTML='<div class="kc"><div class="kn">'+(R.length||0)+'</div><div class="kl">因素总数</div></div><div class="kc"><div class="kn" style="color:#DC2626;">'+mn+'</div><div class="kl">重要因素</div></div><div class="kc"><div class="kn" style="color:#16A34A;">'+cn+'</div><div class="kl">有控制措施</div></div><div class="kc"><div class="kn">'+(R.length?(cn/R.length*100).toFixed(0):0)+'%</div><div class="kl">措施覆盖率</div></div>';
+  var tk=Object.keys(tm).filter(function(k){return tm[k]>0});
+  if(tk.length) ci.a=new Chart(document.getElementById('c1'),{type:'pie',data:{labels:tk,datasets:[{data:tk.map(function(k){return tm[k]}),backgroundColor:['#5470C6','#91CC75','#EE6666','#73C0DE','#3BA272','#FAC858','#FC8452']}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:10}}}}}});
+  if(R.length) ci.b=new Chart(document.getElementById('c2'),{type:'pie',data:{labels:['重要','一般'],datasets:[{data:[mn,R.length-mn],backgroundColor:['#DC2626','#91CC75']}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:10}}}}}});
+  var dk=Object.keys(dm);
+  if(dk.length) ci.c=new Chart(document.getElementById('c3'),{type:'bar',data:{labels:dk,datasets:[{label:'数量',data:dk.map(function(k){return dm[k]}),backgroundColor:'#1F4E79'}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}}}}});
+  document.getElementById('cov').textContent=R.length?(cn/R.length*100).toFixed(1)+'%':'—';
+}
+
+// ===== TRACK =====
+function tk(){
+  var h='';
+  T.forEach(function(t,i){
+    h+='<tr><td>'+(i+1)+'</td>';
+    ['factor','dept','goal','action','respDept','person','budget','planDate','actualDate'].forEach(function(k){
+      h+='<td><input value="'+e(t[k])+'" onchange="ut('+i+',\''+k+'\',this.value)"></td>';
+    });
+    var s=['待实施','实施中','已完成','已验证','滞后'];
+    h+='<td><select onchange="ut('+i+',\'status\',this.value)">';
+    s.forEach(function(v){h+='<option'+(t.status===v?' selected':'')+'>'+v+'</option>'});
+    h+='</select></td>';
+    h+='<td><button class="btn btn-d btn-sm" onclick="dt('+i+')"><i class="fa-solid fa-trash"></i></button></td></tr>';
+  });
+  document.getElementById('tkb').innerHTML=h;
+  var d=T.filter(function(t){return t.status==='已完成'||t.status==='已验证'}).length;
+  document.getElementById('tr').textContent=T.length?(d/T.length*100).toFixed(0)+'%':'—';
+}
+function atk(){T.push({factor:'',dept:'',goal:'',action:'',respDept:'',person:'',budget:'',planDate:'',actualDate:'',status:'待实施'});tk();sv()}
+function ut(i,k,v){T[i][k]=v;sv();tk()}
+function dt(i){T.splice(i,1);tk();sv()}
+
+// ===== EXPORT =====
+function xls(rows,cols,fn){
+  var h='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"></head><body><table border="1">';
+  if(cols){h+='<tr>';cols.forEach(function(c){h+='<th style="background:#1F4E79;color:#fff">'+c+'</th>'});h+='</tr>'}
+  rows.forEach(function(r){h+='<tr>';r.forEach(function(v){h+='<td>'+e(String(v||''))+'</td>'});h+='</tr>'});
+  h+='</table></body></html>';
+  var b=new Blob(['\uFEFF'+h],{type:'application/vnd.ms-excel'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=fn;a.click();URL.revokeObjectURL(a.href);
+}
+function xls1(){
+  var d=[];R.forEach(function(r,i){d.push([i+1,r.dept,r.process,r.state,r.factor,r.impType,r.law,r.qty,r.s1,r.s2,r.s3,r.s4,r.s5,r.s6,r.total,r.major,r.control,r.person,r.date])});
+  xls(d,['#','部门','工序/活动','状态','环境因素','影响类型','适用法规','量化数据','a影响','b法规','c数量','d频率','e关注','f能耗','总分','重要因素','控制措施','评价人','日期'],'环境因素识别与评价.xls');
+}
+function xls3(){
+  var d=[];T.forEach(function(t,i){d.push([i+1,t.factor,t.dept,t.goal,t.action,t.respDept,t.person,t.budget,t.planDate,t.actualDate,t.status])});
+  xls(d,['#','环境因素','部门','目标指标','整改措施','责任部门','责任人','预算(万)','计划完成','实际完成','验证状态'],'整改跟踪.xls');
+}
+
+// ===== PRINT =====
+function prt1(){
+  document.querySelectorAll('.tc').forEach(function(c){c.classList.add('active-print')});
+  document.getElementById('t0').classList.remove('active-print');
+  document.getElementById('t2').classList.remove('active-print');
+  document.getElementById('t3').classList.remove('active-print');
+  document.getElementById('pt1').textContent='打印时间：'+new Date().toLocaleString('zh-CN', {timeZone:'Asia/Shanghai'});
+  window.print();
+  setTimeout(function(){document.querySelectorAll('.tc').forEach(function(c){c.classList.remove('active-print')})},500);
+}
+function prt3(){
+  document.querySelectorAll('.tc').forEach(function(c){c.classList.add('active-print')});
+  document.getElementById('t0').classList.remove('active-print');
+  document.getElementById('t1').classList.remove('active-print');
+  document.getElementById('t2').classList.remove('active-print');
+  document.getElementById('pt3').textContent='打印时间：'+new Date().toLocaleString('zh-CN', {timeZone:'Asia/Shanghai'});
+  window.print();
+  setTimeout(function(){document.querySelectorAll('.tc').forEach(function(c){c.classList.remove('active-print')})},500);
+}
+
+// ===== DEMO =====
+function demo(){
+  R=[{dept:'涂装车间',process:'喷漆作业',state:'正常',factor:'VOCs排放(二甲苯/甲苯)',impType:'大气污染',law:'大气污染防治法、GB 16297',qty:'2.5',s1:'3',s2:'2',s3:'3',s4:'4',s5:'3',s6:'3',manual:'',control:'活性炭吸附+UV光解',person:'张三',date:'2026-01-15'},
+     {dept:'动力部',process:'柴油发电机运行',state:'异常',factor:'柴油燃烧废气(SO₂/NOx)',impType:'大气污染',law:'大气污染防治法',qty:'0.8',s1:'2',s2:'3',s3:'2',s4:'2',s5:'2',s6:'2',manual:'',control:'低硫柴油;每月试机',person:'赵六',date:'2026-01-15'},
+     {dept:'全厂',process:'办公照明/空调',state:'正常',factor:'电力消耗',impType:'资源消耗',law:'节约能源法',qty:'120',s1:'2',s2:'1',s3:'3',s4:'4',s5:'1',s6:'4',manual:'',control:'LED改造;分区控制',person:'钱七',date:'2026-01-14'},
+     {dept:'仓库',process:'化学品存储',state:'紧急',factor:'化学品泄漏(油漆/溶剂)',impType:'土壤污染',law:'水污染防治法、固废法',qty:'—',s1:'4',s2:'3',s3:'1',s4:'1',s5:'4',s6:'1',manual:'',control:'防渗托盘+二次围堰',person:'周八',date:'2026-01-15'},
+     {dept:'污水处理站',process:'废水处理',state:'正常',factor:'COD/氨氮/SS排放超标',impType:'水体污染',law:'水污染防治法、GB 8978',qty:'3.2',s1:'3',s2:'4',s3:'3',s4:'3',s5:'3',s6:'3',manual:'',control:'A/O生化+MBR膜过滤',person:'吴九',date:'2026-01-14'}];
+  T=[{factor:'VOCs排放超标',dept:'涂装车间',goal:'VOCs降至≤40mg/m³',action:'更换活性炭+在线监测',respDept:'安环部',person:'张三',budget:'15',planDate:'2026-03-31',actualDate:'2026-03-25',status:'已验证'},
+     {factor:'化学品泄漏风险',dept:'仓库',goal:'全年泄漏事故为0',action:'备品防漏托盘+季度演练',respDept:'安环部',person:'周八',budget:'8',planDate:'2026-04-30',actualDate:'',status:'实施中'}];
+  ren();tk();sv();
+}
+if(!R.length) demo();else ren();
+</script>
+</body>
+</html>
