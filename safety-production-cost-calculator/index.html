@@ -76,6 +76,7 @@
         .sheen-nav-tool.active { background: rgba(255,255,255,0.15); color: #fff; font-weight: 600; }
         /* 打印品牌 */
         .print-footer { display: none; }
+        
 
         /* ===== 主体布局 ===== */
         .main-body { display: flex; flex-direction: row; flex-wrap: wrap; }
@@ -297,6 +298,7 @@
 <a href="/sheen-toolbox/explosion-venting-calculator/" class="sheen-nav-tool">泄爆面积</a>
 <a href="/sheen-toolbox/environmental-tax-calculator/" class="sheen-nav-tool">环保税</a>
 <a href="/sheen-toolbox/noise-calculator/" class="sheen-nav-tool">噪声计算</a>
+<a href="/sheen-toolbox/major-hazard-identification/" class="sheen-nav-tool">重大危险源</a>
     </div>
         </header>
 
@@ -319,6 +321,7 @@
 
             <div class="content-area" id="contentArea">
 
+                <!-- 打印专用页眉 -->
                 <div class="print-header">
                     <div class="ph-title">企业安全生产费用计算报告</div>
                     <div class="ph-info">
@@ -327,6 +330,7 @@
                     </div>
                 </div>
 
+                <!-- 1. 煤炭生产 -->
                 <section class="panel active" id="panel-coal">
                     <div class="panel-header">
                         <h2><i class="fa-solid fa-mountain"></i> 煤炭生产企业</h2>
@@ -362,6 +366,7 @@
                     </div>
                 </section>
 
+                <!-- 2. 非煤矿山 -->
                 <section class="panel" id="panel-noncoal">
                     <div class="panel-header">
                         <h2><i class="fa-solid fa-gem"></i> 非煤矿山开采企业</h2>
@@ -404,6 +409,7 @@
                     </div>
                 </section>
 
+                <!-- 3. 石油天然气 -->
                 <section class="panel" id="panel-oilgas">
                     <div class="panel-header">
                         <h2><i class="fa-solid fa-oil-can"></i> 石油天然气开采企业</h2>
@@ -438,6 +444,7 @@
                     </div>
                 </section>
 
+                <!-- 4. 建设工程 -->
                 <section class="panel" id="panel-construction">
                     <div class="panel-header">
                         <h2><i class="fa-solid fa-helmet-safety"></i> 建设工程施工企业</h2>
@@ -482,6 +489,7 @@
                     </div>
                 </section>
 
+                <!-- 5. 危险品生产储存 -->
                 <section class="panel" id="panel-hazardous">
                     <div class="panel-header">
                         <h2><i class="fa-solid fa-flask"></i> 危险品生产与储存企业</h2>
@@ -508,6 +516,7 @@
                     </div>
                 </section>
 
+                <!-- 6. 交通运输 -->
                 <section class="panel" id="panel-transport">
                     <div class="panel-header">
                         <h2><i class="fa-solid fa-truck"></i> 交通运输企业</h2>
@@ -542,6 +551,7 @@
                     </div>
                 </section>
 
+                <!-- 7. 冶金 -->
                 <section class="panel" id="panel-metallurgy">
                     <div class="panel-header">
                         <h2><i class="fa-solid fa-industry"></i> 冶金企业</h2>
@@ -567,6 +577,7 @@
                     </div>
                 </section>
 
+                <!-- 8. 机械制造 -->
                 <section class="panel" id="panel-machinery">
                     <div class="panel-header">
                         <h2><i class="fa-solid fa-gears"></i> 机械制造企业</h2>
@@ -592,6 +603,7 @@
                     </div>
                 </section>
 
+                <!-- 9. 烟花爆竹 -->
                 <section class="panel" id="panel-fireworks">
                     <div class="panel-header">
                         <h2><i class="fa-solid fa-fire"></i> 烟花爆竹生产企业</h2>
@@ -617,6 +629,7 @@
                     </div>
                 </section>
 
+                <!-- 10. 民用爆炸物品 -->
                 <section class="panel" id="panel-explosives">
                     <div class="panel-header">
                         <h2><i class="fa-solid fa-bomb"></i> 民用爆炸物品生产企业</h2>
@@ -642,6 +655,7 @@
                     </div>
                 </section>
 
+                <!-- 11. 武器装备研制 -->
                 <section class="panel" id="panel-weapon">
                     <div class="panel-header">
                         <h2><i class="fa-solid fa-rocket"></i> 武器装备研制生产与试验企业</h2>
@@ -679,6 +693,7 @@
                     </div>
                 </section>
 
+                <!-- 12. 电力生产供应 -->
                 <section class="panel" id="panel-power">
                     <div class="panel-header">
                         <h2><i class="fa-solid fa-bolt"></i> 电力生产与供应企业</h2>
