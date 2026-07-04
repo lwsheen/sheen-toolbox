@@ -394,7 +394,7 @@
             }
 
             filtered = data.filter(d => {
-                if(kw && !(d.code.includes(kw) || (d.name||'').toLowerCase().includes(kw) || (d.category||'').toLowerCase().includes(kw) || (d.source||'').toLowerCase().includes(kw))) return false;
+                if(kw && !(d.code.toLowerCase().includes(kw) || (d.name||'').toLowerCase().includes(kw) || (d.category||'').toLowerCase().includes(kw) || (d.source||'').toLowerCase().includes(kw))) return false;
                 if(hw && d.hwCode !== hw) return false;
                 if(haz && !(d.hazard||'').includes(haz)) return false;
                 return true;
