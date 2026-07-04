@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="/sheen-toolbox/common.css">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--black:#000000;--text-primary:#111827;--text-secondary:#6B7280;--bg-page:#F8FAFC;--bg-card:#FFFFFF;--border:#E5E7EB;--border-light:#F3F4F6;--brand-red:#7A1825;--brand-red-hover:#5C121C;--brand-red-light:#FEF2F2;--amber:#FBBF24;--r:12px}
+:root{--black:#000000;--text-primary:#111827;--text-secondary:#6B7280;--bg-page:#F8FAFC;--bg-card:#FFFFFF;--border:#E5E7EB;--border-light:#F3F4F6;--brand-red:#7A1825;--brand-red-hover:#5C121C;--brand-red-light:#FEF2F2;--amber:#FBBF24;--radius-md:12px}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg-page);color:var(--text-primary);line-height:1.6}
 
@@ -24,7 +24,7 @@ h1{font-size:20px;font-weight:700;margin-bottom:4px;display:flex;align-items:cen
 h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);margin-bottom:14px}
 
 /* Cards */
-.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
 .card h3{font-size:14px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px}
 .card h3 i{color:var(--brand-red)}
 .card h3 .num{background:var(--brand-red);color:#fff;min-width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
@@ -43,16 +43,16 @@ textarea.form-control{min-height:56px;resize:vertical}
 /* Buttons */
 .btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:60px;font-size:12px;font-weight:600;cursor:pointer;transition:all .25s;border:none;font-family:inherit;white-space:nowrap}
 .btn-primary{background:var(--brand-red);color:#fff}.btn-primary:hover{background:var(--brand-red-hover)}
-.btn-o{background:var(--bg-card);border:1.5px solid var(--border);color:var(--text-primary)}.btn-o:hover{border-color:var(--brand-red);color:var(--brand-red)}
-.btn-d{background:#DC2626;color:#fff}.btn-d:hover{background:#B91C1C}
-.btn-bad{background:var(--bg-card);color:var(--brand-red);border:1.5px solid var(--brand-red)}.btn-bad:hover{background:var(--brand-red-light)}
+.btn-outline{background:var(--bg-card);border:1.5px solid var(--border);color:var(--text-primary)}.btn-outline:hover{border-color:var(--brand-red);color:var(--brand-red)}
+.btn-danger{background:#DC2626;color:#fff}.btn-danger:hover{background:#B91C1C}
+.btn-outline{background:var(--bg-card);color:var(--brand-red);border:1.5px solid var(--brand-red)}.btn-outline:hover{background:var(--brand-red-light)}
 .btn-success{background:#16A34A;color:#fff}.btn-success:hover{background:#15803D}
 .btn-file{background:#2563EB;color:#fff}.btn-file:hover{background:#1D4ED8}
 .btn-sm{padding:5px 10px;font-size:10px}
 .btn-group{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
 
 /* Steps */
-.step-block{background:var(--bg-page);border:1px solid var(--border-light);border-radius:var(--r);padding:14px 16px;margin-bottom:12px}
+.step-block{background:var(--bg-page);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:14px 16px;margin-bottom:12px}
 .step-block .step-header{display:flex;align-items:center;gap:10px;margin-bottom:6px}
 .step-block .step-num{background:var(--text-primary);color:#fff;min-width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
 .step-block .step-input{flex:1}
@@ -61,7 +61,7 @@ textarea.form-control{min-height:56px;resize:vertical}
 .step-block .step-actions button:hover{background:var(--brand-red-light);color:var(--brand-red);border-color:var(--brand-red)}
 
 /* Hazard cards */
-.hz-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-top:10px;position:relative;display:grid;grid-template-columns:1fr 280px;gap:12px}
+.hz-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px 16px;margin-top:10px;position:relative;display:grid;grid-template-columns:1fr 280px;gap:12px}
 .hz-card .hz-num{position:absolute;top:-9px;left:12px;background:var(--brand-red);color:#fff;font-size:10px;font-weight:700;padding:1px 8px;border-radius:10px}
 .hz-card .hz-main{display:flex;flex-direction:column;gap:8px}
 .hz-card .hz-score{display:flex;flex-direction:column}
@@ -74,7 +74,7 @@ textarea.form-control{min-height:56px;resize:vertical}
 .hz-divider{border:none;border-top:1px dashed var(--border);margin:0}
 
 /* LEC scoring panel */
-.lec-panel{background:var(--bg-page);border:1px solid var(--border-light);border-radius:var(--r);padding:12px;display:flex;flex-direction:column;gap:8px}
+.lec-panel{background:var(--bg-page);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:12px;display:flex;flex-direction:column;gap:8px}
 .lec-panel-title{font-size:11px;font-weight:700;color:var(--text-primary);display:flex;align-items:center;gap:5px}
 .lec-panel-title i{color:var(--brand-red);font-size:12px}
 .lec-selects{display:flex;flex-direction:column;gap:6px}
@@ -103,7 +103,7 @@ textarea.form-control{min-height:56px;resize:vertical}
 
 /* Summary KPI cards */
 .kg{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-bottom:14px}
-.kc{background:var(--bg-card);border-radius:var(--r);padding:12px;text-align:center;border:1px solid var(--border)}
+.kc{background:var(--bg-card);border-radius:var(--radius-md);padding:12px;text-align:center;border:1px solid var(--border)}
 .kc .kn{font-size:24px;font-weight:700}.kc .kl{font-size:11px;color:var(--text-secondary);margin-top:2px}
 
 /* Reference tables */
