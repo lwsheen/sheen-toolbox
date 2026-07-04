@@ -164,6 +164,7 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
 <a href="/sheen-toolbox/explosion-venting-calculator/" class="sheen-nav-tool">泄爆面积</a>
 <a href="/sheen-toolbox/environmental-tax-calculator/" class="sheen-nav-tool">环保税</a>
 <a href="/sheen-toolbox/noise-calculator/" class="sheen-nav-tool">噪声计算</a>
+<a href="/sheen-toolbox/major-hazard-identification/" class="sheen-nav-tool">重大危险源</a>
     </div>
   </header>
 
@@ -180,6 +181,7 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
     <div class="step-dot" data-step="3">3</div>
   </div>
 
+  <!-- Step 1: 5M1E -->
   <div id="step1">
     <div class="card">
       <h2><i class="fa-solid fa-magnifying-glass-chart"></i> 第1步：5M1E 维度分析</h2>
@@ -199,15 +201,18 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
         <button class="btn-secondary" onclick="autoAnalyze()" id="btnAuto" style="border-color:var(--brand-red);"><i class="fa-solid fa-wand-magic-sparkles"></i> 一键生成事故报告</button>
       </div>
 
+      <!-- 一键分析进度 -->
       <div id="autoProgress" style="display:none;text-align:center;padding:20px;">
         <div class="loading" style="justify-content:center;"><div class="spinner"></div> <span id="autoProgressText">AI 正在分析事故并生成报告…</span></div>
         <p style="font-size:12px;color:var(--text-secondary);margin-top:8px;">首次调用约需10-20秒，请耐心等待</p>
       </div>
 
+      <!-- 一键分析错误 -->
       <div id="autoError" style="display:none;text-align:center;padding:16px;background:#FEF2F2;border-radius:var(--radius-md);margin-top:16px;"></div>
     </div>
   </div>
 
+  <!-- Step 2: Interactive 5Why per dimension -->
   <div id="step2" style="display:none;">
     <div class="card" id="analysisCard">
       <h2 id="dimTitle"></h2>
@@ -224,6 +229,7 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
     <div class="card" id="dimProgress" style="text-align:center;font-size:13px;color:var(--text-secondary);"></div>
   </div>
 
+  <!-- Step 3: Final Report -->
   <div id="step3" style="display:none;">
     <div class="card" id="reportCard"></div>
     <div style="text-align:center;">
@@ -240,12 +246,14 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
 <div class="api-toggle no-print" onclick="toggleApiSetup()" title="API设置"><i class="fa-solid fa-key"></i></div>
 <span class="api-status no no-print" id="apiStatusInline" style="position:fixed;bottom:24px;right:68px;z-index:100;font-size:11px;">API配置：未设置</span>
 
+<!-- API Setup Modal -->
 <div class="card api-setup" id="apiSetup" style="position:fixed;bottom:70px;right:20px;width:380px;z-index:100;max-height:80vh;overflow-y:auto;">
   <h3 style="margin-bottom:4px;"><i class="fa-solid fa-key" style="color:var(--amber);"></i> API 配置</h3>
   <p style="font-size:11px;color:var(--text-secondary);margin-bottom:12px;">
     <span id="apiSetupHint">共享代理（免Key）或自有 Key 二选一</span>
   </p>
 
+  <!-- Mode selector -->
   <div style="display:flex;gap:6px;margin-bottom:12px;">
     <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 14px;border-radius:60px;font-size:12px;font-weight:600;border:1.5px solid var(--border);" id="lblProxyMode">
       <input type="radio" name="apiMode" value="proxy" id="radioProxy" onchange="switchApiMode('proxy')" style="accent-color:var(--brand-red);"> 共享代理
