@@ -318,7 +318,7 @@ function getCNTime(){return new Date(Date.now()+(480+new Date().getTimezoneOffse
 function sw(n){
   document.querySelectorAll('.tab').forEach(function(t,i){t.classList.toggle('active',i===n)});
   document.querySelectorAll('.tc').forEach(function(c,i){c.classList.toggle('active',i===n)});
-  if(n===0)calcSynth();if(n===1)calcTWA();if(n===2)calcTasks();if(n===3)calcGrade();if(n===4)calcHearing();
+  [calcSynth,calcTWA,calcTasks,calcGrade,calcHearing][n]();
 }
 function prt(n){
   document.querySelectorAll('.tc').forEach(function(c,i){c.classList.remove('pt');if(i===n)c.classList.add('pt')});
@@ -400,7 +400,7 @@ function calcHearing(){
   else{atten=parseFloat(document.getElementById('hpFactor').value)||0.5}
   var protectedL=L-atten,safe=protectedL<85,belowActionLevel=protectedL<80;
   document.getElementById('hpDetail').innerHTML=
-    '<ul class="steps"><li class="formula">衰减值 = '+f(method==='osha'?'(NRR−7)/2 = ('+NRR+'−7)/2':method==='niosh'?'NRR × '+(type==='earplug'?'0.3(耳塞)':type==='dual'?'0.75(双重)':'0.5(耳罩)'):'衰减因子 × NRR')+' = '+atten.toFixed(1)+' dB</li>'+
+    '<ul class="steps"><li class="formula">衰减值 = '+(method==='osha'?'(NRR−7)/2 = ('+NRR+'−7)/2':method==='niosh'?'NRR × '+(type==='earplug'?'0.3(耳塞)':type==='dual'?'0.75(双重)':'0.5(耳罩)'):'衰减因子 × NRR')+' = '+atten.toFixed(1)+' dB</li>'+
     '<li>环境噪声：<span>'+L.toFixed(1)+' dB(A)</span> · NRR：<span>'+NRR+' dB</span> · '+document.getElementById('hpType').options[document.getElementById('hpType').selectedIndex].text+'</li>'+
     '<li>降噪后暴露声级：<span style="color:'+(safe?'#16A34A':'#DC2626')+'">'+protectedL.toFixed(1)+' dB(A)</span> '+(safe?'<span class="warn-badge" style="background:#ECFDF5;color:#16A34A">✓ 已降至安全线 (≤85 dB)</span>':(belowActionLevel?'<span class="warn-badge" style="background:#FFF7ED;color:#CA8A04">接近阈值</span>':'<span class="warn-badge danger">⚠ 仍高于安全阈值，需加强防护</span>'))+'</li></ul>';
   document.getElementById('hpResult').innerHTML=
@@ -455,7 +455,7 @@ function exportReport(tab){
     var LAeq=10*Math.log10(sum/totalT),LEX=LAeq+10*Math.log10(totalT/8);
     html+='<h2>计算结果</h2><table><tr><td>L<sub>Aeq,T</sub></td><td class="val">'+LAeq.toFixed(1)+' dB(A)</td></tr><tr><td>L<sub>EX,8h</sub></td><td class="val">'+LEX.toFixed(1)+' dB(A)</td></tr></table>';
     if(totalT>8)html+='<p class="warn">⚠ 总暴露时长 '+totalT.toFixed(1)+'h 超过8小时标准班次。</p>';
-  }else if(tab===2){
+  }else if(tab===4){
     var L=parseFloat(document.getElementById('hpLevel').value)||100,NRR=parseFloat(document.getElementById('hpNRR').value)||29,method=document.getElementById('hpMethod').value,type=document.getElementById('hpType').value;
     var atten=method==='osha'?(NRR-7)/2:method==='niosh'?(type==='earplug'?NRR*0.3:type==='dual'?NRR*0.75:NRR*0.5):(parseFloat(document.getElementById('hpFactor').value)||0.5);
     var pL=L-atten;
@@ -474,7 +474,6 @@ function exportReport(tab){
 }
 
 // ===== Init =====
-function f(s){return s}
 document.getElementById('printTime').textContent=getCNTime();
 loadSettings();loadTasks();calcSynth();calcTWA();calcTasks();
 </script>
