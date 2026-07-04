@@ -277,6 +277,18 @@ var TABLE = [
 
 var LBL=['I','II','III','IV'];
 var EXP=['0～25%','25%～50%','50%～75%','75%～100%'];
+// GB/T 8170 修约规则：四舍六入五留双（banker's rounding）
+function roundGBT8170(val, decimals) {
+    var factor = Math.pow(10, decimals);
+    var scaled = val * factor;
+    var intPart = Math.floor(scaled);
+    var frac = scaled - intPart;
+    if (frac > 0.5) return (intPart + 1) / factor;
+    if (frac < 0.5) return intPart / factor;
+    // frac === 0.5: round to even
+    return (intPart % 2 === 0 ? intPart : intPart + 1) / factor;
+}
+
 var MEASURES={
   'I':'改善全面通风 + 局部送风降温 + 职业健康监护和培训 + 防暑降温管理措施',
   'II':'在 I 级措施基础上：强化防暑降温措施和职业健康监护，调整高温作业劳动-休息制度，降低接触时间率',
@@ -323,7 +335,7 @@ function calc(){
   var cavLabel=document.getElementById('clothing').selectedOptions[0].textContent;
   // Step 2: WBGTeff
   var wbgteffRaw=wbgtMeas+cav;
-  var wbgteff=Math.round(wbgteffRaw); // GB/T 8170 rounding
+  var wbgteff=roundGBT8170(wbgteffRaw,0); // GB/T 8170 修约：四舍六入五留双
   // Step 3: exposure time rate
   var rate=(expH/8*100);
   var ei;
