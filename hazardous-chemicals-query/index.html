@@ -38,68 +38,10 @@
             line-height: 1.6;
         }
 
-        /* 导航栏 */
-        .sheen-nav {
-            background: var(--black);
-            padding:0 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 4px solid var(--brand-red);
-            flex-wrap: wrap;
-            min-height:52px;
-        }
-
-        .sheen-nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #fff;
-            text-decoration: none;
-            padding:12px 0;
-        }
-
-        .sheen-nav-brand i {
-            font-size:22px;
-            color: var(--amber);
-        }
-
-        .sheen-nav-brand-text {
-            font-size:15px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
-        .sheen-nav-tools {
-            display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
-        }
-
-        .sheen-nav-tool {
-            display: flex;
-            align-items: center;
-            gap:4px;
-            padding:5px 10px;
-            color: rgba(255,255,255,0.7);
-            text-decoration: none;
-            font-size:11px;
-            font-weight: 500;
-            border-radius: 60px;
-            transition:all .2s;
-            white-space: nowrap;
-        }
-
-        .sheen-nav-tool:hover {
-            background: rgba(255,255,255,0.1);
-            color: #fff;
-        }
-
-        .sheen-nav-tool.active {
-            background: rgba(255,255,255,0.15);
-            color: #fff;
-            font-weight: 600;
-        }
+        .breadcrumb { padding: 10px 24px; font-size: 12px; color: var(--text-secondary); border-bottom: 1px solid var(--border); }
+        .breadcrumb a { color: var(--brand-red); text-decoration: none; font-weight: 500; transition: opacity .2s; }
+        .breadcrumb a:hover { opacity: .7; }
+        .breadcrumb span { color: var(--text-secondary); }
 
         /* 主内容 */
         .app-wrapper {
@@ -338,10 +280,6 @@
 
         /* 打印样式 */
         
-@media (max-width:768px) {
-  .sheen-nav{padding:6px 8px}
-  .sheen-nav-tool{padding:5px 8px;font-size:10px}
-  }
 @media print {
             @page {
                 size: A4;
@@ -360,7 +298,7 @@
                 color: #000 !important;
             }
 
-            .sheen-nav, .sheen-footer, .btn-primary, .btn-print, .search-section, .pagination {
+            .breadcrumb, .sheen-footer, .btn-primary, .btn-print, .search-section, .pagination {
                 display: none !important;
             }
 
@@ -385,10 +323,6 @@
 
         /* 响应式 */
         @media (max-width: 768px) {
-            .sheen-nav {
-                padding: 0 16px;
-            }
-
             .app-wrapper {
                 padding: 16px;
             }
@@ -413,30 +347,10 @@
 </head>
 <body>
     <!-- 导航栏 -->
-    <header class="sheen-nav">
-        <a href="/sheen-toolbox/" class="sheen-nav-brand">
-            <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i>
-            <span class="sheen-nav-brand-text">SHEEN Toolbox</span>
-        </a>
-        <div class="sheen-nav-tools">
-      <a href="/sheen-toolbox/pssr-checklist/" class="sheen-nav-tool">PSSR检查表</a>
-      <a href="/sheen-toolbox/fire-extinguisher-calculator/" class="sheen-nav-tool">灭火器计算器</a>
-      <a href="/sheen-toolbox/safety-production-cost-calculator/" class="sheen-nav-tool">安产费用计算器</a>
-      <a href="/sheen-toolbox/jsa-lec/" class="sheen-nav-tool">JSA+LEC评价</a>
-      <a href="/sheen-toolbox/industry-classification/" class="sheen-nav-tool">行业分类查询</a>
-      <a href="/sheen-toolbox/dangerous-goods-query/" class="sheen-nav-tool">危险货物查询</a>
-      <a href="/sheen-toolbox/five-why-analysis/" class="sheen-nav-tool">5Why根因分析</a>
-      <a href="/sheen-toolbox/hazardous-waste-query/" class="sheen-nav-tool">危险废物查询</a>
-      <a href="/sheen-toolbox/hazardous-chemicals-query/" class="sheen-nav-tool active">危险化学品查询</a>
-      <a href="/sheen-toolbox/iso14001-environmental-factors/" class="sheen-nav-tool">环境因素</a>
-<a href="/sheen-toolbox/heat-stress-classification/" class="sheen-nav-tool">高温分级</a>
-<a href="/sheen-toolbox/niosh-lifting-calculator/" class="sheen-nav-tool">NIOSH举升</a>
-<a href="/sheen-toolbox/explosion-venting-calculator/" class="sheen-nav-tool">泄爆面积</a>
-<a href="/sheen-toolbox/environmental-tax-calculator/" class="sheen-nav-tool">环保税</a>
-<a href="/sheen-toolbox/noise-calculator/" class="sheen-nav-tool">噪声计算</a>
-<a href="/sheen-toolbox/major-hazard-identification/" class="sheen-nav-tool">重大危险源</a>
+    <div class="breadcrumb">
+        <a href="/sheen-toolbox/">&larr; SHEEN Toolbox</a>
+        <span> / 危险化学品查询</span>
     </div>
-  </header>
 
     <!-- 主内容 -->
     <main class="app-wrapper">
