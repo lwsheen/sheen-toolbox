@@ -71,12 +71,12 @@
         /* ===== 主区 ===== */
         .hero {
             text-align: center;
-            padding: 24px 24px 0;
+            padding: 28px 24px 0;
             max-width: 720px;
             margin: 0 auto;
         }
         .hero h1 {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
             color: var(--text-primary);
             margin-bottom: 4px;
@@ -90,10 +90,10 @@
         /* ===== 工具卡片 ===== */
         .tool-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 8px;
-            padding: 16px 20px 32px;
-            max-width: 1320px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            padding: 28px 32px 40px;
+            max-width: 1100px;
             margin: 0 auto;
             width: 100%;
         }
@@ -101,44 +101,54 @@
         .tool-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 10px 12px;
+            border-radius: 14px;
+            padding: 20px 16px 18px;
             text-decoration: none;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 10px;
+            text-align: center;
             position: relative;
-            min-width: 0;
         }
         .tool-card:hover {
             border-color: var(--brand-red);
-            background: var(--bg-page);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(122,24,37,0.12);
         }
-        .tool-card:active { transform: scale(0.98); }
+        .tool-card:active { transform: translateY(-1px); }
 
         .tool-card .tool-icon {
-            width: 28px;
-            height: 28px;
-            border-radius: 7px;
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 24px;
             background: var(--brand-red);
             color: #fff;
             flex-shrink: 0;
+            margin-bottom: 12px;
+            transition: all 0.25s ease;
+        }
+        .tool-card:hover .tool-icon {
+            transform: scale(1.05);
         }
 
         .tool-card h3 {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
             color: var(--text-primary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            line-height: 1.4;
+            margin-bottom: 4px;
+            word-break: break-word;
         }
-        .tool-card .desc { display: none; }
+        .tool-card .desc {
+            font-size: 11.5px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
         .tool-card .arrow { display: none; }
         .tool-card .tag-row { display: none; }
         .tool-card .tag { display: none; }
@@ -146,48 +156,34 @@
         /* ===== 占位卡片 ===== */
         .tool-card.placeholder {
             border-style: dashed;
-            opacity: 0.4;
+            opacity: 0.45;
             cursor: default;
             pointer-events: none;
             user-select: none;
         }
         .tool-card.placeholder:hover {
             border-color: var(--border);
-            background: var(--bg-card);
+            transform: none;
+            box-shadow: none;
         }
         .tool-card.placeholder:active { transform: none; }
         .tool-card.placeholder .tool-icon {
-            background: var(--border);
+            background: #F3F4F6;
             color: var(--text-secondary);
         }
         .tool-card.placeholder h3 {
             color: var(--text-secondary);
-            font-size: 12px;
+            font-size: 12.5px;
         }
         .tool-card.placeholder .coming-badge { display: none; }
 
         /* 拖动排序 */
-        .tool-card.dragging { opacity: 0.4; transform: scale(0.95); }
+        .tool-card.dragging { opacity: 0.35; transform: scale(0.96); }
         .tool-card.drag-over { border-color: var(--brand-red); border-style: solid; }
         .tool-card[draggable="true"] { cursor: grab; }
         .tool-card[draggable="true"]:active { cursor: grabbing; }
-        .tool-card .drag-handle {
-            display: none;
-        }
-        .tool-card:hover .drag-handle,
-        .tool-card.drag-over .drag-handle {
-            display: block;
-            position: absolute;
-            top: 2px;
-            right: 4px;
-            color: #ccc;
-            font-size: 12px;
-            cursor: grab;
-            line-height: 1;
-        }            opacity: 0;
-            transition: opacity 0.2s;
-        }
-        .tool-card:hover .drag-handle { opacity: 1; }
+        .tool-card .drag-handle { display: none; }
+        .tool-card .coming-badge { display: none; }
 
         /* ===== 分隔标题 ===== */
         .section-divider {
@@ -246,26 +242,29 @@
         .sheen-footer strong { color: var(--text-primary); }
 
         @media (max-width: 720px) {
-            .hero { padding: 20px 16px 0; }
-            .hero h1 { font-size: 18px; }
-            .tool-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); padding: 12px 16px 24px; }
+            .hero { padding: 22px 16px 0; }
+            .hero h1 { font-size: 19px; }
+            .tool-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; padding: 20px 16px 30px; }
             .sheen-header { padding: 8px 16px; }
             .sheen-header-brand { font-size: 14px; }
             .sheen-header-info { font-size: 10px; gap: 10px; }
+            .tool-card { padding: 16px 12px 14px; }
+            .tool-card .tool-icon { width: 44px; height: 44px; font-size: 20px; border-radius: 11px; margin-bottom: 10px; }
+            .tool-card h3 { font-size: 13px; }
         }
 
         @media (max-width: 480px) {
-            .hero { padding: 16px 12px 0; }
-            .hero h1 { font-size: 16px; }
+            .hero { padding: 18px 12px 0; }
+            .hero h1 { font-size: 17px; }
             .hero p { font-size: 12px; }
-            .tool-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); padding: 10px 12px 20px; gap: 6px; }
-            .tool-card { padding: 8px 10px; }
-            .tool-card h3 { font-size: 12px; }
-            .tool-card .tool-icon { width: 24px; height: 24px; font-size: 12px; border-radius: 5px; }
+            .tool-grid { grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); padding: 16px 12px 24px; gap: 10px; }
+            .tool-card { padding: 14px 10px 12px; border-radius: 12px; }
+            .tool-card h3 { font-size: 12.5px; }
+            .tool-card .tool-icon { width: 40px; height: 40px; font-size: 18px; border-radius: 10px; margin-bottom: 8px; }
             .sheen-header { padding: 6px 12px; gap: 8px; }
             .sheen-header-brand { font-size: 13px; }
             .sheen-header-info { font-size: 9px; gap: 8px; }
-            .sheen-footer { padding: 12px 16px; font-size: 12px; }
+            .sheen-footer { padding: 14px 16px; font-size: 12px; }
         }
     </style>
 </head>
@@ -279,7 +278,6 @@
         <div class="sheen-header-info">
             <span><i class="fa-solid fa-clock"></i> <span id="liveTime"></span></span>
             <span class="tool-count"><span id="toolCount"></span> 个工具</span>
-            <span><i class="fa-solid fa-eye"></i> <span id="visitCount">—</span></span>
         </div>
     </header>
 
@@ -356,7 +354,7 @@
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-leaf"></i></div>
             <h3 title="ISO 14001 环境因素识别">ISO 14001 环境因素识别</h3>
-            <p class="desc">环境因素识别与评价</p>
+            <p class="desc">ISO 14001 环境管理体系</p>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
         <a href="/sheen-toolbox/heat-stress-classification/" class="tool-card" draggable="true">
@@ -382,7 +380,7 @@
         </a>
         <a href="/sheen-toolbox/environmental-tax-calculator/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
-            <div class="tool-icon"><i class="fa-solid fa-leaf"></i></div>
+            <div class="tool-icon"><i class="fa-solid fa-coins"></i></div>
             <h3>环保税计算器</h3>
             <p class="desc">四大类污染物</p>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
@@ -459,18 +457,15 @@
     (function() {
         function chinaTime() { return new Date(Date.now() + (480 + new Date().getTimezoneOffset()) * 60000); }
         // ===== 访问计数器 =====
-        var el = document.getElementById('visitCount');
         var el2 = document.getElementById('visitCount2');
         var LS = 'sheen_visit_n';
         var localN = parseInt(localStorage.getItem(LS), 10) || 0;
-        if (el) el.textContent = localN.toLocaleString('zh-CN');
         if (el2) el2.textContent = localN.toLocaleString('zh-CN');
         fetch('https://api.counterapi.dev/v1/lwsheen-sheen-toolbox/homepage/up')
             .then(function(r) { return r.json(); })
             .then(function(d) {
                 var n = d.count || 0;
                 var s = n.toLocaleString('zh-CN');
-                if (el) el.textContent = s;
                 if (el2) el2.textContent = s;
                 localStorage.setItem(LS, String(n));
             })
@@ -528,7 +523,7 @@
                 this.classList.remove('drag-over');
                 if (draggedItem && this !== draggedItem) {
                     grid.insertBefore(draggedItem, this);
-                    saveCardOrder();
+                    saveOrder();
                 }
             });
         });
