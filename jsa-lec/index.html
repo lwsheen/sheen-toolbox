@@ -212,6 +212,7 @@ textarea.form-control{min-height:56px;resize:vertical}
 <a href="/sheen-toolbox/explosion-venting-calculator/" class="sheen-nav-tool">泄爆面积</a>
 <a href="/sheen-toolbox/environmental-tax-calculator/" class="sheen-nav-tool">环保税</a>
 <a href="/sheen-toolbox/noise-calculator/" class="sheen-nav-tool">噪声计算</a>
+<a href="/sheen-toolbox/major-hazard-identification/" class="sheen-nav-tool">重大危险源</a>
     </div>
   </header>
 
@@ -220,6 +221,7 @@ textarea.form-control{min-height:56px;resize:vertical}
   <h1><i class="fa-solid fa-magnifying-glass-chart"></i> JSA + LEC 作业安全分析与风险评估</h1>
   <p class="sub">工序分解 · 危害识别 · LEC定量评分 · 风险等级判定 · 控制措施制定</p>
 
+  <!-- 1. 表头信息 -->
   <div class="card">
     <h3><span class="num">1</span> 表头信息</h3>
     <div class="form-row">
@@ -239,6 +241,7 @@ textarea.form-control{min-height:56px;resize:vertical}
     </div>
   </div>
 
+  <!-- 2. 分析表格 -->
   <div class="card" id="analysisCard">
     <h3><span class="num">2</span> 工作步骤 → 危害识别 → LEC评分 → 控制措施</h3>
     <div id="stepsContainer"></div>
@@ -247,6 +250,7 @@ textarea.form-control{min-height:56px;resize:vertical}
     </div>
   </div>
 
+  <!-- 3. 风险汇总 -->
   <div class="card" id="summaryCard" style="display:none">
     <h3><span class="num">3</span> 风险等级汇总</h3>
     <div class="kg" id="resultBar">
@@ -259,6 +263,7 @@ textarea.form-control{min-height:56px;resize:vertical}
     </div>
   </div>
 
+  <!-- Action buttons -->
   <div class="btn-group no-print">
     <button class="btn btn-o" onclick="addDemo()"><i class="fa-solid fa-lightbulb"></i> 加载示例</button>
     <button class="btn btn-p" id="btnAiFill" onclick="aiFill()"><i class="fa-solid fa-wand-magic-sparkles"></i> AI 自动填写</button>
@@ -271,6 +276,7 @@ textarea.form-control{min-height:56px;resize:vertical}
     <button class="btn btn-file" onclick="exportWord()"><i class="fa-solid fa-file-word"></i> 导出 Word</button>
   </div>
 
+  <!-- 4. 评分标准 -->
   <div class="card no-print">
     <h3><span class="num">4</span> LEC 评分标准与实施要点</h3>
     <div class="hint">评分人员现场参考 — 根据实际情况对标选择最匹配的分值</div>
@@ -361,6 +367,7 @@ textarea.form-control{min-height:56px;resize:vertical}
 </footer>
 <div class="print-time" id="printTime"></div>
 
+<!-- API Config -->
 <div id="apiModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:999;align-items:center;justify-content:center;">
   <div class="card" style="max-width:400px;width:90%;margin:0;">
     <h3 style="margin-bottom:12px;">API 配置</h3>
@@ -686,7 +693,7 @@ function exportExcel() {
   var data = collectExportData();
   if (data.rows.length === 0) { alert('暂无数据可导出，请先添加工作步骤和危害因素。'); return; }
 
-  var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"></head><body>';
+  var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>JSA+LEC</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body>';
 
   html += '<h2>JSA+LEC 作业安全分析与风险评估</h2>';
   html += '<tr><td><b>分析：</b></td><td>'+esc(data.analyst)+'</td><td><b>时间：</b></td><td>'+esc(data.analystDate)+'</td><td><b>复核（工序负责人）：</b></td><td>'+esc(data.reviewer)+'</td><td><b>时间：</b></td><td>'+esc(data.reviewerDate)+'</td></tr>';
