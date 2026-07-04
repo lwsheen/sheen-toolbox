@@ -71,12 +71,12 @@
         /* ===== 主区 ===== */
         .hero {
             text-align: center;
-            padding: 28px 24px 0;
+            padding: 24px 24px 0;
             max-width: 720px;
             margin: 0 auto;
         }
         .hero h1 {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
             color: var(--text-primary);
             margin-bottom: 4px;
@@ -90,10 +90,10 @@
         /* ===== 工具卡片 ===== */
         .tool-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 16px;
-            padding: 28px 32px 40px;
-            max-width: 1100px;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 10px;
+            padding: 20px 24px 36px;
+            max-width: 1160px;
             margin: 0 auto;
             width: 100%;
         }
@@ -101,53 +101,64 @@
         .tool-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 20px 16px 18px;
+            border-radius: 10px;
+            padding: 12px 14px;
             text-decoration: none;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
+            align-items: flex-start;
+            gap: 10px;
             position: relative;
         }
         .tool-card:hover {
             border-color: var(--brand-red);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(122,24,37,0.12);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(122,24,37,0.10);
         }
-        .tool-card:active { transform: translateY(-1px); }
+        .tool-card:active { transform: scale(0.98); }
 
         .tool-card .tool-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 14px;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 15px;
             background: var(--brand-red);
             color: #fff;
             flex-shrink: 0;
-            margin-bottom: 12px;
-            transition: all 0.25s ease;
+            margin-top: 1px;
+            transition: all 0.2s ease;
         }
         .tool-card:hover .tool-icon {
-            transform: scale(1.05);
+            background: var(--brand-red-hover);
         }
 
+        .tool-card .card-text {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            gap: 3px;
+        }
         .tool-card h3 {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             color: var(--text-primary);
-            line-height: 1.4;
-            margin-bottom: 4px;
+            line-height: 1.35;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
             word-break: break-word;
         }
         .tool-card .desc {
-            font-size: 11.5px;
+            font-size: 11px;
             color: var(--text-secondary);
-            line-height: 1.4;
+            line-height: 1.3;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .tool-card .arrow { display: none; }
         .tool-card .tag-row { display: none; }
@@ -242,29 +253,30 @@
         .sheen-footer strong { color: var(--text-primary); }
 
         @media (max-width: 720px) {
-            .hero { padding: 22px 16px 0; }
-            .hero h1 { font-size: 19px; }
-            .tool-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; padding: 20px 16px 30px; }
+            .hero { padding: 20px 16px 0; }
+            .hero h1 { font-size: 18px; }
+            .tool-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); padding: 14px 16px 28px; gap: 8px; }
             .sheen-header { padding: 8px 16px; }
             .sheen-header-brand { font-size: 14px; }
             .sheen-header-info { font-size: 10px; gap: 10px; }
-            .tool-card { padding: 16px 12px 14px; }
-            .tool-card .tool-icon { width: 44px; height: 44px; font-size: 20px; border-radius: 11px; margin-bottom: 10px; }
-            .tool-card h3 { font-size: 13px; }
+            .tool-card { padding: 10px 12px; }
+            .tool-card .tool-icon { width: 28px; height: 28px; font-size: 13px; border-radius: 7px; }
+            .tool-card h3 { font-size: 12px; }
+            .tool-card .desc { font-size: 10px; }
         }
 
         @media (max-width: 480px) {
-            .hero { padding: 18px 12px 0; }
-            .hero h1 { font-size: 17px; }
+            .hero { padding: 16px 12px 0; }
+            .hero h1 { font-size: 16px; }
             .hero p { font-size: 12px; }
-            .tool-grid { grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); padding: 16px 12px 24px; gap: 10px; }
-            .tool-card { padding: 14px 10px 12px; border-radius: 12px; }
-            .tool-card h3 { font-size: 12.5px; }
-            .tool-card .tool-icon { width: 40px; height: 40px; font-size: 18px; border-radius: 10px; margin-bottom: 8px; }
+            .tool-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); padding: 12px 12px 22px; gap: 7px; }
+            .tool-card { padding: 8px 10px; border-radius: 8px; }
+            .tool-card h3 { font-size: 11.5px; }
+            .tool-card .tool-icon { width: 24px; height: 24px; font-size: 12px; border-radius: 6px; }
             .sheen-header { padding: 6px 12px; gap: 8px; }
             .sheen-header-brand { font-size: 13px; }
             .sheen-header-info { font-size: 9px; gap: 8px; }
-            .sheen-footer { padding: 14px 16px; font-size: 12px; }
+            .sheen-footer { padding: 12px 16px; font-size: 12px; }
         }
     </style>
 </head>
@@ -290,119 +302,119 @@
         <a href="/sheen-toolbox/pssr-checklist/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-clipboard-check"></i></div>
-            <h3 title="PSSR 开车前安全检查表">PSSR 开车前安全检查表</h3>
-            <p class="desc">多行业增强版检查表</p>
+            <div class="card-text"><h3 title="PSSR 开车前安全检查表">PSSR 开车前安全检查表</h3>
+            <p class="desc">多行业增强版检查表</p></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
         <a href="/sheen-toolbox/fire-extinguisher-calculator/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-fire-extinguisher"></i></div>
-            <h3 title="灭火器配置计算器">灭火器配置计算器</h3>
-            <p class="desc">依据 GB 50140-2005</p>
+            <div class="card-text"><h3 title="灭火器配置计算器">灭火器配置计算器</h3>
+            <p class="desc">依据 GB 50140-2005</p></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
         <a href="/sheen-toolbox/safety-production-cost-calculator/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-calculator"></i></div>
-            <h3 title="安全生产费用计算器">安全生产费用计算器</h3>
-            <p class="desc">依据财企〔2022〕136号</p>
+            <div class="card-text"><h3 title="安全生产费用计算器">安全生产费用计算器</h3>
+            <p class="desc">依据财企〔2022〕136号</p></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
         <a href="/sheen-toolbox/jsa-lec/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
-            <h3 title="JSA + LEC 风险分析">JSA + LEC 风险分析</h3>
-            <p class="desc">工作安全分析 + 风险评价</p>
+            <div class="card-text"><h3 title="JSA + LEC 风险分析">JSA + LEC 风险分析</h3>
+            <p class="desc">工作安全分析 + 风险评价</p></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
         <a href="/sheen-toolbox/industry-classification/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-sitemap"></i></div>
-            <h3 title="行业分类查询">行业分类查询</h3>
-            <p class="desc">国民经济行业分类</p>
+            <div class="card-text"><h3 title="行业分类查询">行业分类查询</h3>
+            <p class="desc">国民经济行业分类</p></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
         <a href="/sheen-toolbox/dangerous-goods-query/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-skull-crossbones"></i></div>
-            <h3 title="危险货物查询">危险货物查询</h3>
-            <p class="desc">767 项危险货物查询</p>
+            <div class="card-text"><h3 title="危险货物查询">危险货物查询</h3>
+            <p class="desc">767 项危险货物查询</p></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
         <a href="/sheen-toolbox/hazardous-chemicals-query/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-flask"></i></div>
-            <h3 title="危险化学品查询">危险化学品查询</h3>
-            <p class="desc">2830 项危化品查询</p>
+            <div class="card-text"><h3 title="危险化学品查询">危险化学品查询</h3>
+            <p class="desc">2830 项危化品查询</p></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
         <a href="/sheen-toolbox/hazardous-waste-query/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-recycle"></i></div>
-            <h3 title="危险废物查询">危险废物查询</h3>
-            <p class="desc">470 项危废查询</p>
+            <div class="card-text"><h3 title="危险废物查询">危险废物查询</h3>
+            <p class="desc">470 项危废查询</p></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
         <a href="/sheen-toolbox/five-why-analysis/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-circle-question"></i></div>
-            <h3 title="5Why + 5M1E 根因分析">5Why + 5M1E 根因分析</h3>
-            <p class="desc">AI 引导根因分析</p>
+            <div class="card-text"><h3 title="5Why + 5M1E 根因分析">5Why + 5M1E 根因分析</h3>
+            <p class="desc">AI 引导根因分析</p></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
         <a href="/sheen-toolbox/iso14001-environmental-factors/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-leaf"></i></div>
-            <h3 title="ISO 14001 环境因素识别">ISO 14001 环境因素识别</h3>
-            <p class="desc">ISO 14001 环境管理体系</p>
+            <div class="card-text"><h3 title="ISO 14001 环境因素识别">ISO 14001 环境因素识别</h3>
+            <p class="desc">ISO 14001 环境管理体系</p></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
         <a href="/sheen-toolbox/heat-stress-classification/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-temperature-high"></i></div>
-            <h3 title="高温作业分级计算器">高温作业分级计算器</h3>
-            <p class="desc">GBZ/T 229.3-2025</p>
+            <div class="card-text"><h3 title="高温作业分级计算器">高温作业分级计算器</h3>
+            <p class="desc">GBZ/T 229.3-2025</p></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
         <a href="/sheen-toolbox/niosh-lifting-calculator/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-weight-hanging"></i></div>
-            <h3 title="NIOSH 举升方程计算器">NIOSH 举升方程计算器</h3>
-            <p class="desc">RWL + LI 风险评估</p>
+            <div class="card-text"><h3 title="NIOSH 举升方程计算器">NIOSH 举升方程计算器</h3>
+            <p class="desc">RWL + LI 风险评估</p></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
         <a href="/sheen-toolbox/explosion-venting-calculator/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-burst"></i></div>
-            <h3 title="泄爆面积计算器">泄爆面积计算器</h3>
-            <p class="desc">GB 50016 + EN 14491</p>
+            <div class="card-text"><h3 title="泄爆面积计算器">泄爆面积计算器</h3>
+            <p class="desc">GB 50016 + EN 14491</p></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
         <a href="/sheen-toolbox/environmental-tax-calculator/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-coins"></i></div>
-            <h3>环保税计算器</h3>
-            <p class="desc">四大类污染物</p>
+            <div class="card-text"><h3>环保税计算器</h3>
+            <p class="desc">四大类污染物</p></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
         <a href="/sheen-toolbox/noise-calculator/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-ear-listen"></i></div>
-            <h3>噪声计算器</h3>
-            <p class="desc">GBZ/T 229.4</p>
+            <div class="card-text"><h3>噪声计算器</h3>
+            <p class="desc">GBZ/T 229.4</p></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
         <a href="/sheen-toolbox/major-hazard-identification/" class="tool-card" draggable="true">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <div class="tool-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
-            <h3 title="重大危险源辨识">重大危险源辨识</h3>
-            <p class="desc">GB 18218-2018</p>
+            <div class="card-text"><h3 title="重大危险源辨识">重大危险源辨识</h3>
+            <p class="desc">GB 18218-2018</p></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
         <div class="tool-card placeholder">
             <div class="tool-icon"><i class="fa-solid fa-diagram-project"></i></div>
-            <h3>更多工具推出中</h3>
-            <p class="desc"></p>
+            <div class="card-text"><h3>更多工具推出中</h3>
+            <p class="desc"></p></div>
             <span class="coming-badge"></span>
         </div>
     </div>
