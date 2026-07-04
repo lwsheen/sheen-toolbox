@@ -59,28 +59,10 @@
         }
 
         /* ===== 顶部导航栏 ===== */
-        .sheen-nav {
-            background: var(--black);
-            padding:0 24px;
-            display: flex; align-items: center; justify-content: space-between;
-            border-bottom: 4px solid var(--brand-red);
-            flex-wrap: wrap;
-            min-height:52px;
-        }
-        .sheen-nav-brand { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; padding:12px 0; }
-        .sheen-nav-brand i { font-size:22px; color: var(--amber); }
-        .sheen-nav-brand-text { font-size:15px; font-weight: 700; letter-spacing: 0.5px; }
-
-        /* SHEEN Toolbox 工具切换导航 */
-        .sheen-nav-tools { display: flex; gap: 4px; flex-wrap: wrap; }
-        .sheen-nav-tool {
-            display: flex; align-items: center; gap:4px;
-            padding:5px 10px; color: rgba(255,255,255,0.7);
-            text-decoration: none; font-size:11px; font-weight: 500;
-            border-radius: 60px; transition: all var(--transition); white-space: nowrap;
-        }
-        .sheen-nav-tool:hover { background: rgba(255,255,255,0.1); color: #fff; }
-        .sheen-nav-tool.active { background: rgba(255,255,255,0.15); color: #fff; font-weight: 600; }
+        .breadcrumb { padding: 10px 24px; font-size: 12px; color: var(--text-secondary); border-bottom: 1px solid var(--border); }
+        .breadcrumb a { color: var(--brand-red); text-decoration: none; font-weight: 500; transition: opacity .2s; }
+        .breadcrumb a:hover { opacity: .7; }
+        .breadcrumb span { color: var(--text-secondary); }
         .print-time { display: none; }
 
         
@@ -320,12 +302,6 @@
         .sheen-footer strong { color: var(--text-primary); }
 
         /* ===== 响应式 ===== */
-        
-        /* Mobile nav sizing */
-        @media (max-width:768px) {
-          .sheen-nav{padding:6px 8px}
-          .sheen-nav-tool{padding:5px 8px;font-size:10px}
-        }
         @media (max-width: 820px) {
             body { padding: 0; }
             .app-wrapper { border-radius: 0; }
@@ -356,17 +332,10 @@
             }
             .main-body { flex-direction: column; }
             .content-area { padding: 20px; }
-            .sheen-nav { padding: 8px 12px; }
-            .sheen-nav-brand-text { font-size: 17px; }
             .result-value .number { font-size: 28px; }
         }
 
         @media (max-width: 480px) {
-            .sheen-nav { padding: 8px 12px; flex-direction: column; gap: 8px; }
-            .sheen-nav-brand-text { font-size: 16px; }
-            
-            .sheen-nav-tool { padding: 6px 10px; font-size: 12px; }
-            
             .content-area { padding: 12px; }
             .panel-header h2 { font-size:15px; }
             .form-control { font-size:11px; padding: 8px 10px; }
@@ -380,7 +349,7 @@
             @page { size: A4; margin: 18mm 15mm 20mm 15mm; }
             body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
             .app-wrapper { box-shadow: none !important; border-radius: 0 !important; max-width: 100% !important; border: none !important; }
-            .sheen-nav, .side-nav, .btn-primary, .btn-print, .form-card, .sheen-footer, .footnote, .disclaimer, .no-print { display: none !important; }
+            .breadcrumb, .side-nav, .btn-primary, .btn-print, .form-card, .sheen-footer, .footnote, .disclaimer, .no-print { display: none !important; }
             .main-body { flex-direction: column; }
             .content-area { padding: 0 !important; }
             .panel-header h2 { font-size: 18pt; color: #000 !important; }
@@ -404,30 +373,10 @@
     <div class="app-wrapper">
 
         <!-- ===== 顶部导航栏 ===== -->
-        <header class="sheen-nav">
-            <a href="/sheen-toolbox/" class="sheen-nav-brand">
-                <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i>
-                <span class="sheen-nav-brand-text">SHEEN Toolbox</span>
-            </a>
-            <div class="sheen-nav-tools">
-      <a href="/sheen-toolbox/pssr-checklist/" class="sheen-nav-tool">PSSR检查表</a>
-      <a href="/sheen-toolbox/fire-extinguisher-calculator/" class="sheen-nav-tool active">灭火器计算器</a>
-      <a href="/sheen-toolbox/safety-production-cost-calculator/" class="sheen-nav-tool">安产费用计算器</a>
-      <a href="/sheen-toolbox/jsa-lec/" class="sheen-nav-tool">JSA+LEC评价</a>
-      <a href="/sheen-toolbox/industry-classification/" class="sheen-nav-tool">行业分类查询</a>
-      <a href="/sheen-toolbox/dangerous-goods-query/" class="sheen-nav-tool">危险货物查询</a>
-      <a href="/sheen-toolbox/five-why-analysis/" class="sheen-nav-tool">5Why根因分析</a>
-      <a href="/sheen-toolbox/hazardous-waste-query/" class="sheen-nav-tool">危险废物查询</a>
-      <a href="/sheen-toolbox/hazardous-chemicals-query/" class="sheen-nav-tool">危险化学品查询</a>
-      <a href="/sheen-toolbox/iso14001-environmental-factors/" class="sheen-nav-tool">环境因素</a>
-<a href="/sheen-toolbox/heat-stress-classification/" class="sheen-nav-tool">高温分级</a>
-<a href="/sheen-toolbox/niosh-lifting-calculator/" class="sheen-nav-tool">NIOSH举升</a>
-<a href="/sheen-toolbox/explosion-venting-calculator/" class="sheen-nav-tool">泄爆面积</a>
-<a href="/sheen-toolbox/environmental-tax-calculator/" class="sheen-nav-tool">环保税</a>
-<a href="/sheen-toolbox/noise-calculator/" class="sheen-nav-tool">噪声计算</a>
-<a href="/sheen-toolbox/major-hazard-identification/" class="sheen-nav-tool">重大危险源</a>
-    </div>
-        </header>
+        <div class="breadcrumb">
+            <a href="/sheen-toolbox/">&larr; SHEEN Toolbox</a>
+            <span> / 灭火器配置计算器</span>
+        </div>
 
         <!-- ===== 主体 ===== -->
         <div class="main-body">
