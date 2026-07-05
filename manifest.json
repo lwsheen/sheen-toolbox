@@ -1,0 +1,27 @@
+{
+  "name": "SHEEN Toolbox",
+  "short_name": "SHEEN",
+  "description": "环境健康安全(EHS)专业工具箱 — 依据国家标准与行业规范的计算与检查工具集",
+  "start_url": "/sheen-toolbox/",
+  "scope": "/sheen-toolbox/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#F8FAFC",
+  "theme_color": "#7A1825",
+  "icons": [
+    {
+      "src": "/sheen-toolbox/assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/sheen-toolbox/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["utilities", "productivity"],
+  "lang": "zh-CN"
+}
