@@ -4,22 +4,29 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="吊装作业计算工具 — 载荷计算、索具强度、臂长评估，依据GB/T 5972等标准">
+
+<!-- PWA -->
+<link rel="manifest" href="/sheen-toolbox/manifest.json">
+<meta name="theme-color" content="#7A1825">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SHEEN Toolbox">
+<link rel="apple-touch-icon" href="/sheen-toolbox/assets/icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/sheen-toolbox/assets/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/sheen-toolbox/assets/icon-512.png">
+
 <title>吊装作业计算工具 — SHEEN Toolbox</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="/sheen-toolbox/common.css">
 <style>
-/* ===== 本工具配色（蓝色工业主题，SHEEN Toolbox 骨架一致） ===== */
+/* ===== 本工具配色 — 使用 SHEEN Toolbox 品牌色系 ===== */
 :root {
-  --lift-blue: #1E5FB4;
-  --lift-blue-hover: #164B8C;
-  --lift-blue-light: #EBF2FB;
-  --lift-blue-dark: #0F3460;
-  --lift-amber: #D97706;
-  --lift-amber-light: #FFFBEB;
-  --lift-green: #059669;
-  --lift-green-light: #ECFDF5;
-  --lift-red: #DC2626;
-  --lift-red-light: #FEF2F2;
+  --warn-red: #DC2626;
+  --warn-red-light: #FEF2F2;
+  --warn-amber: #D97706;
+  --warn-amber-light: #FFFBEB;
+  --warn-green: #059669;
+  --warn-green-light: #ECFDF5;
 }
 
 /* ===== 选项卡 ===== */
@@ -32,8 +39,8 @@
   white-space: nowrap;
 }
 .tab-btn i { font-size: 16px; }
-.tab-btn:hover { color: var(--lift-blue); background: var(--lift-blue-light); }
-.tab-btn.active { color: var(--lift-blue); background: var(--bg-card); border-bottom-color: var(--lift-blue); }
+.tab-btn:hover { color: var(--brand-red); background: var(--brand-red-light); }
+.tab-btn.active { color: var(--brand-red); background: var(--bg-card); border-bottom-color: var(--brand-red); }
 .tab-panel { display: none; background: var(--bg-card); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: 24px; }
 .tab-panel.active { display: block; }
 
@@ -50,11 +57,11 @@
 
 /* ===== 结果展示 ===== */
 .result-block {
-  background: var(--lift-blue-light); border: 2px solid var(--lift-blue);
+  background: var(--brand-red-light); border: 2px solid var(--brand-red);
   border-radius: 16px; padding: 24px; margin-top: 24px;
 }
 .result-block .main-value {
-  font-size: 42px; font-weight: 800; color: var(--lift-blue); line-height: 1.1;
+  font-size: 42px; font-weight: 800; color: var(--brand-red); line-height: 1.1;
 }
 .result-block .main-unit { font-size: 18px; color: var(--text-secondary); margin-left: 4px; font-weight: 600; }
 .result-block .result-label { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
@@ -73,24 +80,24 @@
   font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   line-height: 1.8;
 }
-.formula-box strong { color: var(--lift-blue); }
+.formula-box strong { color: var(--brand-red); }
 
 /* ===== 警告条 ===== */
 .warn-bar {
   padding: 10px 16px; border-radius: 8px; font-size: 12px; font-weight: 600;
   display: flex; align-items: center; gap: 8px; margin-top: 12px;
 }
-.warn-bar.danger { background: var(--lift-red-light); color: var(--lift-red); border: 1px solid var(--lift-red); }
-.warn-bar.warning { background: var(--lift-amber-light); color: var(--lift-amber); border: 1px solid var(--lift-amber); }
-.warn-bar.info { background: var(--lift-blue-light); color: var(--lift-blue); border: 1px solid var(--lift-blue); }
+.warn-bar.danger { background: var(--warn-red-light); color: var(--warn-red); border: 1px solid var(--warn-red); }
+.warn-bar.warning { background: var(--warn-amber-light); color: var(--warn-amber); border: 1px solid var(--warn-amber); }
+.warn-bar.info { background: var(--brand-red-light); color: var(--brand-red); border: 1px solid var(--brand-red); }
 
 /* ===== 规格推荐表 ===== */
 .spec-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 12px; }
-.spec-table th { background: var(--lift-blue); color: #fff; padding: 8px 10px; text-align: left; font-weight: 600; font-size: 11px; }
+.spec-table th { background: var(--brand-red); color: #fff; padding: 8px 10px; text-align: left; font-weight: 600; font-size: 11px; }
 .spec-table td { padding: 7px 10px; border-bottom: 1px solid var(--border-light); }
 .spec-table tr:nth-child(even) { background: var(--bg-page); }
-.spec-table tr.highlight { background: var(--lift-blue-light); }
-.spec-table tr.highlight td { font-weight: 700; color: var(--lift-blue); }
+.spec-table tr.highlight { background: var(--brand-red-light); }
+.spec-table tr.highlight td { font-weight: 700; color: var(--brand-red); }
 
 /* ===== 历史记录 ===== */
 .history-panel { margin-top: 24px; }
@@ -106,20 +113,20 @@
   border-radius: 8px; margin-bottom: 6px; font-size: 12px;
   align-items: center; cursor: pointer; transition: background 0.15s;
 }
-.history-item:hover { background: var(--lift-blue-light); }
+.history-item:hover { background: var(--brand-red-light); }
 .history-item .hi-time { color: var(--text-secondary); }
 .history-item .hi-summary { color: var(--text-primary); font-weight: 500; }
-.history-item .hi-value { color: var(--lift-blue); font-weight: 700; text-align: right; }
+.history-item .hi-value { color: var(--brand-red); font-weight: 700; text-align: right; }
 .history-item .hi-del { color: var(--text-secondary); cursor: pointer; padding: 2px 6px; font-size: 11px; border: none; background: none; }
-.history-item .hi-del:hover { color: var(--lift-red); }
+.history-item .hi-del:hover { color: var(--warn-red); }
 
 /* ===== 免责声明 ===== */
 .disclaimer {
-  margin-top: 28px; padding: 16px 20px; background: var(--lift-amber-light);
-  border: 1px solid var(--lift-amber); border-radius: 12px; font-size: 12px;
+  margin-top: 28px; padding: 16px 20px; background: var(--warn-amber-light);
+  border: 1px solid var(--warn-amber); border-radius: 12px; font-size: 12px;
   color: var(--text-secondary); line-height: 1.8;
 }
-.disclaimer strong { color: var(--lift-amber); }
+.disclaimer strong { color: var(--warn-amber); }
 
 /* ===== 响应式 ===== */
 @media (max-width: 768px) {
@@ -163,7 +170,7 @@
     <h3 style="font-size:16px;font-weight:600;margin-bottom:16px;"><i class="fa-solid fa-weight-scale"></i> 吊装载荷计算</h3>
     <div class="form-grid">
       <div class="form-row">
-        <label>设备净重 G₀ <span style="color:var(--lift-red)">*</span></label>
+        <label>设备净重 G₀ <span style="color:var(--warn-red)">*</span></label>
         <div style="display:flex;gap:8px;align-items:center;">
           <input type="number" id="netWeight" class="form-control" value="10" min="0.01" step="0.01" oninput="calcLoad()" placeholder="设备净重">
           <select class="form-control" style="width:80px;flex-shrink:0;" id="netWeightUnit" onchange="calcLoad()">
@@ -177,7 +184,7 @@
         <input type="number" id="rigWeight" class="form-control" value="0.5" min="0" step="0.01" oninput="calcLoad()" placeholder="吊钩+钢丝绳+吊梁等总重">
       </div>
       <div class="form-row">
-        <label>动载系数 K₁ <span style="color:var(--lift-red)">*</span></label>
+        <label>动载系数 K₁ <span style="color:var(--warn-red)">*</span></label>
         <div class="coefficient-input">
           <select class="form-control" id="dynamicPreset" onchange="onDynamicPreset()">
             <option value="">选择工况预设</option>
@@ -194,7 +201,7 @@
         </div>
       </div>
       <div class="form-row">
-        <label>不均衡系数 K₂ <span style="color:var(--lift-red)">*</span></label>
+        <label>不均衡系数 K₂ <span style="color:var(--warn-red)">*</span></label>
         <div class="coefficient-input">
           <select class="form-control" id="unbalancedPreset" onchange="onUnbalancedPreset()">
             <option value="1">1.00 单台起重机</option>
@@ -222,12 +229,12 @@
       </div>
     </div>
 
-    <button class="btn-primary" style="background:var(--lift-blue);margin-top:16px;width:100%;" onclick="calcLoad(); saveHistory('载荷计算')">
+    <button class="btn-primary" style="background:var(--brand-red);margin-top:16px;width:100%;" onclick="calcLoad(); saveHistory('载荷计算')">
       <i class="fa-solid fa-calculator"></i> 计算吊装载荷
     </button>
     <div style="display:flex;gap:10px;margin-top:12px;">
       <button class="btn-print" style="flex:1;" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印</button>
-      <button class="btn-outline" style="flex:1;border-color:var(--lift-blue);color:var(--lift-blue);" onclick="exportResult('loadResult','吊装作业计算-载荷计算')"><i class="fa-solid fa-file-export"></i> 导出</button>
+      <button class="btn-outline" style="flex:1;border-color:var(--brand-red);color:var(--brand-red);" onclick="exportResult('loadResult','吊装作业计算-载荷计算')"><i class="fa-solid fa-file-export"></i> 导出</button>
     </div>
 
     <!-- 结果 -->
@@ -259,10 +266,10 @@
     <h3 style="font-size:16px;font-weight:600;margin-bottom:16px;"><i class="fa-solid fa-link"></i> 吊索具强度计算</h3>
     <div class="form-grid">
       <div class="form-row">
-        <label>计算载荷 Q <span style="color:var(--lift-red)">*</span> (t)</label>
+        <label>计算载荷 Q <span style="color:var(--warn-red)">*</span> (t)</label>
         <div style="display:flex;gap:8px;">
           <input type="number" id="slingQ" class="form-control" value="15" min="0.01" step="0.01" oninput="calcSling()">
-          <button class="btn-sm" style="background:var(--lift-blue-light);color:var(--lift-blue);border:1px solid var(--lift-blue);white-space:nowrap;padding:8px 12px;" onclick="syncLoadToSling()" title="从载荷计算同步">
+          <button class="btn-sm" style="background:var(--brand-red-light);color:var(--brand-red);border:1px solid var(--brand-red);white-space:nowrap;padding:8px 12px;" onclick="syncLoadToSling()" title="从载荷计算同步">
             <i class="fa-solid fa-sync-alt"></i> 同步
           </button>
         </div>
@@ -278,12 +285,12 @@
         </select>
       </div>
       <div class="form-row">
-        <label>吊索与垂线夹角 α (°) <span style="color:var(--lift-red)">*</span></label>
+        <label>吊索与垂线夹角 α (°) <span style="color:var(--warn-red)">*</span></label>
         <input type="number" id="slingAngle" class="form-control" value="45" min="0" max="89" step="1" oninput="calcSling()" placeholder="吊索与铅垂线夹角（0=垂直）">
         <div class="hint" style="font-size:11px;color:var(--text-secondary);margin-top:2px;">吊索与水平面夹角 = 90° - α</div>
       </div>
       <div class="form-row">
-        <label>安全系数 K <span style="color:var(--lift-red)">*</span></label>
+        <label>安全系数 K <span style="color:var(--warn-red)">*</span></label>
         <div class="coefficient-input">
           <select class="form-control" id="safetyPreset" onchange="onSafetyPreset()">
             <option value="">选择吊装类型</option>
@@ -301,12 +308,12 @@
       </div>
     </div>
 
-    <button class="btn-primary" style="background:var(--lift-blue);margin-top:16px;width:100%;" onclick="calcSling(); saveHistory('索具强度')">
+    <button class="btn-primary" style="background:var(--brand-red);margin-top:16px;width:100%;" onclick="calcSling(); saveHistory('索具强度')">
       <i class="fa-solid fa-calculator"></i> 计算索具强度
     </button>
     <div style="display:flex;gap:10px;margin-top:12px;">
       <button class="btn-print" style="flex:1;" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印</button>
-      <button class="btn-outline" style="flex:1;border-color:var(--lift-blue);color:var(--lift-blue);" onclick="exportResult('slingResult','吊装作业计算-索具强度')"><i class="fa-solid fa-file-export"></i> 导出</button>
+      <button class="btn-outline" style="flex:1;border-color:var(--brand-red);color:var(--brand-red);" onclick="exportResult('slingResult','吊装作业计算-索具强度')"><i class="fa-solid fa-file-export"></i> 导出</button>
     </div>
 
     <!-- 角度警告 -->
@@ -350,15 +357,15 @@
     <h3 style="font-size:16px;font-weight:600;margin-bottom:16px;"><i class="fa-solid fa-ruler-vertical"></i> 臂长与起升高度估算</h3>
     <div class="form-grid">
       <div class="form-row">
-        <label>基础高度 H₁ (m) <span style="color:var(--lift-red)">*</span></label>
+        <label>基础高度 H₁ (m) <span style="color:var(--warn-red)">*</span></label>
         <input type="number" id="h1" class="form-control" value="20" min="0" step="0.1" oninput="calcBoom()" placeholder="设备安装基础面高度">
       </div>
       <div class="form-row">
-        <label>安装间隙 C (m) <span style="color:var(--lift-red)">*</span></label>
+        <label>安装间隙 C (m) <span style="color:var(--warn-red)">*</span></label>
         <input type="number" id="hClearance" class="form-control" value="1.5" min="0.3" step="0.1" oninput="calcBoom()" placeholder="设备底部与基础面间隙">
       </div>
       <div class="form-row">
-        <label>设备高度 H₂ (m) <span style="color:var(--lift-red)">*</span></label>
+        <label>设备高度 H₂ (m) <span style="color:var(--warn-red)">*</span></label>
         <input type="number" id="h2" class="form-control" value="8" min="0.1" step="0.1" oninput="calcBoom()" placeholder="设备自身高度">
       </div>
       <div class="form-row">
@@ -366,7 +373,7 @@
         <input type="number" id="h3" class="form-control" value="3" min="0" step="0.1" oninput="calcBoom()" placeholder="吊钩到设备顶部的吊索高度">
       </div>
       <div class="form-row">
-        <label>工作幅度 R (m) <span style="color:var(--lift-red)">*</span></label>
+        <label>工作幅度 R (m) <span style="color:var(--warn-red)">*</span></label>
         <input type="number" id="radius" class="form-control" value="12" min="0.1" step="0.1" oninput="calcBoom()" placeholder="回转中心到吊钩水平距离">
       </div>
       <div class="form-row">
@@ -375,12 +382,12 @@
       </div>
     </div>
 
-    <button class="btn-primary" style="background:var(--lift-blue);margin-top:16px;width:100%;" onclick="calcBoom(); saveHistory('臂长高度')">
+    <button class="btn-primary" style="background:var(--brand-red);margin-top:16px;width:100%;" onclick="calcBoom(); saveHistory('臂长高度')">
       <i class="fa-solid fa-calculator"></i> 计算臂长与高度
     </button>
     <div style="display:flex;gap:10px;margin-top:12px;">
       <button class="btn-print" style="flex:1;" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印</button>
-      <button class="btn-outline" style="flex:1;border-color:var(--lift-blue);color:var(--lift-blue);" onclick="exportResult('boomResult','吊装作业计算-臂长高度')"><i class="fa-solid fa-file-export"></i> 导出</button>
+      <button class="btn-outline" style="flex:1;border-color:var(--brand-red);color:var(--brand-red);" onclick="exportResult('boomResult','吊装作业计算-臂长高度')"><i class="fa-solid fa-file-export"></i> 导出</button>
     </div>
 
     <!-- 结果 -->
@@ -441,12 +448,84 @@
 
 <div class="print-time" id="printTime"></div>
 
+<!-- PWA 添加到桌面浮动按钮 -->
+<button class="pwa-install-btn" id="pwaInstallBtn" style="display:none;" title="添加到桌面，像 App 一样使用">
+    <i class="fa-solid fa-download"></i> 添加到桌面
+</button>
+
 <script>
 (function() {
 'use strict';
 
 document.getElementById('printTime').textContent =
   new Date().toISOString().replace('T',' ').slice(0,16);
+
+// ===== PWA Service Worker =====
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sheen-toolbox/sw.js');
+}
+
+// ===== PWA 安装按钮逻辑 =====
+var deferredPrompt = null;
+var pwaBtn = document.getElementById('pwaInstallBtn');
+
+function isPwaInstalled() {
+  return window.matchMedia('(display-mode: standalone)').matches ||
+         navigator.standalone ||
+         document.referrer.indexOf('android-app://') === 0;
+}
+
+window.addEventListener('beforeinstallprompt', function(e) {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (!isPwaInstalled() && !localStorage.getItem('sheen_pwa_dismissed')) {
+    if (pwaBtn) pwaBtn.style.display = 'flex';
+  }
+});
+
+function isIosSafari() {
+  var ua = navigator.userAgent;
+  return /iPhone|iPad|iPod/.test(ua) && /Safari/.test(ua) &&
+         !/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+}
+
+if (isIosSafari() && !isPwaInstalled() && !localStorage.getItem('sheen_pwa_dismissed')) {
+  setTimeout(function() { if (pwaBtn) pwaBtn.style.display = 'flex'; }, 2000);
+}
+
+if (pwaBtn) {
+  pwaBtn.addEventListener('click', function() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function(result) {
+        if (result.outcome === 'accepted') {
+          pwaBtn.style.display = 'none';
+        } else {
+          localStorage.setItem('sheen_pwa_dismissed', Date.now() + 7*86400000);
+          pwaBtn.classList.add('dismissed');
+        }
+        deferredPrompt = null;
+      });
+    } else if (isIosSafari()) {
+      var guide = document.createElement('div');
+      guide.innerHTML = '<div style="position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:999;display:flex;align-items:flex-end;justify-content:center;padding-bottom:80px;">' +
+        '<div style="background:#fff;border-radius:20px;padding:24px;margin:16px;max-width:340px;text-align:center;position:relative;">' +
+        '<button onclick="this.parentElement.parentElement.remove()" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:20px;cursor:pointer;color:#999;">×</button>' +
+        '<div style="font-size:40px;margin-bottom:12px;">📱</div>' +
+        '<h3 style="font-size:16px;margin-bottom:8px;color:#111827;">添加到桌面</h3>' +
+        '<p style="font-size:13px;color:#6B7280;margin-bottom:16px;line-height:1.6;">点击 Safari 底部 <strong>分享按钮</strong><br>选择 <strong>"添加到主屏幕"</strong></p>' +
+        '<div style="background:#F3F4F6;border-radius:12px;padding:12px;margin-bottom:12px;"><span style="font-size:12px;color:#6B7280;">↗️ 分享按钮 → 添加到主屏幕</span></div>' +
+        '<button onclick="this.parentElement.parentElement.remove();localStorage.setItem(\'sheen_pwa_dismissed\',Date.now()+7*86400000);" style="width:100%;padding:10px;border-radius:60px;border:none;background:#7A1825;color:#fff;font-size:14px;font-weight:600;cursor:pointer;">我知道了</button>' +
+        '</div></div>';
+      document.body.appendChild(guide);
+    }
+  });
+}
+
+var dismissed = localStorage.getItem('sheen_pwa_dismissed');
+if (dismissed && Date.now() > parseInt(dismissed)) {
+  localStorage.removeItem('sheen_pwa_dismissed');
+}
 
 // ============================================================
 //  选项卡切换
@@ -603,7 +682,7 @@ window.calcSling = function() {
     var status = hl ? '★ 推荐选择' : (r[2] >= pBreak ? '✓ 满足' : '✗ 不足');
     tableHtml += '<tr class="' + (hl ? 'highlight' : '') + '"><td>' + r[0].toFixed(1) + '</td>' +
       '<td>' + r[1].toFixed(2) + '</td><td>' + r[2].toFixed(0) + '</td>' +
-      '<td style="color:' + (status.indexOf('推荐')>=0 ? 'var(--lift-blue)' : (status.indexOf('足')>=0 ? 'var(--lift-red)' : 'var(--lift-green)')) + ';font-weight:600;">' + status + '</td></tr>';
+      '<td style="color:' + (status.indexOf('推荐')>=0 ? 'var(--brand-red)' : (status.indexOf('足')>=0 ? 'var(--warn-red)' : 'var(--warn-green)')) + ';font-weight:600;">' + status + '</td></tr>';
   }
   tableHtml += '</tbody></table>';
   document.getElementById('ropeTableWrap').innerHTML = tableHtml;
@@ -625,7 +704,7 @@ window.calcSling = function() {
   }
   if (shackleChoice) {
     document.getElementById('shackleRec').innerHTML =
-      '安全载荷：<strong style="color:var(--lift-blue);">' + (shackleChoice[0]/1000).toFixed(1) +
+      '安全载荷：<strong style="color:var(--brand-red);">' + (shackleChoice[0]/1000).toFixed(1) +
       ' t</strong> &nbsp;|&nbsp; 销轴直径：<strong>' + shackleChoice[1] +
       '</strong> &nbsp;|&nbsp; 起重量：' + shackleChoice[2] + ' t &nbsp;（安全系数 K=' + k.toFixed(1) + '）';
   } else {
