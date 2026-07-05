@@ -463,7 +463,65 @@ label {
   .sheen-footer { padding: 12px 16px; font-size: 11px; }
 }
 
-/* ===== 16. 工具类 ===== */
+/* ===== 16. PWA 安装浮动按钮 ===== */
+.pwa-install-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 98;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: #8B0000;
+  color: #fff;
+  border: none;
+  border-radius: 60px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font);
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(139,0,0,0.35);
+  transition: all 0.25s ease;
+  white-space: nowrap;
+  animation: pwa-pulse 2.5s ease-in-out infinite;
+}
+.pwa-install-btn:hover {
+  background: #6B0000;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(139,0,0,0.45);
+}
+.pwa-install-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(139,0,0,0.3);
+}
+.pwa-install-btn i { font-size: 16px; }
+.pwa-install-btn.dismissed { display: none; }
+
+/* 按钮脉冲动画提示用户 */
+@keyframes pwa-pulse {
+  0%, 100% { box-shadow: 0 4px 16px rgba(139,0,0,0.35); }
+  50% { box-shadow: 0 6px 24px rgba(139,0,0,0.6); }
+}
+
+/* PWA standalone 模式下隐藏安装按钮 */
+@media all and (display-mode: standalone) {
+  .pwa-install-btn { display: none !important; }
+}
+
+/* 响应式：小屏幕调整位置 */
+@media (max-width: 480px) {
+  .pwa-install-btn {
+    bottom: 16px;
+    right: 16px;
+    padding: 8px 14px;
+    font-size: 12px;
+    gap: 6px;
+  }
+  .pwa-install-btn i { font-size: 14px; }
+}
+
+/* ===== 17. 工具类 ===== */
 .mt-8 { margin-top: 8px; }
 .mt-16 { margin-top: 16px; }
 .mt-24 { margin-top: 24px; }
