@@ -148,7 +148,7 @@
 
 <main class="app-container container-calc">
 
-  <h1 class="page-title"><i class="fa-solid fa-crane" style="color:var(--lift-blue)"></i> 吊装作业计算工具</h1>
+  <h1 class="page-title"><i class="fa-solid fa-weight-hanging" style="color:var(--amber)"></i> 吊装作业计算工具</h1>
   <p class="page-subtitle" style="margin-bottom:16px;">依据 GB/T 5972、SH/T 3515 等标准，快速计算吊装载荷、索具强度及臂长高度</p>
 
   <!-- 选项卡导航 -->
@@ -225,6 +225,10 @@
     <button class="btn-primary" style="background:var(--lift-blue);margin-top:16px;width:100%;" onclick="calcLoad(); saveHistory('载荷计算')">
       <i class="fa-solid fa-calculator"></i> 计算吊装载荷
     </button>
+    <div style="display:flex;gap:10px;margin-top:12px;">
+      <button class="btn-print" style="flex:1;" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印</button>
+      <button class="btn-outline" style="flex:1;border-color:var(--lift-blue);color:var(--lift-blue);" onclick="exportResult('loadResult','吊装作业计算-载荷计算')"><i class="fa-solid fa-file-export"></i> 导出</button>
+    </div>
 
     <!-- 结果 -->
     <div class="result-block" id="loadResult">
@@ -300,6 +304,10 @@
     <button class="btn-primary" style="background:var(--lift-blue);margin-top:16px;width:100%;" onclick="calcSling(); saveHistory('索具强度')">
       <i class="fa-solid fa-calculator"></i> 计算索具强度
     </button>
+    <div style="display:flex;gap:10px;margin-top:12px;">
+      <button class="btn-print" style="flex:1;" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印</button>
+      <button class="btn-outline" style="flex:1;border-color:var(--lift-blue);color:var(--lift-blue);" onclick="exportResult('slingResult','吊装作业计算-索具强度')"><i class="fa-solid fa-file-export"></i> 导出</button>
+    </div>
 
     <!-- 角度警告 -->
     <div class="warn-bar" id="angleWarn" style="display:none;">
@@ -370,6 +378,10 @@
     <button class="btn-primary" style="background:var(--lift-blue);margin-top:16px;width:100%;" onclick="calcBoom(); saveHistory('臂长高度')">
       <i class="fa-solid fa-calculator"></i> 计算臂长与高度
     </button>
+    <div style="display:flex;gap:10px;margin-top:12px;">
+      <button class="btn-print" style="flex:1;" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印</button>
+      <button class="btn-outline" style="flex:1;border-color:var(--lift-blue);color:var(--lift-blue);" onclick="exportResult('boomResult','吊装作业计算-臂长高度')"><i class="fa-solid fa-file-export"></i> 导出</button>
+    </div>
 
     <!-- 结果 -->
     <div class="result-block" id="boomResult">
@@ -730,6 +742,31 @@ function renderHistory() {
 
 // ============================================================
 //  初始化
+// ============================================================
+//  导出功能
+// ============================================================
+window.exportResult = function(resultId, filename) {
+  var el = document.getElementById(resultId);
+  if (!el) return;
+  var html = '<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">' +
+    '<title>' + filename + ' — SHEEN Toolbox</title>' +
+    '<style>body{font-family:system-ui,sans-serif;padding:24px;color:#111827;line-height:1.6;max-width:800px;margin:0 auto}' +
+    'table{width:100%;border-collapse:collapse;font-size:13px}th,td{border:1px solid #E5E7EB;padding:8px;text-align:left}' +
+    'h1{color:#7A1825;font-size:20px}.result-value{background:#FEF2F2;border-left:6px solid #7A1825;' +
+    'padding:20px;border-radius:12px;margin:16px 0}.number{font-size:36px;font-weight:700;color:#7A1825}</style></head><body>' +
+    '<h1>📋 ' + filename + '</h1>' +
+    '<p style="color:#666;font-size:12px;">导出时间：' +
+    new Date().toLocaleString('zh-CN') + '</p>' +
+    el.innerHTML.replace(/class="warn-bar[^"]*"/g, '') +
+    '</body></html>';
+  var blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = filename + '.html';
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
 // ============================================================
 calcLoad();
 calcSling();
