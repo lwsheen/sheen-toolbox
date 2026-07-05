@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="吊装作业计算工具 — 载荷计算、索具强度、臂长评估，依据GB/T 5972等标准">
+<title>吊装作业计算工具 — SHEEN Toolbox</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="/sheen-toolbox/common.css">
+<style>
+/* ===== 本工具配色（蓝色工业主题，SHEEN Toolbox 骨架一致） ===== */
+:root {
+  --lift-blue: #1E5FB4;
+  --lift-blue-hover: #164B8C;
+  --lift-blue-light: #EBF2FB;
+  --lift-blue-dark: #0F3460;
+  --lift-amber: #D97706;
+  --lift-amber-light: #FFFBEB;
+  --lift-green: #059669;
+  --lift-green-light: #ECFDF5;
+  --lift-red: #DC2626;
+  --lift-red-light: #FEF2F2;
+}
+
+/* ===== 选项卡 ===== */
+.tab-nav { display: flex; gap: 0; margin-bottom: 0; border-bottom: 2px solid var(--border); }
+.tab-btn {
+  flex: 1; padding: 14px 16px; font-size: 14px; font-weight: 600; font-family: var(--font);
+  background: var(--bg-page); color: var(--text-secondary); border: none; cursor: pointer;
+  transition: all 0.2s; border-bottom: 3px solid transparent; margin-bottom: -2px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  white-space: nowrap;
+}
+.tab-btn i { font-size: 16px; }
+.tab-btn:hover { color: var(--lift-blue); background: var(--lift-blue-light); }
+.tab-btn.active { color: var(--lift-blue); background: var(--bg-card); border-bottom-color: var(--lift-blue); }
+.tab-panel { display: none; background: var(--bg-card); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: 24px; }
+.tab-panel.active { display: block; }
+
+/* ===== 表单网格 ===== */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.form-grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 14px; }
+.form-full { grid-column: 1 / -1; }
+
+/* ===== 系数双模式输入 ===== */
+.coefficient-input { display: flex; gap: 8px; align-items: flex-end; }
+.coefficient-input select { width: 145px; flex-shrink: 0; }
+.coefficient-input input { flex: 1; }
+
+/* ===== 结果展示 ===== */
+.result-block {
+  background: var(--lift-blue-light); border: 2px solid var(--lift-blue);
+  border-radius: 16px; padding: 24px; margin-top: 24px;
+}
+.result-block .main-value {
+  font-size: 42px; font-weight: 800; color: var(--lift-blue); line-height: 1.1;
+}
+.result-block .main-unit { font-size: 18px; color: var(--text-secondary); margin-left: 4px; font-weight: 600; }
+.result-block .result-label { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+.result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+.result-item {
+  background: var(--bg-card); border-radius: 12px; padding: 14px 16px;
+  border: 1px solid var(--border);
+}
+.result-item .ri-val { font-size: 22px; font-weight: 700; color: var(--text-primary); }
+.result-item .ri-label { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+
+/* ===== 公式说明 ===== */
+.formula-box {
+  background: var(--bg-page); border-radius: 8px; padding: 12px 16px;
+  font-size: 13px; color: var(--text-secondary); margin-top: 12px;
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  line-height: 1.8;
+}
+.formula-box strong { color: var(--lift-blue); }
+
+/* ===== 警告条 ===== */
+.warn-bar {
+  padding: 10px 16px; border-radius: 8px; font-size: 12px; font-weight: 600;
+  display: flex; align-items: center; gap: 8px; margin-top: 12px;
+}
+.warn-bar.danger { background: var(--lift-red-light); color: var(--lift-red); border: 1px solid var(--lift-red); }
+.warn-bar.warning { background: var(--lift-amber-light); color: var(--lift-amber); border: 1px solid var(--lift-amber); }
+.warn-bar.info { background: var(--lift-blue-light); color: var(--lift-blue); border: 1px solid var(--lift-blue); }
+
+/* ===== 规格推荐表 ===== */
+.spec-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 12px; }
+.spec-table th { background: var(--lift-blue); color: #fff; padding: 8px 10px; text-align: left; font-weight: 600; font-size: 11px; }
+.spec-table td { padding: 7px 10px; border-bottom: 1px solid var(--border-light); }
+.spec-table tr:nth-child(even) { background: var(--bg-page); }
+.spec-table tr.highlight { background: var(--lift-blue-light); }
+.spec-table tr.highlight td { font-weight: 700; color: var(--lift-blue); }
+
+/* ===== 历史记录 ===== */
+.history-panel { margin-top: 24px; }
+.history-panel summary {
+  padding: 12px 16px; font-size: 14px; font-weight: 600; cursor: pointer;
+  background: var(--bg-page); border: 1px solid var(--border); border-radius: 8px;
+  display: flex; align-items: center; gap: 8px; user-select: none;
+}
+.history-list { max-height: 300px; overflow-y: auto; margin-top: 8px; }
+.history-item {
+  display: grid; grid-template-columns: 90px 1fr 100px;
+  gap: 12px; padding: 10px 14px; border: 1px solid var(--border-light);
+  border-radius: 8px; margin-bottom: 6px; font-size: 12px;
+  align-items: center; cursor: pointer; transition: background 0.15s;
+}
+.history-item:hover { background: var(--lift-blue-light); }
+.history-item .hi-time { color: var(--text-secondary); }
+.history-item .hi-summary { color: var(--text-primary); font-weight: 500; }
+.history-item .hi-value { color: var(--lift-blue); font-weight: 700; text-align: right; }
+.history-item .hi-del { color: var(--text-secondary); cursor: pointer; padding: 2px 6px; font-size: 11px; border: none; background: none; }
+.history-item .hi-del:hover { color: var(--lift-red); }
+
+/* ===== 免责声明 ===== */
+.disclaimer {
+  margin-top: 28px; padding: 16px 20px; background: var(--lift-amber-light);
+  border: 1px solid var(--lift-amber); border-radius: 12px; font-size: 12px;
+  color: var(--text-secondary); line-height: 1.8;
+}
+.disclaimer strong { color: var(--lift-amber); }
+
+/* ===== 响应式 ===== */
+@media (max-width: 768px) {
+  .tab-btn { padding: 10px 8px; font-size: 12px; gap: 4px; }
+  .tab-btn i { font-size: 14px; }
+  .tab-panel { padding: 16px; }
+  .form-grid, .form-grid-3, .form-grid-4 { grid-template-columns: 1fr; gap: 12px; }
+  .result-grid { grid-template-columns: 1fr; }
+  .result-block .main-value { font-size: 32px; }
+  .coefficient-input { flex-direction: column; gap: 6px; }
+  .coefficient-input select { width: 100%; }
+}
+@media (max-width: 480px) {
+  .tab-btn { padding: 8px 6px; font-size: 11px; }
+  .tab-panel { padding: 12px; }
+  .history-item { grid-template-columns: 75px 1fr 85px; font-size: 11px; }
+}
+</style>
+</head>
+<body>
+
+<div class="breadcrumb">
+  <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+  <span> / 吊装作业计算工具</span>
+</div>
+
+<main class="app-container container-calc">
+
+  <h1 class="page-title"><i class="fa-solid fa-crane" style="color:var(--lift-blue)"></i> 吊装作业计算工具</h1>
+  <p class="page-subtitle" style="margin-bottom:16px;">依据 GB/T 5972、SH/T 3515 等标准，快速计算吊装载荷、索具强度及臂长高度</p>
+
+  <!-- 选项卡导航 -->
+  <div class="tab-nav" role="tablist">
+    <button class="tab-btn active" onclick="switchTab(0)" data-tab="0"><i class="fa-solid fa-weight-scale"></i> 吊装载荷计算</button>
+    <button class="tab-btn" onclick="switchTab(1)" data-tab="1"><i class="fa-solid fa-link"></i> 吊索具强度</button>
+    <button class="tab-btn" onclick="switchTab(2)" data-tab="2"><i class="fa-solid fa-ruler-vertical"></i> 臂长高度估算</button>
+  </div>
+
+  <!-- ==================== TAB 0: 吊装载荷计算 ==================== -->
+  <div class="tab-panel active" id="panel0">
+    <h3 style="font-size:16px;font-weight:600;margin-bottom:16px;"><i class="fa-solid fa-weight-scale"></i> 吊装载荷计算</h3>
+    <div class="form-grid">
+      <div class="form-row">
+        <label>设备净重 G₀ <span style="color:var(--lift-red)">*</span></label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" id="netWeight" class="form-control" value="10" min="0.01" step="0.01" oninput="calcLoad()" placeholder="设备净重">
+          <select class="form-control" style="width:80px;flex-shrink:0;" id="netWeightUnit" onchange="calcLoad()">
+            <option value="t">t（吨）</option>
+            <option value="kg">kg</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <label>吊索具自重 G₁ <span style="color:var(--text-secondary)">(t)</span></label>
+        <input type="number" id="rigWeight" class="form-control" value="0.5" min="0" step="0.01" oninput="calcLoad()" placeholder="吊钩+钢丝绳+吊梁等总重">
+      </div>
+      <div class="form-row">
+        <label>动载系数 K₁ <span style="color:var(--lift-red)">*</span></label>
+        <div class="coefficient-input">
+          <select class="form-control" id="dynamicPreset" onchange="onDynamicPreset()">
+            <option value="">选择工况预设</option>
+            <option value="1.1">1.10 手动吊装/精密安装</option>
+            <option value="1.15">1.15 塔式起重机吊装</option>
+            <option value="1.2" selected>1.20 履带/汽车吊常规</option>
+            <option value="1.25">1.25 轻型构件吊装</option>
+            <option value="1.3">1.30 重型/高空吊装</option>
+            <option value="1.4">1.40 化工设备/反应器</option>
+            <option value="1.5">1.50 风力机组大件吊装</option>
+            <option value="custom">自定义</option>
+          </select>
+          <input type="number" id="dynamicCoeff" class="form-control" value="1.2" min="1.0" max="3.0" step="0.01" oninput="calcLoad()" placeholder="手动输入">
+        </div>
+      </div>
+      <div class="form-row">
+        <label>不均衡系数 K₂ <span style="color:var(--lift-red)">*</span></label>
+        <div class="coefficient-input">
+          <select class="form-control" id="unbalancedPreset" onchange="onUnbalancedPreset()">
+            <option value="1">1.00 单台起重机</option>
+            <option value="1.1">1.10 双机抬吊（低风险）</option>
+            <option value="1.2" selected>1.20 双机抬吊（常规）</option>
+            <option value="1.25">1.25 多机抬吊</option>
+            <option value="custom">自定义</option>
+          </select>
+          <input type="number" id="unbalancedCoeff" class="form-control" value="1.2" min="1.0" max="2.0" step="0.01" oninput="calcLoad()" placeholder="手动输入">
+        </div>
+      </div>
+      <div class="form-row form-full">
+        <label>吊钩与滑轮组效率 η</label>
+        <div class="coefficient-input">
+          <select class="form-control" id="efficiencyPreset" onchange="onEfficiencyPreset()" style="width:200px;">
+            <option value="0.98">0.98 滚动轴承滑轮组（新）</option>
+            <option value="0.96" selected>0.96 滚动轴承滑轮组（常用）</option>
+            <option value="0.94">0.94 滑动轴承滑轮组</option>
+            <option value="0.92">0.92 滑动轴承（磨损）</option>
+            <option value="1.0">1.00 不补偿（忽略效率损失）</option>
+            <option value="custom">自定义</option>
+          </select>
+          <input type="number" id="efficiencyVal" class="form-control" value="0.96" min="0.7" max="1.0" step="0.01" oninput="calcLoad()" placeholder="手动输入">
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-primary" style="background:var(--lift-blue);margin-top:16px;width:100%;" onclick="calcLoad(); saveHistory('载荷计算')">
+      <i class="fa-solid fa-calculator"></i> 计算吊装载荷
+    </button>
+
+    <!-- 结果 -->
+    <div class="result-block" id="loadResult">
+      <div class="result-label">计算载荷 Q</div>
+      <span class="main-value" id="loadQ">—</span><span class="main-unit">t</span>
+      <div style="font-size:14px;color:var(--text-secondary);margin-top:4px;">
+        约 <span id="loadQkN" style="font-weight:700;color:var(--text-primary);">—</span> kN &nbsp;（1 t ≈ 9.81 kN）
+      </div>
+      <div class="formula-box" style="margin-top:12px;">
+        <strong>Q = G₀ + G₁ + K₁ · K₂ / η</strong><br>
+        属性说明：<span id="formulaDetail">—</span>
+      </div>
+      <div class="result-grid">
+        <div class="result-item"><div class="ri-val" id="riGross">—</div><div class="ri-label">总毛重 G₀ + G₁ (t)</div></div>
+        <div class="result-item"><div class="ri-val" id="riKprod">—</div><div class="ri-label">K₁·K₂ 综合系数</div></div>
+        <div class="result-item"><div class="ri-val" id="riLoadNoEff">—</div><div class="ri-label">未补偿载荷 (t)</div></div>
+        <div class="result-item"><div class="ri-val" id="riQmT">—</div><div class="ri-label">含效率补偿计算载荷 (t)</div></div>
+      </div>
+      <div class="warn-bar info" id="loadWarn">
+        <i class="fa-solid fa-circle-info"></i>
+        <span id="loadWarnText">吊装载荷已考虑动载、不均衡及效率补偿</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TAB 1: 吊索具强度计算 ==================== -->
+  <div class="tab-panel" id="panel1">
+    <h3 style="font-size:16px;font-weight:600;margin-bottom:16px;"><i class="fa-solid fa-link"></i> 吊索具强度计算</h3>
+    <div class="form-grid">
+      <div class="form-row">
+        <label>计算载荷 Q <span style="color:var(--lift-red)">*</span> (t)</label>
+        <div style="display:flex;gap:8px;">
+          <input type="number" id="slingQ" class="form-control" value="15" min="0.01" step="0.01" oninput="calcSling()">
+          <button class="btn-sm" style="background:var(--lift-blue-light);color:var(--lift-blue);border:1px solid var(--lift-blue);white-space:nowrap;padding:8px 12px;" onclick="syncLoadToSling()" title="从载荷计算同步">
+            <i class="fa-solid fa-sync-alt"></i> 同步
+          </button>
+        </div>
+      </div>
+      <div class="form-row">
+        <label>钢丝绳分支数 n</label>
+        <select class="form-control" id="branches" onchange="calcSling()">
+          <option value="1">1 根（单根吊装）</option>
+          <option value="2">2 根（两点吊装）</option>
+          <option value="4" selected>4 根（四点吊装）</option>
+          <option value="6">6 根</option>
+          <option value="8">8 根</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>吊索与垂线夹角 α (°) <span style="color:var(--lift-red)">*</span></label>
+        <input type="number" id="slingAngle" class="form-control" value="45" min="0" max="89" step="1" oninput="calcSling()" placeholder="吊索与铅垂线夹角（0=垂直）">
+        <div class="hint" style="font-size:11px;color:var(--text-secondary);margin-top:2px;">吊索与水平面夹角 = 90° - α</div>
+      </div>
+      <div class="form-row">
+        <label>安全系数 K <span style="color:var(--lift-red)">*</span></label>
+        <div class="coefficient-input">
+          <select class="form-control" id="safetyPreset" onchange="onSafetyPreset()">
+            <option value="">选择吊装类型</option>
+            <option value="3">3.0 捆绑绳扣</option>
+            <option value="4">4.0 吊装带/链条</option>
+            <option value="5" selected>5.0 人力/手动起重</option>
+            <option value="6">6.0 机械起重（常规）</option>
+            <option value="7">7.0 载人/特殊吊篮</option>
+            <option value="8">8.0 重要设备/冶金</option>
+            <option value="10">10.0 载人提升装置</option>
+            <option value="custom">自定义</option>
+          </select>
+          <input type="number" id="safetyFactor" class="form-control" value="6" min="3" max="20" step="0.5" oninput="calcSling()" placeholder="手动输入">
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-primary" style="background:var(--lift-blue);margin-top:16px;width:100%;" onclick="calcSling(); saveHistory('索具强度')">
+      <i class="fa-solid fa-calculator"></i> 计算索具强度
+    </button>
+
+    <!-- 角度警告 -->
+    <div class="warn-bar" id="angleWarn" style="display:none;">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <span id="angleWarnText"></span>
+    </div>
+
+    <!-- 结果 -->
+    <div class="result-block" id="slingResult">
+      <div class="result-label">单根钢丝绳拉力 S</div>
+      <span class="main-value" id="slingS">—</span><span class="main-unit">kN</span>
+      <div class="result-grid">
+        <div class="result-item"><div class="ri-val" id="riQkN2">—</div><div class="ri-label">计算载荷 Q (kN)</div></div>
+        <div class="result-item"><div class="ri-val" id="riCosA">—</div><div class="ri-label">cos α（角度系数）</div></div>
+        <div class="result-item"><div class="ri-val" id="riBreak">—</div><div class="ri-label">要求最小破断拉力 (kN)</div></div>
+        <div class="result-item"><div class="ri-val" id="riBreakT">—</div><div class="ri-label">要求破断拉力 (t)</div></div>
+      </div>
+      <div class="formula-box">
+        <strong>S = Q × 9.81 / (n × cos α)</strong> &nbsp;|&nbsp;
+        <strong>P<sub>破</sub> = S × K</strong><br>
+        <span id="slingFormulaDetail">—</span>
+      </div>
+      <div style="margin-top:16px;">
+        <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;">钢丝绳直径推荐（6×37+FC）</h4>
+        <div class="table-scroll" id="ropeTableWrap"></div>
+        <div class="warn-bar info" style="margin-top:8px;">
+          <i class="fa-solid fa-circle-info"></i>
+          <span>上表中抗拉强度为 1670 MPa 参考值，实际选型请核对具体钢丝绳出厂报告。</span>
+        </div>
+      </div>
+      <div style="margin-top:16px;">
+        <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;">卸扣规格推荐（弓形卸扣）</h4>
+        <div id="shackleRec" style="font-size:13px;color:var(--text-secondary);">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TAB 2: 臂长与高度估算 ==================== -->
+  <div class="tab-panel" id="panel2">
+    <h3 style="font-size:16px;font-weight:600;margin-bottom:16px;"><i class="fa-solid fa-ruler-vertical"></i> 臂长与起升高度估算</h3>
+    <div class="form-grid">
+      <div class="form-row">
+        <label>基础高度 H₁ (m) <span style="color:var(--lift-red)">*</span></label>
+        <input type="number" id="h1" class="form-control" value="20" min="0" step="0.1" oninput="calcBoom()" placeholder="设备安装基础面高度">
+      </div>
+      <div class="form-row">
+        <label>安装间隙 C (m) <span style="color:var(--lift-red)">*</span></label>
+        <input type="number" id="hClearance" class="form-control" value="1.5" min="0.3" step="0.1" oninput="calcBoom()" placeholder="设备底部与基础面间隙">
+      </div>
+      <div class="form-row">
+        <label>设备高度 H₂ (m) <span style="color:var(--lift-red)">*</span></label>
+        <input type="number" id="h2" class="form-control" value="8" min="0.1" step="0.1" oninput="calcBoom()" placeholder="设备自身高度">
+      </div>
+      <div class="form-row">
+        <label>吊索垂直高度 H₃ (m)</label>
+        <input type="number" id="h3" class="form-control" value="3" min="0" step="0.1" oninput="calcBoom()" placeholder="吊钩到设备顶部的吊索高度">
+      </div>
+      <div class="form-row">
+        <label>工作幅度 R (m) <span style="color:var(--lift-red)">*</span></label>
+        <input type="number" id="radius" class="form-control" value="12" min="0.1" step="0.1" oninput="calcBoom()" placeholder="回转中心到吊钩水平距离">
+      </div>
+      <div class="form-row">
+        <label>臂铰点高度 H₀ (m)</label>
+        <input type="number" id="h0" class="form-control" value="2.5" min="0" step="0.1" oninput="calcBoom()" placeholder="臂架根部铰点距地面高度">
+      </div>
+    </div>
+
+    <button class="btn-primary" style="background:var(--lift-blue);margin-top:16px;width:100%;" onclick="calcBoom(); saveHistory('臂长高度')">
+      <i class="fa-solid fa-calculator"></i> 计算臂长与高度
+    </button>
+
+    <!-- 结果 -->
+    <div class="result-block" id="boomResult">
+      <div class="result-grid" style="grid-template-columns: 1fr 1fr;">
+        <div style="text-align:center;padding:16px 0;">
+          <div class="result-label">所需起升高度 H</div>
+          <span class="main-value" id="liftH" style="font-size:36px;">—</span><span class="main-unit">m</span>
+        </div>
+        <div style="text-align:center;padding:16px 0;">
+          <div class="result-label">最小臂长 L<sub>min</sub></div>
+          <span class="main-value" id="boomL" style="font-size:36px;">—</span><span class="main-unit">m</span>
+        </div>
+      </div>
+      <div class="result-grid">
+        <div class="result-item"><div class="ri-val" id="riHtotal">—</div><div class="ri-label">总垂直高度 H₁+C+H₂+H₃ (m)</div></div>
+        <div class="result-item"><div class="ri-val" id="riHeightFromPivot">—</div><div class="ri-label">铰点以上所需高度 (m)</div></div>
+        <div class="result-item"><div class="ri-val" id="riAngle">—</div><div class="ri-label">最小臂架仰角 (°)</div></div>
+        <div class="result-item"><div class="ri-val" id="riRadius">—</div><div class="ri-label">工作幅度 R (m)</div></div>
+      </div>
+      <div class="formula-box">
+        <strong>H = H₁ + C + H₂ + H₃</strong> &nbsp;|&nbsp;
+        <strong>L<sub>min</sub> = √(R² + (H − H₀)²)</strong><br>
+        <strong>θ<sub>min</sub> = arctan((H − H₀) / R)</strong><br>
+        <span id="boomFormulaDetail">—</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 计算历史 -->
+  <div class="history-panel" style="margin-top:24px;">
+    <details id="historyDetails">
+      <summary><i class="fa-solid fa-clock-rotate-left"></i> 计算历史记录 (<span id="historyCount">0</span> 条)</summary>
+      <div class="history-list" id="historyList">
+        <div style="text-align:center;color:var(--text-secondary);padding:20px;font-size:13px;">暂无计算记录</div>
+      </div>
+      <div style="text-align:right;margin-top:8px;">
+        <button class="btn-sm" style="border:1px solid var(--border);background:var(--bg-card);color:var(--text-secondary);" onclick="clearHistory()">
+          <i class="fa-solid fa-trash-can"></i> 清空记录
+        </button>
+      </div>
+    </details>
+  </div>
+
+  <!-- 免责声明 -->
+  <div class="disclaimer">
+    <strong><i class="fa-solid fa-triangle-exclamation"></i> 安全免责声明：</strong>
+    本工具计算结果仅供工程初步估算参考，不替代专业人员依据实际工况进行的详细计算与判断。
+    钢丝绳选型应查阅制造商出厂报告及最新标准，吊装方案须由持证工程师审批后方可实施。
+    吊装作业前须进行试吊（离地100~200mm，检查制动器与稳定性），确认安全后方可继续。
+  </div>
+
+</main>
+
+<footer class="sheen-footer">
+  <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 吊装作业计算工具
+</footer>
+
+<div class="print-time" id="printTime"></div>
+
+<script>
+(function() {
+'use strict';
+
+document.getElementById('printTime').textContent =
+  new Date().toISOString().replace('T',' ').slice(0,16);
+
+// ============================================================
+//  选项卡切换
+// ============================================================
+window.switchTab = function(idx) {
+  document.querySelectorAll('.tab-btn').forEach(function(b,i){ b.classList.toggle('active', i===idx); });
+  document.querySelectorAll('.tab-panel').forEach(function(p,i){ p.classList.toggle('active', i===idx); });
+};
+
+// ============================================================
+//  系数联动
+// ============================================================
+window.onDynamicPreset = function() {
+  var v = document.getElementById('dynamicPreset').value;
+  if (v !== 'custom' && v !== '') {
+    document.getElementById('dynamicCoeff').value = v;
+  }
+  calcLoad();
+};
+window.onUnbalancedPreset = function() {
+  var v = document.getElementById('unbalancedPreset').value;
+  if (v !== 'custom' && v !== '') {
+    document.getElementById('unbalancedCoeff').value = v;
+  }
+  calcLoad();
+};
+window.onEfficiencyPreset = function() {
+  var v = document.getElementById('efficiencyPreset').value;
+  if (v !== 'custom' && v !== '') {
+    document.getElementById('efficiencyVal').value = v;
+  }
+  calcLoad();
+};
+window.onSafetyPreset = function() {
+  var v = document.getElementById('safetyPreset').value;
+  if (v !== 'custom' && v !== '') {
+    document.getElementById('safetyFactor').value = v;
+  }
+  calcSling();
+};
+
+// ============================================================
+//  TAB 0: 吊装载荷计算
+// ============================================================
+window.calcLoad = function() {
+  var g0 = parseFloat(document.getElementById('netWeight').value) || 0;
+  var unit = document.getElementById('netWeightUnit').value;
+  var g1 = parseFloat(document.getElementById('rigWeight').value) || 0;
+  var k1 = parseFloat(document.getElementById('dynamicCoeff').value) || 0;
+  var k2 = parseFloat(document.getElementById('unbalancedCoeff').value) || 0;
+  var eff = parseFloat(document.getElementById('efficiencyVal').value) || 1;
+
+  if (unit === 'kg') g0 = g0 / 1000;
+  if (g0 <= 0) return;
+
+  var gross = g0 + g1;
+  var kprod = k1 * k2;
+  var qNoEff = gross * kprod;
+  var q = qNoEff / eff;
+  var qkN = q * 9.81;
+
+  document.getElementById('loadQ').textContent = q.toFixed(2);
+  document.getElementById('loadQkN').textContent = qkN.toFixed(1);
+  document.getElementById('riGross').textContent = gross.toFixed(2) + ' t';
+  document.getElementById('riKprod').textContent = (kprod).toFixed(4);
+  document.getElementById('riLoadNoEff').textContent = qNoEff.toFixed(2) + ' t';
+  document.getElementById('riQmT').textContent = q.toFixed(2) + ' t';
+  document.getElementById('formulaDetail').textContent =
+    'G₀=' + g0.toFixed(2) + 't, G₁=' + g1.toFixed(2) + 't, K₁=' + k1.toFixed(2) +
+    ', K₂=' + k2.toFixed(2) + ', η=' + eff.toFixed(2) + ' | Q = (' + gross.toFixed(2) +
+    ' × ' + kprod.toFixed(2) + ') / ' + eff.toFixed(2) + ' = ' + q.toFixed(2) + ' t';
+
+  var warn = document.getElementById('loadWarn');
+  var warnTxt = document.getElementById('loadWarnText');
+  warn.className = 'warn-bar info';
+  warnTxt.textContent = '计算载荷 Q = ' + q.toFixed(2) + ' t，已包含动载系数 K₁=' +
+    k1.toFixed(2) + '、不均衡系数 K₂=' + k2.toFixed(2) + ' 及效率补偿 η=' + eff.toFixed(2);
+};
+
+// ============================================================
+//  TAB 1: 吊索具强度计算
+// ============================================================
+
+// 6x37+FC 钢丝绳规格表（1670 MPa 抗拉强度，单位 mm / kN）
+var ROPE_6X37FC = [
+  [6.2, 0.135, 20.0], [7.7, 0.211, 31.3], [9.3, 0.305, 45.1],
+  [11.0, 0.432, 63.9], [12.5, 0.549, 81.3], [14.0, 0.694, 102],
+  [15.5, 0.851, 125], [17.0, 1.03, 152], [18.5, 1.22, 180],
+  [20.0, 1.43, 211], [21.5, 1.65, 244], [23.0, 1.90, 281],
+  [24.5, 2.15, 318], [26.0, 2.42, 358], [28.0, 2.81, 416],
+  [30.0, 3.23, 478], [32.0, 3.68, 545], [34.0, 4.15, 614],
+  [36.5, 4.78, 708], [39.0, 5.46, 808], [43.0, 6.56, 971],
+  [47.5, 8.01, 1180], [52.0, 9.60, 1420], [56.0, 11.10, 1640],
+  [60.5, 12.90, 1910], [65.0, 15.00, 2220]
+];
+
+function getRopeRec(breakForce) {
+  for (var i = 0; i < ROPE_6X37FC.length; i++) {
+    var r = ROPE_6X37FC[i];
+    if (r[2] >= breakForce) return r;
+  }
+  return null;
+}
+
+window.calcSling = function() {
+  var q = parseFloat(document.getElementById('slingQ').value) || 0;
+  var n = parseInt(document.getElementById('branches').value) || 1;
+  var alpha = parseFloat(document.getElementById('slingAngle').value) || 0;
+  var k = parseFloat(document.getElementById('safetyFactor').value) || 0;
+
+  if (q <= 0 || k <= 0) return;
+
+  var qkN = q * 9.81;
+  var cosA = Math.cos(alpha * Math.PI / 180);
+  if (cosA < 0.1) cosA = 0.1;
+
+  var s = qkN / (n * cosA);
+  var pBreak = s * k;
+
+  document.getElementById('slingS').textContent = s.toFixed(2);
+  document.getElementById('riQkN2').textContent = qkN.toFixed(1) + ' kN';
+  document.getElementById('riCosA').textContent = cosA.toFixed(4);
+  document.getElementById('riBreak').textContent = pBreak.toFixed(1) + ' kN';
+  document.getElementById('riBreakT').textContent = (pBreak / 9.81).toFixed(1) + ' t';
+  document.getElementById('slingFormulaDetail').textContent =
+    'S = ' + qkN.toFixed(1) + ' / (' + n + ' × ' + cosA.toFixed(4) + ') = ' + s.toFixed(2) +
+    ' kN, P破 = ' + s.toFixed(2) + ' × ' + k.toFixed(2) + ' = ' + pBreak.toFixed(1) + ' kN';
+
+  // 角度警告
+  var warnB = document.getElementById('angleWarn');
+  var warnT = document.getElementById('angleWarnText');
+  var hoistAngle = 90 - alpha; // 吊索与水平面夹角
+  if (alpha >= 60) {
+    warnB.style.display = 'flex';
+    warnB.className = 'warn-bar danger';
+    warnT.textContent = '吊索与垂线夹角 α=' + alpha.toFixed(0) + '°（与水平面 ' +
+      hoistAngle.toFixed(0) + '°<30°），吊索受力急剧增大！建议增加吊索长度或改变吊点。';
+  } else if (alpha >= 45) {
+    warnB.style.display = 'flex';
+    warnB.className = 'warn-bar warning';
+    warnT.textContent = '吊索与垂线夹角 α=' + alpha.toFixed(0) + '°（与水平面 ' +
+      hoistAngle.toFixed(0) + '°），夹角偏大，需确认索具安全余量充足。';
+  } else {
+    warnB.style.display = 'none';
+  }
+
+  // 钢丝绳直径推荐
+  var ropeRec = getRopeRec(pBreak);
+  var tableHtml = '<table class="spec-table"><thead><tr>' +
+    '<th>直径(mm)</th><th>参考重量(kg/m)</th><th>破断拉力(kN)</th><th>状态</th></tr></thead><tbody>';
+  for (var i = 0; i < ROPE_6X37FC.length; i++) {
+    var r = ROPE_6X37FC[i];
+    var hl = ropeRec && r[0] === ropeRec[0];
+    var status = hl ? '★ 推荐选择' : (r[2] >= pBreak ? '✓ 满足' : '✗ 不足');
+    tableHtml += '<tr class="' + (hl ? 'highlight' : '') + '"><td>' + r[0].toFixed(1) + '</td>' +
+      '<td>' + r[1].toFixed(2) + '</td><td>' + r[2].toFixed(0) + '</td>' +
+      '<td style="color:' + (status.indexOf('推荐')>=0 ? 'var(--lift-blue)' : (status.indexOf('足')>=0 ? 'var(--lift-red)' : 'var(--lift-green)')) + ';font-weight:600;">' + status + '</td></tr>';
+  }
+  tableHtml += '</tbody></table>';
+  document.getElementById('ropeTableWrap').innerHTML = tableHtml;
+
+  // 卸扣推荐
+  var shackleLoad = q * 1000; // kg
+  var shackles = [
+    [500, 'M12', '0.5'], [1000, 'M16', '1'], [2000, 'M20', '2'],
+    [3200, 'M24', '3.2'], [5000, 'M30', '5'], [8500, 'M36', '8.5'],
+    [12000, 'M42', '12'], [15000, 'M48', '15'], [21000, 'M56', '21'],
+    [30000, 'M64', '30'], [45000, 'M72', '45'], [60000, 'M80', '60']
+  ];
+  var shackleChoice = null;
+  for (var i = 0; i < shackles.length; i++) {
+    if (shackles[i][0] >= shackleLoad * k / 1000 * 1000) {
+      shackleChoice = shackles[i];
+      break;
+    }
+  }
+  if (shackleChoice) {
+    document.getElementById('shackleRec').innerHTML =
+      '安全载荷：<strong style="color:var(--lift-blue);">' + (shackleChoice[0]/1000).toFixed(1) +
+      ' t</strong> &nbsp;|&nbsp; 销轴直径：<strong>' + shackleChoice[1] +
+      '</strong> &nbsp;|&nbsp; 起重量：' + shackleChoice[2] + ' t &nbsp;（安全系数 K=' + k.toFixed(1) + '）';
+  } else {
+    document.getElementById('shackleRec').innerHTML =
+      '载荷超出常规卸扣范围，请选用定制规格或组合吊具。';
+  }
+};
+
+window.syncLoadToSling = function() {
+  var q = document.getElementById('loadQ').textContent;
+  if (q && q !== '—') {
+    document.getElementById('slingQ').value = parseFloat(q).toFixed(2);
+    calcSling();
+    switchTab(1);
+  }
+};
+
+// ============================================================
+//  TAB 2: 臂长与高度估算
+// ============================================================
+window.calcBoom = function() {
+  var h1 = parseFloat(document.getElementById('h1').value) || 0;
+  var c = parseFloat(document.getElementById('hClearance').value) || 0;
+  var h2 = parseFloat(document.getElementById('h2').value) || 0;
+  var h3 = parseFloat(document.getElementById('h3').value) || 0;
+  var r = parseFloat(document.getElementById('radius').value) || 0;
+  var h0 = parseFloat(document.getElementById('h0').value) || 0;
+
+  var hTotal = h1 + c + h2 + h3;
+  var hFromPivot = hTotal - h0;
+  if (hFromPivot < 0) hFromPivot = 0;
+  var l = Math.sqrt(r * r + hFromPivot * hFromPivot);
+  var theta = Math.atan2(hFromPivot, r) * 180 / Math.PI;
+
+  document.getElementById('liftH').textContent = hTotal.toFixed(1);
+  document.getElementById('boomL').textContent = Math.ceil(l * 10) / 10;
+  document.getElementById('riHtotal').textContent = hTotal.toFixed(1) + ' m';
+  document.getElementById('riHeightFromPivot').textContent = hFromPivot.toFixed(1) + ' m';
+  document.getElementById('riAngle').textContent = theta.toFixed(1) + '°';
+  document.getElementById('riRadius').textContent = r.toFixed(1) + ' m';
+  document.getElementById('boomFormulaDetail').textContent =
+    'H = ' + h1.toFixed(1) + '+' + c.toFixed(1) + '+' + h2.toFixed(1) + '+' + h3.toFixed(1) +
+    ' = ' + hTotal.toFixed(1) + ' m, L = √(' + r.toFixed(1) + '² + ' + hFromPivot.toFixed(1) +
+    '²) = ' + l.toFixed(1) + ' m, θ = ' + theta.toFixed(1) + '°';
+};
+
+// ============================================================
+//  计算历史
+// ============================================================
+var STORAGE_KEY = 'sheen_lifting_history';
+
+function getHistory() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+  catch(e) { return []; }
+}
+function setHistory(h) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(h.slice(-20)));
+}
+
+window.saveHistory = function(tabName) {
+  var now = new Date();
+  var ts = now.toISOString().replace('T',' ').slice(0,16);
+  var summary = '', value = '';
+
+  if (tabName === '载荷计算') {
+    value = document.getElementById('loadQ').textContent + ' t';
+    summary = '计算载荷 Q = ' + value;
+  } else if (tabName === '索具强度') {
+    value = document.getElementById('slingS').textContent + ' kN';
+    summary = '单根拉力 S = ' + value;
+  } else {
+    value = document.getElementById('boomL').textContent + ' m';
+    summary = '最小臂长 L = ' + value;
+  }
+
+  var h = getHistory();
+  h.unshift({ time: ts, tab: tabName, summary: summary, value: value });
+  setHistory(h);
+  renderHistory();
+};
+
+window.clearHistory = function() {
+  if (confirm('确认清空所有计算历史记录？')) {
+    localStorage.removeItem(STORAGE_KEY);
+    renderHistory();
+  }
+};
+
+window.loadHistoryItem = function(idx) {
+  var h = getHistory();
+  if (idx < 0 || idx >= h.length) return;
+  var item = h[idx];
+  if (item.tab === '载荷计算') switchTab(0);
+  else if (item.tab === '索具强度') switchTab(1);
+  else switchTab(2);
+};
+
+function renderHistory() {
+  var h = getHistory();
+  document.getElementById('historyCount').textContent = h.length;
+  var list = document.getElementById('historyList');
+  if (h.length === 0) {
+    list.innerHTML = '<div style="text-align:center;color:var(--text-secondary);padding:20px;font-size:13px;">暂无计算记录</div>';
+    return;
+  }
+  list.innerHTML = h.map(function(item, i) {
+    return '<div class="history-item" onclick="loadHistoryItem(' + i + ')">' +
+      '<span class="hi-time">' + item.time + '</span>' +
+      '<span class="hi-summary">[' + item.tab + '] ' + item.summary + '</span>' +
+      '<span class="hi-value">' + item.value + '</span>' +
+      '</div>';
+  }).join('');
+}
+
+// ============================================================
+//  初始化
+// ============================================================
+calcLoad();
+calcSling();
+calcBoom();
+renderHistory();
+
+})();
+</script>
+
+</body>
+</html>
