@@ -7,6 +7,17 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
+
+    <!-- PWA -->
+    <link rel="manifest" href="/sheen-toolbox/manifest.json">
+    <meta name="theme-color" content="#7A1825">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SHEEN Toolbox">
+    <link rel="apple-touch-icon" href="/sheen-toolbox/assets/icon-192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/sheen-toolbox/assets/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/sheen-toolbox/assets/icon-512.png">
+
     <title>SHEEN Toolbox · 环境健康安全专业工具箱</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 <link rel="stylesheet" href="/sheen-toolbox/common.css">
@@ -452,6 +463,11 @@
     </footer>
 
     <!-- API 配置按钮 -->
+    <!-- PWA 添加到桌面浮动按钮 -->
+    <button class="pwa-install-btn" id="pwaInstallBtn" style="display:none;" title="添加到桌面，像 App 一样使用">
+        <i class="fa-solid fa-download"></i> 添加到桌面
+    </button>
+
     <div id="apiToggle" onclick="toggleApi()" title="API配置" style="position:fixed;bottom:24px;right:24px;z-index:99;width:44px;height:44px;border-radius:50%;background:var(--bg-card);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,0.1);"><i class="fa-solid fa-key"></i></div>
     <span id="apiStatusH" style="position:fixed;bottom:28px;right:76px;z-index:99;font-size:11px;padding:4px 10px;border-radius:60px;background:#FEF2F2;color:#DC2626;">未配置</span>
 
@@ -483,6 +499,78 @@
     <script>
     (function() {
         function chinaTime() { return new Date(Date.now() + (480 + new Date().getTimezoneOffset()) * 60000); }
+
+        // ===== PWA Service Worker =====
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sheen-toolbox/sw.js');
+        }
+
+        // ===== PWA 安装按钮逻辑 =====
+        var deferredPrompt = null;
+        var pwaBtn = document.getElementById('pwaInstallBtn');
+
+        function isPwaInstalled() {
+            return window.matchMedia('(display-mode: standalone)').matches ||
+                   navigator.standalone ||
+                   document.referrer.indexOf('android-app://') === 0;
+        }
+
+        window.addEventListener('beforeinstallprompt', function(e) {
+            e.preventDefault();
+            deferredPrompt = e;
+            if (!isPwaInstalled() && !localStorage.getItem('sheen_pwa_dismissed')) {
+                showPwaBtn();
+            }
+        });
+
+        function isIosSafari() {
+            var ua = navigator.userAgent;
+            return /iPhone|iPad|iPod/.test(ua) && /Safari/.test(ua) &&
+                   !/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+        }
+
+        function showPwaBtn() {
+            if (pwaBtn) pwaBtn.style.display = 'flex';
+        }
+
+        if (isIosSafari() && !isPwaInstalled() && !localStorage.getItem('sheen_pwa_dismissed')) {
+            setTimeout(showPwaBtn, 2000);
+        }
+
+        if (pwaBtn) {
+            pwaBtn.addEventListener('click', function() {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then(function(result) {
+                        if (result.outcome === 'accepted') {
+                            pwaBtn.style.display = 'none';
+                        } else {
+                            localStorage.setItem('sheen_pwa_dismissed', Date.now() + 7*86400000);
+                            pwaBtn.classList.add('dismissed');
+                        }
+                        deferredPrompt = null;
+                    });
+                } else if (isIosSafari()) {
+                    var guide = document.createElement('div');
+                    guide.innerHTML = '<div style="position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:999;display:flex;align-items:flex-end;justify-content:center;padding-bottom:80px;">' +
+                      '<div style="background:#fff;border-radius:20px;padding:24px;margin:16px;max-width:340px;text-align:center;position:relative;">' +
+                      '<button onclick="this.parentElement.parentElement.remove()" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:20px;cursor:pointer;color:#999;">&times;</button>' +
+                      '<div style="font-size:40px;margin-bottom:12px;">📱</div>' +
+                      '<h3 style="font-size:16px;margin-bottom:8px;color:#111827;">添加到桌面</h3>' +
+                      '<p style="font-size:13px;color:#6B7280;margin-bottom:16px;line-height:1.6;">点击 Safari 底部 <strong>分享按钮</strong><br>选择 <strong>"添加到主屏幕"</strong></p>' +
+                      '<div style="background:#F3F4F6;border-radius:12px;padding:12px;margin-bottom:12px;"><span style="font-size:12px;color:#6B7280;">↗️ 分享按钮 → 添加到主屏幕</span></div>' +
+                      '<button onclick="this.parentElement.parentElement.remove();localStorage.setItem(\'sheen_pwa_dismissed\',Date.now()+7*86400000);" style="width:100%;padding:10px;border-radius:60px;border:none;background:#7A1825;color:#fff;font-size:14px;font-weight:600;cursor:pointer;">我知道了</button>' +
+                      '</div></div>';
+                    document.body.appendChild(guide);
+                }
+            });
+        }
+
+        var dismissed = localStorage.getItem('sheen_pwa_dismissed');
+        if (dismissed && Date.now() > parseInt(dismissed)) {
+            localStorage.removeItem('sheen_pwa_dismissed');
+        }
+
         // ===== 访问计数器 =====
         var el2 = document.getElementById('visitCount2');
         var LS = 'sheen_visit_n';
