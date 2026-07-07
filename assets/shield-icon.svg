@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Deep red background (for PWA icons) -->
+  <rect width="512" height="512" rx="102" fill="#7A1825"/>
+
+  <!--
+    Classic shield outline (FA shield-halved geometry)
+    - Rounded top corners
+    - Sides bulge at shoulders (~1/4 from top)
+    - Taper inward to bottom point
+    - Vertical divider line (halved)
+  -->
+  <path d="
+    M 149 76
+    L 363 76
+    C 390 76, 412 94, 420 120
+    C 430 155, 434 195, 434 240
+    C 434 310, 392 380, 256 456
+    C 120 380, 78 310, 78 240
+    C 78 195, 82 155, 92 120
+    C 100 94, 122 76, 149 76
+    Z
+  "
+  fill="none"
+  stroke="#FFFFFF"
+  stroke-width="24"
+  stroke-linejoin="round"
+  stroke-linecap="round"/>
+
+  <!-- Halved divider -->
+  <line x1="256" y1="108" x2="256" y2="424"
+        stroke="#FFFFFF"
+        stroke-width="22"
+        stroke-linecap="round"/>
+</svg>
