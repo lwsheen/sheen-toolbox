@@ -1,21 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <circle cx="256" cy="256" r="244" fill="#7A1825"/>
+  <circle cx="256" cy="256" r="244" fill="#000000"/>
   <clipPath id="c"><circle cx="256" cy="256" r="240"/></clipPath>
   <g clip-path="url(#c)">
-    <!-- 盾牌白底 -->
-    <path fill="#FFFFFF" d="
+    <!-- 盾牌 — 琥珀金填充 -->
+    <path fill="#FBBF24" d="
       M48,100 L256,28 L464,100
       L464,220 Q460,280 456,340
       Q420,420 336,492 Q296,504 256,508
       Q216,504 176,492 Q92,420 56,340
       Q52,280 48,220 Z"/>
-    <!-- 右半深红 -->
-    <path fill="#7A1825" d="
+    <!-- 右半黑色镂空 (shield-halved) -->
+    <path fill="#000000" d="
       M256,28 L464,100 L464,220
       Q460,280 456,340 Q420,420 336,492
       Q296,504 256,508 L256,52 Z"/>
-    <!-- 竖线 -->
+    <!-- 中间竖线 -->
     <line x1="256" y1="32" x2="256" y2="504"
-      stroke="#FFFFFF" stroke-width="12" stroke-linecap="round"/>
+      stroke="#FBBF24" stroke-width="12" stroke-linecap="round"/>
   </g>
 </svg>
