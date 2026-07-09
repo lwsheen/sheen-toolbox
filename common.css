@@ -509,9 +509,9 @@ label {
   .pwa-install-btn { display: none !important; }
 }
 
-/* 手机/平板：显示 PWA 安装按钮 */
+/* 手机/平板：显示 PWA 安装按钮（!important 覆盖旧 HTML 内联 style="display:none"） */
 @media (max-width: 768px) {
-  .pwa-install-btn { display: flex; }
+  .pwa-install-btn { display: flex !important; }
 }
 
 /* 响应式：小屏幕调整位置 */
