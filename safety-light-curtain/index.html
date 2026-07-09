@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="安全光幕选型计算工具 — 基于 ISO 13855 安全距离计算与光幕有效高度选型">
+
+<!-- PWA -->
+<link rel="manifest" href="/sheen-toolbox/manifest.json">
+<meta name="theme-color" content="#7A1825">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SHEEN Toolbox">
+<link rel="apple-touch-icon" href="/sheen-toolbox/assets/icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/sheen-toolbox/assets/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/sheen-toolbox/assets/icon-512.png">
+
+<title>安全光幕选型计算工具 — SHEEN Toolbox</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="/sheen-toolbox/common.css">
+<style>
+:root {
+  --warn-red: #DC2626;
+  --warn-red-light: #FEF2F2;
+  --warn-amber: #D97706;
+  --warn-amber-light: #FFFBEB;
+  --warn-green: #059669;
+  --warn-green-light: #ECFDF5;
+}
+
+/* 选项卡 */
+.tab-nav { display: flex; gap: 0; margin-bottom: 0; border-bottom: 2px solid var(--border); }
+.tab-btn {
+  flex: 1; padding: 14px 16px; font-size: 14px; font-weight: 600; font-family: var(--font);
+  background: var(--bg-page); color: var(--text-secondary); border: none; cursor: pointer;
+  transition: all 0.2s; border-bottom: 3px solid transparent; margin-bottom: -2px;
+  display: flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap;
+}
+.tab-btn i { font-size: 16px; }
+.tab-btn:hover { color: var(--brand-red); background: var(--brand-red-light); }
+.tab-btn.active { color: var(--brand-red); background: var(--bg-card); border-bottom-color: var(--brand-red); }
+.tab-panel { display: none; background: var(--bg-card); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: 24px; }
+.tab-panel.active { display: block; }
+
+/* 表单网格 */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-full { grid-column: 1 / -1; }
+
+/* 结果块 */
+.result-block {
+  background: var(--brand-red-light); border: 2px solid var(--brand-red);
+  border-radius: 16px; padding: 24px; margin-top: 24px;
+}
+.result-block .main-value { font-size: 42px; font-weight: 800; color: var(--brand-red); line-height: 1.1; }
+.result-block .main-unit { font-size: 18px; color: var(--text-secondary); margin-left: 4px; font-weight: 600; }
+.result-block .result-label { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+.result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+.result-item { background: var(--bg-card); border-radius: 12px; padding: 14px 16px; border: 1px solid var(--border); }
+.result-item .ri-val { font-size: 22px; font-weight: 700; color: var(--text-primary); }
+.result-item .ri-label { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+
+/* 公式说明 */
+.formula-box {
+  background: var(--bg-page); border: 1px solid var(--border-light); border-radius: 8px; padding: 12px 16px;
+  font-size: 13px; color: var(--text-secondary); margin-top: 12px;
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; line-height: 1.8; white-space: pre-wrap;
+}
+.formula-box strong { color: var(--brand-red); }
+
+/* 警告条 */
+.warn-bar { padding: 10px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+.warn-bar.danger { background: var(--warn-red-light); color: var(--warn-red); border: 1px solid var(--warn-red); }
+.warn-bar.warning { background: var(--warn-amber-light); color: var(--warn-amber); border: 1px solid var(--warn-amber); }
+.warn-bar.info { background: var(--brand-red-light); color: var(--brand-red); border: 1px solid var(--brand-red); }
+.warn-bar.ok { background: var(--warn-green-light); color: var(--warn-green); border: 1px solid var(--warn-green); }
+
+/* 推荐规格表 */
+.spec-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 12px; }
+.spec-table th { background: var(--brand-red); color: #fff; padding: 8px 10px; text-align: left; font-weight: 600; font-size: 11px; }
+.spec-table td { padding: 7px 10px; border-bottom: 1px solid var(--border-light); }
+.spec-table tr:nth-child(even) { background: var(--bg-page); }
+
+/* 免责声明 */
+.disclaimer { margin-top: 28px; padding: 16px 20px; background: var(--warn-amber-light); border: 1px solid var(--warn-amber); border-radius: 12px; font-size: 12px; color: var(--text-secondary); line-height: 1.8; }
+.disclaimer strong { color: var(--warn-amber); }
+
+.hint { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+
+@media (max-width: 768px) {
+  .tab-btn { padding: 10px 8px; font-size: 12px; gap: 4px; }
+  .tab-panel { padding: 16px; }
+  .form-grid { grid-template-columns: 1fr; gap: 12px; }
+  .result-grid { grid-template-columns: 1fr; }
+  .result-block .main-value { font-size: 32px; }
+}
+</style>
+</head>
+<body>
+
+<div class="breadcrumb">
+  <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+  <span> / 安全光幕选型计算工具</span>
+</div>
+
+<main class="app-container container-calc">
+
+  <h1 class="page-title"><i class="fa-solid fa-wave-square" style="color:var(--amber)"></i> 安全光幕选型计算工具</h1>
+  <p class="page-subtitle" style="margin-bottom:16px;">依据 ISO 13855（机械安全·保护装置·联锁装置安全距离）计算光幕最小安全距离，并选型光幕有效保护高度</p>
+
+  <!-- 选项卡导航 -->
+  <div class="tab-nav" role="tablist">
+    <button class="tab-btn active" onclick="switchTab(0)" data-tab="0"><i class="fa-solid fa-ruler-horizontal"></i> 安全距离计算</button>
+    <button class="tab-btn" onclick="switchTab(1)" data-tab="1"><i class="fa-solid fa-expand"></i> 光幕有效高度</button>
+  </div>
+
+  <!-- ==================== TAB 0: 安全距离计算 ==================== -->
+  <div class="tab-panel active" id="panel0">
+    <h3 style="font-size:16px;font-weight:600;margin-bottom:16px;"><i class="fa-solid fa-ruler-horizontal"></i> 最小安全距离 S 计算</h3>
+    <div class="form-grid">
+      <div class="form-row">
+        <label>光幕分辨率 d (mm) <span style="color:var(--warn-red)">*</span></label>
+        <div class="coefficient-input" style="display:flex;gap:8px;">
+          <select class="form-control" id="dPreset" style="width:120px;flex-shrink:0;" onchange="onDPreset()">
+            <option value="14">14 mm</option>
+            <option value="20">20 mm</option>
+            <option value="30">30 mm</option>
+            <option value="40" selected>40 mm</option>
+            <option value="50">50 mm</option>
+            <option value="60">60 mm</option>
+            <option value="70">70 mm</option>
+            <option value="custom">自定义</option>
+          </select>
+          <input type="number" id="d" class="form-control" value="40" min="9" max="90" step="1" oninput="calcSafety()">
+        </div>
+        <div class="hint">手指/手保护 d≤40mm；手臂/腿 40≤d≤70mm</div>
+      </div>
+      <div class="form-row">
+        <label>光幕响应时间 t₁ (ms) <span style="color:var(--warn-red)">*</span></label>
+        <input type="number" id="t1" class="form-control" value="12" min="0" step="0.5" oninput="calcSafety()" placeholder="光幕+控制器响应">
+        <div class="hint">典型值 8~20ms，含控制器延时</div>
+      </div>
+      <div class="form-row">
+        <label>机器制动时间 t₂ (ms) <span style="color:var(--warn-red)">*</span></label>
+        <input type="number" id="t2" class="form-control" value="100" min="0" step="1" oninput="calcSafety()" placeholder="机器停止/截断时间">
+        <div class="hint">危险机器从触发到停止的时间</div>
+      </div>
+      <div class="form-row">
+        <label>标准版本</label>
+        <select class="form-control" id="stdVer" onchange="onStdChange()">
+          <option value="2015" selected>ISO 13855 经典公式（C 项法）</option>
+          <option value="2024">ISO 13855:2024 新公式（DDS+Z）</option>
+        </select>
+      </div>
+
+      <!-- 经典公式相关 -->
+      <div class="form-row" id="rowMount">
+        <label>安装方式</label>
+        <select class="form-control" id="mount" onchange="onMountChange()">
+          <option value="vertical" selected>垂直安装</option>
+          <option value="horizontal">水平安装</option>
+          <option value="tilt">倾斜安装（夹角 θ）</option>
+        </select>
+      </div>
+      <div class="form-row" id="rowObj">
+        <label>探测对象 <span style="color:var(--warn-red)">*</span></label>
+        <select class="form-control" id="obj" onchange="onObjChange()">
+          <option value="finger" selected>手指 / 手（d≤40mm）</option>
+          <option value="arm">手臂 / 腿（40≤d≤70mm）</option>
+          <option value="access">危险区域访问（2/3/4 光束）</option>
+        </select>
+      </div>
+      <div class="form-row" id="rowH" style="display:none;">
+        <label>危险区域高度 H (mm) <span style="color:var(--warn-red)">*</span></label>
+        <input type="number" id="H" class="form-control" value="1200" min="0" step="10" oninput="calcSafety()" placeholder="地面到危险点的高度">
+      </div>
+      <div class="form-row" id="rowTheta" style="display:none;">
+        <label>倾斜夹角 θ (°) <span style="color:var(--warn-red)">*</span></label>
+        <input type="number" id="theta" class="form-control" value="30" min="0" max="90" step="1" oninput="calcSafety()" placeholder="光幕平面与垂直方向夹角">
+        <div class="hint">θ≥30° 按垂直计算；θ&lt;30° 按水平计算</div>
+      </div>
+
+      <!-- 2024 新公式相关 -->
+      <div class="form-row" id="rowDDS" style="display:none;">
+        <label>伸手距离补偿 DDS (mm) <span style="color:var(--warn-red)">*</span></label>
+        <input type="number" id="dds" class="form-control" value="250" min="0" step="10" oninput="calcSafety()" placeholder="按探测对象预设，可改">
+        <div class="hint">手指≈100 / 手≈250 / 手臂≈550 / 身体≈850</div>
+      </div>
+      <div class="form-row" id="rowZ" style="display:none;">
+        <label>容差系数 Z (mm)</label>
+        <input type="number" id="z" class="form-control" value="0" min="0" step="5" oninput="calcSafety()" placeholder="默认 0">
+        <div class="hint">系统公差补偿，依设备精度取 0~50mm</div>
+      </div>
+    </div>
+
+    <button class="btn-primary" style="background:var(--brand-red);margin-top:16px;width:100%;" onclick="calcSafety(); saveHistory('安全距离')">
+      <i class="fa-solid fa-calculator"></i> 计算最小安全距离
+    </button>
+    <div style="display:flex;gap:10px;margin-top:12px;">
+      <button class="btn-print" style="flex:1;" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印</button>
+      <button class="btn-outline" style="flex:1;border-color:var(--brand-red);color:var(--brand-red);" onclick="exportResult('safeResult','安全光幕选型-安全距离')"><i class="fa-solid fa-file-export"></i> 导出</button>
+    </div>
+
+    <!-- 结果 -->
+    <div class="result-block" id="safeResult">
+      <div class="result-label">最小安全距离 S（光幕到危险区最短距离）</div>
+      <span class="main-value" id="mainS">—</span><span class="main-unit">mm</span>
+      <div class="result-grid">
+        <div class="result-item"><div class="ri-val" id="riK">—</div><div class="ri-label">接近速度 K (mm/s)</div></div>
+        <div class="result-item"><div class="ri-val" id="riT">—</div><div class="ri-label">总停止时间 T (s)</div></div>
+        <div class="result-item"><div class="ri-val" id="riC">—</div><div class="ri-label">附加距离 C / DDS+Z (mm)</div></div>
+        <div class="result-item"><div class="ri-val" id="riD">—</div><div class="ri-label">推荐光幕分辨率 d (mm)</div></div>
+      </div>
+      <div class="formula-box" id="formulaDetail">—</div>
+      <div class="warn-bar info" id="safeWarn"><i class="fa-solid fa-circle-info"></i><span id="safeWarnText">请输入参数后计算</span></div>
+    </div>
+  </div>
+
+  <!-- ==================== TAB 1: 光幕有效高度 ==================== -->
+  <div class="tab-panel" id="panel1">
+    <h3 style="font-size:16px;font-weight:600;margin-bottom:16px;"><i class="fa-solid fa-expand"></i> 光幕有效探测高度选型</h3>
+    <div class="form-grid">
+      <div class="form-row">
+        <label>危险区域最大高度 H_max (mm) <span style="color:var(--warn-red)">*</span></label>
+        <input type="number" id="hMax" class="form-control" value="1500" min="0" step="10" oninput="calcHeight()" placeholder="需防护区域最高点">
+      </div>
+      <div class="form-row">
+        <label>安装盲区高度 (mm)</label>
+        <input type="number" id="blind" class="form-control" value="300" min="0" max="500" step="10" oninput="calcHeight()" placeholder="≤300mm 推荐">
+        <div class="hint">光幕端部盲区，规范建议 ≤300mm</div>
+      </div>
+      <div class="form-row form-full">
+        <label>安全余量 (mm)</label>
+        <input type="number" id="margin" class="form-control" value="200" min="0" step="10" oninput="calcHeight()" placeholder="≥200mm 推荐">
+        <div class="hint">顶部/底部安装间隙余量，规范建议 ≥200mm</div>
+      </div>
+    </div>
+
+    <button class="btn-primary" style="background:var(--brand-red);margin-top:16px;width:100%;" onclick="calcHeight(); saveHistory('有效高度')">
+      <i class="fa-solid fa-calculator"></i> 计算有效保护高度
+    </button>
+    <div style="display:flex;gap:10px;margin-top:12px;">
+      <button class="btn-print" style="flex:1;" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印</button>
+      <button class="btn-outline" style="flex:1;border-color:var(--brand-red);color:var(--brand-red);" onclick="exportResult('heightResult','安全光幕选型-有效高度')"><i class="fa-solid fa-file-export"></i> 导出</button>
+    </div>
+
+    <div class="result-block" id="heightResult">
+      <div class="result-grid" style="grid-template-columns:1fr 1fr;">
+        <div style="text-align:center;padding:16px 0;">
+          <div class="result-label">推荐光幕有效高度</div>
+          <span class="main-value" id="recHeight" style="font-size:36px;">—</span><span class="main-unit">mm</span>
+        </div>
+        <div style="text-align:center;padding:16px 0;">
+          <div class="result-label">最小有效防护高度</div>
+          <span class="main-value" id="minHeight" style="font-size:36px;">—</span><span class="main-unit">mm</span>
+        </div>
+      </div>
+      <div class="formula-box" id="formulaDetail2">—</div>
+      <div style="margin-top:16px;">
+        <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;">常用光幕有效高度规格参考</h4>
+        <div class="table-scroll">
+          <table class="spec-table"><thead><tr><th>规格 (mm)</th><th>适用场景</th></tr></thead>
+          <tbody>
+            <tr><td>150</td><td>局部小开口、手部点位防护</td></tr>
+            <tr><td>300</td><td>工作台面小区域防护</td></tr>
+            <tr><td>600</td><td>设备操作口半身防护</td></tr>
+            <tr><td>900</td><td>站立操作口常规防护</td></tr>
+            <tr><td>1200</td><td>人员通行/作业区防护</td></tr>
+            <tr><td>1500</td><td>大型设备全高防护</td></tr>
+            <tr><td>1800</td><td>通道/区域侵入防护</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+      <div class="warn-bar ok" id="heightWarn" style="display:none;"><i class="fa-solid fa-circle-check"></i><span id="heightWarnText"></span></div>
+    </div>
+  </div>
+
+  <!-- 免责声明 -->
+  <div class="disclaimer">
+    <strong><i class="fa-solid fa-triangle-exclamation"></i> 安全免责声明：</strong>
+    本工具依据 ISO 13855 通用公式进行初步计算，结果仅供选型估算参考，不替代由具备资质的安全工程师
+    依据实际工况、设备响应特性及最新标准所做的详细风险评估与验证。光幕选型须结合制造商技术手册，
+    并在机器安全回路中正确集成（如双手控制、联锁、ESPE 等级要求）。安全距离计算后应进行现场验证与试运转确认。
+  </div>
+
+</main>
+
+<footer class="sheen-footer">
+  <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 安全光幕选型计算工具
+</footer>
+
+<div class="print-time" id="printTime"></div>
+
+<button class="pwa-install-btn" id="pwaInstallBtn" style="display:none;" title="添加到桌面，像 App 一样使用">
+    <i class="fa-solid fa-download"></i> 添加到桌面
+</button>
+
+<script>
+(function() {
+'use strict';
+
+document.getElementById('printTime').textContent =
+  new Date().toISOString().replace('T',' ').slice(0,16);
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sheen-toolbox/sw.js');
+}
+
+// ===== PWA 安装按钮 =====
+var deferredPrompt = null;
+var pwaBtn = document.getElementById('pwaInstallBtn');
+function isPwaInstalled() {
+  return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone ||
+         document.referrer.indexOf('android-app://') === 0;
+}
+window.addEventListener('beforeinstallprompt', function(e) {
+  e.preventDefault(); deferredPrompt = e;
+  if (!isPwaInstalled() && !localStorage.getItem('sheen_pwa_dismissed') && pwaBtn) pwaBtn.style.display = 'flex';
+});
+function isIosSafari() {
+  var ua = navigator.userAgent;
+  return /iPhone|iPad|iPod/.test(ua) && /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+}
+if (isIosSafari() && !isPwaInstalled() && !localStorage.getItem('sheen_pwa_dismissed') && pwaBtn) {
+  setTimeout(function(){ pwaBtn.style.display = 'flex'; }, 2000);
+}
+if (pwaBtn) {
+  pwaBtn.addEventListener('click', function() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function(r){
+        if (r.outcome === 'accepted') pwaBtn.style.display = 'none';
+        else { localStorage.setItem('sheen_pwa_dismissed', Date.now()+7*86400000); pwaBtn.classList.add('dismissed'); }
+        deferredPrompt = null;
+      });
+    } else if (isIosSafari()) {
+      var g = document.createElement('div');
+      g.innerHTML = '<div style="position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:999;display:flex;align-items:flex-end;justify-content:center;padding-bottom:80px;">' +
+        '<div style="background:#fff;border-radius:20px;padding:24px;margin:16px;max-width:340px;text-align:center;position:relative;">' +
+        '<button onclick="this.parentElement.parentElement.remove()" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:20px;cursor:pointer;color:#999;">×</button>' +
+        '<div style="font-size:40px;margin-bottom:12px;">📱</div><h3 style="font-size:16px;margin-bottom:8px;color:#111827;">添加到桌面</h3>' +
+        '<p style="font-size:13px;color:#6B7280;margin-bottom:16px;line-height:1.6;">点击 Safari 底部 <strong>分享按钮</strong><br>选择 <strong>"添加到主屏幕"</strong></p>' +
+        '<button onclick="this.parentElement.parentElement.remove();localStorage.setItem(\'sheen_pwa_dismissed\',Date.now()+7*86400000);" style="width:100%;padding:10px;border-radius:60px;border:none;background:#7A1825;color:#fff;font-size:14px;font-weight:600;cursor:pointer;">我知道了</button></div></div>';
+      document.body.appendChild(g);
+    }
+  });
+}
+var dismissed = localStorage.getItem('sheen_pwa_dismissed');
+if (dismissed && Date.now() > parseInt(dismissed)) localStorage.removeItem('sheen_pwa_dismissed');
+
+// ===== 选项卡 =====
+window.switchTab = function(idx) {
+  document.querySelectorAll('.tab-btn').forEach(function(b,i){ b.classList.toggle('active', i===idx); });
+  document.querySelectorAll('.tab-panel').forEach(function(p,i){ p.classList.toggle('active', i===idx); });
+};
+
+// ===== UI 联动 =====
+window.onDPreset = function() {
+  var v = document.getElementById('dPreset').value;
+  if (v !== 'custom') document.getElementById('d').value = v;
+  calcSafety();
+};
+window.onStdChange = function() {
+  var ver = document.getElementById('stdVer').value;
+  var is2024 = ver === '2024';
+  document.getElementById('rowMount').style.display = is2024 ? 'none' : '';
+  document.getElementById('rowObj').style.display = is2024 ? '' : '';
+  document.getElementById('rowH').style.display = (!is2024 && document.getElementById('mount').value !== 'vertical') ? '' : 'none';
+  document.getElementById('rowTheta').style.display = (!is2024 && document.getElementById('mount').value === 'tilt') ? '' : 'none';
+  document.getElementById('rowDDS').style.display = is2024 ? '' : 'none';
+  document.getElementById('rowZ').style.display = is2024 ? '' : 'none';
+  if (is2024) applyDdsPreset();
+  calcSafety();
+};
+window.onMountChange = function() {
+  var m = document.getElementById('mount').value;
+  document.getElementById('rowObj').style.display = (m === 'vertical' || document.getElementById('stdVer').value === '2024') ? '' : 'none';
+  document.getElementById('rowH').style.display = (m === 'horizontal') ? '' : (m === 'tilt' ? '' : 'none');
+  document.getElementById('rowTheta').style.display = (m === 'tilt') ? '' : 'none';
+  calcSafety();
+};
+window.onObjChange = function() {
+  if (document.getElementById('stdVer').value === '2024') applyDdsPreset();
+  calcSafety();
+};
+function applyDdsPreset() {
+  var obj = document.getElementById('obj').value;
+  var map = { finger:100, hand:250, arm:550, access:850 };
+  var dds = map[obj] !== undefined ? map[obj] : 250;
+  document.getElementById('dds').value = dds;
+}
+
+// ===== 安全距离计算 =====
+window.calcSafety = function() {
+  var d = parseFloat(document.getElementById('d').value) || 0;
+  var t1 = parseFloat(document.getElementById('t1').value) || 0;
+  var t2 = parseFloat(document.getElementById('t2').value) || 0;
+  var mount = document.getElementById('mount').value;
+  var obj = document.getElementById('obj').value;
+  var H = parseFloat(document.getElementById('H').value) || 0;
+  var theta = parseFloat(document.getElementById('theta').value) || 0;
+  var ver = document.getElementById('stdVer').value;
+  var dds = parseFloat(document.getElementById('dds').value) || 0;
+  var z = parseFloat(document.getElementById('z').value) || 0;
+
+  var T = (t1 + t2) / 1000;
+
+  // K：手指/手 2000；其他 1600；水平/倾斜 1600
+  var K = (obj === 'finger') ? 2000 : 1600;
+  if (mount !== 'vertical') K = 1600;
+
+  // 倾斜按夹角判定等效安装方式
+  var mode = mount;
+  if (mount === 'tilt') mode = (theta >= 30) ? 'vertical' : 'horizontal';
+
+  var S = 0, C = 0, formula = '', warnCls = 'info', warnTxt = '';
+  var recD = (obj === 'finger') ? '≤ 40（建议 14/20/30）' :
+             (obj === 'arm') ? '40~70（建议 40/50/60）' : '按光束法（≥40）';
+
+  if (ver === '2024') {
+    S = K * T + dds + z;
+    C = dds + z;
+    formula = 'S = K × T + DDS + Z\n' +
+              '  = ' + K + ' × ' + T.toFixed(3) + ' + ' + dds + ' + ' + z + '\n' +
+              '  = ' + S.toFixed(1) + ' mm';
+  } else {
+    if (mode === 'vertical') {
+      if (obj === 'finger') {
+        var S1 = 2000 * T + 8 * (d - 14);
+        S1 = Math.max(S1, 100);
+        if (S1 > 500) {
+          var S2 = 1600 * T + 8 * (d - 14);
+          S2 = Math.max(S2, 500);
+          S = S2; C = 8 * (d - 14);
+          formula = '① 初始：S = 2000×T + 8×(d−14)\n' +
+                    '   = 2000×' + T.toFixed(3) + ' + 8×(' + d + '−14) = ' + S1.toFixed(1) + ' mm\n' +
+                    '② S>500mm → 采用 K=1600 优化（下限 500mm）：\n' +
+                    '   S = 1600×T + 8×(d−14) = ' + S2.toFixed(1) + ' mm\n' +
+                    '→ 最终采用优化值 ' + S.toFixed(1) + ' mm';
+          warnTxt = '安全距离 >500mm，已自动采用 K=1600 优化方案，更经济且满足 ≥500mm 下限。';
+        } else {
+          S = S1; C = 8 * (d - 14);
+          formula = 'S = 2000×T + 8×(d−14)\n' +
+                    '  = 2000×' + T.toFixed(3) + ' + 8×(' + d + '−14)\n' +
+                    '  = ' + S.toFixed(1) + ' mm  （下限 100mm ✓）';
+        }
+        if (d > 40) { warnCls = 'warning'; warnTxt = '⚠ 检测手指/手要求分辨率 d≤40mm，当前 d=' + d + 'mm 偏大，请确认探测对象或改用更精细光幕。'; }
+      } else if (obj === 'arm') {
+        S = 1600 * T + 850; C = 850;
+        formula = 'S = 1600×T + 850 = 1600×' + T.toFixed(3) + ' + 850 = ' + S.toFixed(1) + ' mm';
+        if (d < 40 || d > 70) { warnCls = 'warning'; warnTxt = '⚠ 检测手臂/腿要求 40≤d≤70mm，当前 d=' + d + 'mm 超出范围。'; }
+      } else {
+        S = 1600 * T + 850; C = 850;
+        formula = 'S = 1600×T + 850 = 1600×' + T.toFixed(3) + ' + 850 = ' + S.toFixed(1) + ' mm\n（危险区域访问，2/3/4 光束法）';
+      }
+    } else {
+      var Cadd = 1200 - 0.4 * H;
+      if (Cadd < 0) { Cadd = 0; warnCls = 'warning'; warnTxt = '⚠ 危险区域高度 H=' + H + 'mm 较大，附加距离 (1200−0.4H) 为负，已取 0，请复核 H 取值是否合理。'; }
+      S = 1600 * T + Cadd; C = Cadd;
+      formula = 'S = 1600×T + (1200 − 0.4×H)\n' +
+                '  = 1600×' + T.toFixed(3) + ' + (1200 − 0.4×' + H + ')\n' +
+                '  = 1600×' + T.toFixed(3) + ' + ' + Cadd.toFixed(1) + ' = ' + S.toFixed(1) + ' mm';
+    }
+  }
+
+  document.getElementById('mainS').textContent = S.toFixed(1);
+  document.getElementById('riK').textContent = K;
+  document.getElementById('riT').textContent = T.toFixed(3);
+  document.getElementById('riC').textContent = C.toFixed(1);
+  document.getElementById('riD').textContent = recD;
+  document.getElementById('formulaDetail').textContent = formula;
+
+  var w = document.getElementById('safeWarn');
+  var wt = document.getElementById('safeWarnText');
+  if (!warnTxt) { w.className = 'warn-bar info'; wt.textContent = '计算完成：光幕探测区到危险区最短直线距离应 ≥ ' + S.toFixed(1) + ' mm。'; }
+  else { w.className = 'warn-bar ' + warnCls; wt.textContent = warnTxt; }
+};
+
+// ===== 有效高度计算 =====
+window.calcHeight = function() {
+  var hMax = parseFloat(document.getElementById('hMax').value) || 0;
+  var blind = parseFloat(document.getElementById('blind').value) || 0;
+  var margin = parseFloat(document.getElementById('margin').value) || 0;
+
+  var rec = (hMax - blind) + margin;
+  var recRounded = Math.ceil(rec / 50) * 50;
+  var minEff = hMax - 100;
+
+  document.getElementById('recHeight').textContent = recRounded;
+  document.getElementById('minHeight').textContent = Math.max(minEff, 0).toFixed(0);
+  document.getElementById('formulaDetail2').textContent =
+    '有效高度 ≥ (H_max − 安装盲区) + 安全余量\n' +
+    '  = (' + hMax + ' − ' + blind + ') + ' + margin + ' = ' + rec.toFixed(0) + ' mm\n' +
+    '→ 向上取整至 50mm 规格：' + recRounded + ' mm\n' +
+    '最小有效防护高度 ≈ H_max − 100 = ' + Math.max(minEff,0).toFixed(0) + ' mm';
+
+  var w = document.getElementById('heightWarn');
+  var wt = document.getElementById('heightWarnText');
+  var msgs = [];
+  if (blind > 300) msgs.push('安装盲区 ' + blind + 'mm > 300mm，建议优化安装以降低盲区');
+  if (margin < 200) msgs.push('安全余量 ' + margin + 'mm < 200mm，建议增至 ≥200mm');
+  if (msgs.length) { w.style.display = 'flex'; w.className = 'warn-bar warning'; wt.textContent = '⚠ ' + msgs.join('；'); }
+  else { w.style.display = 'flex'; w.className = 'warn-bar ok'; wt.textContent = '✓ 盲区与余量均符合推荐范围，选型合理。'; }
+};
+
+// ===== 历史记录 =====
+var STORAGE_KEY = 'sheen_lightcurtain_history';
+function getHistory(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); } catch(e){ return []; } }
+function setHistory(h){ localStorage.setItem(STORAGE_KEY, JSON.stringify(h.slice(-20))); }
+window.saveHistory = function(tab){
+  var ts = new Date().toISOString().replace('T',' ').slice(0,16);
+  var summary='', value='';
+  if (tab==='安全距离'){ value=document.getElementById('mainS').textContent+' mm'; summary='最小安全距离 S = '+value; }
+  else { value=document.getElementById('recHeight').textContent+' mm'; summary='推荐有效高度 = '+value; }
+  var h=getHistory(); h.unshift({time:ts,tab:tab,summary:summary,value:value}); setHistory(h); renderHistory();
+};
+window.clearHistory = function(){ if(confirm('确认清空所有计算历史记录？')){ localStorage.removeItem(STORAGE_KEY); renderHistory(); } };
+function renderHistory(){ /* 简易：本工具不渲染列表，仅记录 */ }
+window.exportResult = function(resultId, filename){
+  var el = document.getElementById(resultId);
+  if (!el) return;
+  var html = '<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><title>'+filename+' — SHEEN Toolbox</title>' +
+    '<style>body{font-family:system-ui,sans-serif;padding:24px;color:#111827;line-height:1.6;max-width:800px;margin:0 auto}' +
+    'h1{color:#7A1825;font-size:20px}.result-value{background:#FEF2F2;border-left:6px solid #7A1825;padding:20px;border-radius:12px;margin:16px 0}' +
+    '.number{font-size:36px;font-weight:700;color:#7A1825}pre{background:#F8FAFC;padding:12px;border-radius:8px;font-size:13px;white-space:pre-wrap}</style></head><body>' +
+    '<h1>📋 '+filename+'</h1><p style="color:#666;font-size:12px;">导出时间：'+new Date().toLocaleString('zh-CN')+'</p>' +
+    el.innerHTML.replace(/class="warn-bar[^"]*"/g,'') + '</body></html>';
+  var blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a'); a.href=url; a.download=filename+'.html'; a.click(); URL.revokeObjectURL(url);
+};
+
+// ===== 初始化 =====
+onStdChange();
+calcSafety();
+calcHeight();
+})();
+</script>
+
+</body>
+</html>
