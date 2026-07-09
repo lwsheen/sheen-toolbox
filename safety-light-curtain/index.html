@@ -404,13 +404,12 @@ window.calcSafety = function() {
 
   var T = (t1 + t2) / 1000;
 
-  // K：手指/手 2000；其他 1600；水平/倾斜 1600
-  var K = (obj === 'finger') ? 2000 : 1600;
-  if (mount !== 'vertical') K = 1600;
-
-  // 倾斜按夹角判定等效安装方式
+  // 倾斜按夹角判定等效安装方式（先算 mode 才能正确定 K）
   var mode = mount;
   if (mount === 'tilt') mode = (theta >= 30) ? 'vertical' : 'horizontal';
+
+  // K：手指且等效垂直 → 2000（身体接近速度）；其余（水平 / 倾斜<30° / 手臂 / 访问）→ 1600
+  var K = (mode === 'vertical' && obj === 'finger') ? 2000 : 1600;
 
   var S = 0, C = 0, formula = '', warnCls = 'info', warnTxt = '';
   var recD = (obj === 'finger') ? '≤ 40（建议 14/20/30）' :
