@@ -14,117 +14,93 @@
 
 <link rel="stylesheet" href="/sheen-toolbox/common.css">
 
-<style>*{margin:0;padding:0;box-sizing:border-box}
-
+<style>
+:root{--black:#000;--text-primary:#111827;--text-secondary:#6B7280;--bg-page:#F8FAFC;--bg-card:#fff;--border:#E5E7EB;--brand-red:#7A1825;--brand-red-hover:#5C121C;--brand-red-light:#FEF2F2;--amber:#FBBF24;--radius-md:12px}
+*{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg-page);color:var(--text-primary);line-height:1.6}
-
+.breadcrumb{padding:12px 24px;font-size:13px;color:var(--text-secondary);border-bottom:1px solid var(--border);background:var(--bg-card);display:flex;align-items:center;gap:6px}
+.breadcrumb a{color:var(--brand-red);text-decoration:none;font-weight:600;transition:opacity .2s;display:inline-flex;align-items:center;gap:4px}
 .breadcrumb a:hover{opacity:.7;text-decoration:underline}
-
 .breadcrumb span{color:var(--text-secondary)}
-
+.sheen-footer{text-align:center;padding:14px 24px;font-size:12px;color:var(--text-secondary);border-top:1px solid var(--border);background:var(--bg-card)}
+.sheen-footer i{color:var(--amber)}.sheen-footer strong{color:var(--text-primary)}
+.app-wrap{max-width:800px;margin:0 auto;padding:32px 24px}
 h1{font-size:20px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
-
 h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);margin-bottom:14px}
 
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
 .card h3{font-size:14px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
-
 .card h3 i{color:var(--brand-red)}
-
 .hint{font-size:11px;color:var(--text-secondary);margin-bottom:10px;padding:6px 10px;background:var(--bg-page);border-radius:6px}
 
 .form-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}
-
 .form-row:last-child{margin-bottom:0}
-
 .form-group{flex:1;min-width:170px}
-
 .form-group.w-sm{flex:0.6;min-width:120px}
-
 .form-group label{display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:3px}
-
 .form-group label .req{color:var(--brand-red)}
-
-select
-
+.form-control{width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;background:var(--bg-card);color:var(--text-primary);font-family:inherit}
+.form-control:focus{outline:none;border-color:var(--brand-red);box-shadow:0 0 0 3px rgba(122,24,37,.06)}
+select.form-control{cursor:pointer}
 .radio-group{display:flex;gap:16px;padding-top:6px}
-
 .radio-group label{display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer;font-weight:400;color:var(--text-primary)}
-
 .radio-group input[type=radio]{accent-color:var(--brand-red)}
 
 .btn{display:inline-flex;align-items:center;gap:5px;padding:10px 24px;border-radius:60px;font-size:14px;font-weight:600;cursor:pointer;transition:all .25s;border:none;font-family:inherit}
+.btn-primary{background:var(--brand-red);color:#fff}.btn-primary:hover{background:var(--brand-red-hover);transform:translateY(-1px);box-shadow:0 6px 16px rgba(122,24,37,.2)}
+.btn-outline{background:var(--bg-card);border:1.5px solid var(--border);color:var(--text-primary)}
+.btn-outline:hover{border-color:var(--brand-red);color:var(--brand-red)}
+.btn-outline{background:var(--bg-card);color:var(--brand-red);border:1.5px solid var(--brand-red)}.btn-outline:hover{background:var(--brand-red-light)}
+.btn-sm{padding:5px 10px;font-size:10px}
 
+/* Result */
 .result-box{display:none;background:var(--brand-red-light);border:2px solid var(--brand-red);border-radius:16px;padding:20px 24px;margin-top:12px}
-
 .result-box .grade{font-size:42px;font-weight:700;margin:8px 0}
-
 .result-box .grade-label{font-size:12px;color:var(--text-secondary)}
-
 .result-box .measures{font-size:13px;line-height:1.8;margin-top:8px;padding:12px;background:rgba(255,255,255,.6);border-radius:8px}
-
 .result-box .measures strong{color:var(--brand-red)}
-
 .result-box .not-grade{font-size:18px;font-weight:700;color:#DC2626}
-
 .steps{list-style:none;font-size:12px;color:var(--text-secondary);line-height:2}
-
 .steps li{padding:2px 0}
-
 .steps li span{color:var(--text-primary);font-weight:600}
 
+/* Grade colors */
 .g-I{color:#16A34A}.g-II{color:#CA8A04}.g-III{color:#EA580C}.g-IV{color:#DC2626}.g-x{color:#991B1B}
-
 .rb-I{border-color:#16A34A!important;background:#ECFDF5!important}
-
 .rb-II{border-color:#CA8A04!important;background:#FFFBEB!important}
-
 .rb-III{border-color:#EA580C!important;background:#FFF7ED!important}
-
 .rb-IV{border-color:#DC2626!important;background:var(--brand-red-light)!important}
-
 .rb-x{border-color:#991B1B!important;background:#FEF2F2!important}
 
+/* Tables */
+
 .dt th,.dt td{padding:4px 5px;border:1px solid var(--border);text-align:center;vertical-align:middle}
-
 .dt th{background:#1F4E79;color:#fff;font-weight:700;font-size:10px}.dt td{background:var(--bg-card)}
-
 .dt td.dim{color:#9CA3AF}.dt td.star{color:#DC2626;font-weight:700}
-
 .dt td.I{background:#ECFDF5;font-weight:700;color:#16A34A}
-
 .dt td.II{background:#FFFBEB;font-weight:700;color:#CA8A04}
-
 .dt td.III{background:#FFF7ED;font-weight:700;color:#EA580C}
-
 .dt td.IV{background:#FEF2F2;font-weight:700;color:#DC2626}
-
 .dt td.hl{outline:3px solid var(--brand-red);outline-offset:-2px}
-
 .mgr-notes{font-size:12px;color:var(--text-secondary);line-height:2;background:var(--bg-page);padding:10px 14px;border-radius:6px;margin-top:8px}
-
 .mgr-notes .lvl{display:inline-block;padding:1px 8px;border-radius:4px;font-weight:700;font-size:11px;margin-right:4px}
 
 details{margin-top:10px}
-
 details summary{font-size:12px;font-weight:600;color:var(--text-secondary);cursor:pointer;padding:6px 0;user-select:none;display:flex;align-items:center;gap:5px}
-
 details summary i{font-size:11px;color:var(--brand-red)}
 
-}
-
+/* Print */
+@media print{
+  @page{size:A4;margin:14mm 14mm 18mm 14mm;@bottom-center{content:"SHEEN Toolbox · 高温作业分级计算器";font-size:8pt;color:#666}}
   .breadcrumb,.sheen-footer,.btn,.no-pr{display:none!important}
-
-  .dt th{background:#eee!important;color:#000!important}
-
+  .app-wrap{padding:0!important}.card{box-shadow:none!important;border:1.5px solid #333!important;break-inside:avoid;padding:10px!important}
+  .btn-primary{display:none!important}.dt th{background:#eee!important;color:#000!important}
 }
-
 @media(max-width:768px){
-
-  .form-group{min-width:100%}
-
+  .app-wrap{padding:8px 4px}.form-group{min-width:100%}
   .result-box .grade{font-size:30px}
-
-}</style>
+}
+</style>
 
 </head>
 
