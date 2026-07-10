@@ -806,22 +806,20 @@ body { background: #fff !important; font-size: 11pt; color: #000 !important; }
 
     <span style="font-size:11px;color:#888;font-weight:700;">筛选：</span>
 
-    <div class="filter-chip active" data-filter="all" onclick="setFilter('all',this)">全部</div>
+    <div class="filter-chip active" data-filter="all" onclick="setFilter('all',this)"><i class="fa-solid fa-list"></i> 全部</div>
 
-    <div class="filter-chip" data-filter="yes" onclick="setFilter('yes',this)">✅ 已完成</div>
+    <div class="filter-chip" data-filter="yes" onclick="setFilter('yes',this)"><i class="fa-solid fa-circle-check"></i> 已完成</div>
 
-    <div class="filter-chip" data-filter="no" onclick="setFilter('no',this)">❌ 未完成</div>
+    <div class="filter-chip" data-filter="no" onclick="setFilter('no',this)"><i class="fa-solid fa-circle-xmark"></i> 未完成</div>
 
-    <div class="filter-chip" data-filter="na" onclick="setFilter('na',this)">— 不适用</div>
+    <div class="filter-chip" data-filter="na" onclick="setFilter('na',this)"><i class="fa-solid fa-circle-minus"></i> 不适用</div>
 
-    <div class="filter-chip" data-filter="pending" onclick="setFilter('pending',this)">⬜ 待填写</div>
+    <div class="filter-chip" data-filter="pending" onclick="setFilter('pending',this)"><i class="fa-solid fa-pen-to-square"></i> 待填写</div>
 
 
   </div>
 
-  <button class="btn btn-outline" onclick="expandAll()"><i class="fa-solid fa-angles-down"></i> 展开全部</button>
-
-  <button class="btn btn-outline" onclick="collapseAll()"><i class="fa-solid fa-angles-up"></i> 收起全部</button>
+  <button class="btn btn-outline" id="btnToggleAll" onclick="toggleAllSections()"><i class="fa-solid fa-angles-down"></i> 展开全部</button>
 
   <button class="btn btn-success" id="btnMarkAll" onclick="markAllYes()"><i class="fa-solid fa-check-double"></i> 全部标记完成</button>
 
@@ -845,7 +843,7 @@ body { background: #fff !important; font-size: 11pt; color: #000 !important; }
 
   <div class="sheen-print-header">
 
-    <div class="sph-title">PSSR 开车前安全审查检查表（多行业增强版）</div>
+    <div class="sph-title">PSSR 开车前安全审查检查表</div>
 
     <div class="sph-info">
 
@@ -861,7 +859,7 @@ body { background: #fff !important; font-size: 11pt; color: #000 !important; }
 
   <div class="header-card">
 
-    <h1>PSSR 开车前安全审查检查表（多行业增强版）</h1>
+    <h1>PSSR 开车前安全审查检查表</h1>
 
     <div class="header-fields">
 
@@ -1520,7 +1518,7 @@ function renderSection(sec) {
 
     <div class="add-row-area">
 
-      <input class="add-row-input" type="text" id="addInput-${sec.id}" placeholder="输入新检查项内容，按回车或点击"添加"..." 
+      <input class="add-row-input" type="text" id="addInput-${sec.id}" placeholder="输入新检查项内容，按回车或点击添加…"
 
              onkeydown="if(event.key==='Enter') addRow('${sec.id}')">
 
@@ -1806,7 +1804,39 @@ function toggleSection(secId) {
 
 }
 
+let allCollapsed = false;
+
+function toggleAllSections() {
+
+  allCollapsed = !allCollapsed;
+
+  sections.forEach(sec => {
+
+    const body = document.getElementById(`body-${sec.id}`);
+
+    const toggle = document.getElementById(`toggle-${sec.id}`);
+
+    if (allCollapsed) { body.classList.add('collapsed'); toggle.classList.add('collapsed'); }
+
+    else { body.classList.remove('collapsed'); toggle.classList.remove('collapsed'); }
+
+  });
+
+  const btn = document.getElementById('btnToggleAll');
+
+  if (btn) {
+
+    btn.innerHTML = allCollapsed
+      ? '<i class="fa-solid fa-angles-down"></i> 展开全部'
+      : '<i class="fa-solid fa-angles-up"></i> 收起全部';
+
+  }
+
+}
+
 function expandAll() {
+
+  allCollapsed = false;
 
   sections.forEach(sec => {
 
@@ -1816,9 +1846,15 @@ function expandAll() {
 
   });
 
+  const btn = document.getElementById('btnToggleAll');
+
+  if (btn) btn.innerHTML = '<i class="fa-solid fa-angles-up"></i> 收起全部';
+
 }
 
 function collapseAll() {
+
+  allCollapsed = true;
 
   sections.forEach(sec => {
 
@@ -1827,6 +1863,10 @@ function collapseAll() {
     document.getElementById(`toggle-${sec.id}`).classList.add('collapsed');
 
   });
+
+  const btn = document.getElementById('btnToggleAll');
+
+  if (btn) btn.innerHTML = '<i class="fa-solid fa-angles-down"></i> 展开全部';
 
 }
 
@@ -1965,12 +2005,7 @@ function applyFilter(filter) {
   document.querySelectorAll('.check-row').forEach(row => {
 
     if (filter === 'all') { row.style.display = ''; return; }
-
-    const secId = row.id.split('-')[1] + (row.id.split('-')[2] ? '-' + row.id.split('-')[2] : '');
-
-    // rebuild check
-
-    } else if (filter === 'yes') {
+    else if (filter === 'yes') {
 
       row.style.display = row.classList.contains('status-yes') ? '' : 'none';
 
