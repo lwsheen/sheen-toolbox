@@ -431,6 +431,18 @@ function getChildren(parentCode) {
 
 }
 
+function buildChildrenOf(item, childContainer) {
+
+  if (childContainer.dataset.built === '1') return;
+
+  var kids = getChildren(item.code);
+
+  kids.forEach(function(child) { childContainer.appendChild(renderTreeNode(child)); });
+
+  childContainer.dataset.built = '1';
+
+}
+
 function renderTreeNode(item) {
 
   var children = getChildren(item.code);
@@ -499,19 +511,11 @@ function renderTreeNode(item) {
 
   childContainer.className = 'tree-children';
 
-  if (hasChildren && item.level < 4) {
-
-    children.forEach(function(child) {
-
-      childContainer.appendChild(renderTreeNode(child));
-
-    });
-
-  }
+  childContainer.dataset.built = '0';
 
   div.appendChild(childContainer);
 
-  // Click toggle
+  // Click toggle (lazy build children on first expand)
 
   if (!isLeaf) {
 
@@ -519,9 +523,13 @@ function renderTreeNode(item) {
 
       e.stopPropagation();
 
-      toggle.classList.toggle('expanded');
+      var willOpen = !childContainer.classList.contains('open');
 
-      childContainer.classList.toggle('open');
+      toggle.classList.toggle('expanded', willOpen);
+
+      childContainer.classList.toggle('open', willOpen);
+
+      if (willOpen) buildChildrenOf(item, childContainer);
 
     });
 
@@ -807,49 +815,30 @@ window.jumpTo = function(code) {
 
   if (item) {
 
+    // Build ancestor chain so the target node exists in the (lazy) DOM
+    var chain = [];
+    var cur = item;
+    while (cur) {
+      chain.unshift(cur);
+      cur = cur.parentCode ? byCode[cur.parentCode] : null;
+    }
+    for (var i = 0; i < chain.length - 1; i++) {
+      var anc = chain[i];
+      var row = document.querySelector('[data-code="' + anc.code + '"]');
+      if (!row) break;
+      var cc = row.parentElement.querySelector('.tree-children');
+      var tog = row.querySelector('.tree-toggle');
+      if (cc) {
+        if (cc.dataset.built === '0') buildChildrenOf(anc, cc);
+        if (!cc.classList.contains('open')) cc.classList.add('open');
+      }
+      if (tog && !tog.classList.contains('expanded')) tog.classList.add('expanded');
+    }
+
     selectItem(item);
 
-    // Expand tree to show the item if in tree mode
-
-    var row = document.querySelector('[data-code="' + code + '"]');
-
-    if (row) {
-
-      row.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-    }
-
-    // Expand parent nodes
-
-    var current = item;
-
-    while (current.parentCode) {
-
-      var parentRow = document.querySelector('[data-code="' + current.parentCode + '"]');
-
-      if (parentRow) {
-
-        var parentToggle = parentRow.querySelector('.tree-toggle');
-
-        var parentChildren = parentRow.parentElement.querySelector('.tree-children');
-
-        if (parentToggle && !parentToggle.classList.contains('expanded')) {
-
-          parentToggle.classList.add('expanded');
-
-        }
-
-        if (parentChildren && !parentChildren.classList.contains('open')) {
-
-          parentChildren.classList.add('open');
-
-        }
-
-      }
-
-      current = byCode[current.parentCode];
-
-    }
+    var targetRow = document.querySelector('[data-code="' + code + '"]');
+    if (targetRow) targetRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
   }
 
