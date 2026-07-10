@@ -1,351 +1,572 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <meta name="description" content="建筑照明设计标准照度标准值查询 — GB/T 50034-2024 — SHEEN Toolbox">
+
     <title>建筑照度标准查询 — SHEEN Toolbox</title>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <link rel="stylesheet" href="/sheen-toolbox/common.css">
+
     <style>
+
         /* ===== 仅本工具特有样式（公共样式见 common.css） ===== */
+
         .search-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+
         .search-bar .form-control { flex: 1; min-width: 220px; }
+
         .filter-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+
         .filter-row .form-control { width: auto; min-width: 180px; }
+
         .result-stats { display: flex; gap: 16px; align-items: baseline; margin: 4px 0 16px;
+
             font-size: 13px; color: var(--text-secondary); }
+
         .result-stats .count { color: var(--brand-red); font-weight: 700; font-size: 18px; }
+
         .eval-cell { font-weight: 700; color: var(--brand-red); }
+
         .eval-cell small { font-weight: 400; color: var(--text-secondary); font-size: 11px; }
+
         .cat-tag { display: inline-block; font-size: 12px; color: var(--brand-red);
+
             background: var(--brand-red-light); padding: 2px 8px; border-radius: 6px; }
+
         .muted { color: var(--text-secondary); }
+
         .empty { text-align: center; padding: 48px 0; color: var(--text-secondary); }
+
         .pagination { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+
         .page-btn { padding: 6px 12px; border: 1px solid var(--border); background: var(--bg-card);
+
             border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--text-primary); transition: all .2s; }
+
         .page-btn.active { background: var(--brand-red); color: #fff; border-color: var(--brand-red); }
+
         .page-btn:hover:not(.active) { border-color: var(--brand-red); }
+
         .tip { font-size: 12px; color: var(--text-secondary); margin-top: 10px; line-height: 1.7; }
+
     </style>
+
 </head>
+
 <body>
 
     <!-- 面包屑导航 -->
+
     <div class="breadcrumb">
+
         <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+
         <span> / 建筑照度标准查询</span>
+
     </div>
 
     <!-- 主容器：查询类用 container-query (1200px) -->
+
     <main class="app-container container-query">
 
         <h1 class="page-title">建筑照度标准查询</h1>
+
         <p class="page-subtitle" style="margin-bottom:24px;">
+
             依据《建筑照明设计标准》<strong>GB/T 50034-2024</strong>（2024-08-01 实施），支持按<strong>场所名称 / 房间 / 活动功能 / 标准条文</strong>检索，
+
             展示维持平均照度、照度均匀度 U₀、统一眩光值 UGR / 眩光限制 GR、显色指数 Rₐ，以及体育多档照度、室外水平/垂直/半柱面照度、博物馆展品限值等完整参数。
+
         </p>
 
         <!-- 搜索区（打印时隐藏） -->
+
         <div class="card no-print" style="padding:20px; margin-bottom:20px;">
+
             <div class="search-bar">
+
                 <input type="text" id="searchInput" class="form-control"
+
                        placeholder="输入场所 / 房间 / 活动 / 条文，如：办公室、手术室、走道、5.3.2 …">
+
                 <button class="btn-primary" onclick="doSearch()"><i class="fa-solid fa-search"></i> 查询</button>
+
                 <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印结果</button>
+
             </div>
+
             <div class="filter-row">
+
                 <select id="catFilter" class="form-control" onchange="doSearch()">
+
                     <option value="">全部场所类别</option>
+
                 </select>
+
                 <span id="overviewStat" class="muted" style="font-size:13px;"></span>
+
             </div>
+
             <div class="tip">
+
                 提示：照度单位为 lx（勒克斯）；体育建筑按<strong>训练 / 业余比赛 / 专业比赛</strong>（或电视转播档）分档列出；
+
                 室外区域以 E<sub>av</sub>（维持平均照度）、E<sub>min</sub>（水平最小）、垂直 E<sub>min</sub>、半柱面 E<sub>min</sub> 表示；
+
                 博物馆对光敏感展品以照度限值（≤）与年曝光量表示。U₀ / UGR / GR / Rₐ 缺失表示该场所标准未做规定。
+
             </div>
+
         </div>
 
         <!-- 结果统计 -->
+
         <div class="result-stats" id="resultStats" style="display:none;">
+
             <span>找到 <span class="count" id="resultCount">0</span> 条标准值</span>
+
             <span id="searchMeta"></span>
+
         </div>
 
         <!-- 结果表格 -->
+
         <div class="table-scroll">
+
             <table class="data-table" id="resultTable">
+
                 <thead>
+
                     <tr>
+
                         <th>场所类别</th>
+
                         <th>场所 / 房间</th>
+
                         <th>活动 / 功能</th>
+
                         <th>参考平面</th>
+
                         <th style="text-align:right;">维持平均照度 (lx)</th>
+
                         <th style="text-align:right;">均匀度 U₀</th>
+
                         <th style="text-align:right;">UGR</th>
+
                         <th style="text-align:center;">GR</th>
+
                         <th style="text-align:center;">Rₐ</th>
+
                         <th>标准条文</th>
+
                         <th>备注</th>
+
                     </tr>
+
                 </thead>
+
                 <tbody id="resultBody">
+
                     <tr><td colspan="11" class="empty">请输入查询条件或选择场所类别</td></tr>
+
                 </tbody>
+
             </table>
+
         </div>
 
         <!-- 分页 -->
+
         <div class="pagination no-print" id="pagination" style="display:none;"></div>
 
     </main>
 
     <!-- 页脚 -->
+
     <footer class="sheen-footer">
+
         <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 建筑照度标准查询
+
     </footer>
 
     <!-- 打印时间戳 -->
+
     <div class="print-time" id="printTime"></div>
+
 <script>
+
     (function () {
+
         'use strict';
 
         // 打印时间
+
         document.getElementById('printTime').textContent =
+
             new Date().toISOString().replace('T', ' ').slice(0, 16);
+
 // ===== 业务逻辑 =====
+
         var RECORDS = [];
+
         var CATS = [];
+
         var filtered = [];
+
         var currentPage = 1;
+
         var itemsPerPage = 25;
 
         // 加载数据：优先 data.json；若缺失（如分片部署）自动回退到 meta.json + data_1..N.json
+
         function loadData() {
+
             fetch('data.json')
+
                 .then(function (r) { if (!r.ok) throw new Error('no data.json'); return r.json(); })
+
                 .then(function (payload) { applyPayload(payload); })
+
                 .catch(function () {
+
                     fetch('meta.json')
+
                         .then(function (r) { return r.json(); })
+
                         .then(function (meta) {
+
                             var n = meta.data_parts || 1;
+
                             var parts = [];
+
                             for (var i = 1; i <= n; i++) {
+
                                 parts.push(fetch('data_' + i + '.json').then(function (r) { return r.json(); }));
+
                             }
+
                             return Promise.all(parts).then(function (arrs) {
+
                                 var data = [];
+
                                 arrs.forEach(function (a) { data = data.concat(a.data || []); });
+
                                 applyPayload(Object.assign({}, meta, { data: data }));
+
                             });
+
                         })
+
                         .catch(function (err) {
+
                             console.error('数据加载失败', err);
+
                             document.getElementById('resultBody').innerHTML =
+
                                 '<tr><td colspan="11" class="empty" style="color:var(--brand-red);">' +
+
                                 '数据加载失败，请确认 data.json / data_1..N.json 与页面同目录部署。</td></tr>';
+
                         });
+
                 });
+
         }
 
         function applyPayload(payload) {
+
             RECORDS = payload.data || [];
+
             CATS = payload.categories || [];
+
             initCategoryFilter();
+
             document.getElementById('overviewStat').textContent =
+
                 '共收录 ' + RECORDS.length + ' 条标准值，覆盖 ' + CATS.length + ' 类场所';
+
         }
 
         function initCategoryFilter() {
+
             var sel = document.getElementById('catFilter');
+
             CATS.forEach(function (c) {
+
                 var opt = document.createElement('option');
+
                 opt.value = c.name;
+
                 opt.textContent = c.name;
+
                 sel.appendChild(opt);
+
             });
+
         }
 
         function esc(s) {
+
             if (s == null) return '';
+
             return String(s).replace(/[&<>"]/g, function (m) {
+
                 return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m];
+
             });
+
         }
 
         // 照度显示：体育多档 > 普通 illuminance > 博物馆限值 > 室外 eav/e_min
+
         function fmtIllum(rec) {
+
             if (rec.sports) {
+
                 var lv = rec.sports.levels || {};
+
                 var parts = [];
+
                 for (var k in lv) {
+
                     if (lv.hasOwnProperty(k)) {
+
                         parts.push('<div>' + esc(k) + '：<b>' + esc(lv[k]) + '</b></div>');
+
                     }
+
                 }
+
                 return '<span class="eval-cell">' + parts.join('') + '</span>';
+
             }
+
             if (rec.illuminance != null) {
+
                 var v = Array.isArray(rec.illuminance) ? rec.illuminance.join(' / ') : rec.illuminance;
+
                 return '<span class="eval-cell">' + esc(v) + '</span>';
+
             }
+
             if (rec.illuminance_max != null) {
+
                 var s = '<span class="eval-cell">≤ ' + esc(rec.illuminance_max) + '</span>';
+
                 if (rec.annual_lux_hours != null) {
+
                     s += '<br><small>年曝光量 ≤ ' + esc(rec.annual_lux_hours) + ' lx·h/y</small>';
+
                 }
+
                 return s;
+
             }
+
             if (rec.illuminance_eav != null) {
+
                 var t = 'E<sub>av</sub> ' + esc(rec.illuminance_eav);
+
                 if (rec.illuminance_e_min != null) t += ' / E<sub>min</sub> ' + esc(rec.illuminance_e_min);
+
                 if (rec.illuminance_vcmin != null) t += ' / 垂直E<sub>min</sub> ' + esc(rec.illuminance_vcmin);
+
                 if (rec.illuminance_vscmin != null) t += ' / 半柱E<sub>min</sub> ' + esc(rec.illuminance_vscmin);
+
                 return '<span class="eval-cell">' + t + '</span>';
+
             }
+
             return '<span class="muted">—</span>';
+
         }
 
         function fmtNum(v) {
+
             if (v == null || v === '') return '<span class="muted">—</span>';
+
             return esc(v);
+
         }
 
         function fmtRemark(v) {
+
             if (!v) return '<span class="muted">—</span>';
+
             return '<span class="badge badge-amber">' + esc(v) + '</span>';
+
         }
 
         function doSearch() {
+
             var kw = document.getElementById('searchInput').value.trim().toLowerCase();
+
             var cat = document.getElementById('catFilter').value;
 
             filtered = RECORDS.filter(function (rec) {
+
                 var matchCat = !cat || rec.category === cat;
+
                 var matchKw = !kw;
+
                 if (!matchKw) {
+
                     var hay = [rec.category, rec.subcategory, rec.room, rec.activity,
+
                                rec.table_ref, rec.reference_plane, rec.remark,
+
                                rec.annual_lux_hours]
+
                               .filter(Boolean).join(' ').toLowerCase();
+
                     matchKw = hay.indexOf(kw) !== -1;
+
                 }
+
                 return matchCat && matchKw;
+
             });
 
             currentPage = 1;
+
             renderStats();
+
             renderTable();
+
             renderPagination();
+
         }
 
         function renderStats() {
+
             var box = document.getElementById('resultStats');
+
             if (filtered.length === 0) { box.style.display = 'none'; return; }
+
             box.style.display = 'flex';
+
             document.getElementById('resultCount').textContent = filtered.length;
+
         }
 
         function renderTable() {
+
             var body = document.getElementById('resultBody');
+
             if (filtered.length === 0) {
+
                 body.innerHTML = '<tr><td colspan="11" class="empty">未找到匹配的标准值，请调整查询条件</td></tr>';
+
                 return;
+
             }
+
             var start = (currentPage - 1) * itemsPerPage;
+
             var pageData = filtered.slice(start, start + itemsPerPage);
 
             body.innerHTML = pageData.map(function (rec) {
+
                 return '<tr>' +
+
                     '<td><span class="cat-tag">' + esc(rec.category) + '</span></td>' +
+
                     '<td>' + esc(rec.room) + '</td>' +
+
                     '<td>' + (rec.activity ? esc(rec.activity) : '<span class="muted">—</span>') + '</td>' +
+
                     '<td>' + (rec.reference_plane ? esc(rec.reference_plane) : '<span class="muted">—</span>') + '</td>' +
+
                     '<td style="text-align:right;">' + fmtIllum(rec) + '</td>' +
+
                     '<td style="text-align:right;">' + fmtNum(rec.uniformity) + '</td>' +
+
                     '<td style="text-align:right;">' + fmtNum(rec.ugr) + '</td>' +
+
                     '<td style="text-align:center;">' + fmtNum(rec.gr) + '</td>' +
+
                     '<td style="text-align:center;">' + fmtNum(rec.ra) + '</td>' +
+
                     '<td>' + (rec.table_ref ? '<code>' + esc(rec.table_ref) + '</code>' : '<span class="muted">—</span>') + '</td>' +
+
                     '<td>' + fmtRemark(rec.remark) + '</td>' +
+
                 '</tr>';
+
             }).join('');
+
         }
 
         function renderPagination() {
+
             var box = document.getElementById('pagination');
+
             var total = Math.ceil(filtered.length / itemsPerPage);
+
             if (total <= 1) { box.style.display = 'none'; box.innerHTML = ''; return; }
+
             box.style.display = 'flex';
+
             var html = '';
+
             if (currentPage > 1) html += '<button class="page-btn" onclick="goPage(' + (currentPage - 1) + ')">上一页</button>';
+
             for (var i = 1; i <= total; i++) {
+
                 if (i === 1 || i === total || (i >= currentPage - 2 && i <= currentPage + 2)) {
+
                     html += '<button class="page-btn ' + (i === currentPage ? 'active' : '') + '" onclick="goPage(' + i + ')">' + i + '</button>';
+
                 } else if (i === currentPage - 3 || i === currentPage + 3) {
+
                     html += '<span class="muted">…</span>';
+
                 }
+
             }
+
             if (currentPage < total) html += '<button class="page-btn" onclick="goPage(' + (currentPage + 1) + ')">下一页</button>';
+
             box.innerHTML = html;
+
         }
 
         window.goPage = function (p) {
+
             currentPage = p;
+
             renderTable();
+
             renderPagination();
+
             window.scrollTo({ top: 0, behavior: 'smooth' });
+
         };
 
         window.doSearch = doSearch;
 
         document.getElementById('searchInput').addEventListener('keypress', function (e) {
+
             if (e.key === 'Enter') doSearch();
+
         });
 
         loadData();
-    })();
-    </script>
 
-    <!-- PWA 安装逻辑 -->
-    <script>
-    (function() {
-            return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
-        }
-            e.preventDefault();
-            }
-        });
-            var ua = navigator.userAgent;
-            return /iPhone|iPad|iPod/.test(ua) && /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
-        }
-        }
-                    var g = document.createElement('div');
-                    g.innerHTML = '<div style="position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:999;display:flex;align-items:flex-end;justify-content:center;padding-bottom:80px;">' +
-                      '<div style="background:#fff;border-radius:20px;padding:24px;margin:16px;max-width:340px;text-align:center;position:relative;">' +
-                      '<button onclick="this.parentElement.parentElement.remove()" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:20px;cursor:pointer;color:#999;">×</button>' +
-                      '<div style="font-size:40px;margin-bottom:12px;">📱</div><h3 style="font-size:16px;margin-bottom:8px;color:#111827;">添加到桌面</h3>' +
-                      '<p style="font-size:13px;color:#6B7280;margin-bottom:16px;line-height:1.6;">点击 Safari 底部<strong>分享按钮</strong><br>选择<strong>"添加到主屏幕"</strong></p>' +
-                    document.body.appendChild(g);
-                } else {
-                    var g2 = document.createElement('div');
-                    g2.innerHTML = '<div style="position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:999;display:flex;align-items:flex-end;justify-content:center;padding-bottom:80px;">' +
-                      '<div style="background:#fff;border-radius:20px;padding:24px;margin:16px;max-width:340px;text-align:center;position:relative;">' +
-                      '<button onclick="this.parentElement.parentElement.remove()" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:20px;cursor:pointer;color:#999;">×</button>' +
-                      '<div style="font-size:40px;margin-bottom:12px;">📱</div><h3 style="font-size:16px;margin-bottom:8px;color:#111827;">添加到桌面</h3>' +
-                      '<p style="font-size:13px;color:#6B7280;margin-bottom:16px;line-height:1.6;">请在浏览器菜单中选择<br><strong>"添加到桌面"</strong>或<strong>"添加至主屏幕"</strong></p>' +
-                      '<p style="font-size:11px;color:#9CA3AF;margin-bottom:12px;">推荐安装 Chrome 浏览器一键添加</p>' +
-                      '<button onclick="this.parentElement.parentElement.remove()" style="width:100%;padding:10px;border-radius:60px;border:none;background:#7A1825;color:#fff;font-size:14px;font-weight:600;cursor:pointer;">我知道了</button></div></div>';
-                    document.body.appendChild(g2);
-                }
-            });
-        }
     })();
+
     </script>
 
 </body>
+
 </html>
+
