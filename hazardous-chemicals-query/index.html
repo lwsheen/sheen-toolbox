@@ -14,11 +14,7 @@
 
 <link rel="stylesheet" href="/sheen-toolbox/common.css">
 
-    <style>
-
-        
-
-        * {
+    <style>* {
 
             margin: 0;
 
@@ -40,17 +36,9 @@
 
         }
 
-        .breadcrumb { padding: 12px 24px; font-size: 13px; color: var(--text-secondary); border-bottom: 1px solid var(--border); background: var(--bg-card); display: flex; align-items: center; gap: 6px; }
-
-        .breadcrumb a { color: var(--brand-red); text-decoration: none; font-weight: 600; transition: opacity .2s; display: inline-flex; align-items: center; gap: 4px; }
-
         .breadcrumb a:hover { opacity: .7; text-decoration: underline; }
 
         .breadcrumb span { color: var(--text-secondary); }
-
-        /* 主内容 */
-
-        
 
         .page-header {
 
@@ -59,32 +47,6 @@
             margin-bottom: 32px;
 
         }
-
-        .page-title {
-
-            font-size: 28px;
-
-            font-weight: 700;
-
-            color: var(--text-primary);
-
-            margin-bottom: 8px;
-
-        }
-
-        .page-subtitle {
-
-            font-size: 14px;
-
-            color: var(--text-secondary);
-
-            max-width: 600px;
-
-            margin: 0 auto;
-
-        }
-
-        /* 搜索区域 */
 
         .search-section {
 
@@ -138,70 +100,6 @@
 
         }
 
-        .btn-primary {
-
-            background: var(--brand-red);
-
-            color: #fff;
-
-            border: none;
-
-            padding: 12px 32px;
-
-            border-radius: 60px;
-
-            font-size: 14px;
-
-            font-weight: 600;
-
-            cursor: pointer;
-
-            transition: all 0.25s;
-
-        }
-
-        .btn-primary:hover {
-
-            background: var(--brand-red-hover);
-
-            transform: translateY(-2px);
-
-            box-shadow: 0 8px 20px rgba(122,24,37,0.25);
-
-        }
-
-        .btn-print {
-
-            background: var(--bg-card);
-
-            color: var(--brand-red);
-
-            border: 1.5px solid var(--brand-red);
-
-            padding: 12px 28px;
-
-            border-radius: 60px;
-
-            font-size: 14px;
-
-            font-weight: 600;
-
-            cursor: pointer;
-
-            transition: all 0.25s;
-
-        }
-
-        .btn-print:hover {
-
-            background: var(--brand-red-light);
-
-            transform: translateY(-2px);
-
-            box-shadow: 0 8px 20px rgba(122,24,37,0.15);
-
-        }
-
         .filter-row {
 
             display: flex;
@@ -232,8 +130,6 @@
 
         }
 
-        /* 结果统计 */
-
         .result-stats {
 
             display: flex;
@@ -261,8 +157,6 @@
             color: var(--brand-red);
 
         }
-
-        /* 表格 */
 
         .result-table {
 
@@ -364,8 +258,6 @@
 
         }
 
-        /* 分页 */
-
         .pagination {
 
             display: flex;
@@ -414,61 +306,7 @@
 
         }
 
-        /* 页脚 */
-
-        .sheen-footer {
-
-            text-align: center;
-
-            padding: 16px 32px;
-
-            font-size:11px;
-
-            color: var(--text-secondary);
-
-            border-top: 1px solid var(--border);
-
-            background: var(--bg-card);
-
-            letter-spacing: 0.5px;
-
         }
-
-        .sheen-footer i {
-
-            color: var(--amber);
-
-        }
-
-        .sheen-footer strong {
-
-            color: var(--text-primary);
-
-        }
-
-        /* 打印样式 */
-
-        
-
-@media print {
-
-            @page {
-
-                size: A4;
-
-                margin: 18mm 15mm 20mm 15mm;
-
-                @bottom-center {
-
-                    content: "SHEEN Toolbox · 危险化学品查询";
-
-                    font-size: 8pt;
-
-                    color: #666;
-
-                }
-
-            }
 
             body {
 
@@ -487,8 +325,6 @@
                 display: none !important;
 
             }
-
-            
 
             .result-table {
 
@@ -514,17 +350,7 @@
 
         }
 
-        /* 响应式 */
-
         @media (max-width: 768px) {
-
-            
-
-            .page-title {
-
-                font-size:22px;
-
-            }
 
             .search-box {
 
@@ -544,9 +370,7 @@
 
             }
 
-        }
-
-    </style>
+        }</style>
 
 </head>
 
