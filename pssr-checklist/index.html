@@ -14,11 +14,7 @@
 
 <title>PSSR 开车前安全审查检查表 · SHEEN Toolbox</title>
 
-<style>
-
-/* ===== 基础变量 ===== */
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
+<style>* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
 
@@ -36,41 +32,15 @@ body {
 
 }
 
-.breadcrumb { padding: 12px 24px; font-size: 13px; color: var(--text-secondary); border-bottom: 1px solid var(--border); background: var(--bg-card); display: flex; align-items: center; gap: 6px; }
-
-.breadcrumb a { color: var(--brand-red); text-decoration: none; font-weight: 600; transition: opacity .2s; display: inline-flex; align-items: center; gap: 4px; }
-
 .breadcrumb a:hover { opacity: .7; text-decoration: underline; }
 
 .breadcrumb span { color: var(--text-secondary); }
-
-/* ===== SHEEN Toolbox 统一页脚 ===== */
-
-.sheen-footer {
-
-  text-align: center; padding: 16px 32px; font-size:11px;
-
-  color: var(--text-secondary); border-top: 1px solid var(--border);
-
-  background: var(--bg-card); letter-spacing: 0.5px;
-
-}
-
-.sheen-footer i { color: var(--amber); margin-right: 4px; }
-
-.sheen-footer strong { color: var(--text-primary); }
-
-/* Spinner */
 
 .spinner-inline{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--brand-red);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:4px}
 
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ===== 打印品牌（仅打印显示） ===== */
-
 .sheen-print-header, .sheen-print-footer { display: none; }
-
-/* ===== 顶部工具栏 ===== */
 
 .toolbar {
 
@@ -114,17 +84,9 @@ body {
 
 }
 
-.btn-primary { background: var(--brand-red); color: #fff; }
-
-.btn-primary:hover { background: var(--brand-red-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(122,24,37,.25); }
-
 .btn-success { background: var(--brand-red); color: #fff; }
 
 .btn-success:hover { background: var(--brand-red-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(122,24,37,.25); }
-
-.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text-primary); }
-
-.btn-outline:hover { border-color: var(--brand-red); color: var(--brand-red); background: var(--brand-red-light); }
 
 #btnUndoMark { border-color: var(--brand-red); color: var(--brand-red); }
 
@@ -132,15 +94,9 @@ body {
 
 #btnResetAll:hover { background: var(--text-primary); color: #fff; border-color: var(--text-primary); }
 
-.btn-danger { background: var(--text-secondary); color: #fff; }
-
-.btn-danger:hover { background: var(--text-primary); }
-
 .btn-warn { background: var(--brand-red); color: #fff; }
 
 .btn-warn:hover { background: var(--brand-red-hover); }
-
-/* 进度指示 */
 
 .progress-wrap {
 
@@ -188,8 +144,6 @@ body {
 
 .progress-text { font-weight: 700; color: var(--brand-red); min-width: 40px; }
 
-/* 过滤器 */
-
 .filter-bar {
 
   display: flex;
@@ -227,12 +181,6 @@ body {
 .filter-chip.active { background: var(--brand-red); border-color: var(--brand-red); color: #fff; }
 
 .filter-chip:hover:not(.active) { border-color: var(--brand-red); color: var(--brand-red); }
-
-/* ===== 主体 ===== */
-
-
-
-/* 表头信息区 */
 
 .header-card {
 
@@ -292,8 +240,6 @@ body {
 
 .field-group input:focus { outline: none; border-color: var(--brand-red); background: #fff; }
 
-/* 行业标记说明 */
-
 .legend {
 
   display: flex;
@@ -332,8 +278,6 @@ body {
 
 }
 
-/* ===== 章节 ===== */
-
 .section { background: var(--bg-card); border-radius: var(--radius); box-shadow: 0 1px 3px rgba(0,0,0,.04); margin-bottom: 16px; overflow: hidden; border: 1px solid var(--border); }
 
 .section-header {
@@ -366,8 +310,6 @@ body {
 
 .section-body { padding: 0; }
 
-/* 检查表格 */
-
 .check-table {
 
   width: 100%;
@@ -382,7 +324,7 @@ body {
 
 .check-table th.col-no { width: 56px; }
 
-.check-table th.col-item { /* takes rest */ }
+.check-table th.col-item { }
 
 .check-table th.col-status { width: 160px; text-align: center; }
 
@@ -426,8 +368,6 @@ body {
 
 .td-action { text-align: center; vertical-align: middle; }
 
-/* 行业标签 */
-
 .industry-tag {
 
   display: inline-block;
@@ -451,8 +391,6 @@ body {
 .tag-chem { background: var(--tag-chem-bg); color: var(--tag-chem); }
 
 .tag-oil { background: var(--tag-oil-bg); color: var(--tag-oil); }
-
-/* 状态按钮组 */
 
 .status-group {
 
@@ -498,8 +436,6 @@ body {
 
 .status-btn.active-na  { background: #e2e3e5; color: #383d41; border-color: #c8cbd0; }
 
-/* 备注输入 */
-
 .note-input {
 
   width: 100%;
@@ -528,8 +464,6 @@ body {
 
 .note-input:focus { outline: none; border-color: var(--brand-red); background: #fff; }
 
-/* 删除行按钮 */
-
 .del-row-btn {
 
   background: none;
@@ -551,8 +485,6 @@ body {
 }
 
 .del-row-btn:hover { color: var(--brand-red); background: var(--brand-red-light); }
-
-/* 新增行区域 */
 
 .add-row-area {
 
@@ -603,8 +535,6 @@ body {
 }
 
 .add-row-btn:hover { background: var(--brand-red); color: #fff; border-color: var(--brand-red); }
-
-/* ===== 签字区 ===== */
 
 .sign-card {
 
@@ -700,8 +630,6 @@ body {
 
 }
 
-/* 说明区 */
-
 .note-card {
 
   background: #fffde7;
@@ -724,21 +652,13 @@ body {
 
 .note-card strong { color: #bf6f00; }
 
-/* ===== 打印样式 ===== */
-
-@media print {
-
-  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-
-  body { background: #fff !important; font-size: 11pt; color: #000 !important; }
+body { background: #fff !important; font-size: 11pt; color: #000 !important; }
 
   .breadcrumb, .toolbar, .filter-bar, .add-row-area, .del-row-btn, .btn-group-actions,
 
   .status-btn:not(.active-yes):not(.active-no):not(.active-na),
 
-  #filterBar, .sheen-footer { display: none !important; }
-
-  
+  #filterBar, 
 
   .sheen-print-header {
 
@@ -816,13 +736,9 @@ body {
 
 }
 
-/* 响应式 */
-
 @media (max-width: 700px) {
 
   .toolbar { padding: 8px 12px; gap: 8px; }
-
-  
 
   .header-fields { grid-template-columns: 1fr; }
 
@@ -838,8 +754,6 @@ body {
 
   .btn { padding: 5px 8px; font-size: 11px; }
 
-  
-
   .header-fields { grid-template-columns: 1fr; gap:4px; }
 
   .check-table { font-size: 12px; }
@@ -850,15 +764,9 @@ body {
 
   .status-btn { padding: 3px 6px; font-size: 11px; }
 
-  .sheen-footer { padding: 12px 16px; font-size: 12px; }
-
 }
 
-/* 动画 */
-
-.section-body.collapsed { display: none; }
-
-</style>
+.section-body.collapsed { display: none; }</style>
 
 </head>
 
