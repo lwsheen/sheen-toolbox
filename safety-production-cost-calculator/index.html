@@ -42,23 +42,7 @@
 
         }
 
-        .app-wrapper {
-
-            width: 100%; max-width:800px;
-
-            background: var(--bg-card);
-
-            border-radius: var(--radius-xl);
-
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-
-            overflow: hidden;
-
-            display: flex; flex-direction: column;
-
-            border: 1px solid var(--border);
-
-        }
+        
 
 .breadcrumb { padding: 12px 24px; font-size: 13px; color: var(--text-secondary); border-bottom: 1px solid var(--border); background: var(--bg-card); display: flex; align-items: center; gap: 6px; }
 
@@ -300,7 +284,7 @@
 
             body { padding: 0; }
 
-            .app-wrapper { border-radius: 0; }
+            
 
             .form-row { grid-template-columns: 1fr; }
 
@@ -362,7 +346,7 @@
 
             body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
 
-            .app-wrapper { box-shadow: none !important; border-radius: 0 !important; max-width: 100% !important; border: none !important; }
+            
 
             .breadcrumb, .industry-nav, .btn-primary, .btn-print, .form-card, .sheen-footer, .footnote, .no-print { display: none !important; }
 
@@ -406,7 +390,7 @@
 
 <body>
 
-    <div class="app-wrapper">
+    <div class="app-container container-calc">
 
         <div class="breadcrumb">
 
@@ -1242,12 +1226,15 @@
 
             <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 安全生产费用计算器
 </footer>
+<div class="print-time" id="printTime"></div>
 
 <div class="print-footer">SHEEN Toolbox · 安全生产费用计算器</div>
 
     </div>
 
     <script>
+document.getElementById('printTime').textContent = new Date().toISOString().replace('T',' ').slice(0,16);
+
 
         (function() {
 
