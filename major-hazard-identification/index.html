@@ -14,203 +14,188 @@
 
 <link rel="stylesheet" href="/sheen-toolbox/common.css">
 
-    <style>* { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
-
-            background: var(--bg-page);
-
-            color: var(--text-primary);
-
-            min-height: 100vh;
-
-            display: flex;
-
-            flex-direction: column;
-
-            line-height: 1.6;
-
+    <style>
+        :root {
+            --black: #000000;
+            --text-primary: #111827;
+            --text-secondary: #6B7280;
+            --bg-page: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --border: #E5E7EB;
+            --border-light: #F3F4F6;
+            --brand-red: #7A1825;
+            --brand-red-hover: #5C121C;
+            --brand-red-light: #FEF2F2;
+            --amber: #FBBF24;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --transition: 0.2s ease;
         }
 
-        .breadcrumb a:hover { opacity: .7; text-decoration: underline; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-page);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+        }
+
+        .breadcrumb { padding: 12px 24px; font-size: 13px; color: var(--text-secondary); border-bottom: 1px solid var(--border); background: var(--bg-card); display: flex; align-items: center; gap: 6px; }
+        .breadcrumb a { color: var(--brand-red); text-decoration: none; font-weight: 600; transition: opacity .2s; display: inline-flex; align-items: center; gap: 4px; }
+        .breadcrumb a:hover { opacity: .7; text-decoration: underline; }
         .breadcrumb span { color: var(--text-secondary); }
 
+        /* ===== 页脚 ===== */
+        .sheen-footer { text-align: center; padding: 16px 32px; font-size: 13px; color: var(--text-secondary); border-top: 1px solid var(--border); background: var(--bg-card); letter-spacing: 0.5px; }
+        .sheen-footer i { color: var(--amber); }
+        .sheen-footer strong { color: var(--text-primary); }
+
+        /* ===== 主布局 ===== */
+        .app-wrapper { max-width:1200px; margin: 0 auto; padding: 32px 24px; width: 100%; flex: 1; }
+
         .page-header { text-align: center; margin-bottom: 28px; }
-
         .page-header h1 { font-size: 24px; font-weight: 700; color: var(--text-primary); }
-
         .page-header .subtitle { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
 
-        .btn-outline, 
-
+        /* ===== 标签切换 ===== */
         .tab-bar { display: flex; gap: 6px; margin-bottom: 24px; background: var(--bg-card); border-radius: var(--radius-lg); padding: 4px; border: 1px solid var(--border); }
-
         .tab-btn { flex: 1; padding: 10px 20px; border: none; background: transparent; border-radius: 16px; font-size: 13px; font-weight: 600; color: var(--text-secondary); cursor: pointer; transition: all var(--transition); font-family: inherit; }
-
         .tab-btn.active { background: var(--brand-red); color: #fff; }
-
         .tab-btn:hover:not(.active) { color: var(--text-primary); background: var(--bg-page); }
 
         .tab-content { display: none; }
-
         .tab-content.active { display: block; }
 
+        /* ===== 介绍卡片 ===== */
         .intro-card { background: var(--brand-red-light); border-left: 5px solid var(--brand-red); border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 20px; font-size: 13px; color: var(--text-primary); display: flex; align-items: flex-start; gap: 10px; }
-
         .intro-card i { color: var(--brand-red); margin-top: 2px; flex-shrink: 0; }
 
+        /* ===== 表单卡片 ===== */
+        .form-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 24px; margin-bottom: 16px; }
         .form-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-
         .form-card h3 i { color: var(--brand-red); }
 
         .form-row { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; }
-
         .form-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 140px; }
-
         .form-group label { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
-
+        .form-control { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-md); font-size: 14px; background: var(--bg-card); color: var(--text-primary); font-family: inherit; transition: all var(--transition); }
+        .form-control:focus { outline: none; border-color: var(--brand-red); box-shadow: 0 0 0 4px rgba(122,24,37,0.08); }
         .form-control.small { padding: 8px 12px; font-size: 13px; }
+        select.form-control { cursor: pointer; }
 
-        select
-
+        /* ===== 数据库搜索 ===== */
         .search-wrapper { position: relative; }
-
         .search-wrapper .dropdown { position: absolute; top: 100%; left: 0; right: 0; background: var(--bg-card); border: 1.5px solid var(--brand-red); border-top: none; border-radius: 0 0 var(--radius-md) var(--radius-md); max-height: 240px; overflow-y: auto; z-index: 100; display: none; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
-
         .search-wrapper .dropdown.show { display: block; }
-
         .dropdown-item { padding: 10px 14px; font-size: 13px; cursor: pointer; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; }
-
         .dropdown-item:hover { background: var(--brand-red-light); }
-
         .dropdown-item .chem-name { font-weight: 600; color: var(--text-primary); }
-
         .dropdown-item .chem-meta { font-size: 11px; color: var(--text-secondary); }
 
+        /* ===== 按钮 ===== */
+        .btn-primary { background: var(--brand-red); color: #fff; border: none; padding: 10px 24px; border-radius: 60px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.25s; font-family: inherit; }
+        .btn-primary:hover { background: var(--brand-red-hover); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(122,24,37,0.2); }
+        .btn-outline { background: var(--bg-card); color: var(--brand-red); border: 1.5px solid var(--brand-red); padding: 10px 24px; border-radius: 60px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.25s; font-family: inherit; }
+        .btn-outline:hover { background: var(--brand-red-light); }
+        .btn-print { background: var(--bg-card); color: var(--brand-red); border: 1.5px solid var(--brand-red); padding: 12px 28px; border-radius: 60px; font-size: 16px; font-weight: 600; transition: all 0.25s; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 6px; }
+        .btn-print:hover { background: var(--brand-red-light); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(122,24,37,0.15); }
+        .btn-sm { padding: 6px 14px; font-size: 12px; }
+        .btn-danger { background: transparent; color: #DC2626; border: 1px solid #FCA5A5; padding: 6px 14px; border-radius: 60px; font-size: 12px; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+        .btn-danger:hover { background: #FEF2F2; border-color: #DC2626; }
+
+        /* ===== 化学品列表 ===== */
         .chem-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-
         .chem-table th { background: var(--bg-page); padding: 10px 12px; font-weight: 600; color: var(--text-secondary); font-size: 12px; text-align: left; border-bottom: 2px solid var(--border); }
-
         .chem-table td { padding: 10px 12px; border-bottom: 1px solid var(--border-light); }
-
         .chem-table tbody tr:hover { background: var(--bg-page); }
-
         .chem-table .empty-row td { text-align: center; color: var(--text-secondary); padding: 40px 12px; font-size: 13px; }
 
+        .source-badge { display: inline-block; padding: 2px 8px; border-radius: 60px; font-size: 10px; font-weight: 600; }
         .source-badge.table1 { background: #DBEAFE; color: #1E40AF; }
-
         .source-badge.table2 { background: #FEF3C7; color: #92400E; }
-
         .source-badge.custom { background: #F3F4F6; color: #6B7280; }
 
+        /* ===== 结果区域 ===== */
         .result-row { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 20px; }
-
+        .result-card { flex: 1; min-width: 200px; background: var(--bg-card); border: 1.5px solid var(--border); border-radius: var(--radius-lg); padding: 20px; }
         .result-card .label { font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; }
-
         .result-card .value { font-size: 32px; font-weight: 700; }
-
         .result-card .value.danger { color: #DC2626; }
-
         .result-card .value.safe { color: #16A34A; }
-
         .result-card .value.info { color: var(--brand-red); }
 
         .verdict-banner { background: var(--bg-card); border: 2px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-top: 16px; text-align: center; }
-
         .verdict-banner.is-hazard { border-color: #DC2626; background: #FEF2F2; }
-
         .verdict-banner.not-hazard { border-color: #16A34A; background: #F0FDF4; }
-
         .verdict-banner .verdict-icon { font-size: 48px; margin-bottom: 12px; }
-
         .verdict-banner.is-hazard .verdict-icon { color: #DC2626; }
-
         .verdict-banner.not-hazard .verdict-icon { color: #16A34A; }
-
         .verdict-banner .verdict-title { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
-
         .verdict-banner .verdict-detail { font-size: 13px; color: var(--text-secondary); }
 
+        /* ===== 分级结果 ===== */
         .level-cards { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
-
         .level-card { flex: 1; min-width: 120px; text-align: center; padding: 16px; border-radius: var(--radius-md); border: 2px solid var(--border); background: var(--bg-card); opacity: 0.5; transition: all 0.3s; }
-
         .level-card.active { opacity: 1; transform: scale(1.05); }
-
         .level-card.level1.active { border-color: #DC2626; background: #FEF2F2; }
-
         .level-card.level2.active { border-color: #EA580C; background: #FFF7ED; }
-
         .level-card.level3.active { border-color: #CA8A04; background: #FEFCE8; }
-
         .level-card.level4.active { border-color: #16A34A; background: #F0FDF4; }
-
         .level-card .level-num { font-size: 28px; font-weight: 700; }
-
         .level-card.level1.active .level-num { color: #DC2626; }
-
         .level-card.level2.active .level-num { color: #EA580C; }
-
         .level-card.level3.active .level-num { color: #CA8A04; }
-
         .level-card.level4.active .level-num { color: #16A34A; }
-
         .level-card .level-range { font-size: 12px; color: var(--text-secondary); }
-
         .level-card .level-name { font-size: 13px; font-weight: 600; margin-top: 4px; }
 
+        /* ===== α 选择器 ===== */
         .alpha-options { display: flex; gap: 8px; flex-wrap: wrap; }
-
         .alpha-opt { padding: 8px 16px; border: 1.5px solid var(--border); border-radius: 60px; font-size: 13px; cursor: pointer; transition: all 0.2s; background: var(--bg-card); font-family: inherit; }
-
         .alpha-opt:hover { border-color: var(--brand-red); }
-
         .alpha-opt.selected { background: var(--brand-red); color: #fff; border-color: var(--brand-red); }
 
+        /* ===== 计算明细表 ===== */
         .calc-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px; }
-
         .calc-table th { background: var(--bg-page); padding: 10px 12px; font-weight: 600; color: var(--text-secondary); font-size: 12px; text-align: left; border-bottom: 2px solid var(--border); }
-
         .calc-table td { padding: 10px 12px; border-bottom: 1px solid var(--border-light); }
-
         .calc-table .highlight { font-weight: 700; color: var(--brand-red); }
 
+        /* ===== β 显示 ===== */
         .beta-tag { display: inline-block; padding: 2px 10px; border-radius: 60px; font-size: 11px; font-weight: 600; background: var(--brand-red-light); color: var(--brand-red); }
 
-        }
+        /* ===== 打印 ===== */
+        .print-time { display: none; }
 
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm 15mm;
+                @bottom-center { content: "SHEEN Toolbox · 重大危险源辨识"; font-size: 8pt; color: #666; }
+            }
             body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
-
             .breadcrumb, .sheen-footer, .btn-primary, .btn-outline, .btn-print, .btn-sm, .btn-danger, .tab-bar, .no-print { display: none !important; }
-
+            .print-time { display: block !important; font-size: 9pt; color: #666; text-align: right; margin-bottom: 12px; }
             .form-card, .result-card, .verdict-banner { box-shadow: none !important; border-radius: 0 !important; border: 1.5px solid #333 !important; page-break-inside: avoid; }
-
             .verdict-banner.is-hazard { background: #fff5f5 !important; }
-
             .verdict-banner.not-hazard { background: #f0fff4 !important; }
-
             .level-card { opacity: 1 !important; }
-
             .level-card.active { transform: none !important; }
-
         }
 
+        /* ===== 响应式 ===== */
         @media (max-width: 768px) {
-
             .form-row { flex-direction: column; }
-
             .result-row { flex-direction: column; }
-
             .level-cards { flex-direction: column; }
-
             .alpha-options { gap: 4px; }
-
             .alpha-opt { font-size: 12px; padding: 6px 12px; }
-
-        }</style>
+        }
+    </style>
 
 </head>
 
