@@ -6,7 +6,20 @@
 <title>泄爆面积计算器 — SHEEN Toolbox</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="/sheen-toolbox/common.css">
-<style>*{margin:0;padding:0;box-sizing:border-box}
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg-page);color:var(--text-primary);line-height:1.6}
+
+
+
+
+
+
+
+
+
+
 
 h1{font-size:20px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
 h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);margin-bottom:14px}
@@ -16,6 +29,7 @@ h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);marg
 .tab:hover{color:var(--brand-red)}.tab.active{color:var(--brand-red);border-bottom-color:var(--brand-red)}.tab i{margin-right:4px}
 .tc{display:none}.tc.active{display:block}
 
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
 .card h3{font-size:14px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
 .card h3 i{color:var(--brand-red)}
 .hint{font-size:11px;color:var(--text-secondary);margin-bottom:10px;padding:6px 10px;background:var(--bg-page);border-radius:6px}
@@ -25,15 +39,17 @@ h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);marg
 .form-group.w-sm{flex:0.6;min-width:100px}
 .form-group label{display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:3px}
 .form-group label .unit{font-weight:400;font-size:10px;color:#9CA3AF}
-
-select
+.form-control{width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;background:var(--bg-card);color:var(--text-primary);font-family:inherit}
+.form-control:focus{outline:none;border-color:var(--brand-red);box-shadow:0 0 0 3px rgba(122,24,37,.06)}
+select.form-control{cursor:pointer}
 .btn{display:inline-flex;align-items:center;gap:5px;padding:10px 24px;border-radius:60px;font-size:14px;font-weight:600;cursor:pointer;transition:all .25s;border:none;font-family:inherit}
 .btn-p{background:var(--brand-red);color:#fff}.btn-p:hover{background:var(--brand-red-hover);transform:translateY(-1px);box-shadow:0 6px 16px rgba(122,24,37,.2)}
 .btn-o{background:var(--bg-card);border:1.5px solid var(--border);color:var(--text-primary)}.btn-o:hover{border-color:var(--brand-red);color:var(--brand-red)}
 .btn-bad{background:var(--bg-card);color:var(--brand-red);border:1.5px solid var(--brand-red)}.btn-bad:hover{background:var(--brand-red-light)}
+.btn-sm{padding:5px 10px;font-size:10px}
 
 .result-box{display:none;margin-top:12px}.rb-show{display:block}
-
+.result-card{background:var(--brand-red-light);border:2px solid var(--brand-red);border-radius:16px;padding:16px 20px;text-align:center;margin-bottom:10px}
 .result-card .rc-val{font-size:36px;font-weight:700;color:var(--brand-red);line-height:1.1}
 .result-card .rc-label{font-size:11px;color:var(--text-secondary);margin-top:2px}
 .result-card .rc-note{font-size:12px;color:var(--text-secondary);margin-top:6px}
@@ -71,10 +87,12 @@ details summary i{font-size:11px;color:var(--brand-red)}
   .result-card .rc-val{font-size:28px}
 }
 
-}
-  body{background:#fff!important;font-size:11pt;color:#000!important}
-  .sheen-footer,.tabs,.btn,.no-pr{display:none!important}
-
+@media print{
+  @page{size:A4;margin:18mm 15mm 20mm 15mm;@bottom-center{content:"SHEEN Toolbox · 泄爆面积计算器";font-size:8pt;color:#666}}
+  body{background:#fff!important;font-size:11pt;color:#000!important}.sheen-footer,.tabs,.btn,.no-pr{display:none!important}
+  
+  .card{box-shadow:none!important;border:1.5px solid #333!important;break-inside:avoid;page-break-inside:avoid;padding:10px!important;border-radius:0!important}
+  .result-card{box-shadow:none!important;break-inside:avoid;page-break-inside:avoid;background:#f9f9f9!important;border:1.5px solid #333!important;border-left:6px solid #000!important}
   .result-card .rc-val{color:#000!important}
   .dt th{background:#eee!important;color:#000!important}
   .seg-item{border:1px solid #999!important;background:#fff!important;break-inside:avoid}
@@ -83,11 +101,15 @@ details summary i{font-size:11px;color:var(--brand-red)}
   .dt th,.dt td{page-break-inside:auto}
   .tc{display:none!important}
   .tc.pt{display:block!important}
-
+  .form-card{display:none!important}
+  
   .steps li.warn{background:#fefefe!important;border-left:3px solid #333!important}
-}</style>
+}
+</style>
 </head>
 <body>
+
+
 
     <div class="breadcrumb">
         <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
@@ -252,8 +274,7 @@ details summary i{font-size:11px;color:var(--brand-red)}
 
 </main>
 
-<footer class="sheen-footer"><i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:22px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 泄爆面积计算器
-</footer>
+<footer class="sheen-footer"><i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:22px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 泄爆面积计算器</footer>
 <div class="print-time" id="printTime"></div>
 
 <script>
@@ -309,8 +330,7 @@ function exp(id,title){
     clone.appendChild(refClone);
   }
   var printTime=new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000).toISOString().replace('T',' ').slice(0,16);
-  var h='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+title+'</title><style>body{font-family:sans-serif;padding:16px;color:#111;font-size:11pt}}}.rc-val{font-size:28px;font-weight:700;color:#7A1825}.rc-label{font-size:11px;color:#666}.rc-note{font-size:10px;color:#666;margin-top:4px}.seg-item{border:1px solid #ccc;padding:8px;margin:4px 0;border-radius:8px}.steps{list-style:none;font-size:10pt}.steps li{padding:4px 0 4px 12px;border-left:3px solid #ddd;margin-bottom:4px}.steps li.warn{border-left-color:#EA580C;background:#FFF7ED}.dt{border-collapse:collapse;width:100%;font-size:9pt}.dt th,.dt td{border:1px solid #999;padding:5px 8px;text-align:center}.dt th{background:#eee}.print-time{font-size:9pt;color:#666;text-align:right;margin-bottom:12px}.btn,.no-pr{display:none}</style></head><body><div class="print-time">'+printTime+'</div>'+clone.innerHTML+'
-</body></html>';
+  var h='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+title+'</title><style>body{font-family:sans-serif;padding:16px;color:#111;font-size:11pt}@media print{@page{size:A4;margin:18mm 15mm 20mm 15mm;@bottom-center{content:"SHEEN Toolbox · '+title+'";font-size:8pt;color:#666}}}.rc-val{font-size:28px;font-weight:700;color:#7A1825}.rc-label{font-size:11px;color:#666}.rc-note{font-size:10px;color:#666;margin-top:4px}.seg-item{border:1px solid #ccc;padding:8px;margin:4px 0;border-radius:8px}.steps{list-style:none;font-size:10pt}.steps li{padding:4px 0 4px 12px;border-left:3px solid #ddd;margin-bottom:4px}.steps li.warn{border-left-color:#EA580C;background:#FFF7ED}.dt{border-collapse:collapse;width:100%;font-size:9pt}.dt th,.dt td{border:1px solid #999;padding:5px 8px;text-align:center}.dt th{background:#eee}.btn,.no-pr{display:none}</style></head><body><div class="print-time">'+printTime+'</div>'+clone.innerHTML+'</body></html>';
   var b=new Blob(['\uFEFF'+h],{type:'application/vnd.ms-excel'});
   var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=title+'.xls';a.click();URL.revokeObjectURL(a.href);
 }
