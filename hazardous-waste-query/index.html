@@ -14,148 +14,147 @@
 
 <link rel="stylesheet" href="/sheen-toolbox/common.css">
 
-    <style>* { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
-
-            background: var(--bg-page);
-
-            color: var(--text-primary);
-
-            line-height: 1.6;
-
+    <style>
+        :root {
+            --black: #000000;
+            --text-primary: #111827;
+            --text-secondary: #6B7280;
+            --bg-page: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --border: #E5E7EB;
+            --border-light: #F3F4F6;
+            --brand-red: #7A1825;
+            --brand-red-hover: #5C121C;
+            --brand-red-light: #FEF2F2;
+            --amber: #FBBF24;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --transition: 0.2s ease;
         }
 
-        .breadcrumb a:hover { opacity: .7; text-decoration: underline; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-page);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .breadcrumb { padding: 12px 24px; font-size: 13px; color: var(--text-secondary); border-bottom: 1px solid var(--border); background: var(--bg-card); display: flex; align-items: center; gap: 6px; }
+        .breadcrumb a { color: var(--brand-red); text-decoration: none; font-weight: 600; transition: opacity .2s; display: inline-flex; align-items: center; gap: 4px; }
+        .breadcrumb a:hover { opacity: .7; text-decoration: underline; }
         .breadcrumb span { color: var(--text-secondary); }
+
+        .app-wrapper { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
 
         .page-header { text-align: center; margin-bottom: 32px; }
 
+        .page-title { font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+
+        .page-subtitle { font-size: 14px; color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
+
         .search-section {
-
             background: var(--bg-card);
-
             border-radius: var(--radius-xl);
-
             padding: 24px;
-
             margin-bottom: 24px;
-
             box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-
         }
 
         .search-box { display: flex; gap: 12px; margin-bottom: 16px; }
 
         .search-input {
-
             flex: 1;
-
             padding: 12px 16px;
-
             border: 1.5px solid var(--border);
-
             border-radius: var(--radius-md);
-
             font-size: 14px;
-
             font-family: inherit;
-
             transition: all var(--transition);
-
         }
 
         .search-input:focus {
-
             outline: none;
-
             border-color: var(--brand-red);
-
             box-shadow: 0 0 0 4px rgba(122,24,37,0.08);
-
         }
+
+        .btn-primary {
+            background: var(--brand-red);
+            color: #fff;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 60px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .btn-primary:hover { background: var(--brand-red-hover); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(122,24,37,0.25); }
+
+        .btn-print {
+            background: var(--bg-card);
+            color: var(--brand-red);
+            border: 1.5px solid var(--brand-red);
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .btn-print:hover { background: var(--brand-red-light); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(122,24,37,0.15); }
 
         .filter-row { display: flex; gap: 12px; flex-wrap: wrap; }
 
         .filter-select {
-
             padding: 8px 12px;
-
             border: 1.5px solid var(--border);
-
             border-radius: var(--radius-sm);
-
             font-size:11px;
-
             font-family: inherit;
-
             background: var(--bg-card);
-
             color: var(--text-primary);
-
             cursor: pointer;
-
         }
 
         .result-stats {
-
             display: flex;
-
             justify-content: space-between;
-
             align-items: center;
-
             margin-bottom: 16px;
-
             padding: 12px 16px;
-
             background: var(--brand-red-light);
-
             border-radius: var(--radius-md);
-
             font-size: 14px;
-
         }
 
         .stats-count { font-weight: 600; color: var(--brand-red); }
 
         .result-table {
-
             width: 100%;
-
             background: var(--bg-card);
-
             border-radius: var(--radius-xl);
-
             overflow: hidden;
-
             box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-
             margin-bottom: 24px;
-
         }
 
         .result-table table { width: 100%; border-collapse: collapse; }
 
         .result-table th {
-
             background: var(--bg-page);
-
             padding: 12px 16px;
-
             text-align: left;
-
             font-size:11px;
-
             font-weight: 600;
-
             color: var(--text-secondary);
-
             border-bottom: 1.5px solid var(--border);
-
         }
 
         .result-table td { padding: 12px 16px; font-size: 14px; border-bottom: 1px solid var(--border-light); }
@@ -165,23 +164,14 @@
         .result-table tr:last-child td { border-bottom: none; }
 
         .hw-code-badge {
-
             display: inline-block;
-
             padding: 2px 8px;
-
             background: var(--brand-red-light);
-
             color: var(--brand-red);
-
             border-radius: 4px;
-
             font-size: 12px;
-
             font-weight: 600;
-
             margin-right: 6px;
-
         }
 
         .waste-name { font-weight: 600; color: var(--text-primary); }
@@ -189,70 +179,68 @@
         .waste-category { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
 
         .hazard-badge {
-
             display: inline-block;
-
             padding: 2px 6px;
-
             background: #FEF3C7;
-
             color: #92400E;
-
             border-radius: 3px;
-
             font-size: 11px;
-
             font-weight: 600;
-
             margin-right: 4px;
-
         }
 
         .pagination { display: flex; justify-content: center; gap: 8px; margin: 24px 0; }
 
         .page-btn {
-
             padding: 8px 12px;
-
             border: 1.5px solid var(--border);
-
             background: var(--bg-card);
-
             border-radius: var(--radius-sm);
-
             cursor: pointer;
-
             font-size:11px;
-
             transition: all var(--transition);
-
         }
 
         .page-btn:hover { border-color: var(--brand-red); color: var(--brand-red); }
 
         .page-btn.active { background: var(--brand-red); color: #fff; border-color: var(--brand-red); }
 
+        .sheen-footer {
+            text-align: center;
+            padding: 16px 32px;
+            font-size:11px;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border);
+            background: var(--bg-card);
+            letter-spacing: 0.5px;
+        }
+
+        .sheen-footer i { color: var(--amber); }
+
+        .sheen-footer strong { color: var(--text-primary); }
+
+        
+@media print {
+            @page {
+                size: A4;
+                margin: 18mm 15mm 20mm 15mm;
+                @bottom-center { content: "SHEEN Toolbox · 危险废物查询"; font-size: 8pt; color: #666; }
             }
-
             body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
-
             .breadcrumb, .sheen-footer, .btn-primary, .btn-print, .search-section, .pagination { display: none !important; }
-
+            .app-wrapper { padding: 0 !important; }
             .result-table { box-shadow: none !important; border-radius: 0 !important; border: 1.5px solid #333 !important; }
-
             .result-table th { background: #f9f9f9 !important; }
-
         }
 
         @media (max-width: 768px) {
-
+            .app-wrapper { padding: 16px; }
+            .page-title { font-size:22px; }
             .search-box { flex-direction: column; }
-
             .result-table { overflow-x: auto; }
-
             .result-table table { min-width: 600px; }
-
-        }</style>
+        }
+    </style>
 
 </head>
 
