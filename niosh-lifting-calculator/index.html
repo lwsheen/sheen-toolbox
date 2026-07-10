@@ -14,147 +14,114 @@
 
 <link rel="stylesheet" href="/sheen-toolbox/common.css">
 
-<style>*{margin:0;padding:0;box-sizing:border-box}
-
+<style>
+:root{--black:#000;--text-primary:#111827;--text-secondary:#6B7280;--bg-page:#F8FAFC;--bg-card:#fff;--border:#E5E7EB;--brand-red:#7A1825;--brand-red-hover:#5C121C;--brand-red-light:#FEF2F2;--amber:#FBBF24;--radius-md:12px}
+*{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg-page);color:var(--text-primary);line-height:1.6}
-
+.breadcrumb{padding:12px 24px;font-size:13px;color:var(--text-secondary);border-bottom:1px solid var(--border);background:var(--bg-card);display:flex;align-items:center;gap:6px}
+.breadcrumb a{color:var(--brand-red);text-decoration:none;font-weight:600;transition:opacity .2s;display:inline-flex;align-items:center;gap:4px}
 .breadcrumb a:hover{opacity:.7;text-decoration:underline}
-
 .breadcrumb span{color:var(--text-secondary)}
-
+.sheen-footer{text-align:center;padding:14px 24px;font-size:12px;color:var(--text-secondary);border-top:1px solid var(--border);background:var(--bg-card)}
+.sheen-footer i{color:var(--amber)}.sheen-footer strong{color:var(--text-primary)}
+.app-wrap{max-width:800px;margin:0 auto;padding:32px 24px}
 h1{font-size:20px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
-
 h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);margin-bottom:14px}
-
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
 .card h3{font-size:14px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
-
 .card h3 i{color:var(--brand-red)}
-
 .hint{font-size:11px;color:var(--text-secondary);margin-bottom:10px;padding:6px 10px;background:var(--bg-page);border-radius:6px}
-
 .form-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}
-
 .form-group{flex:1;min-width:150px}
-
 .form-group.w-sm{flex:0.6;min-width:110px}
-
 .form-group label{display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:3px}
-
 .form-group label .unit{font-weight:400;font-size:10px;color:#9CA3AF}
-
 .form-group label .warn{color:#DC2626;font-size:10px;display:none}
-
+.form-control{width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;background:var(--bg-card);color:var(--text-primary);font-family:inherit}
+.form-control:focus{outline:none;border-color:var(--brand-red);box-shadow:0 0 0 3px rgba(122,24,37,.06)}
 .form-control.invalid{border-color:#DC2626;background:#FFF5F5}
-
-select
-
+select.form-control{cursor:pointer}
 .btn{display:inline-flex;align-items:center;gap:5px;padding:10px 24px;border-radius:60px;font-size:14px;font-weight:600;cursor:pointer;transition:all .25s;border:none;font-family:inherit}
+.btn-primary{background:var(--brand-red);color:#fff}.btn-primary:hover{background:var(--brand-red-hover);transform:translateY(-1px);box-shadow:0 6px 16px rgba(122,24,37,.2)}
+.btn-outline{background:var(--bg-card);border:1.5px solid var(--border);color:var(--text-primary)}.btn-outline:hover{border-color:var(--brand-red);color:var(--brand-red)}
+.btn-outline{background:var(--bg-card);color:var(--brand-red);border:1.5px solid var(--brand-red)}.btn-outline:hover{background:var(--brand-red-light)}
+.btn-sm{padding:5px 10px;font-size:10px}
 
+/* Diagram */
 .diagram{background:var(--bg-page);border:1px dashed var(--border);border-radius:var(--radius-md);padding:14px;text-align:center;margin-bottom:10px}
-
 .diagram img{max-width:100%;max-height:220px}
-
 .diagram .labels{display:flex;justify-content:space-around;flex-wrap:wrap;gap:8px;margin-top:8px;font-size:11px;color:var(--text-secondary)}
 
+/* Result */
 .result-box{display:none;margin-top:12px}
-
 .rb-show{display:block}
-
 .li-card{background:var(--brand-red-light);border:2px solid var(--brand-red);border-radius:16px;padding:16px 20px;text-align:center;margin-bottom:10px}
-
 .li-card .li-val{font-size:48px;font-weight:700;line-height:1.1}
-
 .li-card .li-label{font-size:12px;color:var(--text-secondary);margin-top:2px}
-
 .li-card .li-risk{font-size:16px;font-weight:700;margin-top:4px;padding:4px 16px;border-radius:6px;display:inline-block}
 
 .risk-low{border-color:#16A34A!important;background:#ECFDF5!important}.risk-low .li-val{color:#16A34A}
-
 .risk-low .li-risk{background:#16A34A;color:#fff}
-
 .risk-med{border-color:#EA580C!important;background:#FFF7ED!important}.risk-med .li-val{color:#EA580C}
-
 .risk-med .li-risk{background:#EA580C;color:#fff}
-
 .risk-high{border-color:#DC2626!important;background:#FEF2F2!important}.risk-high .li-val{color:#DC2626}
-
 .risk-high .li-risk{background:#DC2626;color:#fff}
 
 .breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:10px}
-
 .bf-item{background:var(--bg-page);border-radius:8px;padding:10px;text-align:center;border:1px solid var(--border)}
-
 .bf-item .bf-label{font-size:10px;color:var(--text-secondary);margin-bottom:2px}
-
 .bf-item .bf-val{font-size:20px;font-weight:700;color:var(--text-primary)}
-
 .bf-item .bf-range{font-size:9px;color:#9CA3AF}
-
 .bf-item.weakest{background:var(--brand-red-light);border-color:var(--brand-red)}
-
 .bf-item.weakest .bf-val{color:var(--brand-red)}
-
 .weakest-tag{display:inline-block;background:var(--brand-red);color:#fff;font-size:9px;padding:1px 6px;border-radius:4px;margin-top:2px}
 
 .rwl-formula{text-align:center;font-size:12px;color:var(--text-secondary);margin-bottom:10px;padding:8px;background:var(--bg-page);border-radius:6px}
-
 .rwl-formula strong{color:var(--text-primary);font-size:16px}
 
 .improve-box{background:var(--bg-page);border-radius:8px;padding:12px;font-size:12px;line-height:1.8;margin-top:8px}
-
 .improve-box .im-header{font-weight:700;color:var(--brand-red);margin-bottom:4px;display:flex;align-items:center;gap:6px}
 
+/* Ref tables */
 details{margin-top:6px}
-
 details summary{font-size:12px;font-weight:600;color:var(--text-secondary);cursor:pointer;padding:6px 0;user-select:none;display:flex;align-items:center;gap:5px}
-
 details summary i{font-size:11px;color:var(--brand-red)}
 
 .dt th,.dt td{padding:4px 6px;border:1px solid var(--border);text-align:center;vertical-align:middle}
-
 .dt th{background:#1F4E79;color:#fff;font-weight:700;font-size:10px}
-
 .dt td{background:var(--bg-card);color:var(--text-primary)}
-
 .dt .zero{color:#DC2626;font-weight:600}
 
+/* CLI hint */
 .cli-hint{background:#FFFBEB;border-left:4px solid #F59E0B;padding:10px 14px;border-radius:0 8px 8px 0;font-size:12px;color:var(--text-primary);margin-top:8px}
 
+.print-time{display:none}
+
+@media print{
+  @page{size:A4;margin:15mm}
   body{background:#fff!important;font-size:11pt;color:#000!important}
-
   .breadcrumb,.sheen-footer,.btn,.form-row,.hint,.form-group,.no-pr,#inputCard,.cli-hint{display:none!important}
-
+  .app-wrap{padding:0!important}
+  .card{box-shadow:none!important;border:1.5px solid #333!important;break-inside:avoid;padding:10px!important;border-radius:0!important;background:#fff!important}
   .result-box{display:block!important}
-
   h1{font-size:16pt;color:#000!important}
-
   .li-card{background:#f9f9f9!important;border:2px solid #333!important;border-radius:8px!important}
-
   .li-card .li-val{font-size:32pt;color:#000!important}
-
   .li-card .li-risk{background:#333!important;color:#fff!important}
-
   .breakdown .bf-item{border-color:#999!important;background:#fff!important}
-
   .breakdown .bf-item .bf-val{color:#000!important}
-
   .breakdown .bf-item.weakest{border:2px solid #333!important;background:#f9f9f9!important}
-
   .rwl-formula{color:#333!important;font-size:10pt!important}
-
   .improve-box{color:#333!important}
-
   .diagram img{max-height:180px}
-
+  .print-time{display:block!important;font-size:9pt;color:#666;text-align:right;margin-bottom:12px}
 }
 
 @media(max-width:768px){
-
-  .form-group{min-width:100%}
-
+  .app-wrap{padding:8px 4px}.form-group{min-width:100%}
   .li-card .li-val{font-size:36px}.breakdown{grid-template-columns:repeat(3,1fr)}
-
-}</style>
+}
+</style>
 
 </head>
 
