@@ -11,8 +11,7 @@
 <title>安全光幕选型计算工具 — SHEEN Toolbox</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="/sheen-toolbox/common.css">
-<style>
-:root {
+<style>:root {
   --warn-red: #DC2626;
   --warn-red-light: #FEF2F2;
   --warn-amber: #D97706;
@@ -21,7 +20,6 @@
   --warn-green-light: #ECFDF5;
 }
 
-/* 选项卡 */
 .tab-nav { display: flex; gap: 0; margin-bottom: 0; border-bottom: 2px solid var(--border); }
 .tab-btn {
   flex: 1; padding: 14px 16px; font-size: 14px; font-weight: 600; font-family: var(--font);
@@ -35,11 +33,9 @@
 .tab-panel { display: none; background: var(--bg-card); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: 24px; }
 .tab-panel.active { display: block; }
 
-/* 表单网格 */
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .form-full { grid-column: 1 / -1; }
 
-/* 结果块 */
 .result-block {
   background: var(--brand-red-light); border: 2px solid var(--brand-red);
   border-radius: 16px; padding: 24px; margin-top: 24px;
@@ -52,7 +48,6 @@
 .result-item .ri-val { font-size: 22px; font-weight: 700; color: var(--text-primary); }
 .result-item .ri-label { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
 
-/* 公式说明 */
 .formula-box {
   background: var(--bg-page); border: 1px solid var(--border-light); border-radius: 8px; padding: 12px 16px;
   font-size: 13px; color: var(--text-secondary); margin-top: 12px;
@@ -60,20 +55,17 @@
 }
 .formula-box strong { color: var(--brand-red); }
 
-/* 警告条 */
 .warn-bar { padding: 10px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 8px; margin-top: 12px; }
 .warn-bar.danger { background: var(--warn-red-light); color: var(--warn-red); border: 1px solid var(--warn-red); }
 .warn-bar.warning { background: var(--warn-amber-light); color: var(--warn-amber); border: 1px solid var(--warn-amber); }
 .warn-bar.info { background: var(--brand-red-light); color: var(--brand-red); border: 1px solid var(--brand-red); }
 .warn-bar.ok { background: var(--warn-green-light); color: var(--warn-green); border: 1px solid var(--warn-green); }
 
-/* 推荐规格表 */
 .spec-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 12px; }
 .spec-table th { background: var(--brand-red); color: #fff; padding: 8px 10px; text-align: left; font-weight: 600; font-size: 11px; }
 .spec-table td { padding: 7px 10px; border-bottom: 1px solid var(--border-light); }
 .spec-table tr:nth-child(even) { background: var(--bg-page); }
 
-/* 免责声明 */
 .disclaimer { margin-top: 28px; padding: 16px 20px; background: var(--warn-amber-light); border: 1px solid var(--warn-amber); border-radius: 12px; font-size: 12px; color: var(--text-secondary); line-height: 1.8; }
 .disclaimer strong { color: var(--warn-amber); }
 
@@ -85,8 +77,7 @@
   .form-grid { grid-template-columns: 1fr; gap: 12px; }
   .result-grid { grid-template-columns: 1fr; }
   .result-block .main-value { font-size: 32px; }
-}
-</style>
+}</style>
 </head>
 <body>
 
