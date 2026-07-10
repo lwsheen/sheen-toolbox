@@ -30,7 +30,7 @@ body { font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'P
 
 .breadcrumb span{color:var(--text-secondary)}
 
-.app-wrapper { max-width:900px; margin:0 auto; padding:32px 24px; }
+
 
 /* Footer */
 
@@ -202,7 +202,7 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
 
   .breadcrumb, .sheen-footer, .btn-primary, .btn-secondary, .btn-print, .step-indicator, .api-toggle, .no-print { display:none!important; }
 
-  .app-wrapper { padding:0!important; }
+  
 
   .card, .report-card { box-shadow:none!important; border-radius:0!important; border:1.5px solid #333!important; page-break-inside:avoid; }
 
@@ -216,7 +216,7 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
 
 @media (max-width:768px) {
 
-  .app-wrapper { padding:16px; }
+  
 
   .card { padding:20px; }
 
@@ -238,7 +238,7 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
 
 </div>
 
-<main class="app-wrapper">
+<main class="app-container container-wf">
 
   <h1 style="font-size:24px;font-weight:700;color:var(--text-primary);margin-bottom:8px;text-align:center;">
 
@@ -368,6 +368,8 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
 
   <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 5Why+5M1E 根因分析
 </footer>
+<div class="print-time" id="printTime"></div>
+
 
 <div class="api-toggle no-print" onclick="toggleApiSetup()" title="API设置"><i class="fa-solid fa-key"></i></div>
 
@@ -460,6 +462,9 @@ textarea:focus, input:focus, select:focus { outline:none; border-color:var(--bra
 </div>
 
 <script>
+
+document.getElementById('printTime').textContent = new Date().toISOString().replace('T',' ').slice(0,16);
+
 
 // ===== State =====
 
