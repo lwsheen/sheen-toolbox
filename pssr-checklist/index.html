@@ -823,7 +823,7 @@ body { background: #fff !important; font-size: 11pt; color: #000 !important; }
 
   </div>
 
-  <button class="btn btn-outline" id="btnToggleAll" onclick="toggleAllSections()"><i class="fa-solid fa-angles-down"></i> 展开全部</button>
+  <button class="btn btn-outline" id="btnToggleAll" onclick="toggleAllSections()"><i class="fa-solid fa-chevron-down"></i> 展开全部</button>
 
   <button class="btn btn-success" id="btnMarkAll" onclick="markAllYes()"><i class="fa-solid fa-check-double"></i> 全部标记完成</button>
 
@@ -1818,8 +1818,8 @@ function toggleAllSections() {
   if (btn) {
 
     btn.innerHTML = allCollapsed
-      ? '<i class="fa-solid fa-angles-down"></i> 展开全部'
-      : '<i class="fa-solid fa-angles-up"></i> 收起全部';
+      ? '<i class="fa-solid fa-chevron-down"></i> 展开全部'
+      : '<i class="fa-solid fa-chevron-up"></i> 收起全部';
 
   }
 
@@ -1839,7 +1839,7 @@ function expandAll() {
 
   const btn = document.getElementById('btnToggleAll');
 
-  if (btn) btn.innerHTML = '<i class="fa-solid fa-angles-up"></i> 收起全部';
+  if (btn) btn.innerHTML = '<i class="fa-solid fa-chevron-up"></i> 收起全部';
 
 }
 
@@ -1857,7 +1857,7 @@ function collapseAll() {
 
   const btn = document.getElementById('btnToggleAll');
 
-  if (btn) btn.innerHTML = '<i class="fa-solid fa-angles-down"></i> 展开全部';
+  if (btn) btn.innerHTML = '<i class="fa-solid fa-chevron-down"></i> 展开全部';
 
 }
 
