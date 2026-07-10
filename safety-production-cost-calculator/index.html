@@ -16,11 +16,7 @@
 
 <link rel="stylesheet" href="/sheen-toolbox/common.css">
 
-    <style>
-
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-        
+    <style>*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
 
@@ -42,27 +38,13 @@
 
         }
 
-        
-
-.breadcrumb { padding: 12px 24px; font-size: 13px; color: var(--text-secondary); border-bottom: 1px solid var(--border); background: var(--bg-card); display: flex; align-items: center; gap: 6px; }
-
-.breadcrumb a { color: var(--brand-red); text-decoration: none; font-weight: 600; transition: opacity .2s; display: inline-flex; align-items: center; gap: 4px; }
-
 .breadcrumb a:hover { opacity: .7; text-decoration: underline; }
 
 .breadcrumb span { color: var(--text-secondary); }
 
-        /* 打印品牌 */
-
         .print-footer { display: none; }
 
-        
-
-        /* ===== 主体布局 ===== */
-
         .main-body { display: flex; flex-direction: row; flex-wrap: wrap; }
-
-        /* ===== 行业导航侧栏 ===== */
 
         .industry-nav {
 
@@ -114,8 +96,6 @@
 
         .nav-item.active i { color: var(--brand-red); }
 
-        /* ===== 内容区 ===== */
-
         .content-area { flex: 1; padding: 28px 32px; min-width: 0; }
 
         .panel { display: none; animation: fadeSlide 0.3s ease; }
@@ -142,16 +122,6 @@
 
         .panel-header .sub strong { color: var(--text-primary); }
 
-        /* ===== 表单卡片 ===== */
-
-        .form-card {
-
-            background: var(--bg-page); border-radius: var(--radius-lg);
-
-            padding: 24px 28px; border: 1px solid var(--border); margin-bottom: 24px;
-
-        }
-
         .form-card .card-title { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
 
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 24px; }
@@ -162,59 +132,9 @@
 
         .form-group .hint { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
 
-        .form-control {
-
-            width: 100%; padding: 10px 14px; border: 1.5px solid var(--border);
-
-            border-radius: var(--radius-md); font-size: 15px; transition: border var(--transition), box-shadow var(--transition);
-
-            background: var(--bg-card); color: var(--text-primary); font-family: inherit;
-
-        }
-
-        .form-control:focus { outline: none; border-color: var(--brand-red); box-shadow: 0 0 0 4px rgba(122,24,37,0.08); }
-
-        select.form-control { appearance: auto; cursor: pointer; }
-
-        .btn-primary {
-
-            background: var(--brand-red); color: #fff; border: none;
-
-            padding: 12px 32px; border-radius: 60px; font-size: 16px; font-weight: 600;
-
-            cursor: pointer; transition: all 0.25s ease; display: inline-flex;
-
-            align-items: center; gap: 10px; margin-top: 8px;
-
-        }
-
-        .btn-primary:hover { background: var(--brand-red-hover); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(122,24,37,0.25); }
-
-        .btn-primary:active { transform: translateY(0); }
-
-        .btn-print {
-
-            background: var(--bg-card); color: var(--brand-red);
-
-            border: 1.5px solid var(--brand-red);
-
-            padding: 12px 28px; border-radius: 60px; font-size: 16px; font-weight: 600;
-
-            cursor: pointer; transition: all 0.25s ease; display: inline-flex;
-
-            align-items: center; gap: 10px; margin-top: 8px; margin-left: 12px;
-
-        }
-
-        .btn-print:hover { background: var(--brand-red-light); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(122,24,37,0.15); }
-
-        .btn-print:active { transform: translateY(0); }
+        select
 
         .btn-row { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
-
-        /* ===== 结果展示 ===== */
-
-        .result-card { background: var(--bg-card); border-radius: var(--radius-lg); padding: 24px 28px; border: 1px solid var(--border); }
 
         .result-card .result-title { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
 
@@ -227,16 +147,6 @@
         }
 
         .result-placeholder .big-icon { font-size: 40px; display: block; margin-bottom: 12px; }
-
-        .result-value {
-
-            background: var(--brand-red-light);
-
-            border-radius: 16px; padding: 20px 24px; border-left: 6px solid var(--brand-red);
-
-            transition: background 0.4s ease;
-
-        }
 
         .result-value.flash { background: #fef9c3; border-left-color: var(--amber); }
 
@@ -258,33 +168,11 @@
 
         .footnote { margin-top: 12px; font-size:11px; color: var(--text-secondary); border-top: 1px solid var(--border); padding-top: 12px; }
 
-        /* ===== 打印页眉（仅打印显示） ===== */
-
         .print-header { display: none; }
-
-        /* ===== 页脚 ===== */
-
-        .sheen-footer {
-
-            text-align: center; padding: 16px 32px; font-size:11px;
-
-            color: var(--text-secondary); border-top: 1px solid var(--border);
-
-            background: var(--bg-card); letter-spacing: 0.5px;
-
-        }
-
-        .sheen-footer i { color: var(--amber); }
-
-        .sheen-footer strong { color: var(--text-primary); }
-
-        /* ===== 响应式 ===== */
 
         @media (max-width: 720px) {
 
             body { padding: 0; }
-
-            
 
             .form-row { grid-template-columns: 1fr; }
 
@@ -322,9 +210,7 @@
 
             .panel-header h2 { font-size:15px; }
 
-            .form-control { font-size:11px; padding: 8px 10px; }
-
-            .btn-primary, .btn-print { width: 100%; padding: 10px 16px; font-size: 14px; }
+            .btn-primary, 
 
             .industry-nav { max-height: 160px; padding: 8px; }
 
@@ -332,21 +218,9 @@
 
             .result-value .number { font-size:22px; }
 
-            .sheen-footer { padding: 12px 16px; font-size: 12px; }
-
         }
 
-        /* ===== 打印样式 ===== */
-
-        
-
-@media print {
-
-            @page { size: A4; margin: 18mm 15mm 20mm 15mm; }
-
-            body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
-
-            
+        body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
 
             .breadcrumb, .industry-nav, .btn-primary, .btn-print, .form-card, .sheen-footer, .footnote, .no-print { display: none !important; }
 
@@ -359,10 +233,6 @@
             .panel-header h2 i { color: #000 !important; }
 
             .panel-header .sub { background: none !important; border-left: 3px solid #000; font-size: 10pt; }
-
-            .result-card { border: 1.5px solid #333 !important; border-radius: 0 !important; padding: 16px 0 !important; page-break-inside: avoid; }
-
-            .result-value { background: #f9f9f9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border-radius: 8px; border-left-color: #000 !important; }
 
             .result-value .number { font-size: 28pt; color: #000 !important; }
 
@@ -382,9 +252,7 @@
 
             }
 
-        }
-
-    </style>
+        }</style>
 
 </head>
 
