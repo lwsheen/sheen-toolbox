@@ -469,11 +469,11 @@
         <i class="fa-solid fa-download"></i> 添加到桌面
     </button>
 
-    <div id="apiToggle" onclick="toggleApi()" title="API配置" style="position:fixed;bottom:24px;right:24px;z-index:99;width:44px;height:44px;border-radius:50%;background:var(--bg-card);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,0.1);"><i class="fa-solid fa-key"></i></div>
-    <span id="apiStatusH" style="position:fixed;top:24px;right:24px;z-index:99;font-size:11px;padding:4px 12px;border-radius:60px;background:#FEF2F2;color:#DC2626;">未配置</span>
+    <div id="apiToggle" onclick="toggleApi()" title="API配置" style="position:fixed;bottom:24px;left:24px;z-index:99;width:44px;height:44px;border-radius:50%;background:var(--bg-card);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,0.1);"><i class="fa-solid fa-key"></i></div>
+    <span id="apiStatusH" style="position:fixed;bottom:34px;left:76px;z-index:99;font-size:11px;padding:4px 12px;border-radius:60px;background:#FEF2F2;color:#DC2626;">未配置</span>
 
     <!-- API 配置弹窗 -->
-    <div id="apiModalH" style="display:none;position:fixed;bottom:80px;right:24px;width:360px;z-index:100;background:var(--bg-card);border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.15);padding:20px;">
+    <div id="apiModalH" style="display:none;position:fixed;bottom:80px;left:24px;width:360px;z-index:100;background:var(--bg-card);border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.15);padding:20px;">
       <h3 style="margin-bottom:12px;font-size:15px;">全局 API 配置</h3>
       <p style="font-size:11px;color:var(--text-secondary);margin-bottom:10px;">所有 AI 工具共享此配置</p>
       <div style="display:flex;gap:6px;margin-bottom:10px;">
@@ -576,7 +576,7 @@
                       '<button onclick="this.parentElement.parentElement.remove()" style="width:100%;padding:10px;border-radius:60px;border:none;background:#7A1825;color:#fff;font-size:14px;font-weight:600;cursor:pointer;">我知道了</button>' +
                       '</div></div>';
                     document.body.appendChild(g);
-            }
+                }
             });
         }
 
