@@ -14,11 +14,7 @@
 
 <link rel="stylesheet" href="/sheen-toolbox/common.css">
 
-    <style>
-
-        
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+    <style>* { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
 
@@ -32,21 +28,11 @@
 
         }
 
-        .breadcrumb { padding: 12px 24px; font-size: 13px; color: var(--text-secondary); border-bottom: 1px solid var(--border); background: var(--bg-card); display: flex; align-items: center; gap: 6px; }
-
-        .breadcrumb a { color: var(--brand-red); text-decoration: none; font-weight: 600; transition: opacity .2s; display: inline-flex; align-items: center; gap: 4px; }
-
         .breadcrumb a:hover { opacity: .7; text-decoration: underline; }
 
         .breadcrumb span { color: var(--text-secondary); }
 
-        
-
         .page-header { text-align: center; margin-bottom: 32px; }
-
-        .page-title { font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
-
-        .page-subtitle { font-size: 14px; color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
 
         .search-section {
 
@@ -91,54 +77,6 @@
             box-shadow: 0 0 0 4px rgba(122,24,37,0.08);
 
         }
-
-        .btn-primary {
-
-            background: var(--brand-red);
-
-            color: #fff;
-
-            border: none;
-
-            padding: 12px 32px;
-
-            border-radius: 60px;
-
-            font-size: 14px;
-
-            font-weight: 600;
-
-            cursor: pointer;
-
-            transition: all 0.25s;
-
-        }
-
-        .btn-primary:hover { background: var(--brand-red-hover); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(122,24,37,0.25); }
-
-        .btn-print {
-
-            background: var(--bg-card);
-
-            color: var(--brand-red);
-
-            border: 1.5px solid var(--brand-red);
-
-            padding: 12px 28px;
-
-            border-radius: 60px;
-
-            font-size: 14px;
-
-            font-weight: 600;
-
-            cursor: pointer;
-
-            transition: all 0.25s;
-
-        }
-
-        .btn-print:hover { background: var(--brand-red-light); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(122,24,37,0.15); }
 
         .filter-row { display: flex; gap: 12px; flex-wrap: wrap; }
 
@@ -294,47 +232,11 @@
 
         .page-btn.active { background: var(--brand-red); color: #fff; border-color: var(--brand-red); }
 
-        .sheen-footer {
-
-            text-align: center;
-
-            padding: 16px 32px;
-
-            font-size:11px;
-
-            color: var(--text-secondary);
-
-            border-top: 1px solid var(--border);
-
-            background: var(--bg-card);
-
-            letter-spacing: 0.5px;
-
-        }
-
-        .sheen-footer i { color: var(--amber); }
-
-        .sheen-footer strong { color: var(--text-primary); }
-
-        
-
-@media print {
-
-            @page {
-
-                size: A4;
-
-                margin: 18mm 15mm 20mm 15mm;
-
-                @bottom-center { content: "SHEEN Toolbox · 危险废物查询"; font-size: 8pt; color: #666; }
-
             }
 
             body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
 
             .breadcrumb, .sheen-footer, .btn-primary, .btn-print, .search-section, .pagination { display: none !important; }
-
-            
 
             .result-table { box-shadow: none !important; border-radius: 0 !important; border: 1.5px solid #333 !important; }
 
@@ -344,19 +246,13 @@
 
         @media (max-width: 768px) {
 
-            
-
-            .page-title { font-size:22px; }
-
             .search-box { flex-direction: column; }
 
             .result-table { overflow-x: auto; }
 
             .result-table table { min-width: 600px; }
 
-        }
-
-    </style>
+        }</style>
 
 </head>
 
