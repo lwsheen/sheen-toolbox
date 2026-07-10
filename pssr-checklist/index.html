@@ -814,11 +814,6 @@ body { background: #fff !important; font-size: 11pt; color: #000 !important; }
 
     <div class="filter-chip" data-filter="pending" onclick="setFilter('pending',this)">⬜ 待填写</div>
 
-    <div class="filter-chip tag-pharma" style="border-color:var(--border)" data-filter="pharma" onclick="setFilter('pharma',this)">🟢 制药</div>
-
-    <div class="filter-chip tag-chem" style="border-color:var(--border)" data-filter="chem" onclick="setFilter('chem',this)">🟠 化工</div>
-
-    <div class="filter-chip tag-oil" style="border-color:var(--border)" data-filter="oil" onclick="setFilter('oil',this)">🔵 油气</div>
 
   </div>
 
@@ -898,11 +893,6 @@ body { background: #fff !important; font-size: 11pt; color: #000 !important; }
 
       <span style="font-size:12px;font-weight:700;color:#666;">行业标记：</span>
 
-      <span class="legend-item"><span class="legend-dot" style="background:#27ae60"></span> 🟢 制药专项</span>
-
-      <span class="legend-item"><span class="legend-dot" style="background:#e67e22"></span> 🟠 精细化工专项</span>
-
-      <span class="legend-item"><span class="legend-dot" style="background:#2980b9"></span> 🔵 油气处理专项</span>
 
       <span class="legend-item" style="color:#999">（无标记 = 通用检查项）</span>
 
@@ -1977,18 +1967,6 @@ function applyFilter(filter) {
     const secId = row.id.split('-')[1] + (row.id.split('-')[2] ? '-' + row.id.split('-')[2] : '');
 
     // rebuild check
-
-    if (filter === 'pharma') {
-
-      row.style.display = row.dataset.industry === 'pharma' ? '' : 'none';
-
-    } else if (filter === 'chem') {
-
-      row.style.display = row.dataset.industry === 'chem' ? '' : 'none';
-
-    } else if (filter === 'oil') {
-
-      row.style.display = row.dataset.industry === 'oil' ? '' : 'none';
 
     } else if (filter === 'yes') {
 
