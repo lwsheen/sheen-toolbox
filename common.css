@@ -467,7 +467,7 @@ label {
 .pwa-install-btn {
   position: fixed;
   bottom: 24px;
-  left: 24px;
+  right: 24px;
   z-index: 98;
   display: none;
   align-items: center;
@@ -518,7 +518,7 @@ label {
 @media (max-width: 480px) {
   .pwa-install-btn {
     bottom: 16px;
-    left: 16px;
+    right: 16px;
     padding: 8px 14px;
     font-size: 12px;
     gap: 6px;
