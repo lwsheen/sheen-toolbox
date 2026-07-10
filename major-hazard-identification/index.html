@@ -64,6 +64,9 @@
 
         .page-header .subtitle { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
 
+        /* ===== 按钮尺寸统一 ===== */
+        .btn-outline, .btn-print { padding: 10px 24px; font-size: 14px; }
+
         /* ===== 标签切换 ===== */
 
         .tab-bar { display: flex; gap: 6px; margin-bottom: 24px; background: var(--bg-card); border-radius: var(--radius-lg); padding: 4px; border: 1px solid var(--border); }
@@ -123,24 +126,6 @@
         .dropdown-item .chem-meta { font-size: 11px; color: var(--text-secondary); }
 
         /* ===== 按钮 ===== */
-
-        .btn-primary { background: var(--brand-red); color: #fff; border: none; padding: 10px 24px; border-radius: 60px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.25s; font-family: inherit; }
-
-        .btn-primary:hover { background: var(--brand-red-hover); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(122,24,37,0.2); }
-
-        .btn-outline { background: var(--bg-card); color: var(--brand-red); border: 1.5px solid var(--brand-red); padding: 10px 24px; border-radius: 60px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.25s; font-family: inherit; }
-
-        .btn-outline:hover { background: var(--brand-red-light); }
-
-        .btn-print { background: var(--bg-card); color: var(--brand-red); border: 1.5px solid var(--brand-red); padding: 12px 28px; border-radius: 60px; font-size: 16px; font-weight: 600; transition: all 0.25s; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 6px; }
-
-        .btn-print:hover { background: var(--brand-red-light); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(122,24,37,0.15); }
-
-        .btn-sm { padding: 6px 14px; font-size: 12px; }
-
-        .btn-danger { background: transparent; color: #DC2626; border: 1px solid #FCA5A5; padding: 6px 14px; border-radius: 60px; font-size: 12px; cursor: pointer; transition: all 0.2s; font-family: inherit; }
-
-        .btn-danger:hover { background: #FEF2F2; border-color: #DC2626; }
 
         /* ===== 化学品列表 ===== */
 
@@ -464,7 +449,7 @@
 
             <div style="text-align:center;margin-top:16px" class="no-print">
 
-                <button class="btn-outline btn-sm" onclick="clearAll()"><i class="fa-solid fa-trash"></i> 清空列表</button>
+                <button class="btn-outline" onclick="clearAll()"><i class="fa-solid fa-trash"></i> 清空列表</button>
 
                 <button class="btn-print" onclick="window.print()" style="margin-left:12px"><i class="fa-solid fa-print"></i> 打印结果</button>
 
@@ -614,7 +599,7 @@
 
             <div style="text-align:center;margin-top:16px" class="no-print">
 
-                <button class="btn-outline btn-sm" onclick="calcGrade()"><i class="fa-solid fa-rotate"></i> 重新计算分级</button>
+                <button class="btn-outline" onclick="calcGrade()"><i class="fa-solid fa-rotate"></i> 重新计算分级</button>
 
                 <button class="btn-print" onclick="window.print()" style="margin-left:12px"><i class="fa-solid fa-print"></i> 打印结果</button>
 
