@@ -7,7 +7,20 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="/sheen-toolbox/common.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<style>*{margin:0;padding:0;box-sizing:border-box}
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg-page);color:var(--text-primary);line-height:1.6}
+
+
+
+
+
+
+
+
+
+
 
 h1{font-size:20px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
 h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);margin-bottom:14px}
@@ -15,13 +28,13 @@ h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);marg
 .tab{padding:7px 12px;font-size:12px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--text-secondary);border-bottom:3px solid transparent;transition:all .2s;font-family:inherit;white-space:nowrap}
 .tab:hover{color:var(--brand-red)}.tab.active{color:var(--brand-red);border-bottom-color:var(--brand-red)}.tab i{margin-right:4px}
 .tc{display:none}.tc.active{display:block}
-
+.card{background:var(--bg-card);border-radius:var(--radius-md);padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04);border:1px solid var(--border)}
 .card h3{font-size:14px;font-weight:700;margin-bottom:8px}.hint{font-size:11px;color:var(--text-secondary);margin-bottom:10px;padding:6px 10px;background:var(--bg-page);border-radius:6px}
 .btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:60px;font-size:12px;font-weight:600;cursor:pointer;transition:all .25s;border:none;font-family:inherit;white-space:nowrap}
 .btn-p{background:var(--brand-red);color:#fff}.btn-p:hover{background:var(--brand-red-hover)}
 .btn-o{background:var(--bg-card);border:1.5px solid var(--border);color:var(--text-primary)}.btn-o:hover{border-color:var(--brand-red);color:var(--brand-red)}
 .btn-d{background:#DC2626;color:#fff}.btn-d:hover{background:#B91C1C}
-.btn-bad{background:var(--bg-card);color:var(--brand-red);border:1.5px solid var(--brand-red)}.btn-bad:hover{background:var(--brand-red-light)}
+.btn-bad{background:var(--bg-card);color:var(--brand-red);border:1.5px solid var(--brand-red)}.btn-bad:hover{background:var(--brand-red-light)}.btn-sm{padding:5px 10px;font-size:10px}
 .tbl-w{overflow-x:auto}
 .dt{min-width:1500px;border-collapse:collapse;font-size:11px}
 .dt th,.dt td{padding:5px 6px;border:1px solid var(--border);vertical-align:middle;white-space:nowrap}
@@ -42,10 +55,11 @@ h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);marg
 .spin{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--brand-red);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:4px}@keyframes spin{to{transform:rotate(360deg)}}
 #apiMod{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg-card);border-radius:var(--radius-md);padding:18px;z-index:1000;box-shadow:0 8px 32px rgba(0,0,0,.2);width:340px;max-width:95vw}
 #apiOv{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:999}
-
-  .sheen-footer,.tabs,.btn,.no-pr,#apiMod,#apiOv,#aiScene{display:none!important}
+@media print{
+  @page{size:A4 landscape;margin:12mm 10mm 15mm 10mm}.sheen-footer,.tabs,.btn,.no-pr,#apiMod,#apiOv,#aiScene{display:none!important}
   .tc{display:block!important}.tc:not(.active-print){display:none!important}
-
+  
+  .card{box-shadow:none!important;border:1px solid #333!important;break-inside:avoid;padding:8px!important}
   .tbl-w{overflow-x:visible!important}
   .dt{min-width:0!important;width:100%!important;font-size:9px!important;table-layout:auto!important}
   .dt th,.dt td{padding:3px 4px!important;font-size:8px!important;white-space:normal!important;word-break:break-all!important}
@@ -62,9 +76,12 @@ h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);marg
 @media(max-width:768px){
   
   .cr{grid-template-columns:1fr}
-}</style>
+}
+</style>
 </head>
 <body>
+
+
 
     <div class="breadcrumb">
         <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
@@ -157,14 +174,12 @@ h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);marg
 <div id="pS" style="display:none;"><input id="pu" placeholder="代理地址" style="width:100%;padding:8px;border:1.5px solid var(--border);border-radius:6px;font-family:monospace;font-size:12px;margin-bottom:8px;"></div>
 <div style="display:flex;gap:8px;"><button class="btn btn-p btn-sm" onclick="svApi()">保存</button><button class="btn btn-o btn-sm" onclick="document.getElementById('apiMod').style.display='none';document.getElementById('apiOv').style.display='none'">关闭</button></div></div>
 
-<footer class="sheen-footer no-pr"><i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:22px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 环境因素识别与评价
-</footer>
+<footer class="sheen-footer no-pr"><i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:22px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 环境因素识别与评价</footer>
 <div class="print-time" id="printTime"></div>
 
-
 <script>
+document.getElementById('printTime').textContent = new Date().toISOString().replace('T',' ').slice(0,16);
 
-        document.getElementById('printTime').textContent = new Date().toISOString().replace('T',' ').slice(0,16);
 // ===== DATA =====
 let R=JSON.parse(localStorage.getItem('isoR')||'[]');
 let T=JSON.parse(localStorage.getItem('isoT')||'[]');
