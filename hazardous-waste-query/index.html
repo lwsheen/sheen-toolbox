@@ -40,7 +40,7 @@
 
         .breadcrumb span { color: var(--text-secondary); }
 
-        .app-wrapper { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+        
 
         .page-header { text-align: center; margin-bottom: 32px; }
 
@@ -334,7 +334,7 @@
 
             .breadcrumb, .sheen-footer, .btn-primary, .btn-print, .search-section, .pagination { display: none !important; }
 
-            .app-wrapper { padding: 0 !important; }
+            
 
             .result-table { box-shadow: none !important; border-radius: 0 !important; border: 1.5px solid #333 !important; }
 
@@ -344,7 +344,7 @@
 
         @media (max-width: 768px) {
 
-            .app-wrapper { padding: 16px; }
+            
 
             .page-title { font-size:22px; }
 
@@ -370,7 +370,7 @@
 
     </div>
 
-    <main class="app-wrapper">
+    <main class="app-container container-query">
 
         <div class="page-header">
 
@@ -474,8 +474,13 @@
 
         <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 危险废物查询
 </footer>
+<div class="print-time" id="printTime"></div>
+
 
 <script>
+
+document.getElementById('printTime').textContent = new Date().toISOString().replace('T',' ').slice(0,16);
+
 
         let data = [], filtered = [], page = 1, perPage = 20;
 
