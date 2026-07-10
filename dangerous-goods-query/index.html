@@ -14,11 +14,7 @@
 
 <link rel="stylesheet" href="/sheen-toolbox/common.css">
 
-  <style>
-
-    
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+  <style>* { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
 
@@ -40,29 +36,13 @@
 
     }
 
-    /* ── Navigation ── */
-
-    .breadcrumb { padding: 12px 24px; font-size: 13px; color: var(--text-secondary); border-bottom: 1px solid var(--border); background: var(--bg-card); display: flex; align-items: center; gap: 6px; }
-
-    .breadcrumb a { color: var(--brand-red); text-decoration: none; font-weight: 600; transition: opacity .2s; display: inline-flex; align-items: center; gap: 4px; }
-
     .breadcrumb a:hover { opacity: .7; text-decoration: underline; }
 
     .breadcrumb span { color: var(--text-secondary); }
 
-    /* ── Layout ── */
-
-    
-
-    .page-title { font-size:22px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; display: flex; align-items: center; gap: 10px; }
-
     .page-title i { color: var(--brand-red); font-size:22px; }
 
-    .page-subtitle { font-size:11px; color: var(--text-secondary); margin-bottom: 20px; }
-
     .main-grid { display: grid; grid-template-columns: 360px 1fr; gap: 20px; }
-
-    /* ── Sidebar ── */
 
     .sidebar { background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 20px; position: sticky; top: 20px; max-height: calc(100vh - 160px); overflow-y: auto; }
 
@@ -106,8 +86,6 @@
 
     .stat-row span:last-child { font-weight: 600; color: var(--brand-red); }
 
-    /* ── Main Content ── */
-
     .content-area { display: flex; flex-direction: column; gap: 16px; }
 
     .result-header { display: flex; justify-content: space-between; align-items: center; }
@@ -115,8 +93,6 @@
     .result-count { font-size:11px; color: var(--text-secondary); }
 
     .result-count strong { color: var(--text-primary); }
-
-    /* Table */
 
     .table-wrap { background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border); overflow: hidden; }
 
@@ -164,8 +140,6 @@
 
     .pg-badge { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 11px; font-weight: 600; background: var(--border-light); color: var(--text-secondary); margin-left: 4px; }
 
-    /* Detail Panel */
-
     .detail-panel { background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 24px; display: none; }
 
     .detail-panel.active { display: block; }
@@ -188,16 +162,6 @@
 
     .detail-actions { margin-top: 16px; display: flex; gap: 8px; }
 
-    .btn-primary { background: var(--brand-red); color: #fff; border: none; padding: 10px 24px; border-radius: 60px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.25s; display: inline-flex; align-items: center; gap:4px; font-family: inherit; }
-
-    .btn-primary:hover { background: var(--brand-red-hover); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(122,24,37,0.25); }
-
-    .btn-print { background: var(--bg-card); color: var(--brand-red); border: 1.5px solid var(--brand-red); padding: 10px 24px; border-radius: 60px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.25s; display: inline-flex; align-items: center; gap:4px; font-family: inherit; }
-
-    .btn-print:hover { background: var(--brand-red-light); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(122,24,37,0.15); }
-
-    /* Class info card */
-
     .class-info { background: var(--brand-red-light); border-radius: var(--radius-md); padding: 16px; margin-bottom: 16px; border-left: 4px solid var(--brand-red); }
 
     .class-info h4 { font-size: 15px; font-weight: 700; color: var(--brand-red); margin-bottom: 4px; }
@@ -206,33 +170,11 @@
 
     .class-info .pg-info { margin-top: 8px; font-size: 12px; color: var(--text-secondary); }
 
-    /* ── Footer ── */
-
-    .sheen-footer { text-align: center; padding: 16px 32px; font-size:11px; color: var(--text-secondary); border-top: 1px solid var(--border); background: var(--bg-card); letter-spacing: 0.5px; }
-
-    .sheen-footer i { color: var(--amber); }
-
-    .sheen-footer strong { color: var(--text-primary); }
-
-    /* Print */
-
-    .print-time { display: none; }
-
-    
-
-@media print {
-
-      @page { size: A4; margin: 18mm 15mm 20mm 15mm;
-
-        @bottom-center { content: "SHEEN Toolbox · 危险货物查询"; font-size: 8pt; color: #666; }
-
-      }
+    }
 
       body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
 
       .breadcrumb, .sheen-footer, .btn-primary, .btn-print, .sidebar, .table-wrap, .class-info, .result-header, .detail-actions { display: none !important; }
-
-      .print-time { display: block !important; font-size: 9pt; color: #666; text-align: right; margin-bottom: 12px; }
 
       .detail-panel { box-shadow: none !important; border-radius: 0 !important; border: 1.5px solid #333 !important; display: block !important; }
 
@@ -242,13 +184,9 @@
 
     }
 
-    /* Mobile */
-
     @media (max-width: 900px) {
 
       .main-grid { grid-template-columns: 1fr; }
-
-      
 
       .sidebar { position: static; max-height: none; }
 
@@ -264,9 +202,7 @@
 
       .dg-table th:nth-child(5), .dg-table td:nth-child(5) { display: none; }
 
-    }
-
-  </style>
+    }</style>
 
 </head>
 
