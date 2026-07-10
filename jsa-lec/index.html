@@ -7,11 +7,184 @@
 <title>JSA+LEC 作业安全分析与风险评估 · SHEEN Toolbox</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="/sheen-toolbox/common.css">
-<style>*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 
-*{margin:0;padding:0;box-sizing:border-box}</style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg-page);color:var(--text-primary);line-height:1.6}
+
+/* Nav */
+
+
+
+
+
+
+
+
+
+/* Layout */
+
+h1{font-size:20px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);margin-bottom:14px}
+
+/* Cards */
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.card h3{font-size:14px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.card h3 i{color:var(--brand-red)}
+.card h3 .num{background:var(--brand-red);color:#fff;min-width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.hint{font-size:11px;color:var(--text-secondary);margin-bottom:10px;padding:6px 10px;background:var(--bg-page);border-radius:6px}
+
+/* Form */
+.form-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.form-row:last-child{margin-bottom:0}
+.form-group{flex:1;min-width:140px}
+.form-group.w-sm{flex:0.7;min-width:100px}
+.form-group label{display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:3px}
+.form-control{width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;background:var(--bg-card);color:var(--text-primary);font-family:inherit}
+.form-control:focus{outline:none;border-color:var(--brand-red);box-shadow:0 0 0 4px rgba(122,24,37,.08)}
+textarea.form-control{min-height:56px;resize:vertical}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:60px;font-size:12px;font-weight:600;cursor:pointer;transition:all .25s;border:none;font-family:inherit;white-space:nowrap}
+.btn-p{background:var(--brand-red);color:#fff}.btn-p:hover{background:var(--brand-red-hover)}
+.btn-o{background:var(--bg-card);border:1.5px solid var(--border);color:var(--text-primary)}.btn-o:hover{border-color:var(--brand-red);color:var(--brand-red)}
+.btn-d{background:#DC2626;color:#fff}.btn-d:hover{background:#B91C1C}
+.btn-bad{background:var(--bg-card);color:var(--brand-red);border:1.5px solid var(--brand-red)}.btn-bad:hover{background:var(--brand-red-light)}
+.btn-success{background:#16A34A;color:#fff}.btn-success:hover{background:#15803D}
+.btn-file{background:#2563EB;color:#fff}.btn-file:hover{background:#1D4ED8}
+.btn-sm{padding:5px 10px;font-size:10px}
+.btn-group{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+
+/* Steps */
+.step-block{background:var(--bg-page);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:14px 16px;margin-bottom:12px}
+.step-block .step-header{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.step-block .step-num{background:var(--text-primary);color:#fff;min-width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.step-block .step-input{flex:1}
+.step-block .step-actions{display:flex;gap:4px}
+.step-block .step-actions button{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:var(--bg-card);cursor:pointer;font-size:11px;color:var(--text-secondary);display:flex;align-items:center;justify-content:center;transition:all .2s}
+.step-block .step-actions button:hover{background:var(--brand-red-light);color:var(--brand-red);border-color:var(--brand-red)}
+
+/* Hazard cards */
+.hz-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px 16px;margin-top:10px;position:relative;display:grid;grid-template-columns:1fr 280px;gap:12px}
+.hz-card .hz-num{position:absolute;top:-9px;left:12px;background:var(--brand-red);color:#fff;font-size:10px;font-weight:700;padding:1px 8px;border-radius:10px}
+.hz-card .hz-main{display:flex;flex-direction:column;gap:8px}
+.hz-card .hz-score{display:flex;flex-direction:column}
+.hz-field label{display:block;font-size:11px;font-weight:600;color:var(--text-secondary);margin-bottom:2px}
+.hz-field label .hint{font-weight:400;font-size:10px;color:#9CA3AF}
+.hz-field input{width:100%;padding:7px 9px;border:1.5px solid var(--border);border-radius:5px;font-size:12px;font-family:inherit;background:var(--bg-card);color:var(--text-primary)}
+.hz-field input:focus{outline:none;border-color:var(--brand-red);box-shadow:0 0 0 3px rgba(122,24,37,.06)}
+.hz-del{position:absolute;top:8px;right:10px;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);background:var(--bg-card);cursor:pointer;font-size:11px;color:var(--text-secondary);display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:1}
+.hz-del:hover{background:var(--brand-red-light);color:#DC2626;border-color:#DC2626}
+.hz-divider{border:none;border-top:1px dashed var(--border);margin:0}
+
+/* LEC scoring panel */
+.lec-panel{background:var(--bg-page);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:12px;display:flex;flex-direction:column;gap:8px}
+.lec-panel-title{font-size:11px;font-weight:700;color:var(--text-primary);display:flex;align-items:center;gap:5px}
+.lec-panel-title i{color:var(--brand-red);font-size:12px}
+.lec-selects{display:flex;flex-direction:column;gap:6px}
+.lec-selects .lec-row{display:flex;align-items:center;gap:6px}
+.lec-selects .lec-row label{width:82px;font-size:11px;font-weight:600;color:var(--text-secondary);flex-shrink:0;text-align:right}
+.lec-selects .lec-row select{flex:1;padding:6px 7px;border:1.5px solid var(--border);border-radius:5px;font-size:11px;background:var(--bg-card);font-family:inherit;cursor:pointer;min-width:0}
+.lec-selects .lec-row select:focus{outline:none;border-color:var(--brand-red)}
+.lec-result{text-align:center;border-radius:8px;padding:10px 8px}
+.lec-result .d-score{font-size:24px;font-weight:700;line-height:1.1;margin-bottom:2px}
+.lec-result .d-eq{font-size:10px;color:var(--text-secondary);margin-bottom:1px}
+.lec-result .d-level{font-size:11px;font-weight:700;padding:2px 10px;border-radius:4px;display:inline-block}
+
+/* Risk result bg */
+.lec-r-critical{background:linear-gradient(135deg,#FEE2E2,#FECACA)}.lec-r-critical .d-score{color:#991B1B}
+.lec-r-high{background:linear-gradient(135deg,#FEE2E2,#FECACA)}.lec-r-high .d-score{color:#991B1B}
+.lec-r-moderate{background:linear-gradient(135deg,#FFEDD5,#FED7AA)}.lec-r-moderate .d-score{color:#9A3412}
+.lec-r-minor{background:linear-gradient(135deg,#FEF9C3,#FEF3C7)}.lec-r-minor .d-score{color:#854D0E}
+.lec-r-low{background:linear-gradient(135deg,#ECFDF5,#DCFCE7)}.lec-r-low .d-score{color:#166534}
+
+/* Risk badge colors */
+.risk-critical{background:#FCA5A5;color:#7F1D1D}
+.risk-high{background:#FECACA;color:#991B1B}
+.risk-moderate{background:#FED7AA;color:#9A3412}
+.risk-minor{background:#FEF9C3;color:#854D0E}
+.risk-low{background:#DCFCE7;color:#166534}
+
+/* Summary KPI cards */
+.kg{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-bottom:14px}
+.kc{background:var(--bg-card);border-radius:var(--radius-md);padding:12px;text-align:center;border:1px solid var(--border)}
+.kc .kn{font-size:24px;font-weight:700}.kc .kl{font-size:11px;color:var(--text-secondary);margin-top:2px}
+
+/* Reference tables */
+.ref-section{margin-top:12px}
+.ref-section summary{font-size:12px;font-weight:600;color:var(--text-secondary);cursor:pointer;padding:8px 0;user-select:none;display:flex;align-items:center;gap:5px}
+.ref-section summary i{font-size:11px;color:var(--brand-red)}
+.tbl-w{overflow-x:auto}
+.dt{min-width:600px;border-collapse:collapse;font-size:11px}
+.dt th,.dt td{padding:6px 8px;border:1px solid var(--border);vertical-align:middle;font-size:11px}
+.dt th{background:#1F4E79;color:#fff;font-weight:700;font-size:10px}.dt td{background:var(--bg-card);color:var(--text-primary)}
+.ref-notes{font-size:11px;color:var(--text-secondary);background:var(--bg-page);padding:10px 14px;border-radius:6px;line-height:1.8;margin-bottom:12px}
+.ref-notes h4{font-size:12px;font-weight:600;color:var(--text-primary);margin:10px 0 4px}
+.ref-notes h4:first-child{margin-top:0}
+
+/* Spinner */
+.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--brand-red);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:4px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Footer */
+/* Empty */
+.empty-hint{text-align:center;padding:16px;color:var(--text-secondary);font-size:12px}
+
+/* Print */
+@media print{
+  @page{size:A4 landscape;margin:12mm 14mm 18mm 14mm;@bottom-center{content:"SHEEN Toolbox \00b7 JSA+LEC 作业安全分析与风险评估";font-size:8pt;color:#666}}
+  body{background:#fff!important;font-size:10pt;color:#000!important}.sheen-footer,.btn,.btn-group,.no-print,.step-actions,.hz-del,.ref-section{display:none!important}
+  
+  .card{box-shadow:none!important;border-radius:0!important;border:1.5px solid #333!important;page-break-inside:avoid;padding:10px!important;margin-bottom:8px!important}
+  .step-block{background:#fff!important;border:1px solid #ccc!important;page-break-inside:avoid;padding:10px!important;margin-bottom:8px!important}
+  .hz-card{background:#fff!important;border:1px solid #ccc!important;page-break-inside:avoid;padding:6px 8px!important;margin-top:4px!important;grid-template-columns:1fr 200px!important;gap:6px!important}
+  .hz-field input{border:1px solid #ccc!important;font-size:9pt!important;padding:3px 5px!important}
+  .lec-panel{background:#f5f5f5!important;border:1px solid #ccc!important}
+  .lec-selects .lec-row select{border:1px solid #ccc!important;font-size:8pt!important}
+  .lec-result,.lec-r-critical,.lec-r-high,.lec-r-moderate,.lec-r-minor,.lec-r-low{background:#f5f5f5!important}
+  .lec-result .d-score,.lec-r-critical .d-score,.lec-r-high .d-score,.lec-r-moderate .d-score,.lec-r-minor .d-score,.lec-r-low .d-score{color:#000!important;font-size:16pt!important}
+  .hz-divider{border-top-color:#ccc!important}
+  .kg{gap:4px!important}.kc{padding:8px!important;border:1px solid #ccc!important}.kc .kn{font-size:18px!important}
+  .card h3 .num{background:#333!important}
+}
+/* Responsive */
+@media(max-width:860px){
+  .hz-card{grid-template-columns:1fr;gap:8px}
+  .lec-panel{flex-direction:row;flex-wrap:wrap;align-items:flex-end;gap:6px}
+  .lec-panel-title{width:100%}
+  .lec-selects{flex:1;flex-direction:row;gap:4px}
+  .lec-selects .lec-row{flex-direction:column;align-items:stretch}
+  .lec-selects .lec-row label{width:auto;text-align:left;font-size:9px}
+  .lec-selects .lec-row select{font-size:10px;padding:5px 4px}
+  .lec-result{flex:1;min-width:100px}
+  .lec-result .d-score{font-size:18px}
+}
+@media(max-width:768px){
+  
+  .form-group{min-width:100%}
+}
+@media(max-width:480px){
+  
+  
+  
+  
+  
+  h1{font-size:16px}
+  .card{padding:10px}
+  .form-group{min-width:100%}
+  .form-control{font-size:12px;padding:7px 9px}
+  .btn{padding:6px 12px;font-size:11px}
+  .btn-group{flex-direction:column;gap:6px}
+  .hz-field{min-width:100%!important}
+  .dt{font-size:10px}
+  .dt th,.dt td{padding:4px 5px;font-size:9px}
+  }
+</style>
 </head>
 <body>
+
+
 
     <div class="breadcrumb">
         <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
