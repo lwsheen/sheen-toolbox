@@ -6,15 +6,24 @@
     <meta name="description" content="工具描述 — SHEEN Toolbox">
     <title>工具名称 — SHEEN Toolbox</title>
 
+    <!-- 资源加载 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="/sheen-toolbox/common.css">
+
     <style>
-        /* 仅放本工具特有样式，公共样式已在 common.css */
-        /* 可用类: .btn-primary .btn-print .btn-outline .btn-danger .btn-sm */
-        /* 可用类: .card .form-card .result-value .result-card .data-table */
-        /* 可用类: .form-control .page-title .page-subtitle .badge */
-        /* 可用类: .flex-row .flex-between .mt-16 .mb-16 .text-center */
-        /* CSS变量: var(--brand-red) var(--text-primary) var(--border) 等 */
+        /* ============================================
+           仅放本工具特有样式，公共样式已在 common.css
+           请勿在此处重新定义以下类：
+             .breadcrumb / .sheen-footer / .sheen-footer i / .sheen-footer strong
+             .btn-primary / .btn-print / .btn-outline / .btn-danger / .btn-sm
+             .card / .form-card / .result-card / .result-value
+             .form-control / .form-control:focus
+             .page-title / .page-subtitle / .badge / .source-badge
+             .data-table / .table-scroll / .ref-table
+             .print-time
+             @media print（打印样式 common.css 已提供）
+             :root 变量（--brand-red 等 common.css 已定义）
+           ============================================ */
     </style>
 </head>
 <body>
@@ -26,19 +35,22 @@
     </div>
 
     <!-- 主内容区域 -->
-    <!-- 查询类工具用 max-width:1200px，计算器类用 800px，工作流类用 900px -->
-    <!-- ===== 主容器 ===== -->
-    <!-- 宽度分三档：工具类用 container-calc(800px) | container-wf(900px) | container-query(1200px) -->
+    <!-- 容器宽度三档：container-calc(800px) | container-wf(900px) | container-query(1200px) -->
     <main class="app-container container-calc">
 
-        <!-- 页面标题 -->
         <h1 class="page-title">工具名称</h1>
         <p class="page-subtitle" style="margin-bottom:20px;">工具简要说明，依据标准等</p>
 
         <!-- 表单卡片 -->
         <div class="form-card">
             <h3>参数输入</h3>
-            <!-- 表单内容 -->
+            <!-- 使用 common.css 提供的表单控件：
+                 <input class="form-control">
+                 <select class="form-control">
+                 <button class="btn-primary">
+                 <button class="btn-print">
+                 <button class="btn-outline">
+                 <button class="btn-sm"> -->
         </div>
 
         <!-- 结果展示 -->
@@ -49,7 +61,7 @@
 
     </main>
 
-    <!-- 页脚 -->
+    <!-- 页脚（公共样式 .sheen-footer 来自 common.css，勿重新定义） -->
     <footer class="sheen-footer">
         <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 工具名称
     </footer>
@@ -64,7 +76,7 @@
         document.getElementById('printTime').textContent =
             new Date().toISOString().replace('T', ' ').slice(0, 16);
 
-        // 业务逻辑
+        // ===== 业务逻辑 =====
     })();
     </script>
 
