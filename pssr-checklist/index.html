@@ -230,15 +230,7 @@ body {
 
 /* ===== 主体 ===== */
 
-.main {
 
-  max-width: 900px;
-
-  margin: 0 auto;
-
-  padding: 24px 20px 60px;
-
-}
 
 /* 表头信息区 */
 
@@ -746,7 +738,7 @@ body {
 
   #filterBar, .sheen-footer { display: none !important; }
 
-  .main { max-width: 100%; padding: 0; margin: 0; }
+  
 
   .sheen-print-header {
 
@@ -830,7 +822,7 @@ body {
 
   .toolbar { padding: 8px 12px; gap: 8px; }
 
-  .main { padding: 12px 8px 40px; }
+  
 
   .header-fields { grid-template-columns: 1fr; }
 
@@ -846,7 +838,7 @@ body {
 
   .btn { padding: 5px 8px; font-size: 11px; }
 
-  .main { padding: 8px 4px 32px; }
+  
 
   .header-fields { grid-template-columns: 1fr; gap:4px; }
 
@@ -942,7 +934,7 @@ body {
 
 <!-- ===== 主体 ===== -->
 
-<div class="main">
+<div class="app-container container-wf">
 
   <!-- 打印页眉（仅打印时显示） -->
 
@@ -1160,8 +1152,11 @@ body {
 
   <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · PSSR 开车前安全审查检查表
 </footer>
+<div class="print-time" id="printTime"></div>
 
 <script>
+document.getElementById('printTime').textContent = new Date().toISOString().replace('T',' ').slice(0,16);
+
 
 // ===== 数据定义 =====
 
