@@ -4,17 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="安全光幕选型计算工具 — 基于 ISO 13855 安全距离计算与光幕有效高度选型">
-
-<!-- PWA -->
-<link rel="manifest" href="/sheen-toolbox/manifest.json">
-<meta name="theme-color" content="#7A1825">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="SHEEN Toolbox">
-<link rel="apple-touch-icon" href="/sheen-toolbox/assets/icon-192.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/sheen-toolbox/assets/icon-192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="/sheen-toolbox/assets/icon-512.png">
-
 <title>安全光幕选型计算工具 — SHEEN Toolbox</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="/sheen-toolbox/common.css">
@@ -289,11 +278,6 @@
 </footer>
 
 <div class="print-time" id="printTime"></div>
-
-<button class="pwa-install-btn" id="pwaInstallBtn" title="添加到桌面，像 App 一样使用">
-    <i class="fa-solid fa-download"></i> 添加到桌面
-</button>
-
 <script>
 (function() {
 'use strict';
@@ -302,50 +286,38 @@ document.getElementById('printTime').textContent =
   new Date().toISOString().replace('T',' ').slice(0,16);
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sheen-toolbox/sw.js');
 }
 
 // ===== PWA 安装按钮 =====
-var deferredPrompt = null;
-var pwaBtn = document.getElementById('pwaInstallBtn');
-function isPwaInstalled() {
   return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone ||
          document.referrer.indexOf('android-app://') === 0;
 }
-window.addEventListener('beforeinstallprompt', function(e) {
-  e.preventDefault(); deferredPrompt = e;
-  if (!isPwaInstalled() && !localStorage.getItem('sheen_pwa_dismissed') && pwaBtn) pwaBtn.style.display = 'flex';
 });
-function isIosSafari() {
   var ua = navigator.userAgent;
   return /iPhone|iPad|iPod/.test(ua) && /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
 }
-if (isIosSafari() && !isPwaInstalled() && !localStorage.getItem('sheen_pwa_dismissed') && pwaBtn) {
-  setTimeout(function(){ pwaBtn.style.display = 'flex'; }, 2000);
 }
-if (pwaBtn) {
-  pwaBtn.addEventListener('click', function() {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(function(r){
-        if (r.outcome === 'accepted') pwaBtn.style.display = 'none';
-        else { localStorage.setItem('sheen_pwa_dismissed', Date.now()+7*86400000); pwaBtn.classList.add('dismissed'); }
-        deferredPrompt = null;
-      });
-    } else if (isIosSafari()) {
       var g = document.createElement('div');
       g.innerHTML = '<div style="position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:999;display:flex;align-items:flex-end;justify-content:center;padding-bottom:80px;">' +
         '<div style="background:#fff;border-radius:20px;padding:24px;margin:16px;max-width:340px;text-align:center;position:relative;">' +
         '<button onclick="this.parentElement.parentElement.remove()" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:20px;cursor:pointer;color:#999;">×</button>' +
         '<div style="font-size:40px;margin-bottom:12px;">📱</div><h3 style="font-size:16px;margin-bottom:8px;color:#111827;">添加到桌面</h3>' +
         '<p style="font-size:13px;color:#6B7280;margin-bottom:16px;line-height:1.6;">点击 Safari 底部 <strong>分享按钮</strong><br>选择 <strong>"添加到主屏幕"</strong></p>' +
-        '<button onclick="this.parentElement.parentElement.remove();localStorage.setItem(\'sheen_pwa_dismissed\',Date.now()+7*86400000);" style="width:100%;padding:10px;border-radius:60px;border:none;background:#7A1825;color:#fff;font-size:14px;font-weight:600;cursor:pointer;">我知道了</button></div></div>';
       document.body.appendChild(g);
+    } else {
+      // 鸿蒙/小米/三星等 — 通用安装引导
+      var g2 = document.createElement('div');
+      g2.innerHTML = '<div style="position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:999;display:flex;align-items:flex-end;justify-content:center;padding-bottom:80px;">' +
+        '<div style="background:#fff;border-radius:20px;padding:24px;margin:16px;max-width:340px;text-align:center;position:relative;">' +
+        '<button onclick="this.parentElement.parentElement.remove()" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:20px;cursor:pointer;color:#999;">×</button>' +
+        '<div style="font-size:40px;margin-bottom:12px;">📱</div><h3 style="font-size:16px;margin-bottom:8px;color:#111827;">添加到桌面</h3>' +
+        '<p style="font-size:13px;color:#6B7280;margin-bottom:16px;line-height:1.6;">请在浏览器菜单中选择<br><strong>"添加到桌面"</strong> 或 <strong>"添加至主屏幕"</strong></p>' +
+        '<p style="font-size:11px;color:#9CA3AF;margin-bottom:12px;">推荐安装 Chrome 浏览器一键添加</p>' +
+        '<button onclick="this.parentElement.parentElement.remove()" style="width:100%;padding:10px;border-radius:60px;border:none;background:#7A1825;color:#fff;font-size:14px;font-weight:600;cursor:pointer;">我知道了</button></div></div>';
+      document.body.appendChild(g2);
     }
   });
 }
-var dismissed = localStorage.getItem('sheen_pwa_dismissed');
-if (dismissed && Date.now() > parseInt(dismissed)) localStorage.removeItem('sheen_pwa_dismissed');
 
 // ===== 选项卡 =====
 window.switchTab = function(idx) {
