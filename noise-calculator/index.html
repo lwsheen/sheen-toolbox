@@ -487,19 +487,171 @@ details summary i{font-size:11px;color:var(--brand-red)}
 <div class="print-time" id="printTime"></div>
     
 <script>
+function fmt(n,d){return n.toLocaleString('zh-CN',{minimumFractionDigits:d||1,maximumFractionDigits:d||1})}
+function getCNTime(){return new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000).toISOString().replace('T',' ').slice(0,16)}
 
+// ===== Tabs =====
+function sw(n){
+  document.querySelectorAll('.tab').forEach(function(t,i){t.classList.toggle('active',i===n)});
+  document.querySelectorAll('.tc').forEach(function(c,i){c.classList.toggle('active',i===n)});
+  [calcSynth,calcTWA,calcTasks,calcGrade,calcHearing][n]();
+}
+function prt(n){
+  document.querySelectorAll('.tc').forEach(function(c,i){c.classList.remove('pt');if(i===n)c.classList.add('pt')});
+  document.querySelectorAll('details').forEach(function(d){d.setAttribute('open','')});
+  window.print();
+  setTimeout(function(){document.querySelectorAll('.tc').forEach(function(c){c.classList.remove('pt')})},500);
+}
+
+// ===== localStorage =====
+function saveSettings(){var q=document.getElementById('exRate').value;localStorage.setItem('noise-q',q)}
+function loadSettings(){var q=localStorage.getItem('noise-q');if(q)document.getElementById('exRate').value=q}
+function saveTasks(){var data=[];tasks.forEach(function(t){data.push({name:t.name,level:t.level,time:t.time})});localStorage.setItem('noise-tasks',JSON.stringify(data))}
+function loadTasks(){
+  var raw=localStorage.getItem('noise-tasks');
+  if(raw){try{tasks=JSON.parse(raw);calcTasks()}catch(e){tasks=[]}}
+}
+
+// ===== TAB 0: TWA & Dose =====
+function onLEXPreset(){var v=document.getElementById('lexPreset').value;if(!v)return;var p=v.split('|');document.getElementById('leq').value=p[0];document.getElementById('te').value=p[1];calcTWA()}
+function calcTWA(){
+  var L=parseFloat(document.getElementById('leq').value)||92,Te=parseFloat(document.getElementById('te').value)||6,q=parseInt(document.getElementById('exRate').value),Lmax=parseFloat(document.getElementById('lmax').value)||0;
+  var LEX=L+10*Math.log10(Te/8),Tallowed=8/Math.pow(2,(L-85)/q),dose=(Te/Tallowed)*100;
+  var cls='',tag='';
+  if(LEX>=97){cls='purple';tag='Ⅳ级 · 极重危害'}else if(LEX>=94){cls='orange';tag='Ⅲ级 · 重度危害'}else if(LEX>=90){cls='';tag='Ⅱ级 · 中度危害'}else if(LEX>=85){cls='green';tag='Ⅰ级 · 轻度危害'}else{cls='green';tag='非噪声作业'}
+  
+  document.getElementById('twaResult').innerHTML=
+    '<div class="result-card'+((cls&&!cls.includes('purple'))?' '+cls:'')+'"><div class="rc-label">L<sub>EX,8h</sub> 等效声级</div><div class="rc-val">'+LEX.toFixed(1)+' dB(A)</div><div class="rc-note">'+tag+' | L<sub>Aeq</sub>='+L.toFixed(1)+' | T<sub>e</sub>='+Te.toFixed(1)+'h | T<sub>允许</sub>='+Tallowed.toFixed(2)+'h</div></div>'+
+    ((Lmax>0)?'<div class="result-card" style="border-color:'+(Lmax>=115?'#DC2626':'#CA8A04')+'!important;background:'+(Lmax>=115?'#FEF2F2':'#FFF7ED')+'"><div class="rc-label">L<sub>max</sub> 最大瞬时声级</div><div class="rc-val" style="color:'+(Lmax>=115?'#DC2626':'#CA8A04')+'">'+Lmax.toFixed(1)+' dB(A)</div><div class="rc-note">'+(Lmax>=115?'<span style="color:#DC2626">⚠ 超过115 dB，需立即采取工程控制！</span>':'需关注瞬时峰值')+'</div></div>':'');
+  
+  var barC=dose<=100?'safe':(dose<=200?'warn':'danger'),barW=Math.min(dose,400)/4;
+  document.getElementById('twaDetail').innerHTML=
+    '<ul class="steps"><li class="formula">L<sub>EX,8h</sub> = '+L.toFixed(1)+' + 10·log<sub>10</sub>('+Te.toFixed(1)+'/8) = '+LEX.toFixed(1)+' dB(A)</li>'+
+    '<li>允许接触：<span>T<sub>允许</sub> = '+Tallowed.toFixed(2)+' h</span> · 实际：<span>'+Te.toFixed(1)+' h</span></li>'+
+    '<li>噪声剂量：<span>D = '+dose.toFixed(1)+'%</span>'+(dose>100?' <span class="warn-badge danger">⚠ 超标</span>':' <span class="warn-badge" style="background:#ECFDF5;color:#16A34A">✓ 安全</span>')+'</li></ul>'+
+    '<div class="progress-wrap"><div class="progress-bar"><div class="progress-fill '+barC+'" style="width:'+barW+'%">'+dose.toFixed(0)+'%</div></div><div class="progress-labels"><span>0%</span><span>安全线 100%</span><span>200%</span><span>400%</span></div></div>'+
+    (Lmax>0?'<div style="font-size:11px;margin-top:4px"><strong>L<sub>max</sub>='+Lmax.toFixed(1)+' dB(A)</strong>: '+(Lmax>=115?'需立即采取工程控制措施（消声/隔声/吸声），减少瞬时冲击噪声暴露。':'建议监测瞬时峰值，必要时设置声屏障或缩短暴露时间。')+'</div>':'');
+}
+function fillGradeFromTWA(){var L=parseFloat(document.getElementById('leq').value)||92,Te=parseFloat(document.getElementById('te').value)||6;document.getElementById('gLeq').value=(L+10*Math.log10(Te/8)).toFixed(1);document.getElementById('gPreset').value='';sw(3);calcGrade()}
+
+// ===== TAB 1: 多任务合成 =====
+var tasks=[];
+function addTask(){
+  var n=document.getElementById('taskName').value.trim()||'任务'+(tasks.length+1);
+  var L=parseFloat(document.getElementById('taskLevel').value)||0,t=parseFloat(document.getElementById('taskTime').value)||0;
+  if(L<40||L>140||t<=0){alert('请输入有效声级 (40-140 dB) 和持续时间 (>0)');return}
+  tasks.push({name:n,level:L,time:t});
+  document.getElementById('taskName').value='';document.getElementById('taskLevel').value='';document.getElementById('taskTime').value='';
+  document.getElementById('taskLevel').focus();saveTasks();calcTasks();
+}
+function calcTasks(){
+  var el=document.getElementById('taskList'),totalEl=document.getElementById('taskTotal'),badge=document.getElementById('totalTimeBadge'),res=document.getElementById('taskResult');
+  if(!tasks.length){el.innerHTML='<li class="empty-state">暂无任务，请添加不同噪声环境的暴露任务</li>';totalEl.style.display='none';badge.innerHTML='';res.innerHTML='';return}
+  var totalT=0,sum=0,html='';
+  tasks.forEach(function(s,i){
+    totalT+=s.time;sum+=s.time*Math.pow(10,s.level/10);
+    html+='<li><div class="si-info"><strong>'+s.name+'</strong> <span style="color:var(--text-secondary)">'+s.level.toFixed(1)+' dB × '+s.time.toFixed(1)+'h</span></div><div class="si-val">10<sup>'+s.level.toFixed(1)+'/10</sup></div><button onclick="removeTask('+i+')" title="删除"><i class="fa-solid fa-xmark"></i></button></li>';
+  });
+  el.innerHTML=html;
+  badge.innerHTML=totalT>8?' <span class="warn-badge danger">⚠ 总时长 '+totalT.toFixed(1)+'h 超过8小时</span>':'';
+  totalEl.style.display='flex';totalEl.innerHTML='<span>总计 '+tasks.length+' 个任务 · '+totalT.toFixed(1)+' 小时</span><span style="color:var(--brand-red);font-size:16px">∑ = '+totalT.toFixed(1)+'h</span>';
+  var LAeq=10*Math.log10(sum/totalT),LEX=LAeq+10*Math.log10(totalT/8);
+  var cls='';if(LEX>=97)cls='purple';else if(LEX>=90)cls='orange';else if(LEX>=85)cls='green';else cls='green';
+  res.innerHTML=
+    '<div class="result-card'+(cls!='purple'?' '+cls:'')+'"><div class="rc-label">L<sub>Aeq,T</sub> 等效连续声级</div><div class="rc-val">'+LAeq.toFixed(1)+' dB(A)</div><div class="rc-note">'+tasks.length+' 个任务 · 累计 '+totalT.toFixed(1)+'h</div></div>'+
+    '<div class="result-card'+(cls!='purple'?' '+cls:'')+'"><div class="rc-label">L<sub>EX,8h</sub> 8小时等效声级</div><div class="rc-val">'+LEX.toFixed(1)+' dB(A)</div><div class="rc-note">'+LAeq.toFixed(1)+' + 10·log<sub>10</sub>('+totalT.toFixed(1)+'/8)</div></div>';
+  res.dataset.lex=LEX.toFixed(1);
+}
+function removeTask(i){tasks.splice(i,1);saveTasks();calcTasks()}
+function clearTasks(){tasks=[];saveTasks();calcTasks()}
+function fillGradeFromTasks(){var s=document.getElementById('taskResult');if(!s||!s.dataset.lex){alert('请先添加任务');return}document.getElementById('gLeq').value=s.dataset.lex;document.getElementById('gPreset').value='';sw(3);calcGrade()}
+
+// ===== TAB 2: 听力防护 =====
+function calcHearing(){
+  var L=parseFloat(document.getElementById('hpLevel').value)||100,NRR=parseFloat(document.getElementById('hpNRR').value)||29;
+  var method=document.getElementById('hpMethod').value,type=document.getElementById('hpType').value;
+  var atten;
+  if(method==='osha'){atten=(NRR-7)/2}
+  else if(method==='niosh'){atten=type==='earplug'?NRR*0.3:type==='dual'?NRR*0.75:NRR*0.5}
+  else{atten=parseFloat(document.getElementById('hpFactor').value)||0.5}
+  var protectedL=L-atten,safe=protectedL<85,belowActionLevel=protectedL<80;
+  document.getElementById('hpDetail').innerHTML=
+    '<ul class="steps"><li class="formula">衰减值 = '+(method==='osha'?'(NRR−7)/2 = ('+NRR+'−7)/2':method==='niosh'?'NRR × '+(type==='earplug'?'0.3(耳塞)':type==='dual'?'0.75(双重)':'0.5(耳罩)'):'衰减因子 × NRR')+' = '+atten.toFixed(1)+' dB</li>'+
+    '<li>环境噪声：<span>'+L.toFixed(1)+' dB(A)</span> · NRR：<span>'+NRR+' dB</span> · '+document.getElementById('hpType').options[document.getElementById('hpType').selectedIndex].text+'</li>'+
+    '<li>降噪后暴露声级：<span style="color:'+(safe?'#16A34A':'#DC2626')+'">'+protectedL.toFixed(1)+' dB(A)</span> '+(safe?'<span class="warn-badge" style="background:#ECFDF5;color:#16A34A">✓ 已降至安全线 (≤85 dB)</span>':(belowActionLevel?'<span class="warn-badge" style="background:#FFF7ED;color:#CA8A04">接近阈值</span>':'<span class="warn-badge danger">⚠ 仍高于安全阈值，需加强防护</span>'))+'</li></ul>';
+  document.getElementById('hpResult').innerHTML=
+    '<div class="result-card'+((safe&&!belowActionLevel)?' green':'')+'"><div class="rc-label">防护后等效暴露声级</div><div class="rc-val">'+protectedL.toFixed(1)+' dB(A)</div><div class="rc-note">降噪 '+atten.toFixed(1)+' dB | NRR='+NRR+' | '+(safe?'已降至安全线以下 ✓':'需加强防护 ⚠')+'</div></div>';
+}
+(function(){var m=document.getElementById('hpMethod');m&&m.addEventListener('change',function(){document.getElementById('hpCustomDiv').style.display=m.value==='custom'?'block':'none';calcHearing()})})();
+
+// ===== TAB 3: 多声源合成 =====
+var sources=[];
+function addSource(){var L=parseFloat(document.getElementById('sLevel').value)||0,n=document.getElementById('sName').value.trim()||'声源'+(sources.length+1);if(L<30||L>150){alert('请输入有效声级');return}sources.push({name:n,level:L});document.getElementById('sName').value='';document.getElementById('sLevel').value='';document.getElementById('sLevel').focus();renderSources()}
+function renderSources(){var el=document.getElementById('sourceList');if(!sources.length){el.innerHTML='<li class="empty-state">暂无数据</li>';calcSynth();return}var html='';sources.forEach(function(s,i){html+='<li><div class="si-info"><strong>'+s.name+'</strong> <span style="color:var(--text-secondary)">'+s.level.toFixed(1)+' dB</span></div><div class="si-val">10<sup>'+s.level.toFixed(1)+'/10</sup></div><button onclick="removeSource('+i+')"><i class="fa-solid fa-xmark"></i></button></li>'});el.innerHTML=html;calcSynth()}
+function removeSource(i){sources.splice(i,1);renderSources()}function clearSources(){sources=[];renderSources()}
+function calcSynth(){if(!sources.length){document.getElementById('synthResult').innerHTML='';return}var sum=0;sources.forEach(function(s){sum+=Math.pow(10,s.level/10)});var total=10*Math.log10(sum),maxL=sources.reduce(function(a,b){return a.level>b.level?a:b},{level:0}).level;document.getElementById('synthResult').innerHTML='<div class="result-card"><div class="rc-label">合成声级 ('+sources.length+'个源)</div><div class="rc-val">'+total.toFixed(1)+' dB(A)</div><div class="rc-note">最高单源 '+maxL.toFixed(1)+' dB | 增量 '+(total-maxL).toFixed(2)+' dB</div></div>'}
+
+// ===== TAB 4: 危害分级 =====
+function calcGrade(){
+  var L=parseFloat(document.getElementById('gLeq').value)||92,grade,gradeName,gradeColor,measures;
+  if(L<85){grade='—';gradeName='非噪声作业';gradeColor='#16A34A';measures='<p>不视为噪声作业，无需分级。</p>'}
+  else if(L<90){grade='Ⅰ';gradeName='轻度危害';gradeColor='#16A34A';measures='<p>• 日常监测<br>• 发放护听器<br>• 听力保护培训<br>• 定期健康检查</p>'}
+  else if(L<94){grade='Ⅱ';gradeName='中度危害';gradeColor='#CA8A04';measures='<p>• 加强监测（每季度）<br>• 强制佩戴护听器<br>• 工程控制<br>• 每年听力检查</p>'}
+  else if(L<97){grade='Ⅲ';gradeName='重度危害';gradeColor='#EA580C';measures='<p>• 限期治理<br>• 严格时间管理<br>• 半年听力检查<br>• 个人噪声档案</p>'}
+  else{grade='Ⅳ';gradeName='极重危害';gradeColor='#DC2626';measures='<p>• 立即停产整改<br>• 优先工程控制<br>• 3个月听力检查<br>• 高危作业管理</p>'}
+  document.getElementById('gradeResult').innerHTML='<div class="result-card" style="border-color:'+gradeColor+'!important;background:'+(L<90?'#ECFDF5':L<94?'#FFF7ED':L<97?'#FFF7ED':'#FEF2F2')+'"><div class="rc-label">噪声作业危害等级</div><div class="rc-val" style="color:'+gradeColor+'">'+grade+' 级 · '+gradeName+'</div><div class="rc-note">L<sub>EX,8h</sub> = '+L.toFixed(1)+' dB(A)</div></div>';
+  document.getElementById('gradeDetail').innerHTML='<div class="gauge-wrap"><div class="gauge-bar">'+
+    (L<85?'<div class="gauge-seg g1" style="flex:15">非噪声</div><div class="gauge-seg g2" style="flex:10"></div><div class="gauge-seg g3" style="flex:7"></div><div class="gauge-seg g4" style="flex:8"></div>':
+    L<90?'<div class="gauge-seg g1" style="flex:15">Ⅰ级</div><div class="gauge-seg g2" style="flex:10"></div><div class="gauge-seg g3" style="flex:7"></div><div class="gauge-seg g4" style="flex:8"></div>':
+    L<94?'<div class="gauge-seg g1" style="flex:15"></div><div class="gauge-seg g2" style="flex:10">Ⅱ级</div><div class="gauge-seg g3" style="flex:7"></div><div class="gauge-seg g4" style="flex:8"></div>':
+    L<97?'<div class="gauge-seg g1" style="flex:15"></div><div class="gauge-seg g2" style="flex:10"></div><div class="gauge-seg g3" style="flex:7">Ⅲ级</div><div class="gauge-seg g4" style="flex:8"></div>':
+    '<div class="gauge-seg g1" style="flex:15"></div><div class="gauge-seg g2" style="flex:10"></div><div class="gauge-seg g3" style="flex:7"></div><div class="gauge-seg g4" style="flex:8">Ⅳ级</div>')+
+    '</div></div><div class="gauge-labels"><span>←85</span><span>90</span><span>94</span><span>97→</span></div>'+
+    '<div style="margin-top:8px;font-size:12px;line-height:1.8">'+measures+'</div>';
+}
+function onGradePreset(){var v=document.getElementById('gPreset').value;if(!v)return;document.getElementById('gLeq').value=v;calcGrade()}
+
+// ===== Export =====
+function exportReport(tab){
+  var titles=['多声源合成报告','任务暴露评估报告','多任务合成分析报告','危害分级评估报告','听力防护评估报告'];
+  var t=getCNTime(),html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+titles[tab]+'</title>';
+  html+='<style>body{font-family:"Microsoft YaHei",sans-serif;padding:20px;color:#111;font-size:11pt;max-width:800px;margin:0 auto}@media print{@page{size:A4;margin:18mm 15mm 20mm 15mm;@bottom-center{content:"SHEEN Toolbox · 噪声计算器";font-size:8pt;color:#666}}}h1{font-size:18pt;border-bottom:2px solid #7A1825;padding-bottom:8px}h2{font-size:14pt;margin-top:16px}table{border-collapse:collapse;width:100%;margin:10px 0}td,th{border:1px solid #999;padding:6px 10px;font-size:10pt}th{background:#eee}.val{font-weight:700;color:#7A1825}.meta{color:#666;font-size:9pt;margin-bottom:16px}.safe{color:#16A34A}.warn{color:#DC2626}.no-pr{display:none}</style></head><body>';
+  html+='<h1><i class="fa-solid fa-ear-listen"></i> '+titles[tab]+'</h1><p class="meta">生成时间: '+t+' · SHEEN Toolbox 噪声计算器</p>';
+  
+  if(tab===1){
+    var L=parseFloat(document.getElementById('leq').value)||92,Te=parseFloat(document.getElementById('te').value)||6,q=parseInt(document.getElementById('exRate').value),Lmax=parseFloat(document.getElementById('lmax').value)||0;
+    var LEX=L+10*Math.log10(Te/8),Tallowed=8/Math.pow(2,(L-85)/q),dose=(Te/Tallowed)*100;
+    html+='<h2>输入参数</h2><table><tr><td>噪声声级 L<sub>Aeq,Te</sub></td><td class="val">'+L.toFixed(1)+' dB(A)</td></tr><tr><td>接触时间 T<sub>e</sub></td><td class="val">'+Te.toFixed(1)+' h</td></tr><tr><td>交换率</td><td>'+q+' dB</td></tr>'+(Lmax>0?'<tr><td>最大瞬时声级 L<sub>max</sub></td><td class="val">'+Lmax.toFixed(1)+' dB(A)</td></tr>':'')+'</table>';
+    html+='<h2>计算结果</h2><table><tr><td>L<sub>EX,8h</sub></td><td class="val">'+LEX.toFixed(1)+' dB(A)</td></tr><tr><td>允许接触时间</td><td>'+Tallowed.toFixed(2)+' h</td></tr><tr><td>噪声剂量</td><td class="val '+(dose>100?'warn':'safe')+'">'+dose.toFixed(1)+'%'+(dose>100?' (超标)':' (安全)')+'</td></tr></table>';
+    if(Lmax>=115)html+='<p class="warn">⚠ L<sub>max</sub> = '+Lmax.toFixed(1)+' dB(A) 超过115 dB，需立即采取工程控制措施。</p>';
+  }else if(tab===2){
+    html+='<h2>任务清单</h2><table><tr><th>任务名称</th><th>声级 dB(A)</th><th>时长 (h)</th></tr>';
+    var totalT=0,sum=0;tasks.forEach(function(s){totalT+=s.time;sum+=s.time*Math.pow(10,s.level/10);html+='<tr><td>'+s.name+'</td><td class="val">'+s.level.toFixed(1)+'</td><td>'+s.time.toFixed(1)+'</td></tr>'});
+    html+='<tr style="font-weight:700"><td>合计 ('+tasks.length+'个任务)</td><td></td><td>'+totalT.toFixed(1)+' h</td></tr></table>';
+    var LAeq=10*Math.log10(sum/totalT),LEX=LAeq+10*Math.log10(totalT/8);
+    html+='<h2>计算结果</h2><table><tr><td>L<sub>Aeq,T</sub></td><td class="val">'+LAeq.toFixed(1)+' dB(A)</td></tr><tr><td>L<sub>EX,8h</sub></td><td class="val">'+LEX.toFixed(1)+' dB(A)</td></tr></table>';
+    if(totalT>8)html+='<p class="warn">⚠ 总暴露时长 '+totalT.toFixed(1)+'h 超过8小时标准班次。</p>';
+  }else if(tab===4){
+    var L=parseFloat(document.getElementById('hpLevel').value)||100,NRR=parseFloat(document.getElementById('hpNRR').value)||29,method=document.getElementById('hpMethod').value,type=document.getElementById('hpType').value;
+    var atten=method==='osha'?(NRR-7)/2:method==='niosh'?(type==='earplug'?NRR*0.3:type==='dual'?NRR*0.75:NRR*0.5):(parseFloat(document.getElementById('hpFactor').value)||0.5);
+    var pL=L-atten;
+    html+='<h2>防护参数</h2><table><tr><td>环境噪声</td><td class="val">'+L.toFixed(1)+' dB(A)</td></tr><tr><td>NRR 值</td><td class="val">'+NRR+' dB</td></tr><tr><td>护听器类型</td><td>'+document.getElementById('hpType').options[document.getElementById('hpType').selectedIndex].text+'</td></tr><tr><td>计算方法</td><td>'+document.getElementById('hpMethod').options[document.getElementById('hpMethod').selectedIndex].text+'</td></tr><tr><td>衰减值</td><td class="val">'+atten.toFixed(1)+' dB</td></tr></table>';
+    html+='<h2>结果</h2><table><tr><td>防护后暴露声级</td><td class="val '+(pL<85?'safe':'warn')+'">'+pL.toFixed(1)+' dB(A) '+(pL<85?'✓ 已降至安全线':'⚠ 需加强防护')+'</td></tr></table>';
+  }else if(tab===3){
+    var L=parseFloat(document.getElementById('gLeq').value)||92;
+    html+='<h2>分级参数</h2><table><tr><td>L<sub>EX,8h</sub></td><td class="val">'+L.toFixed(1)+' dB(A)</td></tr></table>';
+    var g;if(L<85)g='非噪声作业';else if(L<90)g='Ⅰ级 · 轻度危害';else if(L<94)g='Ⅱ级 · 中度危害';else if(L<97)g='Ⅲ级 · 重度危害';else g='Ⅳ级 · 极重危害';
+    html+='<h2>分级结果</h2><table><tr><td>危害等级</td><td class="val">'+g+'</td></tr></table>';
+  }
+  
+  html+='</body></html>';
   var b=new Blob(['\uFEFF'+html],{type:'application/vnd.ms-excel'});
-
   var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=titles[tab]+'.xls';a.click();URL.revokeObjectURL(a.href);
-
 }
 
 // ===== Init =====
-
 document.getElementById('printTime').textContent=getCNTime();
-
 loadSettings();loadTasks();calcSynth();calcTWA();calcTasks();
-
 </script>
 </body>
 
