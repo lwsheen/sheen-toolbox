@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="依据GB 50016《建筑设计防火规范》，根据建筑类别、耐火等级等条件自动查询防火间距">
+
+    <title>建筑防火间距查询 — SHEEN Toolbox</title>
+
+    <link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
+
+    <link rel="stylesheet" href="/sheen-toolbox/common.css">
+
+    <style>.dual-panel {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 20px;
+
+            margin-bottom: 20px;
+
+            max-width: 100%;
+
+            overflow: hidden;
+
+        }
+
+        .building-panel {
+
+            background: var(--bg-card);
+
+            border: 1px solid var(--border);
+
+            border-radius: var(--radius-lg);
+
+            padding: 24px;
+
+            position: relative;
+
+            max-width: 100%;
+
+            overflow: hidden;
+
+        }
+
+        .building-panel h3 {
+
+            font-size: 16px;
+
+            font-weight: 600;
+
+            margin-bottom: 16px;
+
+            padding-bottom: 10px;
+
+            border-bottom: 1px solid var(--border-light);
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+        }
+
+        .building-panel h3 .panel-icon {
+
+            width: 32px; height: 32px;
+
+            background: var(--brand-red-light);
+
+            color: var(--brand-red);
+
+            border-radius: 8px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 14px;
+
+        }
+
+        .form-row {
+
+            margin-bottom: 14px;
+
+        }
+
+        .form-row label {
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            margin-bottom: 4px;
+
+            display: block;
+
+            color: var(--text-primary);
+
+        }
+
+        .form-row label .req { color: var(--brand-red); }
+
+        .form-row .hint {
+
+            font-size: 11px;
+
+            color: var(--text-secondary);
+
+            margin-top: 2px;
+
+        }
+
+        .building-panel select
+
+        .cond-box h4 {
+
+        .distance-result {
+
+            text-align: center;
+
+            padding: 28px 24px;
+
+        }
+
+        .distance-result .dist-num {
+
+            font-size: 56px;
+
+            font-weight: 800;
+
+            color: var(--brand-red);
+
+            line-height: 1.1;
+
+        }
+
+        .distance-result .dist-unit {
+
+            font-size: 18px;
+
+            font-weight: 600;
+
+            color: var(--text-secondary);
+
+            margin-left: 4px;
+
+        }
+
+        .distance-result .dist-desc {
+
+            font-size: 14px;
+
+            color: var(--text-secondary);
+
+            margin-top: 8px;
+
+        }
+
+        .clause-ref {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 8px;
+
+            padding: 10px 14px;
+
+            background: var(--bg-page);
+
+            border-radius: var(--radius-sm);
+
+            margin-top: 12px;
+
+            font-size: 13px;
+
+            color: var(--text-secondary);
+
+        }
+
+        .clause-ref i { color: var(--brand-red); margin-top: 2px; }
+
+        .special-conditions {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 16px;
+
+            margin-top: 12px;
+
+        }
+
+        .cond-box {
+
+            border: 1px solid var(--border);
+
+            border-radius: var(--radius-md);
+
+            padding: 16px;
+
+        }
+
+        .cond-box h4 {
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            margin-bottom: 8px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+        }
+
+        .cond-box.reduce h4 { color: #16A34A; }
+
+        .cond-box.increase h4 { color: #DC2626; }
+
+        .cond-box ul {
+
+            list-style: none;
+
+            padding: 0;
+
+            margin: 0;
+
+        }
+
+        .cond-box li {
+
+            font-size: 12px;
+
+            color: var(--text-secondary);
+
+            padding: 3px 0;
+
+            padding-left: 14px;
+
+            position: relative;
+
+            line-height: 1.6;
+
+        }
+
+        .cond-box li::before {
+
+            content: '';
+
+            position: absolute;
+
+            left: 0;
+
+            top: 9px;
+
+            width: 6px;
+
+            height: 6px;
+
+            border-radius: 50%;
+
+        }
+
+        .cond-box.reduce li::before { background: #16A34A; }
+
+        .cond-box.increase li::before { background: #DC2626; }
+
+        .ref-table-wrap {
+
+            background: var(--bg-card);
+
+            border: 1px solid var(--border);
+
+            border-radius: var(--radius-lg);
+
+            overflow: hidden;
+
+            margin-top: 20px;
+
+        }
+
+        .ref-table-wrap summary {
+
+            padding: 16px 24px;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            user-select: none;
+
+            color: var(--text-primary);
+
+        }
+
+        .ref-table-wrap summary i { color: var(--brand-red); }
+
+        .ref-table-wrap 
+
+        .ref-table .highlight { background: var(--brand-red-light) !important; }
+
+        .ref-table .highlight td { font-weight: 600 !important; color: var(--brand-red) !important; }
+
+        @media (max-width: 768px) {
+
+            .dual-panel { grid-template-columns: 1fr; }
+
+        .special-conditions { grid-template-columns: 1fr; }
+
+            .distance-result .dist-num { font-size: 44px; }
+
+        }</style>
+
+</head>
+
+<body>
+
+<div class="breadcrumb">
+
+    <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+
+    <span> / 建筑防火间距查询</span>
+
+</div>
+
+<main class="app-container container-query">
+
+    <h1 class="page-title">建筑防火间距查询</h1>
+
+    <p class="page-subtitle" style="margin-bottom:20px;">依据 GB 50016-2014（2018年版）《建筑设计防火规范》，双向选择两栋建筑参数，自动查询最小防火间距要求</p>
+
+    <!-- 双栏选择器 -->
+
+    <div class="dual-panel">
+
+        <!-- 建筑 A -->
+
+        <div class="building-panel">
+
+            <h3><span class="panel-icon"><i class="fa-solid fa-building"></i></span> 建筑 A（本建筑）</h3>
+
+            <div class="form-row">
+
+                <label>建筑类型 <span class="req">*</span></label>
+
+                <select class="form-control" id="typeA" onchange="onTypeChange('A')">
+
+                    <option value="">请选择建筑类型</option>
+
+                    <optgroup label="民用建筑">
+
+                        <option value="civil_residential">住宅建筑</option>
+
+                        <option value="civil_public">公共建筑</option>
+
+                    </optgroup>
+
+                    <optgroup label="工业建筑">
+
+                        <option value="factory">厂房</option>
+
+                        <option value="warehouse">仓库</option>
+
+                    </optgroup>
+
+                </select>
+
+            </div>
+
+            <div class="form-row" id="rowHeightA" style="display:none">
+
+                <label>建筑高度 <span class="req">*</span></label>
+
+                <select class="form-control" id="heightA" onchange="calcDistance()">
+
+                </select>
+
+                <div class="hint" id="hintHeightA"></div>
+
+            </div>
+
+            <div class="form-row" id="rowFRRA" style="display:none">
+
+                <label>耐火等级 <span class="req">*</span></label>
+
+                <select class="form-control" id="frrA" onchange="calcDistance()">
+
+                    <option value="">请选择耐火等级</option>
+
+                </select>
+
+            </div>
+
+            <div class="form-row" id="rowHazardA" style="display:none">
+
+                <label>火灾危险性类别 <span class="req">*</span></label>
+
+                <select class="form-control" id="hazardA" onchange="calcDistance()">
+
+                    <option value="">请选择</option>
+
+                </select>
+
+            </div>
+
+            <div class="form-row" id="rowVolA" style="display:none">
+
+                <label>单罐最大储量 / 总储量</label>
+
+                <select class="form-control" id="volA" onchange="calcDistance()">
+
+                    <option value="normal">常规储量</option>
+
+                    <option value="large">大型储罐（查阅规范具体条款）</option>
+
+                </select>
+
+                <div class="hint">特殊储量类型影响间距，常规情况下选择"常规储量"</div>
+
+            </div>
+
+        </div>
+
+        <!-- 建筑 B -->
+
+        <div class="building-panel">
+
+            <h3><span class="panel-icon"><i class="fa-solid fa-building"></i></span> 建筑 B（相邻建筑）</h3>
+
+            <div class="form-row">
+
+                <label>建筑类型 <span class="req">*</span></label>
+
+                <select class="form-control" id="typeB" onchange="onTypeChange('B')">
+
+                    <option value="">请选择建筑类型</option>
+
+                    <optgroup label="民用建筑">
+
+                        <option value="civil_residential">住宅建筑</option>
+
+                        <option value="civil_public">公共建筑</option>
+
+                    </optgroup>
+
+                    <optgroup label="工业建筑">
+
+                        <option value="factory">厂房</option>
+
+                        <option value="warehouse">仓库</option>
+
+                    </optgroup>
+
+                </select>
+
+            </div>
+
+            <div class="form-row" id="rowHeightB" style="display:none">
+
+                <label>建筑高度 <span class="req">*</span></label>
+
+                <select class="form-control" id="heightB" onchange="calcDistance()">
+
+                </select>
+
+                <div class="hint" id="hintHeightB"></div>
+
+            </div>
+
+            <div class="form-row" id="rowFRRB" style="display:none">
+
+                <label>耐火等级 <span class="req">*</span></label>
+
+                <select class="form-control" id="frrB" onchange="calcDistance()">
+
+                    <option value="">请选择耐火等级</option>
+
+                </select>
+
+            </div>
+
+            <div class="form-row" id="rowHazardB" style="display:none">
+
+                <label>火灾危险性类别 <span class="req">*</span></label>
+
+                <select class="form-control" id="hazardB" onchange="calcDistance()">
+
+                    <option value="">请选择</option>
+
+                </select>
+
+            </div>
+
+            <div class="form-row" id="rowVolB" style="display:none">
+
+                <label>单罐最大储量 / 总储量</label>
+
+                <select class="form-control" id="volB" onchange="calcDistance()">
+
+                    <option value="normal">常规储量</option>
+
+                    <option value="large">大型储罐（查阅规范具体条款）</option>
+
+                </select>
+
+                <div class="hint">特殊储量类型影响间距，常规情况下选择"常规储量"</div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- 间距结果 -->
+
+    <div class="result-card" id="resultCard" style="display:none;">
+
+        <div class="distance-result">
+
+            <div class="dist-desc">最小防火间距要求</div>
+
+            <div>
+
+                <span class="dist-num" id="distNum">—</span>
+
+                <span class="dist-unit">m</span>
+
+            </div>
+
+            <div class="dist-desc" id="distDesc"></div>
+
+            <div class="clause-ref" id="clauseRef">
+
+                <i class="fa-solid fa-scale-balanced"></i>
+
+                <span id="clauseText"></span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- 特殊情况 -->
+
+    <div id="specialBox" style="display:none;">
+
+        <div class="special-conditions">
+
+            <div class="cond-box reduce">
+
+                <h4><i class="fa-solid fa-circle-arrow-down"></i> 允许减小间距的情形</h4>
+
+                <ul id="reduceList"></ul>
+
+            </div>
+
+            <div class="cond-box increase">
+
+                <h4><i class="fa-solid fa-circle-arrow-up"></i> 需要增加间距的情形</h4>
+
+                <ul id="increaseList"></ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- 参考数据表 -->
+
+    <details class="ref-table-wrap" open id="refTableWrap" style="display:none;">
+
+        <summary><i class="fa-solid fa-table-list"></i> 相关规范参考数据表</summary>
+
+        <div class="table-scroll" id="refTableContent"></div>
+
+    </details>
+
+</main>
+
+<footer class="sheen-footer">
+
+    <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 建筑防火间距查询
+        <span id="busuanzi_container_site_pv" class="site-stat">全站访问 <b><span id="busuanzi_value_site_pv">0</span></b> 次</span>
+        <span id="busuanzi_container_site_uv" class="site-stat">· 独立访客 <b><span id="busuanzi_value_site_uv">0</span></b> 人</span>
+</footer>
+
+<div class="print-time" id="printTime"></div>
+
+<script>
+
+(function() {
+
+    'use strict';
+
+    document.getElementById('printTime').textContent =
+
+        new Date().toISOString().replace('T', ' ').slice(0, 16);
+
+    // ============================================================
+
+    //  GB 50016-2014 防火间距数据
+
+    // ============================================================
+
+    // 民建分类: civilCat 映射到表格中的行/列
+
+    //  high_frr12   = 高层民用（耐火等级一、二级）
+
+    //  multi_frr12  = 单多层民用 一、二级
+
+    //  multi_frr3   = 单多层民用 三级
+
+    //  multi_frr4   = 单多层民用 四级
+
+    //
+
+    // 高层民用建筑必须不低于二级，超高层不低于一级
+
+    // ---- 表 5.2.2 民用建筑之间的防火间距 (m) ----
+
+    const CIVIL_DISTANCE = {
+
+        // Building category -> { adjacent category: distance }
+
+        'high_1':  { high_1:13, multi_frr12:9,  multi_frr3:11, multi_frr4:14 },
+
+        'high_2':  { high_1:13, high_2:13, multi_frr12:9,  multi_frr3:11, multi_frr4:14 },
+
+        'multi_frr12': { high_1:9,  high_2:9,  multi_frr12:6,  multi_frr3:7,  multi_frr4:9 },
+
+        'multi_frr3':  { high_1:11, high_2:11, multi_frr12:7,  multi_frr3:8,  multi_frr4:10 },
+
+        'multi_frr4':  { high_1:14, high_2:14, multi_frr12:9,  multi_frr3:10, multi_frr4:12 },
+
+    };
+
+    // ---- 表 3.4.1 厂房之间及厂房与民用建筑防火间距 (m) ----
+
+    // Key: 厂房火灾危险性类别
+
+    // Distances to: 甲/乙/丙/丁/戊类厂房, 民建(各耐火等级)
+
+    const FACTORY_DISTANCE = {
+
+        '甲': {
+
+            '甲_frr12':12, '甲_frr34':14,
+
+            '乙_frr12':12, '乙_frr34':14,
+
+            '丙_frr12':12, '丙_frr34':14,
+
+            '丁戊_frr12':12, '丁戊_frr34':14,
+
+            '民建_高层':50, '民建_frr12':25, '民建_frr3':25, '民建_frr4':25,
+
+            _label:'甲类厂房'
+
+        },
+
+        '乙': {
+
+            '甲_frr12':12, '甲_frr34':14,
+
+            '乙_frr12':10, '乙_frr34':12,
+
+            '丙_frr12':10, '丙_frr34':12,
+
+            '丁戊_frr12':10, '丁戊_frr34':12,
+
+            '民建_高层':50, '民建_frr12':25, '民建_frr3':25, '民建_frr4':25,
+
+            _label:'乙类厂房',
+
+            _note:'乙类厂房耐火等级不低于二级时距离甲类可减至 12m；单多层戊类之间可减按民建确定'
+
+        },
+
+        '丙': {
+
+            '甲_frr12':12, '甲_frr34':14,
+
+            '乙_frr12':10, '乙_frr34':12,
+
+            '丙_frr12':10, '丙_frr34':12,
+
+            '丁戊_frr12':10, '丁戊_frr34':12,
+
+            '民建_高层':20, '民建_frr12':10, '民建_frr3':12, '民建_frr4':14,
+
+            _label:'丙类厂房'
+
+        },
+
+        '丁': {
+
+            '甲_frr12':12, '甲_frr34':14,
+
+            '乙_frr12':10, '乙_frr34':12,
+
+            '丙_frr12':10, '丙_frr34':12,
+
+            '丁戊_frr12':10, '丁戊_frr34':12,
+
+            '民建_高层':15, '民建_frr12':10, '民建_frr3':12, '民建_frr4':14,
+
+            _label:'丁类厂房'
+
+        },
+
+        '戊': {
+
+            '甲_frr12':12, '甲_frr34':14,
+
+            '乙_frr12':10, '乙_frr34':12,
+
+            '丙_frr12':10, '丙_frr34':12,
+
+            '丁戊_frr12':10, '丁戊_frr34':12,
+
+            '民建_高层':15, '民建_frr12':10, '民建_frr3':12, '民建_frr4':14,
+
+            _label:'戊类厂房'
+
+        }
+
+    };
+
+    // ---- 表 3.5.1 / 3.5.2 仓库防火间距 ----
+
+    const WAREHOUSE_DISTANCE = {
+
+        '甲': {
+
+            '甲_frr12':20, '甲_frr34':20,
+
+            '乙_frr12':12, '乙_frr34':15,
+
+            '丙_frr12':15, '丙_frr34':20,
+
+            '丁戊_frr12':12, '丁戊_frr34':15,
+
+            '民建_高层':50, '民建_frr12':25, '民建_frr3':30, '民建_frr4':30,
+
+            _label:'甲类仓库'
+
+        },
+
+        '乙': {
+
+            '甲_frr12':12, '甲_frr34':15,
+
+            '乙_frr12':10, '乙_frr34':12,
+
+            '丙_frr12':10, '丙_frr34':12,
+
+            '丁戊_frr12':10, '丁戊_frr34':12,
+
+            '民建_高层':50, '民建_frr12':25, '民建_frr3':25, '民建_frr4':25,
+
+            _label:'乙类仓库'
+
+        },
+
+        '丙': {
+
+            '甲_frr12':15, '甲_frr34':20,
+
+            '乙_frr12':10, '乙_frr34':12,
+
+            '丙_frr12':10, '丙_frr34':12,
+
+            '丁戊_frr12':10, '丁戊_frr34':12,
+
+            '民建_高层':20, '民建_frr12':12, '民建_frr3':14, '民建_frr4':16,
+
+            _label:'丙类仓库'
+
+        },
+
+        '丁': {
+
+            '甲_frr12':12, '甲_frr34':15,
+
+            '乙_frr12':10, '乙_frr34':12,
+
+            '丙_frr12':10, '丙_frr34':12,
+
+            '丁戊_frr12':10, '丁戊_frr34':12,
+
+            '民建_高层':15, '民建_frr12':10, '民建_frr3':12, '民建_frr4':14,
+
+            _label:'丁类仓库'
+
+        },
+
+        '戊': {
+
+            '甲_frr12':12, '甲_frr34':15,
+
+            '乙_frr12':10, '乙_frr34':12,
+
+            '丙_frr12':10, '丙_frr34':12,
+
+            '丁戊_frr12':10, '丁戊_frr34':12,
+
+            '民建_高层':15, '民建_frr12':10, '民建_frr3':12, '民建_frr4':14,
+
+            _label:'戊类仓库'
+
+        }
+
+    };
+
+    // ============================================================
+
+    //  控件逻辑
+
+    // ============================================================
+
+    // 高度选项（民用）
+
+    function initCivilHeight(prefix) {
+
+        var sel = document.getElementById('height' + prefix);
+
+        sel.innerHTML = '<option value="">请选择高度类别</option>' +
+
+            '<option value="high_1">高层（耐火等级一级）</option>' +
+
+            '<option value="high_2">高层（耐火等级不低于二级）</option>' +
+
+            '<option value="multi">单多层建筑（≤27m 住宅 / ≤24m 公建）</option>';
+
+        var hint = document.getElementById('hintHeight' + prefix);
+
+        hint.textContent = '超高层（>100m）防火间距需专题论证';
+
+    }
+
+    function initIndustrialHeight(prefix) {
+
+        var sel = document.getElementById('height' + prefix);
+
+        sel.innerHTML = '<option value="">请选择建筑高度/层数</option>' +
+
+            '<option value="multi">单层（单多层厂房/仓库）</option>' +
+
+            '<option value="high">高层厂房/仓库（>24m 或二层以上）</option>';
+
+        var hint = document.getElementById('hintHeight' + prefix);
+
+        hint.textContent = '高层厂房/仓库与甲类厂房、甲类仓库间距应≥13m';
+
+    }
+
+    function initFRR(prefix, isCivil) {
+
+        var sel = document.getElementById('frr' + prefix);
+
+        if (isCivil) {
+
+            sel.innerHTML = '<option value="">请选择耐火等级</option>' +
+
+                '<option value="1">一级</option>' +
+
+                '<option value="2">二级</option>' +
+
+                '<option value="3">三级</option>' +
+
+                '<option value="4">四级</option>';
+
+        } else {
+
+            sel.innerHTML = '<option value="">请选择耐火等级</option>' +
+
+                '<option value="1">一级</option>' +
+
+                '<option value="2">二级</option>' +
+
+                '<option value="3">三级</option>' +
+
+                '<option value="4">四级（甲/乙类厂房不应低于二级）</option>';
+
+        }
+
+    }
+
+    function initHazard(prefix) {
+
+        var sel = document.getElementById('hazard' + prefix);
+
+        sel.innerHTML = '<option value="">请选择火灾危险性类别</option>' +
+
+            '<option value="甲">甲类</option>' +
+
+            '<option value="乙">乙类</option>' +
+
+            '<option value="丙">丙类</option>' +
+
+            '<option value="丁">丁类</option>' +
+
+            '<option value="戊">戊类</option>';
+
+    }
+
+    // 建筑类型切换
+
+    window.onTypeChange = function(prefix) {
+
+        var type = document.getElementById('type' + prefix).value;
+
+        var isCivil = type.startsWith('civil_');
+
+        // 高度
+
+        var rowH = document.getElementById('rowHeight' + prefix);
+
+        if (isCivil) {
+
+            rowH.style.display = 'block';
+
+            initCivilHeight(prefix);
+
+        } else if (type === 'factory' || type === 'warehouse') {
+
+            rowH.style.display = 'block';
+
+            initIndustrialHeight(prefix);
+
+        } else {
+
+            rowH.style.display = 'none';
+
+        }
+
+        // 耐火等级
+
+        var rowF = document.getElementById('rowFRR' + prefix);
+
+        rowF.style.display = type ? 'block' : 'none';
+
+        initFRR(prefix, isCivil);
+
+        // 火灾危险性
+
+        var rowHaz = document.getElementById('rowHazard' + prefix);
+
+        var isIndustrial = (type === 'factory' || type === 'warehouse');
+
+        rowHaz.style.display = isIndustrial ? 'block' : 'none';
+
+        if (isIndustrial) initHazard(prefix);
+
+        // 储量
+
+        var rowV = document.getElementById('rowVol' + prefix);
+
+        rowV.style.display = isIndustrial ? 'block' : 'none';
+
+        // VS divider
+
+        checkVsDivider();
+
+        calcDistance();
+
+    };
+
+    function getCategory(type, height, frr, hazard) {
+
+        if (!type || !height || !frr) return null;
+
+        if (type.startsWith('civil_')) {
+
+            if (height === 'high_1') return 'high_1';
+
+            if (height === 'high_2') return 'high_2';
+
+            if (height === 'multi') {
+
+                if (frr === '1' || frr === '2') return 'multi_frr12';
+
+                if (frr === '3') return 'multi_frr3';
+
+                if (frr === '4') return 'multi_frr4';
+
+            }
+
+            return null;
+
+        }
+
+        if (type === 'factory' || type === 'warehouse') {
+
+            if (!hazard) return null;
+
+            var frrCode = (frr === '1' || frr === '2') ? 'frr12' : 'frr34';
+
+            return { type: type, hazard: hazard, frr: frrCode, height: height };
+
+        }
+
+        return null;
+
+    }
+
+    function getCivilTarget(cat) {
+
+        if (cat === 'high_1' || cat === 'high_2') return '民建_高层';
+
+        if (cat === 'multi_frr12') return '民建_frr12';
+
+        if (cat === 'multi_frr3') return '民建_frr3';
+
+        if (cat === 'multi_frr4') return '民建_frr4';
+
+        return null;
+
+    }
+
+    function getIndustrialTarget(tgt) {
+
+        var h = tgt.hazard;
+
+        if (h === '甲') return '甲_' + tgt.frr;
+
+        if (h === '乙') return '乙_' + tgt.frr;
+
+        if (h === '丙') return '丙_' + tgt.frr;
+
+        if (h === '丁' || h === '戊') return '丁戊_' + tgt.frr;
+
+        return null;
+
+    }
+
+    // ============================================================
+
+    //  核心计算
+
+    // ============================================================
+
+    window.calcDistance = function() {
+
+        var typeA = document.getElementById('typeA').value;
+
+        var typeB = document.getElementById('typeB').value;
+
+        var heightA = document.getElementById('heightA').value;
+
+        var heightB = document.getElementById('heightB').value;
+
+        var frrA = document.getElementById('frrA').value;
+
+        var frrB = document.getElementById('frrB').value;
+
+        var hazardA = document.getElementById('hazardA').value;
+
+        var hazardB = document.getElementById('hazardB').value;
+
+        var rc = document.getElementById('resultCard');
+
+        var sb = document.getElementById('specialBox');
+
+        var rt = document.getElementById('refTableWrap');
+
+        var distNum = document.getElementById('distNum');
+
+        var distDesc = document.getElementById('distDesc');
+
+        var clauseText = document.getElementById('clauseText');
+
+        if (!typeA || !typeB || !heightA || !heightB || !frrA || !frrB) {
+
+            rc.style.display = 'none';
+
+            sb.style.display = 'none';
+
+            rt.style.display = 'none';
+
+            return;
+
+        }
+
+        var catA = getCategory(typeA, heightA, frrA, hazardA);
+
+        var catB = getCategory(typeB, heightB, frrB, hazardB);
+
+        if (!catA || !catB) {
+
+            rc.style.display = 'none';
+
+            sb.style.display = 'none';
+
+            return;
+
+        }
+
+        var isCivilA = typeA.startsWith('civil_');
+
+        var isCivilB = typeB.startsWith('civil_');
+
+        var distance = null;
+
+        var clause = '';
+
+        // --- Case 1: Civil vs Civil ---
+
+        if (isCivilA && isCivilB) {
+
+            distance = (CIVIL_DISTANCE[catA] && CIVIL_DISTANCE[catA][catB]) || null;
+
+            if (distance === null) distance = (CIVIL_DISTANCE[catB] && CIVIL_DISTANCE[catB][catA]) || null;
+
+            clause = 'GB 50016-2014（2018年版）表 5.2.2';
+
+        }
+
+        // --- Case 2: Civil A vs Industrial B ---
+
+        if (isCivilA && !isCivilB) {
+
+            var civilKey = getCivilTarget(catA);
+
+            if (catB.type === 'factory') {
+
+                distance = FACTORY_DISTANCE[catB.hazard][civilKey] || null;
+
+                clause = 'GB 50016-2014（2018年版）表 3.4.1';
+
+            } else {
+
+                distance = WAREHOUSE_DISTANCE[catB.hazard][civilKey] || null;
+
+                clause = catB.hazard === '甲'
+
+                    ? 'GB 50016-2014（2018年版）表 3.5.1'
+
+                    : 'GB 50016-2014（2018年版）表 3.5.2';
+
+            }
+
+        }
+
+        // --- Case 3: Industrial A vs Civil B ---
+
+        if (!isCivilA && isCivilB) {
+
+            var civilKey = getCivilTarget(catB);
+
+            if (catA.type === 'factory') {
+
+                distance = FACTORY_DISTANCE[catA.hazard][civilKey] || null;
+
+                clause = 'GB 50016-2014（2018年版）表 3.4.1';
+
+            } else {
+
+                distance = WAREHOUSE_DISTANCE[catA.hazard][civilKey] || null;
+
+                clause = catA.hazard === '甲'
+
+                    ? 'GB 50016-2014（2018年版）表 3.5.1'
+
+                    : 'GB 50016-2014（2018年版）表 3.5.2';
+
+            }
+
+        }
+
+        // --- Case 4: Industrial vs Industrial ---
+
+        if (!isCivilA && !isCivilB) {
+
+            // Determine the more hazardous one as primary lookup
+
+            var hazardOrder = { '甲':0, '乙':1, '丙':2, '丁':3, '戊':4 };
+
+            var primary, secondary, catPrimary, catSecondary, srcType;
+
+            if (hazardOrder[catA.hazard] <= hazardOrder[catB.hazard]) {
+
+                primary = catA; secondary = catB;
+
+            } else {
+
+                primary = catB; secondary = catA;
+
+            }
+
+            var secKey = getIndustrialTarget(secondary);
+
+            srcType = primary.type;
+
+            if (srcType === 'factory') {
+
+                distance = FACTORY_DISTANCE[primary.hazard][secKey] || null;
+
+                clause = 'GB 50016-2014（2018年版）表 3.4.1';
+
+            } else {
+
+                distance = WAREHOUSE_DISTANCE[primary.hazard][secKey] || null;
+
+                clause = primary.hazard === '甲'
+
+                    ? 'GB 50016-2014（2018年版）表 3.5.1'
+
+                    : 'GB 50016-2014（2018年版）表 3.5.2';
+
+            }
+
+        }
+
+        // --- Special: 高层 → 高层厂房/仓库相关 ---
+
+        if (isCivilA && !isCivilB && catA && (catA === 'high_1' || catA === 'high_2')) {
+
+            if (catB.type === 'factory' && catB.height === 'high') {
+
+                distance = Math.max(distance || 0, 13);
+
+            }
+
+            if (catB.type === 'warehouse' && catB.height === 'high') {
+
+                distance = Math.max(distance || 0, 13);
+
+            }
+
+        }
+
+        if (!isCivilA && isCivilB && catB && (catB === 'high_1' || catB === 'high_2')) {
+
+            if (catA.type === 'factory' && catA.height === 'high') {
+
+                distance = Math.max(distance || 0, 13);
+
+            }
+
+            if (catA.type === 'warehouse' && catA.height === 'high') {
+
+                distance = Math.max(distance || 0, 13);
+
+            }
+
+        }
+
+        // --- Display ---
+
+        rc.style.display = 'block';
+
+        if (distance !== null && distance !== undefined) {
+
+            distNum.textContent = distance;
+
+            distDesc.textContent = '两栋建筑之间的最小防火间距（外墙凸出部分从外缘算起）';
+
+            clauseText.textContent = '依据：' + clause;
+
+            populateSpecials(typeA, typeB, isCivilA, isCivilB, catA, catB);
+
+            sb.style.display = 'block';
+
+            buildRefTable(typeA, typeB, isCivilA, isCivilB, catA, catB, clause);
+
+            rt.style.display = 'block';
+
+        } else {
+
+            distNum.textContent = '—';
+
+            distDesc.textContent = '请检查参数选择或参考规范原文';
+
+            clauseText.textContent = '未匹配到对应数值，可能是特殊组合，请查阅规范原文';
+
+            sb.style.display = 'none';
+
+            rt.style.display = 'none';
+
+        }
+
+    };
+
+    // ============================================================
+
+    //  特殊情况
+
+    // ============================================================
+
+    function populateSpecials(typeA, typeB, isCivA, isCivB, catA, catB) {
+
+        var reduceList = document.getElementById('reduceList');
+
+        var increaseList = document.getElementById('increaseList');
+
+        var reduce = [];
+
+        var increase = [];
+
+        // 通用允许减小
+
+        reduce.push('两栋建筑相邻较高一面外墙为防火墙，或高出相邻较低建筑屋面 15m 及以下范围外墙为防火墙时，防火间距不限（5.2.2 注 2）');
+
+        reduce.push('相邻两座高度相同的一、二级耐火等级建筑中，相邻任一侧外墙为防火墙且屋顶耐火极限≥1.00h 时，防火间距不限（5.2.2 注 3）');
+
+        reduce.push('相邻两座建筑中较低一座耐火等级不低于二级，相邻较低一面外墙为防火墙且屋顶无天窗、耐火极限≥1.00h 时，其防火间距可适当减小：高层民用≥4m，单多层民用≥3.5m（5.2.2 注 4）');
+
+        reduce.push('相邻两座建筑中较低一座耐火等级不低于二级且屋顶无天窗，相邻较高一面外墙高出较低建筑屋面 15m 及以下开口部位设置甲级防火门窗或防火卷帘时，可减小 25%（5.2.2 注 5）');
+
+        reduce.push('两座丙、丁、戊类厂房相邻两面外墙均为不燃性墙体，当无外露可燃性屋檐、每面外墙门窗洞口面积之和≤外墙面积 5% 且不正对开设时，防火间距可减少 25%（3.4.1 注 3）');
+
+        // 工业专属
+
+        var isIndA = !isCivA;
+
+        var isIndB = !isCivB;
+
+        if (isIndA || isIndB) {
+
+            reduce.push('单多层戊类厂房之间及与民用建筑之间可按民用建筑防火间距执行（3.4.1 注 1）');
+
+            reduce.push('丙、丁、戊类厂房与民用建筑耐火等级为一、二级时，可适当减小（3.4.1 注 2）');
+
+        }
+
+        // 需要增加
+
+        increase.push('甲、乙类厂房（仓库）不应与除为满足工艺要求而必须设置的相邻建筑外的其他建筑贴邻（3.4.1 / 3.5.1）');
+
+        increase.push('散发可燃气体、可燃蒸气的甲类厂房与重要公共建筑距离不应小于 50m，与明火或散发火花地点不应小于 30m（3.4.2）');
+
+        increase.push('高层厂房与甲、乙、丙类液体储罐，可燃、助燃气体储罐的防火间距应符合本规范第 4 章规定（3.4.3）');
+
+        increase.push('超高层建筑（>100m）的防火间距应按国家相关主管部门要求，必要时进行专题论证');
+
+        reduceList.innerHTML = reduce.map(function(s) { return '<li>' + s + '</li>'; }).join('');
+
+        increaseList.innerHTML = increase.map(function(s) { return '<li>' + s + '</li>'; }).join('');
+
+    }
+
+    // ============================================================
+
+    //  参考数据表
+
+    // ============================================================
+
+    function buildRefTable(typeA, typeB, isCivA, isCivB, catA, catB, clause) {
+
+        var container = document.getElementById('refTableContent');
+
+        var html = '';
+
+        if (isCivA && isCivB) {
+
+            html += '<table class="ref-table"><thead><tr>' +
+
+                '<th>建筑类别</th>' +
+
+                '<th>高层民用</th>' +
+
+                '<th>单多层 一、二级</th>' +
+
+                '<th>单多层 三级</th>' +
+
+                '<th>单多层 四级</th>' +
+
+                '</tr></thead><tbody>';
+
+            var rows = [
+
+                ['高层民用', 13, 9, 11, 14],
+
+                ['单多层 一、二级', 9, 6, 7, 9],
+
+                ['单多层 三级', 11, 7, 8, 10],
+
+                ['单多层 四级', 14, 9, 10, 12]
+
+            ];
+
+            for (var i = 0; i < rows.length; i++) {
+
+                var isMatchA = (catA === rows[i][0] || (catA === 'high_1' && rows[i][0] === '高层民用') || (catA === 'high_2' && rows[i][0] === '高层民用'));
+
+                var trClass = isMatchA ? ' class="highlight"' : '';
+
+                html += '<tr' + trClass + '>';
+
+                html += '<td><strong>' + rows[i][0] + '</strong></td>';
+
+                for (var j = 1; j < rows[i].length; j++) {
+
+                    html += '<td>' + rows[i][j] + '</td>';
+
+                }
+
+                html += '</tr>';
+
+            }
+
+            html += '</tbody></table>';
+
+        } else {
+
+            // For industrial cases, show the relevant lookup table
+
+            if (clause.indexOf('3.4.1') > -1) {
+
+                html += '<table class="ref-table"><thead><tr>' +
+
+                    '<th>厂房类别</th><th>甲类厂房</th><th>乙类厂房</th><th>丙类厂房</th>' +
+
+                    '<th>丁戊类厂房</th><th>高层民用</th><th>民建一二级</th><th>民建三级</th><th>民建四级</th>' +
+
+                    '</tr></thead><tbody>';
+
+                var fRows = [
+
+                    ['甲类厂房', '12 / 14<sup>注</sup>', '12 / 14', '12 / 14', '12 / 14', 50, 25, 25, 25],
+
+                    ['乙类厂房', '12 / 14', '10 / 12', '10 / 12', '10 / 12', 50, 25, 25, 25],
+
+                    ['丙类厂房', '12 / 14', '10 / 12', '10 / 12', '10 / 12', 20, 10, 12, 14],
+
+                    ['丁类厂房', '12 / 14', '10 / 12', '10 / 12', '10 / 12', 15, 10, 12, 14],
+
+                    ['戊类厂房', '12 / 14', '10 / 12', '10 / 12', '10 / 12', 15, 10, 12, 14]
+
+                ];
+
+                for (var fi = 0; fi < fRows.length; fi++) {
+
+                    html += '<tr><td><strong>' + fRows[fi][0] + '</strong></td>';
+
+                    for (var fj = 1; fj < fRows[fi].length; fj++) {
+
+                        html += '<td>' + fRows[fi][fj] + '</td>';
+
+                    }
+
+                    html += '</tr>';
+
+                }
+
+                html += '</tbody></table>';
+
+                html += '<p style="font-size:11px;color:var(--text-secondary);padding:0 24px 12px;">注：斜杠前为一/二级耐火等级间距，斜杠后为三/四级间距。甲类厂房与重要公共建筑≥50m，与明火点≥30m。</p>';
+
+            } else {
+
+                html += '<table class="ref-table"><thead><tr>' +
+
+                    '<th>仓库类别</th><th>甲类仓库</th><th>乙类仓库</th><th>丙类仓库</th>' +
+
+                    '<th>丁戊类仓库</th><th>高层民用</th><th>民建一二级</th><th>民建三级</th><th>民建四级</th>' +
+
+                    '</tr></thead><tbody>';
+
+                var wRows = [
+
+                    ['甲类仓库', '20', '12 / 15', '15 / 20', '12 / 15', 50, 25, 30, 30],
+
+                    ['乙类仓库', '12 / 15', '10 / 12', '10 / 12', '10 / 12', 50, 25, 25, 25],
+
+                    ['丙类仓库', '15 / 20', '10 / 12', '10 / 12', '10 / 12', 20, 12, 14, 16],
+
+                    ['丁类仓库', '12 / 15', '10 / 12', '10 / 12', '10 / 12', 15, 10, 12, 14],
+
+                    ['戊类仓库', '12 / 15', '10 / 12', '10 / 12', '10 / 12', 15, 10, 12, 14]
+
+                ];
+
+                for (var wi = 0; wi < wRows.length; wi++) {
+
+                    html += '<tr><td><strong>' + wRows[wi][0] + '</strong></td>';
+
+                    for (var wj = 1; wj < wRows[wi].length; wj++) {
+
+                        html += '<td>' + wRows[wi][wj] + '</td>';
+
+                    }
+
+                    html += '</tr>';
+
+                }
+
+                html += '</tbody></table>';
+
+                html += '<p style="font-size:11px;color:var(--text-secondary);padding:0 24px 12px;">注：表 3.5.1 (甲类仓库) / 表 3.5.2 (乙丙丁戊类仓库)。斜杠前为一/二级耐火等级间距，斜杠后为三/四级间距。</p>';
+
+            }
+
+        }
+
+        container.innerHTML = html;
+
+    }
+
+})();
+
+</script>
+    
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" onerror="var p=document.getElementById('busuanzi_value_site_pv');var u=document.getElementById('busuanzi_value_site_uv');if(p)p.textContent='—';if(u)u.textContent='—';"></script>
+</body>
+
+</html>
+
