@@ -443,6 +443,8 @@ label {
   .ref-table thead th, .ref-table tbody td { padding: 6px 8px; }
   .table-scroll { margin: 0 -16px; padding: 0 16px; }
   .sheen-footer { padding: 14px 20px; font-size: 12px; }
+  /* 移动端不显示访问统计（仅 PC 端展示） */
+  .site-stat { display: none !important; }
 }
 
 @media (max-width: 480px) {
