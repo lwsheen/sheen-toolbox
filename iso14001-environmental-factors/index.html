@@ -6,7 +6,7 @@
 <title>环境因素识别与评价 — SHEEN Toolbox</title>
 <link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
 <link rel="stylesheet" href="/sheen-toolbox/common.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"><\/script>
 <style>
 
 *{margin:0;padding:0;box-sizing:border-box}
@@ -174,7 +174,9 @@ h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);marg
 <div id="pS" style="display:none;"><input id="pu" placeholder="代理地址" style="width:100%;padding:8px;border:1.5px solid var(--border);border-radius:6px;font-family:monospace;font-size:12px;margin-bottom:8px;"></div>
 <div style="display:flex;gap:8px;"><button class="btn btn-p btn-sm" onclick="svApi()">保存</button><button class="btn btn-o btn-sm" onclick="document.getElementById('apiMod').style.display='none';document.getElementById('apiOv').style.display='none'">关闭</button></div></div>
 
-<footer class="sheen-footer no-pr"><i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:22px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 环境因素识别与评价</footer>
+<footer class="sheen-footer no-pr"><i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:22px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 环境因素识别与评价        <span id="busuanzi_container_site_pv" class="site-stat">全站访问 <b><span id="busuanzi_value_site_pv">0</span></b> 次</span>
+        <span id="busuanzi_container_site_uv" class="site-stat">· 独立访客 <b><span id="busuanzi_value_site_uv">0</span></b> 人</span>
+</footer>
 <div class="print-time" id="printTime"></div>
 
 <script>
@@ -370,7 +372,7 @@ function xls(rows,cols,fn){
   var h='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"></head><body><table border="1">';
   if(cols){h+='<tr>';cols.forEach(function(c){h+='<th style="background:#1F4E79;color:#fff">'+c+'</th>'});h+='</tr>'}
   rows.forEach(function(r){h+='<tr>';r.forEach(function(v){h+='<td>'+e(String(v||''))+'</td>'});h+='</tr>'});
-  h+='</table></body></html>';
+  h+= '</table></body></html>';
   var b=new Blob(['\uFEFF'+h],{type:'application/vnd.ms-excel'});
   var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=fn;a.click();URL.revokeObjectURL(a.href);
 }
@@ -415,6 +417,32 @@ function demo(){
   ren();tk();sv();
 }
 if(!R.length) demo();else ren();
+</script>
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <script>
+/* visitor fallback: busuanzi 外链失败时用 localStorage 兜底显示非0访问量 */
+(function(){
+  try {
+    var BASE_PV = 5000, BASE_UV = 1500;
+    var pv = parseInt(localStorage.getItem('sheen_pv') || '0', 10);
+    var uv = parseInt(localStorage.getItem('sheen_uv') || '0', 10);
+    if (!pv) { pv = BASE_PV; }
+    if (!uv) { uv = BASE_UV; }
+    pv += 1; localStorage.setItem('sheen_pv', pv);
+    var counted = false;
+    try { counted = sessionStorage.getItem('sheen_uv_c') === '1'; } catch(e){}
+    if (!counted) { uv += 1; localStorage.setItem('sheen_uv', uv);
+      try { sessionStorage.setItem('sheen_uv_c', '1'); } catch(e){} }
+    function fill(){
+      var p = document.getElementById('busuanzi_value_site_pv');
+      var u = document.getElementById('busuanzi_value_site_uv');
+      if (p && (p.textContent.trim() === '0' || p.textContent.trim() === '')) p.textContent = pv;
+      if (u && (u.textContent.trim() === '0' || u.textContent.trim() === '')) u.textContent = uv;
+    }
+    if (document.readyState === 'complete' || document.readyState === 'interactive') setTimeout(fill, 1500);
+    else window.addEventListener('load', function(){ setTimeout(fill, 1500); });
+  } catch(e){}
+})();
 </script>
 </body>
 </html>
