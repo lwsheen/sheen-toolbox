@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>环保税计算器 — SHEEN Toolbox</title>
+<link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
+<link rel="stylesheet" href="/sheen-toolbox/common.css">
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg-page);color:var(--text-primary);line-height:1.6}
+
+
+
+
+
+
+
+
+
+
+
+h1{font-size:20px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);margin-bottom:14px}
+
+.tabs{display:flex;gap:2px;margin-bottom:14px;flex-wrap:wrap;border-bottom:2px solid var(--border)}
+.tab{padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--text-secondary);border-bottom:3px solid transparent;transition:all .2s;font-family:inherit;white-space:nowrap}
+.tab:hover{color:var(--brand-red)}.tab.active{color:var(--brand-red);border-bottom-color:var(--brand-red)}.tab i{margin-right:4px}
+.tc{display:none}.tc.active{display:block}
+
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.card h3{font-size:14px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.card h3 i{color:var(--brand-red)}
+.hint{font-size:11px;color:var(--text-secondary);margin-bottom:10px;padding:6px 10px;background:var(--bg-page);border-radius:6px}
+
+.form-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}
+.form-group{flex:1;min-width:140px}
+.form-group.w-sm{flex:0.6;min-width:100px}
+.form-group.w-lg{flex:2;min-width:240px}
+.form-group label{display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:3px}
+.form-group label .unit{font-weight:400;font-size:10px;color:#9CA3AF}
+.form-control{width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;background:var(--bg-card);color:var(--text-primary);font-family:inherit}
+.form-control:focus{outline:none;border-color:var(--brand-red);box-shadow:0 0 0 3px rgba(122,24,37,.06)}
+select.form-control{cursor:pointer}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:10px 24px;border-radius:60px;font-size:14px;font-weight:600;cursor:pointer;transition:all .25s;border:none;font-family:inherit}
+.btn-p{background:var(--brand-red);color:#fff}.btn-p:hover{background:var(--brand-red-hover);transform:translateY(-1px);box-shadow:0 6px 16px rgba(122,24,37,.2)}
+.btn-o{background:var(--bg-card);border:1.5px solid var(--border);color:var(--text-primary)}.btn-o:hover{border-color:var(--brand-red);color:var(--brand-red)}
+.btn-bad{background:var(--bg-card);color:var(--brand-red);border:1.5px solid var(--brand-red)}.btn-bad:hover{background:var(--brand-red-light)}
+.btn-sm{padding:5px 10px;font-size:10px}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+
+.result-box{margin-top:12px}
+.result-card{background:var(--brand-red-light);border:2px solid var(--brand-red);border-radius:16px;padding:16px 20px;text-align:center;margin-bottom:10px}
+.result-card .rc-val{font-size:36px;font-weight:700;color:var(--brand-red);line-height:1.1}
+.result-card .rc-label{font-size:11px;color:var(--text-secondary);margin-top:2px}
+.result-card .rc-note{font-size:12px;color:var(--text-secondary);margin-top:6px}
+
+.batch-list{list-style:none;font-size:12px}
+.batch-list li{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-bottom:1px solid var(--border);gap:8px}
+.batch-list li .bl-info{flex:1;min-width:0}
+.batch-list li .bl-val{font-weight:600;color:var(--brand-red);white-space:nowrap}
+.batch-list li button{background:none;border:none;color:#9CA3AF;cursor:pointer;font-size:14px;padding:2px 4px;transition:all .15s}
+.batch-list li button:hover{color:#DC2626}
+.batch-total{display:flex;justify-content:space-between;padding:8px 10px;font-weight:700;font-size:14px;border-top:2px solid var(--brand-red);margin-top:4px}
+.batch-total .bt-val{color:var(--brand-red);font-size:18px}
+.empty-state{text-align:center;padding:20px;color:var(--text-secondary);font-size:12px}
+
+.tbl-w{overflow-x:auto}
+.dt{min-width:400px;border-collapse:collapse;font-size:10px}
+.dt th,.dt td{padding:5px 8px;border:1px solid var(--border);text-align:center;vertical-align:middle}
+.dt th{background:#1F4E79;color:#fff;font-weight:700;font-size:10px}.dt td{background:var(--bg-card)}
+
+details{margin-top:4px}
+details summary{font-size:12px;font-weight:600;color:var(--text-secondary);cursor:pointer;padding:6px 0;user-select:none;display:flex;align-items:center;gap:5px}
+details summary i{font-size:11px;color:var(--brand-red)}
+
+
+
+@media(max-width:768px){
+  
+  .form-group{min-width:100%}
+  .result-card .rc-val{font-size:28px}
+}
+@media print{
+  @page{size:A4;margin:18mm 15mm 20mm 15mm;@bottom-center{content:"SHEEN Toolbox · 环保税计算器";font-size:8pt;color:#666}}
+  body{background:#fff!important;font-size:11pt;color:#000!important}.sheen-footer,.tabs,.btn,.no-pr{display:none!important}
+  
+  .card{box-shadow:none!important;border:1.5px solid #333!important;break-inside:avoid;padding:10px!important;border-radius:0!important}
+  .result-card{box-shadow:none!important;break-inside:avoid;background:#f9f9f9!important;border:1.5px solid #333!important;border-left:6px solid #000!important}
+  .result-card .rc-val{color:#000!important}
+  .dt th{background:#eee!important;color:#000!important}
+  .tc{display:none!important}.tc.pt{display:block!important}
+  .form-card{display:none!important}
+  
+  details{display:block!important}details summary{display:none!important}
+}
+</style>
+</head>
+<body>
+
+
+
+    <div class="breadcrumb">
+        <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+        <span> / 环保税计算器</span>
+    </div>
+<main class="app-container container-calc">
+<h1><i class="fa-solid fa-leaf"></i> 环保税计算器</h1>
+<p class="sub">基于《中华人民共和国环境保护税法》· 四大类污染物自动计算 · 内置当量值/税率参考表</p>
+
+<!-- Province + Tax Rate selector (shared) -->
+<div class="card form-card" style="margin-bottom:14px">
+<h3><i class="fa-solid fa-map-location-dot"></i> 省份税率参考</h3>
+<div class="hint">选择省份自动填充大气/水污染物适用税额，也可手动修改</div>
+<div class="form-row">
+  <div class="form-group w-sm">
+    <label>省份</label>
+    <select id="province" class="form-control" onchange="setProvinceRate()">
+      <option value="custom">自定义…</option>
+      <option value="beijing">北京 (大气12 / 水14)</option>
+      <option value="tianjin">天津 (大气10 / 水12)</option>
+      <option value="shanghai">上海 (大气7.6 / 水5)</option>
+      <option value="guangdong" selected>广东 (大气1.8 / 水2.8)</option>
+      <option value="jiangsu">江苏 (大气4.8 / 水5.6)</option>
+      <option value="zhejiang">浙江 (大气1.2 / 水1.4)</option>
+      <option value="shandong">山东 (大气6 / 水3)</option>
+      <option value="sichuan">四川 (大气3.9 / 水2.8)</option>
+      <option value="henan">河南 (大气4.8 / 水5.6)</option>
+      <option value="hubei">湖北 (大气2.4 / 水2.8)</option>
+      <option value="hunan">湖南 (大气2.4 / 水3)</option>
+      <option value="fujian">福建 (大气1.2 / 水1.4)</option>
+      <option value="hebei">河北 (大气4.8/6/9.6 / 水5.6/7/11.2)</option>
+      <option value="chongqing">重庆 (大气3.5 / 水3)</option>
+      <option value="other">其他省份 (大气1.2 / 水1.4)</option>
+    </select>
+  </div>
+  <div class="form-group w-sm">
+    <label>大气污染物税额 <span class="unit">(元/污染当量)</span></label>
+    <input type="number" id="taxAir" class="form-control" step="0.01" value="1.8" min="0.01">
+  </div>
+  <div class="form-group w-sm">
+    <label>水污染物税额 <span class="unit">(元/污染当量)</span></label>
+    <input type="number" id="taxWater" class="form-control" step="0.01" value="2.8" min="0.01">
+  </div>
+</div>
+</div>
+
+<div class="tabs no-pr">
+<button class="tab active" onclick="sw(0)"><i class="fa-solid fa-wind"></i>大气污染物</button>
+<button class="tab" onclick="sw(1)"><i class="fa-solid fa-droplet"></i>水污染物</button>
+<button class="tab" onclick="sw(2)"><i class="fa-solid fa-cubes"></i>固体废物</button>
+<button class="tab" onclick="sw(3)"><i class="fa-solid fa-volume-high"></i>噪声</button>
+<button class="tab" onclick="sw(4)"><i class="fa-solid fa-calculator"></i>汇总</button>
+</div>
+
+<!-- TAB 0: 大气污染物 -->
+<div class="tc active" id="t0">
+<div class="card form-card">
+<h3><i class="fa-solid fa-wind"></i> 大气污染物计税</h3>
+<div class="hint">应纳税额 = 排放量(kg) ÷ 污染当量值(kg) × 适用税额(元/污染当量)</div>
+<div class="form-row">
+  <div class="form-group w-lg">
+    <label>污染物名称</label>
+    <select id="airPollutant" class="form-control" onchange="onAirPollutant()">
+      <optgroup label="常规气态污染物">
+        <option value="0.95">二氧化硫 (SO₂) — 当量值 0.95 kg</option>
+        <option value="0.95" data-name="氮氧化物">氮氧化物 (NOₓ) — 当量值 0.95 kg</option>
+        <option value="16.7">一氧化碳 (CO) — 当量值 16.7 kg</option>
+      </optgroup>
+      <optgroup label="颗粒物">
+        <option value="4">一般性粉尘 — 当量值 4 kg</option>
+        <option value="2.18" selected>烟尘 — 当量值 2.18 kg</option>
+      </optgroup>
+      <optgroup label="无机气体">
+        <option value="0.34">氯气 (Cl₂) — 当量值 0.34 kg</option>
+        <option value="10.75">氯化氢 (HCl) — 当量值 10.75 kg</option>
+        <option value="0.87">氟化物 — 当量值 0.87 kg</option>
+        <option value="0.005">氰化氢 (HCN) — 当量值 0.005 kg</option>
+        <option value="0.29">硫化氢 (H₂S) — 当量值 0.29 kg</option>
+        <option value="9.09">氨 (NH₃) — 当量值 9.09 kg</option>
+        <option value="0.6">硫酸雾 — 当量值 0.6 kg</option>
+        <option value="0.0007">铬酸雾 — 当量值 0.0007 kg</option>
+      </optgroup>
+      <optgroup label="有机气体">
+        <option value="0.05">苯 — 当量值 0.05 kg</option>
+        <option value="0.05">甲苯 — 当量值 0.05 kg</option>
+        <option value="0.05">二甲苯 — 当量值 0.05 kg</option>
+        <option value="0.000002">苯并[a]芘 — 当量值 0.000002 kg</option>
+        <option value="0.09">甲醛 — 当量值 0.09 kg</option>
+        <option value="0.45">乙醛 — 当量值 0.45 kg</option>
+        <option value="0.67">甲醇 — 当量值 0.67 kg</option>
+        <option value="0.35">酚类 — 当量值 0.35 kg</option>
+        <option value="0.19">沥青烟 — 当量值 0.19 kg</option>
+      </optgroup>
+      <optgroup label="重金属">
+        <option value="0.0001">汞及其化合物 — 当量值 0.0001 kg</option>
+        <option value="0.02">铅及其化合物 — 当量值 0.02 kg</option>
+        <option value="0.03">镉及其化合物 — 当量值 0.03 kg</option>
+        <option value="0.0004">铍及其化合物 — 当量值 0.0004 kg</option>
+        <option value="0.13">镍及其化合物 — 当量值 0.13 kg</option>
+        <option value="0.27">锡及其化合物 — 当量值 0.27 kg</option>
+      </optgroup>
+      <option value="custom">自定义污染物…</option>
+    </select>
+  </div>
+  <div class="form-group w-sm">
+    <label>污染当量值 <span class="unit">(kg)</span></label>
+    <input type="number" id="airEq" class="form-control" step="any" value="2.18" min="0.000001" oninput="autoCalc('air')">
+  </div>
+</div>
+<div class="form-row">
+  <div class="form-group w-sm">
+    <label>月排放量 <span class="unit">(kg)</span></label>
+    <input type="number" id="airQty" class="form-control" step="0.01" value="1000" min="0" oninput="autoCalc('air')">
+  </div>
+  <div class="form-group w-sm" id="airCustomName" style="display:none">
+    <label>污染物名称</label>
+    <input type="text" id="airName" class="form-control" placeholder="自定义污染物名称">
+  </div>
+  <div class="form-group w-sm" style="align-self:flex-end">
+    <button class="btn btn-p btn-sm" onclick="addAirItem()"><i class="fa-solid fa-plus"></i> 添加</button>
+  </div>
+</div>
+<div id="airResult" style="margin-top:8px"></div>
+</div>
+
+<div class="card">
+<h3><i class="fa-solid fa-list-check"></i> 大气污染物清单</h3>
+<ul class="batch-list" id="airList"></ul>
+<div class="batch-total" id="airTotal"><span>小计（大气污染物）</span><span class="bt-val">¥ 0.00</span></div>
+<div class="btn-row no-pr">
+  <button class="btn btn-bad btn-sm" onclick="prt('air')"><i class="fa-solid fa-print"></i> 打印</button>
+  <button class="btn btn-o btn-sm" onclick="exp('air')"><i class="fa-solid fa-file-export"></i> 导出</button>
+  <button class="btn btn-o btn-sm" onclick="clearList('air')"><i class="fa-solid fa-trash"></i> 清空</button>
+</div>
+</div>
+
+<details class="card no-pr" open style="margin-top:0"><summary><i class="fa-solid fa-table"></i> 大气污染物污染当量值参考表</summary><div class="tbl-w"><table class="dt"><thead><tr><th>污染物</th><th>当量值(kg)</th><th>污染物</th><th>当量值(kg)</th></tr></thead><tbody>
+<tr><td>二氧化硫</td><td>0.95</td><td>氮氧化物</td><td>0.95</td></tr>
+<tr><td>一氧化碳</td><td>16.7</td><td>氯气</td><td>0.34</td></tr>
+<tr><td>氯化氢</td><td>10.75</td><td>氟化物</td><td>0.87</td></tr>
+<tr><td>氰化氢</td><td>0.005</td><td>硫化氢</td><td>0.29</td></tr>
+<tr><td>氨</td><td>9.09</td><td>硫酸雾</td><td>0.6</td></tr>
+<tr><td>铬酸雾</td><td>0.0007</td><td>一般性粉尘</td><td>4</td></tr>
+<tr><td>烟尘</td><td>2.18</td><td>苯</td><td>0.05</td></tr>
+<tr><td>甲苯</td><td>0.05</td><td>二甲苯</td><td>0.05</td></tr>
+<tr><td>苯并[a]芘</td><td>0.000002</td><td>甲醛</td><td>0.09</td></tr>
+<tr><td>乙醛</td><td>0.45</td><td>甲醇</td><td>0.67</td></tr>
+<tr><td>酚类</td><td>0.35</td><td>沥青烟</td><td>0.19</td></tr>
+<tr><td>汞及其化合物</td><td>0.0001</td><td>铅及其化合物</td><td>0.02</td></tr>
+<tr><td>镉及其化合物</td><td>0.03</td><td>铍及其化合物</td><td>0.0004</td></tr>
+<tr><td>镍及其化合物</td><td>0.13</td><td>锡及其化合物</td><td>0.27</td></tr>
+</tbody></table></div></details>
+</div>
+
+<!-- TAB 1: 水污染物 -->
+<div class="tc" id="t1">
+<div class="card form-card">
+<h3><i class="fa-solid fa-droplet"></i> 水污染物计税</h3>
+<div class="hint">应纳税额 = 排放量(kg) ÷ 污染当量值(kg) × 适用税额(元/污染当量) · 同一排放口按当量数前5项或前3项计征</div>
+<div class="form-row">
+  <div class="form-group w-lg">
+    <label>污染物名称</label>
+    <select id="waterPollutant" class="form-control" onchange="onWaterPollutant()">
+      <optgroup label="常规指标">
+        <option value="1" selected>化学需氧量 (COD) — 当量值 1 kg</option>
+        <option value="0.8">氨氮 (NH₃-N) — 当量值 0.8 kg</option>
+        <option value="0.25">总磷 (TP) — 当量值 0.25 kg</option>
+        <option value="0.25">总氮 (TN) — 当量值 0.25 kg</option>
+        <option value="4">悬浮物 (SS) — 当量值 4 kg</option>
+        <option value="0.5">五日生化需氧量 (BOD₅) — 当量值 0.5 kg</option>
+      </optgroup>
+      <optgroup label="有机物">
+        <option value="0.1">石油类 — 当量值 0.1 kg</option>
+        <option value="0.08">挥发酚 — 当量值 0.08 kg</option>
+        <option value="0.05">阴离子表面活性剂(LAS) — 当量值 0.05 kg</option>
+        <option value="0.125">苯胺类 — 当量值 0.125 kg</option>
+        <option value="0.02">硝基苯类 — 当量值 0.02 kg</option>
+      </optgroup>
+      <optgroup label="重金属及无机物">
+        <option value="0.05">氰化物 — 当量值 0.05 kg</option>
+        <option value="0.125">硫化物 — 当量值 0.125 kg</option>
+        <option value="0.5">氟化物 — 当量值 0.5 kg</option>
+        <option value="0.0005">总汞 — 当量值 0.0005 kg</option>
+        <option value="0.005">总镉 — 当量值 0.005 kg</option>
+        <option value="0.04">总铬 — 当量值 0.04 kg</option>
+        <option value="0.02">六价铬 — 当量值 0.02 kg</option>
+        <option value="0.02">总砷 — 当量值 0.02 kg</option>
+        <option value="0.025">总铅 — 当量值 0.025 kg</option>
+        <option value="0.025">总镍 — 当量值 0.025 kg</option>
+        <option value="0.2">总铜 — 当量值 0.2 kg</option>
+        <option value="0.2">总锌 — 当量值 0.2 kg</option>
+      </optgroup>
+      <optgroup label="其他">
+        <option value="0.02">甲醛 — 当量值 0.02 kg</option>
+        <option value="0.49">动植物油 — 当量值 0.49 kg</option>
+        <option value="0.125">有机磷农药 — 当量值 0.125 kg</option>
+      </optgroup>
+      <option value="custom">自定义污染物…</option>
+    </select>
+  </div>
+  <div class="form-group w-sm">
+    <label>污染当量值 <span class="unit">(kg)</span></label>
+    <input type="number" id="waterEq" class="form-control" step="any" value="1" min="0.000001" oninput="autoCalc('water')">
+  </div>
+</div>
+<div class="form-row">
+  <div class="form-group w-sm">
+    <label>月排放量 <span class="unit">(kg)</span></label>
+    <input type="number" id="waterQty" class="form-control" step="0.01" value="500" min="0" oninput="autoCalc('water')">
+  </div>
+  <div class="form-group w-sm" id="waterCustomName" style="display:none">
+    <label>污染物名称</label>
+    <input type="text" id="waterName" class="form-control" placeholder="自定义污染物名称">
+  </div>
+  <div class="form-group w-sm" style="align-self:flex-end">
+    <button class="btn btn-p btn-sm" onclick="addWaterItem()"><i class="fa-solid fa-plus"></i> 添加</button>
+  </div>
+</div>
+<div id="waterResult" style="margin-top:8px"></div>
+</div>
+
+<div class="card">
+<h3><i class="fa-solid fa-list-check"></i> 水污染物清单</h3>
+<ul class="batch-list" id="waterList"></ul>
+<div class="batch-total" id="waterTotal"><span>小计（水污染物 · 按当量值前5项）</span><span class="bt-val">¥ 0.00</span></div>
+<div class="btn-row no-pr">
+  <button class="btn btn-bad btn-sm" onclick="prt('water')"><i class="fa-solid fa-print"></i> 打印</button>
+  <button class="btn btn-o btn-sm" onclick="exp('water')"><i class="fa-solid fa-file-export"></i> 导出</button>
+  <button class="btn btn-o btn-sm" onclick="clearList('water')"><i class="fa-solid fa-trash"></i> 清空</button>
+</div>
+</div>
+
+<details class="card no-pr" open style="margin-top:0"><summary><i class="fa-solid fa-table"></i> 水污染物污染当量值参考表</summary><div class="tbl-w"><table class="dt"><thead><tr><th>污染物</th><th>当量值(kg)</th><th>污染物</th><th>当量值(kg)</th></tr></thead><tbody>
+<tr><td>化学需氧量(COD)</td><td>1</td><td>氨氮(NH₃-N)</td><td>0.8</td></tr>
+<tr><td>总磷(TP)</td><td>0.25</td><td>总氮(TN)</td><td>0.25</td></tr>
+<tr><td>悬浮物(SS)</td><td>4</td><td>BOD₅</td><td>0.5</td></tr>
+<tr><td>石油类</td><td>0.1</td><td>挥发酚</td><td>0.08</td></tr>
+<tr><td>LAS</td><td>0.05</td><td>苯胺类</td><td>0.125</td></tr>
+<tr><td>硝基苯类</td><td>0.02</td><td>氰化物</td><td>0.05</td></tr>
+<tr><td>硫化物</td><td>0.125</td><td>氟化物</td><td>0.5</td></tr>
+<tr><td>总汞</td><td>0.0005</td><td>总镉</td><td>0.005</td></tr>
+<tr><td>总铬</td><td>0.04</td><td>六价铬</td><td>0.02</td></tr>
+<tr><td>总砷</td><td>0.02</td><td>总铅</td><td>0.025</td></tr>
+<tr><td>总镍</td><td>0.025</td><td>总铜</td><td>0.2</td></tr>
+<tr><td>总锌</td><td>0.2</td><td>甲醛</td><td>0.02</td></tr>
+<tr><td>动植物油</td><td>0.49</td><td>有机磷农药</td><td>0.125</td></tr>
+</tbody></table></div></details>
+</div>
+
+<!-- TAB 2: 固体废物 -->
+<div class="tc" id="t2">
+<div class="card form-card">
+<h3><i class="fa-solid fa-cubes"></i> 固体废物计税</h3>
+<div class="hint">应纳税额 = 排放量(吨) × 适用税额(元/吨) · 不同废物类型税额差异大</div>
+<div class="form-row">
+  <div class="form-group">
+    <label>固体废物类型</label>
+    <select id="solidType" class="form-control" onchange="onSolidType()">
+      <option value="5">煤矸石 — 5 元/吨</option>
+      <option value="15">尾矿 — 15 元/吨</option>
+      <option value="1000" selected>危险废物 — 1000 元/吨</option>
+      <option value="25">冶炼渣 — 25 元/吨</option>
+      <option value="25">粉煤灰 — 25 元/吨</option>
+      <option value="25">炉渣 — 25 元/吨</option>
+      <option value="25">其他固体废物（含半固态、液态废物）— 25 元/吨</option>
+      <option value="custom">自定义税额…</option>
+    </select>
+  </div>
+  <div class="form-group w-sm">
+    <label>适用税额 <span class="unit">(元/吨)</span></label>
+    <input type="number" id="solidRate" class="form-control" step="0.01" value="1000" min="0" oninput="autoCalc('solid')">
+  </div>
+</div>
+<div class="form-row">
+  <div class="form-group w-sm">
+    <label>月排放量 <span class="unit">(吨)</span></label>
+    <input type="number" id="solidQty" class="form-control" step="0.01" value="2" min="0" oninput="autoCalc('solid')">
+  </div>
+  <div class="form-group w-sm" id="solidCustomName" style="display:none">
+    <label>废物名称</label>
+    <input type="text" id="solidName" class="form-control" placeholder="自定义废物名称">
+  </div>
+  <div class="form-group w-sm" style="align-self:flex-end">
+    <button class="btn btn-p btn-sm" onclick="addSolidItem()"><i class="fa-solid fa-plus"></i> 添加</button>
+  </div>
+</div>
+<div id="solidResult" style="margin-top:8px"></div>
+</div>
+
+<div class="card">
+<h3><i class="fa-solid fa-list-check"></i> 固体废物清单</h3>
+<ul class="batch-list" id="solidList"></ul>
+<div class="batch-total" id="solidTotal"><span>小计（固体废物）</span><span class="bt-val">¥ 0.00</span></div>
+<div class="btn-row no-pr">
+  <button class="btn btn-bad btn-sm" onclick="prt('solid')"><i class="fa-solid fa-print"></i> 打印</button>
+  <button class="btn btn-o btn-sm" onclick="exp('solid')"><i class="fa-solid fa-file-export"></i> 导出</button>
+  <button class="btn btn-o btn-sm" onclick="clearList('solid')"><i class="fa-solid fa-trash"></i> 清空</button>
+</div>
+</div>
+
+<details class="card no-pr" open style="margin-top:0"><summary><i class="fa-solid fa-table"></i> 固体废物税额参考表</summary><div class="tbl-w"><table class="dt"><thead><tr><th>固体废物类型</th><th>税额(元/吨)</th><th>固体废物类型</th><th>税额(元/吨)</th></tr></thead><tbody>
+<tr><td>煤矸石</td><td>5</td><td>尾矿</td><td>15</td></tr>
+<tr><td>危险废物</td><td>1000</td><td>冶炼渣</td><td>25</td></tr>
+<tr><td>粉煤灰</td><td>25</td><td>炉渣</td><td>25</td></tr>
+<tr><td>其他固体废物</td><td>25</td><td>—</td><td>—</td></tr>
+</tbody></table></div>
+<div class="hint" style="margin-top:8px;font-size:10px">注：危险废物包括医疗废物、废药品、废农药、废有机溶剂、废矿物油、废酸、废碱、含重金属废物等。</div></details>
+</div>
+
+<!-- TAB 3: 噪声 -->
+<div class="tc" id="t3">
+<div class="card form-card">
+<h3><i class="fa-solid fa-volume-high"></i> 建筑施工噪声计税</h3>
+<div class="hint">噪声超标分贝数按月计征，应纳税额取决于超标等级 · 一个单位边界上多处噪声超标，按最高超标等级计算</div>
+<div class="form-row">
+  <div class="form-group">
+    <label>超标分贝数范围</label>
+    <select id="noiseLevel" class="form-control" onchange="autoCalc('noise')">
+      <option value="350">超标 1–3 分贝 — 350 元/月</option>
+      <option value="700" selected>超标 4–6 分贝 — 700 元/月</option>
+      <option value="1400">超标 7–9 分贝 — 1,400 元/月</option>
+      <option value="2800">超标 10–12 分贝 — 2,800 元/月</option>
+      <option value="5600">超标 13–15 分贝 — 5,600 元/月</option>
+      <option value="11200">超标 16 分贝以上 — 11,200 元/月</option>
+    </select>
+  </div>
+  <div class="form-group w-sm">
+    <label>超标月数</label>
+    <input type="number" id="noiseMonths" class="form-control" step="1" value="3" min="0.5" oninput="autoCalc('noise')">
+  </div>
+  <div class="form-group w-sm" style="align-self:flex-end">
+    <button class="btn btn-p btn-sm" onclick="addNoiseItem()"><i class="fa-solid fa-plus"></i> 添加</button>
+  </div>
+</div>
+<div id="noiseResult" style="margin-top:8px"></div>
+</div>
+
+<div class="card">
+<h3><i class="fa-solid fa-list-check"></i> 建筑噪声计税清单</h3>
+<ul class="batch-list" id="noiseList"></ul>
+<div class="batch-total" id="noiseTotal"><span>小计（噪声）</span><span class="bt-val">¥ 0.00</span></div>
+<div class="btn-row no-pr">
+  <button class="btn btn-bad btn-sm" onclick="prt('noise')"><i class="fa-solid fa-print"></i> 打印</button>
+  <button class="btn btn-o btn-sm" onclick="exp('noise')"><i class="fa-solid fa-file-export"></i> 导出</button>
+  <button class="btn btn-o btn-sm" onclick="clearList('noise')"><i class="fa-solid fa-trash"></i> 清空</button>
+</div>
+</div>
+
+<details class="card no-pr" open style="margin-top:0"><summary><i class="fa-solid fa-table"></i> 建筑施工噪声税额参考表</summary><div class="tbl-w"><table class="dt"><thead><tr><th>超标分贝数</th><th>税额(元/月)</th><th>超标分贝数</th><th>税额(元/月)</th></tr></thead><tbody>
+<tr><td>1–3 dB</td><td>350</td><td>4–6 dB</td><td>700</td></tr>
+<tr><td>7–9 dB</td><td>1,400</td><td>10–12 dB</td><td>2,800</td></tr>
+<tr><td>13–15 dB</td><td>5,600</td><td>16 dB 以上</td><td>11,200</td></tr>
+</tbody></table></div>
+<div class="hint" style="margin-top:8px;font-size:10px">注：1. 夜间频繁突发噪声和夜间偶然突发噪声按等效声级和峰值噪声超标分贝数计算，税额标准相同。<br>2. 一个单位有不同地点作业场所的，应当分别计算，合并计征。<br>3. 昼、夜均超标的环境噪声，昼、夜分别计算，累计计征。</div></details>
+</div>
+
+<!-- TAB 4: 汇总 -->
+<div class="tc" id="t4">
+<div class="card">
+<h3><i class="fa-solid fa-calculator"></i> 环保税汇总</h3>
+<div class="hint">以下为所有已添加污染物的汇总结果</div>
+<div class="result-card" id="summaryCard">
+  <div class="rc-label">应纳环保税总额</div>
+  <div class="rc-val" id="grandTotal">¥ 0.00</div>
+  <div class="rc-note" id="grandNote">尚未添加任何污染物</div>
+</div>
+<div class="btn-row no-pr" style="justify-content:center">
+  <button class="btn btn-p" onclick="prt('summary')"><i class="fa-solid fa-print"></i> 汇总打印</button>
+  <button class="btn btn-bad" onclick="exp('summary')"><i class="fa-solid fa-file-export"></i> 汇总导出</button>
+</div>
+</div>
+
+<details class="card no-pr" open style="margin-top:0"><summary><i class="fa-solid fa-table"></i> 省份环保税税率速查表（大气/水污染物）</summary><div class="tbl-w"><table class="dt"><thead><tr><th>省份</th><th>大气(元/当量)</th><th>水(元/当量)</th><th>省份</th><th>大气(元/当量)</th><th>水(元/当量)</th></tr></thead><tbody>
+<tr><td>北京</td><td>12</td><td>14</td><td>天津</td><td>10</td><td>12</td></tr>
+<tr><td>河北</td><td>梯4.8/6/9.6</td><td>梯5.6/7/11.2</td><td>山西</td><td>1.8</td><td>2.1</td></tr>
+<tr><td>内蒙古</td><td>1.2/1.8/2.4</td><td>1.4/2.1/2.8</td><td>辽宁</td><td>1.2</td><td>1.4</td></tr>
+<tr><td>上海</td><td>6.65/7.6</td><td>5</td><td>江苏</td><td>4.8/6/8.4</td><td>5.6/7/8.4</td></tr>
+<tr><td>浙江</td><td>1.2/1.8/2.4</td><td>1.4/2.1/3.5</td><td>安徽</td><td>1.2</td><td>1.4</td></tr>
+<tr><td>福建</td><td>1.2</td><td>1.4</td><td>江西</td><td>1.2</td><td>1.4</td></tr>
+<tr><td>山东</td><td>6(SO₂/NOₓ)</td><td>3</td><td>河南</td><td>4.8</td><td>5.6</td></tr>
+<tr><td>湖北</td><td>2.4(SO₂/NOₓ)</td><td>2.8</td><td>湖南</td><td>2.4</td><td>3</td></tr>
+<tr><td>广东</td><td>1.8</td><td>2.8</td><td>广西</td><td>1.8</td><td>2.8</td></tr>
+<tr><td>海南</td><td>2.4</td><td>2.8</td><td>重庆</td><td>3.5</td><td>3</td></tr>
+<tr><td>四川</td><td>3.9</td><td>2.8</td><td>贵州</td><td>2.4</td><td>2.8</td></tr>
+<tr><td>云南</td><td>1.2</td><td>1.4</td><td>西藏</td><td>1.2</td><td>1.4</td></tr>
+<tr><td>陕西</td><td>1.2</td><td>1.4</td><td>甘肃</td><td>1.2</td><td>1.4</td></tr>
+<tr><td>青海</td><td>1.2</td><td>1.4</td><td>宁夏</td><td>1.2</td><td>1.4</td></tr>
+<tr><td>新疆</td><td>1.2</td><td>1.4</td><td>吉林</td><td>1.2</td><td>1.4</td></tr>
+<tr><td>黑龙江</td><td>1.2</td><td>1.4</td><td>—</td><td>—</td><td>—</td></tr>
+</tbody></table></div></details>
+</div>
+
+</main>
+
+<footer class="sheen-footer"><i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:22px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 环保税计算器        <span id="busuanzi_container_site_pv" class="site-stat">全站访问 <b><span id="busuanzi_value_site_pv">0</span></b> 次</span>
+        <span id="busuanzi_container_site_uv" class="site-stat">· 独立访客 <b><span id="busuanzi_value_site_uv">0</span></b> 人</span>
+</footer>
+<div class="print-time" id="printTime"></div>
+
+<script>
+// ===== Tabs =====
+function sw(n){
+  document.querySelectorAll('.tab').forEach(function(t,i){t.classList.toggle('active',i===n)});
+  document.querySelectorAll('.tc').forEach(function(c,i){c.classList.toggle('active',i===n)});
+  if(n===4) updateSummary();
+}
+
+// ===== Province rate =====
+var provinceRates={
+  beijing:[12,14],tianjin:[10,12],shanghai:[7.6,5],
+  guangdong:[1.8,2.8],jiangsu:[4.8,5.6],zhejiang:[1.2,1.4],
+  shandong:[6,3],sichuan:[3.9,2.8],henan:[4.8,5.6],
+  hubei:[2.4,2.8],hunan:[2.4,3],fujian:[1.2,1.4],
+  hebei:[4.8,5.6],chongqing:[3.5,3],other:[1.2,1.4]
+};
+function setProvinceRate(){
+  var p=document.getElementById('province').value;
+  if(p==='custom')return;
+  var r=provinceRates[p];
+  document.getElementById('taxAir').value=r[0];
+  document.getElementById('taxWater').value=r[1];
+}
+
+// ===== Data store =====
+var data={air:[],water:[],solid:[],noise:[]};
+
+// ===== Custom name toggles =====
+function toggleCustom(cat,show){
+  var elId=cat==='air'?'airCustomName':(cat==='water'?'waterCustomName':'solidCustomName');
+  document.getElementById(elId).style.display=show?'block':'none';
+}
+
+// ===== Pollutant select handlers =====
+function onAirPollutant(){
+  var s=document.getElementById('airPollutant');
+  if(s.value==='custom'){toggleCustom('air',true);return;}
+  toggleCustom('air',false);
+  document.getElementById('airEq').value=s.value;
+  autoCalc('air');
+}
+function onWaterPollutant(){
+  var s=document.getElementById('waterPollutant');
+  if(s.value==='custom'){toggleCustom('water',true);return;}
+  toggleCustom('water',false);
+  document.getElementById('waterEq').value=s.value;
+  autoCalc('water');
+}
+function onSolidType(){
+  var s=document.getElementById('solidType');
+  if(s.value==='custom'){toggleCustom('solid',true);return;}
+  toggleCustom('solid',false);
+  document.getElementById('solidRate').value=s.value;
+  autoCalc('solid');
+}
+
+// ===== Auto-calc preview =====
+function autoCalc(cat){
+  if(cat==='air'){
+    var q=parseFloat(document.getElementById('airQty').value)||0;
+    var v=parseFloat(document.getElementById('airEq').value)||1;
+    var t=parseFloat(document.getElementById('taxAir').value)||0;
+    if(q>0&&v>0){
+      var n=q/v, tax=n*t;
+      document.getElementById('airResult').innerHTML='<div class="hint">当量数：<strong>'+n.toFixed(2)+'</strong> · 应纳税额：<strong style="color:var(--brand-red)">¥ '+tax.toFixed(2)+'</strong></div>';
+    }else{document.getElementById('airResult').innerHTML='';}
+  }else if(cat==='water'){
+    var q=parseFloat(document.getElementById('waterQty').value)||0;
+    var v=parseFloat(document.getElementById('waterEq').value)||1;
+    var t=parseFloat(document.getElementById('taxWater').value)||0;
+    if(q>0&&v>0){
+      var n=q/v, tax=n*t;
+      document.getElementById('waterResult').innerHTML='<div class="hint">当量数：<strong>'+n.toFixed(2)+'</strong> · 应纳税额：<strong style="color:var(--brand-red)">¥ '+tax.toFixed(2)+'</strong></div>';
+    }else{document.getElementById('waterResult').innerHTML='';}
+  }else if(cat==='solid'){
+    var q=parseFloat(document.getElementById('solidQty').value)||0;
+    var r=parseFloat(document.getElementById('solidRate').value)||0;
+    if(q>0&&r>0){
+      var tax=q*r;
+      document.getElementById('solidResult').innerHTML='<div class="hint">应纳税额：<strong style="color:var(--brand-red)">¥ '+tax.toFixed(2)+'</strong></div>';
+    }else{document.getElementById('solidResult').innerHTML='';}
+  }else if(cat==='noise'){
+    var r=parseFloat(document.getElementById('noiseLevel').value)||0;
+    var m=parseFloat(document.getElementById('noiseMonths').value)||0;
+    if(r>0&&m>0){
+      var tax=r*m;
+      document.getElementById('noiseResult').innerHTML='<div class="hint">应纳税额：<strong style="color:var(--brand-red)">¥ '+tax.toFixed(2)+'</strong></div>';
+    }else{document.getElementById('noiseResult').innerHTML='';}
+  }
+}
+
+// ===== Get pollutant display name =====
+function getAirName(){
+  var s=document.getElementById('airPollutant');
+  if(s.value==='custom')return document.getElementById('airName').value||'自定义污染物';
+  return s.options[s.selectedIndex].text.split(' —')[0];
+}
+function getWaterName(){
+  var s=document.getElementById('waterPollutant');
+  if(s.value==='custom')return document.getElementById('waterName').value||'自定义污染物';
+  return s.options[s.selectedIndex].text.split(' —')[0];
+}
+function getSolidName(){
+  var s=document.getElementById('solidType');
+  if(s.value==='custom')return document.getElementById('solidName').value||'自定义废物';
+  return s.options[s.selectedIndex].text.split(' —')[0];
+}
+
+// ===== Add items =====
+function addAirItem(){
+  var q=parseFloat(document.getElementById('airQty').value)||0;
+  var v=parseFloat(document.getElementById('airEq').value)||0;
+  var t=parseFloat(document.getElementById('taxAir').value)||0;
+  if(q<=0||v<=0||t<=0){alert('请填写完整的排放量、当量值和税额');return;}
+  var n=q/v, tax=n*t;
+  var name=getAirName();
+  data.air.push({name:name,qty:q,eq:v,rate:t,equiv:n,tax:tax});
+  renderList('air');
+}
+function addWaterItem(){
+  var q=parseFloat(document.getElementById('waterQty').value)||0;
+  var v=parseFloat(document.getElementById('waterEq').value)||0;
+  var t=parseFloat(document.getElementById('taxWater').value)||0;
+  if(q<=0||v<=0||t<=0){alert('请填写完整的排放量、当量值和税额');return;}
+  var n=q/v, tax=n*t;
+  var name=getWaterName();
+  data.water.push({name:name,qty:q,eq:v,rate:t,equiv:n,tax:tax});
+  // Keep only top 5 by equiv number
+  data.water.sort(function(a,b){return b.equiv-a.equiv});
+  if(data.water.length>5)data.water=data.water.slice(0,5);
+  renderList('water');
+}
+function addSolidItem(){
+  var q=parseFloat(document.getElementById('solidQty').value)||0;
+  var r=parseFloat(document.getElementById('solidRate').value)||0;
+  if(q<=0||r<=0){alert('请填写完整的排放量和税额');return;}
+  var tax=q*r;
+  var name=getSolidName();
+  data.solid.push({name:name,qty:q,rate:r,tax:tax});
+  renderList('solid');
+}
+function addNoiseItem(){
+  var r=parseFloat(document.getElementById('noiseLevel').value)||0;
+  var m=parseFloat(document.getElementById('noiseMonths').value)||0;
+  if(r<=0||m<=0){alert('请填写超标月数');return;}
+  var tax=r*m;
+  var sel=document.getElementById('noiseLevel');
+  var name=sel.options[sel.selectedIndex].text.split(' —')[0];
+  // Check if same level exists, keep highest
+  var dup=data.noise.findIndex(function(x){return x.name===name});
+  if(dup>=0){
+    if(m>data.noise[dup].months){data.noise[dup].months=m;data.noise[dup].tax=tax;}
+  }else{
+    data.noise.push({name:name,rate:r,months:m,tax:tax});
+  }
+  renderList('noise');
+}
+
+// ===== Render lists =====
+function fmt(n){return n.toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function renderList(cat){
+  var list=data[cat], el=document.getElementById(cat+'List'), totalEl=document.getElementById(cat+'Total');
+  if(!list.length){el.innerHTML='<li class="empty-state">暂无数据，请添加污染物</li>';totalEl.innerHTML='<span>小计</span><span class="bt-val">¥ 0.00</span>';updateSummary();return;}
+  var total=0, html='';
+  list.forEach(function(item,i){
+    total+=item.tax;
+    var desc=cat==='noise'?'× '+item.months+' 月':(cat==='solid'?(item.qty+' 吨 × '+item.rate+' 元/吨'):(item.qty+' kg ÷ '+item.eq+' kg/当量 × '+item.rate+' 元/当量'));
+    html+='<li><div class="bl-info"><strong>'+item.name+'</strong> <span style="color:var(--text-secondary)">'+desc+'</span></div><div class="bl-val">¥ '+fmt(item.tax)+'</div><button onclick="removeItem(\''+cat+'\','+i+')" title="删除"><i class="fa-solid fa-xmark"></i></button></li>';
+  });
+  el.innerHTML=html;
+  var label=cat==='noise'?'小计（噪声）':(cat==='solid'?'小计（固体废物）':(cat==='water'?'小计（水污染物 · 前5项）':'小计（大气污染物）'));
+  totalEl.innerHTML='<span>'+label+'</span><span class="bt-val">¥ '+fmt(total)+'</span>';
+  updateSummary();
+}
+function removeItem(cat,i){data[cat].splice(i,1);renderList(cat)}
+function clearList(cat){data[cat]=[];renderList(cat)}
+
+// ===== Update grand total =====
+function updateSummary(){
+  var totals={air:0,water:0,solid:0,noise:0};
+  ['air','water','solid','noise'].forEach(function(cat){
+    data[cat].forEach(function(item){totals[cat]+=item.tax});
+  });
+  var grand=totals.air+totals.water+totals.solid+totals.noise;
+  document.getElementById('grandTotal').textContent='¥ '+fmt(grand);
+  var parts=[];
+  if(totals.air>0)parts.push('大气 ¥'+fmt(totals.air));
+  if(totals.water>0)parts.push('水 ¥'+fmt(totals.water));
+  if(totals.solid>0)parts.push('固废 ¥'+fmt(totals.solid));
+  if(totals.noise>0)parts.push('噪声 ¥'+fmt(totals.noise));
+  document.getElementById('grandNote').textContent=parts.length?parts.join(' + '):'尚未添加任何污染物';
+}
+
+// ===== Print =====
+function prt(cat){
+  var tabs={air:0,water:1,solid:2,noise:3,summary:4};
+  var n=tabs[cat];
+  document.querySelectorAll('.tc').forEach(function(c,i){c.classList.remove('pt');if(i===n)c.classList.add('pt')});
+  document.querySelectorAll('details').forEach(function(d){d.setAttribute('open','')});
+  window.print();
+  setTimeout(function(){document.querySelectorAll('.tc').forEach(function(c){c.classList.remove('pt')})},500);
+}
+
+// ===== Export =====
+function exp(cat){
+  var tData={air:{title:'大气污染物',list:data.air},water:{title:'水污染物',list:data.water},solid:{title:'固体废物',list:data.solid},noise:{title:'噪声',list:data.noise},summary:{title:'汇总',list:[]}};
+  var td=tData[cat];if(!td)return;
+  var printTime=new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000).toISOString().replace('T',' ').slice(0,16);
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>环保税计算 — '+td.title+'</title><style>body{font-family:sans-serif;padding:16px;color:#111;font-size:11pt}@media print{@page{size:A4;margin:18mm 15mm 20mm 15mm;@bottom-center{content:"SHEEN Toolbox · 环保税计算器";font-size:8pt;color:#666}}}h2{font-size:16pt}h3{font-size:12pt}table{border-collapse:collapse;width:100%;margin:8px 0}td,th{border:1px solid #999;padding:5px 8px;font-size:10pt;text-align:center}th{background:#eee}.total{font-weight:700;font-size:14pt;color:#7A1825}.no-pr{display:none}</style></head><body><div class="print-time">'+printTime+'</div><h2>环保税计算 — '+td.title+'</h2>';
+  if(cat==='summary'){
+    ['air','water','solid','noise'].forEach(function(c){
+      if(!data[c].length)return;
+      html+='<h3>'+tData[c].title+'</h3><table><tr><th>名称</th><th>计算明细</th><th>税额(元)</th></tr>';
+      var sub=0;
+      data[c].forEach(function(item){
+        sub+=item.tax;
+        var desc=c==='noise'?item.months+' 月':(c==='solid'?(item.qty+' 吨 × '+item.rate+' 元/吨'):(item.qty+' kg ÷ '+item.eq+' kg/当量 × '+item.rate+' 元/当量'));
+        html+='<tr><td>'+item.name+'</td><td>'+desc+'</td><td>'+fmt(item.tax)+'</td></tr>';
+      });
+      html+='<tr style="font-weight:700"><td colspan="2">小计</td><td>'+fmt(sub)+'</td></tr></table>';
+    });
+    var grand=data.air.reduce(function(s,x){return s+x.tax},0)+data.water.reduce(function(s,x){return s+x.tax},0)+data.solid.reduce(function(s,x){return s+x.tax},0)+data.noise.reduce(function(s,x){return s+x.tax},0);
+    html+='<p class="total">应纳环保税总额：¥ '+fmt(grand)+'</p>';
+  }else{
+    html+='<table><tr><th>名称</th><th>计算明细</th><th>税额(元)</th></tr>';
+    var total=0;
+    td.list.forEach(function(item){
+      total+=item.tax;
+      var desc=cat==='noise'?item.months+' 月':(cat==='solid'?(item.qty+' 吨 × '+item.rate+' 元/吨'):(item.qty+' kg ÷ '+item.eq+' kg/当量 × '+item.rate+' 元/当量'));
+      html+='<tr><td>'+item.name+'</td><td>'+desc+'</td><td>'+fmt(item.tax)+'</td></tr>';
+    });
+    html+='<tr style="font-weight:700"><td colspan="2">合计</td><td>'+fmt(total)+'</td></tr></table>';
+    html+='<p class="total">'+td.title+'应纳税额：¥ '+fmt(total)+'</p>';
+  }
+  html+='    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" onerror="var p=document.getElementById('busuanzi_value_site_pv');var u=document.getElementById('busuanzi_value_site_uv');if(p)p.textContent='—';if(u)u.textContent='—';"></script>
+</body></html>';
+  var b=new Blob(['\uFEFF'+html],{type:'application/vnd.ms-excel'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='环保税计算_'+td.title+'.xls';a.click();URL.revokeObjectURL(a.href);
+}
+
+// ===== Init =====
+document.getElementById('printTime').textContent=new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000).toISOString().replace('T',' ').slice(0,16);
+autoCalc('air');autoCalc('water');autoCalc('solid');autoCalc('noise');
+</script>
+</body>
+</html>
