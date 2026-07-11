@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="依据《工伤保险条例》估算一次性伤残补助金、医疗/就业补助金、停工留薪期工资、护理费及月度伤残津贴">
+    <title>工伤理赔计算器 — SHEEN Toolbox</title>
+
+    <link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
+    <link rel="stylesheet" href="/sheen-toolbox/common.css">
+
+    <style>
+        /* ============================================
+           仅本工具特有样式；公共类（.breadcrumb / .sheen-footer /
+           .form-control / .btn-* / .card / .form-card / .result-card /
+           .badge / .print-time / :root 变量）均来自 common.css
+           ============================================ */
+
+        /* 表单多列布局 */
+        .form-row { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; }
+        .form-row.col-2 > .form-group { flex: 0 0 calc(50% - 7px); }
+        .form-row.col-3 > .form-group { flex: 0 0 calc(33.33% - 10px); }
+        .form-group { display: flex; flex-direction: column; gap: 5px; min-width: 140px; }
+        .form-group label {
+            font-size: 13px; font-weight: 600; color: var(--text-secondary);
+            letter-spacing: 0.3px; white-space: nowrap;
+        }
+        .form-group label .required { color: var(--brand-red); margin-left: 2px; }
+        .form-group .hint { font-size: 11px; color: var(--text-secondary); opacity: 0.85; min-height: 14px; letter-spacing: 0.2px; }
+        .form-group select {
+            appearance: none; -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat; background-position: right 12px center; background-size: 16px;
+            padding-right: 36px; cursor: pointer;
+        }
+
+        /* 带单位的输入框 */
+        .unit { position: relative; }
+        .unit::after {
+            content: attr(data-unit); position: absolute; right: 14px; top: 50%;
+            transform: translateY(-50%); font-size: 12px; color: var(--text-secondary);
+            pointer-events: none; letter-spacing: 0.3px;
+        }
+        .unit .form-control { padding-right: 56px; }
+
+        /* 复选框 */
+        .checkbox-row { display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; padding: 8px 0; }
+        .checkbox-row input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--brand-red); cursor: pointer; flex-shrink: 0; }
+        .checkbox-label { font-size: 14px; font-weight: 500; color: var(--text-primary); cursor: pointer; }
+        .checkbox-hint { font-size: 11px; color: var(--text-secondary); }
+
+        /* 卡片图标标题 */
+        .card > h3 i { color: var(--brand-red); margin-right: 8px; }
+
+        /* 按钮组 */
+        .btn-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin: 4px 0 8px; }
+
+        /* 结果头部（品牌深色渐变） */
+        .result-header {
+            background: linear-gradient(135deg, #5C121C 0%, #7A1825 100%);
+            color: #fff; padding: 16px 22px; display: flex;
+            align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+        }
+        .result-header h2 { font-size: 1rem; font-weight: 650; letter-spacing: 0.5px; }
+        .result-total {
+            font-family: 'SF Mono', 'Cascadia Code', 'Consolas', 'Menlo', monospace;
+            font-size: 1.6rem; font-weight: 700; letter-spacing: 1px; color: #fff;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3); print-color-adjust: exact; -webkit-print-color-adjust: exact;
+        }
+        .result-total .currency { font-size: 0.9rem; font-weight: 500; margin-right: 2px; }
+
+        .result-body { padding: 16px 22px; display: flex; flex-direction: column; gap: 10px; }
+        .result-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 9px 0; border-bottom: 1px dashed var(--border-light); flex-wrap: wrap; gap: 6px;
+        }
+        .result-item:last-child { border-bottom: none; }
+        .result-item .item-label { font-size: 14px; color: var(--text-secondary); letter-spacing: 0.3px; display: flex; align-items: center; gap: 6px; }
+        .result-item .item-value {
+            font-family: 'SF Mono', 'Cascadia Code', 'Consolas', 'Menlo', monospace;
+            font-size: 15px; font-weight: 600; color: var(--text-primary); letter-spacing: 0.5px;
+        }
+        .result-item .item-value.zero { color: #C0C5CE; font-weight: 500; }
+        .result-item.sub-item { padding-left: 18px; font-size: 13px; border-bottom: none; padding-top: 2px; padding-bottom: 2px; }
+        .result-item.sub-item .item-label { font-size: 12px; color: var(--text-secondary); opacity: 0.9; }
+        .result-item.sub-item .item-value { font-size: 13px; font-weight: 500; color: var(--text-secondary); }
+        .result-item.total-row {
+            border-top: 2px solid var(--border); padding-top: 14px; margin-top: 4px; font-weight: 700;
+        }
+        .result-item.total-row .item-label { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+        .result-item.total-row .item-value { font-size: 1.15rem; font-weight: 700; color: var(--brand-red); }
+
+        /* 月度津贴区 */
+        .monthly-box {
+            background: var(--bg-page); border: 1px dashed var(--border);
+            border-radius: var(--radius-md); padding: 14px 16px; margin-top: 4px;
+        }
+        .monthly-title { font-size: 12px; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.5px; margin-bottom: 8px; }
+
+        /* 提示信息 */
+        .note-box {
+            background: var(--brand-red-light); border: 1px solid #FCA5A5;
+            border-radius: var(--radius-sm); padding: 12px 16px;
+            font-size: 12px; color: var(--brand-red); letter-spacing: 0.3px; line-height: 1.6;
+            margin: 0 22px 18px;
+        }
+        .note-box .note-icon { margin-right: 4px; }
+
+        /* 响应式 */
+        @media (max-width: 600px) {
+            .form-row.col-2 > .form-group,
+            .form-row.col-3 > .form-group { flex: 0 0 100%; }
+            .result-header { flex-direction: column; align-items: flex-start; }
+            .result-total { font-size: 1.35rem; }
+            .btn-row .btn-primary, .btn-row .btn-outline { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="breadcrumb">
+        <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+        <span> / 工伤理赔计算器</span>
+    </div>
+
+    <main class="app-container container-calc">
+        <h1 class="page-title">工伤理赔计算器</h1>
+        <p class="page-subtitle" style="margin-bottom:20px;">依据《工伤保险条例》及相关规定估算一次性赔偿与月度津贴</p>
+
+        <!-- 基本信息卡片 -->
+        <div class="form-card">
+            <h3><i class="fa-solid fa-clipboard-list"></i>基本信息</h3>
+            <div class="form-row col-2">
+                <div class="form-group">
+                    <label for="gradeSelect">伤残等级 <span class="required">*</span></label>
+                    <select id="gradeSelect" class="form-control" aria-label="伤残等级">
+                        <option value="1">一级伤残</option>
+                        <option value="2">二级伤残</option>
+                        <option value="3">三级伤残</option>
+                        <option value="4">四级伤残</option>
+                        <option value="5">五级伤残</option>
+                        <option value="6">六级伤残</option>
+                        <option value="7">七级伤残</option>
+                        <option value="8">八级伤残</option>
+                        <option value="9">九级伤残</option>
+                        <option value="10" selected>十级伤残</option>
+                    </select>
+                    <span class="hint">劳动能力鉴定结论的伤残等级</span>
+                </div>
+                <div class="form-group">
+                    <label for="monthlyWage">本人月工资（元） <span class="required">*</span></label>
+                    <div class="unit" data-unit="元/月">
+                        <input type="number" id="monthlyWage" class="form-control" value="8000" min="0" step="100" placeholder="如：8000" aria-label="本人月工资">
+                    </div>
+                    <span class="hint">受伤前12个月平均月缴费工资</span>
+                </div>
+            </div>
+            <div class="form-row col-2">
+                <div class="form-group">
+                    <label for="avgWage">统筹地区社平工资（元）</label>
+                    <div class="unit" data-unit="元/月">
+                        <input type="number" id="avgWage" class="form-control" value="7500" min="0" step="100" placeholder="如：7500" aria-label="社平工资">
+                    </div>
+                    <span class="hint">用于护理费计算及工资上下限调整</span>
+                </div>
+                <div class="form-group">
+                    <label for="terminateCheck">是否解除/终止劳动关系</label>
+                    <div class="checkbox-row">
+                        <input type="checkbox" id="terminateCheck" aria-label="解除劳动关系">
+                        <span class="checkbox-label" id="terminateLabel">解除劳动关系</span>
+                    </div>
+                    <span class="hint" id="terminateHint">7-10级解除后可获医疗+就业补助金</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 其他费用与津贴卡片 -->
+        <div class="form-card">
+            <h3><i class="fa-solid fa-file-invoice-dollar"></i>其他费用与津贴</h3>
+            <div class="form-row col-3">
+                <div class="form-group">
+                    <label for="stopWorkMonths">停工留薪期（月）</label>
+                    <div class="unit" data-unit="个月">
+                        <input type="number" id="stopWorkMonths" class="form-control" value="6" min="0" max="24" step="0.5" placeholder="一般≤12个月" aria-label="停工留薪期月数">
+                    </div>
+                    <span class="hint">原工资照发，一般不超过12个月</span>
+                </div>
+                <div class="form-group">
+                    <label for="medicalCost">医疗费用（元）</label>
+                    <div class="unit" data-unit="元">
+                        <input type="number" id="medicalCost" class="form-control" value="0" min="0" step="100" placeholder="实际发生" aria-label="医疗费用">
+                    </div>
+                    <span class="hint">工伤保险基金或单位支付</span>
+                </div>
+                <div class="form-group">
+                    <label for="hospitalDays">住院天数（天）</label>
+                    <div class="unit" data-unit="天">
+                        <input type="number" id="hospitalDays" class="form-control" value="0" min="0" step="1" placeholder="0" aria-label="住院天数">
+                    </div>
+                    <span class="hint">用于计算伙食补助费</span>
+                </div>
+            </div>
+            <div class="form-row col-3">
+                <div class="form-group">
+                    <label for="mealSubsidy">住院伙食补助标准（元/天）</label>
+                    <div class="unit" data-unit="元/天">
+                        <input type="number" id="mealSubsidy" class="form-control" value="50" min="0" step="5" placeholder="50" aria-label="伙食补助标准">
+                    </div>
+                    <span class="hint">各地标准不同，一般30-100元/天</span>
+                </div>
+                <div class="form-group">
+                    <label for="trafficCost">交通食宿费（元）</label>
+                    <div class="unit" data-unit="元">
+                        <input type="number" id="trafficCost" class="form-control" value="0" min="0" step="100" placeholder="0" aria-label="交通食宿费">
+                    </div>
+                    <span class="hint">异地就医产生的交通食宿费用</span>
+                </div>
+                <div class="form-group">
+                    <label for="careLevel">护理依赖等级</label>
+                    <select id="careLevel" class="form-control" aria-label="护理依赖等级">
+                        <option value="none" selected>无需护理</option>
+                        <option value="partial">部分不能自理（30%）</option>
+                        <option value="mostly">大部分不能自理（40%）</option>
+                        <option value="full">完全不能自理（50%）</option>
+                    </select>
+                    <span class="hint">按月领取护理费（社平工资比例）</span>
+                </div>
+            </div>
+            <div class="form-row col-2">
+                <div class="form-group">
+                    <label for="careMonths">护理费计算月数</label>
+                    <div class="unit" data-unit="个月">
+                        <input type="number" id="careMonths" class="form-control" value="12" min="0" step="1" placeholder="12" aria-label="护理费计算月数">
+                    </div>
+                    <span class="hint">估算护理费总额的参考月数</span>
+                </div>
+                <div class="form-group">
+                    <label for="otherCost">其他费用（元）</label>
+                    <div class="unit" data-unit="元">
+                        <input type="number" id="otherCost" class="form-control" value="0" min="0" step="100" placeholder="如辅助器具费等" aria-label="其他费用">
+                    </div>
+                    <span class="hint">辅助器具费、鉴定费等</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="btn-row">
+            <button class="btn-primary" id="btnCalculate" aria-label="计算理赔金额">
+                <i class="fa-solid fa-calculator"></i> 计算理赔金额
+            </button>
+            <button class="btn-outline" id="btnReset" aria-label="重置所有输入">
+                <i class="fa-solid fa-rotate-left"></i> 重置
+            </button>
+            <button class="btn-outline btn-sm" id="btnPrint" aria-label="打印结果">
+                <i class="fa-solid fa-print"></i> 打印
+            </button>
+        </div>
+
+        <!-- 结果卡片 -->
+        <div class="result-card" id="resultCard" style="display:none;" aria-live="polite">
+            <div class="result-header">
+                <h2><i class="fa-solid fa-clipboard-check"></i> 理赔计算结果</h2>
+                <div class="result-total">
+                    <span class="currency">¥</span><span id="totalAmount">0</span>
+                </div>
+            </div>
+            <div class="result-body" id="resultBody"><!-- 动态填充 --></div>
+            <div class="note-box">
+                <span class="note-icon">⚠️</span> 以上计算仅供参考，实际赔偿金额以当地劳动仲裁或法院判决为准。一次性工伤医疗补助金和伤残就业补助金的具体标准因各省市规定而异，本计算器采用通用参考值。建议咨询专业律师或当地人社部门。
+            </div>
+        </div>
+    </main>
+
+    <footer class="sheen-footer">
+        <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 工伤理赔计算器
+    </footer>
+
+    <div class="print-time" id="printTime"></div>
+
+    <script>
+    (function () {
+        'use strict';
+
+        document.getElementById('printTime').textContent =
+            new Date().toISOString().replace('T', ' ').slice(0, 16);
+
+        // ==================== DOM元素 ====================
+        const gradeSelect = document.getElementById('gradeSelect');
+        const monthlyWageInput = document.getElementById('monthlyWage');
+        const avgWageInput = document.getElementById('avgWage');
+        const terminateCheck = document.getElementById('terminateCheck');
+        const terminateLabel = document.getElementById('terminateLabel');
+        const terminateHint = document.getElementById('terminateHint');
+        const stopWorkMonthsInput = document.getElementById('stopWorkMonths');
+        const medicalCostInput = document.getElementById('medicalCost');
+        const hospitalDaysInput = document.getElementById('hospitalDays');
+        const mealSubsidyInput = document.getElementById('mealSubsidy');
+        const trafficCostInput = document.getElementById('trafficCost');
+        const careLevelSelect = document.getElementById('careLevel');
+        const careMonthsInput = document.getElementById('careMonths');
+        const otherCostInput = document.getElementById('otherCost');
+        const btnCalculate = document.getElementById('btnCalculate');
+        const btnReset = document.getElementById('btnReset');
+        const btnPrint = document.getElementById('btnPrint');
+        const resultCard = document.getElementById('resultCard');
+        const resultBody = document.getElementById('resultBody');
+        const totalAmountEl = document.getElementById('totalAmount');
+
+        // ==================== 伤残等级对应月数配置 ====================
+        // [伤残补助金月数, 医疗补助金月数(解除时), 就业补助金月数(解除时), 伤残津贴比例]
+        const GRADE_CONFIG = {
+            1: { compensation: 27, medical: 0, employment: 0, allowanceRate: 0.90, canTerminate: false, label: '一级伤残' },
+            2: { compensation: 25, medical: 0, employment: 0, allowanceRate: 0.85, canTerminate: false, label: '二级伤残' },
+            3: { compensation: 23, medical: 0, employment: 0, allowanceRate: 0.80, canTerminate: false, label: '三级伤残' },
+            4: { compensation: 21, medical: 0, employment: 0, allowanceRate: 0.75, canTerminate: false, label: '四级伤残' },
+            5: { compensation: 18, medical: 18, employment: 18, allowanceRate: 0.70, canTerminate: true, label: '五级伤残' },
+            6: { compensation: 16, medical: 15, employment: 15, allowanceRate: 0.60, canTerminate: true, label: '六级伤残' },
+            7: { compensation: 13, medical: 12, employment: 12, allowanceRate: 0, canTerminate: true, label: '七级伤残' },
+            8: { compensation: 11, medical: 9, employment: 9, allowanceRate: 0, canTerminate: true, label: '八级伤残' },
+            9: { compensation: 9, medical: 6, employment: 6, allowanceRate: 0, canTerminate: true, label: '九级伤残' },
+            10: { compensation: 7, medical: 3, employment: 3, allowanceRate: 0, canTerminate: true, label: '十级伤残' },
+        };
+
+        let currentGrade = 10;
+
+        // ==================== 工具函数 ====================
+        function fmtMoney(num) {
+            if (num === 0 || num === undefined || num === null) return '0.00';
+            return Number(num).toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+        function getVal(id) {
+            const v = parseFloat(document.getElementById(id).value);
+            return isNaN(v) ? 0 : Math.max(0, v);
+        }
+
+        // ==================== 解除劳动关系选项 ====================
+        function updateTerminateOption() {
+            const grade = parseInt(gradeSelect.value);
+            currentGrade = grade;
+            const config = GRADE_CONFIG[grade];
+            if (!config.canTerminate) {
+                terminateCheck.checked = false;
+                terminateCheck.disabled = true;
+                terminateLabel.style.color = '#b0b5bf';
+                terminateHint.textContent = '1-4级保留劳动关系，退出岗位';
+                terminateHint.style.color = '#b0b5bf';
+            } else {
+                terminateCheck.disabled = false;
+                terminateLabel.style.color = '';
+                terminateHint.textContent = '解除后可获医疗+就业补助金（' + config.medical + '+' + config.employment + '个月工资）';
+                terminateHint.style.color = '';
+            }
+        }
+        gradeSelect.addEventListener('change', updateTerminateOption);
+        updateTerminateOption();
+
+        // ==================== 计算逻辑 ====================
+        function calculate() {
+            const grade = parseInt(gradeSelect.value);
+            const config = GRADE_CONFIG[grade];
+            const rawWage = getVal('monthlyWage');
+            const avgWage = getVal('avgWage');
+            const isTerminated = terminateCheck.checked && config.canTerminate;
+            const stopWorkMonths = getVal('stopWorkMonths');
+            const medicalCost = getVal('medicalCost');
+            const hospitalDays = getVal('hospitalDays');
+            const mealSubsidy = getVal('mealSubsidy');
+            const trafficCost = getVal('trafficCost');
+            const careLevel = careLevelSelect.value;
+            const careMonths = getVal('careMonths');
+            const otherCost = getVal('otherCost');
+
+            let calcWage = rawWage;
+            if (avgWage > 0) {
+                const lowerBound = avgWage * 0.6;
+                const upperBound = avgWage * 3.0;
+                if (rawWage > upperBound) calcWage = upperBound;
+                if (rawWage < lowerBound && rawWage > 0) calcWage = lowerBound;
+            }
+            if (rawWage === 0) calcWage = 0;
+
+            // 护理比例
+            let careRate = 0;
+            if (careLevel === 'partial') careRate = 0.30;
+            if (careLevel === 'mostly') careRate = 0.40;
+            if (careLevel === 'full') careRate = 0.50;
+
+            // 1. 一次性伤残补助金
+            const compensation = calcWage * config.compensation;
+            // 2. 一次性工伤医疗补助金（解除时）
+            const medicalSubsidy = isTerminated ? calcWage * config.medical : 0;
+            // 3. 一次性伤残就业补助金（解除时）
+            const employmentSubsidy = isTerminated ? calcWage * config.employment : 0;
+            // 4. 停工留薪期工资
+            const stopWorkPay = rawWage * stopWorkMonths;
+            // 5. 医疗费用
+            const medicalTotal = medicalCost;
+            // 6. 住院伙食补助费
+            const mealTotal = hospitalDays * mealSubsidy;
+            // 7. 交通食宿费
+            const trafficTotal = trafficCost;
+            // 8. 护理费
+            const careMonthly = avgWage * careRate;
+            const careTotal = careMonthly * careMonths;
+            // 9. 其他费用
+            const otherTotal = otherCost;
+            // 10. 月度伤残津贴（1-6级）
+            const monthlyAllowance = config.allowanceRate > 0 ? calcWage * config.allowanceRate : 0;
+
+            const lumpSumTotal = compensation + medicalSubsidy + employmentSubsidy + stopWorkPay + medicalTotal +
+                mealTotal + trafficTotal + careTotal + otherTotal;
+
+            return {
+                grade, config, rawWage, avgWage, calcWage, isTerminated,
+                compensation, medicalSubsidy, employmentSubsidy,
+                stopWorkPay, stopWorkMonths, medicalTotal, mealTotal, hospitalDays, mealSubsidy,
+                trafficTotal, careTotal, careMonthly, careMonths, careLevel, careRate, otherTotal,
+                monthlyAllowance, lumpSumTotal
+            };
+        }
+
+        // ==================== 渲染结果 ====================
+        function renderResults(r) {
+            const config = r.config;
+            const grade = r.grade;
+            let html = '';
+
+            // 一次性伤残补助金
+            html += `
+                <div class="result-item">
+                    <span class="item-label"><span class="badge badge-red">基金支付</span> 一次性伤残补助金</span>
+                    <span class="item-value">¥${fmtMoney(r.compensation)}</span>
+                </div>
+                <div class="result-item sub-item">
+                    <span class="item-label">计发工资 ¥${fmtMoney(r.calcWage)} × ${config.compensation}个月</span>
+                    <span class="item-value"></span>
+                </div>`;
+
+            // 医疗补助金和就业补助金
+            if (config.canTerminate && r.isTerminated) {
+                html += `
+                <div class="result-item">
+                    <span class="item-label"><span class="badge badge-red">基金支付</span> 一次性工伤医疗补助金</span>
+                    <span class="item-value">¥${fmtMoney(r.medicalSubsidy)}</span>
+                </div>
+                <div class="result-item sub-item">
+                    <span class="item-label">计发工资 ¥${fmtMoney(r.calcWage)} × ${config.medical}个月</span>
+                    <span class="item-value"></span>
+                </div>
+                <div class="result-item">
+                    <span class="item-label"><span class="badge badge-amber">单位支付</span> 一次性伤残就业补助金</span>
+                    <span class="item-value">¥${fmtMoney(r.employmentSubsidy)}</span>
+                </div>
+                <div class="result-item sub-item">
+                    <span class="item-label">计发工资 ¥${fmtMoney(r.calcWage)} × ${config.employment}个月</span>
+                    <span class="item-value"></span>
+                </div>`;
+            } else if (config.canTerminate && !r.isTerminated) {
+                html += `
+                <div class="result-item">
+                    <span class="item-label">一次性工伤医疗补助金</span>
+                    <span class="item-value zero">未解除关系，不适用</span>
+                </div>
+                <div class="result-item">
+                    <span class="item-label">一次性伤残就业补助金</span>
+                    <span class="item-value zero">未解除关系，不适用</span>
+                </div>`;
+            } else if (!config.canTerminate) {
+                html += `
+                <div class="result-item">
+                    <span class="item-label">一次性工伤医疗补助金</span>
+                    <span class="item-value zero">1-4级不适用</span>
+                </div>
+                <div class="result-item">
+                    <span class="item-label">一次性伤残就业补助金</span>
+                    <span class="item-value zero">1-4级不适用</span>
+                </div>`;
+            }
+
+            // 停工留薪期工资
+            html += `
+                <div class="result-item">
+                    <span class="item-label"><span class="badge badge-amber">单位支付</span> 停工留薪期工资</span>
+                    <span class="item-value">¥${fmtMoney(r.stopWorkPay)}</span>
+                </div>
+                <div class="result-item sub-item">
+                    <span class="item-label">月工资 ¥${fmtMoney(r.rawWage)} × ${r.stopWorkMonths}个月</span>
+                    <span class="item-value"></span>
+                </div>`;
+
+            if (r.medicalTotal > 0) {
+                html += `<div class="result-item"><span class="item-label">🏥 医疗费用</span><span class="item-value">¥${fmtMoney(r.medicalTotal)}</span></div>`;
+            }
+            if (r.hospitalDays > 0) {
+                html += `
+                <div class="result-item">
+                    <span class="item-label">🍽️ 住院伙食补助费</span>
+                    <span class="item-value">¥${fmtMoney(r.mealTotal)}</span>
+                </div>
+                <div class="result-item sub-item">
+                    <span class="item-label">${r.hospitalDays}天 × ¥${r.mealSubsidy}/天</span>
+                    <span class="item-value"></span>
+                </div>`;
+            }
+            if (r.trafficTotal > 0) {
+                html += `<div class="result-item"><span class="item-label">🚗 交通食宿费</span><span class="item-value">¥${fmtMoney(r.trafficTotal)}</span></div>`;
+            }
+            if (r.careLevel !== 'none' && r.careTotal > 0) {
+                const careLabelMap = { 'partial': '部分不能自理(30%)', 'mostly': '大部分不能自理(40%)', 'full': '完全不能自理(50%)' };
+                html += `
+                <div class="result-item">
+                    <span class="item-label"><span class="badge badge-red">基金支付</span> 生活护理费（${r.careMonths}个月）</span>
+                    <span class="item-value">¥${fmtMoney(r.careTotal)}</span>
+                </div>
+                <div class="result-item sub-item">
+                    <span class="item-label">${careLabelMap[r.careLevel]}：社平¥${fmtMoney(r.avgWage)} × ${(r.careRate * 100).toFixed(0)}% × ${r.careMonths}个月</span>
+                    <span class="item-value"></span>
+                </div>`;
+            }
+            if (r.otherTotal > 0) {
+                html += `<div class="result-item"><span class="item-label">📦 其他费用</span><span class="item-value">¥${fmtMoney(r.otherTotal)}</span></div>`;
+            }
+
+            // 总计
+            html += `
+                <div class="result-item total-row">
+                    <span class="item-label">💰 一次性赔偿总计</span>
+                    <span class="item-value">¥${fmtMoney(r.lumpSumTotal)}</span>
+                </div>`;
+
+            // 月度津贴（1-6级）
+            if (r.monthlyAllowance > 0) {
+                const allowanceLabel = grade <= 4
+                    ? '（工伤保险基金按月支付至退休）'
+                    : '（单位按月支付，难以安排工作时适用）';
+                html += `
+                <div class="monthly-box">
+                    <div class="monthly-title">📅 月度伤残津贴参考</div>
+                    <div class="result-item" style="border-bottom:none;">
+                        <span class="item-label"><span class="badge badge-green">月度津贴</span> ${config.label} ${allowanceLabel}</span>
+                        <span class="item-value">¥${fmtMoney(r.monthlyAllowance)}/月</span>
+                    </div>
+                    <div class="result-item sub-item">
+                        <span class="item-label">计发工资 ¥${fmtMoney(r.calcWage)} × ${(config.allowanceRate * 100).toFixed(0)}%</span>
+                        <span class="item-value"></span>
+                    </div>
+                </div>`;
+            }
+
+            // 月度护理费
+            if (r.careLevel !== 'none' && r.careMonthly > 0) {
+                html += `
+                <div class="monthly-box" style="margin-top:8px;">
+                    <div class="monthly-title">🏥 月度生活护理费</div>
+                    <div class="result-item" style="border-bottom:none;">
+                        <span class="item-label">按月领取（工伤保险基金支付）</span>
+                        <span class="item-value">¥${fmtMoney(r.careMonthly)}/月</span>
+                    </div>
+                </div>`;
+            }
+
+            resultBody.innerHTML = html;
+            totalAmountEl.textContent = fmtMoney(r.lumpSumTotal);
+            resultCard.style.display = 'block';
+            resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // ==================== 事件 ====================
+        btnCalculate.addEventListener('click', () => {
+            const rawWage = getVal('monthlyWage');
+            if (rawWage <= 0) {
+                alert('请输入有效的本人月工资。');
+                monthlyWageInput.focus();
+                return;
+            }
+            renderResults(calculate());
+        });
+
+        btnReset.addEventListener('click', () => {
+            if (confirm('确定要重置所有输入数据吗？')) {
+                gradeSelect.value = '10';
+                monthlyWageInput.value = '8000';
+                avgWageInput.value = '7500';
+                terminateCheck.checked = false;
+                stopWorkMonthsInput.value = '6';
+                medicalCostInput.value = '0';
+                hospitalDaysInput.value = '0';
+                mealSubsidyInput.value = '50';
+                trafficCostInput.value = '0';
+                careLevelSelect.value = 'none';
+                careMonthsInput.value = '12';
+                otherCostInput.value = '0';
+                updateTerminateOption();
+                resultCard.style.display = 'none';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+
+        btnPrint.addEventListener('click', () => {
+            if (resultCard.style.display === 'none') {
+                alert('请先点击"计算理赔金额"生成结果后再打印。');
+                return;
+            }
+            window.print();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) { e.preventDefault(); btnCalculate.click(); }
+            if (e.key === 'r' && e.ctrlKey && e.shiftKey) { e.preventDefault(); btnReset.click(); }
+        });
+
+        // ==================== 初始化（展示默认示例） ====================
+        updateTerminateOption();
+        renderResults(calculate());
+    })();
+    </script>
+</body>
+</html>
