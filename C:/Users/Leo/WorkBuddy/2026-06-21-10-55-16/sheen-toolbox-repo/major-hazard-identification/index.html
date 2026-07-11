@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>重大危险源辨识 — SHEEN Toolbox</title>
+
+    <link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
+
+<link rel="stylesheet" href="/sheen-toolbox/common.css">
+
+    <style>
+        :root {
+            --black: #000000;
+            --text-primary: #111827;
+            --text-secondary: #6B7280;
+            --bg-page: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --border: #E5E7EB;
+            --border-light: #F3F4F6;
+            --brand-red: #7A1825;
+            --brand-red-hover: #5C121C;
+            --brand-red-light: #FEF2F2;
+            --amber: #FBBF24;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --transition: 0.2s ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-page);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+        }
+
+        .breadcrumb { padding: 12px 24px; font-size: 13px; color: var(--text-secondary); border-bottom: 1px solid var(--border); background: var(--bg-card); display: flex; align-items: center; gap: 6px; }
+        .breadcrumb a { color: var(--brand-red); text-decoration: none; font-weight: 600; transition: opacity .2s; display: inline-flex; align-items: center; gap: 4px; }
+        .breadcrumb a:hover { opacity: .7; text-decoration: underline; }
+        .breadcrumb span { color: var(--text-secondary); }
+
+        /* ===== 页脚 ===== */
+        .sheen-footer { text-align: center; padding: 16px 32px; font-size: 13px; color: var(--text-secondary); border-top: 1px solid var(--border); background: var(--bg-card); letter-spacing: 0.5px; }
+        .sheen-footer i { color: var(--amber); }
+        .sheen-footer strong { color: var(--text-primary); }
+
+        /* ===== 主布局 ===== */
+        .app-wrapper { max-width:1200px; margin: 0 auto; padding: 32px 24px; width: 100%; flex: 1; }
+
+        .page-header { text-align: center; margin-bottom: 28px; }
+        .page-header h1 { font-size: 24px; font-weight: 700; color: var(--text-primary); }
+        .page-header .subtitle { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+
+        /* ===== 标签切换 ===== */
+        .tab-bar { display: flex; gap: 6px; margin-bottom: 24px; background: var(--bg-card); border-radius: var(--radius-lg); padding: 4px; border: 1px solid var(--border); }
+        .tab-btn { flex: 1; padding: 10px 20px; border: none; background: transparent; border-radius: 16px; font-size: 13px; font-weight: 600; color: var(--text-secondary); cursor: pointer; transition: all var(--transition); font-family: inherit; }
+        .tab-btn.active { background: var(--brand-red); color: #fff; }
+        .tab-btn:hover:not(.active) { color: var(--text-primary); background: var(--bg-page); }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* ===== 介绍卡片 ===== */
+        .intro-card { background: var(--brand-red-light); border-left: 5px solid var(--brand-red); border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 20px; font-size: 13px; color: var(--text-primary); display: flex; align-items: flex-start; gap: 10px; }
+        .intro-card i { color: var(--brand-red); margin-top: 2px; flex-shrink: 0; }
+
+        /* ===== 表单卡片 ===== */
+        .form-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 24px; margin-bottom: 16px; }
+        .form-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .form-card h3 i { color: var(--brand-red); }
+
+        .form-row { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 140px; }
+        .form-group label { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+        .form-control { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-md); font-size: 14px; background: var(--bg-card); color: var(--text-primary); font-family: inherit; transition: all var(--transition); }
+        .form-control:focus { outline: none; border-color: var(--brand-red); box-shadow: 0 0 0 4px rgba(122,24,37,0.08); }
+        .form-control.small { padding: 8px 12px; font-size: 13px; }
+        select.form-control { cursor: pointer; }
+
+        /* ===== 数据库搜索 ===== */
+        .search-wrapper { position: relative; }
+        .search-wrapper .dropdown { position: absolute; top: 100%; left: 0; right: 0; background: var(--bg-card); border: 1.5px solid var(--brand-red); border-top: none; border-radius: 0 0 var(--radius-md) var(--radius-md); max-height: 240px; overflow-y: auto; z-index: 100; display: none; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .search-wrapper .dropdown.show { display: block; }
+        .dropdown-item { padding: 10px 14px; font-size: 13px; cursor: pointer; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; }
+        .dropdown-item:hover { background: var(--brand-red-light); }
+        .dropdown-item .chem-name { font-weight: 600; color: var(--text-primary); }
+        .dropdown-item .chem-meta { font-size: 11px; color: var(--text-secondary); }
+
+        /* ===== 按钮 ===== */
+        .btn-primary { background: var(--brand-red); color: #fff; border: none; padding: 10px 24px; border-radius: 60px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.25s; font-family: inherit; }
+        .btn-primary:hover { background: var(--brand-red-hover); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(122,24,37,0.2); }
+        .btn-outline { background: var(--bg-card); color: var(--brand-red); border: 1.5px solid var(--brand-red); padding: 10px 24px; border-radius: 60px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.25s; font-family: inherit; }
+        .btn-outline:hover { background: var(--brand-red-light); }
+        .btn-print { background: var(--bg-card); color: var(--brand-red); border: 1.5px solid var(--brand-red); padding: 12px 28px; border-radius: 60px; font-size: 16px; font-weight: 600; transition: all 0.25s; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 6px; }
+        .btn-print:hover { background: var(--brand-red-light); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(122,24,37,0.15); }
+        .btn-sm { padding: 6px 14px; font-size: 12px; }
+        .btn-danger { background: transparent; color: #DC2626; border: 1px solid #FCA5A5; padding: 6px 14px; border-radius: 60px; font-size: 12px; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+        .btn-danger:hover { background: #FEF2F2; border-color: #DC2626; }
+
+        /* ===== 化学品列表 ===== */
+        .chem-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .chem-table th { background: var(--bg-page); padding: 10px 12px; font-weight: 600; color: var(--text-secondary); font-size: 12px; text-align: left; border-bottom: 2px solid var(--border); }
+        .chem-table td { padding: 10px 12px; border-bottom: 1px solid var(--border-light); }
+        .chem-table tbody tr:hover { background: var(--bg-page); }
+        .chem-table .empty-row td { text-align: center; color: var(--text-secondary); padding: 40px 12px; font-size: 13px; }
+
+        .source-badge { display: inline-block; padding: 2px 8px; border-radius: 60px; font-size: 10px; font-weight: 600; }
+        .source-badge.table1 { background: #DBEAFE; color: #1E40AF; }
+        .source-badge.table2 { background: #FEF3C7; color: #92400E; }
+        .source-badge.custom { background: #F3F4F6; color: #6B7280; }
+
+        /* ===== 结果区域 ===== */
+        .result-row { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 20px; }
+        .result-card { flex: 1; min-width: 200px; background: var(--bg-card); border: 1.5px solid var(--border); border-radius: var(--radius-lg); padding: 20px; }
+        .result-card .label { font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; }
+        .result-card .value { font-size: 32px; font-weight: 700; }
+        .result-card .value.danger { color: #DC2626; }
+        .result-card .value.safe { color: #16A34A; }
+        .result-card .value.info { color: var(--brand-red); }
+
+        .verdict-banner { background: var(--bg-card); border: 2px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-top: 16px; text-align: center; }
+        .verdict-banner.is-hazard { border-color: #DC2626; background: #FEF2F2; }
+        .verdict-banner.not-hazard { border-color: #16A34A; background: #F0FDF4; }
+        .verdict-banner .verdict-icon { font-size: 48px; margin-bottom: 12px; }
+        .verdict-banner.is-hazard .verdict-icon { color: #DC2626; }
+        .verdict-banner.not-hazard .verdict-icon { color: #16A34A; }
+        .verdict-banner .verdict-title { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+        .verdict-banner .verdict-detail { font-size: 13px; color: var(--text-secondary); }
+
+        /* ===== 分级结果 ===== */
+        .level-cards { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+        .level-card { flex: 1; min-width: 120px; text-align: center; padding: 16px; border-radius: var(--radius-md); border: 2px solid var(--border); background: var(--bg-card); opacity: 0.5; transition: all 0.3s; }
+        .level-card.active { opacity: 1; transform: scale(1.05); }
+        .level-card.level1.active { border-color: #DC2626; background: #FEF2F2; }
+        .level-card.level2.active { border-color: #EA580C; background: #FFF7ED; }
+        .level-card.level3.active { border-color: #CA8A04; background: #FEFCE8; }
+        .level-card.level4.active { border-color: #16A34A; background: #F0FDF4; }
+        .level-card .level-num { font-size: 28px; font-weight: 700; }
+        .level-card.level1.active .level-num { color: #DC2626; }
+        .level-card.level2.active .level-num { color: #EA580C; }
+        .level-card.level3.active .level-num { color: #CA8A04; }
+        .level-card.level4.active .level-num { color: #16A34A; }
+        .level-card .level-range { font-size: 12px; color: var(--text-secondary); }
+        .level-card .level-name { font-size: 13px; font-weight: 600; margin-top: 4px; }
+
+        /* ===== α 选择器 ===== */
+        .alpha-options { display: flex; gap: 8px; flex-wrap: wrap; }
+        .alpha-opt { padding: 8px 16px; border: 1.5px solid var(--border); border-radius: 60px; font-size: 13px; cursor: pointer; transition: all 0.2s; background: var(--bg-card); font-family: inherit; }
+        .alpha-opt:hover { border-color: var(--brand-red); }
+        .alpha-opt.selected { background: var(--brand-red); color: #fff; border-color: var(--brand-red); }
+
+        /* ===== 计算明细表 ===== */
+        .calc-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px; }
+        .calc-table th { background: var(--bg-page); padding: 10px 12px; font-weight: 600; color: var(--text-secondary); font-size: 12px; text-align: left; border-bottom: 2px solid var(--border); }
+        .calc-table td { padding: 10px 12px; border-bottom: 1px solid var(--border-light); }
+        .calc-table .highlight { font-weight: 700; color: var(--brand-red); }
+
+        /* ===== β 显示 ===== */
+        .beta-tag { display: inline-block; padding: 2px 10px; border-radius: 60px; font-size: 11px; font-weight: 600; background: var(--brand-red-light); color: var(--brand-red); }
+
+        /* ===== 打印 ===== */
+        .print-time { display: none; }
+
+        @media print {
+            @page { size: A4; margin: 18mm 15mm 20mm 15mm;
+                @bottom-center { content: "SHEEN Toolbox · 重大危险源辨识"; font-size: 8pt; color: #666; }
+            }
+            body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
+            .breadcrumb, .sheen-footer, .btn-primary, .btn-outline, .btn-print, .btn-sm, .btn-danger, .tab-bar, .no-print { display: none !important; }
+            .print-time { display: block !important; font-size: 9pt; color: #666; text-align: right; margin-bottom: 12px; }
+            .form-card, .result-card, .verdict-banner { box-shadow: none !important; border-radius: 0 !important; border: 1.5px solid #333 !important; page-break-inside: avoid; }
+            .verdict-banner.is-hazard { background: #fff5f5 !important; }
+            .verdict-banner.not-hazard { background: #f0fff4 !important; }
+            .level-card { opacity: 1 !important; }
+            .level-card.active { transform: none !important; }
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 768px) {
+            .form-row { flex-direction: column; }
+            .result-row { flex-direction: column; }
+            .level-cards { flex-direction: column; }
+            .alpha-options { gap: 4px; }
+            .alpha-opt { font-size: 12px; padding: 6px 12px; }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="breadcrumb">
+
+        <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+
+        <span> / 重大危险源辨识</span>
+
+    </div>
+
+    <!-- 主内容 -->
+
+    <main class="app-container container-query">
+
+        <div class="page-header">
+
+            <h1><i class="fa-solid fa-triangle-exclamation" style="color:var(--brand-red);margin-right:8px"></i>重大危险源辨识与分级</h1>
+
+            <p class="subtitle">依据 GB 18218-2018《危险化学品重大危险源辨识》</p>
+
+        </div>
+
+        <!-- 标签切换 -->
+
+        <div class="tab-bar no-print">
+
+            <button class="tab-btn active" onclick="switchTab(0)"><i class="fa-solid fa-magnifying-glass"></i> 重大危险源辨识</button>
+
+            <button class="tab-btn" onclick="switchTab(1)"><i class="fa-solid fa-layer-group"></i> 重大危险源分级</button>
+
+        </div>
+
+        <!-- ==================== Tab 1: 辨识 ==================== -->
+
+        <div class="tab-content active" id="tab0">
+
+            <div class="intro-card">
+
+                <i class="fa-solid fa-circle-info"></i>
+
+                <div>
+
+                    <strong>辨识准则</strong>：单元内危险化学品数量 ≥ 临界量即构成重大危险源。<br>
+
+                    单一品种：直接比较；多品种：按 <em>S = Σ(qᵢ/Qᵢ)</em> 计算，S ≥ 1 即为重大危险源。
+
+                </div>
+
+            </div>
+
+            <!-- 化学品输入 -->
+
+            <div class="form-card">
+
+                <h3><i class="fa-solid fa-flask"></i> 添加危险化学品</h3>
+
+                <div class="form-row">
+
+                    <div class="form-group search-wrapper" style="flex:2;min-width:250px">
+
+                        <label>搜索化学品（名称/CAS）</label>
+
+                        <input type="text" class="form-control" id="chemSearch" placeholder="输入化学品名称或CAS号搜索..." oninput="searchChem()" onfocus="searchChem()" autocomplete="off">
+
+                        <div class="dropdown" id="chemDropdown"></div>
+
+                    </div>
+
+                    <div class="form-group" style="flex:1;min-width:130px">
+
+                        <label>实际存在量 (t)</label>
+
+                        <input type="number" class="form-control" id="chemQty" placeholder="吨" min="0" step="any">
+
+                    </div>
+
+                    <div class="form-group" style="flex:0 0 auto;min-width:auto;align-self:flex-end">
+
+                        <button class="btn-primary" onclick="addChemical()"><i class="fa-solid fa-plus"></i> 添加</button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- 化学品列表 -->
+
+            <div class="form-card" id="chemListCard">
+
+                <h3><i class="fa-solid fa-list-check"></i> 化学品清单 <span style="font-weight:400;font-size:12px;color:var(--text-secondary);margin-left:8px">（共 <span id="chemCount">0</span> 种）</span></h3>
+
+                <table class="chem-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th style="width:40px">#</th>
+
+                            <th>化学品名称</th>
+
+                            <th style="width:120px">CAS号</th>
+
+                            <th style="width:80px">来源</th>
+
+                            <th style="width:100px">临界量(t)</th>
+
+                            <th style="width:100px">实际量(t)</th>
+
+                            <th style="width:80px">qᵢ/Qᵢ</th>
+
+                            <th style="width:50px"></th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="chemTableBody">
+
+                        <tr class="empty-row"><td colspan="8">暂无化学品，请在上方搜索并添加</td></tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <!-- 计算结果 -->
+
+            <div class="form-card" id="resultCard" style="display:none">
+
+                <h3><i class="fa-solid fa-calculator"></i> 辨识结果</h3>
+
+                <div class="result-row">
+
+                    <div class="result-card">
+
+                        <div class="label">辨识指标 S = Σ(qᵢ/Qᵢ)</div>
+
+                        <div class="value info" id="sValue">-</div>
+
+                    </div>
+
+                    <div class="result-card">
+
+                        <div class="label">化学品品种数</div>
+
+                        <div class="value" style="color:var(--text-primary)" id="nValue">0</div>
+
+                    </div>
+
+                </div>
+
+                <div class="verdict-banner" id="verdictBanner">
+
+                    <div class="verdict-icon"><i class="fa-solid fa-circle-question"></i></div>
+
+                    <div class="verdict-title">请输入化学品数据进行辨识</div>
+
+                </div>
+
+            </div>
+
+            <div style="text-align:center;margin-top:16px" class="no-print">
+
+                <button class="btn-outline" onclick="clearAll()"><i class="fa-solid fa-trash"></i> 清空列表</button>
+
+                <button class="btn-print" onclick="window.print()" style="margin-left:12px"><i class="fa-solid fa-print"></i> 打印结果</button> <button class="btn-outline no-print" onclick="exportResult('chemListCard','重大危险源辨识结果')"><i class="fa-solid fa-file-export"></i> 导出</button>
+
+            </div>
+
+        </div>
+
+        <!-- ==================== Tab 2: 分级 ==================== -->
+
+        <div class="tab-content" id="tab1">
+
+            <div class="intro-card">
+
+                <i class="fa-solid fa-circle-info"></i>
+
+                <div>
+
+                    <strong>分级准则</strong>：R = α × Σ(βᵢ × qᵢ/Qᵢ)<br>
+
+                    α — 厂外暴露人员校正系数；βᵢ — 各化学品校正系数（毒性气体查表3，其余查表4）<br>
+
+                    分级标准：一级 R≥100 | 二级 50≤R&lt;100 | 三级 10≤R&lt;50 | 四级 R&lt;10
+
+                </div>
+
+            </div>
+
+            <!-- α 选择 -->
+
+            <div class="form-card">
+
+                <h3><i class="fa-solid fa-users"></i> 厂外暴露人员校正系数 α</h3>
+
+                <p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">厂区边界向外扩展500m范围内常住人口数量</p>
+
+                <div class="alpha-options" id="alphaOptions">
+
+                    <button class="alpha-opt" onclick="selectAlpha(0.5, this)">0人 → α=0.5</button>
+
+                    <button class="alpha-opt" onclick="selectAlpha(1.0, this)">1~29人 → α=1.0</button>
+
+                    <button class="alpha-opt selected" onclick="selectAlpha(1.2, this)">30~49人 → α=1.2</button>
+
+                    <button class="alpha-opt" onclick="selectAlpha(1.5, this)">50~99人 → α=1.5</button>
+
+                    <button class="alpha-opt" onclick="selectAlpha(2.0, this)">≥100人 → α=2.0</button>
+
+                </div>
+
+            </div>
+
+            <!-- 分级计算表 -->
+
+            <div class="form-card" id="gradeCard">
+
+                <h3><i class="fa-solid fa-table"></i> 分级计算明细</h3>
+
+                <p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">化学品数据来自"重大危险源辨识"标签页，β值自动匹配（可手动修改）</p>
+
+                <table class="calc-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>化学品</th>
+
+                            <th style="width:100px">qᵢ (t)</th>
+
+                            <th style="width:100px">Qᵢ (t)</th>
+
+                            <th style="width:100px">qᵢ/Qᵢ</th>
+
+                            <th style="width:100px">β 校正系数</th>
+
+                            <th style="width:100px">βᵢ×qᵢ/Qᵢ</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="gradeTableBody">
+
+                        <tr class="empty-row"><td colspan="6">请先在"重大危险源辨识"标签页添加化学品</td></tr>
+
+                    </tbody>
+
+                    <tfoot id="gradeTableFoot" style="display:none">
+
+                        <tr style="font-weight:700;background:var(--brand-red-light)">
+
+                            <td>合计 Σ(βᵢ×qᵢ/Qᵢ)</td>
+
+                            <td></td><td></td><td></td><td></td>
+
+                            <td class="highlight" id="sumBetaQ">-</td>
+
+                        </tr>
+
+                    </tfoot>
+
+                </table>
+
+            </div>
+
+            <!-- 分级结果 -->
+
+            <div class="form-card" id="gradeResultCard" style="display:none">
+
+                <h3><i class="fa-solid fa-ranking-star"></i> 分级结果</h3>
+
+                <div class="result-row">
+
+                    <div class="result-card">
+
+                        <div class="label">分级指标 R</div>
+
+                        <div class="value info" id="rValue">-</div>
+
+                        <div style="font-size:12px;color:var(--text-secondary);margin-top:4px">R = α × Σ(βᵢ×qᵢ/Qᵢ)</div>
+
+                    </div>
+
+                    <div class="result-card" id="levelResultCard">
+
+                        <div class="label">重大危险源级别</div>
+
+                        <div class="value" id="levelResult">-</div>
+
+                    </div>
+
+                </div>
+
+                <div class="level-cards" id="levelCards">
+
+                    <div class="level-card level1" id="lc1"><div class="level-num">一</div><div class="level-range">R ≥ 100</div><div class="level-name">一级重大危险源</div></div>
+
+                    <div class="level-card level2" id="lc2"><div class="level-num">二</div><div class="level-range">50 ≤ R &lt; 100</div><div class="level-name">二级重大危险源</div></div>
+
+                    <div class="level-card level3" id="lc3"><div class="level-num">三</div><div class="level-range">10 ≤ R &lt; 50</div><div class="level-name">三级重大危险源</div></div>
+
+                    <div class="level-card level4" id="lc4"><div class="level-num">四</div><div class="level-range">R &lt; 10</div><div class="level-name">四级重大危险源</div></div>
+
+                </div>
+
+            </div>
+
+            <div style="text-align:center;margin-top:16px" class="no-print">
+
+                <button class="btn-outline" onclick="calcGrade()"><i class="fa-solid fa-rotate"></i> 重新计算分级</button>
+
+                <button class="btn-print" onclick="window.print()" style="margin-left:12px"><i class="fa-solid fa-print"></i> 打印结果</button> <button class="btn-outline no-print" onclick="exportResult('chemListCard','重大危险源辨识结果')"><i class="fa-solid fa-file-export"></i> 导出</button>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- 页脚 -->
+
+    <footer class="sheen-footer">
+
+        <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 重大危险源辨识
+        <span id="busuanzi_container_site_pv" class="site-stat">全站访问 <b><span id="busuanzi_value_site_pv">0</span></b> 次</span>
+        <span id="busuanzi_container_site_uv" class="site-stat">· 独立访客 <b><span id="busuanzi_value_site_uv">0</span></b> 人</span>
+</footer>
+
+<!-- 打印时间戳 -->
+
+    <div class="print-time" id="printTime"></div>
+
+    <script>
+
+    (function() {
+
+    'use strict';
+
+    // ========== 化学品数据库 (GB 18218-2018 表1) ==========
+
+    var chemDB = [
+
+        {id:1,name:"氨",alias:"液氨；氨气",cas:"7664-41-7",q:10,cat:"急性毒性-吸入,类别2*;易燃气体,类别1"},
+
+        {id:2,name:"二氟化氧",alias:"一氧化二氟",cas:"7783-41-7",q:1,cat:"氧化性气体,类别1"},
+
+        {id:3,name:"二氧化氮",alias:"",cas:"10102-44-0",q:1,cat:"急性毒性-吸入,类别2*"},
+
+        {id:4,name:"二氧化硫",alias:"亚硫酸酐",cas:"7446-09-5",q:20,cat:"急性毒性-吸入,类别2*"},
+
+        {id:5,name:"氟",alias:"",cas:"7782-41-4",q:1,cat:"氧化性气体,类别1"},
+
+        {id:6,name:"碳酰氯",alias:"光气",cas:"75-44-5",q:0.3,cat:"急性毒性-吸入,类别1"},
+
+        {id:7,name:"环氧乙烷",alias:"氧化乙烯",cas:"75-21-8",q:10,cat:"易燃气体,类别1;急性毒性-吸入,类别2*"},
+
+        {id:8,name:"甲醛(含量>90%)",alias:"蚁醛",cas:"50-00-0",q:5,cat:"急性毒性-经口,类别3*"},
+
+        {id:9,name:"磷化氢",alias:"磷化三氢；膦",cas:"7803-51-2",q:1,cat:"易燃气体,类别1;急性毒性-吸入,类别2*"},
+
+        {id:10,name:"硫化氢",alias:"",cas:"7783-06-4",q:5,cat:"易燃气体,类别1;急性毒性-吸入,类别2*"},
+
+        {id:11,name:"氯化氢(无水)",alias:"",cas:"7647-01-0",q:20,cat:"急性毒性-吸入,类别2*"},
+
+        {id:12,name:"氯",alias:"液氯；氯气",cas:"7782-50-5",q:5,cat:"急性毒性-吸入,类别2*"},
+
+        {id:13,name:"煤气(CO,CO和H2,CH4的混合物等)",alias:"",cas:"-",q:20,cat:"易燃气体,类别1"},
+
+        {id:14,name:"砷化氢",alias:"砷化三氢；胂",cas:"7784-42-1",q:1,cat:"易燃气体,类别1;急性毒性-吸入,类别2*"},
+
+        {id:15,name:"锑化氢",alias:"三氢化锑",cas:"7803-52-3",q:1,cat:"易燃气体,类别1"},
+
+        {id:16,name:"硒化氢",alias:"",cas:"7783-07-5",q:1,cat:"易燃气体,类别1;急性毒性-吸入,类别2*"},
+
+        {id:17,name:"溴甲烷",alias:"甲基溴",cas:"74-83-9",q:10,cat:"易燃气体,类别1"},
+
+        {id:18,name:"丙酮氰醇",alias:"丙酮合氰化氢",cas:"75-86-5",q:20,cat:"急性毒性-经皮,类别1"},
+
+        {id:19,name:"丙烯醛",alias:"烯丙醛",cas:"107-02-8",q:20,cat:"急性毒性-经皮,类别1"},
+
+        {id:20,name:"氟化氢",alias:"",cas:"7664-39-3",q:1,cat:"急性毒性-经皮,类别1"},
+
+        {id:21,name:"1-氯-2,3-环氧丙烷",alias:"环氧氯丙烷",cas:"106-89-8",q:20,cat:"急性毒性-经皮,类别1"},
+
+        {id:22,name:"3-溴-1,2-环氧丙烷",alias:"环氧溴丙烷",cas:"3132-64-7",q:20,cat:"急性毒性-经皮,类别1"},
+
+        {id:23,name:"甲苯二异氰酸酯",alias:"TDI",cas:"26471-62-5",q:100,cat:"急性毒性-吸入,类别2*"},
+
+        {id:24,name:"一氯化硫",alias:"氯化硫",cas:"10025-67-9",q:1,cat:"急性毒性-经皮,类别1"},
+
+        {id:25,name:"氰化氢",alias:"无水氢氰酸",cas:"74-90-8",q:1,cat:"急性毒性-经皮,类别1"},
+
+        {id:26,name:"三氧化硫",alias:"硫酸酐",cas:"7446-11-9",q:75,cat:"皮肤腐蚀/刺激,类别1A"},
+
+        {id:27,name:"3-氨基丙烯",alias:"烯丙胺",cas:"107-11-9",q:20,cat:"急性毒性-经皮,类别1"},
+
+        {id:28,name:"溴",alias:"溴素",cas:"7726-95-6",q:20,cat:"急性毒性-吸入,类别2*"},
+
+        {id:29,name:"乙撑亚胺",alias:"氮丙啶",cas:"151-56-4",q:20,cat:"急性毒性-经皮,类别1"},
+
+        {id:30,name:"异氰酸甲酯",alias:"甲基异氰酸酯",cas:"624-83-9",q:0.75,cat:"急性毒性-经皮,类别1"},
+
+        {id:31,name:"叠氮化钡",alias:"叠氮钡",cas:"18810-58-7",q:0.5,cat:"爆炸物,1.1项"},
+
+        {id:32,name:"叠氮化铅",alias:"",cas:"13424-46-9",q:0.5,cat:"爆炸物,1.1项"},
+
+        {id:33,name:"雷汞",alias:"雷酸汞",cas:"628-86-4",q:0.5,cat:"爆炸物,1.1项"},
+
+        {id:34,name:"三硝基苯甲醚",alias:"三硝基茴香醚",cas:"28653-16-9",q:5,cat:"爆炸物,1.1项"},
+
+        {id:35,name:"2,4,6-三硝基甲苯",alias:"TNT",cas:"118-96-7",q:5,cat:"爆炸物,1.1项"},
+
+        {id:36,name:"硝化甘油",alias:"甘油三硝酸酯",cas:"55-63-0",q:1,cat:"爆炸物,1.1项"},
+
+        {id:37,name:"硝化纤维素[干或含水(或乙醇)<25%]",alias:"硝化棉",cas:"9004-70-0",q:1,cat:"爆炸物,1.1项"},
+
+        {id:38,name:"硝化纤维素(未改型,含增塑剂<18%)",alias:"",cas:"9004-70-0",q:1,cat:"爆炸物,1.1项"},
+
+        {id:39,name:"硝化纤维素(含乙醇≥25%)",alias:"",cas:"9004-70-0",q:10,cat:"爆炸物,1.3项"},
+
+        {id:40,name:"硝化纤维素(含氮≤12.6%)",alias:"",cas:"9004-70-0",q:50,cat:"易燃固体,类别1"},
+
+        {id:41,name:"硝化纤维素(含水≥25%)",alias:"",cas:"9004-70-0",q:50,cat:"易燃固体,类别1"},
+
+        {id:42,name:"硝化纤维素溶液(含氮量≤12.6%)",alias:"硝化棉溶液",cas:"9004-70-0",q:50,cat:"易燃液体,类别2"},
+
+        {id:43,name:"硝酸铵(含可燃物>0.2%)",alias:"",cas:"6484-52-2",q:5,cat:"爆炸物,1.1项"},
+
+        {id:44,name:"硝酸铵(含可燃物≤0.2%)",alias:"",cas:"6484-52-2",q:50,cat:"氧化性固体,类别2"},
+
+        {id:45,name:"硝酸铵肥料(含可燃物≤0.4%)",alias:"",cas:"6484-52-2",q:200,cat:"氧化性固体,类别3"},
+
+        {id:46,name:"硝酸钾",alias:"",cas:"7757-79-1",q:1000,cat:"氧化性固体,类别2"},
+
+        {id:47,name:"1,3-丁二烯",alias:"联乙烯",cas:"106-99-0",q:5,cat:"易燃气体,类别1"},
+
+        {id:48,name:"二甲醚",alias:"甲醚",cas:"115-10-6",q:50,cat:"易燃气体,类别1"},
+
+        {id:49,name:"甲烷，天然气",alias:"",cas:"74-82-8",q:50,cat:"易燃气体,类别1"},
+
+        {id:50,name:"氯乙烯",alias:"乙烯基氯",cas:"75-01-4",q:50,cat:"易燃气体,类别1"},
+
+        {id:51,name:"氢",alias:"氢气",cas:"1333-74-0",q:5,cat:"易燃气体,类别1"},
+
+        {id:52,name:"液化石油气(含丙烷、丁烷)",alias:"石油气（液化的）",cas:"68476-85-7",q:50,cat:"易燃气体,类别1"},
+
+        {id:53,name:"一甲胺",alias:"氨基甲烷",cas:"74-89-5",q:5,cat:"易燃气体,类别1"},
+
+        {id:54,name:"乙炔",alias:"电石气",cas:"74-86-2",q:1,cat:"易燃气体,类别1"},
+
+        {id:55,name:"乙烯",alias:"",cas:"74-85-1",q:50,cat:"易燃气体,类别1"},
+
+        {id:56,name:"氧(压缩的或液化的)",alias:"液氧；氧气",cas:"7782-44-7",q:200,cat:"氧化性气体,类别1"},
+
+        {id:57,name:"苯",alias:"纯苯",cas:"71-43-2",q:50,cat:"易燃液体,类别2"},
+
+        {id:58,name:"苯乙烯",alias:"乙烯苯",cas:"100-42-5",q:500,cat:"易燃液体,类别3"},
+
+        {id:59,name:"丙酮",alias:"二甲基酮",cas:"67-64-1",q:500,cat:"易燃液体,类别2"},
+
+        {id:60,name:"2-丙烯腈",alias:"丙烯腈",cas:"107-13-1",q:50,cat:"易燃液体,类别2"},
+
+        {id:61,name:"二硫化碳",alias:"",cas:"75-15-0",q:50,cat:"易燃液体,类别2"},
+
+        {id:62,name:"环己烷",alias:"六氢化苯",cas:"110-82-7",q:500,cat:"易燃液体,类别2"},
+
+        {id:63,name:"1,2-环氧丙烷",alias:"氧化丙烯",cas:"75-56-9",q:10,cat:"易燃液体,类别2"},
+
+        {id:64,name:"甲苯",alias:"甲基苯",cas:"108-88-3",q:500,cat:"易燃液体,类别2"},
+
+        {id:65,name:"甲醇",alias:"木醇；木精",cas:"67-56-1",q:500,cat:"易燃液体,类别2"},
+
+        {id:66,name:"汽油(乙醇汽油、甲醇汽油)",alias:"",cas:"86290-81-5",q:200,cat:"易燃液体,类别2"},
+
+        {id:67,name:"乙醇",alias:"酒精",cas:"64-17-5",q:500,cat:"易燃液体,类别2"},
+
+        {id:68,name:"乙醚",alias:"二乙基醚",cas:"60-29-7",q:10,cat:"易燃液体,类别2"},
+
+        {id:69,name:"乙酸乙酯",alias:"醋酸乙酯",cas:"141-78-6",q:500,cat:"易燃液体,类别2"},
+
+        {id:70,name:"正己烷",alias:"己烷",cas:"110-54-3",q:500,cat:"易燃液体,类别2"},
+
+        {id:71,name:"过乙酸",alias:"过醋酸",cas:"79-21-0",q:10,cat:"有机过氧化物,D型"},
+
+        {id:72,name:"过氧化甲基乙基酮(10%<有效氧≤10.7%)",alias:"",cas:"1338-23-4",q:10,cat:"有机过氧化物,D型"},
+
+        {id:73,name:"白磷",alias:"黄磷",cas:"12185-10-3",q:50,cat:"自燃固体,类别1"},
+
+        {id:74,name:"烷基铝",alias:"三烷基铝",cas:"-",q:1,cat:"自燃液体,类别1"},
+
+        {id:75,name:"戊硼烷",alias:"五硼烷",cas:"19624-22-7",q:1,cat:"自燃液体,类别1"},
+
+        {id:76,name:"过氧化钾",alias:"",cas:"17014-71-0",q:20,cat:"氧化性固体,类别1"},
+
+        {id:77,name:"过氧化钠",alias:"二氧化钠",cas:"1313-60-6",q:20,cat:"氧化性固体,类别1"},
+
+        {id:78,name:"氯酸钾",alias:"",cas:"3811-04-9",q:100,cat:"氧化性固体,类别1"},
+
+        {id:79,name:"氯酸钠",alias:"",cas:"7775-09-9",q:100,cat:"氧化性固体,类别1"},
+
+        {id:80,name:"发烟硝酸",alias:"",cas:"52583-42-3",q:20,cat:"氧化性液体,类别1"},
+
+        {id:81,name:"硝酸(发红烟的除外,含硝酸>70%)",alias:"",cas:"7697-37-2",q:100,cat:"氧化性液体,类别2"},
+
+        {id:82,name:"硝酸胍",alias:"硝酸亚氨脲",cas:"506-93-4",q:50,cat:"氧化性固体,类别2"},
+
+        {id:83,name:"碳化钙",alias:"电石",cas:"75-20-7",q:100,cat:"遇水放出易燃气体,类别1"},
+
+        {id:84,name:"钾",alias:"金属钾",cas:"7440-09-7",q:1,cat:"遇水放出易燃气体,类别1"},
+
+        {id:85,name:"钠",alias:"金属钠",cas:"7440-23-5",q:10,cat:"遇水放出易燃气体,类别1"}
+
+    ];
+
+    // 表3: 毒性气体 β 值
+
+    var toxicGasBeta = {
+
+        "一氧化碳":2,"二氧化硫":2,"氨":2,"环氧乙烷":2,"氯化氢":3,"溴甲烷":3,
+
+        "氯":4,"硫化氢":5,"氟化氢":5,"二氧化氮":10,"氰化氢":10,"碳酰氯":20,"磷化氢":20,"异氰酸甲酯":20
+
+    };
+
+    // 表4: 类别 β 值 (简化映射)
+
+    var catBeta = {
+
+        "J1":4,"J2":1,"J3":2,"J4":2,"J5":1,
+
+        "W1.1":2,"W1.2":2,"W1.3":2,
+
+        "W2":1.5,"W3":1,"W4":1,
+
+        "W5.1":1.5,"W5.2":1,"W5.3":1,"W5.4":1,
+
+        "W6.1":1.5,"W6.2":1,
+
+        "W7.1":1.5,"W7.2":1,
+
+        "W8":1,"W9.1":1,"W9.2":1,"W10":1,"W11":1
+
+    };
+
+    // 表2: 未在表1列举的类别临界量
+
+    var table2 = [
+
+        {code:"J1",desc:"急性毒性类别1,气体",q:5},
+
+        {code:"J2",desc:"急性毒性类别1,固体/液体",q:50},
+
+        {code:"J3",desc:"急性毒性类别2/3,气体",q:50},
+
+        {code:"J4",desc:"急性毒性类别2/3,吸入液体(沸点≤35℃)",q:50},
+
+        {code:"J5",desc:"急性毒性类别2,液体/固体(除J4)",q:500},
+
+        {code:"W1.1",desc:"不稳定爆炸物/1.1项",q:1},
+
+        {code:"W1.2",desc:"1.2/1.3/1.5/1.6项爆炸物",q:10},
+
+        {code:"W1.3",desc:"1.4项爆炸物",q:50},
+
+        {code:"W2",desc:"易燃气体类别1和2",q:10},
+
+        {code:"W3",desc:"气溶胶类别1和2",q:150},
+
+        {code:"W4",desc:"氧化性气体类别1",q:50},
+
+        {code:"W5.1",desc:"易燃液体类别1/高温类别2/3",q:10},
+
+        {code:"W5.2",desc:"易燃液体特殊工艺(危险工艺等)",q:50},
+
+        {code:"W5.3",desc:"易燃液体类别2(其他)",q:1000},
+
+        {code:"W5.4",desc:"易燃液体类别3(其他)",q:5000},
+
+        {code:"W6.1",desc:"自反应物质A/B型",q:10},
+
+        {code:"W6.2",desc:"自反应物质C/D/E型",q:50},
+
+        {code:"W7.1",desc:"有机过氧化物A/B型",q:10},
+
+        {code:"W7.2",desc:"有机过氧化物C/D/E/F型",q:50},
+
+        {code:"W8",desc:"自燃液体/固体类别1",q:50},
+
+        {code:"W9.1",desc:"氧化性固体/液体类别1",q:50},
+
+        {code:"W9.2",desc:"氧化性固体/液体类别2/3",q:200},
+
+        {code:"W10",desc:"易燃固体类别1",q:200},
+
+        {code:"W11",desc:"遇水放出易燃气体类别1/2",q:200}
+
+    ];
+
+    // ========== 全局状态 ==========
+
+    var chemicals = [];
+
+    var alpha = 1.2;
+
+    var currentTab = 0;
+
+    // ========== 标签切换 ==========
+
+    window.switchTab = function(n) {
+
+        currentTab = n;
+
+        document.querySelectorAll('.tab-btn').forEach(function(el,i){ el.classList.toggle('active',i===n); });
+
+        document.querySelectorAll('.tab-content').forEach(function(el,i){ el.classList.toggle('active',i===n); });
+
+        if (n === 1) { buildGradeTable(); calcGrade(); }
+
+    };
+
+    // ========== 搜索化学品 ==========
+
+    window.searchChem = function() {
+
+        var q = document.getElementById('chemSearch').value.trim().toLowerCase();
+
+        var dd = document.getElementById('chemDropdown');
+
+        if (!q) { dd.classList.remove('show'); return; }
+
+        var results = [];
+
+        // 搜索表1
+
+        chemDB.forEach(function(c){
+
+            if (c.name.toLowerCase().indexOf(q)>=0||c.cas.indexOf(q)>=0||(c.alias&&c.alias.toLowerCase().indexOf(q)>=0)){
+
+                results.push({type:'table1',data:c});
+
+            }
+
+        });
+
+        // 搜索表2
+
+        table2.forEach(function(t){
+
+            if (t.desc.toLowerCase().indexOf(q)>=0||t.code.toLowerCase().indexOf(q)>=0){
+
+                results.push({type:'table2',data:t});
+
+            }
+
+        });
+
+        results = results.slice(0, 15);
+
+        var html = '';
+
+        results.forEach(function(r){
+
+            if (r.type==='table1'){
+
+                var c=r.data;
+
+                html+='<div class="dropdown-item" onclick="selectChem(\'table1\','+c.id+')"><span><span class="chem-name">'+escapeHtml(c.name)+'</span><br><span class="chem-meta">CAS: '+c.cas+' | 临界量: '+c.q+'t</span></span><span class="source-badge table1">表1</span></div>';
+
+            } else {
+
+                var t=r.data;
+
+                html+='<div class="dropdown-item" onclick="selectChem(\'table2\',\''+t.code+'\')"><span><span class="chem-name">'+escapeHtml(t.desc)+'</span><br><span class="chem-meta">临界量: '+t.q+'t</span></span><span class="source-badge table2">表2</span></div>';
+
+            }
+
+        });
+
+        if (!html) html='<div class="dropdown-item" style="color:var(--text-secondary)">未找到匹配项，支持手动输入</div>';
+
+        dd.innerHTML=html;
+
+        dd.classList.add('show');
+
+    };
+
+    window.selectChem = function(type, id) {
+
+        if (type==='table1'){
+
+            var c = chemDB.find(function(x){return x.id===id;});
+
+            if(c){
+
+                document.getElementById('chemSearch').value = c.name + ' (' + c.cas + ')';
+
+                window._selectedChem = {source:'table1', id:c.id, name:c.name, cas:c.cas, qty:c.q, cat:c.cat};
+
+            }
+
+        } else {
+
+            var t = table2.find(function(x){return x.code===id;});
+
+            if(t){
+
+                document.getElementById('chemSearch').value = t.desc + ' [' + t.code + ']';
+
+                window._selectedChem = {source:'table2', code:t.code, name:t.desc, cas:'-', qty:t.q, cat:t.desc};
+
+            }
+
+        }
+
+        document.getElementById('chemDropdown').classList.remove('show');
+
+        document.getElementById('chemQty').focus();
+
+    };
+
+    // 点击外部关闭下拉
+
+    document.addEventListener('click', function(e){
+
+        if (!e.target.closest('.search-wrapper')) {
+
+            document.getElementById('chemDropdown').classList.remove('show');
+
+        }
+
+    });
+
+    // ========== 添加化学品 ==========
+
+    window.addChemical = function() {
+
+        var sel = window._selectedChem;
+
+        var qtyVal = parseFloat(document.getElementById('chemQty').value);
+
+        if (!sel) {
+
+            // 手动输入模式
+
+            var name = document.getElementById('chemSearch').value.trim();
+
+            if (!name) { alert('请先搜索/选择化学品'); return; }
+
+            if (isNaN(qtyVal) || qtyVal <= 0) { alert('请输入有效的实际存在量(t)'); return; }
+
+            var cqty = parseFloat(prompt('请输入该化学品对应的临界量（吨）：', ''));
+
+            if (isNaN(cqty) || cqty <= 0) return;
+
+            var bbeta = parseFloat(prompt('请输入该化学品对应的β校正系数（默认1.0）：', '1.0'));
+
+            if (isNaN(bbeta)) bbeta = 1.0;
+
+            chemicals.push({
+
+                source: 'custom', name: name, cas: '-', qty: cqty, actual: qtyVal,
+
+                ratio: qtyVal/cqty, cat: '手动输入', beta: bbeta
+
+            });
+
+        } else if (sel.source === 'table1') {
+
+            if (isNaN(qtyVal) || qtyVal <= 0) { alert('请输入有效的实际存在量(t)'); return; }
+
+            var b = getBeta(sel.name, sel.cat);
+
+            chemicals.push({
+
+                source: 'table1', id: sel.id, name: sel.name, cas: sel.cas,
+
+                qty: sel.qty, actual: qtyVal, ratio: qtyVal/sel.qty, cat: sel.cat, beta: b
+
+            });
+
+        } else if (sel.source === 'table2') {
+
+            if (isNaN(qtyVal) || qtyVal <= 0) { alert('请输入有效的实际存在量(t)'); return; }
+
+            var bb = catBeta[sel.code] || 1;
+
+            chemicals.push({
+
+                source: 'table2', code: sel.code, name: sel.name, cas: '-',
+
+                qty: sel.qty, actual: qtyVal, ratio: qtyVal/sel.qty, cat: sel.cat, beta: bb
+
+            });
+
+        }
+
+        document.getElementById('chemSearch').value = '';
+
+        document.getElementById('chemQty').value = '';
+
+        window._selectedChem = null;
+
+        renderChemicals();
+
+        calcIdentification();
+
+        buildGradeTable();
+
+        calcGrade();
+
+    };
+
+    function getBeta(name, cat) {
+
+        // 按名称查毒性气体β值
+
+        if (toxicGasBeta[name]) return toxicGasBeta[name];
+
+        // 也检查cat字段中是否包含已知毒性气体名称
+
+        for (var tg in toxicGasBeta) {
+
+            if (cat.indexOf(tg) >= 0) return toxicGasBeta[tg];
+
+        }
+
+        // 爆炸物 W1
+
+        if (cat.indexOf('爆炸')>=0 || cat.indexOf('1.1项')>=0) return catBeta['W1.1']||2;
+
+        if (cat.indexOf('1.2')>=0 || cat.indexOf('1.3项')>=0 || cat.indexOf('1.5')>=0 || cat.indexOf('1.6')>=0) return catBeta['W1.2']||2;
+
+        if (cat.indexOf('1.4项')>=0) return catBeta['W1.3']||2;
+
+        // W2: 易燃气体
+
+        if (cat.indexOf('易燃气体')>=0) return catBeta['W2']||1.5;
+
+        // W4: 氧化性气体
+
+        if (cat.indexOf('氧化性气体')>=0) return catBeta['W4']||1;
+
+        // W5: 易燃液体 — 按具体类别/工艺区分
+
+        if (cat.indexOf('易燃液体')>=0) {
+
+            if (cat.indexOf('类别1')>=0 || cat.indexOf('高温')>=0) return catBeta['W5.1']||1.5;
+
+            if (cat.indexOf('特殊工艺')>=0) return catBeta['W5.2']||1;
+
+            if (cat.indexOf('类别3')>=0) return catBeta['W5.4']||1;
+
+            return catBeta['W5.3']||1; // 类别2 及其他 → W5.3
+
+        }
+
+        // W6: 自反应物质
+
+        if (cat.indexOf('自反应')>=0) {
+
+            if (cat.indexOf('A')>=0 || cat.indexOf('B')>=0) return catBeta['W6.1']||1.5;
+
+            return catBeta['W6.2']||1;
+
+        }
+
+        // W7: 有机过氧化物
+
+        if (cat.indexOf('有机过氧化物')>=0) {
+
+            if (cat.indexOf('A')>=0 || cat.indexOf('B')>=0) return catBeta['W7.1']||1.5;
+
+            return catBeta['W7.2']||1;
+
+        }
+
+        // W8: 自燃
+
+        if (cat.indexOf('自燃')>=0) return catBeta['W8']||1;
+
+        // W9: 氧化性固体/液体 — 区分类别
+
+        if (cat.indexOf('氧化性固体')>=0 || cat.indexOf('氧化性液体')>=0) {
+
+            if (cat.indexOf('类别1')>=0) return catBeta['W9.1']||1;
+
+            return catBeta['W9.2']||1;
+
+        }
+
+        // W10: 易燃固体
+
+        if (cat.indexOf('易燃固体')>=0) return catBeta['W10']||1;
+
+        // W11: 遇水
+
+        if (cat.indexOf('遇水')>=0) return catBeta['W11']||1;
+
+        // J: 急性毒性 — 区分气体(吸入)与固体/液体(经皮/经口)
+
+        if (cat.indexOf('急性毒性')>=0) {
+
+            var isInhale = cat.indexOf('吸入')>=0;
+
+            // J1: 急性毒性类别1气体 → β=4
+
+            if (isInhale && cat.indexOf('类别1')>=0) return catBeta['J1']||4;
+
+            // J3/J4: 急性毒性类别2/3 气体 → β=2
+
+            if (isInhale && (cat.indexOf('类别2')>=0 || cat.indexOf('类别3')>=0)) {
+
+                if (cat.indexOf('沸点')>=0 || (cat.indexOf('液体')>=0 && isInhale)) return catBeta['J4']||2;
+
+                return catBeta['J3']||2;
+
+            }
+
+            // J2: 类别1 固体/液体（经皮/经口）
+
+            if (cat.indexOf('类别1')>=0 || cat.indexOf('经皮')>=0) return catBeta['J2']||1;
+
+            // J5: 其他急性毒性
+
+            return catBeta['J5']||1;
+
+        }
+
+        if (cat.indexOf('皮肤')>=0 || cat.indexOf('腐蚀')>=0) return 1;
+
+        return 1;
+
+    }
+
+    // ========== 渲染化学品列表 ==========
+
+    function renderChemicals() {
+
+        var tb = document.getElementById('chemTableBody');
+
+        document.getElementById('chemCount').textContent = chemicals.length;
+
+        if (chemicals.length === 0) {
+
+            tb.innerHTML = '<tr class="empty-row"><td colspan="8">暂无化学品，请在上方搜索并添加</td></tr>';
+
+            document.getElementById('resultCard').style.display = 'none';
+
+            return;
+
+        }
+
+        var html = '';
+
+        chemicals.forEach(function(c, i){
+
+            var sourceLabel, sourceClass;
+
+            if (c.source==='table1'){sourceLabel='表1';sourceClass='table1';}
+
+            else if (c.source==='table2'){sourceLabel='表2';sourceClass='table2';}
+
+            else {sourceLabel='自定义';sourceClass='custom';}
+
+            html += '<tr>'+
+
+                '<td>'+(i+1)+'</td>'+
+
+                '<td><strong>'+escapeHtml(c.name)+'</strong></td>'+
+
+                '<td style="font-size:12px;color:var(--text-secondary)">'+c.cas+'</td>'+
+
+                '<td><span class="source-badge '+sourceClass+'">'+sourceLabel+'</span></td>'+
+
+                '<td>'+c.qty+'</td>'+
+
+                '<td>'+c.actual+'</td>'+
+
+                '<td style="font-weight:600">'+c.ratio.toFixed(4)+'</td>'+
+
+                '<td><button class="btn-danger" onclick="removeChem('+i+')" title="删除"><i class="fa-solid fa-xmark"></i></button></td>'+
+
+                '</tr>';
+
+        });
+
+        tb.innerHTML = html;
+
+    }
+
+    window.removeChem = function(i) {
+
+        chemicals.splice(i, 1);
+
+        renderChemicals();
+
+        calcIdentification();
+
+        buildGradeTable();
+
+        calcGrade();
+
+    };
+
+    window.clearAll = function() {
+
+        if (chemicals.length===0) return;
+
+        if (!confirm('确定清空所有化学品数据？')) return;
+
+        chemicals = [];
+
+        renderChemicals();
+
+        calcIdentification();
+
+        buildGradeTable();
+
+        calcGrade();
+
+    };
+
+    // ========== 辨识计算 ==========
+
+    function calcIdentification() {
+
+        var card = document.getElementById('resultCard');
+
+        if (chemicals.length === 0) { card.style.display = 'none'; return; }
+
+        card.style.display = 'block';
+
+        var S = 0;
+
+        chemicals.forEach(function(c){ S += c.ratio; });
+
+        document.getElementById('sValue').textContent = S.toFixed(4);
+
+        document.getElementById('nValue').textContent = chemicals.length;
+
+        var banner = document.getElementById('verdictBanner');
+
+        if (S >= 1) {
+
+            banner.className = 'verdict-banner is-hazard';
+
+            banner.innerHTML = '<div class="verdict-icon"><i class="fa-solid fa-circle-exclamation"></i></div>'+
+
+                '<div class="verdict-title" style="color:#DC2626">构成重大危险源</div>'+
+
+                '<div class="verdict-detail">辨识指标 S = '+S.toFixed(4)+' ≥ 1，该单元属于危险化学品重大危险源</div>';
+
+        } else {
+
+            banner.className = 'verdict-banner not-hazard';
+
+            banner.innerHTML = '<div class="verdict-icon"><i class="fa-solid fa-circle-check"></i></div>'+
+
+                '<div class="verdict-title" style="color:#16A34A">未构成重大危险源</div>'+
+
+                '<div class="verdict-detail">辨识指标 S = '+S.toFixed(4)+' &lt; 1，该单元不属于危险化学品重大危险源</div>';
+
+        }
+
+    }
+
+    // ========== α 选择 ==========
+
+    window.selectAlpha = function(val, btn) {
+
+        alpha = val;
+
+        document.querySelectorAll('#alphaOptions .alpha-opt').forEach(function(el){ el.classList.remove('selected'); });
+
+        btn.classList.add('selected');
+
+        calcGrade();
+
+    };
+
+    // ========== 构建分级表 ==========
+
+    function buildGradeTable() {
+
+        var tb = document.getElementById('gradeTableBody');
+
+        var ft = document.getElementById('gradeTableFoot');
+
+        if (chemicals.length === 0) {
+
+            tb.innerHTML = '<tr class="empty-row"><td colspan="6">请先在"重大危险源辨识"标签页添加化学品</td></tr>';
+
+            ft.style.display = 'none';
+
+            document.getElementById('gradeResultCard').style.display = 'none';
+
+            return;
+
+        }
+
+        var html = '';
+
+        chemicals.forEach(function(c,i){
+
+            html += '<tr>'+
+
+                '<td><strong>'+escapeHtml(c.name)+'</strong></td>'+
+
+                '<td>'+c.actual+'</td>'+
+
+                '<td>'+c.qty+'</td>'+
+
+                '<td style="font-weight:600">'+c.ratio.toFixed(4)+'</td>'+
+
+                '<td><input type="number" class="form-control small" value="'+c.beta+'" step="0.1" min="0" style="width:80px" onchange="updateBeta('+i+',this.value)" id="betaInput'+i+'"></td>'+
+
+                '<td style="font-weight:600" id="betaQCell'+i+'">'+(c.beta*c.ratio).toFixed(4)+'</td>'+
+
+                '</tr>';
+
+        });
+
+        tb.innerHTML = html;
+
+        ft.style.display = '';
+
+    }
+
+    window.updateBeta = function(i, val) {
+
+        var v = parseFloat(val);
+
+        if (isNaN(v) || v < 0) return;
+
+        chemicals[i].beta = v;
+
+        document.getElementById('betaQCell'+i).textContent = (v * chemicals[i].ratio).toFixed(4);
+
+        calcGrade();
+
+    };
+
+    // ========== 分级计算 ==========
+
+    window.calcGrade = function() {
+
+        buildGradeTable();
+
+        var card = document.getElementById('gradeResultCard');
+
+        if (chemicals.length === 0) { card.style.display = 'none'; return; }
+
+        card.style.display = 'block';
+
+        var sumBetaQ = 0;
+
+        chemicals.forEach(function(c){ sumBetaQ += c.beta * c.ratio; });
+
+        document.getElementById('sumBetaQ').textContent = sumBetaQ.toFixed(4);
+
+        var R = alpha * sumBetaQ;
+
+        document.getElementById('rValue').textContent = R.toFixed(2);
+
+        var level, levelClass;
+
+        if (R >= 100) { level = '一级'; levelClass = 'level1'; }
+
+        else if (R >= 50) { level = '二级'; levelClass = 'level2'; }
+
+        else if (R >= 10) { level = '三级'; levelClass = 'level3'; }
+
+        else { level = '四级'; levelClass = 'level4'; }
+
+        var lr = document.getElementById('levelResultCard');
+
+        lr.querySelector('.value').textContent = level;
+
+        lr.querySelector('.value').className = 'value';
+
+        lr.querySelector('.value').classList.add(levelClass==='level1'?'danger':(levelClass==='level4'?'safe':'info'));
+
+        document.getElementById('levelResult').textContent = level + '重大危险源';
+
+        // 高亮对应级别卡片
+
+        ['lc1','lc2','lc3','lc4'].forEach(function(id){ document.getElementById(id).classList.remove('active'); });
+
+        document.getElementById('lc' + (level==='一级'?'1':level==='二级'?'2':level==='三级'?'3':'4')).classList.add('active');
+
+    };
+
+    // ========== 工具函数 ==========
+
+    function escapeHtml(str) {
+
+        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+    }
+
+    // ========== 打印时间 ==========
+
+    document.getElementById('printTime').textContent =
+
+        new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000).toISOString().replace('T',' ').slice(0,16);
+
+    })();
+
+    
+window.exportResult = function(resultId, filename) {
+  var el = document.getElementById(resultId);
+  if (!el) { alert('暂无可导出的结果'); return; }
+  var html = '<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">' +
+    '<title>' + filename + ' — SHEEN Toolbox</title>' +
+    '<style>body{font-family:system-ui,-apple-system,sans-serif;padding:24px;color:#111827;line-height:1.6;max-width:900px;margin:0 auto}' +
+    'table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}th,td{border:1px solid #E5E7EB;padding:8px;text-align:left}' +
+    'th{background:#F8FAFC;font-weight:600}.result-value{background:#FEF2F2;border-left:6px solid #7A1825;' +
+    'padding:20px;border-radius:12px;margin:16px 0}.number{font-size:36px;font-weight:700;color:#7A1825}' +
+    'h1{color:#7A1825;font-size:20px;margin-bottom:4px}h4{color:#7A1825;margin:16px 0 8px}' +
+    '.stats-count{color:#7A1825;font-weight:700}</style></head><body>' +
+    '<h1>📋 ' + filename + '</h1>' +
+    '<p style="color:#6B7280;font-size:12px;margin-top:0;">导出时间：' +
+    new Date().toLocaleString('zh-CN') + '</p>' +
+    el.innerHTML.replace(/class="warn-bar[^"]*"/g, '') +
+    '    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" onerror="var p=document.getElementById('busuanzi_value_site_pv');var u=document.getElementById('busuanzi_value_site_uv');if(p)p.textContent='—';if(u)u.textContent='—';"></script>
+</body></html>';
+  var blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = filename + '.html';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
+
+</script>
+    
+</body>
+
+</html>
+
