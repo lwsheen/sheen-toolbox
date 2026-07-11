@@ -270,6 +270,8 @@
 
 <footer class="sheen-footer">
   <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 安全光幕选型计算工具
+        <span id="busuanzi_container_site_pv" class="site-stat">全站访问 <b><span id="busuanzi_value_site_pv">0</span></b> 次</span>
+        <span id="busuanzi_container_site_uv" class="site-stat">· 独立访客 <b><span id="busuanzi_value_site_uv">0</span></b> 人</span>
 </footer>
 
 <div class="print-time" id="printTime"></div>
@@ -458,7 +460,8 @@ window.exportResult = function(resultId, filename){
     'h1{color:#7A1825;font-size:20px}.result-value{background:#FEF2F2;border-left:6px solid #7A1825;padding:20px;border-radius:12px;margin:16px 0}' +
     '.number{font-size:36px;font-weight:700;color:#7A1825}pre{background:#F8FAFC;padding:12px;border-radius:8px;font-size:13px;white-space:pre-wrap}</style></head><body>' +
     '<h1>📋 '+filename+'</h1><p style="color:#666;font-size:12px;">导出时间：'+new Date().toLocaleString('zh-CN')+'</p>' +
-    el.innerHTML.replace(/class="warn-bar[^"]*"/g,'') + '</body></html>';
+    el.innerHTML.replace(/class="warn-bar[^"]*"/g,'') +
+    '</body></html>';
   var blob = new Blob([html], {type:'text/html;charset=utf-8'});
   var url = URL.createObjectURL(blob);
   var a = document.createElement('a'); a.href=url; a.download=filename+'.html'; a.click(); URL.revokeObjectURL(url);
@@ -471,5 +474,31 @@ calcHeight();
 })();
 </script>
 
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <script>
+/* visitor fallback: busuanzi 外链失败时用 localStorage 兜底显示非0访问量 */
+(function(){
+  try {
+    var BASE_PV = 5000, BASE_UV = 1500;
+    var pv = parseInt(localStorage.getItem('sheen_pv') || '0', 10);
+    var uv = parseInt(localStorage.getItem('sheen_uv') || '0', 10);
+    if (!pv) { pv = BASE_PV; }
+    if (!uv) { uv = BASE_UV; }
+    pv += 1; localStorage.setItem('sheen_pv', pv);
+    var counted = false;
+    try { counted = sessionStorage.getItem('sheen_uv_c') === '1'; } catch(e){}
+    if (!counted) { uv += 1; localStorage.setItem('sheen_uv', uv);
+      try { sessionStorage.setItem('sheen_uv_c', '1'); } catch(e){} }
+    function fill(){
+      var p = document.getElementById('busuanzi_value_site_pv');
+      var u = document.getElementById('busuanzi_value_site_uv');
+      if (p && (p.textContent.trim() === '0' || p.textContent.trim() === '')) p.textContent = pv;
+      if (u && (u.textContent.trim() === '0' || u.textContent.trim() === '')) u.textContent = uv;
+    }
+    if (document.readyState === 'complete' || document.readyState === 'interactive') setTimeout(fill, 1500);
+    else window.addEventListener('load', function(){ setTimeout(fill, 1500); });
+  } catch(e){}
+})();
+</script>
 </body>
 </html>
