@@ -803,32 +803,7 @@ window.exportResult = function(resultId, filename) {
 
 </script>
     
-    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    <script>
-/* visitor fallback: busuanzi 外链失败时用 localStorage 兜底显示非0访问量 */
-(function(){
-  try {
-    var BASE_PV = 5000, BASE_UV = 1500;
-    var pv = parseInt(localStorage.getItem('sheen_pv') || '0', 10);
-    var uv = parseInt(localStorage.getItem('sheen_uv') || '0', 10);
-    if (!pv) { pv = BASE_PV; }
-    if (!uv) { uv = BASE_UV; }
-    pv += 1; localStorage.setItem('sheen_pv', pv);
-    var counted = false;
-    try { counted = sessionStorage.getItem('sheen_uv_c') === '1'; } catch(e){}
-    if (!counted) { uv += 1; localStorage.setItem('sheen_uv', uv);
-      try { sessionStorage.setItem('sheen_uv_c', '1'); } catch(e){} }
-    function fill(){
-      var p = document.getElementById('busuanzi_value_site_pv');
-      var u = document.getElementById('busuanzi_value_site_uv');
-      if (p && (p.textContent.trim() === '0' || p.textContent.trim() === '')) p.textContent = pv;
-      if (u && (u.textContent.trim() === '0' || u.textContent.trim() === '')) u.textContent = uv;
-    }
-    if (document.readyState === 'complete' || document.readyState === 'interactive') setTimeout(fill, 1500);
-    else window.addEventListener('load', function(){ setTimeout(fill, 1500); });
-  } catch(e){}
-})();
-</script>
+    <script src="/sheen-toolbox/counter.js"></script>
 </body>
 
 </html>
