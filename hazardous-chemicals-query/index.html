@@ -1,1 +1,808 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>危险化学品查询 — SHEEN Toolbox</title><link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css"><link rel="stylesheet" href="/sheen-toolbox/common.css"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg-page);color:var(--text-primary);line-height:1.6}.breadcrumb a:hover{opacity:.7;text-decoration:underline}.breadcrumb span{color:var(--text-secondary)}.page-header{text-align:center;margin-bottom:32px}.search-section{background:var(--bg-card);border-radius:var(--radius-xl);padding:24px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,.04)}.search-box{display:flex;gap:12px;margin-bottom:16px}.search-input{flex:1;padding:12px 16px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:14px;font-family:inherit;transition:all var(--transition)}.search-input:focus{outline:0;border-color:var(--brand-red);box-shadow:0 0 0 4px rgba(122,24,37,.08)}.filter-row{display:flex;gap:12px;flex-wrap:wrap}.filter-select{padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:11px;font-family:inherit;background:var(--bg-card);color:var(--text-primary);cursor:pointer}.result-stats{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding:12px 16px;background:var(--brand-red-light);border-radius:var(--radius-md);font-size:14px}.stats-count{font-weight:600;color:var(--brand-red)}.result-table{width:100%;background:var(--bg-card);border-radius:var(--radius-xl);overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:24px}.result-table table{width:100%;border-collapse:collapse}.result-table th{background:var(--bg-page);padding:12px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--text-secondary);border-bottom:1.5px solid var(--border)}.result-table td{padding:12px 16px;font-size:14px;border-bottom:1px solid var(--border-light)}.result-table tr:hover{background:var(--bg-page)}.result-table tr:last-child td{border-bottom:none}.chemical-name{font-weight:600;color:var(--brand-red)}.chemical-alias{font-size:12px;color:var(--text-secondary);margin-top:4px}.badge-toxic{display:inline-block;padding:2px 8px;background:#fee2e2;color:#991b1b;border-radius:4px;font-size:12px;font-weight:600}.pagination{display:flex;justify-content:center;gap:8px;margin:24px 0}.page-btn{padding:8px 12px;border:1.5px solid var(--border);background:var(--bg-card);border-radius:var(--radius-sm);cursor:pointer;font-size:11px;transition:all var(--transition)}.page-btn:hover{border-color:var(--brand-red);color:var(--brand-red)}.page-btn.active{background:var(--brand-red);color:#fff;border-color:var(--brand-red)}.breadcrumb,.btn-primary,.btn-print,.pagination,.search-section,.sheen-footer{display:none!important}.result-table{box-shadow:none!important;border-radius:0!important;border:1.5px solid #333!important}.result-table th{background:#f9f9f9!important}.chemical-name{color:#000!important}.result-table{overflow-x:auto}.result-table table{min-width:600px}</style></head><body><div class="breadcrumb"><a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a> <span>/ 危险化学品查询</span></div><main class="app-container container-query"><div class="page-header"><h1 class="page-title">危险化学品查询</h1><p class="page-subtitle">基于《危险化学品目录（2025调整版）》，支持序号、品名、别名、CAS号、备注多维检索，覆盖 2830 项危险化学品。</p></div><div class="search-section"><div class="search-box"><input type="text" id="searchInput" class="search-input" placeholder="输入序号、品名、别名、CAS号或备注..."> <button class="btn-primary" onclick="searchChemicals()"><i class="fa-solid fa-search"></i> 查询</button> <button class="btn-print" onclick="window.print()"><button class="btn-outline no-print" onclick='exportResult("content-area","危险化学品查询结果")'><i class="fa-solid fa-file-export"></i> 导出</button> <i class="fa-solid fa-print"></i> 打印</button></div><div class="filter-row"><select id="remarkFilter" class="filter-select" onchange="searchChemicals()"><option value="">全部备注</option><option value="剧毒">剧毒</option><option value="易制爆">易制爆</option><option value="易制毒">易制毒</option></select></div></div><div id="content-area"><div class="result-stats" id="resultStats" style="display:none"><span>找到 <span class="stats-count" id="resultCount">0</span> 条记录</span> <span id="searchTime"></span></div><div class="result-table"><table><thead><tr><th style="width:60px">序号</th><th>品名</th><th style="width:120px">CAS号</th><th style="width:80px">备注</th></tr></thead><tbody id="resultTableBody"><tr><td colspan="4" style="text-align:center;padding:40px;color:var(--text-secondary)">请输入查询条件</td></tr></tbody></table></div><div class="pagination" id="pagination" style="display:none"></div></div></main><footer class="sheen-footer"><i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 危险化学品查询 <span id="busuanzi_container_site_pv" class="site-stat">全站访问 <b><span id="busuanzi_value_site_pv">0</span></b> 次</span> <span id="busuanzi_container_site_uv" class="site-stat">· 独立访客 <b><span id="busuanzi_value_site_uv">0</span></b> 人</span></footer><div class="print-time" id="printTime"></div><script>document.getElementById("printTime").textContent=(new Date).toISOString().replace("T"," ").slice(0,16);let chemicalData=[],filteredData=[],currentPage=1;const itemsPerPage=20;async function loadData(){try{const e=await fetch("data.json"),t=await e.json();chemicalData=t.items}catch(e){console.error("❌ 数据加载失败：",e),document.getElementById("resultTableBody").innerHTML='\n\n                    <tr>\n\n                        <td colspan="4" style="text-align: center; padding: 40px; color: #DC2626;">\n\n                            数据加载失败，请检查 data.json 文件\n\n                        </td>\n\n                    </tr>\n\n                '}}function searchChemicals(){const e=document.getElementById("searchInput").value.trim().toLowerCase(),t=document.getElementById("remarkFilter").value;if(!e&&!t)return document.getElementById("resultStats").style.display="none",document.getElementById("pagination").style.display="none",void(document.getElementById("resultTableBody").innerHTML='\n\n                    <tr>\n\n                        <td colspan="4" style="text-align: center; padding: 40px; color: var(--text-secondary);">\n\n                            请输入查询条件或选择筛选条件\n\n                        </td>\n\n                    </tr>\n\n                ');const n=performance.now();filteredData=chemicalData.filter(n=>{const a=!e||n.name&&n.name.toLowerCase().includes(e)||n.alias&&n.alias.toLowerCase().includes(e)||n.cas&&n.cas.toLowerCase().includes(e)||n.remark&&n.remark.toLowerCase().includes(e)||n.id&&n.id.toString().includes(e),o=!t||n.remark&&n.remark.includes(t);return a&&o});const a=(performance.now()-n).toFixed(2);document.getElementById("resultCount").textContent=filteredData.length,document.getElementById("searchTime").textContent=`(${a} ms)`,document.getElementById("resultStats").style.display="flex",currentPage=1,renderTable(),renderPagination()}function renderTable(){const e=document.getElementById("resultTableBody");if(0===filteredData.length)return void(e.innerHTML='\n\n                    <tr>\n\n                        <td colspan="4" style="text-align: center; padding: 40px; color: var(--text-secondary);">\n\n                            未找到匹配记录\n\n                        </td>\n\n                    </tr>\n\n                ');const t=20*(currentPage-1),n=Math.min(t+20,filteredData.length),a=filteredData.slice(t,n);e.innerHTML=a.map(e=>`\n\n                <tr>\n\n                    <td>${e.id||""}</td>\n\n                    <td>\n\n                        <div class="chemical-name">${e.name||""}</div>\n\n                        ${e.alias?`<div class="chemical-alias">${e.alias}</div>`:""}\n\n                    </td>\n\n                    <td>${e.cas||""}</td>\n\n                    <td>${e.remark?`<span class="badge-toxic">${e.remark}</span>`:""}</td>\n\n                </tr>\n\n            `).join("")}function renderPagination(){const e=Math.ceil(filteredData.length/20);if(e<=1)return void(document.getElementById("pagination").style.display="none");document.getElementById("pagination").style.display="flex";let t="";currentPage>1&&(t+=`<button class="page-btn" onclick="goToPage(${currentPage-1})">上一页</button>`);for(let n=1;n<=e;n++)1===n||n===e||n>=currentPage-2&&n<=currentPage+2?t+=`<button class="page-btn ${n===currentPage?"active":""}" onclick="goToPage(${n})">${n}</button>`:n!==currentPage-3&&n!==currentPage+3||(t+="<span>...</span>");currentPage<e&&(t+=`<button class="page-btn" onclick="goToPage(${currentPage+1})">下一页</button>`),document.getElementById("pagination").innerHTML=t}function goToPage(e){currentPage=e,renderTable(),renderPagination(),window.scrollTo({top:0,behavior:"smooth"})}document.getElementById("searchInput").addEventListener("keypress",function(e){"Enter"===e.key&&searchChemicals()}),window.addEventListener("DOMContentLoaded",loadData),window.exportResult=function(e,t){var n=document.getElementById(e);if(n){var a='<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><title>'+t+" — SHEEN Toolbox</title><style>body{font-family:system-ui,-apple-system,sans-serif;padding:24px;color:#111827;line-height:1.6;max-width:900px;margin:0 auto}table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}th,td{border:1px solid #E5E7EB;padding:8px;text-align:left}th{background:#F8FAFC;font-weight:600}.result-value{background:#FEF2F2;border-left:6px solid #7A1825;padding:20px;border-radius:12px;margin:16px 0}.number{font-size:36px;font-weight:700;color:#7A1825}h1{color:#7A1825;font-size:20px;margin-bottom:4px}h4{color:#7A1825;margin:16px 0 8px}.stats-count{color:#7A1825;font-weight:700}</style></head><body><h1>📋 "+t+'</h1><p style="color:#6B7280;font-size:12px;margin-top:0;">导出时间：'+(new Date).toLocaleString("zh-CN")+"</p>"+n.innerHTML.replace(/class="warn-bar[^"]*"/g,"")+"</body></html>",o=new Blob([a],{type:"text/html;charset=utf-8"}),r=URL.createObjectURL(o),l=document.createElement("a");l.href=r,l.download=t+".html",document.body.appendChild(l),l.click(),document.body.removeChild(l),URL.revokeObjectURL(r)}else alert("暂无可导出的结果")}</script><script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></body></html>
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>危险化学品查询 — SHEEN Toolbox</title>
+
+    <link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
+
+<link rel="stylesheet" href="/sheen-toolbox/common.css">
+
+    <style>* {
+
+            margin: 0;
+
+            padding: 0;
+
+            box-sizing: border-box;
+
+        }
+
+        body {
+
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+
+            background: var(--bg-page);
+
+            color: var(--text-primary);
+
+            line-height: 1.6;
+
+        }
+
+        .breadcrumb a:hover { opacity: .7; text-decoration: underline; }
+
+        .breadcrumb span { color: var(--text-secondary); }
+
+        .page-header {
+
+            text-align: center;
+
+            margin-bottom: 32px;
+
+        }
+
+        .search-section {
+
+            background: var(--bg-card);
+
+            border-radius: var(--radius-xl);
+
+            padding: 24px;
+
+            margin-bottom: 24px;
+
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+
+        }
+
+        .search-box {
+
+            display: flex;
+
+            gap: 12px;
+
+            margin-bottom: 16px;
+
+        }
+
+        .search-input {
+
+            flex: 1;
+
+            padding: 12px 16px;
+
+            border: 1.5px solid var(--border);
+
+            border-radius: var(--radius-md);
+
+            font-size: 14px;
+
+            font-family: inherit;
+
+            transition: all var(--transition);
+
+        }
+
+        .search-input:focus {
+
+            outline: none;
+
+            border-color: var(--brand-red);
+
+            box-shadow: 0 0 0 4px rgba(122,24,37,0.08);
+
+        }
+
+        .filter-row {
+
+            display: flex;
+
+            gap: 12px;
+
+            flex-wrap: wrap;
+
+        }
+
+        .filter-select {
+
+            padding: 8px 12px;
+
+            border: 1.5px solid var(--border);
+
+            border-radius: var(--radius-sm);
+
+            font-size:11px;
+
+            font-family: inherit;
+
+            background: var(--bg-card);
+
+            color: var(--text-primary);
+
+            cursor: pointer;
+
+        }
+
+        .result-stats {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 16px;
+
+            padding: 12px 16px;
+
+            background: var(--brand-red-light);
+
+            border-radius: var(--radius-md);
+
+            font-size: 14px;
+
+        }
+
+        .stats-count {
+
+            font-weight: 600;
+
+            color: var(--brand-red);
+
+        }
+
+        .result-table {
+
+            width: 100%;
+
+            background: var(--bg-card);
+
+            border-radius: var(--radius-xl);
+
+            overflow: hidden;
+
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+
+            margin-bottom: 24px;
+
+        }
+
+        .result-table table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+        }
+
+        .result-table th {
+
+            background: var(--bg-page);
+
+            padding: 12px 16px;
+
+            text-align: left;
+
+            font-size:11px;
+
+            font-weight: 600;
+
+            color: var(--text-secondary);
+
+            border-bottom: 1.5px solid var(--border);
+
+        }
+
+        .result-table td {
+
+            padding: 12px 16px;
+
+            font-size: 14px;
+
+            border-bottom: 1px solid var(--border-light);
+
+        }
+
+        .result-table tr:hover {
+
+            background: var(--bg-page);
+
+        }
+
+        .result-table tr:last-child td {
+
+            border-bottom: none;
+
+        }
+
+        .chemical-name {
+
+            font-weight: 600;
+
+            color: var(--brand-red);
+
+        }
+
+        .chemical-alias {
+
+            font-size: 12px;
+
+            color: var(--text-secondary);
+
+            margin-top: 4px;
+
+        }
+
+        .badge-toxic {
+
+            display: inline-block;
+
+            padding: 2px 8px;
+
+            background: #FEE2E2;
+
+            color: #991B1B;
+
+            border-radius: 4px;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+        }
+
+        .pagination {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            margin: 24px 0;
+
+        }
+
+        .page-btn {
+
+            padding: 8px 12px;
+
+            border: 1.5px solid var(--border);
+
+            background: var(--bg-card);
+
+            border-radius: var(--radius-sm);
+
+            cursor: pointer;
+
+            font-size:11px;
+
+            transition: all var(--transition);
+
+        }
+
+        .page-btn:hover {
+
+            border-color: var(--brand-red);
+
+            color: var(--brand-red);
+
+        }
+
+        .page-btn.active {
+
+            background: var(--brand-red);
+
+            color: #fff;
+
+            border-color: var(--brand-red);
+
+        }
+
+        }
+
+        @media print {
+            body {
+
+                background: #fff !important;
+
+                padding: 0 !important;
+
+                font-size: 12pt;
+
+                color: #000 !important;
+
+            }
+
+            .breadcrumb, .sheen-footer, .btn-primary, .btn-print, .search-section, .pagination {
+
+                display: none !important;
+
+            }
+
+            .result-table {
+
+                box-shadow: none !important;
+
+                border-radius: 0 !important;
+
+                border: 1.5px solid #333 !important;
+
+            }
+
+            .result-table th {
+
+                background: #f9f9f9 !important;
+
+            }
+
+            .chemical-name {
+
+                color: #000 !important;
+
+            }
+
+        }
+
+        @media (max-width: 768px) {
+
+            .search-box {
+
+                flex-direction: column;
+
+            }
+
+            .result-table {
+
+                overflow-x: auto;
+
+            }
+
+            .result-table table {
+
+                min-width: 600px;
+
+            }
+
+        }</style>
+
+</head>
+
+<body>
+
+    <!-- 导航栏 -->
+
+    <div class="breadcrumb">
+
+        <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+
+        <span> / 危险化学品查询</span>
+
+    </div>
+
+    <!-- 主内容 -->
+
+    <main class="app-container container-query">
+
+        <div class="page-header">
+
+            <h1 class="page-title">危险化学品查询</h1>
+
+            <p class="page-subtitle">基于《危险化学品目录（2025调整版）》，支持序号、品名、别名、CAS号、备注多维检索，覆盖 2830 项危险化学品。</p>
+
+        </div>
+
+        <!-- 搜索区域 -->
+
+        <div class="search-section">
+
+            <div class="search-box">
+
+                <input type="text" id="searchInput" class="search-input" placeholder="输入序号、品名、别名、CAS号或备注...">
+
+                <button class="btn-primary" onclick="searchChemicals()">
+
+                    <i class="fa-solid fa-search"></i> 查询
+
+                </button>
+
+                <button class="btn-print" onclick="window.print()"> <button class="btn-outline no-print" onclick="exportResult('content-area','危险化学品查询结果')"><i class="fa-solid fa-file-export"></i> 导出</button>
+
+                    <i class="fa-solid fa-print"></i> 打印
+
+                </button>
+
+            </div>
+
+            <div class="filter-row">
+
+                <select id="remarkFilter" class="filter-select" onchange="searchChemicals()">
+
+                    <option value="">全部备注</option>
+
+                    <option value="剧毒">剧毒</option>
+
+                    <option value="易制爆">易制爆</option>
+
+                    <option value="易制毒">易制毒</option>
+
+                </select>
+
+            </div>
+
+        </div>
+        <div id="content-area">
+        <!-- 结果统计 -->
+
+        <div class="result-stats" id="resultStats" style="display: none;">
+
+            <span>找到 <span class="stats-count" id="resultCount">0</span> 条记录</span>
+
+            <span id="searchTime"></span>
+
+        </div>
+
+        <!-- 结果表格 -->
+
+        <div class="result-table">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th style="width: 60px;">序号</th>
+
+                        <th>品名</th>
+
+                        <th style="width: 120px;">CAS号</th>
+
+                        <th style="width: 80px;">备注</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="resultTableBody">
+
+                    <tr>
+
+                        <td colspan="4" style="text-align: center; padding: 40px; color: var(--text-secondary);">
+
+                            请输入查询条件
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <!-- 分页 -->
+
+        <div class="pagination" id="pagination" style="display: none;"></div>
+        </div>
+
+    </main>
+
+    <!-- 页脚 -->
+
+    <footer class="sheen-footer">
+
+        <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 危险化学品查询
+        <span id="busuanzi_container_site_pv" class="site-stat">全站访问 <b><span id="busuanzi_value_site_pv">0</span></b> 次</span>
+        <span id="busuanzi_container_site_uv" class="site-stat">· 独立访客 <b><span id="busuanzi_value_site_uv">0</span></b> 人</span>
+</footer>
+<div class="print-time" id="printTime"></div>
+
+
+<script>
+
+document.getElementById('printTime').textContent = new Date().toISOString().replace('T',' ').slice(0,16);
+
+
+        let chemicalData = [];
+
+        let filteredData = [];
+
+        let currentPage = 1;
+
+        const itemsPerPage = 20;
+
+        // 加载数据
+
+        async function loadData() {
+
+            try {
+
+                const response = await fetch('data.json');
+
+                const data = await response.json();
+
+                chemicalData = data.items;
+
+            } catch (error) {
+
+                console.error('❌ 数据加载失败：', error);
+
+                document.getElementById('resultTableBody').innerHTML = `
+
+                    <tr>
+
+                        <td colspan="4" style="text-align: center; padding: 40px; color: #DC2626;">
+
+                            数据加载失败，请检查 data.json 文件
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+
+        }
+
+        // 搜索
+
+        function searchChemicals() {
+
+            const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
+
+            const remarkFilter = document.getElementById('remarkFilter').value;
+
+            if (!keyword && !remarkFilter) {
+
+                document.getElementById('resultStats').style.display = 'none';
+
+                document.getElementById('pagination').style.display = 'none';
+
+                document.getElementById('resultTableBody').innerHTML = `
+
+                    <tr>
+
+                        <td colspan="4" style="text-align: center; padding: 40px; color: var(--text-secondary);">
+
+                            请输入查询条件或选择筛选条件
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+                return;
+
+            }
+
+            const startTime = performance.now();
+
+            filteredData = chemicalData.filter(item => {
+
+                const matchKeyword = !keyword || 
+
+                    (item.name && item.name.toLowerCase().includes(keyword)) ||
+
+                    (item.alias && item.alias.toLowerCase().includes(keyword)) ||
+
+                    (item.cas && item.cas.toLowerCase().includes(keyword)) ||
+
+                    (item.remark && item.remark.toLowerCase().includes(keyword)) ||
+
+                    (item.id && item.id.toString().includes(keyword));
+
+                const matchRemark = !remarkFilter || (item.remark && item.remark.includes(remarkFilter));
+
+                return matchKeyword && matchRemark;
+
+            });
+
+            const endTime = performance.now();
+
+            const searchTime = (endTime - startTime).toFixed(2);
+
+            // 显示统计
+
+            document.getElementById('resultCount').textContent = filteredData.length;
+
+            document.getElementById('searchTime').textContent = `(${searchTime} ms)`;
+
+            document.getElementById('resultStats').style.display = 'flex';
+
+            // 分页
+
+            currentPage = 1;
+
+            renderTable();
+
+            renderPagination();
+
+        }
+
+        // 渲染表格
+
+        function renderTable() {
+
+            const tbody = document.getElementById('resultTableBody');
+
+            
+
+            if (filteredData.length === 0) {
+
+                tbody.innerHTML = `
+
+                    <tr>
+
+                        <td colspan="4" style="text-align: center; padding: 40px; color: var(--text-secondary);">
+
+                            未找到匹配记录
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+                return;
+
+            }
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+
+            const endIndex = Math.min(startIndex + itemsPerPage, filteredData.length);
+
+            const pageData = filteredData.slice(startIndex, endIndex);
+
+            tbody.innerHTML = pageData.map(item => `
+
+                <tr>
+
+                    <td>${item.id || ''}</td>
+
+                    <td>
+
+                        <div class="chemical-name">${item.name || ''}</div>
+
+                        ${item.alias ? `<div class="chemical-alias">${item.alias}</div>` : ''}
+
+                    </td>
+
+                    <td>${item.cas || ''}</td>
+
+                    <td>${item.remark ? `<span class="badge-toxic">${item.remark}</span>` : ''}</td>
+
+                </tr>
+
+            `).join('');
+
+        }
+
+        // 渲染分页
+
+        function renderPagination() {
+
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+            
+
+            if (totalPages <= 1) {
+
+                document.getElementById('pagination').style.display = 'none';
+
+                return;
+
+            }
+
+            document.getElementById('pagination').style.display = 'flex';
+
+            let html = '';
+
+            
+
+            // 上一页
+
+            if (currentPage > 1) {
+
+                html += `<button class="page-btn" onclick="goToPage(${currentPage - 1})">上一页</button>`;
+
+            }
+
+            // 页码
+
+            for (let i = 1; i <= totalPages; i++) {
+
+                if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+
+                    html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+
+                } else if (i === currentPage - 3 || i === currentPage + 3) {
+
+                    html += `<span>...</span>`;
+
+                }
+
+            }
+
+            // 下一页
+
+            if (currentPage < totalPages) {
+
+                html += `<button class="page-btn" onclick="goToPage(${currentPage + 1})">下一页</button>`;
+
+            }
+
+            document.getElementById('pagination').innerHTML = html;
+
+        }
+
+        // 跳转页码
+
+        function goToPage(page) {
+
+            currentPage = page;
+
+            renderTable();
+
+            renderPagination();
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        }
+
+        // 回车搜索
+
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+
+            if (e.key === 'Enter') {
+
+                searchChemicals();
+
+            }
+
+        });
+
+        // 页面加载时加载数据
+
+        window.addEventListener('DOMContentLoaded', loadData);
+
+    
+window.exportResult = function(resultId, filename) {
+  var el = document.getElementById(resultId);
+  if (!el) { alert('暂无可导出的结果'); return; }
+  var html = '<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">' +
+    '<title>' + filename + ' — SHEEN Toolbox</title>' +
+    '<style>body{font-family:system-ui,-apple-system,sans-serif;padding:24px;color:#111827;line-height:1.6;max-width:900px;margin:0 auto}' +
+    'table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}th,td{border:1px solid #E5E7EB;padding:8px;text-align:left}' +
+    'th{background:#F8FAFC;font-weight:600}.result-value{background:#FEF2F2;border-left:6px solid #7A1825;' +
+    'padding:20px;border-radius:12px;margin:16px 0}.number{font-size:36px;font-weight:700;color:#7A1825}' +
+    'h1{color:#7A1825;font-size:20px;margin-bottom:4px}h4{color:#7A1825;margin:16px 0 8px}' +
+    '.stats-count{color:#7A1825;font-weight:700}</style></head><body>' +
+    '<h1>📋 ' + filename + '</h1>' +
+    '<p style="color:#6B7280;font-size:12px;margin-top:0;">导出时间：' +
+    new Date().toLocaleString('zh-CN') + '</p>' +
+    el.innerHTML.replace(/class="warn-bar[^"]*"/g, '') +
+    '</body></html>';
+  var blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = filename + '.html';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
+
+</script>
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+
+</html>
