@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="特种作业 / 建筑施工特种作业 / 特种设备作业 目录查询与证书验证 — SHEEN Toolbox">
+    <title>特种作业目录查询与证书验证 — SHEEN Toolbox</title>
+
+    <!-- 图标库（与 Toolbox 一致） -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* ============================================================
+           SHEEN Toolbox — 内联品牌样式（单文件自包含）
+           品牌色板：深红 #7A1825 / 近黑 #111827 / 微纤灰 #F8FAFC
+           圆角卡片 + 柔和阴影 + 药丸按钮，响应式适配移动端
+           ============================================================ */
+        :root {
+            --black: #000000;
+            --text-primary: #111827;
+            --text-secondary: #6B7280;
+            --bg-page: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --border: #E5E7EB;
+            --border-light: #F3F4F6;
+            --brand-red: #7A1825;
+            --brand-red-hover: #5C121C;
+            --brand-red-light: #FEF2F2;
+            --amber: #FBBF24;
+            --amber-text: #D97706;
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --shadow-soft: 0 2px 12px rgba(17,24,39,0.06);
+            --shadow-card: 0 4px 20px rgba(17,24,39,0.07);
+            --transition: 0.2s ease;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+                   'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg-page);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        /* ===== 面包屑 ===== */
+        .breadcrumb {
+            padding: 10px 24px;
+            font-size: 13px;
+            font-weight: 500;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .breadcrumb a {
+            color: var(--brand-red);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: color var(--transition);
+        }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .breadcrumb span { color: var(--text-secondary); }
+
+        /* ===== 主容器 ===== */
+        .app-container {
+            margin: 0 auto;
+            padding: 32px 24px;
+            flex: 1;
+            width: 100%;
+            max-width: 1200px; /* 查询类 */
+        }
+
+        .page-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .page-title i { color: var(--brand-red); font-size: 22px; }
+        .page-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        /* ===== 卡片（圆角 + 柔和阴影） ===== */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 22px 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-card);
+        }
+        .card > h2 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card > h2 i { color: var(--brand-red); font-size: 16px; }
+        .card .subtitle {
+            font-size: 12.5px;
+            color: var(--text-secondary);
+            line-height: 1.55;
+            margin-bottom: 16px;
+        }
+
+        /* ===== Tabs ===== */
+        .tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid var(--border);
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 11px 18px;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: var(--font);
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .tab-btn i { font-size: 0.95rem; }
+        .tab-btn.active { color: var(--brand-red); border-bottom-color: var(--brand-red); }
+        .tab-btn:hover { color: var(--brand-red-hover); }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.25s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+        /* ===== 搜索框 ===== */
+        .search-box {
+            width: 100%;
+            padding: 11px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-family: var(--font);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            transition: border-color var(--transition), box-shadow var(--transition);
+            margin-bottom: 18px;
+        }
+        .search-box:focus {
+            outline: none;
+            border-color: var(--brand-red);
+            box-shadow: 0 0 0 4px rgba(122,24,37,0.08);
+        }
+        .search-box::placeholder { color: var(--text-secondary); opacity: 0.65; }
+
+        /* ===== 目录分类 ===== */
+        .category { margin-bottom: 20px; }
+        .category h3 {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: var(--brand-red);
+            border-left: 4px solid var(--brand-red);
+            padding-left: 12px;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        .item-list { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+        .item {
+            background: var(--border-light);
+            padding: 7px 15px;
+            border-radius: 60px;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid transparent;
+        }
+        .item:hover {
+            background: var(--brand-red-light);
+            color: var(--brand-red);
+            border-color: rgba(122,24,37,0.25);
+        }
+        .item small { font-size: 0.78rem; color: var(--amber-text); font-weight: 600; }
+
+        .no-result {
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 24px;
+            display: none;
+            font-size: 0.95rem;
+        }
+
+        /* ===== 证书验证表单 ===== */
+        .verify-form { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; }
+        .form-group { display: flex; flex-direction: column; flex: 1 1 200px; }
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--text-primary);
+        }
+        .form-group input {
+            padding: 11px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-family: var(--font);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            transition: border-color var(--transition), box-shadow var(--transition);
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--brand-red);
+            box-shadow: 0 0 0 4px rgba(122,24,37,0.08);
+        }
+        .form-group input::placeholder { color: var(--text-secondary); opacity: 0.6; }
+
+        /* 药丸按钮（品牌红） */
+        button.verify-btn {
+            padding: 12px 28px;
+            background: var(--brand-red);
+            color: #fff;
+            border: none;
+            border-radius: 60px;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: var(--font);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        button.verify-btn:hover {
+            background: var(--brand-red-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(122,24,37,0.25);
+        }
+        button.verify-btn:active { transform: translateY(0); }
+
+        /* ===== 提示框（品牌浅红） ===== */
+        .note {
+            background: var(--brand-red-light);
+            border-left: 4px solid var(--brand-red);
+            padding: 13px 16px;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            margin-top: 16px;
+            color: var(--brand-red-hover);
+            line-height: 1.6;
+        }
+        .note a { color: var(--brand-red); font-weight: 600; word-break: break-all; }
+        .note a:hover { text-decoration: underline; }
+
+        /* ===== 页脚 ===== */
+        .sheen-footer {
+            text-align: center;
+            padding: 16px 32px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border);
+            background: var(--bg-card);
+            margin-top: auto;
+            letter-spacing: 0.5px;
+        }
+        .sheen-footer i { color: var(--amber); margin-right: 4px; }
+        .sheen-footer strong { color: var(--text-primary); }
+        .site-stat { color: var(--text-secondary); font-size: 12px; margin-left: 8px; }
+        .site-stat b { color: var(--brand-red); font-weight: 700; }
+
+        /* ===== 打印时间戳 ===== */
+        .print-time { display: none; font-size: 10pt; color: #666; text-align: right; margin-bottom: 10px; }
+
+        /* ===== 打印样式 ===== */
+        @media print {
+            body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
+            .breadcrumb, .sheen-footer, .no-print, nav, .tabs, .verify-form, .note, .search-box { display: none !important; }
+            .print-time { display: block !important; }
+            .card {
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                border: 1.5px solid #333 !important;
+                page-break-inside: avoid;
+                margin-bottom: 12px;
+            }
+            .item { border: 1px solid #999 !important; background: #f5f5f5 !important; }
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 768px) {
+            .app-container { padding: 20px 16px; }
+            .page-title { font-size: 19px; }
+            .card { padding: 16px 18px; }
+            .tab-btn { padding: 9px 14px; font-size: 0.9rem; }
+        }
+        @media (max-width: 480px) {
+            .app-container { padding: 14px 10px; }
+            .breadcrumb { padding: 8px 12px; font-size: 12px; }
+            .page-title { font-size: 17px; }
+            .card { padding: 14px 14px; border-radius: var(--radius-md); }
+            .verify-form { flex-direction: column; align-items: stretch; }
+            .verify-form .form-group { flex: 1 1 auto; }
+            button.verify-btn { width: 100%; justify-content: center; }
+            .tab-btn { flex: 1 1 auto; justify-content: center; font-size: 0.82rem; padding: 9px 8px; }
+            .sheen-footer { padding: 12px 16px; font-size: 11px; }
+            .site-stat { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 面包屑 -->
+    <div class="breadcrumb">
+        <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+        <span> / 特种作业目录查询与证书验证</span>
+    </div>
+
+    <main class="app-container">
+
+        <h1 class="page-title"><i class="fa-solid fa-clipboard-list"></i> 特种作业目录查询与证书验证</h1>
+        <p class="page-subtitle">涵盖应急管理类、建筑施工类、特种设备三类特种作业目录查询与官方证书核验入口，数据依据最新版《特种作业目录》及相关部委规定。</p>
+
+        <div class="tabs no-print">
+            <button class="tab-btn active" id="tabSpecialOp"><i class="fa-solid fa-bolt"></i> 特种作业（应急管理类）</button>
+            <button class="tab-btn" id="tabBuild"><i class="fa-solid fa-building"></i> 建筑施工特种作业</button>
+            <button class="tab-btn" id="tabSpecialEquip"><i class="fa-solid fa-gear"></i> 特种设备作业</button>
+        </div>
+
+        <!-- ========= 特种作业（应急管理类） ========= -->
+        <div class="tab-content active" id="contentSpecialOp">
+            <div class="card">
+                <h2><i class="fa-solid fa-list"></i> 特种作业目录（应急管理类）</h2>
+                <p class="subtitle">依据应急管理部令第19号及新版《特种作业目录》，共11个作业类别，62个操作项目。标注日期为该项目开始考核的时间。</p>
+                <input type="text" class="search-box" id="searchSpecOp" placeholder="搜索作业类别或操作项目...">
+                <div id="dirSpecOp"></div>
+                <div class="no-result" id="noResultSpecOp">未找到匹配的作业项目</div>
+            </div>
+            <div class="card">
+                <h2><i class="fa-solid fa-circle-check"></i> 特种作业操作证验证</h2>
+                <p class="subtitle">特种作业操作证有效期6年，电子证书与实体证书同等效力。请通过应急管理部官方平台核验真伪。</p>
+                <div class="verify-form no-print">
+                    <div class="form-group"><label>姓名</label><input type="text" id="nameSp" placeholder="持证人姓名"></div>
+                    <div class="form-group"><label>身份证号</label><input type="text" id="idCardSp" placeholder="18位身份证号"></div>
+                    <div class="form-group"><label>证书编号</label><input type="text" id="certSp" placeholder="T+身份证号或证件号"></div>
+                    <button class="verify-btn" id="verifySpBtn"><i class="fa-solid fa-arrow-up-right-from-square"></i> 前往官方平台验证</button>
+                </div>
+                <div class="note">
+                    ⚠️ 证书真伪以应急管理部官方查询为准。<br>
+                    官方平台：<a href="https://cx.mem.gov.cn" target="_blank" rel="noopener">https://cx.mem.gov.cn</a> 或微信公众号“国家安全生产考试”。
+                </div>
+            </div>
+        </div>
+
+        <!-- ========= 建筑施工特种作业（建筑类） ========= -->
+        <div class="tab-content" id="contentBuild">
+            <div class="card">
+                <h2><i class="fa-solid fa-list"></i> 特种作业目录（建筑施工类）</h2>
+                <p class="subtitle">依据住建部令第60号及新版《特种作业目录》，共10个作业类别，19个操作项目。标注日期为该项目开始考核的时间。</p>
+                <input type="text" class="search-box" id="searchBuild" placeholder="搜索作业项目...">
+                <div id="dirBuild"></div>
+                <div class="no-result" id="noResultBuild">未找到匹配的作业项目</div>
+            </div>
+            <div class="card">
+                <h2><i class="fa-solid fa-circle-check"></i> 建筑施工特种作业证书验证</h2>
+                <p class="subtitle">资格证书实行电子证照，全国有效，有效期3年。请通过住建部官方平台核验真伪。</p>
+                <div class="verify-form no-print">
+                    <div class="form-group"><label>姓名</label><input type="text" id="nameBuild" placeholder="持证人姓名"></div>
+                    <div class="form-group"><label>身份证号</label><input type="text" id="idCardBuild" placeholder="18位身份证号"></div>
+                    <div class="form-group"><label>证书编号</label><input type="text" id="certBuild" placeholder="电子证照编号"></div>
+                    <button class="verify-btn" id="verifyBuildBtn"><i class="fa-solid fa-arrow-up-right-from-square"></i> 前往官方平台验证</button>
+                </div>
+                <div class="note">
+                    ⚠️ 证书真伪以住建部“全国工程质量安全监管信息平台”查询结果为准。<br>
+                    官方平台：<a href="https://zlaq.mohurd.gov.cn" target="_blank" rel="noopener">https://zlaq.mohurd.gov.cn</a> （进入后选择“特种作业人员查询”）。
+                </div>
+            </div>
+        </div>
+
+        <!-- ========= 特种设备作业（市场监管总局） ========= -->
+        <div class="tab-content" id="contentSpecialEquip">
+            <div class="card">
+                <h2><i class="fa-solid fa-list"></i> 特种设备作业目录</h2>
+                <p class="subtitle">依据《特种设备作业人员资格认定分类与项目》（TSG Z6001-2019），点击项目可查看详情。</p>
+                <input type="text" class="search-box" id="searchSpecEquip" placeholder="搜索作业项目或种类...">
+                <div id="dirSpecEquip"></div>
+                <div class="no-result" id="noResultSpecEquip">未找到匹配的作业项目</div>
+            </div>
+            <div class="card">
+                <h2><i class="fa-solid fa-circle-check"></i> 特种设备作业证书验证</h2>
+                <p class="subtitle">填写信息后点击按钮，将跳转至全国特种设备公示信息查询平台。</p>
+                <div class="verify-form no-print">
+                    <div class="form-group"><label>姓名</label><input type="text" id="nameEquip" placeholder="持证人姓名"></div>
+                    <div class="form-group"><label>身份证号</label><input type="text" id="idCardEquip" placeholder="18位身份证号"></div>
+                    <div class="form-group"><label>证书编号</label><input type="text" id="certEquip" placeholder="证书编号"></div>
+                    <button class="verify-btn" id="verifyEquipBtn"><i class="fa-solid fa-arrow-up-right-from-square"></i> 前往官方平台验证</button>
+                </div>
+                <div class="note">
+                    ⚠️ 证书真伪以全国特种设备公示信息查询平台为准。<br>
+                    官方平台：<a href="https://cnse.samr.gov.cn" target="_blank" rel="noopener">https://cnse.samr.gov.cn</a> （或搜索“全国特种设备公示信息查询平台”）。
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="sheen-footer">
+        <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 特种作业目录查询与证书验证
+        <span class="site-stat">访问 <b><span id="busuanzi_container_site_pv"><span id="busuanzi_value_site_pv">—</span></span></b></span>
+    </footer>
+
+    <!-- 打印时间戳 -->
+    <div class="print-time" id="printTime"></div>
+
+    <script>
+    (function () {
+        'use strict';
+
+        // ===== 打印时间戳（UTC+8 中国时区） =====
+        (function () {
+            var d = new Date();
+            var utc = d.getTime() + d.getTimezoneOffset() * 60000;
+            var cn = new Date(utc + 8 * 3600000);
+            var p = function (n) { return (n < 10 ? '0' : '') + n; };
+            var s = cn.getFullYear() + '-' + p(cn.getMonth() + 1) + '-' + p(cn.getDate()) +
+                    ' ' + p(cn.getHours()) + ':' + p(cn.getMinutes());
+            var el = document.getElementById('printTime');
+            if (el) el.textContent = '打印时间：' + s + '（北京时间）';
+        })();
+
+        // ========== 1. 特种作业目录（应急管理类） ==========
+        var emergencyDir = [
+            {
+                category: "1. 电工作业",
+                items: [
+                    { name: "高压电工作业" }, { name: "低压电工作业" },
+                    { name: "电力电缆作业" }, { name: "继电保护作业" }, { name: "电气试验作业" }
+                ]
+            },
+            {
+                category: "2. 焊接与热切割作业",
+                items: [ { name: "熔化焊接与热切割作业" } ]
+            },
+            {
+                category: "3. 高处作业",
+                items: [ { name: "登高架设作业" }, { name: "高处安装、维护、拆除作业" } ]
+            },
+            {
+                category: "4. 涉氨制冷作业",
+                items: [ { name: "涉氨制冷设备运行、维修操作作业" } ]
+            },
+            {
+                category: "5. 煤矿安全作业",
+                items: [
+                    { name: "煤矿井下电气作业" }, { name: "煤矿井下爆破作业" },
+                    { name: "煤矿安全监测监控作业" }, { name: "煤矿瓦斯检查作业" },
+                    { name: "煤矿安全检查作业" }, { name: "煤矿提升机操作作业" },
+                    { name: "煤矿采煤机操作作业" }, { name: "煤矿掘进机操作作业" },
+                    { name: "煤矿瓦斯抽采作业" }, { name: "煤矿防突作业" },
+                    { name: "煤矿探放水作业" },
+                    { name: "煤矿防冲作业", examDate: "2028-06-01" },
+                    { name: "煤矿无轨胶轮车操作作业", examDate: "2028-06-01" },
+                    { name: "煤矿调度作业", examDate: "2028-06-01" }
+                ]
+            },
+            {
+                category: "6. 金属非金属矿山安全作业",
+                items: [
+                    { name: "金属非金属矿井通风作业" }, { name: "尾矿作业" },
+                    { name: "金属非金属矿山提升机操作作业" },
+                    { name: "金属非金属矿山支护作业" },
+                    { name: "金属非金属地下矿山主排水作业" },
+                    { name: "金属非金属矿山无轨胶轮车操作作业", examDate: "2028-06-01" },
+                    { name: "金属非金属矿山调度作业", examDate: "2028-06-01" }
+                ]
+            },
+            {
+                category: "7. 石油天然气安全作业",
+                items: [
+                    { name: "陆上石油钻井司钻作业" }, { name: "陆上石油井下作业司钻作业" },
+                    { name: "海洋石油司钻作业", examDate: "2028-06-01" },
+                    { name: "海洋石油电气作业", examDate: "2028-06-01" },
+                    { name: "海洋石油吊装作业", examDate: "2028-06-01" },
+                    { name: "海洋石油司索指挥作业", examDate: "2028-06-01" }
+                ]
+            },
+            {
+                category: "8. 冶金、有色、建材生产安全作业",
+                items: [ { name: "煤气作业" } ]
+            },
+            {
+                category: "9. 危险化学品安全作业",
+                items: [
+                    { name: "光气及光气化工艺作业" }, { name: "氯碱电解工艺作业" },
+                    { name: "氯化工艺作业" }, { name: "硝化工艺作业" },
+                    { name: "合成氨工艺作业" }, { name: "裂解（裂化）工艺作业" },
+                    { name: "氟化工艺作业" }, { name: "加氢工艺作业" },
+                    { name: "重氮化工艺作业" }, { name: "氧化工艺作业" },
+                    { name: "过氧化工艺作业" }, { name: "胺基化工艺作业" },
+                    { name: "磺化工艺作业" }, { name: "聚合工艺作业" },
+                    { name: "烷基化工艺作业" },
+                    { name: "新型煤化工工艺作业", examDate: "2028-06-01" },
+                    { name: "电石生产工艺作业", examDate: "2028-06-01" },
+                    { name: "偶氮化工艺作业", examDate: "2028-06-01" },
+                    { name: "化工自动化控制仪表作业" }
+                ]
+            },
+            {
+                category: "10. 烟花爆竹安全作业",
+                items: [
+                    { name: "烟火药及效果件制造作业" }, { name: "黑火药制造作业" },
+                    { name: "引火线制造作业" }, { name: "烟花爆竹产品涉药作业" },
+                    { name: "烟花爆竹搬运作业" }
+                ]
+            },
+            {
+                category: "11. 有限空间安全作业",
+                items: [ { name: "有限空间监护作业", examDate: "2028-06-01" } ]
+            }
+        ];
+
+        // ========== 2. 建筑施工特种作业目录（建筑类） ==========
+        var buildDir = [
+            { category: "12. 建筑电工", items: [ { name: "建筑电工" } ] },
+            {
+                category: "13. 建筑架子工",
+                items: [
+                    { name: "建筑架子工（普通脚手架）" },
+                    { name: "建筑架子工（附着升降脚手架）" },
+                    { name: "建筑架子工（高处作业吊篮）" }
+                ]
+            },
+            { category: "14. 建筑起重司索信号工", items: [ { name: "建筑起重司索信号工" } ] },
+            {
+                category: "15. 建筑起重机械司机",
+                items: [
+                    { name: "建筑起重机械司机（塔式起重机）" },
+                    { name: "建筑起重机械司机（桥式、门式起重机）", examDate: "2027-06-01" },
+                    { name: "建筑起重机械司机（履带式、轮胎起重机）", examDate: "2027-06-01" },
+                    { name: "建筑起重机械司机（汽车起重机）", examDate: "2027-06-01" },
+                    { name: "建筑起重机械司机（施工升降机、物料提升机）" }
+                ]
+            },
+            {
+                category: "16. 建筑起重机械安装拆卸工",
+                items: [
+                    { name: "建筑起重机械安装拆卸工（塔式起重机）" },
+                    { name: "建筑起重机械安装拆卸工（桥式、门式起重机）", examDate: "2027-06-01" },
+                    { name: "建筑起重机械安装拆卸工（履带式、轮胎起重机）", examDate: "2027-06-01" },
+                    { name: "建筑起重机械安装拆卸工（施工升降机、物料提升机）" }
+                ]
+            },
+            {
+                category: "17. 登高设备操作工（吊篮、移动式升降工作平台）",
+                items: [ { name: "登高设备操作工（吊篮、移动式升降工作平台）", examDate: "2027-06-01" } ]
+            },
+            {
+                category: "18. 场（厂）内专用机动车辆司机（叉车、装载机）",
+                items: [ { name: "场（厂）内专用机动车辆司机（叉车、装载机）", examDate: "2027-06-01" } ]
+            },
+            { category: "19. 建筑焊工", items: [ { name: "建筑焊工", examDate: "2027-06-01" } ] },
+            {
+                category: "20. 建筑有限空间作业监护工",
+                items: [ { name: "建筑有限空间作业监护工", examDate: "2028-06-01" } ]
+            },
+            { category: "21. 建筑桩机操作工", items: [ { name: "建筑桩机操作工", examDate: "2027-06-01" } ] }
+        ];
+
+        // ========== 3. 特种设备作业目录（市场监管总局） ==========
+        var specialEquipDir = [
+            { category: "特种设备安全管理", items: [{ name: "特种设备安全管理" }] },
+            { category: "锅炉作业", items: [{ name: "工业锅炉司炉" }, { name: "电站锅炉司炉" }, { name: "锅炉水处理" }] },
+            { category: "压力容器作业", items: [{ name: "快开门式压力容器操作" }, { name: "移动式压力容器充装" }, { name: "氧舱维护保养" }] },
+            { category: "气瓶作业", items: [{ name: "气瓶充装" }] },
+            { category: "电梯作业", items: [{ name: "电梯修理" }] },
+            { category: "起重机作业", items: [{ name: "起重机指挥" }, { name: "起重机司机（限桥式/门式/塔式/流动式/门座式/升降机）" }] },
+            { category: "客运索道作业", items: [{ name: "客运索道修理" }, { name: "客运索道司机" }] },
+            { category: "大型游乐设施作业", items: [{ name: "大型游乐设施修理" }, { name: "大型游乐设施操作" }] },
+            { category: "场(厂)内专用机动车辆作业", items: [{ name: "叉车司机" }, { name: "观光车和观光列车司机" }] },
+            { category: "安全附件维修作业", items: [{ name: "安全阀校验" }] },
+            { category: "特种设备焊接作业", items: [{ name: "金属焊接操作" }, { name: "非金属焊接操作" }] }
+        ];
+
+        // 通用渲染函数（支持考试日期标注）
+        function renderDirectory(containerId, directory, filterText, noResultId) {
+            var container = document.getElementById(containerId);
+            var noResult = document.getElementById(noResultId);
+            container.innerHTML = '';
+            var hasMatch = false;
+
+            directory.forEach(function (cat) {
+                var matchItems = filterText
+                    ? cat.items.filter(function (item) { return item.name.indexOf(filterText) >= 0 || cat.category.indexOf(filterText) >= 0; })
+                    : cat.items;
+                if (matchItems.length === 0 && filterText && cat.category.indexOf(filterText) < 0) return;
+
+                hasMatch = true;
+                var catDiv = document.createElement('div');
+                catDiv.className = 'category';
+                var h3 = document.createElement('h3');
+                h3.textContent = cat.category;
+                catDiv.appendChild(h3);
+                var listDiv = document.createElement('div');
+                listDiv.className = 'item-list';
+                (filterText ? matchItems : cat.items).forEach(function (item) {
+                    var span = document.createElement('span');
+                    span.className = 'item';
+                    var label = item.name;
+                    if (item.examDate && item.examDate !== '2026-06-01') {
+                        label += ' <small>(' + item.examDate.replace(/-/g, '.') + '起考核)</small>';
+                    }
+                    span.innerHTML = label;
+                    span.title = item.name;
+                    span.addEventListener('click', function () {
+                        var msg = '作业项目：' + item.name + '\n所属类别：' + cat.category;
+                        if (item.examDate && item.examDate !== '2026-06-01') {
+                            msg += '\n考核实施日期：' + item.examDate;
+                        }
+                        alert(msg);
+                    });
+                    listDiv.appendChild(span);
+                });
+                catDiv.appendChild(listDiv);
+                container.appendChild(catDiv);
+            });
+            noResult.style.display = hasMatch ? 'none' : 'block';
+        }
+
+        // 绑定搜索事件
+        document.getElementById('searchSpecOp').addEventListener('input', function (e) {
+            renderDirectory('dirSpecOp', emergencyDir, e.target.value.trim(), 'noResultSpecOp');
+        });
+        document.getElementById('searchBuild').addEventListener('input', function (e) {
+            renderDirectory('dirBuild', buildDir, e.target.value.trim(), 'noResultBuild');
+        });
+        document.getElementById('searchSpecEquip').addEventListener('input', function (e) {
+            renderDirectory('dirSpecEquip', specialEquipDir, e.target.value.trim(), 'noResultSpecEquip');
+        });
+
+        // 初始渲染
+        renderDirectory('dirSpecOp', emergencyDir, '', 'noResultSpecOp');
+        renderDirectory('dirBuild', buildDir, '', 'noResultBuild');
+        renderDirectory('dirSpecEquip', specialEquipDir, '', 'noResultSpecEquip');
+
+        // 证书验证按钮
+        document.getElementById('verifySpBtn').addEventListener('click', function () {
+            var name = document.getElementById('nameSp').value.trim();
+            var idCard = document.getElementById('idCardSp').value.trim();
+            var cert = document.getElementById('certSp').value.trim();
+            if (!name || !idCard || !cert) return alert('请完整填写姓名、身份证号和证书编号。');
+            window.open('https://cx.mem.gov.cn', '_blank');
+            alert('已打开应急管理部查询平台。\n请选择“特种作业操作证查询”，并填入：\n姓名：' + name + '\n身份证号：' + idCard + '\n证书编号：' + cert);
+        });
+
+        document.getElementById('verifyBuildBtn').addEventListener('click', function () {
+            var name = document.getElementById('nameBuild').value.trim();
+            var idCard = document.getElementById('idCardBuild').value.trim();
+            var cert = document.getElementById('certBuild').value.trim();
+            if (!name || !idCard || !cert) return alert('请完整填写姓名、身份证号和证书编号。');
+            window.open('https://zlaq.mohurd.gov.cn', '_blank');
+            alert('已打开全国工程质量安全监管信息平台。\n请选择“特种作业人员查询”，并填入：\n姓名：' + name + '\n身份证号：' + idCard + '\n证书编号：' + cert);
+        });
+
+        document.getElementById('verifyEquipBtn').addEventListener('click', function () {
+            var name = document.getElementById('nameEquip').value.trim();
+            var idCard = document.getElementById('idCardEquip').value.trim();
+            var cert = document.getElementById('certEquip').value.trim();
+            if (!name || !idCard || !cert) return alert('请完整填写姓名、身份证号和证书编号。');
+            window.open('https://cnse.samr.gov.cn', '_blank');
+            alert('已打开全国特种设备公示信息查询平台。\n请自行填入以下信息进行查询：\n姓名：' + name + '\n身份证号：' + idCard + '\n证书编号：' + cert);
+        });
+
+        // Tab 切换逻辑
+        var tabBtns = document.querySelectorAll('.tab-btn');
+        var tabContents = document.querySelectorAll('.tab-content');
+        var tabMap = {
+            tabSpecialOp: 'contentSpecialOp',
+            tabBuild: 'contentBuild',
+            tabSpecialEquip: 'contentSpecialEquip'
+        };
+        tabBtns.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var target = tabMap[btn.id];
+                if (!target) return;
+                tabBtns.forEach(function (b) { b.classList.remove('active'); });
+                btn.classList.add('active');
+                tabContents.forEach(function (c) { c.classList.remove('active'); });
+                document.getElementById(target).classList.add('active');
+            });
+        });
+    })();
+    </script>
+
+    <!-- 访问统计（与 Toolbox 一致） -->
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+</html>
