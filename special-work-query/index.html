@@ -371,9 +371,6 @@
                 <h2><i class="fa-solid fa-circle-check"></i> 特种作业操作证验证</h2>
                 <p class="subtitle">特种作业操作证有效期6年，电子证书与实体证书同等效力。请通过应急管理部官方平台核验真伪。</p>
                 <div class="verify-form no-print">
-                    <div class="form-group"><label>姓名</label><input type="text" id="nameSp" placeholder="持证人姓名"></div>
-                    <div class="form-group"><label>身份证号</label><input type="text" id="idCardSp" placeholder="18位身份证号"></div>
-                    <div class="form-group"><label>证书编号</label><input type="text" id="certSp" placeholder="T+身份证号或证件号"></div>
                     <button class="verify-btn" id="verifySpBtn"><i class="fa-solid fa-arrow-up-right-from-square"></i> 前往官方平台验证</button>
                 </div>
                 <div class="note">
@@ -396,9 +393,6 @@
                 <h2><i class="fa-solid fa-circle-check"></i> 建筑施工特种作业证书验证</h2>
                 <p class="subtitle">资格证书实行电子证照，全国有效，有效期3年。请通过住建部官方平台核验真伪。</p>
                 <div class="verify-form no-print">
-                    <div class="form-group"><label>姓名</label><input type="text" id="nameBuild" placeholder="持证人姓名"></div>
-                    <div class="form-group"><label>身份证号</label><input type="text" id="idCardBuild" placeholder="18位身份证号"></div>
-                    <div class="form-group"><label>证书编号</label><input type="text" id="certBuild" placeholder="电子证照编号"></div>
                     <button class="verify-btn" id="verifyBuildBtn"><i class="fa-solid fa-arrow-up-right-from-square"></i> 前往官方平台验证</button>
                 </div>
                 <div class="note">
@@ -419,11 +413,8 @@
             </div>
             <div class="card">
                 <h2><i class="fa-solid fa-circle-check"></i> 特种设备作业证书验证</h2>
-                <p class="subtitle">填写信息后点击按钮，将跳转至全国特种设备公示信息查询平台。</p>
+                <p class="subtitle">点击按钮，将跳转至全国特种设备公示信息查询平台。</p>
                 <div class="verify-form no-print">
-                    <div class="form-group"><label>姓名</label><input type="text" id="nameEquip" placeholder="持证人姓名"></div>
-                    <div class="form-group"><label>身份证号</label><input type="text" id="idCardEquip" placeholder="18位身份证号"></div>
-                    <div class="form-group"><label>证书编号</label><input type="text" id="certEquip" placeholder="证书编号"></div>
                     <button class="verify-btn" id="verifyEquipBtn"><i class="fa-solid fa-arrow-up-right-from-square"></i> 前往官方平台验证</button>
                 </div>
                 <div class="note">
@@ -676,30 +667,15 @@
 
         // 证书验证按钮
         document.getElementById('verifySpBtn').addEventListener('click', function () {
-            var name = document.getElementById('nameSp').value.trim();
-            var idCard = document.getElementById('idCardSp').value.trim();
-            var cert = document.getElementById('certSp').value.trim();
-            if (!name || !idCard || !cert) return alert('请完整填写姓名、身份证号和证书编号。');
             window.open('https://cx.mem.gov.cn', '_blank');
-            alert('已打开应急管理部查询平台。\n请选择“特种作业操作证查询”，并填入：\n姓名：' + name + '\n身份证号：' + idCard + '\n证书编号：' + cert);
         });
 
         document.getElementById('verifyBuildBtn').addEventListener('click', function () {
-            var name = document.getElementById('nameBuild').value.trim();
-            var idCard = document.getElementById('idCardBuild').value.trim();
-            var cert = document.getElementById('certBuild').value.trim();
-            if (!name || !idCard || !cert) return alert('请完整填写姓名、身份证号和证书编号。');
             window.open('https://zlaq.mohurd.gov.cn', '_blank');
-            alert('已打开全国工程质量安全监管信息平台。\n请选择“特种作业人员查询”，并填入：\n姓名：' + name + '\n身份证号：' + idCard + '\n证书编号：' + cert);
         });
 
         document.getElementById('verifyEquipBtn').addEventListener('click', function () {
-            var name = document.getElementById('nameEquip').value.trim();
-            var idCard = document.getElementById('idCardEquip').value.trim();
-            var cert = document.getElementById('certEquip').value.trim();
-            if (!name || !idCard || !cert) return alert('请完整填写姓名、身份证号和证书编号。');
             window.open('https://cnse.samr.gov.cn', '_blank');
-            alert('已打开全国特种设备公示信息查询平台。\n请自行填入以下信息进行查询：\n姓名：' + name + '\n身份证号：' + idCard + '\n证书编号：' + cert);
         });
 
         // Tab 切换逻辑
