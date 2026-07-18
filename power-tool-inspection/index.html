@@ -52,25 +52,39 @@
             color: var(--brand-red);
             font-weight: 600;
         }
+        /* 橙色警告提示条（截图2样式） */
+        .guide-suggest {
+            background: #FFF7ED;
+            border: 1px solid #FDBA74;
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            margin-top: 12px;
+            font-size: 13px;
+            color: #9A3412;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .guide-suggest i { color: #F97316; margin-top: 2px; }
 
         /* ===== 记录表（基于 common.css .data-table） ===== */
         .record-table thead th {
             text-align: center;
-            font-size: 12px;
+            font-size: 11px;
             white-space: nowrap;
         }
         .record-table tbody td {
             text-align: center;
             vertical-align: middle;
-            padding: 6px 6px;
+            padding: 5px 4px;
         }
         .record-table input,
         .record-table select {
             width: 100%;
-            min-width: 64px;
+            min-width: 52px;
             text-align: center;
-            padding: 7px 8px;
-            font-size: 12px;
+            padding: 5px 4px;
+            font-size: 11px;
         }
         .record-table .seq {
             font-weight: 600;
@@ -80,7 +94,7 @@
         .record-table .sign-input { text-align: left; }
         .record-table tr:hover td { background: var(--bg-page); }
 
-        /* 删除按钮（小圆） */
+        /* 删除按钮（小圆 ✕） */
         .del-btn {
             width: 24px;
             height: 24px;
@@ -98,8 +112,31 @@
         }
         .del-btn:hover { background: var(--brand-red); color: #fff; }
 
+        /* 绝缘结构标签（蓝色胶囊 badge，截图2风格） */
+        .insul-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 11px !important;
+            font-weight: 600;
+            text-align: center;
+            line-height: 1.6;
+            min-width: auto !important;
+            width: auto !important;
+            border: none !important;
+            background: transparent !important;
+        }
+        .insul-badge.type-basic   { background: #DBEAFE !important; color: #1E40AF !important; }    /* 蓝 - 基本≥2 */
+        .insul-badge.type-reinforced { background: #E0E7FF !important; color: #3730A3 !important; } /* 靛蓝 - 加强≥7 */
+        .insul-badge.type-supplementary { background: #D1FAE5 !important; color: #065F46 !important; } /* 绿 - 附加≥5 */
+
+        /* 自动结论：不合格标红 */
+        .conclusion-bad { color: var(--brand-red) !important; font-weight: 700; }
+        .conclusion-good { color: #166534 !important; font-weight: 600; }
+
         /* 指南内对照表高亮行 */
         .ref-table tr.highlight td { background: var(--brand-red-light); }
+        .ref-table th { background: #334155; color: #fff; }
 
         /* ===== 表单页脚行（检查单位/日期/页） ===== */
         .form-footer {
@@ -128,10 +165,40 @@
 
         /* ===== 打印补充 ===== */
         @media print {
+            @page {
+                size: landscape;      /* 横版打印，确保宽表完整显示 */
+                margin: 12mm 8mm;
+            }
+            body {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
             .guide-box { display: none !important; }
-            .record-table thead th { background: #e5e5e5 !important; color: #000 !important; position: static !important; }
-            .record-table tbody td { border-color: #ccc !important; }
+            .record-table thead th {
+                background: #e5e5e5 !important;
+                color: #000 !important;
+                position: static !important;
+                font-size: 9px !important;
+            }
+            .record-table tbody td {
+                border-color: #ccc !important;
+                font-size: 9px !important;
+                padding: 3px 2px !important;
+            }
+            .record-table input,
+            .record-table select {
+                font-size: 9px !important;
+                padding: 2px !important;
+                min-width: 36px !important;
+            }
             .form-footer { border-color: #999 !important; }
+            .del-btn { display: none !important; }
+            .insul-badge {
+                font-size: 8px !important;
+                padding: 1px 4px !important;
+            }
+            /* 横版下表格可以更紧凑 */
+            .table-scroll { overflow: visible !important; }
         }
     </style>
 </head>
@@ -158,49 +225,52 @@
             <button type="button" class="btn btn-sm btn-outline" id="guideBtn"><i class="fa-solid fa-book-open"></i> 检测标准指南</button>
         </div>
 
-        <!-- 检测标准指南（GB/T 3787 绝缘电阻合格标准对照表） -->
+        <!-- 检测标准指南（GB/T 3787 绝缘电阻 "2/5/7" 判别标准） -->
         <div class="guide-box" id="guideBox">
-            <h3><i class="fa-solid fa-circle-info"></i> 9 项检查项目方法及绝缘电阻合格标准</h3>
-            <p><b>1–8 项（目视与手动）</b>：按照 GB/T 3787-2017 第 6.2 条执行 —— 标志清晰、外壳完好无破损、电缆及 PE 线完好、插头无松动、开关灵活、防护装置齐全、转动部件正常、电气保护有效。</p>
-            <p><b>9. 绝缘电阻测量</b>：必须使用 <b>输出 500V 的绝缘电阻测试仪</b>（兆欧表，含数字电子式）测量，严禁用普通万用表替代。根据标准第 6.3 条表 1，不同检测部位和工具类别的合格值严格对比如下：</p>
+            <h3><i class="fa-solid fa-flask"></i> 绝缘电阻 "2 / 5 / 7" 的判别标准</h3>
+            <p>实测绝缘电阻值是否合格，<b>不取决于工具类别（Ⅰ/Ⅱ/Ⅲ）</b>，而取决于<b>测量部位的绝缘结构属性</b>。判定标准如下：</p>
 
             <table class="ref-table">
                 <thead>
                     <tr>
-                        <th>测量部位</th>
-                        <th>绝缘类型</th>
+                        <th>测量部位（检点）</th>
+                        <th>绝缘结构类型</th>
                         <th>合格值 (MΩ)</th>
-                        <th>适用情况</th>
+                        <th>实操判别方法</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr class="highlight">
                         <td>带电部分 ↔ 壳体</td>
-                        <td>基本绝缘</td>
+                        <td><span class="insul-badge type-basic">基本绝缘</span></td>
                         <td><b>≥ 2 MΩ</b></td>
-                        <td>I、II、III 类工具通用</td>
+                        <td>常见于 Ⅰ 类工具（金属外壳带接地），或Ⅲ类工具低压侧。</td>
                     </tr>
                     <tr>
                         <td>带电部分 ↔ 壳体</td>
-                        <td>加强绝缘</td>
+                        <td><span class="insul-badge type-reinforced">加强绝缘</span></td>
                         <td><b>≥ 7 MΩ</b></td>
-                        <td>I、II、III 类工具通用（指无内部金属层情况）</td>
+                        <td>带 "回" 字标志的Ⅱ类工具，全塑外壳，测外壳时用此标准。</td>
                     </tr>
                     <tr class="highlight">
                         <td>带电部分 ↔ 内部金属零件</td>
-                        <td>基本绝缘</td>
+                        <td><span class="insul-badge type-basic">基本绝缘</span></td>
                         <td><b>≥ 2 MΩ</b></td>
-                        <td><b>仅限 II 类工具</b>（如电机铁芯等）</td>
+                        <td>仅限Ⅱ类工具内部裸露金属（如电机铁芯）与带电体之间。</td>
                     </tr>
                     <tr>
                         <td>内部金属零件 ↔ 壳体</td>
-                        <td>附加绝缘</td>
+                        <td><span class="insul-badge type-supplementary">附加绝缘</span></td>
                         <td><b>≥ 5 MΩ</b></td>
-                        <td><b>仅限 II 类工具</b>（双重绝缘的第二层）</td>
+                        <td>仅限Ⅱ类工具，内部裸露金属与可触及外壳之间的第二层绝缘。</td>
                     </tr>
                 </tbody>
             </table>
-            <p class="warn" style="margin-top:10px;">⚠️ 不合格处理：低于标准需干燥处理或送修；维修后必须做介电强度试验（耐压），合格方可贴标继续使用。</p>
+
+            <div class="guide-suggest">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span><b>记录填写建议：</b>在下方表格中，请选择"绝缘结构（决定合格线）"，系统将自动对应正确的合格标准，辅助您判定结论。</span>
+            </div>
         </div>
 
         <!-- 记录表 -->
@@ -209,23 +279,24 @@
                 <table class="data-table record-table" id="recordTable">
                     <thead>
                         <tr>
-                            <th style="width:36px;">序号</th>
-                            <th style="width:90px;">工具编号</th>
-                            <th style="width:120px;">工具名称/型号</th>
-                            <th style="width:120px;">检查日期</th>
-                            <th style="width:58px;">1.标志</th>
-                            <th style="width:60px;">2.外壳</th>
-                            <th style="width:70px;">3.电缆/PE</th>
-                            <th style="width:58px;">4.插头</th>
-                            <th style="width:58px;">5.开关</th>
-                            <th style="width:60px;">6.防护</th>
-                            <th style="width:58px;">7.转动</th>
-                            <th style="width:68px;">8.电气保</th>
-                            <th style="width:74px;">9.绝缘(MΩ)</th>
-                            <th style="width:64px;">总结论</th>
-                            <th style="width:90px;">签字栏</th>
-                            <th style="width:120px;">备注</th>
-                            <th style="width:40px;" class="no-print">操作</th>
+                            <th style="width:32px;">序号</th>
+                            <th style="width:80px;">工具编号</th>
+                            <th style="width:110px;">工具名称</th>
+                            <th style="width:100px;">检查日期</th>
+                            <th style="width:48px;">1.标志</th>
+                            <th style="width:48px;">2.外壳</th>
+                            <th style="width:58px;">3.电缆/PE</th>
+                            <th style="width:48px;">4.插头</th>
+                            <th style="width:48px;">5.开关</th>
+                            <th style="width:48px;">6.防护</th>
+                            <th style="width:48px;">7.转动</th>
+                            <th style="width:56px;">8.电气保</th>
+                            <th style="width:68px;">9.绝缘<br>(实测MΩ)</th>
+                            <th style="width:120px;">绝缘结构<br>(决定合格线)</th>
+                            <th style="width:60px;">结论</th>
+                            <th style="width:72px;">签字栏</th>
+                            <th style="width:90px;">备注</th>
+                            <th style="width:34px;" class="no-print">操作</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
@@ -271,6 +342,14 @@
         var tbody = document.getElementById('tableBody');
         var rowCount = 0;
 
+        // ===== 绝缘结构类型定义（对应截图2的判别标准） =====
+        // key 用于存储 value，显示为蓝色胶囊 badge
+        var INSUL_TYPES = [
+            { key: 'basic',     label: '基本绝缘 ≥2MΩ',  cssClass: 'type-basic',       minVal: 2 },
+            { key: 'reinforced', label: '加强绝缘 ≥7MΩ',  cssClass: 'type-reinforced',  minVal: 7 },
+            { key: 'supplementary', label: '附加绝缘 ≥5MΩ', cssClass: 'type-supplementary', minVal: 5 }
+        ];
+
         function chinaDate() {
             var d = new Date();
             var utc = d.getTime() + d.getTimezoneOffset() * 60000;
@@ -286,28 +365,105 @@
         // 8 个目视/手动检查项默认合格
         var CHECK_DEFAULT = '合格';
 
+        /**
+         * 根据绝缘结构类型 + 实测值自动判定结论
+         * @param {string} insulKey - INSUL_TYPES 中的 key
+         * @param {string} rawVal - 用户输入的实测值
+         * @returns {string} '合格' | '不合格' | ''
+         */
+        function autoConclusion(insulKey, rawVal) {
+            if (!insulKey || rawVal === '' || rawVal === null || rawVal === undefined) return '';
+            var num = parseFloat(rawVal);
+            if (isNaN(num)) return '';
+            for (var i = 0; i < INSUL_TYPES.length; i++) {
+                if (INSUL_TYPES[i].key === insulKey) {
+                    return num >= INSUL_TYPES[i].minVal ? '合格' : '不合格';
+                }
+            }
+            return '';
+        }
+
+        /**
+         * 获取指定行的结论 select 元素并更新其值和样式
+         */
+        function updateRowConclusion(tr) {
+            var insulSelect = tr.querySelector('.insul-type-select');
+            var insulInput = tr.querySelector('.insul-value-input');
+            var conclSelect = tr.querySelector('.conclusion-select');
+            if (!insulSelect || !insulInput || !conclSelect) return;
+
+            var result = autoConclusion(insulSelect.value, insulInput.value);
+            if (result) {
+                conclSelect.value = result;
+                // 视觉反馈
+                if (result === '不合格') {
+                    conclSelect.className = 'form-control conclusion-select conclusion-bad';
+                } else {
+                    conclSelect.className = 'form-control conclusion-select conclusion-good';
+                }
+            } else {
+                conclSelect.value = '合格'; // 默认
+                conclSelect.className = 'form-control conclusion-select';
+            }
+        }
+
         function addRow(data) {
             data = data || {};
             rowCount++;
             var tr = document.createElement('tr');
+
+            // 构建绝缘结构下拉选项
+            var insulOptions = '';
+            var selKey = data['绝缘结构'] || '';
+            for (var k = 0; k < INSUL_TYPES.length; k++) {
+                var it = INSUL_TYPES[k];
+                insulOptions += '<option value="' + it.key + '"' + (selKey === it.key ? ' selected' : '') + '>' + it.label + '</option>';
+            }
+
             var html = '';
             html += '<td class="text-center seq">' + rowCount + '</td>';
             html += '<td><input type="text" class="form-control" value="' + (data['编号'] || '') + '" placeholder="编号"></td>';
             html += '<td><input type="text" class="form-control" value="' + (data['名称'] || '') + '" placeholder="名称/型号"></td>';
             html += '<td><input type="date" class="form-control" value="' + (data['日期'] || chinaDate()) + '"></td>';
+
+            // 8 个目视检查项
             for (var i = 0; i < 8; i++) {
                 var v = data['item' + i] || CHECK_DEFAULT;
                 html += '<td><select class="form-control">' + opt(v, '合格') + opt(v, '不合格') + '</select></td>';
             }
-            html += '<td><input type="text" class="form-control" value="' + (data['绝缘'] || '') + '" placeholder="实测值"></td>';
+
+            // 9. 绝缘实测值
+            html += '<td><input type="number" step="0.1" class="form-control insul-value-input" value="' + (data['绝缘'] || '') + '" placeholder="实测值"></td>';
+
+            // 绝缘结构（决定合格线）
+            html += '<td><select class="form-control insul-type-select">' + insulOptions + '</select></td>';
+
+            // 结论（自动判定）
             var c = data['结论'] || CHECK_DEFAULT;
-            html += '<td><select class="form-control">' + opt(c, '合格') + opt(c, '不合格') + '</select></td>';
-            html += '<td><input type="text" class="form-control sign-input" value="' + (data['签字'] || '') + '" placeholder="打印后手签"></td>';
+            html += '<td><select class="form-control conclusion-select">' + opt(c, '合格') + opt(c, '不合格') + '</select></td>';
+
+            html += '<td><input type="text" class="form-control sign-input" value="' + (data['签字'] || '') + '" placeholder="签字"></td>';
             html += '<td><input type="text" class="form-control" value="' + (data['备注'] || '') + '" placeholder="异常备注"></td>';
             html += '<td class="text-center no-print"><button type="button" class="del-btn" title="删除">✕</button></td>';
+
             tr.innerHTML = html;
+
+            // 绑定删除按钮
             tr.querySelector('.del-btn').addEventListener('click', function () { deleteRow(this); });
+
+            // 绑定绝缘结构变化 → 自动判定
+            tr.querySelector('.insul-type-select').addEventListener('change', function () {
+                updateRowConclusion(this.closest('tr'));
+            });
+            // 绑定绝缘实测值变化 → 自动判定
+            tr.querySelector('.insul-value-input').addEventListener('input', function () {
+                updateRowConclusion(this.closest('tr'));
+            });
+
             tbody.appendChild(tr);
+
+            // 初始化时也跑一次自动判定（示例数据场景）
+            updateRowConclusion(tr);
         }
 
         function deleteRow(btn) {
@@ -347,7 +503,7 @@
             var body = '<table border="1" cellspacing="0" cellpadding="5" style="border-collapse:collapse;width:100%;font-size:12px;">';
             body += '<thead><tr>';
             for (var c = 0; c < colCount - 1; c++) {
-                body += '<th>' + theadCells[c].textContent.trim() + '</th>';
+                body += '<th>' + theadCells[c].textContent.trim().replace(/\n/g, ' ') + '</th>';
             }
             body += '</tr></thead><tbody>';
 
@@ -395,10 +551,10 @@
         document.getElementById('clearBtn').addEventListener('click', function () { clearAll(); });
         document.getElementById('guideBtn').addEventListener('click', function () { toggleGuide(); });
 
-        // ===== 初始化示例数据 =====
-        addRow({ '编号': 'JD-001', '名称': '手电钻（II类）', '绝缘': '3.2', '签字': '张三', '备注': '测外壳，基本绝缘合格' });
-        addRow({ '编号': 'JD-002', '名称': '角磨机（I类）', '绝缘': '1.5', '签字': '李四', '备注': '绝缘低于 2MΩ，需干燥处理' });
-        addRow({ '编号': 'JD-003', '名称': '冲击电锤（II类）', '绝缘': '5.5', '签字': '王五', '备注': '内部金属零件对壳体附加绝缘合格(≥5MΩ)' });
+        // ===== 初始化示例数据（含绝缘结构字段） =====
+        addRow({ '编号': 'JD-001', '名称': '手电钻（II类）',  '绝缘': '3.5', '绝缘结构': 'basic',      '结论': '合格', '签字': '张三', '备注': '实测3.5，选基本绝缘≥2MΩ' });
+        addRow({ '编号': 'JD-002', '名称': '角磨机（I类）',   '绝缘': '2.5', '绝缘结构': 'basic',      '结论': '合格', '签字': '李四', '备注': '实测2.5，选基本绝缘≥2MΩ' });
+        addRow({ '编号': 'JD-003', '名称': '冲击电锤（II类）','绝缘': '5.5', '绝缘结构': 'supplementary', '结论': '合格', '签字': '王五', '备注': '内部金属对壳体，附加绝缘≥5MΩ合格' });
     })();
     </script>
 
