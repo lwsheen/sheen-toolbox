@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="手持式电动工具定期检查记录表，含 GB/T 3787-2017 绝缘电阻合格标准对照 — SHEEN Toolbox">
+    <title>手持式电动工具检查记录表 — SHEEN Toolbox</title>
+
+    <!-- 图标库（与 Toolbox 一致） -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/sheen-toolbox/common.css">
+
+    <style>
+        /* ============================================================
+           本工具特有样式（公共组件由 common.css 提供）
+           品牌色：深红 #7A1825 / 微纤灰 #F8FAFC / 圆角卡片 + 药丸按钮
+           ============================================================ */
+
+        /* ===== 工具栏（药丸按钮组） ===== */
+        .tool-toolbar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        /* ===== 检测标准指南折叠 ===== */
+        .guide-box {
+            display: none;
+            background: var(--brand-red-light);
+            border-left: 4px solid var(--brand-red);
+            border-radius: var(--radius-md);
+            padding: 16px 18px;
+            margin-bottom: 18px;
+        }
+        .guide-box h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--brand-red-hover);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .guide-box p {
+            font-size: 13px;
+            color: var(--text-primary);
+            line-height: 1.65;
+            margin-bottom: 8px;
+        }
+        .guide-box .warn {
+            color: var(--brand-red);
+            font-weight: 600;
+        }
+
+        /* ===== 记录表（基于 common.css .data-table） ===== */
+        .record-table thead th {
+            text-align: center;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+        .record-table tbody td {
+            text-align: center;
+            vertical-align: middle;
+            padding: 6px 6px;
+        }
+        .record-table input,
+        .record-table select {
+            width: 100%;
+            min-width: 64px;
+            text-align: center;
+            padding: 7px 8px;
+            font-size: 12px;
+        }
+        .record-table .seq {
+            font-weight: 600;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+        .record-table .sign-input { text-align: left; }
+        .record-table tr:hover td { background: var(--bg-page); }
+
+        /* 删除按钮（小圆） */
+        .del-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 1px solid var(--brand-red);
+            background: #fff;
+            color: var(--brand-red);
+            font-size: 12px;
+            line-height: 1;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .del-btn:hover { background: var(--brand-red); color: #fff; }
+
+        /* 指南内对照表高亮行 */
+        .ref-table tr.highlight td { background: var(--brand-red-light); }
+
+        /* ===== 表单页脚行（检查单位/日期/页） ===== */
+        .form-footer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            align-items: flex-end;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 18px;
+            border-top: 1px dashed var(--border);
+            padding-top: 14px;
+        }
+        .form-footer .line { display: flex; gap: 6px; align-items: baseline; }
+        .form-footer .underline {
+            border: none;
+            border-bottom: 1px solid var(--text-secondary);
+            background: transparent;
+            min-width: 110px;
+            padding: 2px 4px;
+            font-size: 13px;
+            outline: none;
+            color: var(--text-primary);
+            font-family: var(--font);
+        }
+
+        /* ===== 打印补充 ===== */
+        @media print {
+            .guide-box { display: none !important; }
+            .record-table thead th { background: #e5e5e5 !important; color: #000 !important; position: static !important; }
+            .record-table tbody td { border-color: #ccc !important; }
+            .form-footer { border-color: #999 !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 面包屑 -->
+    <div class="breadcrumb">
+        <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+        <span> / 手持式电动工具检查记录表</span>
+    </div>
+
+    <main class="app-container container-query">
+
+        <h1 class="page-title"><i class="fa-solid fa-screwdriver-wrench"></i> 手持式电动工具检查记录表</h1>
+        <p class="page-subtitle">依据 GB/T 3787-2017《手持式电动工具的管理、使用、检查和维修安全技术规程》第 6 章编制，含绝缘电阻合格标准对照表。</p>
+
+        <!-- 工具栏 -->
+        <div class="tool-toolbar no-print">
+            <button type="button" class="btn btn-sm btn-primary" id="addBtn"><i class="fa-solid fa-plus"></i> 增加记录</button>
+            <button type="button" class="btn btn-sm btn-outline" id="excelBtn"><i class="fa-solid fa-file-excel"></i> 导出 Excel</button>
+            <button type="button" class="btn btn-sm btn-outline" id="wordBtn"><i class="fa-solid fa-file-word"></i> 导出 Word</button>
+            <button type="button" class="btn btn-sm btn-print" id="printBtn"><i class="fa-solid fa-print"></i> 打印</button>
+            <button type="button" class="btn btn-sm btn-danger" id="clearBtn"><i class="fa-solid fa-trash-can"></i> 清空全部</button>
+            <button type="button" class="btn btn-sm btn-outline" id="guideBtn"><i class="fa-solid fa-book-open"></i> 检测标准指南</button>
+        </div>
+
+        <!-- 检测标准指南（GB/T 3787 绝缘电阻合格标准对照表） -->
+        <div class="guide-box" id="guideBox">
+            <h3><i class="fa-solid fa-circle-info"></i> 9 项检查项目方法及绝缘电阻合格标准</h3>
+            <p><b>1–8 项（目视与手动）</b>：按照 GB/T 3787-2017 第 6.2 条执行 —— 标志清晰、外壳完好无破损、电缆及 PE 线完好、插头无松动、开关灵活、防护装置齐全、转动部件正常、电气保护有效。</p>
+            <p><b>9. 绝缘电阻测量</b>：必须使用 <b>输出 500V 的绝缘电阻测试仪</b>（兆欧表，含数字电子式）测量，严禁用普通万用表替代。根据标准第 6.3 条表 1，不同检测部位和工具类别的合格值严格对比如下：</p>
+
+            <table class="ref-table">
+                <thead>
+                    <tr>
+                        <th>测量部位</th>
+                        <th>绝缘类型</th>
+                        <th>合格值 (MΩ)</th>
+                        <th>适用情况</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="highlight">
+                        <td>带电部分 ↔ 壳体</td>
+                        <td>基本绝缘</td>
+                        <td><b>≥ 2 MΩ</b></td>
+                        <td>I、II、III 类工具通用</td>
+                    </tr>
+                    <tr>
+                        <td>带电部分 ↔ 壳体</td>
+                        <td>加强绝缘</td>
+                        <td><b>≥ 7 MΩ</b></td>
+                        <td>I、II、III 类工具通用（指无内部金属层情况）</td>
+                    </tr>
+                    <tr class="highlight">
+                        <td>带电部分 ↔ 内部金属零件</td>
+                        <td>基本绝缘</td>
+                        <td><b>≥ 2 MΩ</b></td>
+                        <td><b>仅限 II 类工具</b>（如电机铁芯等）</td>
+                    </tr>
+                    <tr>
+                        <td>内部金属零件 ↔ 壳体</td>
+                        <td>附加绝缘</td>
+                        <td><b>≥ 5 MΩ</b></td>
+                        <td><b>仅限 II 类工具</b>（双重绝缘的第二层）</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="warn" style="margin-top:10px;">⚠️ 不合格处理：低于标准需干燥处理或送修；维修后必须做介电强度试验（耐压），合格方可贴标继续使用。</p>
+        </div>
+
+        <!-- 记录表 -->
+        <div class="card">
+            <div class="table-scroll">
+                <table class="data-table record-table" id="recordTable">
+                    <thead>
+                        <tr>
+                            <th style="width:36px;">序号</th>
+                            <th style="width:90px;">工具编号</th>
+                            <th style="width:120px;">工具名称/型号</th>
+                            <th style="width:120px;">检查日期</th>
+                            <th style="width:58px;">1.标志</th>
+                            <th style="width:60px;">2.外壳</th>
+                            <th style="width:70px;">3.电缆/PE</th>
+                            <th style="width:58px;">4.插头</th>
+                            <th style="width:58px;">5.开关</th>
+                            <th style="width:60px;">6.防护</th>
+                            <th style="width:58px;">7.转动</th>
+                            <th style="width:68px;">8.电气保</th>
+                            <th style="width:74px;">9.绝缘(MΩ)</th>
+                            <th style="width:64px;">总结论</th>
+                            <th style="width:90px;">签字栏</th>
+                            <th style="width:120px;">备注</th>
+                            <th style="width:40px;" class="no-print">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- 动态生成记录 -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-footer no-print">
+                <div class="line">检查单位：<input type="text" class="underline" placeholder="单位名称"></div>
+                <div class="line">检查日期：<input type="date" class="underline"></div>
+                <div class="line">第 <input type="text" class="underline" style="min-width:40px;"> 页</div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="sheen-footer">
+        <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 手持式电动工具检查记录表
+        <span class="site-stat">访问 <b><span id="busuanzi_value_site_pv">—</span></b></span>
+    </footer>
+
+    <!-- 打印时间戳 -->
+    <div class="print-time" id="printTime"></div>
+
+    <script>
+    (function () {
+        'use strict';
+
+        // ===== 打印时间戳（UTC+8 北京时间） =====
+        (function () {
+            var d = new Date();
+            var utc = d.getTime() + d.getTimezoneOffset() * 60000;
+            var cn = new Date(utc + 8 * 3600000);
+            var p = function (n) { return (n < 10 ? '0' : '') + n; };
+            var s = cn.getFullYear() + '-' + p(cn.getMonth() + 1) + '-' + p(cn.getDate()) +
+                    ' ' + p(cn.getHours()) + ':' + p(cn.getMinutes());
+            var el = document.getElementById('printTime');
+            if (el) el.textContent = '打印时间：' + s + '（北京时间）';
+        })();
+
+        var tbody = document.getElementById('tableBody');
+        var rowCount = 0;
+
+        function chinaDate() {
+            var d = new Date();
+            var utc = d.getTime() + d.getTimezoneOffset() * 60000;
+            var cn = new Date(utc + 8 * 3600000);
+            var p = function (n) { return (n < 10 ? '0' : '') + n; };
+            return cn.getFullYear() + '-' + p(cn.getMonth() + 1) + '-' + p(cn.getDate());
+        }
+
+        function opt(sel, val) {
+            return '<option value="' + val + '"' + (sel === val ? ' selected' : '') + '>' + val + '</option>';
+        }
+
+        // 8 个目视/手动检查项默认合格
+        var CHECK_DEFAULT = '合格';
+
+        function addRow(data) {
+            data = data || {};
+            rowCount++;
+            var tr = document.createElement('tr');
+            var html = '';
+            html += '<td class="text-center seq">' + rowCount + '</td>';
+            html += '<td><input type="text" class="form-control" value="' + (data['编号'] || '') + '" placeholder="编号"></td>';
+            html += '<td><input type="text" class="form-control" value="' + (data['名称'] || '') + '" placeholder="名称/型号"></td>';
+            html += '<td><input type="date" class="form-control" value="' + (data['日期'] || chinaDate()) + '"></td>';
+            for (var i = 0; i < 8; i++) {
+                var v = data['item' + i] || CHECK_DEFAULT;
+                html += '<td><select class="form-control">' + opt(v, '合格') + opt(v, '不合格') + '</select></td>';
+            }
+            html += '<td><input type="text" class="form-control" value="' + (data['绝缘'] || '') + '" placeholder="实测值"></td>';
+            var c = data['结论'] || CHECK_DEFAULT;
+            html += '<td><select class="form-control">' + opt(c, '合格') + opt(c, '不合格') + '</select></td>';
+            html += '<td><input type="text" class="form-control sign-input" value="' + (data['签字'] || '') + '" placeholder="打印后手签"></td>';
+            html += '<td><input type="text" class="form-control" value="' + (data['备注'] || '') + '" placeholder="异常备注"></td>';
+            html += '<td class="text-center no-print"><button type="button" class="del-btn" title="删除">✕</button></td>';
+            tr.innerHTML = html;
+            tr.querySelector('.del-btn').addEventListener('click', function () { deleteRow(this); });
+            tbody.appendChild(tr);
+        }
+
+        function deleteRow(btn) {
+            if (!window.confirm('确定删除该条记录吗？')) return;
+            var tr = btn.parentNode.parentNode;
+            tr.parentNode.removeChild(tr);
+            renumber();
+        }
+
+        function renumber() {
+            var rows = tbody.querySelectorAll('tr');
+            for (var i = 0; i < rows.length; i++) {
+                var seq = rows[i].querySelector('.seq');
+                if (seq) seq.textContent = i + 1;
+            }
+            rowCount = rows.length;
+        }
+
+        function clearAll() {
+            if (!window.confirm('确定清空所有记录吗？')) return;
+            tbody.innerHTML = '';
+            rowCount = 0;
+        }
+
+        function toggleGuide() {
+            var box = document.getElementById('guideBox');
+            box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+        }
+
+        // 导出 Excel / Word：读取当前输入值生成真实单元格文本
+        function exportTable(type) {
+            var table = document.getElementById('recordTable');
+            var theadCells = table.querySelectorAll('thead th');
+            var colCount = theadCells.length;
+            var rows = table.querySelectorAll('tbody tr');
+
+            var body = '<table border="1" cellspacing="0" cellpadding="5" style="border-collapse:collapse;width:100%;font-size:12px;">';
+            body += '<thead><tr>';
+            for (var c = 0; c < colCount - 1; c++) {
+                body += '<th>' + theadCells[c].textContent.trim() + '</th>';
+            }
+            body += '</tr></thead><tbody>';
+
+            for (var r = 0; r < rows.length; r++) {
+                body += '<tr>';
+                var tds = rows[r].children;
+                for (var c2 = 0; c2 < colCount - 1; c2++) {
+                    var cell = tds[c2];
+                    var ctrl = cell.querySelector('input, select');
+                    var val = ctrl ? ctrl.value : cell.textContent.trim();
+                    body += '<td>' + (val === undefined ? '' : val) + '</td>';
+                }
+                body += '</tr>';
+            }
+            body += '</tbody></table>';
+
+            var doc = '<html xmlns:o="urn:schemas-microsoft-com:office:office" ' +
+                      'xmlns:x="urn:schemas-microsoft-com:office:excel" ' +
+                      'xmlns="http://www.w3.org/TR/REC-html40">' +
+                      '<head><meta charset="UTF-8"></head><body>' +
+                      '<h2 style="text-align:center;">手持式电动工具定期检查记录表</h2>' +
+                      '<p style="text-align:center;font-size:12px;color:#555;">依据 GB/T 3787-2017 编制</p>' +
+                      body +
+                      '<div style="margin-top:20px;font-size:14px;">' +
+                      '检查人签字：________________ &nbsp;&nbsp;&nbsp; 审核人签字：________________ &nbsp;&nbsp;&nbsp; 日期：____年____月____日</div>' +
+                      '</body></html>';
+
+            var mime = (type === 'xls') ? 'application/vnd.ms-excel' : 'application/msword';
+            var blob = new Blob(['﻿' + doc], { type: mime });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = '手持电动工具检查记录表.' + (type === 'xls' ? 'xls' : 'doc');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+        }
+
+        // ===== 绑定按钮 =====
+        document.getElementById('addBtn').addEventListener('click', function () { addRow(); });
+        document.getElementById('excelBtn').addEventListener('click', function () { exportTable('xls'); });
+        document.getElementById('wordBtn').addEventListener('click', function () { exportTable('doc'); });
+        document.getElementById('printBtn').addEventListener('click', function () { window.print(); });
+        document.getElementById('clearBtn').addEventListener('click', function () { clearAll(); });
+        document.getElementById('guideBtn').addEventListener('click', function () { toggleGuide(); });
+
+        // ===== 初始化示例数据 =====
+        addRow({ '编号': 'JD-001', '名称': '手电钻（II类）', '绝缘': '3.2', '签字': '张三', '备注': '测外壳，基本绝缘合格' });
+        addRow({ '编号': 'JD-002', '名称': '角磨机（I类）', '绝缘': '1.5', '签字': '李四', '备注': '绝缘低于 2MΩ，需干燥处理' });
+        addRow({ '编号': 'JD-003', '名称': '冲击电锤（II类）', '绝缘': '5.5', '签字': '王五', '备注': '内部金属零件对壳体附加绝缘合格(≥5MΩ)' });
+    })();
+    </script>
+
+    <!-- 访问统计（与 Toolbox 一致） -->
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+</html>
