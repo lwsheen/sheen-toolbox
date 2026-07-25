@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="用电安全检查表，覆盖变配电室、配电箱、线路、照明插座、移动设备、接地、临时用电、标识消防、用电管理九大类 — SHEEN Toolbox">
+    <title>用电安全检查表 — SHEEN Toolbox</title>
+
+    <!-- 图标库（与 Toolbox 一致） -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/sheen-toolbox/common.css">
+
+    <style>
+        /* ============================================================
+           本工具特有样式（公共组件由 common.css 提供）
+           品牌色：深红 #7A1825 / 微纤灰 #F8FAFC / 圆角卡片 + 药丸按钮
+           ============================================================ */
+
+        /* ===== 头部信息条 ===== */
+        .meta-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px 28px;
+            align-items: flex-end;
+            background: var(--bg-page);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px 18px;
+            margin-bottom: 16px;
+        }
+        .meta-bar .field { display: flex; flex-direction: column; gap: 4px; }
+        .meta-bar label { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
+        .meta-bar input {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 7px 10px;
+            font-size: 13px;
+            font-family: var(--font);
+            background: #fff;
+            min-width: 160px;
+            outline: none;
+        }
+        .meta-bar input:focus { border-color: var(--brand-red); }
+
+        /* ===== 工具栏（药丸按钮组） ===== */
+        .tool-toolbar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        /* ===== 实时统计面板 ===== */
+        .summary-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .stat-card {
+            flex: 1 1 110px;
+            min-width: 96px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 12px 14px;
+            text-align: center;
+        }
+        .stat-card .num { font-size: 24px; font-weight: 800; line-height: 1.1; color: var(--text-primary); }
+        .stat-card .lab { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+        .stat-card.s-ok    { border-color: #BBF7D0; }
+        .stat-card.s-ok .num   { color: #166534; }
+        .stat-card.s-bad   { border-color: #FECACA; background: #FEF2F2; }
+        .stat-card.s-bad .num  { color: var(--brand-red); }
+        .stat-card.s-na    { border-color: #E5E7EB; }
+        .stat-card.s-na .num   { color: #6B7280; }
+        .stat-card.s-pending .num { color: #B45309; }
+
+        /* ===== 检查说明折叠 ===== */
+        .guide-box {
+            display: none;
+            background: var(--brand-red-light);
+            border-left: 4px solid var(--brand-red);
+            border-radius: var(--radius-md);
+            padding: 16px 18px;
+            margin-bottom: 18px;
+        }
+        .guide-box h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--brand-red-hover);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .guide-box ul { margin: 0; padding-left: 20px; }
+        .guide-box li { font-size: 13px; color: var(--text-primary); line-height: 1.7; }
+
+        /* ===== 检查表 ===== */
+        .check-table thead th {
+            text-align: center;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+        .check-table tbody td { vertical-align: middle; padding: 6px 6px; }
+        .check-table .col-seq    { width: 56px;  text-align: center; font-weight: 600; color: var(--text-secondary); white-space: nowrap; }
+        .check-table .col-item   { width: 150px; font-weight: 600; color: var(--text-primary); }
+        .check-table .col-std    { text-align: left; font-size: 12px; line-height: 1.55; color: #374151; }
+        .check-table .col-result { width: 168px; }
+        .check-table .col-remark { width: 150px; }
+        .check-table .col-op     { width: 34px; text-align: center; }
+
+        .check-table .item-input,
+        .check-table .std-input,
+        .check-table .remark-input {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 6px 8px;
+            font-size: 12px;
+            font-family: var(--font);
+            background: #fff;
+            outline: none;
+        }
+        .check-table .item-input { font-weight: 600; }
+        .check-table .std-input  { min-height: 38px; resize: vertical; line-height: 1.5; }
+        .check-table input:focus,
+        .check-table textarea:focus { border-color: var(--brand-red); }
+
+        /* 区段标题行 */
+        .section-row td {
+            background: #1F2A37;
+            color: #fff;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 9px 10px !important;
+            letter-spacing: 0.5px;
+        }
+        .section-row .sec-no { color: var(--amber, #FBBF24); font-weight: 800; margin-right: 6px; }
+
+        /* 结果单选药丸 */
+        .res-group { display: flex; gap: 5px; justify-content: center; flex-wrap: wrap; }
+        .res-opt {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 4px 9px;
+            font-size: 12px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            background: #fff;
+            user-select: none;
+            white-space: nowrap;
+            transition: all 0.15s;
+        }
+        .res-opt input { display: none; }
+        .res-opt:hover { border-color: #9CA3AF; }
+        .res-opt.active-ok    { background: #DCFCE7; border-color: #16A34A; color: #166534; font-weight: 700; }
+        .res-opt.active-bad   { background: #FEE2E2; border-color: var(--brand-red); color: var(--brand-red); font-weight: 700; }
+        .res-opt.active-na    { background: #F3F4F6; border-color: #9CA3AF; color: #4B5563; }
+
+        /* 不符合行高亮 */
+        tr.row-bad td { background: #FEF2F2 !important; }
+        tr.row-bad .col-item { color: var(--brand-red); }
+
+        /* 删除按钮 */
+        .del-btn {
+            width: 24px; height: 24px;
+            border-radius: 50%;
+            border: 1px solid var(--brand-red);
+            background: #fff; color: var(--brand-red);
+            font-size: 12px; line-height: 1;
+            cursor: pointer;
+            display: inline-flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+        }
+        .del-btn:hover { background: var(--brand-red); color: #fff; }
+
+        /* 提示条 */
+        .alert-bad {
+            display: none;
+            background: #FEF2F2;
+            border: 1px solid #FECACA;
+            color: var(--brand-red);
+            border-radius: var(--radius-md);
+            padding: 10px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        /* ===== 打印补充 ===== */
+        @media print {
+            @page {
+                size: landscape;      /* 横版打印，确保宽表完整显示 */
+                margin: 12mm 8mm;
+            }
+            body {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .meta-bar { background: #fff !important; }
+            .guide-box { display: none !important; }
+            .tool-toolbar, .summary-bar, .alert-bad { display: none !important; }
+            .check-table thead th {
+                background: #e5e5e5 !important;
+                color: #000 !important;
+                position: static !important;
+                font-size: 10px !important;
+            }
+            .check-table tbody td { font-size: 10px !important; padding: 3px 4px !important; }
+            .check-table .col-std { font-size: 9px !important; }
+            .check-table .item-input,
+            .check-table .std-input,
+            .check-table .remark-input {
+                border: none !important; font-size: 9px !important; padding: 1px 2px !important;
+                background: transparent !important;
+            }
+            .check-table .std-input { min-height: 0 !important; }
+            .del-btn { display: none !important; }
+            .section-row td { background: #1F2A37 !important; color: #fff !important; -webkit-print-color-adjust: exact; }
+            .res-opt { border: 1px solid #999 !important; padding: 1px 6px !important; font-size: 9px !important; }
+            .res-opt.active-ok  { background: #DCFCE7 !important; }
+            .res-opt.active-bad { background: #FEE2E2 !important; }
+            .res-opt.active-na  { background: #F3F4F6 !important; }
+            .table-scroll { overflow: visible !important; }
+            .alert-bad { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 面包屑 -->
+    <div class="breadcrumb">
+        <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+        <span> / 用电安全检查表</span>
+    </div>
+
+    <main class="app-container container-query">
+
+        <h1 class="page-title"><i class="fa-solid fa-bolt"></i> 用电安全检查表</h1>
+        <p class="page-subtitle">覆盖变配电室、配电箱、线路敷设、照明插座、移动设备、接地等电位、临时用电、标识消防、用电管理九大类，可按场所实际增减检查项目。</p>
+
+        <!-- 头部信息条 -->
+        <div class="meta-bar no-print">
+            <div class="field">
+                <label>检查日期</label>
+                <input type="date" id="checkDate">
+            </div>
+            <div class="field">
+                <label>检查区域 / 部门</label>
+                <input type="text" id="checkArea" placeholder="如：一车间配电房">
+            </div>
+            <div class="field">
+                <label>检查人</label>
+                <input type="text" id="checkPerson" placeholder="检查人员姓名">
+            </div>
+        </div>
+
+        <!-- 工具栏 -->
+        <div class="tool-toolbar no-print">
+            <button type="button" class="btn btn-sm btn-primary" id="addBtn"><i class="fa-solid fa-plus"></i> 新增检查项</button>
+            <button type="button" class="btn btn-sm btn-outline" id="excelBtn"><i class="fa-solid fa-file-excel"></i> 导出 Excel</button>
+            <button type="button" class="btn btn-sm btn-outline" id="wordBtn"><i class="fa-solid fa-file-word"></i> 导出 Word</button>
+            <button type="button" class="btn btn-sm btn-print" id="printBtn"><i class="fa-solid fa-print"></i> 打印</button>
+            <button type="button" class="btn btn-sm btn-danger" id="resetBtn"><i class="fa-solid fa-rotate-left"></i> 重置结果</button>
+            <button type="button" class="btn btn-sm btn-outline" id="guideBtn"><i class="fa-solid fa-book-open"></i> 使用说明</button>
+        </div>
+
+        <!-- 实时统计 -->
+        <div class="summary-bar no-print">
+            <div class="stat-card"><div class="num" id="stTotal">0</div><div class="lab">检查项总数</div></div>
+            <div class="stat-card s-ok"><div class="num" id="stOk">0</div><div class="lab">符合</div></div>
+            <div class="stat-card s-bad"><div class="num" id="stBad">0</div><div class="lab">不符合</div></div>
+            <div class="stat-card s-na"><div class="num" id="stNa">0</div><div class="lab">不适用</div></div>
+            <div class="stat-card s-pending"><div class="num" id="stPend">0</div><div class="lab">未检查</div></div>
+        </div>
+
+        <!-- 不符合提示 -->
+        <div class="alert-bad" id="alertBad"><i class="fa-solid fa-triangle-exclamation"></i> <span id="alertText"></span></div>
+
+        <!-- 使用说明 -->
+        <div class="guide-box" id="guideBox">
+            <h3><i class="fa-solid fa-circle-info"></i> 使用说明</h3>
+            <ul>
+                <li>检查时应严格遵守电气安全规定，涉及带电部位需保持安全距离或停电后进行。</li>
+                <li>发现问题立即记录，严重隐患需当场停用并上报整改。</li>
+                <li>安全工器具的周期试验必须严格执行，无合格标签或超期的一律停用并送检。</li>
+                <li>本表可根据场所实际情况，点击「新增检查项」继续增加检查项目，或删除不必要的项目。</li>
+                <li>右侧统计实时汇总检查结果；点击「导出 Excel / Word / 打印」可生成带填写内容的记录表。</li>
+            </ul>
+        </div>
+
+        <!-- 检查表 -->
+        <div class="card">
+            <div class="table-scroll">
+                <table class="data-table check-table" id="checkTable">
+                    <thead>
+                        <tr>
+                            <th class="col-seq">序号</th>
+                            <th class="col-item">检查项目</th>
+                            <th class="col-std">检查标准</th>
+                            <th class="col-result">检查结果</th>
+                            <th class="col-remark">备注</th>
+                            <th class="col-op no-print">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- 动态生成 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="sheen-footer">
+        <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 用电安全检查表
+        <span class="site-stat">访问 <b><span id="busuanzi_value_site_pv">—</span></b></span>
+    </footer>
+
+    <!-- 打印时间戳 -->
+    <div class="print-time" id="printTime"></div>
+
+    <script>
+    (function () {
+        'use strict';
+
+        // ===== 打印时间戳（UTC+8 北京时间） =====
+        (function () {
+            var d = new Date();
+            var utc = d.getTime() + d.getTimezoneOffset() * 60000;
+            var cn = new Date(utc + 8 * 3600000);
+            var p = function (n) { return (n < 10 ? '0' : '') + n; };
+            var s = cn.getFullYear() + '-' + p(cn.getMonth() + 1) + '-' + p(cn.getDate()) +
+                    ' ' + p(cn.getHours()) + ':' + p(cn.getMinutes());
+            var el = document.getElementById('printTime');
+            if (el) el.textContent = '打印时间：' + s + '（北京时间）';
+            var cd = document.getElementById('checkDate');
+            if (cd && !cd.value) cd.value = cn.getFullYear() + '-' + p(cn.getMonth() + 1) + '-' + p(cn.getDate());
+        })();
+
+        var tbody = document.getElementById('tableBody');
+        var customCount = 0;
+
+        // ===== 检查表数据结构 =====
+        var SECTIONS = [
+            { no: '一', title: '变配电室与高低压设备', items: [
+                { code: '1.1', item: '门锁与挡鼠板', std: '配电室门应向外开启，锁具完好；挡鼠板高度≥500mm，安装牢固无破损。', remark: '' },
+                { code: '1.2', item: '绝缘手套', std: '外观：每次使用前检查，无划伤、刺孔、裂纹、气泡、发粘等老化破损，卷曲无漏气。周期试验：每6个月进行耐压试验，合格证在有效期内，标有试验日期和电压。', remark: '无标签或超期立即停用' },
+                { code: '1.3', item: '绝缘靴（鞋）', std: '外观：每次使用前检查，无破损、磨穿，靴底花纹完好，无进水受潮。周期试验：每6个月进行耐压试验，泄漏电流达标，合格证在有效期内。', remark: '' },
+                { code: '1.4', item: '验电器（高压）', std: '外观与功能：每次使用前自检正常，在同级电压带电体上验证声光指示清晰。周期试验：启动电压每6个月测试一次，操作杆绝缘部分每12个月耐压试验一次，标签在有效期内。', remark: '必须执行"有电-无电"双重验证' },
+                { code: '1.5', item: '绝缘垫', std: '外观：每月检查表面无破裂、割伤、电蚀痕迹，保持清洁。周期试验：每12个月进行一次耐压试验，有合格标志且在有效期内。', remark: '无法拆下的应有同批次样品报告' },
+                { code: '1.6', item: '绝缘操作杆（令克棒）', std: '外观：使用前检查表面无裂纹、分层、受潮，接头紧固。周期试验：每12个月进行一次工频耐压试验，合格证完好有效。', remark: '' },
+                { code: '1.7', item: '携带型接地线', std: '外观：每次使用前检查，软铜线无断股、断头，绝缘杆完好，夹具无开裂，螺丝紧固。周期试验：操作杆绝缘部分每12个月耐压试验，成组直流电阻每5年测试，均在有效期内。', remark: '线径须满足短路电流要求' },
+                { code: '1.8', item: '应急照明与通风', std: '正常照明与应急照明完好；通风顺畅，室温、湿度正常，无漏水积水。', remark: '' },
+                { code: '1.9', item: '消防与安全标识', std: '配备CO₂或干粉灭火器且压力正常、未过期；设有"当心触电""禁止合闸"等警示牌，通道畅通。', remark: '' },
+                { code: '1.10', item: '设备状态与记录', std: '变压器、开关柜等运行正常，无异常声响、异味、过热；巡检记录、运行日志齐全。', remark: '' }
+            ]},
+            { no: '二', title: '配电箱（柜）', items: [
+                { code: '2.1', item: '箱体及门跨接', std: '箱体、箱门用编织铜带可靠接地/接零，跨接线无松动脱落。', remark: '' },
+                { code: '2.2', item: '内部状况', std: '箱内无杂物、积尘，无烧焦痕迹；导线压接紧密，绝缘无破损；相序及N、PE排标识清晰。', remark: '' },
+                { code: '2.3', item: '保护设备', std: '熔断器额定值匹配，禁止用铜丝/铁丝替代；断路器、漏电保护器参数整定正确，漏保每月试验按钮动作灵敏。', remark: '' },
+                { code: '2.4', item: '标识与门锁', std: '配电箱有名称、编号及系统图；开关控制对象标识明确；箱门锁闭，非专管人员无法随意开启。', remark: '' }
+            ]},
+            { no: '三', title: '电气线路敷设', items: [
+                { code: '3.1', item: '绝缘与防护', std: '导线绝缘无老化、破损、龟裂；线路穿管或线槽保护，管口有护套，接头处绝缘防水。', remark: '' },
+                { code: '3.2', item: '临时线与私拉乱接', std: '无私拉乱接现象；临时线路须有审批手续，限期使用并到期拆除，不得用花线、护套线作为永久电源线。', remark: '' },
+                { code: '3.3', item: '电缆沟与桥架', std: '电缆沟无积水、杂物，盖板齐全；桥架、线槽固定牢固，跨接线完好，穿过防火分区处封堵严密。', remark: '' },
+                { code: '3.4', item: '间距与保护', std: '线路与热力管道、易燃气体管道保持安全距离；穿墙、穿楼板孔洞封堵完好，过路段有保护管。', remark: '' }
+            ]},
+            { no: '四', title: '照明与插座', items: [
+                { code: '4.1', item: '灯具安装', std: '灯具固定牢固，防护罩完好；高温灯具（如碘钨灯）距可燃物≥500mm，不得直射易燃物。', remark: '' },
+                { code: '4.2', item: '插座接线与防护', std: '单相三孔插座接线"左零右火上接地"，保护线不得串联；厨房、卫生间等潮湿场所使用防溅型插座并设漏保。', remark: '' },
+                { code: '4.3', item: '应急与疏散照明', std: '应急灯、疏散指示标志外观完好，测试自亮正常，蓄电池放电时间满足规范。', remark: '' },
+                { code: '4.4', item: '开关与插头', std: '开关、插头无破损、烧焦变形，接触良好；插座不超负荷使用，无过载发热痕迹。', remark: '' }
+            ]},
+            { no: '五', title: '移动式/手持式电气设备', items: [
+                { code: '5.1', item: '外壳与电源线', std: '外壳完好无裂损；电源线采用橡套软电缆，无接头、无绝缘破损，长度宜≤6m。', remark: '' },
+                { code: '5.2', item: '接地与漏电保护', std: 'Ⅰ类工具必须有PE保护线，且使用动作电流≤30mA、动作时间≤0.1s的漏电保护器；在金属容器内等特别潮湿场所必须使用安全电压或隔离变压器。', remark: '' },
+                { code: '5.3', item: '定期检测', std: '手持电动工具绝缘电阻、漏电保护器由专人定期检测，记录完善，检验合格标志在有效期内。', remark: '' }
+            ]},
+            { no: '六', title: '接地与等电位联结', items: [
+                { code: '6.1', item: '接地连接', std: '接地干线、支线连接牢固，无锈蚀、断裂；防雷引下线完好，断接卡无松动、无腐蚀。', remark: '' },
+                { code: '6.2', item: '等电位联结', std: '总等电位、辅助等电位端子箱完好，联结线规范，无松动脱落；卫生间等局部等电位联结有效。', remark: '' },
+                { code: '6.3', item: '接地电阻', std: '工作接地、保护接地、防雷接地电阻定期检测，数值符合设计要求，检测报告在有效期内。', remark: '' }
+            ]},
+            { no: '七', title: '临时用电（施工/检修等）', items: [
+                { code: '7.1', item: '审批与配电箱', std: '临时用电已办理审批手续，使用专用电箱（带漏保、电压电流表等），严禁从二级箱直接私接。', remark: '' },
+                { code: '7.2', item: '线路与防护', std: '临时线架空或穿管埋地敷设，过道加设防护；禁止搭挂在脚手架、金属构架、管道上。', remark: '' },
+                { code: '7.3', item: '一机一闸一漏', std: '每台用电设备有各自专用开关和漏电保护，严禁一闸多机；行灯电压≤36V，金属容器内≤12V。', remark: '' },
+                { code: '7.4', item: '收工管理', std: '每日收工后切断临时电源，专人检查；临时用电到期立即拆除，现场恢复原状。', remark: '' }
+            ]},
+            { no: '八', title: '电气安全标识与消防', items: [
+                { code: '8.1', item: '安全警示标识', std: '带电设备、配电箱等处有"当心触电"标识；配电室有"未经许可 不得入内"标牌；紧急分闸按钮标识清晰。', remark: '' },
+                { code: '8.2', item: '消防器材与距离', std: '电气设备附近配备适用灭火器（干粉、CO₂等），周围无易燃物堆积，电气设备与可燃物保持安全距离。', remark: '' }
+            ]},
+            { no: '九', title: '用电管理与人员', items: [
+                { code: '9.1', item: '人员资质', std: '电工持有效特种作业操作证上岗，按期复审；非电工作业人员无擅自接线、拆线行为。', remark: '' },
+                { code: '9.2', item: '制度与记录', std: '建立安全用电管理制度、停送电操作规程；变配电室运行记录、隐患整改台账完整。', remark: '' },
+                { code: '9.3', item: '防护与培训', std: '电工正确穿戴绝缘鞋、手套等防护用品；定期组织用电安全教育，触电应急培训。', remark: '' },
+                { code: '9.4', item: '应急准备', std: '编制触电事故应急预案并组织演练；现场备有绝缘棒、急救箱，相关人员熟悉急救方法。', remark: '' }
+            ]}
+        ];
+
+        var RESULTS = ['符合', '不符合', '不适用'];
+
+        function esc(s) {
+            return String(s == null ? '' : s)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        // 生成单条检查项的行 HTML
+        function itemRowHTML(code, item, std, remark, custom) {
+            var resChips = '';
+            for (var i = 0; i < RESULTS.length; i++) {
+                var v = RESULTS[i];
+                var cls = v === '符合' ? 'active-ok' : (v === '不符合' ? 'active-bad' : 'active-na');
+                resChips += '<label class="res-opt" data-cls="' + cls + '">' +
+                            '<input type="radio" name="res_' + code + '" value="' + v + '">' + v + '</label>';
+            }
+            var opCell = custom
+                ? '<td class="col-op no-print"><button type="button" class="del-btn" title="删除">✕</button></td>'
+                : '<td class="col-op no-print"></td>';
+            return '<tr class="item-row" data-code="' + esc(code) + '" data-custom="' + (custom ? '1' : '0') + '">' +
+                   '<td class="col-seq">' + esc(code) + '</td>' +
+                   (custom
+                        ? '<td class="col-item"><input type="text" class="item-input" value="' + esc(item) + '" placeholder="检查项目"></td>'
+                        : '<td class="col-item">' + esc(item) + '</td>') +
+                   (custom
+                        ? '<td class="col-std"><textarea class="std-input" placeholder="检查标准">' + esc(std) + '</textarea></td>'
+                        : '<td class="col-std">' + esc(std) + '</td>') +
+                   '<td class="col-result"><div class="res-group">' + resChips + '</div></td>' +
+                   '<td class="col-remark"><input type="text" class="remark-input" value="' + esc(remark) + '" placeholder="备注"></td>' +
+                   opCell +
+                   '</tr>';
+        }
+
+        function sectionRowHTML(no, title) {
+            return '<tr class="section-row"><td colspan="6"><span class="sec-no">' + esc(no) + '、</span>' + esc(title) + '</td></tr>';
+        }
+
+        function renderAll() {
+            var html = '';
+            for (var s = 0; s < SECTIONS.length; s++) {
+                var sec = SECTIONS[s];
+                html += sectionRowHTML(sec.no, sec.title);
+                for (var i = 0; i < sec.items.length; i++) {
+                    var it = sec.items[i];
+                    html += itemRowHTML(it.code, it.item, it.std, it.remark || '', false);
+                }
+            }
+            tbody.innerHTML = html;
+            bindRows();
+            updateSummary();
+        }
+
+        // 绑定所有行内的交互
+        function bindRows() {
+            var rows = tbody.querySelectorAll('.item-row');
+            for (var r = 0; r < rows.length; r++) {
+                bindRow(rows[r]);
+            }
+        }
+
+        // 绑定单行：tr 作为参数传入，避免 var 循环闭包串到末行
+        function bindRow(tr) {
+            var opts = tr.querySelectorAll('.res-opt');
+            for (var o = 0; o < opts.length; o++) {
+                (function (opt, row) {
+                    var input = opt.querySelector('input');
+                    input.addEventListener('change', function () {
+                        // 清除同组激活态
+                        var group = opt.parentNode.querySelectorAll('.res-opt');
+                        for (var g = 0; g < group.length; g++) {
+                            group[g].classList.remove('active-ok', 'active-bad', 'active-na');
+                        }
+                        opt.classList.add(opt.getAttribute('data-cls'));
+                        // 行高亮（作用于当前行）
+                        if (input.value === '不符合') row.classList.add('row-bad');
+                        else row.classList.remove('row-bad');
+                        updateSummary();
+                    });
+                })(opts[o], tr);
+            }
+            // 删除（自定义行）
+            var del = tr.querySelector('.del-btn');
+            if (del) {
+                del.addEventListener('click', function () {
+                    if (!window.confirm('确定删除该检查项吗？')) return;
+                    tr.parentNode.removeChild(tr);
+                    updateSummary();
+                });
+            }
+        }
+
+        // 新增自定义检查项（附加在表格末尾）
+        function addCustom() {
+            customCount++;
+            var code = '附' + customCount;
+            // 用 tbody 作为解析上下文（div 内不允许直接放 <tr>，会导致节点被丢弃）
+            var tmp = document.createElement('tbody');
+            tmp.innerHTML = itemRowHTML(code, '', '', '', true).trim();
+            var tr = tmp.firstChild;
+            if (!tr) return;
+            tbody.appendChild(tr);
+            bindRow(tr);
+            updateSummary();
+            // 滚动到新增行
+            try { tr.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {}
+        }
+
+        // 实时统计
+        function updateSummary() {
+            var rows = tbody.querySelectorAll('.item-row');
+            var total = rows.length, ok = 0, bad = 0, na = 0, pend = 0;
+            for (var r = 0; r < rows.length; r++) {
+                var checked = rows[r].querySelector('input[type=radio]:checked');
+                if (!checked) { pend++; continue; }
+                var v = checked.value;
+                if (v === '符合') ok++;
+                else if (v === '不符合') bad++;
+                else if (v === '不适用') na++;
+            }
+            setText('stTotal', total);
+            setText('stOk', ok);
+            setText('stBad', bad);
+            setText('stNa', na);
+            setText('stPend', pend);
+
+            var alert = document.getElementById('alertBad');
+            if (bad > 0) {
+                alert.style.display = 'block';
+                setText('alertText', '发现 ' + bad + ' 项不符合，请立即记录并整改上报。');
+            } else {
+                alert.style.display = 'none';
+            }
+        }
+
+        function setText(id, v) {
+            var el = document.getElementById(id);
+            if (el) el.textContent = v;
+        }
+
+        // 重置结果（保留结构）
+        function resetResults() {
+            if (!window.confirm('确定清空所有检查结果与备注吗？（检查项结构保留）')) return;
+            var rows = tbody.querySelectorAll('.item-row');
+            for (var r = 0; r < rows.length; r++) {
+                var radios = rows[r].querySelectorAll('input[type=radio]');
+                for (var i = 0; i < radios.length; i++) radios[i].checked = false;
+                var opts = rows[r].querySelectorAll('.res-opt');
+                for (var o = 0; o < opts.length; o++) opts[o].classList.remove('active-ok', 'active-bad', 'active-na');
+                rows[r].classList.remove('row-bad');
+                var rm = rows[r].querySelector('.remark-input');
+                if (rm) rm.value = '';
+            }
+            updateSummary();
+        }
+
+        function toggleGuide() {
+            var box = document.getElementById('guideBox');
+            box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+        }
+
+        // 读取某行结果文本
+        function rowResult(tr) {
+            var c = tr.querySelector('input[type=radio]:checked');
+            return c ? c.value : '';
+        }
+        function rowRemark(tr) {
+            var c = tr.querySelector('.remark-input');
+            return c ? c.value : '';
+        }
+        function rowItem(tr) {
+            var c = tr.querySelector('.item-input');
+            return c ? c.value : (tr.querySelector('.col-item') ? tr.querySelector('.col-item').textContent.trim() : '');
+        }
+        function rowStd(tr) {
+            var c = tr.querySelector('.std-input');
+            return c ? c.value : (tr.querySelector('.col-std') ? tr.querySelector('.col-std').textContent.trim() : '');
+        }
+
+        // 导出 Excel / Word
+        function exportTable(type) {
+            var rows = tbody.querySelectorAll('tr');
+            var meta = '检查日期：' + (document.getElementById('checkDate').value || '____') +
+                       '　　检查区域/部门：' + (document.getElementById('checkArea').value || '______') +
+                       '　　检查人：' + (document.getElementById('checkPerson').value || '__________');
+
+            var body = '<table border="1" cellspacing="0" cellpadding="5" style="border-collapse:collapse;width:100%;font-size:12px;">';
+            body += '<thead><tr>' +
+                    '<th style="width:56px;">序号</th><th style="width:120px;">检查项目</th>' +
+                    '<th>检查标准</th><th style="width:90px;">检查结果</th><th style="width:120px;">备注</th>' +
+                    '</tr></thead><tbody>';
+
+            for (var i = 0; i < rows.length; i++) {
+                var tr = rows[i];
+                if (tr.classList.contains('section-row')) {
+                    var t = tr.querySelector('td').textContent.trim();
+                    body += '<tr><td colspan="5" style="background:#1F2A37;color:#fff;font-weight:700;">' + esc(t) + '</td></tr>';
+                    continue;
+                }
+                var code = tr.getAttribute('data-code') || '';
+                body += '<tr>' +
+                        '<td style="text-align:center;">' + esc(code) + '</td>' +
+                        '<td>' + esc(rowItem(tr)) + '</td>' +
+                        '<td>' + esc(rowStd(tr)) + '</td>' +
+                        '<td style="text-align:center;">' + esc(rowResult(tr)) + '</td>' +
+                        '<td>' + esc(rowRemark(tr)) + '</td>' +
+                        '</tr>';
+            }
+            body += '</tbody></table>';
+
+            var doc = '<html xmlns:o="urn:schemas-microsoft-com:office:office" ' +
+                      'xmlns="http://www.w3.org/TR/REC-html40">' +
+                      '<head><meta charset="UTF-8"></head><body>' +
+                      '<h2 style="text-align:center;">用电安全检查表</h2>' +
+                      '<p style="text-align:center;font-size:12px;color:#555;">' + esc(meta) + '</p>' +
+                      body +
+                      '<div style="margin-top:20px;font-size:14px;">' +
+                      '检查人签字：________________ &nbsp;&nbsp;&nbsp; 审核人签字：________________ &nbsp;&nbsp;&nbsp; 日期：____年____月____日</div>' +
+                      '</body></html>';
+
+            var mime = (type === 'xls') ? 'application/vnd.ms-excel' : 'application/msword';
+            var blob = new Blob(['\uFEFF' + doc], { type: mime });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = '用电安全检查表.' + (type === 'xls' ? 'xls' : 'doc');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+        }
+
+        // ===== 绑定按钮 =====
+        document.getElementById('addBtn').addEventListener('click', addCustom);
+        document.getElementById('excelBtn').addEventListener('click', function () { exportTable('xls'); });
+        document.getElementById('wordBtn').addEventListener('click', function () { exportTable('doc'); });
+        document.getElementById('printBtn').addEventListener('click', function () { window.print(); });
+        document.getElementById('resetBtn').addEventListener('click', resetResults);
+        document.getElementById('guideBtn').addEventListener('click', toggleGuide);
+
+        // ===== 初始化 =====
+        renderAll();
+    })();
+    </script>
+
+    <!-- 访问统计（与 Toolbox 一致） -->
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+</html>
