@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="特种设备查询与判定 — 八大类分类详解、叉车属性四要素判定、常见误区纠正 — SHEEN Toolbox">
+    <title>特种设备查询与判定 — SHEEN Toolbox</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/sheen-toolbox/common.css">
+
+    <style>
+        /* 仅本工具特有样式 */
+        .eq-search {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 4px 0 22px;
+            background: #fff;
+            border: 1px solid var(--border, #E5E7EB);
+            border-radius: 60px;
+            padding: 10px 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .eq-search i { color: var(--brand-red, #7A1825); font-size: 16px; }
+        .eq-search input {
+            border: none; outline: none; flex: 1; font-size: 15px;
+            background: transparent; color: var(--ink, #111827);
+        }
+        .eq-search .clear-search {
+            border: none; background: transparent; color: #9ca3af; cursor: pointer;
+            font-size: 14px; padding: 2px 6px;
+        }
+        .eq-search .clear-search:hover { color: var(--brand-red, #7A1825); }
+
+        .eq-section-title {
+            display: flex; align-items: center; gap: 10px;
+            margin: 30px 0 16px; font-size: 19px; font-weight: 700; color: var(--ink, #111827);
+        }
+        .eq-section-title i { color: var(--brand-red, #7A1825); }
+
+        /* 八大类卡片网格 */
+        .cat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+            gap: 16px;
+        }
+        .cat-card {
+            background: #fff;
+            border: 1px solid var(--border, #E5E7EB);
+            border-radius: 14px;
+            padding: 18px;
+            cursor: pointer;
+            transition: box-shadow .2s, transform .2s, border-color .2s;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .cat-card:hover { box-shadow: 0 6px 20px rgba(122,24,37,0.12); border-color: var(--brand-red, #7A1825); transform: translateY(-2px); }
+        .cat-card .cat-icon {
+            width: 46px; height: 46px; border-radius: 12px;
+            background: var(--brand-red-soft, #FEF2F2);
+            color: var(--brand-red, #7A1825);
+            display: flex; align-items: center; justify-content: center; font-size: 22px;
+        }
+        .cat-card h3 { margin: 0; font-size: 16px; color: var(--ink, #111827); display: flex; align-items: center; gap: 8px; }
+        .cat-card .cat-code {
+            font-size: 11px; color: #fff; background: var(--brand-red, #7A1825);
+            border-radius: 20px; padding: 1px 9px; font-weight: 600;
+        }
+        .cat-card p { margin: 0; font-size: 13px; color: var(--muted, #6B7280); line-height: 1.5; }
+        .cat-card .cat-more { font-size: 12px; color: var(--brand-red, #7A1825); font-weight: 600; margin-top: auto; }
+
+        /* 详情展开区 */
+        .cat-detail {
+            display: none;
+            margin-top: 12px;
+            background: #fff;
+            border: 1px solid var(--border, #E5E7EB);
+            border-left: 4px solid var(--brand-red, #7A1825);
+            border-radius: 10px;
+            padding: 18px 20px;
+        }
+        .cat-detail.open { display: block; }
+        .cat-detail h4 { margin: 14px 0 6px; font-size: 14px; color: var(--brand-red, #7A1825); }
+        .cat-detail h4:first-child { margin-top: 0; }
+        .cat-detail ul { margin: 4px 0; padding-left: 20px; }
+        .cat-detail li { font-size: 13px; color: var(--ink, #111827); line-height: 1.7; }
+        .cat-detail .scope-box {
+            background: var(--bg-soft, #F8FAFC); border-radius: 8px; padding: 10px 14px;
+            font-size: 13px; color: var(--ink, #111827); line-height: 1.6;
+        }
+        .cat-detail .basis { font-size: 12px; color: var(--muted, #6B7280); margin-top: 10px; }
+        .tag-yes { color: #059669; font-weight: 600; }
+        .tag-no { color: #DC2626; font-weight: 600; }
+
+        /* 叉车判定器 */
+        .checker {
+            background: #fff; border: 1px solid var(--border, #E5E7EB);
+            border-radius: 14px; padding: 22px; margin-top: 14px;
+        }
+        .checker .q-row {
+            display: flex; align-items: flex-start; gap: 12px;
+            padding: 12px 0; border-bottom: 1px dashed var(--border, #E5E7EB);
+        }
+        .checker .q-row:last-of-type { border-bottom: none; }
+        .checker .q-num {
+            flex: none; width: 26px; height: 26px; border-radius: 50%;
+            background: var(--brand-red, #7A1825); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 700; margin-top: 2px;
+        }
+        .checker .q-text { flex: 1; }
+        .checker .q-text .qt { font-size: 14px; color: var(--ink, #111827); font-weight: 600; }
+        .checker .q-text .qh { font-size: 12px; color: var(--muted, #6B7280); margin-top: 2px; line-height: 1.5; }
+        .checker .opts { display: flex; gap: 8px; flex: none; }
+        .checker .opts label {
+            display: inline-flex; align-items: center; gap: 5px;
+            font-size: 13px; padding: 5px 12px; border-radius: 30px;
+            border: 1px solid var(--border, #E5E7EB); cursor: pointer; user-select: none;
+            white-space: nowrap; transition: all .15s;
+        }
+        .checker .opts label:hover { border-color: var(--brand-red, #7A1825); }
+        .checker .opts input { accent-color: var(--brand-red, #7A1825); }
+        .checker .opts label.sel-yes { background: #ECFDF5; border-color: #059669; color: #047857; }
+        .checker .opts label.sel-no { background: #FEF2F2; border-color: #DC2626; color: #B91C1C; }
+
+        .checker-result {
+            margin-top: 18px; padding: 18px; border-radius: 12px; display: none;
+        }
+        .checker-result.show { display: block; }
+        .checker-result.is-eq { background: #FEF2F2; border: 1px solid #FCA5A5; }
+        .checker-result.not-eq { background: #F0FDF4; border: 1px solid #86EFAC; }
+        .checker-result .cr-title { font-size: 17px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+        .checker-result.is-eq .cr-title { color: #B91C1C; }
+        .checker-result.not-eq .cr-title { color: #047857; }
+        .checker-result .cr-reason { font-size: 13px; color: var(--ink, #111827); margin-top: 8px; line-height: 1.7; }
+        .checker-result .cr-manage { font-size: 13px; margin-top: 10px; line-height: 1.7; }
+        .checker-result .cr-manage b { color: var(--brand-red, #7A1825); }
+
+        /* 误区清单 */
+        .myth-list { display: flex; flex-direction: column; gap: 12px; }
+        .myth-item {
+            background: #fff; border: 1px solid var(--border, #E5E7EB);
+            border-radius: 12px; padding: 16px 18px; border-left: 4px solid #F59E0B;
+        }
+        .myth-item.fact { border-left-color: #059669; }
+        .myth-item h4 { margin: 0 0 6px; font-size: 14px; color: var(--ink, #111827); }
+        .myth-item .myth-bad { color: #B91C1C; font-weight: 600; }
+        .myth-item .myth-good { color: #047857; font-weight: 600; }
+        .myth-item p { margin: 4px 0 0; font-size: 13px; color: var(--muted, #6B7280); line-height: 1.6; }
+
+        .no-result { text-align: center; color: var(--muted, #6B7280); padding: 30px; font-size: 14px; display: none; }
+
+        .eq-note {
+            background: var(--brand-red-soft, #FEF2F2); border-radius: 10px;
+            padding: 14px 18px; font-size: 12.5px; color: #7A1825; line-height: 1.7; margin-top: 16px;
+        }
+        .eq-note b { font-weight: 700; }
+
+        @media print {
+            .eq-search, .checker .opts, .btn-print, .cat-more, .no-print { display: none !important; }
+            .cat-detail { display: block !important; }
+            .checker-result { display: block !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 面包屑 -->
+    <div class="breadcrumb">
+        <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+        <span> / 特种设备查询与判定</span>
+    </div>
+
+    <main class="app-container container-query">
+
+        <h1 class="page-title">特种设备查询与判定</h1>
+        <p class="page-subtitle" style="margin-bottom:6px;">
+            依据《中华人民共和国特种设备安全法》及《特种设备目录》(2014年第114号公告)、TSG 81—2022 编制。涵盖八大类释义、叉车属性四要素判定与常见误区纠正。
+        </p>
+
+        <!-- 搜索过滤 -->
+        <div class="eq-search no-print">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="eqSearch" placeholder="搜索：叉车、锅炉、电梯、起重机械、误区…">
+            <button class="clear-search" id="eqClear" title="清除"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <!-- 八大类 -->
+        <div class="eq-section-title"><i class="fa-solid fa-layer-group"></i> 特种设备八大类</div>
+        <div class="cat-grid" id="catGrid"></div>
+        <div class="no-result" id="catNoResult">未找到匹配的设备类别，请调整关键词。</div>
+
+        <!-- 叉车判定器 -->
+        <div class="eq-section-title"><i class="fa-solid fa-forklift"></i> 叉车是否属于特种设备？四要素判定</div>
+        <div class="checker no-print" id="checker">
+            <div class="q-row">
+                <div class="q-num">1</div>
+                <div class="q-text">
+                    <div class="qt">是否由司机直接操纵（含遥控）？</div>
+                    <div class="qh">纯自动运行、主要模式为无人操作的 AGV 叉车，即使带遥控，按当前监管口径暂不纳入。</div>
+                </div>
+                <div class="opts">
+                    <label><input type="radio" name="q1" value="yes"> 是</label>
+                    <label><input type="radio" name="q1" value="no"> 否</label>
+                </div>
+            </div>
+            <div class="q-row">
+                <div class="q-num">2</div>
+                <div class="q-text">
+                    <div class="qt">是否具备门架结构？</div>
+                    <div class="qh">门架是支撑货叉升降的刚性框架。手动液压托盘车（地牛）无门架，仅能地面平移。</div>
+                </div>
+                <div class="opts">
+                    <label><input type="radio" name="q2" value="yes"> 是</label>
+                    <label><input type="radio" name="q2" value="no"> 否</label>
+                </div>
+            </div>
+            <div class="q-row">
+                <div class="q-num">3</div>
+                <div class="q-text">
+                    <div class="qt">是否配备货叉作业装置（未拆除）？</div>
+                    <div class="qh">拆除货叉、改装为夹抱器或吊钩，则失去叉车属性；属具（如夹抱器）加装不改变属性。</div>
+                </div>
+                <div class="opts">
+                    <label><input type="radio" name="q3" value="yes"> 是</label>
+                    <label><input type="radio" name="q3" value="no"> 否</label>
+                </div>
+            </div>
+            <div class="q-row">
+                <div class="q-num">4</div>
+                <div class="q-text">
+                    <div class="qt">行驶与升降是否依赖自身动力（非人力）？</div>
+                    <div class="qh">电动/燃油等自行动力。人力推动的堆高车，即便能电动升降、移动靠人力，不属于。</div>
+                </div>
+                <div class="opts">
+                    <label><input type="radio" name="q4" value="yes"> 是</label>
+                    <label><input type="radio" name="q4" value="no"> 否</label>
+                </div>
+            </div>
+            <div class="q-row">
+                <div class="q-num">5</div>
+                <div class="q-text">
+                    <div class="qt">是否在“三区”内使用？</div>
+                    <div class="qh">工厂厂区 / 旅游景区 / 游乐场所等特定区域。道路交通车辆、农用车辆不在此列。</div>
+                </div>
+                <div class="opts">
+                    <label><input type="radio" name="q5" value="yes"> 是</label>
+                    <label><input type="radio" name="q5" value="no"> 否</label>
+                </div>
+            </div>
+            <div style="margin-top:16px; display:flex; gap:10px;">
+                <button class="btn-primary" id="eqCheck"><i class="fa-solid fa-magnifying-glass"></i> 判定</button>
+                <button class="btn-outline" id="eqReset">重置</button>
+            </div>
+        </div>
+        <div class="checker-result" id="checkerResult"></div>
+
+        <!-- 常见误区与排除清单 -->
+        <div class="eq-section-title"><i class="fa-solid fa-triangle-exclamation"></i> 常见误区与排除清单</div>
+        <div class="myth-list" id="mythList"></div>
+        <div class="no-result" id="mythNoResult">未找到匹配的条目。</div>
+
+        <div class="eq-note">
+            <b>免责声明：</b>本工具用于快速查询与初步判定，内容依据现行《特种设备安全法》《特种设备目录》(2014-114号)及 TSG 81—2022 等整理。具体设备属性、使用登记与检验要求，请以属地市场监督管理部门及核准检验机构的最终认定为准。
+        </div>
+
+    </main>
+
+    <footer class="sheen-footer">
+        <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 特种设备查询与判定
+    </footer>
+
+    <div class="print-time" id="printTime"></div>
+
+    <script>
+    (function() {
+        'use strict';
+
+        document.getElementById('printTime').textContent =
+            new Date().toISOString().replace('T', ' ').slice(0, 16);
+
+        /* =========================================================
+           八大类数据
+           ========================================================= */
+        var CATEGORIES = [
+            {
+                code: '1000', name: '锅炉', icon: 'fa-fire-burner',
+                def: '利用燃料、电或其他能源，将所盛装液体加热到一定参数，并通过对外输出介质形式提供热能的设备。',
+                scope: '容积≥30L 的承压蒸汽锅炉；出口水压≥0.1MPa(表压)且额定功率≥0.1MW 的承压热水锅炉；额定功率≥0.1MW 的有机热载体锅炉。',
+                examples: ['燃煤/燃气/燃油蒸汽锅炉', '承压热水锅炉', '有机热载体锅炉（导热油炉）'],
+                exclude: ['容积＜30L 的承压蒸汽锅炉', '常压锅炉、茶浴炉', '开水器'],
+                basis: '《特种设备目录》(2014-114号) · TSG 11-2020《锅炉安全技术规程》'
+            },
+            {
+                code: '2000', name: '压力容器', icon: 'fa-compress',
+                def: '盛装气体或液体、承载一定压力的密闭设备（含气瓶、氧舱）。',
+                scope: '最高工作压力≥0.1MPa(表压)；内直径≥150mm 且容积≥30L；介质为气体/液化气体或最高工作温度≥标准沸点的液体。',
+                examples: ['储气罐、反应釜', '气瓶（钢瓶、液化石油气瓶）', '氧舱'],
+                exclude: ['简单压力容器（设计压力≤1.6MPa、容积≤1m³、P·V≤1，介质为空气/水蒸气，免使用登记、免强制定检）', '非承压常压容器'],
+                basis: '《特种设备目录》· TSG 21-2016《固定式压力容器安全技术监察规程》'
+            },
+            {
+                code: '8000', name: '压力管道', icon: 'fa-route',
+                def: '利用一定压力输送气体或液体的管状设备。',
+                scope: '最高工作压力≥0.1MPa(表压)；介质为气体/液化气体/蒸汽或可燃、易爆、有毒、有腐蚀性、最高温度≥标准沸点的液体；公称直径≥50mm。',
+                examples: ['长输管道', '公用管道（燃气、热力）', '工业管道'],
+                exclude: ['公称直径＜50mm 的管道', '非金属管道（特定情形）', '设备本体所属管道元件'],
+                basis: '《特种设备目录》· TSG D0001《压力管道安全技术监察规程》'
+            },
+            {
+                code: '3000', name: '电梯', icon: 'fa-elevator',
+                def: '动力驱动、利用沿刚性导轨运行的箱体或固定线路运行的梯级，进行升降或平行运送人、货物的机电设备。',
+                scope: '载人（货）电梯、自动扶梯、自动人行道、杂物电梯等均纳入。',
+                examples: ['曳引与强制驱动电梯', '液压电梯', '自动扶梯、自动人行道、杂物电梯'],
+                exclude: ['仅供单一家庭使用的私人住宅电梯（非公共场所）', '移动式升降平台'],
+                basis: '《特种设备目录》· TSG T7001 系列《电梯监督检验和定期检验规则》'
+            },
+            {
+                code: '4000', name: '起重机械', icon: 'fa-arrows-up-down',
+                def: '用于垂直升降或垂直升降并水平移动重物的机电设备。',
+                scope: '额定起重量≥0.5t 的升降机；额定起重量≥3t（或塔式起重机额定起重力矩≥40t·m、装卸桥生产率≥300t/h）且提升高度≥2m 的起重机；层数≥2 层的机械式停车设备。',
+                examples: ['桥式、门式起重机', '塔式、流动式、门座起重机', '升降机、机械式停车设备'],
+                exclude: ['汽车起重机（轮胎吊，非特种设备）', '建筑工地用起重机械（按住建部门规定管理）', '人力起重工具'],
+                basis: '《特种设备目录》· TSG Q0002《起重机械安全技术监察规程》'
+            },
+            {
+                code: '6000', name: '客运索道', icon: 'fa-cable-car',
+                def: '动力驱动，利用柔性绳索牵引箱体等运载工具运送人员的机电设备。',
+                scope: '用于运送乘客的架空索道、缆车、拖牵索道。',
+                examples: ['客运架空索道', '客运缆车', '客运拖牵索道'],
+                exclude: ['货运索道', '景区非载人拖牵设备'],
+                basis: '《特种设备目录》· TSG S1000《客运索道安全技术监察规程》'
+            },
+            {
+                code: '7000', name: '大型游乐设施', icon: 'fa-ferris-wheel',
+                def: '用于经营目的，承载乘客游乐的设施。',
+                scope: '设计最大运行线速度≥2m/s，或运行高度距地面≥2m 的载人大型游乐设施（含无动力类）。',
+                examples: ['观览车、滑行车、飞行塔', '转马、自控飞机、赛车', '水上游乐设施、无动力游乐设施'],
+                exclude: ['运行高度＜2m 且无动力小型设施', '普通健身器材', '非经营目的自用设备'],
+                basis: '《特种设备目录》· TSG 07-2019《大型游乐设施安全技术规程》'
+            },
+            {
+                code: '5000', name: '场(厂)内专用机动车辆', icon: 'fa-forklift',
+                def: '除道路交通、农用车辆以外，仅在工厂厂区、旅游景区、游乐场所等特定区域使用的专用机动车辆。',
+                scope: '包括机动工业车辆（叉车）和非公路用旅游观光车辆。叉车：由司机直接操纵(含遥控)，通过门架和货叉将载荷起升到一定高度作业的自行式车辆。',
+                examples: ['平衡重式/前移式/侧面式/插腿式叉车', '托盘堆垛车、三向堆垛车', '非公路用旅游观光车、观光列车'],
+                exclude: ['手动液压托盘车（地牛，无门架）', '人力推动堆高车', '纯无人 AGV 叉车（按监管口径暂不纳入）', '已上牌道路车辆、农用机械'],
+                basis: '《特种设备目录》· TSG 81-2022《场(厂)内专用机动车辆安全技术规程》'
+            }
+        ];
+
+        /* =========================================================
+           渲染八大类卡片 + 详情
+           ========================================================= */
+        var catGrid = document.getElementById('catGrid');
+        function renderCats() {
+            catGrid.innerHTML = '';
+            CATEGORIES.forEach(function(c, i) {
+                var card = document.createElement('div');
+                card.className = 'cat-card';
+                card.setAttribute('data-idx', i);
+                card.innerHTML =
+                    '<div class="cat-icon"><i class="fa-solid ' + c.icon + '"></i></div>' +
+                    '<h3>' + c.name + ' <span class="cat-code">' + c.code + '</span></h3>' +
+                    '<p>' + c.def + '</p>' +
+                    '<div class="cat-more">查看详情 <i class="fa-solid fa-angle-right"></i></div>';
+                var detail = document.createElement('div');
+                detail.className = 'cat-detail';
+                detail.setAttribute('data-idx', i);
+                detail.innerHTML =
+                    '<h4>定义</h4><div class="scope-box">' + c.def + '</div>' +
+                    '<h4>纳入范围</h4><div class="scope-box">' + c.scope + '</div>' +
+                    '<h4>常见设备举例 <span class="tag-yes">✓ 属于</span></h4>' +
+                    '<ul>' + c.examples.map(function(e){ return '<li>' + e + '</li>'; }).join('') + '</ul>' +
+                    '<h4>典型排除 <span class="tag-no">✕ 不属于</span></h4>' +
+                    '<ul>' + c.exclude.map(function(e){ return '<li>' + e + '</li>'; }).join('') + '</ul>' +
+                    '<div class="basis">监管依据：' + c.basis + '</div>';
+
+                card.addEventListener('click', function() {
+                    var open = detail.classList.contains('open');
+                    // 关闭其他
+                    Array.prototype.forEach.call(document.querySelectorAll('.cat-detail.open'), function(d){
+                        if (d !== detail) d.classList.remove('open');
+                    });
+                    detail.classList.toggle('open', !open);
+                });
+
+                catGrid.appendChild(card);
+                catGrid.appendChild(detail);
+            });
+        }
+        renderCats();
+
+        /* =========================================================
+           叉车四要素判定器
+           ========================================================= */
+        var checkerResult = document.getElementById('checkerResult');
+        function getVal(name) {
+            var el = document.querySelector('input[name="' + name + '"]:checked');
+            return el ? el.value : null;
+        }
+        function styleOpts() {
+            Array.prototype.forEach.call(document.querySelectorAll('.checker .opts label'), function(l){
+                l.classList.remove('sel-yes', 'sel-no');
+            });
+            Array.prototype.forEach.call(document.querySelectorAll('.checker .opts input:checked'), function(inp){
+                var lab = inp.closest('label');
+                if (lab) lab.classList.add(inp.value === 'yes' ? 'sel-yes' : 'sel-no');
+            });
+        }
+        Array.prototype.forEach.call(document.querySelectorAll('.checker .opts input'), function(inp){
+            inp.addEventListener('change', styleOpts);
+        });
+
+        function safeScroll(el) {
+            if (el && el.scrollIntoView) el.scrollIntoView({behavior:'smooth', block:'nearest'});
+        }
+
+        document.getElementById('eqCheck').addEventListener('click', function() {
+            var v1 = getVal('q1'), v2 = getVal('q2'), v3 = getVal('q3'), v4 = getVal('q4'), v5 = getVal('q5');
+            // 纯无人 AGV（q1=否）可直接判定，无需回答其余
+            if (v1 === 'no') {
+                showResult(false, '主要运行模式为无人操作的 AGV 叉车',
+                    '依据 TSG 81—2022 及监管口径，纯自动运行、无人直接操纵的 AGV 叉车，即使具备门架与货叉，当前暂不纳入特种设备目录管理；但企业仍需建立安全管理制度与操作规程。',
+                    false);
+                return;
+            }
+            if (!v1 || !v2 || !v3 || !v4 || !v5) {
+                checkerResult.className = 'checker-result show not-eq';
+                checkerResult.innerHTML = '<div class="cr-title"><i class="fa-solid fa-circle-exclamation"></i> 请完成全部 5 项选择</div>' +
+                    '<div class="cr-reason">每道题选择“是”或“否”后，系统才能给出判定结论。</div>';
+                safeScroll(checkerResult);
+                return;
+            }
+            // 四要素 + 三区
+            var failed = [];
+            if (v2 === 'no') failed.push('不具备门架结构');
+            if (v3 === 'no') failed.push('未配备货叉（或已拆除改装）');
+            if (v4 === 'no') failed.push('行驶/升降依赖人力而非自行动力');
+            if (v5 === 'no') failed.push('不在工厂厂区/旅游景区/游乐场所等“三区”内使用');
+
+            if (failed.length > 0) {
+                showResult(false, failed.join('；') + '，不满足全部要素',
+                    '该设备不完全符合 TSG 81—2022 中“叉车”定义，不纳入特种设备监管。但仍应按一般厂内车辆进行安全管理、操作培训，防范事故。',
+                    false);
+            } else {
+                showResult(true, '同时满足四要素且在“三区”内使用',
+                    '该叉车属于特种设备（场(厂)内专用机动车辆类），须依法：① 投入使用前或后 30 日内办理使用登记；② 在检验有效期届满前 1 个月申请定期（含首次）检验；③ 作业人员持 N1 类特种设备作业人员证上岗；④ 配备安全管理员并建立安全技术档案。',
+                    true);
+            }
+        });
+
+        function showResult(isEq, title, reason, manage) {
+            checkerResult.className = 'checker-result show ' + (isEq ? 'is-eq' : 'not-eq');
+            var icon = isEq ? 'fa-triangle-exclamation' : 'fa-circle-check';
+            var manageHtml = manage
+                ? '<div class="cr-manage"><b>管理要求：</b>使用登记(上牌) · 定期检验 · 持证上岗(N1) · 安全管理员 · 应急预案</div>'
+                : '';
+            checkerResult.innerHTML =
+                '<div class="cr-title"><i class="fa-solid ' + icon + '"></i> ' + (isEq ? '属于特种设备' : '不属于特种设备') + '</div>' +
+                '<div class="cr-reason"><b>判定依据：</b>' + title + '。<br>' + reason + '</div>' +
+                manageHtml;
+            safeScroll(checkerResult);
+        }
+
+        document.getElementById('eqReset').addEventListener('click', function() {
+            Array.prototype.forEach.call(document.querySelectorAll('.checker .opts input'), function(i){ i.checked = false; });
+            styleOpts();
+            checkerResult.className = 'checker-result';
+            checkerResult.innerHTML = '';
+        });
+
+        /* =========================================================
+           误区与排除清单
+           ========================================================= */
+        var MYTHS = [
+            { bad: '只有柴油（或汽油）叉车要上牌登记，电动叉车不用', good: '无论柴油、电动或防爆，符合“门架+货叉+自行式+三区内”定义的叉车均属特种设备，都须办理使用登记（上牌）与定期检验。', fact: false },
+            { bad: '起升高度低（或吨位小）就不算特种设备', good: 'TSG 81—2022 未设定起升高度或额定起重量数值门槛。只要具备通过门架和货叉将载荷起升到一定高度堆垛的功能，即纳入监管，与吨位、高度无关。', fact: false },
+            { bad: '装了夹抱器、属具就不是叉车了', good: '货叉未被拆除、仅加装属具（夹抱器等），仍按特种设备叉车管理；只有拆除货叉改装为其他取物装置才失去叉车属性。', fact: false },
+            { bad: 'AGV 有遥控功能就属于特种设备', good: '纯自动运行、主要模式为无人操作的 AGV 叉车，即使带遥控，按当前监管口径暂不纳入特种设备监管（但企业须自行安全管理）。', fact: false },
+            { bad: '手动液压托盘车（地牛）也是叉车，要上牌', good: '地牛无门架、靠人力在地面平移，不满足“门架+自行式”要素，不属于特种设备，按一般厂内搬运设备管理。', fact: false },
+            { bad: '汽车吊是轮胎起重机，属于特种设备', good: '《特种设备目录》有“轮胎起重机”但无“汽车吊”。汽车吊有车辆驾驶舱+吊车作业舱两个舱，不属于特种设备；轮胎起重机只有一个作业舱，属于特种设备。', fact: false },
+            { bad: '液压升降平台能当货梯用', good: '液压升降平台本身不属于特种设备；若加装井道、门锁、限位等改造成“简易升降机”且额定起重量≥500kg，则属于特种设备，私自改造属“三非”违法。', fact: false },
+            { bad: '建筑工地用的叉车、起重机要按特种设备管', good: '建筑工地、市政工程工地使用的起重机械和场(厂)内专用机动车辆，按《特种设备目录》说明不纳入目录管理，由住建部门相关规范监管；但厂区（非工地）内的仍属特种设备。', fact: false }
+        ];
+
+        var mythList = document.getElementById('mythList');
+        function renderMyths() {
+            mythList.innerHTML = '';
+            MYTHS.forEach(function(m) {
+                var item = document.createElement('div');
+                item.className = 'myth-item' + (m.fact ? ' fact' : '');
+                item.innerHTML =
+                    '<h4><span class="myth-bad">✕ 误区：</span>' + m.bad + '</h4>' +
+                    '<p><span class="myth-good">✓ 正解：</span>' + m.good + '</p>';
+                mythList.appendChild(item);
+            });
+        }
+        renderMyths();
+
+        /* =========================================================
+           搜索过滤
+           ========================================================= */
+        var eqSearch = document.getElementById('eqSearch');
+        var catNoResult = document.getElementById('catNoResult');
+        var mythNoResult = document.getElementById('mythNoResult');
+
+        function normalize(s) { return (s || '').toLowerCase().replace(/\s/g, ''); }
+
+        function applyFilter() {
+            var q = normalize(eqSearch.value);
+            // 八大类
+            var catVisible = 0;
+            Array.prototype.forEach.call(catGrid.querySelectorAll('.cat-card'), function(card) {
+                var idx = card.getAttribute('data-idx');
+                var c = CATEGORIES[idx];
+                var hay = normalize(c.name + c.def + c.scope + c.examples.join('') + c.exclude.join('') + c.basis + c.code);
+                var show = !q || hay.indexOf(q) !== -1;
+                card.style.display = show ? '' : 'none';
+                var detail = catGrid.querySelector('.cat-detail[data-idx="' + idx + '"]');
+                if (detail) {
+                    detail.style.display = (show && detail.classList.contains('open')) ? 'block' : (detail.classList.contains('open') ? 'block' : 'none');
+                    if (!show) detail.classList.remove('open');
+                }
+                if (show) catVisible++;
+            });
+            catNoResult.style.display = catVisible === 0 ? 'block' : 'none';
+
+            // 误区
+            var mythVisible = 0;
+            Array.prototype.forEach.call(mythList.querySelectorAll('.myth-item'), function(item, i) {
+                var m = MYTHS[i];
+                var hay = normalize(m.bad + m.good);
+                var show = !q || hay.indexOf(q) !== -1;
+                item.style.display = show ? '' : 'none';
+                if (show) mythVisible++;
+            });
+            mythNoResult.style.display = mythVisible === 0 ? 'block' : 'none';
+        }
+
+        eqSearch.addEventListener('input', applyFilter);
+        document.getElementById('eqClear').addEventListener('click', function() {
+            eqSearch.value = '';
+            applyFilter();
+            eqSearch.focus();
+        });
+    })();
+    </script>
+
+</body>
+</html>
