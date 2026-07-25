@@ -111,17 +111,22 @@
         .guide-box .warn i { color: #F97316; margin-top: 2px; }
 
         /* ===== 检查表 ===== */
+        .check-table {
+            table-layout: fixed;
+            min-width: 850px;          /* 保证列宽不被压缩到不可用，超宽时由 table-scroll 横滚 */
+            width: 100%;
+        }
         .check-table thead th {
             text-align: center;
             font-size: 12px;
             white-space: nowrap;
         }
         .check-table tbody td { vertical-align: middle; padding: 6px 8px; }
-        .check-table .col-seq    { width: 44px;  text-align: center; font-weight: 700; color: var(--text-secondary); }
-        .check-table .col-part   { width: 120px; font-weight: 700; color: var(--text-primary); text-align: center; }
-        .check-table .col-std    { text-align: left; font-size: 12px; line-height: 1.6; color: #374151; }
-        .check-table .col-result { width: 150px; }
-        .check-table .col-remark { width: 180px; }
+        .check-table .col-seq    { width: 40px;  text-align: center; font-weight: 700; color: var(--text-secondary); white-space: nowrap; }
+        .check-table .col-part   { width: 115px; font-weight: 700; color: var(--text-primary); text-align: center; min-width: 95px; }
+        .check-table .col-std    { /* 自适应剩余宽度 */ text-align: left; font-size: 12px; line-height: 1.55; color: #374151; }
+        .check-table .col-result { width: 140px; min-width: 120px; }
+        .check-table .col-remark { width: 160px; min-width: 130px; }
 
         /* 部件标题强调 */
         .check-table .col-part .part-name { display: block; font-size: 13px; }
@@ -219,26 +224,44 @@
         @media print {
             @page {
                 size: landscape;      /* 横版打印，确保宽表完整显示 */
-                margin: 12mm 8mm;
+                margin: 10mm 7mm;
             }
             body { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             .meta-bar { background: #fff !important; }
-            .guide-box, .tool-toolbar, .summary-bar, .alert-bad { display: none !important; }
+            .guide-box, .tool-toolbar, .summary-bar, .alert-bad, .verdict-card { display: none !important; }
+
+            /* 打印时表格用百分比宽度，确保横版 A4 容纳全部列 */
+            .check-table {
+                table-layout: fixed !important;
+                min-width: 0 !important;
+                width: 100% !important;
+            }
+            .check-table .col-seq    { width: 4%  !important; min-width: 0 !important; font-size: 9px !important; }
+            .check-table .col-part   { width: 11% !important; min-width: 0 !important; font-size: 9px !important; word-wrap: break-word; }
+            .check-table .col-part .part-name { font-size: 9px !important; }
+            .check-table .col-part .part-sub  { font-size: 8px !important; }
+            .check-table .col-std    { width: 44% !important; font-size: 8.5px !important; line-height: 1.35 !important; }
+            .check-table .col-result { width: 16% !important; min-width: 0 !important; }
+            .check-table .col-remark { width: 22% !important; min-width: 0 !important; }
+
             .check-table thead th {
                 background: #e5e5e5 !important; color: #000 !important;
-                position: static !important; font-size: 10px !important;
+                position: static !important; font-size: 9px !important; padding: 3px 2px !important;
             }
-            .check-table tbody td { font-size: 10px !important; padding: 4px 6px !important; }
-            .check-table .col-std { font-size: 9px !important; }
-            .remark-input { border: none !important; font-size: 9px !important; padding: 1px 2px !important; background: transparent !important; min-height: 0 !important; }
-            .res-opt { border: 1px solid #999 !important; padding: 2px 8px !important; font-size: 9px !important; }
+            .check-table tbody td { font-size: 8.5px !important; padding: 2px 3px !important; }
+            .std-list { padding-left: 12px !important; margin: 0 !important; }
+            .std-list li { margin-bottom: 1px !important; font-size: 8.5px !important; }
+            .remark-input { border: none !important; font-size: 8.5px !important; padding: 1px 2px !important; background: transparent !important; min-height: 0 !important; }
+            .res-opt { border: 1px solid #999 !important; padding: 1px 4px !important; font-size: 8px !important; }
             .res-opt.active-ok { background: #DCFCE7 !important; }
             .res-opt.active-bad { background: #FEE2E2 !important; }
-            .verdict-card { background: #fff !important; }
-            .verdict-card textarea { border: 1px solid #999 !important; font-size: 10px !important; }
-            .verdict-opt { border: 1px solid #999 !important; padding: 2px 8px !important; font-size: 10px !important; }
+            .verdict-card { display: block !important; background: #fff !important; margin-top: 12px; page-break-inside: avoid; }
+            .verdict-card h3 { font-size: 11px !important; }
+            .verdict-opts { gap: 4px !important; margin-bottom: 6px !important; }
+            .verdict-opt { border: 1px solid #999 !important; padding: 2px 6px !important; font-size: 9px !important; }
             .verdict-opt.active { background: #7A1825 !important; }
-            .table-scroll { overflow: visible !important; }
+            .verdict-card textarea { border: 1px solid #999 !important; font-size: 9px !important; min-height: 40px !important; }
+            .table-scroll { overflow: visible !important; margin: 0 !important; padding: 0 !important; }
         }
     </style>
 </head>
