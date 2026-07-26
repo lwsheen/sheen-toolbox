@@ -89,7 +89,7 @@
         .guide-suggest i { color: #F97316; margin-top: 2px; }
 
         /* ===== 记录表（每项一行，与用电安全检查表一致） ===== */
-        .check-table { table-layout: fixed; min-width: 900px; width: 100%; }
+        .check-table { table-layout: fixed; min-width: 860px; width: 100%; }
         .check-table thead th {
             text-align: center; font-size: 11px; white-space: nowrap;
             background: #334155; color: #fff;
@@ -102,14 +102,18 @@
             font-size: 11px; border: 1px solid var(--border, #E5E7EB); border-radius: var(--radius-sm, 4px);
         }
         .check-table .col-seq { width: 40px; font-weight: 600; color: var(--text-secondary, #6B7280); }
-        .check-table .col-item { width: 140px; min-width: 110px; text-align: left !important; font-weight: 500; }
-        .check-table .col-std { /* auto */ text-align: left !important; font-size: 11px; color: var(--text-secondary, #6B7280); }
-        .check-table .col-result { width: 160px; min-width: 130px; }
-        .check-table .col-class { width: 70px; }
-        .check-table .col-insul { width: 80px; }
-        .check-table .col-concl { width: 60px; }
-        .check-table .col-remark { width: 130px; min-width: 100px; }
+        .check-table .col-item { width: 180px; min-width: 150px; text-align: left !important; font-weight: 500; white-space: nowrap; }
+        .check-table .col-std { width: 240px; text-align: left !important; font-size: 11px; color: var(--text-secondary, #6B7280); }
+        .check-table .col-result { width: 150px; min-width: 130px; }
+        .check-table .col-class { width: 65px; }
+        .check-table .col-insul { width: 70px; }
+        .check-table .col-concl { width: 55px; }
+        .check-table .col-remark { width: 120px; min-width: 90px; }
         .check-table .col-op { width: 32px; }
+        /* 操作列：默认隐藏，hover 行时显示 */
+        .check-table .col-op { display: none; }
+        .check-table tr:hover > .col-op { display: table-cell; }
+        .check-table tr:hover .del-btn { display: inline-flex; }
         .check-table tr:hover td { background: var(--bg-page, #F8FAFC); }
 
         /* 结果药丸 */
@@ -125,12 +129,13 @@
         .res-opt.active-n  { background: #FEE2E2; color: #991B1B; border-color: #F87171 !important; font-weight: 600; }
         .res-opt.active-na { background: #F3F4F6; color: #4B5563; border-color: #9CA3AF !important; }
 
-        /* 删除按钮 */
+        /* 删除按钮：默认隐藏，hover 行时显示 */
         .del-btn {
+            display: none;
             width: 24px; height: 24px; border-radius: 50%;
             border: 1px solid var(--brand-red, #7A1825); background: #fff;
             color: var(--brand-red, #7A1825); font-size: 12px; line-height: 1;
-            cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+            cursor: pointer; align-items: center; justify-content: center;
             transition: all 0.2s;
         }
         .del-btn:hover { background: var(--brand-red, #7A1825); color: #fff; }
