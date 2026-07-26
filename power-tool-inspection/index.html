@@ -89,7 +89,7 @@
         .guide-suggest i { color: #F97316; margin-top: 2px; }
 
         /* ===== 记录表（每项一行，与用电安全检查表一致） ===== */
-        .check-table { table-layout: fixed; min-width: 860px; width: 100%; }
+        .check-table { table-layout: fixed; min-width: 900px; width: 100%; }
         .check-table thead th {
             text-align: center; font-size: 11px; white-space: nowrap;
             background: #334155; color: #fff;
@@ -109,11 +109,6 @@
         .check-table .col-insul { width: 70px; }
         .check-table .col-concl { width: 55px; }
         .check-table .col-remark { width: 120px; min-width: 90px; }
-        .check-table .col-op { width: 32px; }
-        /* 操作列：默认隐藏，hover 行时显示 */
-        .check-table .col-op { display: none; }
-        .check-table tr:hover > .col-op { display: table-cell; }
-        .check-table tr:hover .del-btn { display: inline-flex; }
         .check-table tr:hover td { background: var(--bg-page, #F8FAFC); }
 
         /* 结果药丸 */
@@ -128,17 +123,6 @@
         .res-opt.active-y  { background: #D1FAE5; color: #065F46; border-color: #34D399 !important; font-weight: 600; }
         .res-opt.active-n  { background: #FEE2E2; color: #991B1B; border-color: #F87171 !important; font-weight: 600; }
         .res-opt.active-na { background: #F3F4F6; color: #4B5563; border-color: #9CA3AF !important; }
-
-        /* 删除按钮：默认隐藏，hover 行时显示 */
-        .del-btn {
-            display: none;
-            width: 24px; height: 24px; border-radius: 50%;
-            border: 1px solid var(--brand-red, #7A1825); background: #fff;
-            color: var(--brand-red, #7A1825); font-size: 12px; line-height: 1;
-            cursor: pointer; align-items: center; justify-content: center;
-            transition: all 0.2s;
-        }
-        .del-btn:hover { background: var(--brand-red, #7A1825); color: #fff; }
 
         /* 工具类别 badge */
         .tool-class-badge {
@@ -200,7 +184,6 @@
             .form-header { background: transparent !important; border: none !important; padding: 4px 0 !important; font-size: 9px !important; }
             .form-header input, .form-header select { border: 0.5pt solid #999 !important; padding: 1px 3px !important; font-size: 9px !important; }
             .form-footer { border-color: #999 !important; font-size: 9px !important; }
-            .del-btn, .col-op { display: none !important; }
             .res-opt { font-size: 8px !important; padding: 1px 4px !important; }
             .table-scroll { overflow: visible !important; margin: 0 !important; padding: 0 !important; }
             .card { box-shadow: none !important; border-radius: 0 !important; border: 1.5px solid #333 !important; page-break-inside: auto !important; }
@@ -229,6 +212,7 @@
             <button type="button" class="btn btn-sm btn-outline" id="excelBtn"><i class="fa-solid fa-file-excel"></i> 导出 Excel</button>
             <button type="button" class="btn btn-sm btn-outline" id="wordBtn"><i class="fa-solid fa-file-word"></i> 导出 Word</button>
             <button type="button" class="btn btn-sm btn-print" id="printBtn"><i class="fa-solid fa-print"></i> 打印</button>
+            <button type="button" class="btn btn-sm btn-danger" id="delLastBtn"><i class="fa-solid fa-minus"></i> 删除最后一台</button>
             <button type="button" class="btn btn-sm btn-danger" id="clearBtn"><i class="fa-solid fa-trash-can"></i> 清空</button>
             <button type="button" class="btn btn-sm btn-outline" id="guideBtn"><i class="fa-solid fa-book-open"></i> 绝缘电阻标准</button>
         </div>
@@ -296,7 +280,6 @@
                             <th class="col-insul">绝缘<br>MΩ</th>
                             <th class="col-concl">结论</th>
                             <th class="col-remark">备注</th>
-                            <th class="col-op no-print">操作</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
@@ -495,11 +478,6 @@
                     ? '<input type="text" class="form-control" value="'+(data['备注']||'')+'" placeholder="异常备注">'
                     : '')+'</td>';
 
-                // 操作（仅每组第一行显示）
-                html+='<td class="col-op no-print">'+(idx===0
-                    ? '<button type="button" class="del-btn" title="删除此工具">✕</button>'
-                    : '')+'</td>';
-
                 tr.innerHTML=html;
                 tbody.appendChild(tr);
 
@@ -543,16 +521,6 @@
                 }
             }
 
-            // 删除按钮（绑在第一行上）
-            var firstRow=tbody.querySelectorAll('tr[data-tool="'+toolCount+'"]')[0];
-            firstRow.querySelector('.del-btn').addEventListener('click',function(){
-                if(!window.confirm('确定删除该工具的全部 '+CHECK_ITEMS.length+' 项检查记录吗？'))return;
-                var rows=tbody.querySelectorAll('tr[data-tool="'+this.closest('tr').getAttribute('data-tool')+'"]');
-                for(var r=0;r<rows.length;r++) rows[r].parentNode.removeChild(rows[r]);
-                renumberTools();
-                updateVerdict();
-            });
-
             // 初始化第9行自动判定
             var row9=tbody.querySelectorAll('tr[data-tool="'+toolCode+'"][data-item-code="9"]')[0];
             // 用 toolCount 重新查找
@@ -561,10 +529,19 @@
             updateVerdict();
         }
 
-        function deleteTool(btn) {
-            if(!window.confirm('确定删除该工具的全部检查记录吗？'))return;
-            var tid=btn.closest('tr').getAttribute('data-tool');
-            var rows=tbody.querySelectorAll('tr[data-tool="'+tid+'"]');
+        function deleteLastTool() {
+            var groups={}, order=[];
+            var allTrs=tbody.querySelectorAll('tr[data-tool]');
+            if(allTrs.length===0) return;
+            allTrs.forEach(function(tr){
+                var tid=tr.getAttribute('data-tool');
+                if(!groups[tid]){ groups[tid]=[]; order.push(tid); }
+                groups[tid].push(tr);
+            });
+            if(order.length===0) return;
+            var lastTid=order[order.length-1];
+            if(!window.confirm('确定删除第 '+order.length+' 台工具的全部 '+CHECK_ITEMS.length+' 项检查记录吗？'))return;
+            var rows=tbody.querySelectorAll('tr[data-tool="'+lastTid+'"]');
             for(var i=0;i<rows.length;i++) rows[i].parentNode.removeChild(rows[i]);
             renumberTools(); updateVerdict();
         }
@@ -586,16 +563,6 @@
                     if(seqCell) seqCell.textContent=(r===0)?toolCount:'';
                     // 更新 data-tool
                     grp[r].setAttribute('data-tool', toolCount);
-                }
-                // 更新删除按钮的 data-tool 引用
-                var delBtn=grp[0].querySelector('.del-btn');
-                if(delBtn){
-                    // 重新绑定
-                    var newBtn=delBtn.cloneNode(true);
-                    delBtn.parentNode.replaceChild(newBtn,delBtn);
-                    (function(tid){
-                        newBtn.addEventListener('click',function(){ deleteTool(this); });
-                    })(toolCount);
                 }
             }
         }
@@ -658,6 +625,7 @@
         document.getElementById('excelBtn').addEventListener('click',function(){exportTable('xls');});
         document.getElementById('wordBtn').addEventListener('click',function(){exportTable('doc');});
         document.getElementById('printBtn').addEventListener('click',function(){window.print();});
+        document.getElementById('delLastBtn').addEventListener('click',function(){deleteLastTool();});
         document.getElementById('clearBtn').addEventListener('click',function(){clearAll();});
         document.getElementById('guideBtn').addEventListener('click',function(){toggleGuide();});
 
