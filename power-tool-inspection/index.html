@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="手持式电动工具定期检查记录表，含 GB/T 3787-2017 绝缘电阻合格标准对照 — SHEEN Toolbox">
+    <meta name="description" content="手持式电动工具定期检查记录表，依据 GB/T 3787-2026 编制，含绝缘电阻合格标准（I/II/III类及电池式）— SHEEN Toolbox">
     <title>手持式电动工具检查记录表 — SHEEN Toolbox</title>
 
-    <!-- 图标库（与 Toolbox 一致） -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="/sheen-toolbox/common.css">
 
     <style>
         /* ============================================================
-           本工具特有样式（公共组件由 common.css 提供）
-           品牌色：深红 #7A1825 / 微纤灰 #F8FAFC / 圆角卡片 + 药丸按钮
+           手持电动工具检查表特有样式
+           品牌色：深红 #7A1825 / 公共组件由 common.css 提供
+           依据：GB/T 3787-2026 附录 A 定期检查记录表
            ============================================================ */
 
-        /* ===== 工具栏（药丸按钮组） ===== */
+        /* ===== 工具栏 ===== */
         .tool-toolbar {
             display: flex;
             gap: 10px;
@@ -24,19 +24,55 @@
             margin-bottom: 16px;
         }
 
+        /* ===== 表头信息区（标准 A.1 表头字段） ===== */
+        .form-header {
+            display: grid;
+            grid-template-columns: auto 1fr auto 1fr;
+            gap: 6px 16px;
+            align-items: center;
+            font-size: 13px;
+            margin-bottom: 16px;
+            padding: 14px 18px;
+            background: var(--bg-page, #F8FAFC);
+            border: 1px solid var(--border, #E5E7EB);
+            border-radius: var(--radius-md, 8px);
+        }
+        .form-header .fh-label {
+            font-weight: 600;
+            color: var(--text-primary, #111827);
+            white-space: nowrap;
+            text-align: right;
+        }
+        .form-header input, .form-header select {
+            min-width: 0;
+            flex: 1;
+            font-size: 13px;
+            padding: 5px 8px;
+            border: 1px solid var(--border, #E5E7EB);
+            border-radius: var(--radius-sm, 4px);
+            background: #fff;
+            color: var(--text-primary, #111827);
+            outline: none;
+            font-family: var(--font, system-ui, -apple-system, sans-serif);
+        }
+        .form-header input:focus, .form-header select:focus {
+            border-color: var(--brand-red, #7A1825);
+            box-shadow: 0 0 0 2px rgba(122,24,37,0.08);
+        }
+
         /* ===== 检测标准指南折叠 ===== */
         .guide-box {
             display: none;
-            background: var(--brand-red-light);
-            border-left: 4px solid var(--brand-red);
-            border-radius: var(--radius-md);
+            background: var(--brand-red-light, #FEF2F2);
+            border-left: 4px solid var(--brand-red, #7A1825);
+            border-radius: var(--radius-md, 8px);
             padding: 16px 18px;
             margin-bottom: 18px;
         }
         .guide-box h3 {
             font-size: 15px;
             font-weight: 700;
-            color: var(--brand-red-hover);
+            color: var(--brand-red-hover, #5C121C);
             margin-bottom: 10px;
             display: flex;
             align-items: center;
@@ -44,19 +80,17 @@
         }
         .guide-box p {
             font-size: 13px;
-            color: var(--text-primary);
+            color: var(--text-primary, #111827);
             line-height: 1.65;
             margin-bottom: 8px;
         }
-        .guide-box .warn {
-            color: var(--brand-red);
-            font-weight: 600;
-        }
-        /* 橙色警告提示条（截图2样式） */
+        .guide-box .warn { color: var(--brand-red, #7A1825); font-weight: 600; }
+
+        /* 橙色提示条 */
         .guide-suggest {
             background: #FFF7ED;
             border: 1px solid #FDBA74;
-            border-radius: var(--radius-sm);
+            border-radius: var(--radius-sm, 4px);
             padding: 10px 14px;
             margin-top: 12px;
             font-size: 13px;
@@ -67,138 +101,140 @@
         }
         .guide-suggest i { color: #F97316; margin-top: 2px; }
 
-        /* ===== 记录表（基于 common.css .data-table） ===== */
-        .record-table thead th {
+        /* ===== 记录表 ===== */
+        .check-table { table-layout: fixed; min-width: 1100px; width: 100%; }
+        .check-table thead th {
             text-align: center;
             font-size: 11px;
             white-space: nowrap;
+            background: #334155;
+            color: #fff;
         }
-        .record-table tbody td {
+        .check-table tbody td {
             text-align: center;
             vertical-align: middle;
             padding: 5px 4px;
+            font-size: 12px;
         }
-        .record-table input,
-        .record-table select {
+        .check-table input,
+        .check-table select {
             width: 100%;
-            min-width: 52px;
+            min-width: 48px;
             text-align: center;
             padding: 5px 4px;
             font-size: 11px;
+            border: 1px solid var(--border, #E5E7EB);
+            border-radius: var(--radius-sm, 4px);
         }
-        .record-table .seq {
-            font-weight: 600;
-            color: var(--text-secondary);
-            white-space: nowrap;
-        }
-        .record-table .sign-input { text-align: left; }
-        .record-table tr:hover td { background: var(--bg-page); }
+        .check-table .col-seq { width: 38px; font-weight: 600; color: var(--text-secondary, #6B7280); }
+        .check-table .col-item { width: 130px; min-width: 110px; text-align: left !important; font-weight: 500; }
+        .check-table .col-std { /* auto */ }
+        .check-table .col-result { width: 140px; min-width: 120px; }
+        .check-table .col-op { width: 32px; }
+        .check-table tr:hover td { background: var(--bg-page, #F8FAFC); }
 
-        /* 删除按钮（小圆 ✕） */
-        .del-btn {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            border: 1px solid var(--brand-red);
-            background: #fff;
-            color: var(--brand-red);
-            font-size: 12px;
-            line-height: 1;
-            cursor: pointer;
+        /* 结果药丸 */
+        .res-group { display: flex; gap: 4px; justify-content: center; flex-wrap: nowrap; }
+        .res-opt {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
-        .del-btn:hover { background: var(--brand-red); color: #fff; }
-
-        /* 绝缘结构标签（蓝色胶囊 badge，截图2风格） */
-        .insul-badge {
-            display: inline-block;
-            padding: 2px 8px;
+            gap: 3px;
+            border: 1px solid var(--border, #E5E7EB);
             border-radius: 999px;
+            padding: 3px 7px;
             font-size: 11px !important;
-            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            background: #fff;
             text-align: center;
-            line-height: 1.6;
+            justify-content: center;
             min-width: auto !important;
             width: auto !important;
             border: none !important;
-            background: transparent !important;
         }
-        .insul-badge.type-basic   { background: #DBEAFE !important; color: #1E40AF !important; }    /* 蓝 - 基本≥2 */
-        .insul-badge.type-reinforced { background: #E0E7FF !important; color: #3730A3 !important; } /* 靛蓝 - 加强≥7 */
-        .insul-badge.type-supplementary { background: #D1FAE5 !important; color: #065F46 !important; } /* 绿 - 附加≥5 */
+        .res-opt.active-y { background: #D1FAE5; color: #065F46; border-color: #34D399 !important; font-weight: 600; }
+        .res-opt.active-n { background: #FEE2E2; color: #991B1B; border-color: #F87171 !important; font-weight: 600; }
+        .res-opt.active-na { background: #F3F4F6; color: #4B5563; border-color: #9CA3AF !important; }
 
-        /* 自动结论：不合格标红 */
-        .conclusion-bad { color: var(--brand-red) !important; font-weight: 700; }
+        /* 删除按钮 */
+        .del-btn {
+            width: 24px; height: 24px; border-radius: 50%;
+            border: 1px solid var(--brand-red, #7A1825); background: #fff;
+            color: var(--brand-red, #7A1825); font-size: 12px; line-height: 1;
+            cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+        }
+        .del-btn:hover { background: var(--brand-red, #7A1825); color: #fff; }
+
+        /* 工具类别 badge */
+        .tool-class-badge {
+            display: inline-block; padding: 2px 8px; border-radius: 999px;
+            font-size: 11px !important; font-weight: 600; text-align: center;
+            line-height: 1.6; min-width: auto !important; width: auto !important;
+            border: none !important; background: transparent !important;
+        }
+        .tc-i     { background: #DBEAFE !important; color: #1E40AF !important; }   /* I类 蓝 */
+        .tc-ii    { background: #E0E7FF !important; color: #3730A3 !important; }   /* II类 靛 */
+        .tc-iii   { background: #D1FAE5 !important; color: #065F46 !important; }   /* III类 绿 */
+        .tc-batt  { background: #FEF3C7 !important; color: #92400E !important; }   /* 电池式 黄 */
+
+        /* 绝缘电阻子表格 */
+        .insul-sub { border: none; width: 100%; }
+        .insul-sub th { font-size: 10px !important; padding: 2px !important; background: #475569 !important; }
+        .insul-sub td { font-size: 10px !important; padding: 2px !important; }
+
+        /* 自动结论颜色 */
+        .conclusion-bad { color: var(--brand-red, #7A1825) !important; font-weight: 700; }
         .conclusion-good { color: #166534 !important; font-weight: 600; }
 
-        /* 指南内对照表高亮行 */
-        .ref-table tr.highlight td { background: var(--brand-red-light); }
-        .ref-table th { background: #334155; color: #fff; }
+        /* 指南内对照表 */
+        .ref-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 10px 0; }
+        .ref-table th { background: #334155; color: #fff; padding: 6px 8px; }
+        .ref-table td { padding: 6px 8px; border: 1px solid #E5E7EB; }
+        .ref-table tr.highlight td { background: var(--brand-red-light, #FEF2F2); }
 
-        /* ===== 表单页脚行（检查单位/日期/页） ===== */
+        /* ===== 表尾（结论/签字/日期） ===== */
         .form-footer {
             display: flex;
             flex-wrap: wrap;
-            gap: 24px;
+            gap: 16px 28px;
             align-items: flex-end;
             font-size: 13px;
-            color: var(--text-secondary);
+            color: var(--text-secondary, #6B7280);
             margin-top: 18px;
-            border-top: 1px dashed var(--border);
+            border-top: 1px dashed var(--border, #E5E7EB);
             padding-top: 14px;
         }
         .form-footer .line { display: flex; gap: 6px; align-items: baseline; }
         .form-footer .underline {
-            border: none;
-            border-bottom: 1px solid var(--text-secondary);
-            background: transparent;
-            min-width: 110px;
-            padding: 2px 4px;
-            font-size: 13px;
-            outline: none;
-            color: var(--text-primary);
-            font-family: var(--font);
+            border: none; border-bottom: 1px solid var(--text-secondary, #6B7280);
+            background: transparent; min-width: 90px; padding: 2px 4px;
+            font-size: 13px; outline: none; color: var(--text-primary, #111827);
+            font-family: var(--font, system-ui, -apple-system, sans-serif);
         }
+        .form-footer .footer-label { font-weight: 600; color: var(--text-primary, #111827); }
 
-        /* ===== 打印补充 ===== */
+        /* ===== 打印样式 ===== */
         @media print {
             @page {
-                size: landscape;      /* 横版打印，确保宽表完整显示 */
-                margin: 12mm 8mm;
+                size: landscape;
+                margin: 10mm 7mm;
             }
-            body {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-            .guide-box { display: none !important; }
-            .record-table thead th {
-                background: #e5e5e5 !important;
-                color: #000 !important;
-                position: static !important;
-                font-size: 9px !important;
-            }
-            .record-table tbody td {
-                border-color: #ccc !important;
-                font-size: 9px !important;
-                padding: 3px 2px !important;
-            }
-            .record-table input,
-            .record-table select {
-                font-size: 9px !important;
-                padding: 2px !important;
-                min-width: 36px !important;
-            }
-            .form-footer { border-color: #999 !important; }
-            .del-btn { display: none !important; }
-            .insul-badge {
-                font-size: 8px !important;
-                padding: 1px 4px !important;
-            }
-            /* 横版下表格可以更紧凑 */
-            .table-scroll { overflow: visible !important; }
+            body { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            .guide-box, .tool-toolbar { display: none !important; }
+            .check-table thead th { background: #e5e5e5 !important; color: #000 !important; position: static !important; font-size: 8.5px !important; }
+            .check-table tbody td { border-color: #ccc !important; font-size: 8.5px !important; padding: 2px 2px !important; }
+            .check-table input, .check-table select { font-size: 8.5px !important; padding: 1px !important; min-width: 28px !important; border: 0.5pt solid #999 !important; }
+            .form-header { background: transparent !important; border: none !important; padding: 4px 0 !important; font-size: 9px !important; }
+            .form-header input, .form-header select { border: 0.5pt solid #999 !important; padding: 1px 3px !important; font-size: 9px !important; }
+            .form-footer { border-color: #999 !important; font-size: 9px !important; }
+            .del-btn, .col-op { display: none !important; }
+            .res-opt { font-size: 8px !important; padding: 1px 4px !important; }
+            .tool-class-badge { font-size: 7px !important; padding: 1px 3px !important; }
+            .table-scroll { overflow: visible !important; margin: 0 !important; padding: 0 !important; }
+            .card { box-shadow: none !important; border-radius: 0 !important; border: 1.5px solid #333 !important; page-break-inside: auto !important; }
+            .breadcrumb, .page-subtitle, .sheen-footer { display: none !important; }
+            h1.page-title { font-size: 16px !important; margin-bottom: 4px !important; }
         }
     </style>
 </head>
@@ -213,7 +249,7 @@
     <main class="app-container container-query">
 
         <h1 class="page-title"><i class="fa-solid fa-screwdriver-wrench"></i> 手持式电动工具检查记录表</h1>
-        <p class="page-subtitle">依据 GB/T 3787-2017《手持式电动工具的管理、使用、检查和维修安全技术规程》第 6 章编制，含绝缘电阻合格标准对照表。</p>
+        <p class="page-subtitle">依据 <b>GB/T 3787—2026</b>《手持式电动工具的管理、使用、检查和维修安全技术要求》附录 A 定期检查记录表编制。</p>
 
         <!-- 工具栏 -->
         <div class="tool-toolbar no-print">
@@ -225,90 +261,108 @@
             <button type="button" class="btn btn-sm btn-outline" id="guideBtn"><i class="fa-solid fa-book-open"></i> 检测标准指南</button>
         </div>
 
-        <!-- 检测标准指南（GB/T 3787 绝缘电阻 "2/5/7" 判别标准） -->
+        <!-- 检测标准指南（GB/T 3787-2026 绝缘电阻合格标准） -->
         <div class="guide-box" id="guideBox">
-            <h3><i class="fa-solid fa-flask"></i> 绝缘电阻 "2 / 5 / 7" 的判别标准</h3>
-            <p>实测绝缘电阻值是否合格，<b>不取决于工具类别（Ⅰ/Ⅱ/Ⅲ）</b>，而取决于<b>测量部位的绝缘结构属性</b>。判定标准如下：</p>
+            <h3><i class="fa-solid fa-flask"></i> GB/T 3787—2026 绝缘电阻合格标准</h3>
+            <p>实测绝缘电阻值是否合格，取决于<b>工具类别（Ⅰ类 / Ⅱ类 / Ⅲ类 / 电池式）</b>以及<b>测量条件</b>。判定标准如下：</p>
 
             <table class="ref-table">
                 <thead>
                     <tr>
-                        <th>测量部位（检点）</th>
-                        <th>绝缘结构类型</th>
-                        <th>合格值 (MΩ)</th>
-                        <th>实操判别方法</th>
+                        <th>测量条件</th>
+                        <th><span class="tool-class-badge tc-i">Ⅰ类</span></th>
+                        <th><span class="tool-class-badge tc-ii">Ⅱ类</span></th>
+                        <th><span class="tool-class-badge tc-iii">Ⅲ类</span></th>
+                        <th><span class="tool-class-badge tc-batt">电池式</span></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr class="highlight">
-                        <td>带电部分 ↔ 壳体</td>
-                        <td><span class="insul-badge type-basic">基本绝缘</span></td>
+                        <td>工具开关在闭合情况下，充电器插脚及外壳/输出端之间</td>
                         <td><b>≥ 2 MΩ</b></td>
-                        <td>常见于 Ⅰ 类工具（金属外壳带接地），或Ⅲ类工具低压侧。</td>
-                    </tr>
-                    <tr>
-                        <td>带电部分 ↔ 壳体</td>
-                        <td><span class="insul-badge type-reinforced">加强绝缘</span></td>
                         <td><b>≥ 7 MΩ</b></td>
-                        <td>带 "回" 字标志的Ⅱ类工具，全塑外壳，测外壳时用此标准。</td>
-                    </tr>
-                    <tr class="highlight">
-                        <td>带电部分 ↔ 内部金属零件</td>
-                        <td><span class="insul-badge type-basic">基本绝缘</span></td>
                         <td><b>≥ 2 MΩ</b></td>
-                        <td>仅限Ⅱ类工具内部裸露金属（如电机铁芯）与带电体之间。</td>
+                        <td>—</td>
                     </tr>
                     <tr>
-                        <td>内部金属零件 ↔ 壳体</td>
-                        <td><span class="insul-badge type-supplementary">附加绝缘</span></td>
-                        <td><b>≥ 5 MΩ</b></td>
-                        <td>仅限Ⅱ类工具，内部裸露金属与可触及外壳之间的第二层绝缘。</td>
+                        <td>当可能切割副线绳和/或自身电源线的场合进行操作时，开关在闭合情况下输出轴和手柄之间</td>
+                        <td><b>≥ 2 MΩ</b></td>
+                        <td><b>≥ 2 MΩ</b></td>
+                        <td><b>≥ 2 MΩ</b></td>
+                        <td><b>≥ 2 MΩ</b></td>
                     </tr>
                 </tbody>
             </table>
 
+            <p style="margin-top:10px;"><b>适用范围：</b>额定电压 ≤250V 交流单相工具、≤440V 交流三相工具、直流 ≤75V 的电池式工具及电池包。</p>
+
             <div class="guide-suggest">
                 <i class="fa-solid fa-triangle-exclamation"></i>
-                <span><b>记录填写建议：</b>在下方表格中，请选择"绝缘结构（决定合格线）"，系统将自动对应正确的合格标准，辅助您判定结论。</span>
+                <span><b>填写说明：</b>在下方每条记录中选择「工具类别」并输入「绝缘电阻实测值(MΩ)」，系统将自动按上表判定合格与否。</span>
             </div>
         </div>
 
-        <!-- 记录表 -->
+        <!-- ===== 表头信息区（对应标准 A.1 表头） ===== -->
+        <div class="form-header no-print" id="formHeader">
+            <span class="fh-label">单位名称：</span><input type="text" id="fhUnit" placeholder="使用单位名称">
+            <span class="fh-label">制造单位：</span><input type="text" id="fhMfr" placeholder="制造商">
+
+            <span class="fh-label">工具名称：</span><input type="text" id="fhToolName" placeholder="工具名称/型号">
+            <span class="fh-label">制造日期：</span><input type="date" id="fhMfrDate">
+
+            <span class="fh-label">型号规格：</span><input type="text" id="fhModel" placeholder="型号规格">
+            <span class="fh-label">出厂编号：</span><input type="text" id="fhSerial" placeholder="出厂编号">
+            <span class="fh-label">工具编号：</span><input type="text" id="fhToolNo" placeholder="内部编号">
+
+            <span class="fh-label">管理部门：</span><input type="text" id="fhDept" placeholder="归口管理部门">
+            <span class="fh-label">工具类别：</span>
+            <select id="fhClass">
+                <option value="">— 选择 —</option>
+                <option value="I">Ⅰ类</option>
+                <option value="II">Ⅱ类</option>
+                <option value="III">Ⅲ类</option>
+                <option value="电池式">电池式</option>
+            </select>
+            <span class="fh-label">检查周期(月)：</span><input type="number" id="fhCycle" placeholder="月" min="1" max="36" style="max-width:70px;">
+        </div>
+
+        <!-- 记录表主体 -->
         <div class="card">
             <div class="table-scroll">
-                <table class="data-table record-table" id="recordTable">
+                <table class="data-table check-table" id="recordTable">
                     <thead>
                         <tr>
-                            <th style="width:32px;">序号</th>
-                            <th style="width:80px;">工具编号</th>
-                            <th style="width:110px;">工具名称</th>
-                            <th style="width:100px;">检查日期</th>
-                            <th style="width:48px;">1.标志</th>
-                            <th style="width:48px;">2.外壳</th>
-                            <th style="width:58px;">3.电缆/PE</th>
-                            <th style="width:48px;">4.插头</th>
-                            <th style="width:48px;">5.开关</th>
-                            <th style="width:48px;">6.防护</th>
-                            <th style="width:48px;">7.转动</th>
-                            <th style="width:56px;">8.电气保</th>
-                            <th style="width:68px;">9.绝缘<br>(实测MΩ)</th>
-                            <th style="width:120px;">绝缘结构<br>(决定合格线)</th>
+                            <th class="col-seq">序号</th>
+                            <th class="col-item">检查项目名称</th>
+                            <th class="col-std">检查要求</th>
+                            <th class="col-result">检查结果</th>
+                            <th style="width:52px;">工具<br>类别</th>
+                            <th style="width:72px;">绝缘电阻<br>实测 MΩ</th>
                             <th style="width:60px;">结论</th>
-                            <th style="width:72px;">签字栏</th>
-                            <th style="width:90px;">备注</th>
-                            <th style="width:34px;" class="no-print">操作</th>
+                            <th style="width:72px;">备注</th>
+                            <th class="col-op no-print">操作</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
-                        <!-- 动态生成记录 -->
+                        <!-- 动态生成 -->
                     </tbody>
                 </table>
             </div>
 
-            <div class="form-footer no-print">
-                <div class="line">检查单位：<input type="text" class="underline" placeholder="单位名称"></div>
-                <div class="line">检查日期：<input type="date" class="underline"></div>
-                <div class="line">第 <input type="text" class="underline" style="min-width:40px;"> 页</div>
+            <!-- 表尾 -->
+            <div class="form-footer">
+                <div class="line footer-label">检查结论：</div>
+                <div class="line">
+                    <select id="finalConclusion" style="border:1px solid #E5E7EB;border-radius:4px;padding:4px 8px;font-size:13px;">
+                        <option value="">— 请判定 —</option>
+                        <option value="合格">合格</option>
+                        <option value="不合格">不合格</option>
+                        <option value="条件合格（限期整改）">条件合格（限期整改）</option>
+                    </select>
+                </div>
+                <div class="line">检查责任人(签字)：<input type="text" class="underline" id="signName" placeholder="签字"></div>
+                <div class="line">检查日期：<input type="date" class="underline" id="inspectDate"></div>
+                <div class="line">下次检查日期：<input type="date" class="underline" id="nextDate"></div>
             </div>
         </div>
 
@@ -342,13 +396,28 @@
         var tbody = document.getElementById('tableBody');
         var rowCount = 0;
 
-        // ===== 绝缘结构类型定义（对应截图2的判别标准） =====
-        // key 用于存储 value，显示为蓝色胶囊 badge
-        var INSUL_TYPES = [
-            { key: 'basic',     label: '基本绝缘 ≥2MΩ',  cssClass: 'type-basic',       minVal: 2 },
-            { key: 'reinforced', label: '加强绝缘 ≥7MΩ',  cssClass: 'type-reinforced',  minVal: 7 },
-            { key: 'supplementary', label: '附加绝缘 ≥5MΩ', cssClass: 'type-supplementary', minVal: 5 }
+        // ===== GB/T 3787-2026 附录 A 检查项定义 =====
+        var CHECK_ITEMS = [
+            { code: '1',  name: '标识检查',               std: '有铭牌和/或安全警告标识' },
+            { code: '2',  name: '电源线、保护接地线检查',   std: '完好无损' },
+            { code: '3',  name: '电源插头检查',            std: '完好无损、连接正确' },
+            { code: '4',  name: '电源开关检查',            std: '动作正常、灵活、无缺损或破裂' },
+            { code: '5',  name: '工具运动部件',            std: '传动灵活、轻快、无阻滞现象' },
+            { code: '6',  name: '电气保护装置',            std: '良好' },
+            { code: '7',  name: '电池包(如有)',            std: '完好无损' },
+            { code: '8',  name: '充电器(如有)',            std: '完好无损' },
+            { code: '9',  name: '绝缘电阻测量',            std: '见下方实测值与工具类别对照' }
         ];
+
+        // ===== 工具类别 → 绝缘电阻合格标准 (MΩ) =====
+        // key 对应两种测量条件的最低要求（取严格值）
+        // 条件1：开关闭合时 充电脚↔外壳  |  条件2：切割操作时 输出轴↔手柄
+        var INSUL_STANDARD = {
+            'I':    { label: 'Ⅰ类', css: 'tc-i',    cond1Min: 2, cond2Min: 2 },   // Ⅰ类：基本绝缘 ≥2
+            'II':   { label: 'Ⅱ类', css: 'tc-ii',   cond1Min: 7, cond2Min: 2 },   // Ⅱ类：加强绝缘 ≥7（条件1）/基本 ≥2（条件2）
+            'III':  { label: 'Ⅲ类', css: 'tc-iii',  cond1Min: 2, cond2Min: 2 },   // Ⅲ类：基本 ≥2
+            '电池式':{ label: '电池式',css: 'tc-batt', cond1Min: null, cond2Min: 2 } // 电池式：条件1不适用/条件2 ≥2
+        };
 
         function chinaDate() {
             var d = new Date();
@@ -358,111 +427,165 @@
             return cn.getFullYear() + '-' + p(cn.getMonth() + 1) + '-' + p(cn.getDate());
         }
 
-        function opt(sel, val) {
-            return '<option value="' + val + '"' + (sel === val ? ' selected' : '') + '>' + val + '</option>';
-        }
-
-        // 8 个目视/手动检查项默认合格
-        var CHECK_DEFAULT = '合格';
-
         /**
-         * 根据绝缘结构类型 + 实测值自动判定结论
-         * @param {string} insulKey - INSUL_TYPES 中的 key
-         * @param {string} rawVal - 用户输入的实测值
-         * @returns {string} '合格' | '不合格' | ''
+         * 根据工具类别 + 实测值自动判定绝缘电阻是否合格
+         * 以条件1（更严格的）为判据；若条件1不适用则用条件2
          */
-        function autoConclusion(insulKey, rawVal) {
-            if (!insulKey || rawVal === '' || rawVal === null || rawVal === undefined) return '';
+        function autoInsulConclusion(toolClass, rawVal) {
+            if (!toolClass || rawVal === '' || rawVal === null || rawVal === undefined) return '';
             var num = parseFloat(rawVal);
             if (isNaN(num)) return '';
-            for (var i = 0; i < INSUL_TYPES.length; i++) {
-                if (INSUL_TYPES[i].key === insulKey) {
-                    return num >= INSUL_TYPES[i].minVal ? '合格' : '不合格';
-                }
-            }
-            return '';
+            var std = INSUL_STANDARD[toolClass];
+            if (!std) return '';
+            // 取适用的最低阈值（条件1优先）
+            var threshold = std.cond1Min !== null ? std.cond1Min : std.cond2Min;
+            return num >= threshold ? '合格' : '不合格';
         }
 
         /**
-         * 获取指定行的结论 select 元素并更新其值和样式
+         * 更新单行结论
          */
         function updateRowConclusion(tr) {
-            var insulSelect = tr.querySelector('.insul-type-select');
+            var classSelect = tr.querySelector('.tool-class-select');
             var insulInput = tr.querySelector('.insul-value-input');
             var conclSelect = tr.querySelector('.conclusion-select');
-            if (!insulSelect || !insulInput || !conclSelect) return;
+            if (!classSelect || !insulInput || !conclSelect) return;
 
-            var result = autoConclusion(insulSelect.value, insulInput.value);
+            var result = autoInsulConclusion(classSelect.value, insulInput.value);
             if (result) {
                 conclSelect.value = result;
-                // 视觉反馈
-                if (result === '不合格') {
-                    conclSelect.className = 'form-control conclusion-select conclusion-bad';
-                } else {
-                    conclSelect.className = 'form-control conclusion-select conclusion-good';
-                }
+                conclSelect.className = 'form-control conclusion-select ' +
+                    (result === '不合格' ? 'conclusion-bad' : 'conclusion-good');
             } else {
-                conclSelect.value = '合格'; // 默认
+                conclSelect.value = '';
                 conclSelect.className = 'form-control conclusion-select';
             }
         }
 
+        /**
+         * 构建结果药丸 HTML（符合/不符合/不适用 三选一）
+         */
+        function buildResPills(selVal) {
+            var opts = ['符合', '不符合', '不适用'];
+            var html = '<div class="res-group">';
+            for (var i = 0; i < opts.length; i++) {
+                var v = opts[i];
+                var active = '';
+                if (selVal === v) {
+                    active = v === '符合' ? ' active-y' : (v === '不符合' ? ' active-n' : ' active-na');
+                }
+                html += '<span class="res-opt' + active + '" data-val="' + v + '">' + v + '</span>';
+            }
+            html += '</div>';
+            // 隐藏存储用
+            html += '<input type="hidden" class="res-hidden" value="' + (selVal || '') + '">';
+            return html;
+        }
+
+        /**
+         * 添加一行记录
+         */
         function addRow(data) {
             data = data || {};
             rowCount++;
             var tr = document.createElement('tr');
 
-            // 构建绝缘结构下拉选项
-            var insulOptions = '';
-            var selKey = data['绝缘结构'] || '';
-            for (var k = 0; k < INSUL_TYPES.length; k++) {
-                var it = INSUL_TYPES[k];
-                insulOptions += '<option value="' + it.key + '"' + (selKey === it.key ? ' selected' : '') + '>' + it.label + '</option>';
+            // 工具类别选项
+            var classOptions = '';
+            var selClass = data['工具类别'] || '';
+            var classKeys = Object.keys(INSUL_STANDARD);
+            for (var k = 0; k < classKeys.length; k++) {
+                var ck = classKeys[k];
+                var st = INSUL_STANDARD[ck];
+                classOptions += '<option value="' + ck + '"' + (selClass === ck ? ' selected' : '') + '>' + st.label + '</option>';
             }
 
             var html = '';
-            html += '<td class="text-center seq">' + rowCount + '</td>';
-            html += '<td><input type="text" class="form-control" value="' + (data['编号'] || '') + '" placeholder="编号"></td>';
-            html += '<td><input type="text" class="form-control" value="' + (data['名称'] || '') + '" placeholder="名称/型号"></td>';
-            html += '<td><input type="date" class="form-control" value="' + (data['日期'] || chinaDate()) + '"></td>';
 
-            // 8 个目视检查项
-            for (var i = 0; i < 8; i++) {
-                var v = data['item' + i] || CHECK_DEFAULT;
-                html += '<td><select class="form-control">' + opt(v, '合格') + opt(v, '不合格') + '</select></td>';
+            // 序号
+            html += '<td class="col-seq text-center">' + rowCount + '</td>';
+
+            // 检查项目名称 + 检查要求（合并显示）
+            html += '<td class="col-item">';
+            for (var idx = 0; idx < CHECK_ITEMS.length; idx++) {
+                var item = CHECK_ITEMS[idx];
+                html += '<div style="margin-bottom:3px;font-size:11px;"><b>' + item.code + '. ' + item.name + '</b>';
+                if (idx < CHECK_ITEMS.length - 1) html += '<br><span style="color:#6B7280;font-size:10px;">' + item.std + '</span>';
+                else html += '<br><span style="color:#6B7280;font-size:10px;">' + item.std + '</span>';
+                html += '</div>';
             }
+            html += '</td>';
 
-            // 9. 绝缘实测值
-            html += '<td><input type="number" step="0.1" class="form-control insul-value-input" value="' + (data['绝缘'] || '') + '" placeholder="实测值"></td>';
+            // 检查结果（前8项药丸 + 第9项绝缘电阻输入）
+            html += '<td class="col-result">';
+            for (var r = 0; r < CHECK_ITEMS.length - 1; r++) {
+                var rv = data['item' + r] || '';
+                html += '<div style="margin-bottom:3px;">' + buildResPills(rv) + '</div>';
+            }
+            // 第9项：绝缘电阻实测值输入
+            html += '<div style="margin-top:4px;"><input type="number" step="0.1" min="0" class="form-control insul-value-input" ';
+            html += 'value="' + (data['绝缘'] || '') + '" placeholder="实测MΩ" style="width:70px;display:inline-block;"></div>';
+            html += '</td>';
 
-            // 绝缘结构（决定合格线）
-            html += '<td><select class="form-control insul-type-select">' + insulOptions + '</select></td>';
+            // 工具类别
+            html += '<td><select class="form-control tool-class-select">' + classOptions + '</select></td>';
 
             // 结论（自动判定）
-            var c = data['结论'] || CHECK_DEFAULT;
-            html += '<td><select class="form-control conclusion-select">' + opt(c, '合格') + opt(c, '不合格') + '</select></td>';
+            var c = data['结论'] || '';
+            html += '<td><select class="form-control conclusion-select">';
+            html += '<option value=""' + (c === '' ? ' selected' : '') + '>—</option>';
+            html += '<option value="合格"' + (c === '合格' ? ' selected' : '') + '>合格</option>';
+            html += '<option value="不合格"' + (c === '不合格' ? ' selected' : '') + '>不合格</option>';
+            html += '</select></td>';
 
-            html += '<td><input type="text" class="form-control sign-input" value="' + (data['签字'] || '') + '" placeholder="签字"></td>';
-            html += '<td><input type="text" class="form-control" value="' + (data['备注'] || '') + '" placeholder="异常备注"></td>';
-            html += '<td class="text-center no-print"><button type="button" class="del-btn" title="删除">✕</button></td>';
+            // 备注
+            html += '<td><input type="text" class="form-control" value="' + (data['备注'] || '') + '" placeholder="异常备注" style="min-width:80px;"></td>';
+
+            // 操作
+            html += '<td class="col-op text-center no-print"><button type="button" class="del-btn" title="删除该记录">✕</button></td>';
 
             tr.innerHTML = html;
+            tbody.appendChild(tr);
+
+            // 绑定药丸点击事件
+            var pillGroups = tr.querySelectorAll('.res-group');
+            for (var pg = 0; pg < pillGroups.length; pg++) {
+                (function (group) {
+                    var pills = group.querySelectorAll('.res-opt');
+                    var hidden = group.nextElementSibling;
+                    for (var pi = 0; pi < pills.length; pi++) {
+                        pills[pi].addEventListener('click', function () {
+                            // 清除同组所有 active
+                            for (var j = 0; j < pills.length; j++) {
+                                pills[j].className = 'res-opt' +
+                                    (pills[j] === this ?
+                                        (this.dataset.val === '符合' ? ' active-y' :
+                                         this.dataset.val === '不符合' ? ' active-n' : ' active-na') : '');
+                            }
+                            hidden.value = this.dataset.val;
+                        });
+                    }
+                })(pillGroups[pg]);
+            }
 
             // 绑定删除按钮
             tr.querySelector('.del-btn').addEventListener('click', function () { deleteRow(this); });
 
-            // 绑定绝缘结构变化 → 自动判定
-            tr.querySelector('.insul-type-select').addEventListener('change', function () {
+            // 绑定工具类别变化 → 自动判定
+            tr.querySelector('.tool-class-select').addEventListener('change', function () {
                 updateRowConclusion(this.closest('tr'));
+                // 更新 badge 视觉
+                var sel = this.value;
+                var badges = this.closest('tr').querySelectorAll('.tool-class-badge');
+                // （badge 在下拉中不需要额外处理，select 本身已够清晰）
             });
-            // 绑定绝缘实测值变化 → 自动判定
+
+            // 绑定绝缘电阻变化 → 自动判定
             tr.querySelector('.insul-value-input').addEventListener('input', function () {
                 updateRowConclusion(this.closest('tr'));
             });
 
-            tbody.appendChild(tr);
-
-            // 初始化时也跑一次自动判定（示例数据场景）
+            // 初始化自动判定
             updateRowConclusion(tr);
         }
 
@@ -476,7 +599,7 @@
         function renumber() {
             var rows = tbody.querySelectorAll('tr');
             for (var i = 0; i < rows.length; i++) {
-                var seq = rows[i].querySelector('.seq');
+                var seq = rows[i].querySelector('.col-seq');
                 if (seq) seq.textContent = i + 1;
             }
             rowCount = rows.length;
@@ -493,14 +616,27 @@
             box.style.display = (box.style.display === 'block') ? 'none' : 'block';
         }
 
-        // 导出 Excel / Word：读取当前输入值生成真实单元格文本
+        // ===== 导出 Excel / Word =====
         function exportTable(type) {
             var table = document.getElementById('recordTable');
             var theadCells = table.querySelectorAll('thead th');
             var colCount = theadCells.length;
             var rows = table.querySelectorAll('tbody tr');
 
+            // 收集表头信息
+            var unit = document.getElementById('fhUnit').value || '';
+            var mfr = document.getElementById('fhMfr').value || '';
+            var finalConc = document.getElementById('finalConclusion').value || '';
+            var signer = document.getElementById('signName').value || '';
+            var inspectDt = document.getElementById('inspectDate').value || '';
+            var nextDt = document.getElementById('nextDate').value || '';
+
             var body = '<table border="1" cellspacing="0" cellpadding="5" style="border-collapse:collapse;width:100%;font-size:12px;">';
+
+            // 表头信息行
+            body += '<tr><td colspan="' + (colCount - 1) + '" style="text-align:center;font-size:14px;font-weight:bold;">手持式电动工具定期检查记录表</td></tr>';
+            body += '<tr><td colspan="' + (colCount - 1) + '" style="text-align:center;font-size:11px;color:#555;">依据 GB/T 3787—2026 &nbsp;|&nbsp; 单位：' + unit + ' &nbsp;|&nbsp; 制造单位：' + mfr + '</td></tr>';
+
             body += '<thead><tr>';
             for (var c = 0; c < colCount - 1; c++) {
                 body += '<th>' + theadCells[c].textContent.trim().replace(/\n/g, ' ') + '</th>';
@@ -512,31 +648,34 @@
                 var tds = rows[r].children;
                 for (var c2 = 0; c2 < colCount - 1; c2++) {
                     var cell = tds[c2];
-                    var ctrl = cell.querySelector('input, select');
-                    var val = ctrl ? ctrl.value : cell.textContent.trim();
+                    // 药丸组 → 取隐藏值
+                    var hidden = cell.querySelector('.res-hidden');
+                    var ctrl = cell.querySelector('input:not(.res-hidden), select');
+                    var val = hidden ? hidden.value : (ctrl ? ctrl.value : cell.textContent.trim().replace(/\s+/g, ' '));
                     body += '<td>' + (val === undefined ? '' : val) + '</td>';
                 }
                 body += '</tr>';
             }
             body += '</tbody></table>';
 
+            body += '<div style="margin-top:16px;font-size:13px;">';
+            body += '<b>检查结论：</b>' + (finalConc || '—') + ' &nbsp;&nbsp;';
+            body += '<b>检查责任人(签字)：</b>' + (signer || '________________') + ' &nbsp;&nbsp;';
+            body += '<b>检查日期：</b>' + (inspectDt || '____年__月__日') + ' &nbsp;&nbsp;';
+            body += '<b>下次检查日期：</b>' + (nextDt || '____年__月__日');
+            body += '</div>';
+
             var doc = '<html xmlns:o="urn:schemas-microsoft-com:office:office" ' +
                       'xmlns:x="urn:schemas-microsoft-com:office:excel" ' +
                       'xmlns="http://www.w3.org/TR/REC-html40">' +
-                      '<head><meta charset="UTF-8"></head><body>' +
-                      '<h2 style="text-align:center;">手持式电动工具定期检查记录表</h2>' +
-                      '<p style="text-align:center;font-size:12px;color:#555;">依据 GB/T 3787-2017 编制</p>' +
-                      body +
-                      '<div style="margin-top:20px;font-size:14px;">' +
-                      '检查人签字：________________ &nbsp;&nbsp;&nbsp; 审核人签字：________________ &nbsp;&nbsp;&nbsp; 日期：____年____月____日</div>' +
-                      '</body></html>';
+                      '<head><meta charset="UTF-8"></head><body>' + body + '</body></html>';
 
             var mime = (type === 'xls') ? 'application/vnd.ms-excel' : 'application/msword';
             var blob = new Blob(['﻿' + doc], { type: mime });
-            var url = URL.createObjectURL(blob);
+            var url = URL.createObjectURL(url);
             var a = document.createElement('a');
             a.href = url;
-            a.download = '手持电动工具检查记录表.' + (type === 'xls' ? 'xls' : 'doc');
+            a.download = '手持电动工具检查记录表(GB_T_3787-2026).' + (type === 'xls' ? 'xls' : 'doc');
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -551,14 +690,38 @@
         document.getElementById('clearBtn').addEventListener('click', function () { clearAll(); });
         document.getElementById('guideBtn').addEventListener('click', function () { toggleGuide(); });
 
-        // ===== 初始化示例数据（含绝缘结构字段） =====
-        addRow({ '编号': 'JD-001', '名称': '手电钻（II类）',  '绝缘': '3.5', '绝缘结构': 'basic',      '结论': '合格', '签字': '张三', '备注': '实测3.5，选基本绝缘≥2MΩ' });
-        addRow({ '编号': 'JD-002', '名称': '角磨机（I类）',   '绝缘': '2.5', '绝缘结构': 'basic',      '结论': '合格', '签字': '李四', '备注': '实测2.5，选基本绝缘≥2MΩ' });
-        addRow({ '编号': 'JD-003', '名称': '冲击电锤（II类）','绝缘': '5.5', '绝缘结构': 'supplementary', '结论': '合格', '签字': '王五', '备注': '内部金属对壳体，附加绝缘≥5MΩ合格' });
+        // ===== 初始化示例数据 =====
+        addRow({
+            '工具类别': 'II',
+            '绝缘': '8.5',
+            '结论': '合格',
+            '备注': 'Ⅱ类角磨机，条件1实测8.5≥7',
+            'item0': '符合', 'item1': '符合', 'item2': '符合',
+            'item3': '符合', 'item4': '符合', 'item5': '符合',
+            'item6': '不适用', 'item7': '不适用'
+        });
+        addRow({
+            '工具类别': 'I',
+            '绝缘': '3.2',
+            '结论': '合格',
+            '备注': 'Ⅰ类手电钻，实测3.2≥2',
+            'item0': '符合', 'item1': '符合', 'item2': '符合',
+            'item3': '符合', 'item4': '符合', 'item5': '符合',
+            'item6': '不适用', 'item7': '不适用'
+        });
+        addRow({
+            '工具类别': '电池式',
+            '绝缘': '5.0',
+            '结论': '合格',
+            '备注': '电池式锂电扳手，条件2实测5.0≥2',
+            'item0': '符合', 'item1': '符合', 'item2': '符合',
+            'item3': '符合', 'item4': '符合', 'item5': '符合',
+            'item6': '符合', 'item7': '符合'
+        });
     })();
     </script>
 
-    <!-- 访问统计（与 Toolbox 一致） -->
+    <!-- 访问统计 -->
     <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>
