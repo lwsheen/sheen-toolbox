@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <style>
+      .shield-fill { fill: #FFFFFF; }
+      .shield-cut { fill: #7A1825; }
+      .check { fill: none; stroke: #FFFFFF; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
+      .text { fill: #FFFFFF; font-family: 'Arial Black', Arial, sans-serif; font-weight: 900; font-size: 68px; letter-spacing: 4px; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <!-- Shield outer (white filled) -->
+  <polygon class="shield-fill" points="
+    256,62
+    320.9,107.4
+    386.1,152.7
+    405.2,234.1
+    424.3,315.4
+    359,368.4
+    293.8,421.4
+    256,484.1
+    218.2,421.4
+    153,368.4
+    87.7,315.4
+    106.8,234.1
+    125.9,152.7
+    191.1,107.4
+  "/>
+
+  <!-- Shield inner cutout (brand red = transparent when used on red bg) -->
+  <polygon class="shield-cut" points="
+    256,95.4
+    305.6,127.2
+    355.3,158.9
+    369.7,216
+    384.1,273
+    337.2,309.9
+    290.3,346.9
+    256,391.8
+    221.7,346.9
+    174.8,309.9
+    127.9,273
+    142.3,216
+    156.7,158.9
+    206.4,127.2
+  "/>
+
+  <!-- Checkmark -->
+  <polyline class="check" points="210,258 242,290 302,222"/>
+
+  <!-- SHEEN text -->
+  <text class="text" x="256" y="458">SHEEN</text>
+</svg>
