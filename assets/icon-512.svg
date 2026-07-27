@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="96" fill="#7A1825"/>
+  <!-- Classic shield outline: rounded top, bulging shoulders, tapering to point -->
+  <path d="
+    M 120 108
+    C 120 88, 148 72, 176 72
+    L 336 72
+    C 364 72, 392 88, 392 108
+    L 392 180
+    C 392 280, 340 360, 256 432
+    C 172 360, 120 280, 120 180
+    Z
+  "
+  fill="none" stroke="#FFFFFF" stroke-width="22" stroke-linejoin="round"/>
+
+  <!-- Vertical divider (halved effect) -->
+  <line x1="256" y1="100" x2="256" y2="408"
+        stroke="#FFFFFF" stroke-width="20" stroke-linecap="round"/>
+</svg>
