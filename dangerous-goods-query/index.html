@@ -54,7 +54,7 @@
 
     .search-box input { width: 100%; padding: 10px 14px 10px 38px; border: 1.5px solid var(--border); border-radius: 60px; font-size: 14px; background: var(--bg-card); color: var(--text-primary); font-family: inherit; transition: var(--transition); }
 
-    .search-box input:focus { outline: none; border-color: var(--brand-red); box-shadow: 0 0 0 4px rgba(122,24,37,0.08); }
+    .search-box input:focus { outline: none; border-color: var(--brand-red); box-shadow: 0 0 0 4px rgba(240,55,82,0.08); }
 
     .search-box i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); font-size: 14px; }
 
@@ -746,7 +746,7 @@
 
       } catch(e) {
 
-        document.getElementById('tableBody').innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:#DC2626;">数据加载失败：' + e.message + '</td></tr>';
+        document.getElementById('tableBody').innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:#F03752;">数据加载失败：' + e.message + '</td></tr>';
 
       }
 
@@ -758,14 +758,14 @@ window.exportResult = function(resultId, filename) {
   if (!el) { alert('暂无可导出的结果'); return; }
   var html = '<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">' +
     '<title>' + filename + ' — SHEEN Toolbox</title>' +
-    '<style>body{font-family:system-ui,-apple-system,sans-serif;padding:24px;color:#111827;line-height:1.6;max-width:900px;margin:0 auto}' +
-    'table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}th,td{border:1px solid #E5E7EB;padding:8px;text-align:left}' +
-    'th{background:#F8FAFC;font-weight:600}.result-value{background:#FEF2F2;border-left:6px solid #7A1825;' +
-    'padding:20px;border-radius:12px;margin:16px 0}.number{font-size:36px;font-weight:700;color:#7A1825}' +
-    'h1{color:#7A1825;font-size:20px;margin-bottom:4px}h4{color:#7A1825;margin:16px 0 8px}' +
-    '.stats-count{color:#7A1825;font-weight:700}</style></head><body>' +
+    '<style>body{font-family:system-ui,-apple-system,sans-serif;padding:24px;color:#1E2126;line-height:1.6;max-width:900px;margin:0 auto}' +
+    'table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}th,td{border:1px solid #E3E6EA;padding:8px;text-align:left}' +
+    'th{background:#F8F9FA;font-weight:600}.result-value{background:#FDEEF1;border-left:6px solid #F03752;' +
+    'padding:20px;border-radius:12px;margin:16px 0}.number{font-size:36px;font-weight:700;color:#F03752}' +
+    'h1{color:#F03752;font-size:20px;margin-bottom:4px}h4{color:#F03752;margin:16px 0 8px}' +
+    '.stats-count{color:#F03752;font-weight:700}</style></head><body>' +
     '<h1>📋 ' + filename + '</h1>' +
-    '<p style="color:#6B7280;font-size:12px;margin-top:0;">导出时间：' +
+    '<p style="color:#5C6470;font-size:12px;margin-top:0;">导出时间：' +
     new Date().toLocaleString('zh-CN') + '</p>' +
     el.innerHTML.replace(/class="warn-bar[^"]*"/g, '') +
     '</body></html>';
