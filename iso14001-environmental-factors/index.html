@@ -25,7 +25,7 @@ h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);marg
 .btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:60px;font-size:12px;font-weight:600;cursor:pointer;transition:all .25s;border:none;font-family:inherit;white-space:nowrap}
 .btn-p{background:var(--brand-red);color:#fff}.btn-p:hover{background:var(--brand-red-hover)}
 .btn-o{background:var(--bg-card);border:1.5px solid var(--border);color:var(--text-primary)}.btn-o:hover{border-color:var(--brand-red);color:var(--brand-red)}
-.btn-d{background:#DC2626;color:#fff}.btn-d:hover{background:#B91C1C}
+.btn-d{background:#F03752;color:#fff}.btn-d:hover{background:#D12E47}
 .btn-bad{background:var(--bg-card);color:var(--brand-red);border:1.5px solid var(--brand-red)}.btn-bad:hover{background:var(--brand-red-light)}.btn-sm{padding:5px 10px;font-size:10px}
 .tbl-w{overflow-x:auto}
 .dt{min-width:1500px;border-collapse:collapse;font-size:11px}
@@ -36,7 +36,7 @@ h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);marg
 .dt .mj-y{background:var(--brand-red-light);color:var(--brand-red);font-weight:700}.mj-n{color:var(--text-secondary)}
 .dt .ex td{background:#FFF9E6}
 .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px}
-.rc{border-left:4px solid #DC2626;background:var(--brand-red-light);padding:10px;border-radius:0 6px 6px 0;font-size:12px}.rc strong{color:var(--brand-red);display:block;margin-bottom:2px}
+.rc{border-left:4px solid #F03752;background:var(--brand-red-light);padding:10px;border-radius:0 6px 6px 0;font-size:12px}.rc strong{color:var(--brand-red);display:block;margin-bottom:2px}
 .kg{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:14px}
 .kc{background:var(--bg-card);border-radius:var(--radius-md);padding:12px;text-align:center;border:1px solid var(--border)}
 .kc .kn{font-size:26px;font-weight:700}.kc .kl{font-size:11px;color:var(--text-secondary);margin-top:2px}
@@ -102,7 +102,7 @@ h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);marg
 <tr><td><strong>e) 相关方关注度</strong></td><td style="white-space:normal">不关注<br><small>无投诉</small></td><td style="white-space:normal">一般<br><small>零星投诉，已处理</small></td><td style="white-space:normal">高度<br><small>群体投诉、媒体关注</small></td><td style="background:#FFC7CE;font-weight:700;white-space:normal">极度<br><small>重大舆情，上级督办</small></td></tr>
 <tr><td><strong>f) 能源资源消耗</strong></td><td style="white-space:normal">低<br><small>＜先进值50%</small></td><td style="white-space:normal">中<br><small>50%-100%先进值</small></td><td style="white-space:normal">较高<br><small>与行业均值持平</small></td><td style="background:#FFC7CE;font-weight:700;white-space:normal">高<br><small>显著高于均值</small></td></tr>
 </tbody></table></div></div>
-<div class="card"><h3><i class="fa-solid fa-triangle-exclamation" style="color:#DC2626;"></i> 重要环境因素判定规则</h3>
+<div class="card"><h3><i class="fa-solid fa-triangle-exclamation" style="color:#F03752;"></i> 重要环境因素判定规则</h3>
 <div class="sg">
 <div class="rc"><strong>规则1 — 法规严重不符</strong>法规得分 = 4分 → 直接判定</div>
 <div class="rc"><strong>规则2 — 影响严重</strong>影响程度 = 4分 → 直接判定</div>
@@ -130,7 +130,7 @@ h1 i{color:var(--brand-red)}.sub{font-size:12px;color:var(--text-secondary);marg
 <span class="filter-chip" onclick="flt('normal',this)">一般</span>
 <button class="btn btn-bad btn-sm" onclick="xls1()"><i class="fa-solid fa-file-excel"></i>导出</button>
 <button class="btn btn-bad btn-sm" onclick="prt1()"><i class="fa-solid fa-print"></i>打印</button>
-<span style="font-size:11px;color:var(--text-secondary);">共<strong id="nRow">0</strong>条 | 重要<strong id="nMj" style="color:#DC2626;">0</strong></span>
+<span style="font-size:11px;color:var(--text-secondary);">共<strong id="nRow">0</strong>条 | 重要<strong id="nMj" style="color:#F03752;">0</strong></span>
 </div>
 <div class="tbl-w"><table class="dt" id="mt">
 <thead><tr><th>#</th><th>部门</th><th>工序/活动</th><th>状态</th><th>环境因素</th><th>影响类型</th><th>适用法规</th><th>量化数据</th><th>a影响</th><th>b法规</th><th>c数量</th><th>d频率</th><th>e关注</th><th>f能耗</th><th>总分</th><th>重要因素</th><th>控制措施</th><th>评价人</th><th>日期</th><th></th></tr></thead>
@@ -328,10 +328,10 @@ function db(){
   R.forEach(function(r){var t=r.impType||'其他';tm[t]=(tm[t]||0)+1;var d=r.dept||'未指定';dm[d]=(dm[d]||0)+1});
   var mn=R.filter(function(r){return r.major==='是'}).length;
   var cn=R.filter(function(r){return r.control&&r.control.trim()}).length;
-  document.getElementById('ka').innerHTML='<div class="kc"><div class="kn">'+(R.length||0)+'</div><div class="kl">因素总数</div></div><div class="kc"><div class="kn" style="color:#DC2626;">'+mn+'</div><div class="kl">重要因素</div></div><div class="kc"><div class="kn" style="color:#16A34A;">'+cn+'</div><div class="kl">有控制措施</div></div><div class="kc"><div class="kn">'+(R.length?(cn/R.length*100).toFixed(0):0)+'%</div><div class="kl">措施覆盖率</div></div>';
+  document.getElementById('ka').innerHTML='<div class="kc"><div class="kn">'+(R.length||0)+'</div><div class="kl">因素总数</div></div><div class="kc"><div class="kn" style="color:#F03752;">'+mn+'</div><div class="kl">重要因素</div></div><div class="kc"><div class="kn" style="color:#16A34A;">'+cn+'</div><div class="kl">有控制措施</div></div><div class="kc"><div class="kn">'+(R.length?(cn/R.length*100).toFixed(0):0)+'%</div><div class="kl">措施覆盖率</div></div>';
   var tk=Object.keys(tm).filter(function(k){return tm[k]>0});
   if(tk.length) ci.a=new Chart(document.getElementById('c1'),{type:'pie',data:{labels:tk,datasets:[{data:tk.map(function(k){return tm[k]}),backgroundColor:['#5470C6','#91CC75','#EE6666','#73C0DE','#3BA272','#FAC858','#FC8452']}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:10}}}}}});
-  if(R.length) ci.b=new Chart(document.getElementById('c2'),{type:'pie',data:{labels:['重要','一般'],datasets:[{data:[mn,R.length-mn],backgroundColor:['#DC2626','#91CC75']}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:10}}}}}});
+  if(R.length) ci.b=new Chart(document.getElementById('c2'),{type:'pie',data:{labels:['重要','一般'],datasets:[{data:[mn,R.length-mn],backgroundColor:['#F03752','#91CC75']}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:10}}}}}});
   var dk=Object.keys(dm);
   if(dk.length) ci.c=new Chart(document.getElementById('c3'),{type:'bar',data:{labels:dk,datasets:[{label:'数量',data:dk.map(function(k){return dm[k]}),backgroundColor:'#1F4E79'}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}}}}});
   document.getElementById('cov').textContent=R.length?(cn/R.length*100).toFixed(1)+'%':'—';
