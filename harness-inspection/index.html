@@ -13,7 +13,7 @@
     <style>
         /* ============================================================
            本工具特有样式（公共组件由 common.css 提供）
-           品牌色：深红 #7A1825 / 微纤灰 #F8FAFC / 圆角卡片 + 药丸按钮
+           品牌色：深红 #F03752 / 微纤灰 #F8F9FA / 圆角卡片 + 药丸按钮
            ============================================================ */
 
         /* ===== 头部信息条 ===== */
@@ -70,10 +70,10 @@
         .stat-card .lab { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
         .stat-card.s-ok    { border-color: #BBF7D0; }
         .stat-card.s-ok .num   { color: #166534; }
-        .stat-card.s-bad   { border-color: #FECACA; background: #FEF2F2; }
+        .stat-card.s-bad   { border-color: #FECACA; background: #FDEEF1; }
         .stat-card.s-bad .num  { color: var(--brand-red); }
-        .stat-card.s-na    { border-color: #E5E7EB; }
-        .stat-card.s-na .num   { color: #6B7280; }
+        .stat-card.s-na    { border-color: #E3E6EA; }
+        .stat-card.s-na .num   { color: #5C6470; }
         .stat-card.s-pending .num { color: #B45309; }
 
         /* ===== 使用说明折叠 ===== */
@@ -172,13 +172,13 @@
         .res-opt.active-bad { background: #FEE2E2; border-color: var(--brand-red); color: var(--brand-red); font-weight: 700; }
 
         /* 不合格行高亮 */
-        tr.row-bad td { background: #FEF2F2 !important; }
+        tr.row-bad td { background: #FDEEF1 !important; }
         tr.row-bad .col-part { color: var(--brand-red); }
 
         /* 提示条 */
         .alert-bad {
             display: none;
-            background: #FEF2F2;
+            background: #FDEEF1;
             border: 1px solid #FECACA;
             color: var(--brand-red);
             border-radius: var(--radius-md);
@@ -259,7 +259,7 @@
             .verdict-card h3 { font-size: 11px !important; }
             .verdict-opts { gap: 4px !important; margin-bottom: 6px !important; }
             .verdict-opt { border: 1px solid #999 !important; padding: 2px 6px !important; font-size: 9px !important; }
-            .verdict-opt.active { background: #7A1825 !important; }
+            .verdict-opt.active { background: #F03752 !important; }
             .verdict-card textarea { border: 1px solid #999 !important; font-size: 9px !important; min-height: 40px !important; }
             .table-scroll { overflow: visible !important; margin: 0 !important; padding: 0 !important; }
             /* 长表超过一页时允许跨页断行，避免整张 .card 被推到第二页造成第一页空白 */
