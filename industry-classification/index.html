@@ -82,7 +82,7 @@
 
     .search-box input { width: 100%; padding: 10px 14px 10px 38px; border: 1.5px solid var(--border); border-radius: 60px; font-size: 14px; background: var(--bg-card); color: var(--text-primary); font-family: inherit; transition: var(--transition); }
 
-    .search-box input:focus { outline: none; border-color: var(--brand-red); box-shadow: 0 0 0 4px rgba(122,24,37,0.08); }
+    .search-box input:focus { outline: none; border-color: var(--brand-red); box-shadow: 0 0 0 4px rgba(240,55,82,0.08); }
 
     .search-box i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); font-size: 14px; }
 
@@ -852,7 +852,7 @@ function showToast(msg) {
 
   toast.textContent = msg;
 
-  toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:10px 24px;border-radius:60px;font-size:13px;z-index:9999;animation:fadeInOut 2s forwards;';
+  toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1E2126;color:#fff;padding:10px 24px;border-radius:60px;font-size:13px;z-index:9999;animation:fadeInOut 2s forwards;';
 
   document.body.appendChild(toast);
 
@@ -882,7 +882,7 @@ fetch('gb4754_data.json')
 
   .then(function(data){startApp(data)})
 
-  .catch(function(e){treeContainer.innerHTML='<div class="tree-empty" style="color:#DC2626"><i class="fa-solid fa-triangle-exclamation"></i> 数据加载失败：'+e.message+'</div>'});
+  .catch(function(e){treeContainer.innerHTML='<div class="tree-empty" style="color:#F03752"><i class="fa-solid fa-triangle-exclamation"></i> 数据加载失败：'+e.message+'</div>'});
 
 })();
 
