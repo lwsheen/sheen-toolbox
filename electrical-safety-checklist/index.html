@@ -13,7 +13,7 @@
     <style>
         /* ============================================================
            本工具特有样式（公共组件由 common.css 提供）
-           品牌色：深红 #7A1825 / 微纤灰 #F8FAFC / 圆角卡片 + 药丸按钮
+           品牌色：深红 #F03752 / 微纤灰 #F8F9FA / 圆角卡片 + 药丸按钮
            ============================================================ */
 
         /* ===== 头部信息条 ===== */
@@ -70,10 +70,10 @@
         .stat-card .lab { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
         .stat-card.s-ok    { border-color: #BBF7D0; }
         .stat-card.s-ok .num   { color: #166534; }
-        .stat-card.s-bad   { border-color: #FECACA; background: #FEF2F2; }
+        .stat-card.s-bad   { border-color: #FECACA; background: #FDEEF1; }
         .stat-card.s-bad .num  { color: var(--brand-red); }
-        .stat-card.s-na    { border-color: #E5E7EB; }
-        .stat-card.s-na .num   { color: #6B7280; }
+        .stat-card.s-na    { border-color: #E3E6EA; }
+        .stat-card.s-na .num   { color: #5C6470; }
         .stat-card.s-pending .num { color: #B45309; }
 
         /* ===== 检查说明折叠 ===== */
@@ -142,7 +142,7 @@
             padding: 9px 10px !important;
             letter-spacing: 0.5px;
         }
-        .section-row .sec-no { color: var(--amber, #FBBF24); font-weight: 800; margin-right: 6px; }
+        .section-row .sec-no { color: var(--amber, #F57C00); font-weight: 800; margin-right: 6px; }
 
         /* 结果单选药丸 */
         .res-group { display: flex; gap: 4px; justify-content: center; flex-wrap: nowrap; }
@@ -168,7 +168,7 @@
         .res-opt.active-na    { background: #F3F4F6; border-color: #9CA3AF; color: #4B5563; }
 
         /* 不符合行高亮 */
-        tr.row-bad td { background: #FEF2F2 !important; }
+        tr.row-bad td { background: #FDEEF1 !important; }
         tr.row-bad .col-item { color: var(--brand-red); }
 
         /* 删除按钮 */
@@ -187,7 +187,7 @@
         /* 提示条 */
         .alert-bad {
             display: none;
-            background: #FEF2F2;
+            background: #FDEEF1;
             border: 1px solid #FECACA;
             color: var(--brand-red);
             border-radius: var(--radius-md);
