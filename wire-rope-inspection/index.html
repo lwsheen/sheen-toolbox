@@ -13,7 +13,7 @@
     <style>
         /* ============================================================
            本工具特有样式（公共组件由 common.css 提供）
-           品牌色：深红 #7A1825 / 微纤灰 #F8FAFC / 圆角卡片 + 药丸按钮
+           品牌色：深红 #F03752 / 微纤灰 #F8F9FA / 圆角卡片 + 药丸按钮
            检查表三态：正常(绿) / 注意(黄) / 报废·不合格(红)
            ============================================================ */
 
@@ -83,9 +83,9 @@
         .stat-card.s-ok .num   { color: #166534; }
         .stat-card.s-warn  { border-color: #FDE68A; }
         .stat-card.s-warn .num { color: #B45309; }
-        .stat-card.s-bad   { border-color: #FECACA; background: #FEF2F2; }
+        .stat-card.s-bad   { border-color: #FECACA; background: #FDEEF1; }
         .stat-card.s-bad .num  { color: var(--brand-red); }
-        .stat-card.s-pending .num { color: #6B7280; }
+        .stat-card.s-pending .num { color: #5C6470; }
 
         /* ===== 使用说明折叠 ===== */
         .guide-box {
@@ -176,7 +176,7 @@
         .measure-block {
             margin-top: 8px;
             padding: 8px 10px;
-            background: #F8FAFC;
+            background: #F8F9FA;
             border: 1px dashed var(--border);
             border-radius: var(--radius-sm);
             display: flex;
@@ -215,18 +215,18 @@
         .res-opt input { display: none; }
         .res-opt:hover { border-color: #9CA3AF; }
         .res-opt.active-ok  { background: #DCFCE7; border-color: #16A34A; color: #166534; font-weight: 700; }
-        .res-opt.active-warn{ background: #FEF3C7; border-color: #F59E0B; color: #B45309; font-weight: 700; }
+        .res-opt.active-warn{ background: #FEF3C7; border-color: #F57C00; color: #B45309; font-weight: 700; }
         .res-opt.active-bad { background: #FEE2E2; border-color: var(--brand-red); color: var(--brand-red); font-weight: 700; }
 
         /* 不合格/报废行高亮 */
-        tr.row-bad td { background: #FEF2F2 !important; }
+        tr.row-bad td { background: #FDEEF1 !important; }
         tr.row-bad .col-item { color: var(--brand-red); }
-        tr.row-warn td { background: #FFFBEB !important; }
+        tr.row-warn td { background: #FEF3E2 !important; }
 
         /* 提示条 */
         .alert-bad {
             display: none;
-            background: #FEF2F2;
+            background: #FDEEF1;
             border: 1px solid #FECACA;
             color: var(--brand-red);
             border-radius: var(--radius-md);
@@ -263,7 +263,7 @@
         }
         .verdict-card textarea:focus, .verdict-card .note-input:focus { border-color: var(--brand-red); }
         .measure-step {
-            background: #F8FAFC; border: 1px solid var(--border); border-radius: var(--radius-sm);
+            background: #F8F9FA; border: 1px solid var(--border); border-radius: var(--radius-sm);
             padding: 12px 14px; font-size: 13px; color: var(--text-primary); line-height: 1.8; margin-bottom: 14px;
         }
         .measure-step b { color: var(--brand-red-hover); }
@@ -312,12 +312,12 @@
             .res-opt.active-ok { background: #DCFCE7 !important; }
             .res-opt.active-warn { background: #FEF3C7 !important; }
             .res-opt.active-bad { background: #FEE2E2 !important; }
-            .section-row td { background: #7A1825 !important; color: #fff !important; font-size: 10px !important; padding: 4px 6px !important; }
+            .section-row td { background: #F03752 !important; color: #fff !important; font-size: 10px !important; padding: 4px 6px !important; }
             .verdict-card { display: block !important; background: #fff !important; margin-top: 12px; page-break-inside: auto; }
             .verdict-card h3, .verdict-card h4 { font-size: 11px !important; }
             .verdict-opts { gap: 4px !important; margin-bottom: 6px !important; }
             .verdict-opt { border: 1px solid #999 !important; padding: 2px 6px !important; font-size: 9px !important; }
-            .verdict-opt.active { background: #7A1825 !important; }
+            .verdict-opt.active { background: #F03752 !important; }
             .verdict-card textarea, .verdict-card .note-input, .measure-step { border: 1px solid #999 !important; font-size: 9px !important; min-height: 40px !important; }
             .verdict-sign input { border-bottom: 1px solid #333 !important; }
             .table-scroll { overflow: visible !important; margin: 0 !important; padding: 0 !important; }
@@ -811,7 +811,7 @@
                     '</tr></thead><tbody>';
 
             for (var s = 0; s < SECTIONS.length; s++) {
-                body += '<tr><td colspan="5" style="background:#7A1825;color:#fff;font-weight:700;">' + esc(SECTIONS[s].title) + '</td></tr>';
+                body += '<tr><td colspan="5" style="background:#F03752;color:#fff;font-weight:700;">' + esc(SECTIONS[s].title) + '</td></tr>';
                 for (var i = 0; i < SECTIONS[s].items.length; i++) {
                     var item = SECTIONS[s].items[i];
                     var seq = item.seq;
