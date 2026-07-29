@@ -12,7 +12,7 @@
     <style>
         /* ============================================================
            手持电动工具检查表特有样式
-           品牌色：深红 #7A1825 / 公共组件由 common.css 提供
+           品牌色：深红 #F03752 / 公共组件由 common.css 提供
            依据：GB/T 3787-2026 附录 A 定期检查记录表
            ============================================================ */
 
@@ -33,13 +33,13 @@
             font-size: 13px;
             margin-bottom: 16px;
             padding: 14px 18px;
-            background: var(--bg-page, #F8FAFC);
-            border: 1px solid var(--border, #E5E7EB);
+            background: var(--bg-page, #F8F9FA);
+            border: 1px solid var(--border, #E3E6EA);
             border-radius: var(--radius-md, 8px);
         }
         .form-header .fh-label {
             font-weight: 600;
-            color: var(--text-primary, #111827);
+            color: var(--text-primary, #1E2126);
             white-space: nowrap;
             text-align: right;
         }
@@ -48,23 +48,23 @@
             flex: 1;
             font-size: 13px;
             padding: 5px 8px;
-            border: 1px solid var(--border, #E5E7EB);
+            border: 1px solid var(--border, #E3E6EA);
             border-radius: var(--radius-sm, 4px);
             background: #fff;
-            color: var(--text-primary, #111827);
+            color: var(--text-primary, #1E2126);
             outline: none;
             font-family: var(--font, system-ui, -apple-system, sans-serif);
         }
         .form-header input:focus, .form-header select:focus {
-            border-color: var(--brand-red, #7A1825);
-            box-shadow: 0 0 0 2px rgba(122,24,37,0.08);
+            border-color: var(--brand-red, #F03752);
+            box-shadow: 0 0 0 2px rgba(240,55,82,0.08);
         }
 
         /* ===== 检测标准指南折叠 ===== */
         .guide-box {
             display: none;
-            background: var(--brand-red-light, #FEF2F2);
-            border-left: 4px solid var(--brand-red, #7A1825);
+            background: var(--brand-red-light, #FDEEF1);
+            border-left: 4px solid var(--brand-red, #F03752);
             border-radius: var(--radius-md, 8px);
             padding: 16px 18px;
             margin-bottom: 18px;
@@ -72,7 +72,7 @@
         .guide-box h3 {
             font-size: 15px;
             font-weight: 700;
-            color: var(--brand-red-hover, #5C121C);
+            color: var(--brand-red-hover, #D12E47);
             margin-bottom: 10px;
             display: flex;
             align-items: center;
@@ -99,23 +99,23 @@
         }
         .check-table input, .check-table select {
             width: 100%; min-width: 48px; text-align: center; padding: 4px 4px;
-            font-size: 11px; border: 1px solid var(--border, #E5E7EB); border-radius: var(--radius-sm, 4px);
+            font-size: 11px; border: 1px solid var(--border, #E3E6EA); border-radius: var(--radius-sm, 4px);
         }
-        .check-table .col-seq { width: 40px; font-weight: 600; color: var(--text-secondary, #6B7280); }
+        .check-table .col-seq { width: 40px; font-weight: 600; color: var(--text-secondary, #5C6470); }
         .check-table .col-item { width: 180px; min-width: 150px; text-align: left !important; font-weight: 500; white-space: nowrap; }
-        .check-table .col-std { width: 240px; text-align: left !important; font-size: 11px; color: var(--text-secondary, #6B7280); }
+        .check-table .col-std { width: 240px; text-align: left !important; font-size: 11px; color: var(--text-secondary, #5C6470); }
         .check-table .col-result { width: 150px; min-width: 130px; }
         .check-table .col-class { width: 65px; }
         .check-table .col-insul { width: 70px; }
         .check-table .col-concl { width: 55px; }
         .check-table .col-remark { width: 120px; min-width: 90px; }
-        .check-table tr:hover td { background: var(--bg-page, #F8FAFC); }
+        .check-table tr:hover td { background: var(--bg-page, #F8F9FA); }
 
         /* 结果药丸 */
         .res-group { display: flex; gap: 4px; justify-content: center; flex-wrap: nowrap; }
         .res-opt {
             display: inline-flex; align-items: center; gap: 3px;
-            border: 1px solid var(--border, #E5E7EB); border-radius: 999px;
+            border: 1px solid var(--border, #E3E6EA); border-radius: 999px;
             padding: 3px 8px; font-size: 11px !important; cursor: pointer;
             transition: all 0.15s; background: #fff; text-align: center;
             justify-content: center; min-width: auto !important; width: auto !important; border: none !important;
@@ -136,42 +136,42 @@
         .tc-batt { background: #FEF3C7 !important; color: #92400E !important; }
 
         /* 结论颜色 */
-        .conclusion-bad  { color: var(--brand-red, #7A1825) !important; font-weight: 700; }
+        .conclusion-bad  { color: var(--brand-red, #F03752) !important; font-weight: 700; }
         .conclusion-good { color: #166534 !important; font-weight: 600; }
 
         /* 综合判定卡片 */
         .verdict-card {
             margin-top: 18px; padding: 14px 20px;
-            background: linear-gradient(135deg, #FEF2F2 0%, #FFF7ED 100%);
-            border: 1.5px solid var(--brand-red, #7A1825); border-radius: var(--radius-md, 8px);
+            background: linear-gradient(135deg, #FDEEF1 0%, #FFF7ED 100%);
+            border: 1.5px solid var(--brand-red, #F03752); border-radius: var(--radius-md, 8px);
             display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center;
         }
-        .verdict-card .vc-label { font-weight: 700; font-size: 14px; color: var(--brand-red, #7A1825); }
+        .verdict-card .vc-label { font-weight: 700; font-size: 14px; color: var(--brand-red, #F03752); }
         .verdict-card .vc-value { font-size: 15px; font-weight: 800; }
         .verdict-card .vc-good { color: #166534; }
-        .verdict-card .vc-bad  { color: var(--brand-red, #7A1825); }
+        .verdict-card .vc-bad  { color: var(--brand-red, #F03752); }
         .verdict-card .vc-warn { color: #92400E; }
 
         /* 指南内对照表 */
         .ref-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 10px 0; }
         .ref-table th { background: #334155; color: #fff; padding: 6px 8px; }
-        .ref-table td { padding: 6px 8px; border: 1px solid #E5E7EB; }
-        .ref-table tr.highlight td { background: var(--brand-red-light, #FEF2F2); }
+        .ref-table td { padding: 6px 8px; border: 1px solid #E3E6EA; }
+        .ref-table tr.highlight td { background: var(--brand-red-light, #FDEEF1); }
 
         /* ===== 表尾 ===== */
         .form-footer {
             display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: flex-end;
-            font-size: 13px; color: var(--text-secondary, #6B7280);
-            margin-top: 18px; border-top: 1px dashed var(--border, #E5E7EB); padding-top: 14px;
+            font-size: 13px; color: var(--text-secondary, #5C6470);
+            margin-top: 18px; border-top: 1px dashed var(--border, #E3E6EA); padding-top: 14px;
         }
         .form-footer .line { display: flex; gap: 6px; align-items: baseline; }
         .form-footer .underline {
-            border: none; border-bottom: 1px solid var(--text-secondary, #6B7280);
+            border: none; border-bottom: 1px solid var(--text-secondary, #5C6470);
             background: transparent; min-width: 90px; padding: 2px 4px;
-            font-size: 13px; outline: none; color: var(--text-primary, #111827);
+            font-size: 13px; outline: none; color: var(--text-primary, #1E2126);
             font-family: var(--font, system-ui, -apple-system, sans-serif);
         }
-        .form-footer .footer-label { font-weight: 600; color: var(--text-primary, #111827); }
+        .form-footer .footer-label { font-weight: 600; color: var(--text-primary, #1E2126); }
 
         /* ===== 打印样式 ===== */
         @media print {
@@ -292,7 +292,7 @@
             <div class="verdict-card" id="verdictCard">
                 <span class="vc-label"><i class="fa-solid fa-gavel"></i> 综合判定：</span>
                 <span class="vc-value" id="verdictText">—</span>
-                <span style="margin-left:auto;font-size:12px;color:#6B7280;">
+                <span style="margin-left:auto;font-size:12px;color:#5C6470;">
                     合格 <b id="passCount">0</b> / 不合格 <b id="failCount">0</b> / 总项 <b id="totalCount">0</b>
                 </span>
             </div>
