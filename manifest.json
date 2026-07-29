@@ -6,8 +6,8 @@
   "scope": "/sheen-toolbox/",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#F8FAFC",
-  "theme_color": "#7A1825",
+  "background_color": "#F8F9FA",
+  "theme_color": "#F03752",
   "icons": [
     {
       "src": "/sheen-toolbox/assets/icon-192.png",
