@@ -53,7 +53,7 @@
   color: var(--brand-red); display: none;
 }
 .sel-verdict.show { display: block; }
-.sel-verdict.warn { background: #FFFBEB; border-color: var(--amber); color: #B45309; }
+.sel-verdict.warn { background: #FEF3E2; border-color: var(--amber); color: #B45309; }
 
 .related-box {
   margin-top: 22px; padding: 14px 18px; background: var(--bg-page);
@@ -63,7 +63,7 @@
 .related-box a:hover { text-decoration: underline; }
 
 .disclaimer {
-  margin-top: 24px; padding: 16px 20px; background: #FFFBEB;
+  margin-top: 24px; padding: 16px 20px; background: #FEF3E2;
   border: 1px solid var(--amber); border-radius: var(--radius-md); font-size: 12px;
   color: var(--text-secondary); line-height: 1.8;
 }
@@ -279,10 +279,10 @@ window.exportResult = function() {
   var w = parseFloat(document.getElementById('weight').value) || 0;
   var html = '<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">' +
     '<title>钢丝绳&起重链条选型 — SHEEN Toolbox</title>' +
-    '<style>body{font-family:system-ui,sans-serif;padding:24px;color:#111827;line-height:1.6;max-width:800px;margin:0 auto}' +
-    'h1{color:#7A1825;font-size:20px}.box{border:1px solid #E5E7EB;border-radius:12px;padding:16px;margin:12px 0}' +
-    '.num{font-size:34px;font-weight:800;color:#7A1825}.cnum{color:#B45309}.meta{font-size:13px;color:#374151}' +
-    '.formula{font-size:11px;color:#6B7280;background:#F8FAFC;padding:8px;border-radius:6px;font-family:monospace}' +
+    '<style>body{font-family:system-ui,sans-serif;padding:24px;color:#1E2126;line-height:1.6;max-width:800px;margin:0 auto}' +
+    'h1{color:#F03752;font-size:20px}.box{border:1px solid #E3E6EA;border-radius:12px;padding:16px;margin:12px 0}' +
+    '.num{font-size:34px;font-weight:800;color:#F03752}.cnum{color:#B45309}.meta{font-size:13px;color:#374151}' +
+    '.formula{font-size:11px;color:#5C6470;background:#F8F9FA;padding:8px;border-radius:6px;font-family:monospace}' +
     '</style></head><body>' +
     '<h1>📋 钢丝绳 &amp; 起重链条 选型结果</h1>' +
     '<p style="color:#666;font-size:12px;">吊重：<b>' + w + ' t</b>　导出时间：' + new Date().toLocaleString('zh-CN') + '</p>' +
