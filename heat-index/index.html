@@ -68,7 +68,7 @@
 
         /* ---- 结果卡片（大字 + 风险色带） ---- */
         .result-panel {
-            background: linear-gradient(135deg, #fff 0%, #f8fafc 100%);
+            background: linear-gradient(135deg, #fff 0%, #F8F9FA 100%);
             border: 2px solid var(--border);
             border-radius: var(--radius-lg);
             padding: 24px;
@@ -485,7 +485,7 @@
               ]},
             { max: 55,   key: 'danger',    labelCN: '危险',         labelEN: 'Danger',
               cssClass: 'risk-danger',    hiClass: 'hi-danger',
-              adviceTitle: '<i class="fa-solid fa-skull-crossbones" style="color:#DC2626;"></i> 危险 — 中暑高风险',
+              adviceTitle: '<i class="fa-solid fa-skull-crossbones" style="color:#F03752;"></i> 危险 — 中暑高风险',
               advice: [
                   '运动或长时间户外暴露时，中暑可能性极高！',
                   '尽可能取消非必要户外活动。',
@@ -497,7 +497,7 @@
               cssClass: 'risk-extdanger', hiClass: 'hi-extdanger',
               adviceTitle: '<i class="fa-solid fa-triangle-exclamation" style="color:#fff;"></i> ⚠️ 极度危险 — 紧急医疗状态！',
               advice: [
-                  '<b style="color:#DC2626;">中暑极可能发生，属于紧急医疗状况！</b>',
+                  '<b style="color:#F03752;">中暑极可能发生，属于紧急医疗状况！</b>',
                   '任何户外活动都可能危及生命，请留在室内并开启空调。',
                   '如必须在户外：缩短至绝对最短时间，配备全程监护人员。',
                   '热射病（体温＞40℃、意识障碍）可致命，需立即拨打急救电话并物理降温。'
@@ -623,7 +623,7 @@
             hiNumberEl.textContent = hi;
             var colors = {
                 safe:'#059669', caution:'#CA8A04', extreme:'#C2410C',
-                danger:'#DC2626', extdanger:'#FFF'
+                danger:'#F03752', extdanger:'#FFF'
             };
             hiNumberEl.style.color = colors[risk.key] || '#000';
 
