@@ -3,7 +3,7 @@
   <clipPath id="c"><circle cx="256" cy="256" r="240"/></clipPath>
   <g clip-path="url(#c)">
     <!-- 盾牌 — 琥珀金填充 -->
-    <path fill="#FBBF24" d="
+    <path fill="#F57C00" d="
       M48,100 L256,28 L464,100
       L464,220 Q460,280 456,340
       Q420,420 336,492 Q296,504 256,508
@@ -16,6 +16,6 @@
       Q296,504 256,508 L256,52 Z"/>
     <!-- 中间竖线 -->
     <line x1="256" y1="32" x2="256" y2="504"
-      stroke="#FBBF24" stroke-width="12" stroke-linecap="round"/>
+      stroke="#F57C00" stroke-width="12" stroke-linecap="round"/>
   </g>
 </svg>
