@@ -12,22 +12,22 @@
     <style>
         /* ============================================================
            SHEEN Toolbox — 内联品牌样式（单文件自包含）
-           品牌色板：深红 #7A1825 / 近黑 #111827 / 微纤灰 #F8FAFC
+           品牌色板：深红 #F03752 / 近黑 #1E2126 / 微纤灰 #F8F9FA
            圆角卡片 + 柔和阴影 + 药丸按钮，响应式适配移动端
            ============================================================ */
         :root {
             --black: #000000;
-            --text-primary: #111827;
-            --text-secondary: #6B7280;
-            --bg-page: #F8FAFC;
+            --text-primary: #1E2126;
+            --text-secondary: #5C6470;
+            --bg-page: #F8F9FA;
             --bg-card: #FFFFFF;
-            --border: #E5E7EB;
+            --border: #E3E6EA;
             --border-light: #F3F4F6;
-            --brand-red: #7A1825;
-            --brand-red-hover: #5C121C;
-            --brand-red-light: #FEF2F2;
-            --amber: #FBBF24;
-            --amber-text: #D97706;
+            --brand-red: #F03752;
+            --brand-red-hover: #D12E47;
+            --brand-red-light: #FDEEF1;
+            --amber: #F57C00;
+            --amber-text: #C2410C;
             --radius-lg: 20px;
             --radius-md: 12px;
             --radius-sm: 8px;
@@ -177,7 +177,7 @@
         .search-box:focus {
             outline: none;
             border-color: var(--brand-red);
-            box-shadow: 0 0 0 4px rgba(122,24,37,0.08);
+            box-shadow: 0 0 0 4px rgba(240,55,82,0.08);
         }
         .search-box::placeholder { color: var(--text-secondary); opacity: 0.65; }
 
@@ -208,7 +208,7 @@
         .item:hover {
             background: var(--brand-red-light);
             color: var(--brand-red);
-            border-color: rgba(122,24,37,0.25);
+            border-color: rgba(240,55,82,0.25);
         }
         .item small { font-size: 0.78rem; color: var(--amber-text); font-weight: 600; }
 
@@ -242,7 +242,7 @@
         .form-group input:focus {
             outline: none;
             border-color: var(--brand-red);
-            box-shadow: 0 0 0 4px rgba(122,24,37,0.08);
+            box-shadow: 0 0 0 4px rgba(240,55,82,0.08);
         }
         .form-group input::placeholder { color: var(--text-secondary); opacity: 0.6; }
 
@@ -266,7 +266,7 @@
         button.verify-btn:hover {
             background: var(--brand-red-hover);
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(122,24,37,0.25);
+            box-shadow: 0 8px 20px rgba(240,55,82,0.25);
         }
         button.verify-btn:active { transform: translateY(0); }
 
