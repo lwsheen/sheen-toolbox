@@ -2,7 +2,7 @@
   <defs>
     <style>
       .shield-fill { fill: #FFFFFF; }
-      .shield-cut { fill: #7A1825; }
+      .shield-cut { fill: #F03752; }
       .check { fill: none; stroke: #FFFFFF; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
       .text { fill: #FFFFFF; font-family: 'Arial Black', Arial, sans-serif; font-weight: 900; font-size: 68px; letter-spacing: 4px; text-anchor: middle; }
     </style>
