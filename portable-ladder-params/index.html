@@ -162,6 +162,41 @@
         }
         .std-ref a { color: var(--tech-blue, #2D7EE7); text-decoration: none; }
 
+        /* ===== 标准图示区 ===== */
+        .lp-diagram-sec {
+            background: #fff; border: 1px solid var(--border, #E3E6EA);
+            border-radius: 14px; margin-bottom: 22px; overflow: hidden;
+        }
+        .lp-diagram-head {
+            display: flex; align-items: center; gap: 10px;
+            padding: 14px 18px; cursor: pointer; user-select: none;
+            background: var(--bg-soft, #F8F9FA);
+        }
+        .lp-diagram-head h2 {
+            margin: 0; font-size: 16px; font-weight: 700; color: var(--ink, #1E2126);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .lp-diagram-head h2 i { color: var(--brand-red, #F03752); }
+        .lp-diagram-toggle { margin-left: auto; color: #9ca3af; transition: transform .25s; }
+        .lp-diagram-sec.collapsed .lp-diagram-toggle { transform: rotate(-90deg); }
+        .lp-diagram-body { padding: 18px; }
+        .lp-diagram-sec.collapsed .lp-diagram-body { display: none; }
+        .dg-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 18px;
+        }
+        .dg-figure {
+            margin: 0; border: 1px solid var(--border, #E3E6EA);
+            border-radius: 10px; padding: 12px; background: var(--bg-soft, #F8F9FA);
+        }
+        .dg-figure figcaption {
+            font-size: 12.5px; font-weight: 600; color: var(--ink, #1E2126);
+            margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px dashed var(--border, #E3E6EA);
+        }
+        .dg-figure svg { width: 100%; height: auto; display: block; }
+        .dg-note { font-size: 11.5px; color: var(--muted, #5C6470); margin-top: 8px; line-height: 1.5; }
+
+
         /* 全部展开/收起按钮 */
         .lp-actions {
             display: flex; gap: 10px; margin-bottom: 16px;
@@ -233,6 +268,83 @@
     <p class="page-subtitle" style="margin-bottom:6px;">
         依据 <strong>GB 12142-2025《便携式金属梯安全要求》</strong> 编制。七类梯型设计参数一键检索，含长高限制、宽度与倾角、结构要求及安全使用要点。
     </p>
+
+    <!-- 标准图示 -->
+    <section class="lp-diagram-sec" id="diagramSec">
+        <div class="lp-diagram-head" onclick="document.getElementById('diagramSec').classList.toggle('collapsed')">
+            <h2><i class="fa-solid fa-diagram-project"></i> 标准图示</h2>
+            <span class="lp-diagram-toggle"><i class="fa-solid fa-chevron-down"></i></span>
+        </div>
+        <div class="lp-diagram-body">
+            <div class="dg-grid">
+                <figure class="dg-figure">
+                    <figcaption>图1　倚靠梯结构及架设倾角（65°~75°）</figcaption>
+                    <svg viewBox="0 0 680 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="倚靠梯结构及架设倾角示意图">
+                        <!-- 地面 -->
+                        <line x1="40" y1="320" x2="640" y2="320" stroke="#5C6470" stroke-width="2"/>
+                        <text x="46" y="340" font-size="12" fill="#5C6470">地面 / 支撑面</text>
+                        <!-- 梯子旋转组 -->
+                        <g transform="rotate(22 170 320)">
+                            <line x1="170" y1="70" x2="170" y2="320" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
+                            <line x1="202" y1="70" x2="202" y2="320" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
+                            <line x1="170" y1="110" x2="202" y2="110" stroke="#2D7EE7" stroke-width="4" stroke-linecap="round"/>
+                            <line x1="170" y1="150" x2="202" y2="150" stroke="#2D7EE7" stroke-width="4" stroke-linecap="round"/>
+                            <line x1="170" y1="190" x2="202" y2="190" stroke="#2D7EE7" stroke-width="4" stroke-linecap="round"/>
+                            <line x1="170" y1="230" x2="202" y2="230" stroke="#2D7EE7" stroke-width="4" stroke-linecap="round"/>
+                            <line x1="170" y1="270" x2="202" y2="270" stroke="#2D7EE7" stroke-width="4" stroke-linecap="round"/>
+                            <line x1="170" y1="310" x2="202" y2="310" stroke="#2D7EE7" stroke-width="4" stroke-linecap="round"/>
+                            <rect x="162" y="316" width="16" height="10" rx="3" fill="#F03752"/>
+                            <rect x="194" y="316" width="16" height="10" rx="3" fill="#F03752"/>
+                        </g>
+                        <!-- 倾角弧 -->
+                        <path d="M 220 320 A 50 50 0 0 0 188.7 273.6" fill="none" stroke="#F03752" stroke-width="2" stroke-dasharray="4 3"/>
+                        <text x="138" y="300" font-size="13" font-weight="700" fill="#F03752">65°~75°</text>
+                        <!-- 顶部伸入 -->
+                        <line x1="263.6" y1="88.4" x2="322" y2="64" stroke="#5C6470" stroke-width="1.5"/>
+                        <text x="326" y="68" font-size="12" fill="#1E2126">顶部伸入支撑面 ≥1m</text>
+                        <!-- 踏棍标注 -->
+                        <line x1="218.6" y1="199.5" x2="432" y2="206" stroke="#9CA3AF" stroke-width="1"/>
+                        <text x="436" y="202" font-size="12" fill="#1E2126">踏棍（深度 ≥20mm）</text>
+                        <text x="436" y="218" font-size="11" fill="#5C6470">踏棍间距 230~308mm</text>
+                        <!-- 梯框标注 -->
+                        <line x1="293.3" y1="100.4" x2="432" y2="142" stroke="#9CA3AF" stroke-width="1"/>
+                        <text x="436" y="140" font-size="12" fill="#1E2126">梯框（stile）</text>
+                        <!-- 防滑梯脚标注 -->
+                        <text x="58" y="354" font-size="12" font-weight="600" fill="#F03752">防滑梯脚</text>
+                        <line x1="172" y1="324" x2="122" y2="348" stroke="#9CA3AF" stroke-width="1"/>
+                    </svg>
+                    <p class="dg-note">说明：倚靠梯架设倾角应为 65°~75°；顶部须伸入支撑面 ≥1m；踏棍间距 230~308mm（公差 ±2mm）。</p>
+                </figure>
+
+                <figure class="dg-figure">
+                    <figcaption>图2　自立梯（人字梯）横角及结构示意</figcaption>
+                    <svg viewBox="0 0 680 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="自立梯横角及结构示意图">
+                        <!-- 地面 -->
+                        <line x1="80" y1="320" x2="600" y2="320" stroke="#5C6470" stroke-width="2"/>
+                        <!-- 梯腿 -->
+                        <line x1="340" y1="70" x2="230" y2="320" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
+                        <line x1="340" y1="70" x2="450" y2="320" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
+                        <!-- 踏棍 / 横撑 -->
+                        <line x1="318" y1="130" x2="362" y2="130" stroke="#2D7EE7" stroke-width="4" stroke-linecap="round"/>
+                        <line x1="300" y1="185" x2="380" y2="185" stroke="#2D7EE7" stroke-width="4" stroke-linecap="round"/>
+                        <line x1="282" y1="240" x2="398" y2="240" stroke="#2D7EE7" stroke-width="4" stroke-linecap="round"/>
+                        <!-- 张开限制连杆 -->
+                        <line x1="262" y1="290" x2="418" y2="290" stroke="#F57C00" stroke-width="3" stroke-dasharray="5 3"/>
+                        <text x="298" y="283" font-size="11" fill="#F57C00">张开限制连杆 ≤2m</text>
+                        <!-- 扶手 -->
+                        <line x1="340" y1="70" x2="340" y2="30" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
+                        <text x="350" y="36" font-size="12" fill="#1E2126">扶手 ≥450mm</text>
+                        <!-- 横角弧（左腿与水平面） -->
+                        <path d="M 275 320 A 45 45 0 0 0 248.1 278.8" fill="none" stroke="#F03752" stroke-width="2"/>
+                        <text x="196" y="302" font-size="13" font-weight="700" fill="#F03752">横角 ≤73°</text>
+                        <!-- 顶部警示 -->
+                        <text x="120" y="92" font-size="12" font-weight="600" fill="#F03752">⚠ 踏帽 / 工具架严禁踩踏</text>
+                    </svg>
+                    <p class="dg-note">说明：单侧攀爬横角 α≤73°（梯框与水平面），双侧攀爬 ≤77°；顶部不可踩踏时须设警示；张开限制连杆距地 ≤2m。</p>
+                </figure>
+            </div>
+        </div>
+    </section>
 
     <!-- 搜索栏 -->
     <div class="lp-search no-print">
