@@ -211,7 +211,7 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             position: relative; text-align: center;
         }
-        .diag-lightbox-inner svg { width: auto; height: auto; max-width: 85vw; max-height: 75vh; }
+        .diag-lightbox-inner svg { width: 680px; max-width: 90vw; height: auto; }
         .diag-lb-title {
             font-size: 14px; font-weight: 700; color: var(--ink, #1E2126);
             margin-bottom: 12px;
@@ -1094,8 +1094,11 @@ chips.forEach(function(chip){
         if(!svg) return;
         var clone = svg.cloneNode(true);
         clone.style.pointerEvents = 'auto';
-        clone.setAttribute('width', '');
-        clone.setAttribute('height', '');
+        clone.removeAttribute('width');
+        clone.removeAttribute('height');
+        clone.style.width = '680px';
+        clone.style.maxWidth = '90vw';
+        clone.style.height = 'auto';
         document.getElementById('diagLbBody').innerHTML = '';
         document.getElementById('diagLbBody').appendChild(clone);
         document.getElementById('diagLbTitle').textContent = caption ? caption.textContent : '结构示意图';
