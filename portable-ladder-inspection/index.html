@@ -532,9 +532,9 @@
                 .replace(/"/g, '&quot;');
         }
         function stdHTML(list) {
-            var h = '<ol class="std-list">';
+            var h = '<ul class="std-list">';
             for (var i = 0; i < list.length; i++) h += '<li>' + esc(list[i]) + '</li>';
-            h += '</ol>';
+            h += '</ul>';
             return h;
         }
         function levelCls(level) {
@@ -863,9 +863,9 @@
                 } else {
                     var item = blk;
                     var seq = item.seq, name = item.name;
-                    var stdHtml = '<ol>';
+                    var stdHtml = '<ul>';
                     for (var k = 0; k < item.std.length; k++) stdHtml += '<li>' + esc(item.std[k]) + '</li>';
-                    stdHtml += '</ol>';
+                    stdHtml += '</ul>';
                     var rowEl = tbody.querySelector('.item-row[data-seq="' + seq + '"]');
                     if (rowEl && item.measure) {
                         var m = item.measure;
