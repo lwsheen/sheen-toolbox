@@ -12,6 +12,12 @@
     <style>
         /* ===== 本工具特有样式 ===== */
 
+        /* 页脚 LOGO 尺寸（common.css 未定义，必须内联） */
+        .sheen-logo-sm {
+            width: 16px; height: 16px; border-radius: 4px;
+            vertical-align: text-bottom; object-fit: contain;
+        }
+
         /* 搜索栏 */
         .lp-search {
             display: flex; align-items: center; gap: 10px;
@@ -90,13 +96,13 @@
         }
         .lc-body.show { display: block; }
 
-        /* 四列参数标签页 */
+        /* 四列参数标签页 + 图示标签页 */
         .param-tabs {
             display: flex; border-bottom: 1px solid var(--border, #E3E6EA);
             background: #fff; overflow-x: auto;
         }
         .param-tab {
-            padding: 10px 16px; font-size: 13px; font-weight: 600;
+            padding: 10px 14px; font-size: 12.5px; font-weight: 600;
             color: var(--muted, #5C6470); cursor: pointer;
             white-space: nowrap; border-bottom: 2px solid transparent;
             transition: all .15s; user-select: none;
@@ -106,6 +112,9 @@
             color: var(--brand-red, #F03752);
             border-bottom-color: var(--brand-red, #F03752);
         }
+        .param-tab.tab-diagram { color: var(--tech-blue, #2D7EE7); }
+        .param-tab.tab-diagram.active { color: var(--tech-blue, #2D7EE7); border-bottom-color: var(--tech-blue, #2D7EE7); }
+        .param-tab.tab-diagram:hover { color: var(--tech-blue, #2D7EE7); }
         .param-content { display: none; padding: 16px 18px; }
         .param-content.active { display: block; }
 
@@ -162,39 +171,20 @@
         }
         .std-ref a { color: var(--tech-blue, #2D7EE7); text-decoration: none; }
 
-        /* ===== 标准图示区 ===== */
-        .lp-diagram-sec {
+        /* ===== 卡片内图示区 ===== */
+        .card-diagram {
             background: #fff; border: 1px solid var(--border, #E3E6EA);
-            border-radius: 14px; margin-bottom: 22px; overflow: hidden;
+            border-radius: 10px; padding: 14px; text-align: center;
         }
-        .lp-diagram-head {
-            display: flex; align-items: center; gap: 10px;
-            padding: 14px 18px; cursor: pointer; user-select: none;
-            background: var(--bg-soft, #F8F9FA);
+        .card-diagram svg { width: 100%; max-width: 520px; height: auto; display: block; margin: 0 auto; }
+        .card-diagram .cd-caption {
+            font-size: 12px; font-weight: 700; color: var(--ink, #1E2126);
+            margin-bottom: 10px;
         }
-        .lp-diagram-head h2 {
-            margin: 0; font-size: 16px; font-weight: 700; color: var(--ink, #1E2126);
-            display: flex; align-items: center; gap: 8px;
+        .card-diagram .cd-note {
+            font-size: 11.5px; color: var(--muted, #5C6470);
+            margin-top: 10px; line-height: 1.55; text-align: left;
         }
-        .lp-diagram-head h2 i { color: var(--brand-red, #F03752); }
-        .lp-diagram-toggle { margin-left: auto; color: #9ca3af; transition: transform .25s; }
-        .lp-diagram-sec.collapsed .lp-diagram-toggle { transform: rotate(-90deg); }
-        .lp-diagram-body { padding: 18px; }
-        .lp-diagram-sec.collapsed .lp-diagram-body { display: none; }
-        .dg-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 18px;
-        }
-        .dg-figure {
-            margin: 0; border: 1px solid var(--border, #E3E6EA);
-            border-radius: 10px; padding: 12px; background: var(--bg-soft, #F8F9FA);
-        }
-        .dg-figure figcaption {
-            font-size: 12.5px; font-weight: 600; color: var(--ink, #1E2126);
-            margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px dashed var(--border, #E3E6EA);
-        }
-        .dg-figure svg { width: 100%; height: auto; display: block; }
-        .dg-note { font-size: 11.5px; color: var(--muted, #5C6470); margin-top: 8px; line-height: 1.5; }
 
 
         /* 全部展开/收起按钮 */
@@ -219,31 +209,10 @@
         }
         .no-result i { font-size: 36px; margin-bottom: 10px; display: block; opacity: .3; }
 
-        /* 快速对比表（打印视图） */
-        .compare-table-wrap {
-            overflow-x: auto; margin-top: 20px;
-        }
-        table.compare-table {
-            width: 100%; border-collapse: collapse;
-            font-size: 12.5px; background: #fff;
-            border: 1px solid var(--border, #E3E6EA); border-radius: 10px;
-        }
-        table.compare-table th {
-            background: var(--ink, #1E2126); color: #fff;
-            padding: 10px 12px; text-align: left; font-weight: 600;
-            white-space: nowrap;
-        }
-        table.compare-table td {
-            padding: 9px 12px; border-bottom: 1px solid var(--border, #E3E6EA);
-            vertical-align: top; line-height: 1.55;
-        }
-        table.compare-table tr:hover td { background: var(--bg-soft, #F8F9FA); }
-        table.compare-table .ct-type { font-weight: 700; color: var(--brand-red, #F03752); white-space: nowrap; }
-
         @media (max-width: 640px) {
             .ladder-grid { grid-template-columns: 1fr; }
             .param-tabs { gap: 0; }
-            .param-tab { padding: 8px 12px; font-size: 12.5px; }
+            .param-tab { padding: 8px 10px; font-size: 11.5px; }
         }
 
         @media print {
@@ -252,6 +221,7 @@
             .lc-body { display: block !important; border: none; }
             .param-content { display: block !important; padding: 6px 0; }
             .ladder-card { break-inside: avoid; page-break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+            .card-diagram { break-inside: avoid; }
         }
     </style>
 </head>
@@ -268,83 +238,6 @@
     <p class="page-subtitle" style="margin-bottom:6px;">
         依据 <strong>GB 12142-2025《便携式金属梯安全要求》</strong> 编制。七类梯型设计参数一键检索，含长高限制、宽度与倾角、结构要求及安全使用要点。
     </p>
-
-    <!-- 标准图示 -->
-    <section class="lp-diagram-sec" id="diagramSec">
-        <div class="lp-diagram-head" onclick="document.getElementById('diagramSec').classList.toggle('collapsed')">
-            <h2><i class="fa-solid fa-diagram-project"></i> 标准图示</h2>
-            <span class="lp-diagram-toggle"><i class="fa-solid fa-chevron-down"></i></span>
-        </div>
-        <div class="lp-diagram-body">
-            <div class="dg-grid">
-                <figure class="dg-figure">
-                    <figcaption>图1　倚靠梯结构及架设倾角（65°~75°）</figcaption>
-                    <svg viewBox="0 0 680 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="倚靠梯结构及架设倾角示意图">
-                        <!-- 地面 -->
-                        <line x1="40" y1="320" x2="640" y2="320" stroke="#5C6470" stroke-width="2"/>
-                        <text x="46" y="340" font-size="12" fill="#5C6470">地面 / 支撑面</text>
-                        <!-- 梯子旋转组 -->
-                        <g transform="rotate(22 170 320)">
-                            <line x1="170" y1="70" x2="170" y2="320" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
-                            <line x1="202" y1="70" x2="202" y2="320" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
-                            <line x1="170" y1="110" x2="202" y2="110" stroke="#2D7EE7" stroke-width="4" stroke-linecap="round"/>
-                            <line x1="170" y1="150" x2="202" y2="150" stroke="#2D7EE7" stroke-width="4" stroke-linecap="round"/>
-                            <line x1="170" y1="190" x2="202" y2="190" stroke="#2D7EE7" stroke-width="4" stroke-linecap="round"/>
-                            <line x1="170" y1="230" x2="202" y2="230" stroke="#2D7EE7" stroke-width="4" stroke-linecap="round"/>
-                            <line x1="170" y1="270" x2="202" y2="270" stroke="#2D7EE7" stroke-width="4" stroke-linecap="round"/>
-                            <line x1="170" y1="310" x2="202" y2="310" stroke="#2D7EE7" stroke-width="4" stroke-linecap="round"/>
-                            <rect x="162" y="316" width="16" height="10" rx="3" fill="#F03752"/>
-                            <rect x="194" y="316" width="16" height="10" rx="3" fill="#F03752"/>
-                        </g>
-                        <!-- 倾角弧 -->
-                        <path d="M 220 320 A 50 50 0 0 0 188.7 273.6" fill="none" stroke="#F03752" stroke-width="2" stroke-dasharray="4 3"/>
-                        <text x="138" y="300" font-size="13" font-weight="700" fill="#F03752">65°~75°</text>
-                        <!-- 顶部伸入 -->
-                        <line x1="263.6" y1="88.4" x2="322" y2="64" stroke="#5C6470" stroke-width="1.5"/>
-                        <text x="326" y="68" font-size="12" fill="#1E2126">顶部伸入支撑面 ≥1m</text>
-                        <!-- 踏棍标注 -->
-                        <line x1="218.6" y1="199.5" x2="432" y2="206" stroke="#9CA3AF" stroke-width="1"/>
-                        <text x="436" y="202" font-size="12" fill="#1E2126">踏棍（深度 ≥20mm）</text>
-                        <text x="436" y="218" font-size="11" fill="#5C6470">踏棍间距 230~308mm</text>
-                        <!-- 梯框标注 -->
-                        <line x1="293.3" y1="100.4" x2="432" y2="142" stroke="#9CA3AF" stroke-width="1"/>
-                        <text x="436" y="140" font-size="12" fill="#1E2126">梯框（stile）</text>
-                        <!-- 防滑梯脚标注 -->
-                        <text x="58" y="354" font-size="12" font-weight="600" fill="#F03752">防滑梯脚</text>
-                        <line x1="172" y1="324" x2="122" y2="348" stroke="#9CA3AF" stroke-width="1"/>
-                    </svg>
-                    <p class="dg-note">说明：倚靠梯架设倾角应为 65°~75°；顶部须伸入支撑面 ≥1m；踏棍间距 230~308mm（公差 ±2mm）。</p>
-                </figure>
-
-                <figure class="dg-figure">
-                    <figcaption>图2　自立梯（人字梯）横角及结构示意</figcaption>
-                    <svg viewBox="0 0 680 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="自立梯横角及结构示意图">
-                        <!-- 地面 -->
-                        <line x1="80" y1="320" x2="600" y2="320" stroke="#5C6470" stroke-width="2"/>
-                        <!-- 梯腿 -->
-                        <line x1="340" y1="70" x2="230" y2="320" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
-                        <line x1="340" y1="70" x2="450" y2="320" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
-                        <!-- 踏棍 / 横撑 -->
-                        <line x1="318" y1="130" x2="362" y2="130" stroke="#2D7EE7" stroke-width="4" stroke-linecap="round"/>
-                        <line x1="300" y1="185" x2="380" y2="185" stroke="#2D7EE7" stroke-width="4" stroke-linecap="round"/>
-                        <line x1="282" y1="240" x2="398" y2="240" stroke="#2D7EE7" stroke-width="4" stroke-linecap="round"/>
-                        <!-- 张开限制连杆 -->
-                        <line x1="262" y1="290" x2="418" y2="290" stroke="#F57C00" stroke-width="3" stroke-dasharray="5 3"/>
-                        <text x="298" y="283" font-size="11" fill="#F57C00">张开限制连杆 ≤2m</text>
-                        <!-- 扶手 -->
-                        <line x1="340" y1="70" x2="340" y2="30" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
-                        <text x="350" y="36" font-size="12" fill="#1E2126">扶手 ≥450mm</text>
-                        <!-- 横角弧（左腿与水平面） -->
-                        <path d="M 275 320 A 45 45 0 0 0 248.1 278.8" fill="none" stroke="#F03752" stroke-width="2"/>
-                        <text x="196" y="302" font-size="13" font-weight="700" fill="#F03752">横角 ≤73°</text>
-                        <!-- 顶部警示 -->
-                        <text x="120" y="92" font-size="12" font-weight="600" fill="#F03752">⚠ 踏帽 / 工具架严禁踩踏</text>
-                    </svg>
-                    <p class="dg-note">说明：单侧攀爬横角 α≤73°（梯框与水平面），双侧攀爬 ≤77°；顶部不可踩踏时须设警示；张开限制连杆距地 ≤2m。</p>
-                </figure>
-            </div>
-        </div>
-    </section>
 
     <!-- 搜索栏 -->
     <div class="lp-search no-print">
@@ -389,8 +282,9 @@
                 <div class="param-tabs">
                     <div class="param-tab active" onclick="switchTab(this,'p1-g-len')">长高限制</div>
                     <div class="param-tab" onclick="switchTab(this,'p1-g-width')">宽度与倾角</div>
+                    <div class="param-tab tab-diagram" onclick="switchTab(this,'p1-g-diag')"><i class="fa-solid fa-image"></i> 结构示意</div>
                     <div class="param-tab" onclick="switchTab(this,'p1-g-struct')">结构要求</div>
-                    <div class="param-tab" onclick="switchTab(this,'p1-g-safety')">安全使用要点</div>
+                    <div class="param-tab" onclick="switchTab(this,'p1-g-safety')">安全要点</div>
                 </div>
                 <div class="param-content active" id="p1-g-len">
                     <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">额定承载：<span class="pi-val">&ge; 100 kg</span></div></div>
@@ -401,6 +295,57 @@
                     <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">踏板深度：<span class="pi-val">&ge; 80 mm</span></div></div>
                     <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">踏棍深度：<span class="pi-val">&ge; 20 mm</span></div></div>
                     <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">圆形踏棍直径：<span class="pi-val">&ge; 25 mm</span></div></div>
+                </div>
+                <div class="param-content" id="p1-g-diag">
+                    <div class="card-diagram">
+                        <div class="cd-caption">图1　便携式金属梯通用结构示意</div>
+                        <svg viewBox="0 0 680 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="便携式金属梯通用结构示意图">
+                            <!-- 地面 -->
+                            <line x1="40" y1="340" x2="640" y2="340" stroke="#5C6470" stroke-width="2"/>
+                            <text x="46" y="360" font-size="12" fill="#5C6470">地面 / 支撑面</text>
+                            <!-- 梯子（倚靠态） -->
+                            <g transform="rotate(22 200 340)">
+                                <line x1="200" y1="70" x2="200" y2="340" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
+                                <line x1="236" y1="70" x2="236" y2="340" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
+                                <!-- 踏棍（蓝色） -->
+                                <line x1="200" y1="110" x2="236" y2="110" stroke="#2D7EE7" stroke-width="5" stroke-linecap="round"/>
+                                <line x1="200" y1="155" x2="236" y2="155" stroke="#2D7EE7" stroke-width="5" stroke-linecap="round"/>
+                                <line x1="200" y1="200" x2="236" y2="200" stroke="#2D7EE7" stroke-width="5" stroke-linecap="round"/>
+                                <line x1="200" y1="245" x2="236" y2="245" stroke="#2D7EE7" stroke-width="5" stroke-linecap="round"/>
+                                <line x1="200" y1="290" x2="236" y2="290" stroke="#2D7EE7" stroke-width="5" stroke-linecap="round"/>
+                                <line x1="200" y1="335" x2="236" y2="335" stroke="#2D7EE7" stroke-width="5" stroke-linecap="round"/>
+                                <!-- 防滑梯脚（海棠红） -->
+                                <rect x="191" y="336" width="18" height="10" rx="3" fill="#F03752"/>
+                                <rect x="227" y="336" width="18" height="10" rx="3" fill="#F03752"/>
+                            </g>
+                            <!-- 倾角弧 -->
+                            <path d="M 256 340 A 56 56 0 0 0 220 289" fill="none" stroke="#F03752" stroke-width="2.5" stroke-dasharray="5 3"/>
+                            <text x="165" y="318" font-size="14" font-weight="700" fill="#F03752">65°~75°</text>
+                            <!-- 标注线：踏棍间距 -->
+                            <line x1="250" y1="156" x2="370" y2="156" stroke="#9CA3AF" stroke-width="1"/>
+                            <line x1="250" y1="152" x2="250" y2="160" stroke="#9CA3AF" stroke-width="1"/>
+                            <line x1="250" y1="201" x2="250" y2="209" stroke="#9CA3AF" stroke-width="1"/>
+                            <text x="374" y="152" font-size="12" fill="#1E2126">踏棍间距</text>
+                            <text x="374" y="168" font-size="12" font-weight="700" fill="#F03752">230~308mm</text>
+                            <!-- 标注线：踏棍深度 -->
+                            <line x1="200" y1="110" x2="200" y2="155" stroke="#2D7EE7" stroke-width="1.5"/>
+                            <line x1="196" y1="110" x2="204" y2="110" stroke="#2D7EE7" stroke-width="1.5"/>
+                            <line x1="196" y1="155" x2="204" y2="155" stroke="#2D7EE7" stroke-width="1.5"/>
+                            <text x="130" y="138" font-size="11" fill="#2D7EE7" font-weight="600">深度&ge;20mm</text>
+                            <!-- 标注线：顶部伸入 -->
+                            <line x1="302" y1="96" x2="420" y2="70" stroke="#5C6470" stroke-width="1.2"/>
+                            <text x="424" y="74" font-size="12" fill="#1E2126">顶部伸入 &ge;1m</text>
+                            <!-- 三点接触示意 -->
+                            <circle cx="218" cy="178" r="14" fill="none" stroke="#F57C00" stroke-width="1.5" stroke-dasharray="3 2"/>
+                            <text x="238" y="182" font-size="11" fill="#F57C00" font-weight="600">三点接触</text>
+                            <!-- 图例 -->
+                            <rect x="480" y="60" width="12" height="12" rx="2" fill="#2D7EE7"/>
+                            <text x="498" y="71" font-size="11" fill="#5C6470">踏棍/踏板</text>
+                            <rect x="480" y="82" width="12" height="12" rx="2" fill="#F03752"/>
+                            <text x="498" y="93" font-size="11" fill="#5C6470">防滑梯脚</text>
+                        </svg>
+                        <p class="cd-note">所有便携式金属梯须满足：额定承载 &ge;100kg；踏棍间距 230~308mm；架设倾角 65°~75°；底部装防滑梯脚；采用三点接触法攀登。</p>
+                    </div>
                 </div>
                 <div class="param-content" id="p1-g-struct">
                     <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">表面无锐边、毛刺，进行<span class="pi-warn">防腐蚀处理</span></div></div>
@@ -416,7 +361,7 @@
         </div>
 
         <!-- ════════════ 2. 倚靠梯 ════════════ -->
-        <div class="ladder-card" data-cat="leaning" data-keywords="倚靠梯 最大长度9m 内宽280 外宽公式1200mm 单梯">
+        <div class="ladder-card" data-cat="leaning" data-keywords="倚靠梯 最大长度9m 内���280 外宽公式1200mm 单梯">
             <div class="lc-head" onclick="toggleCard(this)">
                 <div class="lc-icon"><i class="fa-solid fa-person-running"></i></div>
                 <div>
@@ -429,7 +374,8 @@
                 <div class="param-tabs">
                     <div class="param-tab active" onclick="switchTab(this,'p2-l-len')">长高限制</div>
                     <div class="param-tab" onclick="switchTab(this,'p2-l-width')">宽度与倾角</div>
-                    <div class="param-tab" onclick="switchTab(this,'p2-l-safety')">安全使用要点</div>
+                    <div class="param-tab tab-diagram" onclick="switchTab(this,'p2-l-diag')"><i class="fa-solid fa-image"></i> 结构示意</div>
+                    <div class="param-tab" onclick="switchTab(this,'p2-l-safety')">安全要点</div>
                 </div>
                 <div class="param-content active" id="p2-l-len">
                     <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">最大长度：<span class="pi-val">&le; 9 m</span></div></div>
@@ -441,6 +387,52 @@
                         <div class="formula-block"><div class="fb-label">计算公式</div>b<sub>2</sub> &ge; b<sub>1</sub> + 0.1L + 2t<div class="pi-note" style="padding-left:0;margin-top:4px;">L = 梯长(m)，t = 梯框料厚(mm)</div></div>
                         <div class="pi-note">计算值超过 1200 mm 时，取 <span class="pi-val">1200 mm</span></div>
                     </div></div>
+                </div>
+                <div class="param-content" id="p2-l-diag">
+                    <div class="card-diagram">
+                        <div class="cd-caption">图2　倚靠梯结构及尺寸参数</div>
+                        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="倚靠梯结构示意图">
+                            <!-- 支撑面（墙/屋檐） -->
+                            <rect x="500" y="30" width="160" height="280" fill="#F8F9FA" stroke="#E3E6EA" stroke-width="1.5"/>
+                            <text x="540" y="52" font-size="12" fill="#5C6470">支撑面</text>
+                            <!-- 地面 -->
+                            <line x1="30" y1="350" x2="650" y2="350" stroke="#5C6470" stroke-width="2"/>
+                            <text x="36" y="372" font-size="12" fill="#5C6470">地面</text>
+                            <!-- 梯子 -->
+                            <g transform="rotate(22 190 350)">
+                                <line x1="190" y1="55" x2="190" y2="350" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
+                                <line x1="228" y1="55" x2="228" y2="350" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
+                                <line x1="190" y1="95" x2="228" y2="95" stroke="#2D7EE7" stroke-width="4.5" stroke-linecap="round"/>
+                                <line x1="190" y1="140" x2="228" y2="140" stroke="#2D7EE7" stroke-width="4.5" stroke-linecap="round"/>
+                                <line x1="190" y1="185" x2="228" y2="185" stroke="#2D7EE7" stroke-width="4.5" stroke-linecap="round"/>
+                                <line x1="190" y1="230" x2="228" y2="230" stroke="#2D7EE7" stroke-width="4.5" stroke-linecap="round"/>
+                                <line x1="190" y1="275" x2="228" y2="275" stroke="#2D7EE7" stroke-width="4.5" stroke-linecap="round"/>
+                                <line x1="190" y1="320" x2="228" y2="320" stroke="#2D7EE7" stroke-width="4.5" stroke-linecap="round"/>
+                                <rect x="181" y="346" width="18" height="10" rx="3" fill="#F03752"/>
+                                <rect x="219" y="346" width="18" height="10" rx="3" fill="#F03752"/>
+                            </g>
+                            <!-- 内宽 b1 标注 -->
+                            <line x1="190" y1="186" x2="228" y2="186" stroke="#2D7EE7" stroke-width="1.2"/>
+                            <line x1="190" y1="180" x2="190" y2="192" stroke="#2D7EE7" stroke-width="1.2"/>
+                            <line x1="228" y1="180" x2="228" y2="192" stroke="#2D7EE7" stroke-width="1.2"/>
+                            <text x="190" y="210" font-size="11" fill="#2D7EE7" font-weight="600">b<sub>1</sub>&ge;280</text>
+                            <!-- 外宽 b2 标注 -->
+                            <line x1="181" y1="186" x2="237" y2="186" stroke="#1E2126" stroke-width="1" stroke-dasharray="3 2"/>
+                            <text x="170" y="226" font-size="10" fill="#1E2126">b<sub>2</sub>=b<sub>1</sub>+0.1L+2t</text>
+                            <!-- 长度 L 标注 -->
+                            <line x1="295" y1="108" x2="295" y2="346" stroke="#F03752" stroke-width="1.5"/>
+                            <line x1="289" y1="108" x2="301" y2="108" stroke="#F03752" stroke-width="1.5"/>
+                            <line x1="289" y1="346" x2="301" y2="346" stroke="#F03752" stroke-width="1.5"/>
+                            <text x="304" y="232" font-size="12" font-weight="700" fill="#F03752">L &le; 9m</text>
+                            <!-- 倾角弧 -->
+                            <path d="M 270 350 A 60 60 0 0 0 235 296" fill="none" stroke="#F03752" stroke-width="2" stroke-dasharray="4 3"/>
+                            <text x="175" y="328" font-size="13" font-weight="700" fill="#F03752">65°~75°</text>
+                            <!-- 顶部伸入 -->
+                            <line x1="298" y1="78" x2="500" y2="62" stroke="#5C6470" stroke-width="1.2" stroke-dasharray="4 2"/>
+                            <text x="385" y="64" font-size="11" fill="#5C6470">顶部伸入 &ge;1m</text>
+                        </svg>
+                        <p class="cd-note">倚靠梯最大长度 &le;9m；内宽 b<sub>1</sub>&ge;280mm；外宽按公式 b<sub>2</sub>&ge;b<sub>1</sub>+0.1L+2t 计算，上限 1200mm。架设时两梯框须同时接触支撑面。</p>
+                    </div>
                 </div>
                 <div class="param-content" id="p2-l-safety">
                     <div class="safety-tip"><i class="fa-solid fa-triangle-exclamation"></i>顶部放置时，两梯框必须同时接触顶部支撑面</div>
@@ -462,8 +454,9 @@
                 <div class="param-tabs">
                     <div class="param-tab active" onclick="switchTab(this,'p3-e-len')">长高限制</div>
                     <div class="param-tab" onclick="switchTab(this,'p3-e-width')">宽度与倾角</div>
+                    <div class="param-tab tab-diagram" onclick="switchTab(this,'p3-e-diag')"><i class="fa-solid fa-image"></i> 结构示意</div>
                     <div class="param-tab" onclick="switchTab(this,'p3-e-struct')">结构要求</div>
-                    <div class="param-tab" onclick="switchTab(this,'p3-e-safety')">安全使用要点</div>
+                    <div class="param-tab" onclick="switchTab(this,'p3-e-safety')">安全要点</div>
                 </div>
                 <div class="param-content active" id="p3-e-len">
                     <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">最大延伸长度：<span class="pi-val">&le; 18 m</span></div></div>
@@ -476,6 +469,55 @@
                         &bull; L &gt; 12 m &rarr; &ge; <span class="pi-val">455 mm</span>
                     </div>
                     <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">外宽：同倚靠梯公式（b<sub>2</sub> &ge; b<sub>1</sub> + 0.1L + 2t）</div></div>
+                </div>
+                <div class="param-content" id="p3-e-diag">
+                    <div class="card-diagram">
+                        <div class="cd-caption">图3　延伸梯结构及搭接示意</div>
+                        <svg viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="延伸梯结构示意图">
+                            <!-- 地面 -->
+                            <line x1="30" y1="370" x2="650" y2="370" stroke="#5C6470" stroke-width="2"/>
+                            <text x="36" y="392" font-size="12" fill="#5C6470">地面</text>
+                            <!-- 支撑面 -->
+                            <rect x="530" y="30" width="130" height="300" fill="#F8F9FA" stroke="#E3E6EA" stroke-width="1.5"/>
+                            <text x="560" y="52" font-size="12" fill="#5C6470">支撑面</text>
+                            <!-- 底段（粗线，固定部分）-->
+                            <g transform="rotate(22 180 370)">
+                                <line x1="180" y1="240" x2="180" y2="370" stroke="#1E2126" stroke-width="6" stroke-linecap="round"/>
+                                <line x1="222" y1="240" x2="222" y2="370" stroke="#1E2126" stroke-width="6" stroke-linecap="round"/>
+                                <line x1="180" y1="270" x2="222" y2="270" stroke="#2D7EE7" stroke-width="4" stroke-linecap="round"/>
+                                <line x1="180" y1="305" x2="222" y2="305" stroke="#2D7EE7" stroke-width="4" stroke-linecap="round"/>
+                                <line x1="180" y1="340" x2="222" y2="340" stroke="#2D7EE7" stroke-width="4" stroke-linecap="round"/>
+                                <rect x="171" y="366" width="18" height="10" rx="3" fill="#F03752"/>
+                                <rect x="213" y="366" width="18" height="10" rx="3" fill="#F03752"/>
+                            </g>
+                            <!-- 延伸段（细线，可滑动部分）-->
+                            <g transform="rotate(22 180 370)">
+                                <line x1="176" y1="60" x2="176" y2="255" stroke="#1E2126" stroke-width="4" stroke-linecap="round"/>
+                                <line x1="226" y1="60" x2="226" y2="255" stroke="#1E2126" stroke-width="4" stroke-linecap="round"/>
+                                <line x1="176" y1="95" x2="226" y2="95" stroke="#2D7EE7" stroke-width="3.5" stroke-linecap="round"/>
+                                <line x1="176" y1="135" x2="226" y2="135" stroke="#2D7EE7" stroke-width="3.5" stroke-linecap="round"/>
+                                <line x1="176" y1="175" x2="226" y2="175" stroke="#2D7EE7" stroke-width="3.5" stroke-linecap="round"/>
+                                <line x1="176" y1="215" x2="226" y2="215" stroke="#2D7EE7" stroke-width="3.5" stroke-linecap="round"/>
+                            </g>
+                            <!-- 搭接区域标注 -->
+                            <rect x="158" y="213" width="86" height="58" rx="4" fill="none" stroke="#F57C00" stroke-width="1.5" stroke-dasharray="5 3" transform="rotate(22 201 242)"/>
+                            <text x="260" y="248" font-size="11" font-weight="700" fill="#F57C00">搭接区域</text>
+                            <text x="260" y="264" font-size="11" fill="#F57C00">0.83~1.75m</text>
+                            <!-- 拉绳 -->
+                            <path d="M 228 310 Q 300 280 320 90" fill="none" stroke="#F57C00" stroke-width="2" stroke-dasharray="4 2"/>
+                            <text x="326" y="88" font-size="11" fill="#F57C00">拉绳 &ge;&phi;8mm</text>
+                            <!-- 限位器 -->
+                            <rect x="166" y="232" width="28" height="8" rx="2" fill="#F03752" transform="rotate(22 180 236)"/>
+                            <text x="100" y="260" font-size="10" fill="#F03752" font-weight="600">限位器</text>
+                            <!-- 总延伸长度 -->
+                            <line x1="278" y1="82" x2="278" y2="352" stroke="#F03752" stroke-width="1.5"/>
+                            <text x="286" y="222" font-size="12" font-weight="700" fill="#F03752">总长 &le;18m</text>
+                            <!-- 内宽分级标注 -->
+                            <text x="420" y="340" font-size="11" fill="#5C6470">底段内宽：</text>
+                            <text x="420" y="356" font-size="11" fill="#2D7EE7" font-weight="600">L&le;8.5m&rarr;355mm | 8.5&lt;L&le;12m&rarr;380mm | L&gt;12m&rarr;455mm</text>
+                        </svg>
+                        <p class="cd-note">延伸梯由底段+延伸段组成，搭接量 0.83~1.75m；拉绳 &ge;&phi;8mm，极限拉力 &ge;2490N；必须装有限位器（不得仅靠滑轮定位）。只允许在地面调整长度。</p>
+                    </div>
                 </div>
                 <div class="param-content" id="p3-e-struct">
                     <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">搭接量（完全伸长时）：<span class="pi-val">0.83 ~ 1.75 m</span><div class="pi-note">按长度查表取值</div></div></div>
@@ -505,8 +547,9 @@
                 <div class="param-tabs">
                     <div class="param-tab active" onclick="switchTab(this,'p4-s-len')">长高限制</div>
                     <div class="param-tab" onclick="switchTab(this,'p4-s-width')">宽度与倾角</div>
+                    <div class="param-tab tab-diagram" onclick="switchTab(this,'p4-s-diag')"><i class="fa-solid fa-image"></i> 结构示意</div>
                     <div class="param-tab" onclick="switchTab(this,'p4-s-struct')">结构要求</div>
-                    <div class="param-tab" onclick="switchTab(this,'p4-s-safety')">安全使用要点</div>
+                    <div class="param-tab" onclick="switchTab(this,'p4-s-safety')">安全要点</div>
                 </div>
                 <div class="param-content active" id="p4-s-len">
                     <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">长度（L）：<span class="pi-val">0.9 ~ 6 m</span><div class="pi-note">不含顶部扶手 / 护栏</div></div></div>
@@ -518,6 +561,48 @@
                     <div class="formula-block">
                         &bull; 单侧攀爬：&alpha; &le; <span class="pi-val">73&deg;</span> / &beta; &le; <span class="pi-val">80&deg;</span><br>
                         &bull; 双侧攀爬：&alpha; &le; <span class="pi-val">77&deg;</span>
+                    </div>
+                </div>
+                <div class="param-content" id="p4-s-diag">
+                    <div class="card-diagram">
+                        <div class="cd-caption">图4　自立梯（人字梯）结构及横角示意</div>
+                        <svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="自立梯结构示意图">
+                            <!-- 地面 -->
+                            <line x1="50" y1="355" x2="630" y2="355" stroke="#5C6470" stroke-width="2"/>
+                            <text x="56" y="377" font-size="12" fill="#5C6470">地面</text>
+                            <!-- 左梯腿 -->
+                            <line x1="340" y1="70" x2="220" y2="355" stroke="#1E2126" stroke-width="5.5" stroke-linecap="round"/>
+                            <!-- 右梯腿 -->
+                            <line x1="340" y1="70" x2="460" y2="355" stroke="#1E2126" stroke-width="5.5" stroke-linecap="round"/>
+                            <!-- 踏棍/横撑（蓝色） -->
+                            <line x1="315" y1="132" x2="365" y2="132" stroke="#2D7EE7" stroke-width="4.5" stroke-linecap="round"/>
+                            <line x1="295" y1="188" x2="385" y2="188" stroke="#2D7EE7" stroke-width="4.5" stroke-linecap="round"/>
+                            <line x1="275" y1="244" x2="405" y2="244" stroke="#2D7EE7" stroke-width="4.5" stroke-linecap="round"/>
+                            <line x1="255" y1="300" x2="425" y2="300" stroke="#2D7EE7" stroke-width="4.5" stroke-linecap="round"/>
+                            <!-- 张开限制连杆（橙色虚线） -->
+                            <line x1="248" y1="322" x2="432" y2="322" stroke="#F57C00" stroke-width="3" stroke-dasharray="6 3"/>
+                            <text x="298" y="315" font-size="11" fill="#F57C00" font-weight="600">张开限制连杆 &le;2m（距地高度）</text>
+                            <!-- 扶手 -->
+                            <line x1="340" y1="70" x2="340" y2="28" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
+                            <text x="350" y="34" font-size="12" fill="#1E2126">扶手 &ge;450mm</text>
+                            <!-- 横角弧（左腿与水平面） -->
+                            <path d="M 270 355 A 50 50 0 0 0 241 310" fill="none" stroke="#F03752" stroke-width="2.5"/>
+                            <text x="182" y="338" font-size="14" font-weight="700" fill="#F03752">&alpha; &le;73&deg;</text>
+                            <!-- 右侧横角 -->
+                            <path d="M 410 355 A 50 50 0 0 1 439 310" fill="none" stroke="#F03752" stroke-width="2" stroke-dasharray="4 2"/>
+                            <text x="448" y="338" font-size="12" fill="#F03772">&beta; &le;80&deg;</text>
+                            <!-- 顶部警示 -->
+                            <rect x="115" y="86" width="145" height="36" rx="6" fill="#FDEEF1" stroke="#F03752" stroke-width="1"/>
+                            <text x="125" y="100" font-size="11" font-weight="700" fill="#F03752">&#9888; 踏帽/工具架</text>
+                            <text x="125" y="116" font-size="11" font-weight="700" fill="#F03752">严禁踩踏！</text>
+                            <!-- 顶部内宽标注 -->
+                            <line x1="315" y1="132" x2="365" y2="132" stroke="#2D7EE7" stroke-width="1.2"/>
+                            <text x="320" y="124" font-size="10" fill="#2D7EE7" font-weight="600">b<sub>1</sub>&ge;280</text>
+                            <!-- 长度标注 -->
+                            <line x1="340" y1="70" x2="340" y2="355" stroke="#F03752" stroke-width="1.2" stroke-dasharray="3 2"/>
+                            <text x="348" y="215" font-size="11" fill="#F03752" font-weight="600">L: 0.9~6m</text>
+                        </svg>
+                        <p class="cd-note">自立梯（人字梯）：单侧攀爬横角 &alpha;&le;73°/&beta;&le;80°，双侧 &le;77°；扶手垂直高度 &ge;450mm；张开限制连杆距地 &le;2m；顶部踏帽/工具架严禁踩踏。</p>
                     </div>
                 </div>
                 <div class="param-content" id="p4-s-struct">
@@ -547,8 +632,9 @@
                 <div class="param-tabs">
                     <div class="param-tab active" onclick="switchTab(this,'p5-t-len')">长高限制</div>
                     <div class="param-tab" onclick="switchTab(this,'p5-t-width')">宽度与倾角</div>
+                    <div class="param-tab tab-diagram" onclick="switchTab(this,'p5-t-diag')"><i class="fa-solid fa-image"></i> 结构示意</div>
                     <div class="param-tab" onclick="switchTab(this,'p5-t-struct')">结构要求</div>
-                    <div class="param-tab" onclick="switchTab(this,'p5-t-safety')">安全使用要点</div>
+                    <div class="param-tab" onclick="switchTab(this,'p5-t-safety')">安全要点</div>
                 </div>
                 <div class="param-content active" id="p5-t-len">
                     <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">完全展开最大长度：<span class="pi-val">&le; 5 m</span></div></div>
@@ -556,6 +642,65 @@
                 <div class="param-content" id="p5-t-width">
                     <div class="param-item"><div class="pi-bullet"></div><div class="pi-text"><strong>倚靠状态</strong> &rarr; 满足倚靠梯尺寸要求</div></div>
                     <div class="param-item"><div class="pi-bullet"></div><div class="pi-text"><strong>自立状态</strong> &rarr; 满足自立梯尺寸要求</div></div>
+                </div>
+                <div class="param-content" id="p5-t-diag">
+                    <div class="card-diagram">
+                        <div class="cd-caption">图5　伸缩梯（套筒式）结构示意</div>
+                        <svg viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="伸缩梯结构示意图">
+                            <!-- 地面 -->
+                            <line x1="30" y1="370" x2="650" y2="370" stroke="#5C6470" stroke-width="2"/>
+                            <text x="36" y="392" font-size="12" fill="#5C6470">地面</text>
+                            <!-- 伸缩梯 - 多节套筒（从外到内递减线宽） -->
+                            <!-- 第1节（最外层） -->
+                            <g transform="rotate(18 220 370)">
+                                <line x1="195" y1="75" x2="195" y2="370" stroke="#1E2126" stroke-width="7" stroke-linecap="round"/>
+                                <line x1="265" y1="75" x2="265" y2="370" stroke="#1E2126" stroke-width="7" stroke-linecap="round"/>
+                                <line x1="195" y1="130" x2="265" y2="130" stroke="#2D7EE7" stroke-width="5" stroke-linecap="round"/>
+                                <line x1="195" y1="200" x2="265" y2="200" stroke="#2D7EE7" stroke-width="5" stroke-linecap="round"/>
+                                <line x1="195" y1="270" x2="265" y2="270" stroke="#2D7EE7" stroke-width="5" stroke-linecap="round"/>
+                                <line x1="195" y1="340" x2="265" y2="340" stroke="#2D7EE7" stroke-width="5" stroke-linecap="round"/>
+                                <rect x="185" y="366" width="20" height="10" rx="3" fill="#F03752"/>
+                                <rect x="255" y="366" width="20" height="10" rx="3" fill="#F03752"/>
+                            </g>
+                            <!-- 第2节 -->
+                            <g transform="rotate(18 220 370)">
+                                <line x1="203" y1="75" x2="203" y2="260" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
+                                <line x1="257" y1="75" x2="257" y2="260" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
+                                <line x1="203" y1="115" x2="257" y2="115" stroke="#2D7EE7" stroke-width="3.5" stroke-linecap="round"/>
+                                <line x1="203" y1="170" x2="257" y2="170" stroke="#2D7EE7" stroke-width="3.5" stroke-linecap="round"/>
+                                <line x1="203" y1="225" x2="257" y2="225" stroke="#2D7EE7" stroke-width="3.5" stroke-linecap="round"/>
+                            </g>
+                            <!-- 第3节（最内层） -->
+                            <g transform="rotate(18 220 370)">
+                                <line x1="209" y1="75" x2="209" y2="165" stroke="#1E2126" stroke-width="3.5" stroke-linecap="round"/>
+                                <line x1="251" y1="75" x2="251" y2="165" stroke="#1E2126" stroke-width="3.5" stroke-linecap="round"/>
+                                <line x1="209" y1="105" x2="251" y2="105" stroke="#2D7EE7" stroke-width="2.5" stroke-linecap="round"/>
+                                <line x1="209" y1="140" x2="251" y2="140" stroke="#2D7EE7" stroke-width="2.5" stroke-linecap="round"/>
+                            </g>
+                            <!-- 锁定指示器标记 -->
+                            <circle cx="208" cy="168" r="8" fill="#16A34A" transform="rotate(18 220 370)"/>
+                            <text x="216" y="172" font-size="9" fill="#fff" font-weight="700" transform="rotate(18 220 370)">OK</text>
+                            <circle cx="256" cy="168" r="8" fill="#16A34A" transform="rotate(18 220 370)"/>
+                            <text x="264" y="172" font-size="9" fill="#fff" font-weight="700" transform="rotate(18 220 370)">OK</text>
+                            <text x="330" y="175" font-size="11" fill="#16A34A" font-weight="600">锁定指示器（绿色=已锁定）</text>
+                            <!-- 防挤压间隙标注 -->
+                            <line x1="207" y1="258" x2="203" y2="258" stroke="#F57C00" stroke-width="2" transform="rotate(18 220 370)"/>
+                            <text x="205" y="250" font-size="9" fill="#F57C00" transform="rotate(18 220 370)">&gt;25mm或&le;7mm</text>
+                            <!-- 节号标注 -->
+                            <text x="162" y="225" font-size="11" fill="#5C6470" transform="rotate(18 220 370)">第1节</text>
+                            <text x="174" y="168" font-size="10" fill="#5C6470" transform="rotate(18 220 370)">第2节</text>
+                            <text x="184" y="118" font-size="10" fill="#5C6470" transform="rotate(18 220 370)">第3节</text>
+                            <!-- 展开长度 -->
+                            <line x1="288" y1="84" x2="288" y2="358" stroke="#F03752" stroke-width="1.5"/>
+                            <text x="296" y="225" font-size="12" font-weight="700" fill="#F03752">完全展开 &le;5m</text>
+                            <!-- 缩合时间提示 -->
+                            <rect x="430" y="300" width="220" height="56" rx="8" fill="#FDEEF1" stroke="#F03752" stroke-width="1"/>
+                            <text x="444" y="322" font-size="12" font-weight="700" fill="#F03752">&#9888; 安全要求</text>
+                            <text x="444" y="342" font-size="11" fill="#991b1b">每节缓缩时间 &ge;1.5s</text>
+                            <text x="444" y="356" font-size="11" fill="#991b1b">间隙缝 &gt;25mm 或 &le;7mm</text>
+                        </svg>
+                        <p class="cd-note">伸缩梯为多节套筒式结构，每节须有清晰可见的锁定指示器；防挤压/剪切保护要求相邻管件间隙 &gt;25mm 或 &le;7mm；每梯段缓缩时间 &ge;1.5s。</p>
+                    </div>
                 </div>
                 <div class="param-content" id="p5-t-struct">
                     <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">锁定指示器：<span class="pi-warn">必须清晰可见</span></div></div>
@@ -587,8 +732,9 @@
                 <div class="param-tabs">
                     <div class="param-tab active" onclick="switchTab(this,'p6-a-len')">长高限制</div>
                     <div class="param-tab" onclick="switchTab(this,'p6-a-width')">宽度与倾角</div>
+                    <div class="param-tab tab-diagram" onclick="switchTab(this,'p6-a-diag')"><i class="fa-solid fa-image"></i> 结构示意</div>
                     <div class="param-tab" onclick="switchTab(this,'p6-a-struct')">结构要求</div>
-                    <div class="param-tab" onclick="switchTab(this,'p6-a-safety')">安全使用要点</div>
+                    <div class="param-tab" onclick="switchTab(this,'p6-a-safety')">安全要点</div>
                 </div>
                 <div class="param-content active" id="p6-a-len">
                     <div class="param-item"><div class="pi-bullet"></div><div class="pi-text"><strong>平台模式：</strong>台板件高度 <span class="pi-val">&le; 1 m</span></div></div>
@@ -597,6 +743,71 @@
                 <div class="param-content" id="p6-a-width">
                     <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">平台模式倾角：<span class="pi-val">65&deg; ~ 75&deg;</span></div></div>
                     <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">支座模式倾角：<span class="pi-val">65&deg; ~ 75&deg;</span></div></div>
+                </div>
+                <div class="param-content" id="p6-a-diag">
+                    <div class="card-diagram">
+                        <div class="cd-caption">图6　铰链梯多形态结构示意</div>
+                        <svg viewBox="0 0 680 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="铰链梯结构示意图">
+                            <!-- ===== 上半：平台模式 ===== -->
+                            <text x="40" y="28" font-size="13" font-weight="700" fill="#1E2126">平台模式</text>
+                            <line x1="30" y1="195" x2="330" y2="195" stroke="#E3E6EA" stroke-width="1"/>
+                            <!-- 地面 -->
+                            <line x1="40" y1="185" x2="320" y2="185" stroke="#5C6470" stroke-width="1.5"/>
+                            <text x="44" y="180" font-size="10" fill="#5C6470">地面</text>
+                            <!-- 平台模式：四边形带铰链 -->
+                            <line x1="100" y1="60" x2="100" y2="185" stroke="#1E2126" stroke-width="4.5" stroke-linecap="round"/>
+                            <line x1="260" y1="60" x2="260" y2="185" stroke="#1E2126" stroke-width="4.5" stroke-linecap="round"/>
+                            <!-- 台板件（水平平台） -->
+                            <rect x="94" y="60" width="172" height="14" rx="3" fill="#2D7EE7" stroke="#1E2126" stroke-width="1.5"/>
+                            <text x="170" y="52" font-size="10" fill="#2D7EE7" font-weight="600">台板件（平台）</text>
+                            <!-- 铰链关节（圆圈标记） -->
+                            <circle cx="100" cy="67" r="6" fill="#F57C00" stroke="#1E2126" stroke-width="1.5"/>
+                            <circle cx="260" cy="67" r="6" fill="#F57C00" stroke="#1E2126" stroke-width="1.5"/>
+                            <text x="76" y="70" font-size="9" fill="#F57C00" font-weight="600">铰链</text>
+                            <text x="268" y="70" font-size="9" fill="#F57C00" font-weight="600">铰链</text>
+                            <!-- 高度标注 -->
+                            <line x1="84" y1="60" x2="84" y2="185" stroke="#F03752" stroke-width="1.2"/>
+                            <text x="66" y="128" font-size="10" fill="#F03752" font-weight="600" writing-mode="tb">H&le;1m</text>
+                            <!-- 安装间隙 -->
+                            <line x1="100" y1="74" x2="100" y2="79" stroke="#16A34A" stroke-width="2"/>
+                            <text x="106" y="80" font-size="9" fill="#16A34A">间隙&le;5mm</text>
+
+                            <!-- ===== 下半：支座模式 ===== -->
+                            <text x="380" y="238" font-size="13" font-weight="700" fill="#1E2126">支座模式</text>
+                            <line x1="370" y1="405" x2="670" y2="405" stroke="#E3E6EA" stroke-width="1"/>
+                            <!-- 地面 -->
+                            <line x1="380" y1="395" x2="660" y2="395" stroke="#5C6470" stroke-width="1.5"/>
+                            <text x="384" y="390" font-size="10" fill="#5C6470">地面</text>
+                            <!-- 支座模式：类似直梯但底部有支座 -->
+                            <g transform="rotate(20 480 395)">
+                                <line x1="440" y1="260" x2="440" y2="395" stroke="#1E2126" stroke-width="4.5" stroke-linecap="round"/>
+                                <line x1="520" y1="260" x2="520" y2="395" stroke="#1E2126" stroke-width="4.5" stroke-linecap="round"/>
+                                <line x1="440" y1="290" x2="520" y2="290" stroke="#2D7EE7" stroke-width="3.5" stroke-linecap="round"/>
+                                <line x1="440" y1="330" x2="520" y2="330" stroke="#2D7EE7" stroke-width="3.5" stroke-linecap="round"/>
+                                <line x1="440" y1="370" x2="520" y2="370" stroke="#2D7EE7" stroke-width="3.5" stroke-linecap="round"/>
+                                <!-- 支座底 -->
+                                <rect x="430" y="391" width="20" height="10" rx="3" fill="#F03752"/>
+                                <rect x="510" y="391" width="20" height="10" rx="3" fill="#F03752"/>
+                            </g>
+                            <!-- 支座铰链 -->
+                            <circle cx="453" cy="275" r="6" fill="#F57C00" stroke="#1E2126" stroke-width="1.5" transform="rotate(20 480 395)"/>
+                            <circle cx="507" cy="275" r="6" fill="#F57C00" stroke="#1E2126" stroke-width="1.5" transform="rotate(20 480 395)"/>
+                            <!-- 伸出长度标注 -->
+                            <line x1="440" y1="260" x2="440" y2="395" stroke="#F03752" stroke-width="1.2" transform="rotate(20 480 395)"/>
+                            <text x="560" y="320" font-size="10" fill="#F03752" font-weight="600">伸出 &le;1.2m</text>
+                            <!-- 倾角 -->
+                            <path d="M 420 395 A 60 60 0 0 0 388 345" fill="none" stroke="#F03752" stroke-width="1.5" stroke-dasharray="4 2"/>
+                            <text x="348" y="372" font-size="11" fill="#F03752" font-weight="600">65°~75°</text>
+                            <!-- 外跨安装标注 -->
+                            <text x="560" y="360" font-size="10" fill="#16A34A">外跨安装每侧&le;25mm</text>
+                            <!-- 图例 -->
+                            <rect x="380" y="54" width="10" height="10" rx="2" fill="#F57C00"/>
+                            <text x="396" y="63" font-size="10" fill="#5C6470">铰链关节（须能锁定）</text>
+                            <rect x="380" y="72" width="10" height="10" rx="2" fill="#2D7EE7"/>
+                            <text x="396" y="81" font-size="10" fill="#5C6470">台板件 / 踏棍</text>
+                        </svg>
+                        <p class="cd-note">铰链梯通过多组铰链实现多种形态变换：平台模式台板件高度 &le;1m，支座模式伸出 &le;1.2m；所有铰链必须能可靠锁定；台板件内置安装间隙 &le;5mm，外跨安装每侧 &le;25mm。</p>
+                    </div>
                 </div>
                 <div class="param-content" id="p6-a-struct">
                     <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">台板件安装间隙：</div></div>
@@ -626,8 +837,8 @@
             <div class="lc-body">
                 <div class="param-tabs">
                     <div class="param-tab active" onclick="switchTab(this,'p7-c-len')">长高限制</div>
-                    <div class="param-tab" onclick="switchTab(this,'p7-c-width')">宽度与倾角</div>
-                    <div class="param-tab" onclick="switchTab(this,'p7-c-safety')">安全使用要点</div>
+                    <div class="param-tab tab-diagram" onclick="switchTab(this,'p7-c-diag')"><i class="fa-solid fa-image"></i> 形态示意</div>
+                    <div class="param-tab" onclick="switchTab(this,'p7-c-safety')">安全要点</div>
                 </div>
                 <div class="param-content active" id="p7-c-len">
                     <div class="safety-tip"><i class="fa-solid fa-circle-info"></i>无独立专属数据，取决于当前使用模式</div>
@@ -639,11 +850,81 @@
                         &bull; 铰链模式 &rarr; 铰链梯参数
                     </div>
                 </div>
-                <div class="param-content" id="p7-c-width">
-                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">同上——取决于当前使用的具体模式，参照对应梯型的宽度与倾角要求。</div></div>
+                <div class="param-content" id="p7-c-diag">
+                    <div class="card-diagram">
+                        <div class="cd-caption">图7　组合梯四种使用形态示意</div>
+                        <svg viewBox="0 0 680 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="组合梯四种使用形态示意图">
+                            <!-- 形态1：直梯/倚靠模式 -->
+                            <text x="40" y="28" font-size="12" font-weight="700" fill="#1E2126">① 直梯模式（倚靠）</text>
+                            <line x1="30" y1="105" x2="320" y2="105" stroke="#E3E6EA" stroke-width="1"/>
+                            <line x1="40" y1="95" x2="310" y2="95" stroke="#5C6470" stroke-width="1.2"/>
+                            <text x="44" y="90" font-size="9" fill="#5C6470">地面</text>
+                            <g transform="rotate(22 120 95)">
+                                <line x1="100" y1="20" x2="100" y2="95" stroke="#1E2126" stroke-width="4" stroke-linecap="round"/>
+                                <line x1="140" y1="20" x2="140" y2="95" stroke="#1E2126" stroke-width="4" stroke-linecap="round"/>
+                                <line x1="100" y1="40" x2="140" y2="40" stroke="#2D7EE7" stroke-width="3" stroke-linecap="round"/>
+                                <line x1="100" y1="60" x2="140" y2="60" stroke="#2D7EE7" stroke-width="3" stroke-linecap="round"/>
+                                <line x1="100" y1="80" x2="140" y2="80" stroke="#2D7EE7" stroke-width="3" stroke-linecap="round"/>
+                            </g>
+                            <text x="200" y="55" font-size="10" fill="#5C6470">→ 按倚靠梯参数</text>
+
+                            <!-- 形态2：延伸模式 -->
+                            <text x="380" y="28" font-size="12" font-weight="700" fill="#1E2126">② 延伸模式</text>
+                            <line x1="370" y1="105" x2="660" y2="105" stroke="#E3E6EA" stroke-width="1"/>
+                            <line x1="380" y1="95" x2="650" y2="95" stroke="#5C6470" stroke-width="1.2"/>
+                            <text x="384" y="90" font-size="9" fill="#5C6470">地面</text>
+                            <g transform="rotate(22 480 95)">
+                                <line x1="460" y1="20" x2="460" y2="95" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
+                                <line x1="500" y1="20" x2="500" y2="95" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
+                                <line x1="456" y1="20" x2="456" y2="65" stroke="#1E2126" stroke-width="3" stroke-linecap="round"/>
+                                <line x1="504" y1="20" x2="504" y2="65" stroke="#1E2126" stroke-width="3" stroke-linecap="round"/>
+                                <line x1="460" y1="40" x2="500" y2="40" stroke="#2D7EE7" stroke-width="3" stroke-linecap="round"/>
+                                <line x1="460" y1="68" x2="500" y2="68" stroke="#2D7EE7" stroke-width="2.5" stroke-linecap="round"/>
+                                <line x1="456" y1="35" x2="504" y2="35" stroke="#2D7EE7" stroke-width="2" stroke-linecap="round"/>
+                            </g>
+                            <text x="540" y="55" font-size="10" fill="#5C6470">→ 按延伸梯参数</text>
+
+                            <!-- 形态3：人字梯/自立模式 -->
+                            <text x="40" y="228" font-size="12" font-weight="700" fill="#1E2126">③ 人字梯模式（自立）</text>
+                            <line x1="30" y1="335" x2="320" y2="335" stroke="#E3E6EA" stroke-width="1"/>
+                            <line x1="40" y1="325" x2="310" y2="325" stroke="#5C6470" stroke-width="1.2"/>
+                            <text x="44" y="320" font-size="9" fill="#5C6470">地面</text>
+                            <line x1="175" y1="150" x2="120" y2="325" stroke="#1E2126" stroke-width="4.5" stroke-linecap="round"/>
+                            <line x1="175" y1="150" x2="230" y2="325" stroke="#1E2126" stroke-width="4.5" stroke-linecap="round"/>
+                            <line x1="157" y1="195" x2="193" y2="195" stroke="#2D7EE7" stroke-width="3.5" stroke-linecap="round"/>
+                            <line x1="148" y1="240" x2="202" y2="240" stroke="#2D7EE7" stroke-width="3.5" stroke-linecap="round"/>
+                            <line x1="139" y1="285" x2="211" y2="285" stroke="#2D7EE7" stroke-width="3.5" stroke-linecap="round"/>
+                            <!-- 支撑侧标红警告 -->
+                            <line x1="139" y1="285" x2="211" y2="285" stroke="#F03752" stroke-width="3" stroke-dasharray="4 2"/>
+                            <text x="220" y="290" font-size="9" fill="#F03752" font-weight="600">&#9888; 此侧禁止攀登！</text>
+                            <text x="240" y="200" font-size="10" fill="#5C6470">→ 按自立梯参数</text>
+
+                            <!-- 形态4：铰链/平台模式 -->
+                            <text x="380" y="228" font-size="12" font-weight="700" fill="#1E2126">④ 平台模式（铰链）</text>
+                            <line x1="370" y1="335" x2="660" y2="335" stroke="#E3E6EA" stroke-width="1"/>
+                            <line x1="380" y1="325" x2="650" y2="325" stroke="#5C6470" stroke-width="1.2"/>
+                            <text x="384" y="320" font-size="9" fill="#5C6470">地面</text>
+                            <line x1="440" y1="250" x2="440" y2="325" stroke="#1E2126" stroke-width="4.5" stroke-linecap="round"/>
+                            <line x1="580" y1="250" x2="580" y2="325" stroke="#1E2126" stroke-width="4.5" stroke-linecap="round"/>
+                            <!-- 平台板 -->
+                            <rect x="434" y="244" width="152" height="12" rx="3" fill="#2D7EE7" stroke="#1E2126" stroke-width="1.2"/>
+                            <!-- 铰链标记 -->
+                            <circle cx="440" cy="250" r="5" fill="#F57C00" stroke="#1E2126" stroke-width="1.2"/>
+                            <circle cx="580" cy="250" r="5" fill="#F57C00" stroke="#1E2126" stroke-width="1.2"/>
+                            <text x="590" y="280" font-size="10" fill="#5C6470">→ 按铰链梯参数</text>
+
+                            <!-- 中央说明框 -->
+                            <rect x="240" y="390" width="220" height="56" rx="8" fill="#FDEEF1" stroke="#F03752" stroke-width="1.2"/>
+                            <text x="254" y="410" font-size="11" font-weight="700" fill="#F03752">&#9888; 关键安全规则</text>
+                            <text x="254" y="426" font-size="10" fill="#991b1b">自立模式时：严禁从支撑侧梯段攀登！</text>
+                            <text x="254" y="440" font-size="10" fill="#991b1b">各模式切换前确认所有锁扣已锁定。</text>
+                        </svg>
+                        <p class="cd-note">组合梯无独立专属数据，根据当前实际使用形态分别满足对应梯型的全部参数要求。图中展示四种典型形态：直梯（倚靠）、延伸、人字梯（自立）、平台（铰链）。特别注意：自立状态下严禁从支撑侧梯段攀登。</p>
+                    </div>
                 </div>
                 <div class="param-content" id="p7-c-safety">
                     <div class="safety-tip"><i class="fa-solid fa-ban"></i><strong>自立状态使用时：严禁从其支撑侧梯段攀登！</strong></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">每次切换模式后，须检查<span class="pi-warn">所有锁扣 / 铰链已正确锁定</span></div></div>
                 </div>
             </div>
         </div>
@@ -684,7 +965,7 @@ function toggleCard(head) {
 
 function expandAll() {
     document.querySelectorAll('.ladder-card').forEach(function(c){
-        c.classList.add('open'); c.querySelector('.lc-body').classList.add('show');
+        c.classList.add('open'); c.querySelector('.lc-body').addClass('show');
     });
 }
 function collapseAll() {
@@ -719,7 +1000,6 @@ function filterCards(q) {
     cards.forEach(function(card){
         if(!q){ card.style.display=''; visibleCount++; return; }
         var keywords = (card.getAttribute('data-keywords')||'').toLowerCase();
-        // 也搜索展开内容中的文本
         var bodyText = card.textContent.toLowerCase();
         var match = keywords.indexOf(q)!==-1 || bodyText.indexOf(q)!==-1;
         card.style.display = match ? '' : 'none';
@@ -739,7 +1019,6 @@ chips.forEach(function(chip){
             if(cat==='all'){ card.style.display=''; }
             else{ card.style.display = card.getAttribute('data-cat')===cat ? '' : 'none'; }
         });
-        // 清空搜索
         searchInput.value=''; clearBtn.style.display='none';
         document.getElementById('noResult').style.display='none';
     });
