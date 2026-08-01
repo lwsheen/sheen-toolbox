@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="便携式金属梯安全检查表，依据 GB 12142-2025《便携式金属梯安全要求》对标志、结构尺寸、使用前、使用过程、定期与维护存放逐条检查并综合判定 — SHEEN Toolbox">
+    <title>便携式金属梯安全检查表 — SHEEN Toolbox</title>
+
+    <!-- 图标库（与 Toolbox 一致） -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/sheen-toolbox/common.css">
+
+    <style>
+        /* 本工具特有样式（公共组件由 common.css 提供） */
+        .meta-bar {
+            display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: flex-end;
+            background: var(--bg-page); border: 1px solid var(--border);
+            border-radius: var(--radius-md); padding: 16px 18px; margin-bottom: 16px;
+        }
+        .meta-bar .field { display: flex; flex-direction: column; gap: 4px; }
+        .meta-bar label { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
+        .meta-bar input[type=text], .meta-bar input[type=date], .meta-bar input[type=number] {
+            border: 1px solid var(--border); border-radius: var(--radius-sm);
+            padding: 7px 10px; font-size: 13px; font-family: var(--font);
+            background: #fff; min-width: 150px; outline: none;
+        }
+        .meta-bar input:focus { border-color: var(--brand-red); }
+        .field.full { flex: 1 1 100%; }
+
+        /* 梯型多选 */
+        .type-box {
+            flex: 1 1 100%; display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: flex-end;
+            background: #F8F9FA; border: 1px dashed var(--border); border-radius: var(--radius-sm); padding: 12px 14px;
+        }
+        .type-box .type-label { font-size: 12px; font-weight: 700; color: var(--brand-red); flex: 1 1 100%; }
+        .type-opt {
+            display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;
+            font-size: 13px; color: var(--text-primary);
+            border: 1px solid var(--border); border-radius: 999px; padding: 4px 12px; background: #fff;
+            transition: all 0.15s;
+        }
+        .type-opt input { width: 15px; height: 15px; accent-color: var(--brand-red); }
+        .type-opt.active { background: var(--brand-red); border-color: var(--brand-red); color: #fff; font-weight: 700; }
+
+        .tool-toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+
+        .summary-bar { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+        .stat-card {
+            flex: 1 1 100px; min-width: 86px; background: #fff; border: 1px solid var(--border);
+            border-radius: var(--radius-md); padding: 12px 14px; text-align: center;
+        }
+        .stat-card .num { font-size: 24px; font-weight: 800; line-height: 1.1; color: var(--text-primary); }
+        .stat-card .lab { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+        .stat-card.s-ok { border-color: #BBF7D0; }
+        .stat-card.s-ok .num { color: #166534; }
+        .stat-card.s-bad { border-color: #FECACA; background: #FDEEF1; }
+        .stat-card.s-bad .num { color: var(--brand-red); }
+        .stat-card.s-na { border-color: #E5E7EB; }
+        .stat-card.s-na .num { color: #9CA3AF; }
+        .stat-card.s-pending .num { color: #5C6470; }
+
+        .guide-box {
+            display: none; background: var(--brand-red-light); border-left: 4px solid var(--brand-red);
+            border-radius: var(--radius-md); padding: 16px 18px; margin-bottom: 18px;
+        }
+        .guide-box h3 { font-size: 15px; font-weight: 700; color: var(--brand-red-hover); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .guide-box h4 { font-size: 13px; font-weight: 700; color: var(--text-primary); margin: 12px 0 6px; }
+        .guide-box ul { margin: 0 0 8px; padding-left: 20px; }
+        .guide-box li { font-size: 13px; color: var(--text-primary); line-height: 1.75; }
+        .guide-box .warn {
+            background: #FFF7ED; border: 1px solid #FDBA74; border-radius: var(--radius-sm);
+            padding: 10px 14px; margin-top: 6px; font-size: 13px; color: #9A3412;
+            display: flex; align-items: flex-start; gap: 8px;
+        }
+        .guide-box .warn i { color: #F97316; margin-top: 2px; }
+
+        .check-table { table-layout: fixed; min-width: 920px; width: 100%; }
+        .check-table thead th { text-align: center; font-size: 12px; white-space: nowrap; }
+        .check-table tbody td { vertical-align: middle; padding: 6px 8px; }
+        .check-table .col-seq { width: 44px; text-align: center; font-weight: 700; color: var(--text-secondary); white-space: nowrap; }
+        .check-table .col-item { width: 130px; font-weight: 700; color: var(--text-primary); text-align: center; min-width: 100px; }
+        .check-table .col-std { text-align: left; font-size: 12px; line-height: 1.55; color: #374151; }
+        .check-table .col-result { width: 180px; min-width: 150px; }
+        .check-table .col-remark { width: 150px; min-width: 120px; }
+        .col-item .item-name { display: block; font-size: 12.5px; }
+
+        .chapter-row td {
+            background: var(--space-gray, #1E2126) !important; color: #fff !important;
+            font-weight: 700 !important; font-size: 13.5px !important; text-align: left !important;
+            padding: 9px 12px !important; letter-spacing: 0.5px;
+        }
+        .chapter-row td i { margin-right: 8px; opacity: 0.9; }
+        .section-row td {
+            background: var(--brand-red) !important; color: #fff !important;
+            font-weight: 700 !important; font-size: 13px !important; text-align: left !important;
+            padding: 8px 12px !important;
+        }
+        .section-row td i { margin-right: 8px; opacity: 0.9; }
+        .subsection-row td {
+            background: #FDEEF1 !important; color: var(--brand-red) !important;
+            font-weight: 700 !important; font-size: 12.5px !important; text-align: left !important;
+            padding: 7px 16px !important; border-left: 4px solid var(--brand-red);
+        }
+
+        .std-list { margin: 0; padding-left: 18px; }
+        .std-list li { margin-bottom: 3px; }
+
+        .remark-input {
+            width: 100%; border: 1px solid var(--border); border-radius: var(--radius-sm);
+            padding: 6px 8px; font-size: 12px; font-family: var(--font); background: #fff;
+            min-height: 38px; resize: vertical; outline: none;
+        }
+        .remark-input:focus { border-color: var(--brand-red); }
+
+        /* 测量小模块 */
+        .measure-block {
+            margin-top: 8px; padding: 8px 10px; background: #F8F9FA; border: 1px dashed var(--border);
+            border-radius: var(--radius-sm); display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center;
+            font-size: 12px; color: var(--text-primary);
+        }
+        .measure-block label { display: inline-flex; align-items: center; gap: 4px; }
+        .measure-block input {
+            width: 78px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+            padding: 4px 6px; font-size: 12px; outline: none; font-family: var(--font); background: #fff;
+        }
+        .measure-block input:focus { border-color: var(--brand-red); }
+        .measure-block .m-judge { font-weight: 700; color: var(--text-secondary); }
+        .measure-block .m-judge.over { color: var(--brand-red); }
+        .measure-block .m-thr { font-weight: 700; color: var(--tech-blue, #2D7EE7); }
+        .measure-block .m-unit { color: var(--text-secondary); }
+
+        /* 结果单选药丸（合格 / 不合格 / 不适用） */
+        .res-group { display: flex; gap: 4px; justify-content: center; flex-wrap: wrap; }
+        .res-opt {
+            display: inline-flex; align-items: center; gap: 2px;
+            border: 1px solid var(--border); border-radius: 999px;
+            padding: 3px 9px; font-size: 11.5px; cursor: pointer; color: var(--text-secondary);
+            background: #fff; user-select: none; white-space: nowrap; transition: all 0.15s;
+        }
+        .res-opt input { display: none; }
+        .res-opt:hover { border-color: #9CA3AF; }
+        .res-opt.active-ok { background: #DCFCE7; border-color: #16A34A; color: #166534; font-weight: 700; }
+        .res-opt.active-bad { background: #FEE2E2; border-color: var(--brand-red); color: var(--brand-red); font-weight: 700; }
+        .res-opt.active-na { background: #F3F4F6; border-color: #9CA3AF; color: #6B7280; font-weight: 700; }
+
+        tr.row-bad td { background: #FDEEF1 !important; }
+        tr.row-bad .col-item { color: var(--brand-red); }
+        tr.row-na td { opacity: 0.55; }
+        tr.row-na .col-item { color: #9CA3AF; }
+
+        .alert-bad {
+            display: none; background: #FDEEF1; border: 1px solid #FECACA; color: var(--brand-red);
+            border-radius: var(--radius-md); padding: 10px 14px; font-size: 13px; font-weight: 600; margin-bottom: 16px;
+        }
+
+        .verdict-card {
+            background: var(--bg-page); border: 1px solid var(--border); border-radius: var(--radius-md);
+            padding: 18px 20px; margin-top: 18px;
+        }
+        .verdict-card h3 { font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .verdict-card h4 { font-size: 13px; font-weight: 700; color: var(--text-primary); margin: 16px 0 8px; display: flex; align-items: center; gap: 6px; }
+        .verdict-opts { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+        .verdict-opt {
+            display: inline-flex; align-items: center; gap: 6px;
+            border: 1px solid var(--border); border-radius: 999px;
+            padding: 8px 16px; font-size: 13px; cursor: pointer; background: #fff; user-select: none; transition: all 0.15s;
+        }
+        .verdict-opt input { display: none; }
+        .verdict-opt.active { background: var(--brand-red); border-color: var(--brand-red); color: #fff; font-weight: 700; }
+        .verdict-card label.field-label { font-size: 12px; color: var(--text-secondary); font-weight: 600; display: block; margin-bottom: 6px; }
+        .verdict-card textarea, .verdict-card .note-input {
+            width: 100%; border: 1px solid var(--border); border-radius: var(--radius-sm);
+            padding: 10px 12px; font-size: 13px; font-family: var(--font); background: #fff;
+            min-height: 64px; resize: vertical; outline: none;
+        }
+        .verdict-card textarea:focus, .verdict-card .note-input:focus { border-color: var(--brand-red); }
+        .verdict-sign { display: flex; flex-wrap: wrap; gap: 18px 28px; margin-top: 14px; align-items: flex-end; }
+        .verdict-sign .field { display: flex; flex-direction: column; gap: 4px; }
+        .verdict-sign label { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
+        .verdict-sign input[type=text], .verdict-sign input[type=date] {
+            border: none; border-bottom: 1px solid var(--text-secondary); background: transparent;
+            min-width: 150px; padding: 4px; font-size: 13px; outline: none; font-family: var(--font); color: var(--text-primary);
+        }
+        .recheck-opt { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; user-select: none; }
+        .recheck-opt input { width: 15px; height: 15px; accent-color: var(--brand-red); }
+
+        @media print {
+            @page { size: landscape; margin: 10mm 7mm; }
+            body { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            .meta-bar { background: #fff !important; }
+            .type-box { background: #fff !important; }
+            .guide-box, .tool-toolbar, .summary-bar, .alert-bad { display: none !important; }
+            .check-table { table-layout: fixed !important; min-width: 0 !important; width: 100% !important; }
+            .check-table .col-seq { width: 4% !important; min-width: 0 !important; font-size: 9px !important; }
+            .check-table .col-item { width: 11% !important; min-width: 0 !important; font-size: 9px !important; word-wrap: break-word; }
+            .col-item .item-name { font-size: 9px !important; }
+            .check-table .col-std { width: 47% !important; font-size: 8.5px !important; line-height: 1.35 !important; }
+            .check-table .col-result { width: 16% !important; min-width: 0 !important; }
+            .check-table .col-remark { width: 22% !important; min-width: 0 !important; }
+            .check-table thead th { background: #e5e5e5 !important; color: #000 !important; position: static !important; font-size: 9px !important; padding: 3px 2px !important; }
+            .check-table tbody td { font-size: 8.5px !important; padding: 2px 3px !important; }
+            .std-list { padding-left: 12px !important; margin: 0 !important; }
+            .std-list li { margin-bottom: 1px !important; font-size: 8.5px !important; }
+            .measure-block { background: #fff !important; border: 1px solid #999 !important; font-size: 8px !important; padding: 2px 4px !important; margin-top: 2px !important; }
+            .measure-block input { width: 44px !important; font-size: 8px !important; padding: 1px 2px !important; }
+            .remark-input { border: none !important; font-size: 8.5px !important; padding: 1px 2px !important; background: transparent !important; min-height: 0 !important; }
+            .res-opt { border: 1px solid #999 !important; padding: 1px 4px !important; font-size: 8px !important; }
+            .res-opt.active-ok { background: #DCFCE7 !important; }
+            .res-opt.active-bad { background: #FEE2E2 !important; }
+            .res-opt.active-na { background: #F3F4F6 !important; }
+            .chapter-row td { background: #1E2126 !important; color: #fff !important; font-size: 10px !important; padding: 4px 6px !important; }
+            .section-row td { background: #F03752 !important; color: #fff !important; font-size: 10px !important; padding: 4px 6px !important; }
+            .subsection-row td { background: #FDEEF1 !important; color: #F03752 !important; font-size: 9px !important; padding: 3px 8px !important; }
+            .verdict-card { display: block !important; background: #fff !important; margin-top: 12px; page-break-inside: auto; }
+            .verdict-card h3, .verdict-card h4 { font-size: 11px !important; }
+            .verdict-opts { gap: 4px !important; margin-bottom: 6px !important; }
+            .verdict-opt { border: 1px solid #999 !important; padding: 2px 6px !important; font-size: 9px !important; }
+            .verdict-opt.active { background: #F03752 !important; }
+            .verdict-card textarea, .verdict-card .note-input { border: 1px solid #999 !important; font-size: 9px !important; min-height: 40px !important; }
+            .verdict-sign input { border-bottom: 1px solid #333 !important; }
+            .table-scroll { overflow: visible !important; margin: 0 !important; padding: 0 !important; }
+            .card { box-shadow: none !important; border-radius: 0 !important; border: 1.5px solid #333 !important; page-break-inside: auto !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 面包屑 -->
+    <div class="breadcrumb">
+        <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+        <span> / 便携式金属梯安全检查表</span>
+    </div>
+
+    <main class="app-container container-query">
+
+        <h1 class="page-title"><i class="fa-solid fa-clipboard-check" style="color:var(--brand-red)"></i> 便携式金属梯安全检查表</h1>
+        <p class="page-subtitle">依据 <strong>GB 12142-2025《便携式金属梯安全要求》</strong>（替代 GB 12142-2007）编制。覆盖标志、结构尺寸、使用前、使用过程、定期与维护存放全环节，含实测值自动判定与梯型适用性联动，自动汇总不合格项并支持导出 / 打印。</p>
+
+        <!-- 基本信息 -->
+        <div class="meta-bar">
+            <div class="field">
+                <label>检查日期</label>
+                <input type="date" id="checkDate">
+            </div>
+            <div class="field">
+                <label>检查人</label>
+                <input type="text" id="checkPerson" placeholder="检查人">
+            </div>
+            <div class="field">
+                <label>梯子编号 / 型号</label>
+                <input type="text" id="ladderNo" placeholder="梯子编号 / 型号">
+            </div>
+            <div class="field">
+                <label>额定载荷 (kg)</label>
+                <input type="number" id="ratedLoad" min="0" step="1" placeholder="额定载荷">
+            </div>
+            <div class="field">
+                <label>梯子总长度 (m)</label>
+                <input type="number" id="totalLen" min="0" step="0.1" placeholder="梯子总长度">
+            </div>
+            <div class="field">
+                <label>制造厂家</label>
+                <input type="text" id="manufacturer" placeholder="制造厂家">
+            </div>
+            <div class="field">
+                <label>制造年月</label>
+                <input type="text" id="madeDate" placeholder="例：2024-03">
+            </div>
+
+            <div class="type-box">
+                <span class="type-label">梯型（多选；将自动判定结构尺寸章节的适用性）</span>
+                <label class="type-opt"><input type="checkbox" name="ladderType" value="倚靠梯"> 倚靠梯</label>
+                <label class="type-opt"><input type="checkbox" name="ladderType" value="延伸梯"> 延伸梯</label>
+                <label class="type-opt"><input type="checkbox" name="ladderType" value="自立梯"> 自立梯</label>
+                <label class="type-opt"><input type="checkbox" name="ladderType" value="伸缩梯"> 伸缩梯</label>
+                <label class="type-opt"><input type="checkbox" name="ladderType" value="铰链梯"> 铰链梯</label>
+                <label class="type-opt"><input type="checkbox" name="ladderType" value="组合梯"> 组合梯</label>
+            </div>
+        </div>
+
+        <!-- 工具栏 -->
+        <div class="tool-toolbar no-print">
+            <button type="button" class="btn btn-sm btn-primary" id="excelBtn"><i class="fa-solid fa-file-excel"></i> 导出 Excel</button>
+            <button type="button" class="btn btn-sm btn-outline" id="wordBtn"><i class="fa-solid fa-file-word"></i> 导出 Word</button>
+            <button type="button" class="btn btn-sm btn-print" id="printBtn"><i class="fa-solid fa-print"></i> 打印</button>
+            <button type="button" class="btn btn-sm btn-danger" id="resetBtn"><i class="fa-solid fa-rotate-left"></i> 重置</button>
+            <button type="button" class="btn btn-sm btn-outline" id="guideBtn"><i class="fa-solid fa-book-open"></i> 使用说明</button>
+        </div>
+
+        <!-- 实时统计 -->
+        <div class="summary-bar no-print">
+            <div class="stat-card"><div class="num" id="stTotal">0</div><div class="lab">检查项总数</div></div>
+            <div class="stat-card s-ok"><div class="num" id="stOk">0</div><div class="lab">合格</div></div>
+            <div class="stat-card s-bad"><div class="num" id="stBad">0</div><div class="lab">不合格</div></div>
+            <div class="stat-card s-na"><div class="num" id="stNa">0</div><div class="lab">不适用</div></div>
+            <div class="stat-card s-pending"><div class="num" id="stPend">0</div><div class="lab">待检</div></div>
+        </div>
+
+        <div class="alert-bad" id="alertBad"><i class="fa-solid fa-triangle-exclamation"></i> <span id="alertText"></span></div>
+
+        <!-- 使用说明 -->
+        <div class="guide-box" id="guideBox">
+            <h3><i class="fa-solid fa-circle-info"></i> 使用说明</h3>
+            <ul>
+                <li>本表适用于各类便携式金属梯（倚靠梯、延伸梯、自立梯、伸缩梯、铰链梯、组合梯）的投入使用前、使用前、使用过程、定期与维护存放检查。</li>
+                <li>结果判定三态：<b>合格</b>（符合标准）、<b>不合格</b>（不符合，须处置）、<b>不适用</b>（该梯型无此项要求）。</li>
+                <li>勾选顶部「梯型」后，结构尺寸章节中不适用的梯型项目将自动标记为「不适用」。</li>
+                <li>带「实测值」的项目输入数值后，系统按 GB 12142-2025 限值自动判定，超范围将自动标红「不合格」。</li>
+            </ul>
+            <div class="warn">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span><b>安全提示：</b>金属梯不应在可能接触带电线路的场合使用；严禁侧向承载、踩踏顶帽 / 工具架 / 支撑侧横撑；有人在上时不得挪动梯子；损坏梯子须作明显标识后停用，修复或报废。</span>
+            </div>
+        </div>
+
+        <!-- 检查表 -->
+        <div class="card">
+            <div class="table-scroll">
+                <table class="data-table check-table" id="checkTable">
+                    <thead>
+                        <tr>
+                            <th class="col-seq">序号</th>
+                            <th class="col-item">检查项目</th>
+                            <th class="col-std">合格标准 / 检查要点（GB 12142-2025）</th>
+                            <th class="col-result">检查结果</th>
+                            <th class="col-remark">备注</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- 动态生成 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 检查结论 -->
+        <div class="verdict-card">
+            <h3><i class="fa-solid fa-clipboard-list"></i> 检查结论（GB 12142-2025）</h3>
+
+            <div class="verdict-opts" id="verdictOpts" style="margin-top:6px;">
+                <label class="verdict-opt" data-v="可以继续使用"><input type="radio" name="verdict" value="可以继续使用"> 可以继续使用</label>
+                <label class="verdict-opt" data-v="需修复后使用"><input type="radio" name="verdict" value="需修复后使用"> 需修复后使用</label>
+                <label class="verdict-opt" data-v="应报废"><input type="radio" name="verdict" value="应报废"> 应报废</label>
+            </div>
+
+            <h4><i class="fa-solid fa-circle-exclamation"></i> 不合格项描述及处理建议</h4>
+            <textarea id="nonconform" placeholder="系统将自动汇总不合格项；亦可补充处理 / 整改 / 停用措施及责任人……"></textarea>
+
+            <h4><i class="fa-solid fa-signature"></i> 签字确认</h4>
+            <div class="verdict-sign">
+                <div class="field"><label>检查人签字</label><input type="text" id="checkSign" placeholder="检查人签字"></div>
+                <div class="field"><label>日期</label><input type="date" id="checkSignDate"></div>
+                <div class="field"><label>复核人签字</label><input type="text" id="reviewSign" placeholder="复核人签字"></div>
+                <div class="field"><label>日期</label><input type="date" id="reviewSignDate"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="sheen-footer">
+        <i class="fa-solid fa-shield-halved"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 便携式金属梯安全检查表
+        <span class="site-stat">访问 <b><span id="busuanzi_value_site_pv">—</span></b></span>
+    </footer>
+
+    <div class="print-time" id="printTime"></div>
+
+    <script>
+    (function () {
+        'use strict';
+
+        // ===== 打印时间戳（UTC+8 北京时间） + 默认日期 =====
+        (function () {
+            var d = new Date();
+            var utc = d.getTime() + d.getTimezoneOffset() * 60000;
+            var cn = new Date(utc + 8 * 3600000);
+            var p = function (n) { return (n < 10 ? '0' : '') + n; };
+            var s = cn.getFullYear() + '-' + p(cn.getMonth() + 1) + '-' + p(cn.getDate()) +
+                    ' ' + p(cn.getHours()) + ':' + p(cn.getMinutes());
+            var el = document.getElementById('printTime');
+            if (el) el.textContent = '打印时间：' + s + '（北京时间）';
+            var cd = document.getElementById('checkDate');
+            if (cd && !cd.value) cd.value = cn.getFullYear() + '-' + p(cn.getMonth() + 1) + '-' + p(cn.getDate());
+        })();
+
+        var tbody = document.getElementById('tableBody');
+
+        // ===== 选项定义 =====
+        var OK  = { label: '合格', level: 'ok' };
+        var BAD = { label: '不合格', level: 'bad' };
+        var NA  = { label: '不适用', level: 'na' };
+        function O(extra) { // 合格/不合格
+            return [OK, BAD].concat(extra || []);
+        }
+        function ONA() { // 合格/不合格/不适用
+            return [OK, BAD, NA];
+        }
+
+        // ===== 章节 / 分组 / 检查项数据 =====
+        // type: chapter | section | subsection | item
+        var BLOCKS = [
+            // ===== 二、投入使用前检查 =====
+            { type: 'chapter', title: '二、投入使用前检查（购置接收时进行全面检查）', icon: 'fa-box-open' },
+
+            { type: 'section', title: '2.1 标志检查', icon: 'fa-tags' },
+            { type: 'item', seq: '2.1.1', name: '产品数据信息标志', appl: 'all', std: ['应包含：型号 / 名称、额定载荷、梯子总长度、最高站立面高度、制造商、制造年月、执行标准。'], options: O() },
+            { type: 'item', seq: '2.1.2', name: '倚靠梯最高站立处标志', appl: 'all', std: ['永久性危险警告标志，如"危险：不要站在此踏棍上及以上位置"。'], options: O() },
+            { type: 'item', seq: '2.1.3', name: '延伸梯段警示标志', appl: 'all', std: ['未装永久性锁定装置的延伸梯段应有"注意：本梯段不允许卸下单独使用"标志。'], options: ONA() },
+            { type: 'item', seq: '2.1.4', name: '工具架警示标志', appl: 'all', std: ['永久性"危险：不可站立或坐在此处"标志。'], options: O() },
+            { type: 'item', seq: '2.1.5', name: '触电危险警示标志', appl: 'all', std: ['"注意：防止触电，金属梯不应在可能与电路接触的场合使用"或等效图形标志。'], options: O() },
+            { type: 'item', seq: '2.1.6', name: '夹手风险警示标志', appl: 'all', std: ['有夹手风险的位置应有"小心夹手"或等效图形标志。'], options: ONA() },
+            { type: 'item', seq: '2.1.7', name: '标志清晰可见性', appl: 'all', std: ['标志清晰、明显可见，设置在梯框外侧或踏棍 / 踏板正面。'], options: O() },
+            { type: 'item', seq: '2.1.8', name: '标志耐久性', appl: 'all', std: ['伸缩 / 折叠过程中标志不被损坏。'], options: O() },
+
+            { type: 'section', title: '2.2 一般要求检查', icon: 'fa-sliders' },
+            { type: 'item', seq: '2.2.1', name: '额定载荷', appl: 'all', std: ['额定承重量 ≥ 100 kg。'], options: O(), measure: { type: 'ge', unit: 'kg', min: 100 } },
+            { type: 'item', seq: '2.2.2', name: '表面质量', appl: 'all', std: ['可触及表面无锐边、毛刺及其他结构缺陷。'], options: O() },
+            { type: 'item', seq: '2.2.3', name: '防腐蚀处理', appl: 'all', std: ['易腐蚀材料制成的结构件应进行表面防腐蚀处理。'], options: O() },
+            { type: 'item', seq: '2.2.4', name: '防滑梯脚', appl: 'all', std: ['梯框底部安装防滑梯脚。'], options: O() },
+            { type: 'item', seq: '2.2.5', name: '踏棍 / 踏板上表面防滑', appl: 'all', std: ['上表面防滑（凹凸波纹形、锯齿形、压花或防滑材料覆盖）。'], options: O() },
+
+            { type: 'section', title: '2.3 结构尺寸检查', icon: 'fa-ruler-combined' },
+            { type: 'subsection', title: '2.3.1 通用结构尺寸（所有梯型）', icon: 'fa-grip-lines' },
+            { type: 'item', seq: '2.3.1.1', name: '相邻踏棍 / 踏板间距', appl: 'all', std: ['230 mm ~ 308 mm，公差 ±2 mm。'], options: O(), measure: { type: 'range', unit: 'mm', min: 230, max: 308 } },
+            { type: 'item', seq: '2.3.1.2', name: '第一级踏棍 / 踏板到底端距离', appl: 'all', std: ['≥ 0.5×间距 且 ≤ 间距 + 15 mm（间距见 2.3.1.1）。'], options: O(), measure: { type: 'value', unit: 'mm' } },
+            { type: 'item', seq: '2.3.1.3', name: '踏板前后深度', appl: 'all', std: ['≥ 80 mm。'], options: O(), measure: { type: 'ge', unit: 'mm', min: 80 } },
+            { type: 'item', seq: '2.3.1.4', name: '踏棍前后深度', appl: 'all', std: ['≥ 20 mm。'], options: O(), measure: { type: 'ge', unit: 'mm', min: 20 } },
+            { type: 'item', seq: '2.3.1.5', name: '圆形踏棍直径', appl: 'all', std: ['≥ 25 mm。'], options: O(), measure: { type: 'ge', unit: 'mm', min: 25 } },
+
+            { type: 'subsection', title: '2.3.2 倚靠梯 / 延伸梯结构尺寸', icon: 'fa-arrows-up-down', appl: ['倚靠梯', '延伸梯'] },
+            { type: 'item', seq: '2.3.2.1', name: '倚靠梯最大长度', appl: ['倚靠梯', '延伸梯'], std: ['≤ 9 m。'], options: ONA(), measure: { type: 'le', unit: 'm', min: 0, max: 9 } },
+            { type: 'item', seq: '2.3.2.2', name: '延伸梯最大延伸长度', appl: ['倚靠梯', '延伸梯'], std: ['≤ 18 m。'], options: ONA(), measure: { type: 'le', unit: 'm', min: 0, max: 18 } },
+            { type: 'item', seq: '2.3.2.3', name: '倚靠梯内宽', appl: ['倚靠梯', '延伸梯'], std: ['≥ 280 mm。'], options: ONA(), measure: { type: 'ge', unit: 'mm', min: 280 } },
+            { type: 'item', seq: '2.3.2.4', name: '倚靠梯外宽', appl: ['倚靠梯', '延伸梯'], std: ['长度 > 3m 时：b₂ ≥ b₁ + 0.1×L + 2×t（超 1200 mm 取 1200 mm）。'], options: ONA(), measure: { type: 'formula', unit: 'mm' } },
+            { type: 'item', seq: '2.3.2.5', name: '延伸梯底段内宽', appl: ['倚靠梯', '延伸梯'], std: ['L≤8.5m → ≥355mm；8.5<L≤12m → ≥380mm；L>12m → ≥455mm。'], options: ONA(), measure: { type: 'value', unit: 'mm' } },
+            { type: 'item', seq: '2.3.2.6', name: '延伸梯搭接量', appl: ['倚靠梯', '延伸梯'], std: ['完全伸长时符合标准表 2 要求。'], options: ONA(), measure: { type: 'value', unit: 'm' } },
+            { type: 'item', seq: '2.3.2.7', name: '延伸梯限位器', appl: ['倚靠梯', '延伸梯'], std: ['装有限位器，不仅靠滑轮定位。'], options: ONA() },
+            { type: 'item', seq: '2.3.2.8', name: '延伸梯导向装置', appl: ['倚靠梯', '延伸梯'], std: ['导向装置沿梯框长度 ≥ 32 mm。'], options: ONA(), measure: { type: 'ge', unit: 'mm', min: 32 } },
+            { type: 'item', seq: '2.3.2.9', name: '延伸梯拉绳直径', appl: ['倚靠梯', '延伸梯'], std: ['≥ 8 mm。'], options: ONA(), measure: { type: 'ge', unit: 'mm', min: 8 } },
+            { type: 'item', seq: '2.3.2.10', name: '延伸梯拉绳极限拉力', appl: ['倚靠梯', '延伸梯'], std: ['≥ 2 490 N。'], options: ONA(), measure: { type: 'ge', unit: 'N', min: 2490 } },
+
+            { type: 'subsection', title: '2.3.3 自立梯结构尺寸', icon: 'fa-person-walking', appl: ['自立梯'] },
+            { type: 'item', seq: '2.3.3.1', name: '自立梯长度', appl: ['自立梯'], std: ['0.9 m ~ 6 m。'], options: ONA(), measure: { type: 'range', unit: 'm', min: 0.9, max: 6 } },
+            { type: 'item', seq: '2.3.3.2', name: '顶部内宽', appl: ['自立梯'], std: ['≥ 280 mm。'], options: ONA(), measure: { type: 'ge', unit: 'mm', min: 280 } },
+            { type: 'item', seq: '2.3.3.3', name: '外宽', appl: ['自立梯'], std: ['b₂ ≥ b₁ + 0.1×L + 2×t。'], options: ONA(), measure: { type: 'formula', unit: 'mm' } },
+            { type: 'item', seq: '2.3.3.4', name: '攀爬侧倾角（单侧）', appl: ['自立梯'], std: ['α ≤ 73°。'], options: ONA(), measure: { type: 'le', unit: '°', min: 0, max: 73 } },
+            { type: 'item', seq: '2.3.3.5', name: '支撑侧倾角（单侧）', appl: ['自立梯'], std: ['β ≤ 80°。'], options: ONA(), measure: { type: 'le', unit: '°', min: 0, max: 80 } },
+            { type: 'item', seq: '2.3.3.6', name: '双侧攀爬倾角', appl: ['自立梯'], std: ['α ≤ 77°。'], options: ONA(), measure: { type: 'le', unit: '°', min: 0, max: 77 } },
+            { type: 'item', seq: '2.3.3.7', name: '扶手高度', appl: ['自立梯'], std: ['顶部可踩踏时，扶手垂直高度 ≥ 450 mm。'], options: ONA(), measure: { type: 'ge', unit: 'mm', min: 450 } },
+            { type: 'item', seq: '2.3.3.8', name: '禁止踩踏措施', appl: ['自立梯'], std: ['顶部不允许踩踏时，有警示标志或镂空等措施。'], options: ONA() },
+            { type: 'item', seq: '2.3.3.9', name: '张开限制 / 锁定功能', appl: ['自立梯'], std: ['有张开限制或锁定功能。'], options: ONA() },
+            { type: 'item', seq: '2.3.3.10', name: '张开限制连杆高度', appl: ['自立梯'], std: ['距底部支撑面 ≤ 2 m。'], options: ONA(), measure: { type: 'le', unit: 'm', min: 0, max: 2 } },
+
+            { type: 'subsection', title: '2.3.4 伸缩梯结构尺寸', icon: 'fa-up-right-and-down-left-from-center', appl: ['伸缩梯'] },
+            { type: 'item', seq: '2.3.4.1', name: '完全展开最大长度', appl: ['伸缩梯'], std: ['≤ 5 m。'], options: ONA() },
+            { type: 'item', seq: '2.3.4.2', name: '锁定机构', appl: ['伸缩梯'], std: ['每个伸缩踏棍 / 踏板梯段都有一对锁定机构。'], options: ONA() },
+            { type: 'item', seq: '2.3.4.3', name: '锁定指示器', appl: ['伸缩梯'], std: ['能清晰显示锁定或解锁状态。'], options: ONA() },
+            { type: 'item', seq: '2.3.4.4', name: '防挤压 / 剪切措施', appl: ['伸缩梯'], std: ['间隔装置相对距离 >25mm 或 ≤7mm；或缓降收合 ≥1.5s / 段。'], options: ONA() },
+
+            { type: 'subsection', title: '2.3.5 铰链梯结构尺寸', icon: 'fa-rotate', appl: ['铰链梯'] },
+            { type: 'item', seq: '2.3.5.1', name: '平台模式台板件高度', appl: ['铰链梯'], std: ['≤ 1 000 mm。'], options: ONA(), measure: { type: 'le', unit: 'mm', min: 0, max: 1000 } },
+            { type: 'item', seq: '2.3.5.2', name: '平台模式伸出量', appl: ['铰链梯'], std: ['≤ 50 mm。'], options: ONA(), measure: { type: 'le', unit: 'mm', min: 0, max: 50 } },
+            { type: 'item', seq: '2.3.5.3', name: '平台模式踏板梯倾角', appl: ['铰链梯'], std: ['65° ~ 75°。'], options: ONA(), measure: { type: 'range', unit: '°', min: 65, max: 75 } },
+            { type: 'item', seq: '2.3.5.4', name: '平台模式踏棍梯倾角', appl: ['铰链梯'], std: ['65° ~ 70°。'], options: ONA(), measure: { type: 'range', unit: '°', min: 65, max: 70 } },
+            { type: 'item', seq: '2.3.5.5', name: '支座模式伸出长度', appl: ['铰链梯'], std: ['≤ 1 200 mm。'], options: ONA(), measure: { type: 'le', unit: 'mm', min: 0, max: 1200 } },
+            { type: 'item', seq: '2.3.5.6', name: '支座模式倾角', appl: ['铰链梯'], std: ['65° ~ 75°。'], options: ONA(), measure: { type: 'range', unit: '°', min: 65, max: 75 } },
+            { type: 'item', seq: '2.3.5.7', name: '铰链锁定', appl: ['铰链梯'], std: ['所有铰链能锁定。'], options: ONA() },
+            { type: 'item', seq: '2.3.5.8', name: '台板件固定', appl: ['铰链梯'], std: ['牢固固定，防意外移动。'], options: ONA() },
+            { type: 'item', seq: '2.3.5.9', name: '台板件内置间隙', appl: ['铰链梯'], std: ['台板件与梯框间隙 ≤ 5 mm。'], options: ONA(), measure: { type: 'le', unit: 'mm', min: 0, max: 5 } },
+            { type: 'item', seq: '2.3.5.10', name: '台板件外跨伸出量', appl: ['铰链梯'], std: ['每侧伸出量 ≤ 25 mm。'], options: ONA(), measure: { type: 'le', unit: 'mm', min: 0, max: 25 } },
+
+            // ===== 三、使用前检查 =====
+            { type: 'chapter', title: '三、使用前检查（每次使用前）', icon: 'fa-clipboard-list' },
+            { type: 'item', seq: '3.1', name: '梯框外观', appl: 'all', std: ['无凹陷、弯曲、裂纹、锈蚀。'], options: O() },
+            { type: 'item', seq: '3.2', name: '踏棍 / 踏板 / 平台', appl: 'all', std: ['无过度变形，与梯框连接牢固。'], options: O() },
+            { type: 'item', seq: '3.3', name: '金属配件', appl: 'all', std: ['无损坏、松动、缺失。'], options: O() },
+            { type: 'item', seq: '3.4', name: '锁定装置', appl: 'all', std: ['功能正常，啮合到位。'], options: ONA() },
+            { type: 'item', seq: '3.5', name: '铰链', appl: 'all', std: ['功能正常，能可靠锁定。'], options: ONA() },
+            { type: 'item', seq: '3.6', name: '伸缩梯锁定指示器', appl: 'all', std: ['显示锁定状态。'], options: ONA() },
+            { type: 'item', seq: '3.7', name: '拉绳和滑轮', appl: 'all', std: ['无磨损、缺陷，滑动正常。'], options: ONA() },
+            { type: 'item', seq: '3.8', name: '防滑梯脚', appl: 'all', std: ['无过度磨损、损坏或缺失。'], options: O() },
+            { type: 'item', seq: '3.9', name: '攀登 / 抓握表面', appl: 'all', std: ['无油、蜡等易打滑材料。'], options: O() },
+            { type: 'item', seq: '3.10', name: '连接螺栓 / 铆钉', appl: 'all', std: ['无缺失，连接无松动。'], options: O() },
+            { type: 'item', seq: '3.11', name: '可转动连接及滑动表面', appl: 'all', std: ['润滑良好。'], options: O() },
+
+            // ===== 四、使用过程安全要求检查 =====
+            { type: 'chapter', title: '四、使用过程安全要求检查', icon: 'fa-triangle-exclamation' },
+            { type: 'item', seq: '4.1', name: '额定载荷', appl: 'all', std: ['不超过梯子额定载荷。'], options: O() },
+            { type: 'item', seq: '4.2', name: '单人使用', appl: 'all', std: ['除专门设计外，不应多人同时攀登。'], options: O() },
+            { type: 'item', seq: '4.3', name: '架设倾角（倚靠状态）', appl: 'all', std: ['与水平面倾斜 65° ~ 75°。'], options: O() },
+            { type: 'item', seq: '4.4', name: '底部支撑', appl: 'all', std: ['放置在牢固水平支撑面上。'], options: O() },
+            { type: 'item', seq: '4.5', name: '顶部支撑（倚靠式）', appl: 'all', std: ['两梯框同时接触支撑面。'], options: ONA() },
+            { type: 'item', seq: '4.6', name: '自立梯张开', appl: 'all', std: ['完全张开 / 锁定，各梯脚接触稳固水平面。'], options: ONA() },
+            { type: 'item', seq: '4.7', name: '伸缩梯锁定', appl: 'all', std: ['每个伸缩梯段正常锁定。'], options: ONA() },
+            { type: 'item', seq: '4.8', name: '铰链梯锁定', appl: 'all', std: ['所有铰链处于锁定状态。'], options: ONA() },
+            { type: 'item', seq: '4.9', name: '最高站立面', appl: 'all', std: ['不站在高于标志的踏棍 / 踏板 / 平台上。'], options: O() },
+            { type: 'item', seq: '4.10', name: '禁止踩踏位置', appl: 'all', std: ['不踩踏顶帽、工具架、支撑侧横撑。'], options: O() },
+            { type: 'item', seq: '4.11', name: '攀登方向', appl: 'all', std: ['面向梯子，三点接触（双手双脚四点中的三点）。'], options: O() },
+            { type: 'item', seq: '4.12', name: '侧向承载', appl: 'all', std: ['不准许侧向承载。'], options: O() },
+            { type: 'item', seq: '4.13', name: '顶部伸出长度', appl: 'all', std: ['进入高处平面时，梯子伸出进入面上方 ≥ 1 m。'], options: ONA() },
+            { type: 'item', seq: '4.14', name: '电气安全', appl: 'all', std: ['金属梯不在可能接触带电线路的场合使用。'], options: O() },
+            { type: 'item', seq: '4.15', name: '非正常使用', appl: 'all', std: ['不作支撑物、滑道、跳板、平台等非预定用途。'], options: O() },
+            { type: 'item', seq: '4.16', name: '挪动梯子', appl: 'all', std: ['有人在上时不得挪动。'], options: O() },
+
+            // ===== 五、定期全面检查 =====
+            { type: 'chapter', title: '五、定期全面检查（定期进行）', icon: 'fa-calendar-check' },
+            { type: 'item', seq: '5.1', name: '翻倒 / 冲击损坏', appl: 'all', std: ['梯框凹陷 / 弯曲、踏棍 / 踏板过度变形、配件连接牢固度。'], options: O() },
+            { type: 'item', seq: '5.2', name: '高温接触后检查', appl: 'all', std: ['接触高温后按标准进行强度试验。'], options: ONA() },
+            { type: 'item', seq: '5.3', name: '腐蚀性物质接触', appl: 'all', std: ['接触酸碱物质后咨询厂家或有资质人员。'], options: ONA() },
+            { type: 'item', seq: '5.4', name: '绳索和滑轮', appl: 'all', std: ['定期检查，磨损或有缺陷及时更换。'], options: ONA() },
+            { type: 'item', seq: '5.5', name: '防滑梯脚', appl: 'all', std: ['过度磨损 / 损坏 / 缺失时及时更换。'], options: O() },
+            { type: 'item', seq: '5.6', name: '连接件', appl: 'all', std: ['螺栓 / 铆钉缺失或松动须修复后方可使用。'], options: O() },
+            { type: 'item', seq: '5.7', name: '润滑', appl: 'all', std: ['可转动连接及踏棍锁滑动表面经常润滑。'], options: O() },
+
+            // ===== 六、维护与存放检查 =====
+            { type: 'chapter', title: '六、维护与存放检查', icon: 'fa-screwdriver-wrench' },
+            { type: 'item', seq: '6.1', name: '损坏梯子处置', appl: 'all', std: ['损坏梯子作明显标识后停止使用，修复或报废。'], options: O() },
+            { type: 'item', seq: '6.2', name: '运输要求', appl: 'all', std: ['不抛掷、不踩踏、防潮防雨淋、不与腐蚀品同包装。'], options: O() },
+            { type: 'item', seq: '6.3', name: '存放环境', appl: 'all', std: ['干燥、通风良好。'], options: O() },
+            { type: 'item', seq: '6.4', name: '伸缩 / 铰链梯存放', appl: 'all', std: ['不与粉体物质混合存放。'], options: ONA() }
+        ];
+
+        // 索引
+        var ITEM_BY_SEQ = {};
+        for (var b = 0; b < BLOCKS.length; b++) {
+            if (BLOCKS[b].type === 'item') ITEM_BY_SEQ[BLOCKS[b].seq] = BLOCKS[b];
+        }
+
+        function esc(s) {
+            return String(s == null ? '' : s)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+        function stdHTML(list) {
+            var h = '<ol class="std-list">';
+            for (var i = 0; i < list.length; i++) h += '<li>' + esc(list[i]) + '</li>';
+            h += '</ol>';
+            return h;
+        }
+        function levelCls(level) {
+            return level === 'ok' ? 'active-ok' : (level === 'bad' ? 'active-bad' : 'active-na');
+        }
+        function resGroupHTML(item) {
+            var html = '<div class="res-group">';
+            for (var i = 0; i < item.options.length; i++) {
+                var r = item.options[i];
+                html += '<label class="res-opt" data-cls="' + levelCls(r.level) + '">' +
+                        '<input type="radio" name="res_' + esc(item.seq) + '" value="' + esc(r.label) + '">' +
+                        esc(r.label) + '</label>';
+            }
+            html += '</div>';
+            return html;
+        }
+        function measureHTML(item) {
+            var m = item.measure;
+            if (!m) return '';
+            if (m.type === 'formula') {
+                return '<div class="measure-block">' +
+                    '<label>内宽 b₁ <input type="number" class="m-b1" step="0.1" min="0" placeholder="b₁(mm)"></label>' +
+                    '<label>梯长 L <input type="number" class="m-l" step="0.1" min="0" placeholder="L(mm)"></label>' +
+                    '<label>梯框厚 t <input type="number" class="m-t" step="0.1" min="0" placeholder="t(mm)"></label>' +
+                    '<label>外宽 b₂ <input type="number" class="m-b2" step="0.1" min="0" placeholder="b₂(mm)"></label>' +
+                    '<span class="m-thr">要求 b₂≥<span class="m-thr-val">—</span> mm</span>' +
+                    '<span class="m-judge"></span>' +
+                    '</div>';
+            }
+            var ph = '实测值';
+            if (m.type === 'range') ph = m.min + '~' + m.max;
+            else if (m.type === 'ge') ph = '≥' + m.min;
+            else if (m.type === 'le') ph = '≤' + m.max;
+            return '<div class="measure-block">' +
+                '<label>实测值 <input type="number" class="m-val" step="0.01" min="0" placeholder="' + esc(ph) + '"></label>' +
+                '<span class="m-unit">' + esc(m.unit) + '</span>' +
+                '<span>限值 ' + esc(ph) + '</span>' +
+                '<span class="m-judge"></span>' +
+                '</div>';
+        }
+        function itemRowHTML(item) {
+            return '<tr class="item-row" data-seq="' + esc(item.seq) + '" data-appl="' + esc(JSON.stringify(item.appl)) + '">' +
+                   '<td class="col-seq">' + esc(item.seq) + '</td>' +
+                   '<td class="col-item"><span class="item-name">' + esc(item.name) + '</span></td>' +
+                   '<td class="col-std">' + stdHTML(item.std) + measureHTML(item) + '</td>' +
+                   '<td class="col-result">' + resGroupHTML(item) + '</td>' +
+                   '<td class="col-remark"><textarea class="remark-input" placeholder="备注"></textarea></td>' +
+                   '</tr>';
+        }
+
+        function renderAll() {
+            var html = '';
+            for (var i = 0; i < BLOCKS.length; i++) {
+                var blk = BLOCKS[i];
+                if (blk.type === 'chapter') {
+                    html += '<tr class="chapter-row"><td colspan="5"><i class="fa-solid ' + esc(blk.icon || 'fa-book') + '"></i>' + esc(blk.title) + '</td></tr>';
+                } else if (blk.type === 'section') {
+                    html += '<tr class="section-row"><td colspan="5"><i class="fa-solid ' + esc(blk.icon || 'fa-list') + '"></i>' + esc(blk.title) + '</td></tr>';
+                } else if (blk.type === 'subsection') {
+                    html += '<tr class="subsection-row"><td colspan="5"><i class="fa-solid ' + esc(blk.icon || 'fa-angle-right') + '"></i>' + esc(blk.title) + '</td></tr>';
+                } else {
+                    html += itemRowHTML(blk);
+                }
+            }
+            tbody.innerHTML = html;
+            bindRows();
+            updateSummary();
+        }
+
+        // ===== 选择结果 =====
+        function selectResult(row, label) {
+            var opts = row.querySelectorAll('.res-opt');
+            for (var k = 0; k < opts.length; k++) {
+                var inp = opts[k].querySelector('input');
+                if (inp.value === label) {
+                    if (!inp.checked) { inp.checked = true; inp.dispatchEvent(new Event('change')); }
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // ===== 绑定交互 =====
+        function bindRows() {
+            var rows = tbody.querySelectorAll('.item-row');
+            for (var r = 0; r < rows.length; r++) {
+                var tr = rows[r];
+                var opts = tr.querySelectorAll('.res-opt');
+                for (var o = 0; o < opts.length; o++) {
+                    (function (opt, row) {
+                        var input = opt.querySelector('input');
+                        input.addEventListener('change', function () {
+                            var group = opt.parentNode.querySelectorAll('.res-opt');
+                            for (var g = 0; g < group.length; g++) group[g].classList.remove('active-ok', 'active-warn', 'active-bad', 'active-na');
+                            opt.classList.add(opt.getAttribute('data-cls'));
+                            var val = input.value;
+                            row.classList.remove('row-bad', 'row-na');
+                            if (val === '不合格') row.classList.add('row-bad');
+                            else if (val === '不适用') row.classList.add('row-na');
+                            updateSummary();
+                        });
+                    })(opts[o], tr);
+                }
+                // 测量联动
+                bindMeasure(tr);
+            }
+        }
+
+        function bindMeasure(tr) {
+            var item = ITEM_BY_SEQ[tr.getAttribute('data-seq')];
+            var m = item.measure;
+            if (!m) return;
+            if (m.type === 'formula') {
+                var b1 = tr.querySelector('.m-b1'), L = tr.querySelector('.m-l'), t = tr.querySelector('.m-t'), b2 = tr.querySelector('.m-b2');
+                var thrVal = tr.querySelector('.m-thr-val');
+                var judge = tr.querySelector('.m-judge');
+                function calcFormula() {
+                    var b1v = parseFloat(b1.value), Lv = parseFloat(L.value), tv = parseFloat(t.value), b2v = parseFloat(b2.value);
+                    if (!isNaN(b1v) && !isNaN(Lv) && !isNaN(tv)) {
+                        var thr = Math.min(b1v + 0.1 * Lv + 2 * tv, 1200);
+                        thrVal.textContent = (Math.round(thr * 10) / 10);
+                        if (!isNaN(b2v)) {
+                            if (b2v < thr - 1e-6) {
+                                judge.textContent = '外宽不足';
+                                judge.className = 'm-judge over';
+                                selectResult(tr, '不合格');
+                            } else {
+                                judge.textContent = '满足';
+                                judge.className = 'm-judge';
+                            }
+                        } else { judge.textContent = ''; judge.className = 'm-judge'; }
+                    } else {
+                        thrVal.textContent = '—';
+                        judge.textContent = '';
+                        judge.className = 'm-judge';
+                    }
+                }
+                [b1, L, t, b2].forEach(function (el) { el.addEventListener('input', calcFormula); });
+            } else if (m.type === 'value') {
+                // 仅记录实测值，不自动判定
+                return;
+            } else {
+                var valEl = tr.querySelector('.m-val');
+                var judge = tr.querySelector('.m-judge');
+                valEl.addEventListener('input', function () {
+                    var v = parseFloat(valEl.value);
+                    if (isNaN(v)) { judge.textContent = '—'; judge.className = 'm-judge'; return; }
+                    var pass;
+                    if (m.type === 'range') pass = (v >= m.min - 1e-6 && v <= m.max + 1e-6);
+                    else if (m.type === 'ge') pass = (v >= m.min - 1e-6);
+                    else if (m.type === 'le') pass = (v <= m.max + 1e-6);
+                    if (pass) { judge.textContent = '合格'; judge.className = 'm-judge'; }
+                    else {
+                        judge.textContent = '超范围';
+                        judge.className = 'm-judge over';
+                        selectResult(tr, '不合格');
+                    }
+                });
+            }
+        }
+
+        // ===== 梯型适用性 =====
+        function getSelectedTypes() {
+            var boxes = document.querySelectorAll('input[name=ladderType]:checked');
+            var arr = [];
+            for (var i = 0; i < boxes.length; i++) arr.push(boxes[i].value);
+            return arr;
+        }
+        function sectionApplicable(appl, selected) {
+            if (!appl || appl === 'all') return true;
+            if (selected.length === 0) return true;            // 未选时全部显示
+            if (selected.indexOf('组合梯') >= 0) return true;  // 组合梯：按实际模式手动判定
+            for (var i = 0; i < appl.length; i++) if (selected.indexOf(appl[i]) >= 0) return true;
+            return false;
+        }
+        function recomputeApplicability() {
+            var selected = getSelectedTypes();
+            var rows = tbody.querySelectorAll('.item-row');
+            for (var r = 0; r < rows.length; r++) {
+                var row = rows[r];
+                var applRaw = row.getAttribute('data-appl');
+                var appl = (applRaw === 'all') ? 'all' : JSON.parse(applRaw);
+                var applicable = sectionApplicable(appl, selected);
+                var naRadio = row.querySelector('input[value="不适用"]');
+                if (!applicable) {
+                    if (naRadio && !naRadio.checked) {
+                        naRadio.checked = true;
+                        naRadio.dispatchEvent(new Event('change'));
+                        row.dataset.autoNa = '1';
+                    }
+                } else {
+                    if (row.dataset.autoNa === '1' && naRadio && naRadio.checked) {
+                        naRadio.checked = false;
+                        var opt = naRadio.closest('.res-opt');
+                        if (opt) opt.classList.remove('active-na');
+                        row.dataset.autoNa = '';
+                        updateSummary();
+                    }
+                }
+            }
+        }
+
+        // ===== 实时统计 + 不合格汇总 =====
+        var lastAuto = '';
+        function updateSummary() {
+            var rows = tbody.querySelectorAll('.item-row');
+            var total = rows.length, ok = 0, bad = 0, na = 0, pend = 0;
+            var badList = [];
+            for (var r = 0; r < rows.length; r++) {
+                var c = rows[r].querySelector('input[type=radio]:checked');
+                if (!c) { pend++; continue; }
+                var v = c.value;
+                if (v === '合格') ok++;
+                else if (v === '不合格') { bad++; badList.push(rows[r].getAttribute('data-seq') + ' ' + ITEM_BY_SEQ[rows[r].getAttribute('data-seq')].name); }
+                else if (v === '不适用') na++;
+            }
+            setText('stTotal', total);
+            setText('stOk', ok);
+            setText('stBad', bad);
+            setText('stNa', na);
+            setText('stPend', pend);
+
+            var alert = document.getElementById('alertBad');
+            if (bad > 0) {
+                alert.style.display = 'block';
+                setText('alertText', '发现 ' + bad + ' 项不合格，请立即处置并在备注中说明处理意见；达到报废条件的须停用。');
+            } else {
+                alert.style.display = 'none';
+            }
+
+            // 自动汇总不合格项
+            var nc = document.getElementById('nonconform');
+            if (nc) {
+                var auto = badList.length ? ('以下项目不合格，须处置：\n' + badList.join('；\n')) : '';
+                if (nc.value === lastAuto || nc.value === '') {
+                    nc.value = auto;
+                    lastAuto = auto;
+                }
+            }
+        }
+
+        function setText(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; }
+
+        function resetAll() {
+            if (!window.confirm('确定重置全部检查结果、检查结论与备注吗？')) return;
+            var rows = tbody.querySelectorAll('.item-row');
+            for (var r = 0; r < rows.length; r++) {
+                var radios = rows[r].querySelectorAll('input[type=radio]');
+                for (var i = 0; i < radios.length; i++) radios[i].checked = false;
+                var opts = rows[r].querySelectorAll('.res-opt');
+                for (var o = 0; o < opts.length; o++) opts[o].classList.remove('active-ok', 'active-warn', 'active-bad', 'active-na');
+                rows[r].classList.remove('row-bad', 'row-na');
+                rows[r].dataset.autoNa = '';
+                var rm = rows[r].querySelector('.remark-input'); if (rm) rm.value = '';
+                var m = rows[r].querySelectorAll('.measure-block input');
+                for (var k = 0; k < m.length; k++) m[k].value = '';
+                var j = rows[r].querySelector('.m-judge'); if (j) { j.textContent = ''; j.className = 'm-judge'; }
+                var tv = rows[r].querySelector('.m-thr-val'); if (tv) tv.textContent = '—';
+            }
+            var vRadios = document.querySelectorAll('input[name=verdict]');
+            for (var v = 0; v < vRadios.length; v++) vRadios[v].checked = false;
+            var vOpts = document.querySelectorAll('#verdictOpts .verdict-opt');
+            for (var vo = 0; vo < vOpts.length; vo++) vOpts[vo].classList.remove('active');
+            var nc = document.getElementById('nonconform'); if (nc) { nc.value = ''; lastAuto = ''; }
+            var fields = ['checkSign', 'checkSignDate', 'reviewSign', 'reviewSignDate'];
+            for (var f = 0; f < fields.length; f++) { var fe = document.getElementById(fields[f]); if (fe) fe.value = ''; }
+            updateSummary();
+        }
+
+        function toggleGuide() {
+            var box = document.getElementById('guideBox');
+            box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+        }
+
+        // 综合判定单选
+        (function bindVerdict() {
+            var opts = document.querySelectorAll('#verdictOpts .verdict-opt');
+            for (var i = 0; i < opts.length; i++) {
+                (function (opt) {
+                    var input = opt.querySelector('input');
+                    input.addEventListener('change', function () {
+                        for (var j = 0; j < opts.length; j++) opts[j].classList.remove('active');
+                        opt.classList.add('active');
+                    });
+                })(opts[i]);
+            }
+        })();
+
+        // 梯型多选高亮 + 适用性联动
+        (function bindTypes() {
+            var boxes = document.querySelectorAll('input[name=ladderType]');
+            for (var i = 0; i < boxes.length; i++) {
+                boxes[i].addEventListener('change', function () {
+                    var lbl = this.closest('.type-opt');
+                    if (this.checked) lbl.classList.add('active'); else lbl.classList.remove('active');
+                    recomputeApplicability();
+                });
+            }
+        })();
+
+        // ===== 导出 Excel / Word =====
+        function exportTable(type) {
+            var meta = '检查日期：' + (document.getElementById('checkDate').value || '____') +
+                       '　　检查人：' + (document.getElementById('checkPerson').value || '____') +
+                       '　　梯子编号/型号：' + (document.getElementById('ladderNo').value || '____') +
+                       '　　额定载荷：' + (document.getElementById('ratedLoad').value || '____') + ' kg' +
+                       '　　梯子总长度：' + (document.getElementById('totalLen').value || '____') + ' m' +
+                       '　　制造厂家：' + (document.getElementById('manufacturer').value || '____') +
+                       '　　制造年月：' + (document.getElementById('madeDate').value || '____') +
+                       '　　梯型：' + getSelectedTypes().join('、');
+
+            var body = '<table border="1" cellspacing="0" cellpadding="5" style="border-collapse:collapse;width:100%;font-size:12px;">';
+            body += '<thead><tr>' +
+                    '<th style="width:44px;">序号</th><th style="width:120px;">检查项目</th>' +
+                    '<th>合格标准 / 检查要点（GB 12142-2025）</th><th style="width:120px;">检查结果</th><th style="width:130px;">备注</th>' +
+                    '</tr></thead><tbody>';
+
+            for (var i = 0; i < BLOCKS.length; i++) {
+                var blk = BLOCKS[i];
+                if (blk.type === 'chapter') {
+                    body += '<tr><td colspan="5" style="background:#1E2126;color:#fff;font-weight:700;">' + esc(blk.title) + '</td></tr>';
+                } else if (blk.type === 'section') {
+                    body += '<tr><td colspan="5" style="background:#F03752;color:#fff;font-weight:700;">' + esc(blk.title) + '</td></tr>';
+                } else if (blk.type === 'subsection') {
+                    body += '<tr><td colspan="5" style="background:#FDEEF1;color:#F03752;font-weight:700;border-left:4px solid #F03752;">' + esc(blk.title) + '</td></tr>';
+                } else {
+                    var item = blk;
+                    var seq = item.seq, name = item.name;
+                    var stdHtml = '<ol>';
+                    for (var k = 0; k < item.std.length; k++) stdHtml += '<li>' + esc(item.std[k]) + '</li>';
+                    stdHtml += '</ol>';
+                    var rowEl = tbody.querySelector('.item-row[data-seq="' + seq + '"]');
+                    if (rowEl && item.measure) {
+                        var m = item.measure;
+                        if (m.type === 'formula') {
+                            var b1 = rowEl.querySelector('.m-b1'), L = rowEl.querySelector('.m-l'), t = rowEl.querySelector('.m-t'), b2 = rowEl.querySelector('.m-b2'), tv = rowEl.querySelector('.m-thr-val');
+                            stdHtml += '<div>内宽b₁：' + (b1 ? b1.value : '—') + ' mm　梯长L：' + (L ? L.value : '—') + ' mm　梯框厚t：' + (t ? t.value : '—') + ' mm　外宽b₂：' + (b2 ? b2.value : '—') + ' mm　要求b₂≥' + (tv ? tv.textContent : '—') + ' mm</div>';
+                        } else if (m.type !== 'value' || true) {
+                            var mv = rowEl.querySelector('.m-val');
+                            if (mv) stdHtml += '<div>实测值：' + esc(mv.value || '—') + ' ' + esc(m.unit) + '</div>';
+                        }
+                    }
+                    var c = rowEl ? rowEl.querySelector('input[type=radio]:checked') : null;
+                    var res = c ? c.value : '';
+                    var rm = rowEl ? rowEl.querySelector('.remark-input') : null;
+                    var remark = rm ? rm.value : '';
+                    body += '<tr><td style="text-align:center;">' + esc(seq) + '</td>' +
+                            '<td>' + esc(name) + '</td>' +
+                            '<td>' + stdHtml + '</td>' +
+                            '<td style="text-align:center;">' + esc(res) + '</td>' +
+                            '<td>' + esc(remark) + '</td></tr>';
+                }
+            }
+            body += '</tbody></table>';
+
+            var verdict = '';
+            var v = document.querySelector('input[name=verdict]:checked');
+            if (v) verdict = v.value;
+            var nc = document.getElementById('nonconform').value || '';
+            var cs = document.getElementById('checkSign').value || '____';
+            var csd = document.getElementById('checkSignDate').value || '____';
+            var rs = document.getElementById('reviewSign').value || '____';
+            var rsd = document.getElementById('reviewSignDate').value || '____';
+
+            var verdictBlock = '<div style="margin-top:18px;font-size:14px;">' +
+                    '<b>总体结论：</b>' + esc(verdict) + '<br><br>' +
+                    '<b>不合格项描述及处理建议：</b><br>' + esc(nc).replace(/\n/g, '<br>') + '<br><br>' +
+                    '<b>检查人签字：</b>' + esc(cs) + '　　<b>日期：</b>' + esc(csd) + '<br>' +
+                    '<b>复核人签字：</b>' + esc(rs) + '　　<b>日期：</b>' + esc(rsd) + '</div>';
+
+            var warnBlock = '<div style="margin-top:14px;font-size:12px;color:#9A3412;background:#FFF7ED;border:1px solid #FDBA74;padding:10px 14px;">' +
+                    '<b>安全提示：</b>金属梯不应在可能接触带电线路的场合使用；严禁侧向承载、踩踏顶帽 / 工具架 / 支撑侧横撑；有人在上时不得挪动梯子；损坏梯子须作明显标识后停用，修复或报废。</div>';
+
+            var doc = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns="http://www.w3.org/TR/REC-html40">' +
+                      '<head><meta charset="UTF-8"></head><body>' +
+                      '<h2 style="text-align:center;">便携式金属梯安全检查表</h2>' +
+                      '<p style="text-align:center;font-size:12px;color:#555;">' + esc(meta) + '</p>' +
+                      body + verdictBlock + warnBlock +
+                      '</body></html>';
+
+            var mime = (type === 'xls') ? 'application/vnd.ms-excel' : 'application/msword';
+            var blob = new Blob(['﻿' + doc], { type: mime });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = '便携式金属梯安全检查表.' + (type === 'xls' ? 'xls' : 'doc');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+        }
+
+        // ===== 绑定按钮 =====
+        document.getElementById('excelBtn').addEventListener('click', function () { exportTable('xls'); });
+        document.getElementById('wordBtn').addEventListener('click', function () { exportTable('doc'); });
+        document.getElementById('printBtn').addEventListener('click', function () { window.print(); });
+        document.getElementById('resetBtn').addEventListener('click', resetAll);
+        document.getElementById('guideBtn').addEventListener('click', toggleGuide);
+
+        // ===== 初始化 =====
+        renderAll();
+    })();
+    </script>
+
+    <!-- 访问统计（与 Toolbox 一致） -->
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+</html>
