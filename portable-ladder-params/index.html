@@ -175,8 +175,14 @@
         .card-diagram {
             background: #fff; border: 1px solid var(--border, #E3E6EA);
             border-radius: 10px; padding: 14px; text-align: center;
+            cursor: pointer; position: relative;
+            transition: box-shadow .2s, transform .15s;
         }
-        .card-diagram svg { width: 100%; max-width: 520px; height: auto; display: block; margin: 0 auto; }
+        .card-diagram:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            transform: translateY(-1px);
+        }
+        .card-diagram svg { width: 100%; max-width: 520px; height: auto; display: block; margin: 0 auto; pointer-events: none; }
         .card-diagram .cd-caption {
             font-size: 12px; font-weight: 700; color: var(--ink, #1E2126);
             margin-bottom: 10px;
@@ -185,6 +191,41 @@
             font-size: 11.5px; color: var(--muted, #5C6470);
             margin-top: 10px; line-height: 1.55; text-align: left;
         }
+        .card-diagram .cd-hint {
+            position: absolute; bottom: 8px; right: 12px;
+            font-size: 10px; color: #9ca3af; pointer-events: none;
+            display: flex; align-items: center; gap: 3px;
+        }
+
+        /* ===== 图示放大 Lightbox ===== */
+        .diag-lightbox {
+            display: none; position: fixed; inset: 0; z-index: 9999;
+            background: rgba(0,0,0,0.65); backdrop-filter: blur(4px);
+            justify-content: center; align-items: center;
+            animation: lb-fade-in .2s ease-out;
+        }
+        .diag-lightbox.show { display: flex; }
+        .diag-lightbox-inner {
+            background: #fff; border-radius: 14px; padding: 20px 24px 16px;
+            max-width: 92vw; max-height: 92vh; overflow: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative; text-align: center;
+        }
+        .diag-lightbox-inner svg { width: auto; height: auto; max-width: 85vw; max-height: 75vh; }
+        .diag-lb-title {
+            font-size: 14px; font-weight: 700; color: var(--ink, #1E2126);
+            margin-bottom: 12px;
+        }
+        .diag-lb-close {
+            position: absolute; top: 10px; right: 14px;
+            width: 32px; height: 32px; border-radius: 50%;
+            border: none; background: #f0f0f0; color: #666;
+            font-size: 16px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all .15s;
+        }
+        .diag-lb-close:hover { background: var(--brand-red, #F03752); color: #fff; }
+        @keyframes lb-fade-in { from{opacity:0} to{opacity:1} }
 
 
         /* 全部展开/收起按钮 */
@@ -415,10 +456,10 @@
                             <line x1="190" y1="186" x2="228" y2="186" stroke="#2D7EE7" stroke-width="1.2"/>
                             <line x1="190" y1="180" x2="190" y2="192" stroke="#2D7EE7" stroke-width="1.2"/>
                             <line x1="228" y1="180" x2="228" y2="192" stroke="#2D7EE7" stroke-width="1.2"/>
-                            <text x="190" y="210" font-size="11" fill="#2D7EE7" font-weight="600">b<sub>1</sub>&ge;280</text>
+                            <text x="190" y="210" font-size="11" fill="#2D7EE7" font-weight="600">b<tspan dy="4" font-size="8.5">1</tspan><tspan dy="-4">&ge;280</tspan></text>
                             <!-- 外宽 b2 标注 -->
                             <line x1="181" y1="186" x2="237" y2="186" stroke="#1E2126" stroke-width="1" stroke-dasharray="3 2"/>
-                            <text x="170" y="226" font-size="10" fill="#1E2126">b<sub>2</sub>=b<sub>1</sub>+0.1L+2t</text>
+                            <text x="170" y="226" font-size="10" fill="#1E2126">b<tspan dy="3" font-size="7.5">2</tspan><tspan dy="-3">=b</tspan><tspan dy="3" font-size="7.5">1</tspan><tspan dy="-3">+0.1L+2t</tspan></text>
                             <!-- 长度 L 标注 -->
                             <line x1="295" y1="108" x2="295" y2="346" stroke="#F03752" stroke-width="1.5"/>
                             <line x1="289" y1="108" x2="301" y2="108" stroke="#F03752" stroke-width="1.5"/>
@@ -597,7 +638,7 @@
                             <text x="125" y="116" font-size="11" font-weight="700" fill="#F03752">严禁踩踏！</text>
                             <!-- 顶部内宽标注 -->
                             <line x1="315" y1="132" x2="365" y2="132" stroke="#2D7EE7" stroke-width="1.2"/>
-                            <text x="320" y="124" font-size="10" fill="#2D7EE7" font-weight="600">b<sub>1</sub>&ge;280</text>
+                            <text x="320" y="124" font-size="10" fill="#2D7EE7" font-weight="600">b<tspan dy="4" font-size="8">1</tspan><tspan dy="-4">&ge;280</tspan></text>
                             <!-- 长度标注 -->
                             <line x1="340" y1="70" x2="340" y2="355" stroke="#F03752" stroke-width="1.2" stroke-dasharray="3 2"/>
                             <text x="348" y="215" font-size="11" fill="#F03752" font-weight="600">L: 0.9~6m</text>
@@ -1032,6 +1073,49 @@ chips.forEach(function(chip){
     el.className='print-time';
     el.textContent='打印时间：'+ts;
     document.querySelector('main').appendChild(el);
+})();
+
+// ===== 图示点击放大 Lightbox =====
+(function(){
+    var lb = document.createElement('div');
+    lb.className = 'diag-lightbox';
+    lb.id = 'diagLightbox';
+    lb.innerHTML = '<div class="diag-lightbox-inner"><button class="diag-lb-close" id="diagLbClose">&times;</button><div class="diag-lb-title" id="diagLbTitle"></div><div id="diagLbBody"></div></div>';
+    lb.addEventListener('click', function(e){ if(e.target===lb) closeLb(); });
+    document.body.appendChild(lb);
+
+    var closeBtn = document.getElementById('diagLbClose');
+    closeBtn.addEventListener('click', closeLb);
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeLb(); });
+
+    function openLb(diagEl){
+        var svg = diagEl.querySelector('svg');
+        var caption = diagEl.querySelector('.cd-caption');
+        if(!svg) return;
+        var clone = svg.cloneNode(true);
+        clone.style.pointerEvents = 'auto';
+        clone.setAttribute('width', '');
+        clone.setAttribute('height', '');
+        document.getElementById('diagLbBody').innerHTML = '';
+        document.getElementById('diagLbBody').appendChild(clone);
+        document.getElementById('diagLbTitle').textContent = caption ? caption.textContent : '结构示意图';
+        lb.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeLb(){
+        lb.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+
+    // Bind click to all .card-diagram
+    document.querySelectorAll('.card-diagram').forEach(function(el){
+        // Add hint
+        var hint = document.createElement('span');
+        hint.className = 'cd-hint';
+        hint.innerHTML = '<i class="fa-solid fa-expand"></i> 点击放大';
+        el.appendChild(hint);
+        el.addEventListener('click', function(){ openLb(el); });
+    });
 })();
 </script>
 
