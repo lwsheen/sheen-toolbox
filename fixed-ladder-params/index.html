@@ -131,14 +131,14 @@
             cursor: pointer; position: relative; transition: box-shadow .2s, transform .15s;
         }
         .card-diagram:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); transform: translateY(-1px); }
-        .card-diagram svg { width: 100%; max-width: 540px; height: auto; display: block; margin: 0 auto; pointer-events: none; }
+        .card-diagram svg, .card-diagram .diag-img { width: 100%; max-width: 540px; height: auto; display: block; margin: 0 auto; pointer-events: none; }
         .card-diagram .cd-caption { font-size: 12px; font-weight: 700; color: var(--ink, #1E2126); margin-bottom: 10px; }
         .card-diagram .cd-note { font-size: 11.5px; color: var(--muted, #5C6470); margin-top: 10px; line-height: 1.55; text-align: left; }
         .card-diagram .cd-hint { position: absolute; bottom: 8px; right: 12px; font-size: 10px; color: #9ca3af; pointer-events: none; display: flex; align-items: center; gap: 3px; }
         .diag-lightbox { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.65); backdrop-filter: blur(4px); justify-content: center; align-items: center; animation: lb-fade-in .2s ease-out; }
         .diag-lightbox.show { display: flex; }
         .diag-lightbox-inner { background: #fff; border-radius: 14px; padding: 20px 24px 16px; max-width: 92vw; max-height: 92vh; overflow: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative; text-align: center; }
-        .diag-lightbox-inner svg { width: 680px; max-width: 90vw; height: auto; }
+        .diag-lightbox-inner svg, .diag-lightbox-inner img { width: 680px; max-width: 90vw; height: auto; }
         .diag-lb-title { font-size: 14px; font-weight: 700; color: var(--ink, #1E2126); margin-bottom: 12px; }
         .diag-lb-close { position: absolute; top: 10px; right: 14px; width: 32px; height: 32px; border-radius: 50%; border: none; background: #f0f0f0; color: #666; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; }
         .diag-lb-close:hover { background: var(--brand-red, #F03752); color: #fff; }
@@ -297,51 +297,8 @@
                 </div>
                 <div class="param-content" id="v-diag">
                     <div class="card-diagram">
-                        <div class="cd-caption">图　固定式金属直梯（带护笼）结构示意</div>
-                        <svg viewBox="0 0 680 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="固定式金属直梯结构示意图">
-                            <!-- 地面 -->
-                            <line x1="40" y1="410" x2="640" y2="410" stroke="#5C6470" stroke-width="2"/>
-                            <text x="46" y="430" font-size="12" fill="#5C6470">启程面 / 地面</text>
-                            <!-- 梯梁（双梯梁，垂直） -->
-                            <line x1="300" y1="60" x2="300" y2="410" stroke="#1E2126" stroke-width="6" stroke-linecap="round"/>
-                            <line x1="372" y1="60" x2="372" y2="410" stroke="#1E2126" stroke-width="6" stroke-linecap="round"/>
-                            <!-- 踏棍（蓝） -->
-                            <line x1="300" y1="110" x2="372" y2="110" stroke="#2D7EE7" stroke-width="5" stroke-linecap="round"/>
-                            <line x1="300" y1="160" x2="372" y2="160" stroke="#2D7EE7" stroke-width="5" stroke-linecap="round"/>
-                            <line x1="300" y1="210" x2="372" y2="210" stroke="#2D7EE7" stroke-width="5" stroke-linecap="round"/>
-                            <line x1="300" y1="260" x2="372" y2="260" stroke="#2D7EE7" stroke-width="5" stroke-linecap="round"/>
-                            <line x1="300" y1="310" x2="372" y2="310" stroke="#2D7EE7" stroke-width="5" stroke-linecap="round"/>
-                            <line x1="300" y1="360" x2="372" y2="360" stroke="#2D7EE7" stroke-width="5" stroke-linecap="round"/>
-                            <line x1="300" y1="400" x2="372" y2="400" stroke="#2D7EE7" stroke-width="5" stroke-linecap="round"/>
-                            <!-- 护笼（半透明圆角矩形包围） -->
-                            <rect x="276" y="100" width="120" height="300" rx="14" fill="#FDEEF1" stroke="#F03752" stroke-width="2" stroke-dasharray="6 4"/>
-                            <!-- 笼箍（横） -->
-                            <line x1="276" y1="180" x2="396" y2="180" stroke="#F03752" stroke-width="3"/>
-                            <line x1="276" y1="260" x2="396" y2="260" stroke="#F03752" stroke-width="3"/>
-                            <line x1="276" y1="340" x2="396" y2="340" stroke="#F03752" stroke-width="3"/>
-                            <!-- 立杆（竖，4根示意） -->
-                            <line x1="300" y1="100" x2="300" y2="400" stroke="#F03752" stroke-width="2"/>
-                            <line x1="324" y1="100" x2="324" y2="400" stroke="#F03752" stroke-width="2"/>
-                            <line x1="348" y1="100" x2="348" y2="400" stroke="#F03752" stroke-width="2"/>
-                            <line x1="372" y1="100" x2="372" y2="400" stroke="#F03752" stroke-width="2"/>
-                            <!-- 支撑 -->
-                            <line x1="300" y1="220" x2="240" y2="220" stroke="#5C6470" stroke-width="4" stroke-linecap="round"/>
-                            <line x1="372" y1="220" x2="432" y2="220" stroke="#5C6470" stroke-width="4" stroke-linecap="round"/>
-                            <!-- 标注：内侧净宽 -->
-                            <line x1="300" y1="430" x2="372" y2="430" stroke="#2D7EE7" stroke-width="1.2"/>
-                            <text x="306" y="448" font-size="11" fill="#2D7EE7" font-weight="600">内侧净宽 400~600</text>
-                            <!-- 标注：护笼深度 -->
-                            <line x1="276" y1="86" x2="396" y2="86" stroke="#F03752" stroke-width="1"/>
-                            <text x="282" y="80" font-size="10" fill="#F03752" font-weight="600">护笼深 650~800</text>
-                            <!-- 延长段 -->
-                            <line x1="300" y1="60" x2="300" y2="20" stroke="#1E2126" stroke-width="6" stroke-linecap="round"/>
-                            <line x1="372" y1="60" x2="372" y2="20" stroke="#1E2126" stroke-width="6" stroke-linecap="round"/>
-                            <text x="400" y="44" font-size="10" fill="#5C6470">延长段</text>
-                            <!-- 图例 -->
-                            <rect x="470" y="100" width="12" height="12" rx="2" fill="#2D7EE7"/><text x="488" y="111" font-size="11" fill="#5C6470">踏棍</text>
-                            <rect x="470" y="120" width="12" height="12" rx="2" fill="#1E2126"/><text x="488" y="131" font-size="11" fill="#5C6470">梯梁</text>
-                            <rect x="470" y="140" width="12" height="12" rx="2" fill="#F03752"/><text x="488" y="151" font-size="11" fill="#5C6470">护笼</text>
-                        </svg>
+                        <div class="cd-caption">图　固定式金属直梯设计要求（GB 4053.1—2025）</div>
+                        <img src="../assets/gb4053-straight-ladder.png" alt="固定式金属直梯设计要求示意图" class="diag-img" loading="lazy"/>
                         <p class="cd-note">直梯倾角 75°~90°；内侧净宽 400~600mm；踏棍间距 225~300mm；护笼深 650~800mm（至少 2 笼箍 + 5 立杆）；梯段高度 &gt;10m 须设防坠器；延长段高度不小于防护栏杆高度。</p>
                     </div>
                 </div>
@@ -433,44 +390,8 @@
                 </div>
                 <div class="param-content" id="i-diag">
                     <div class="card-diagram">
-                        <div class="cd-caption">图　固定式金属斜梯（带防护栏杆）结构示意</div>
-                        <svg viewBox="0 0 680 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="固定式金属斜梯结构示意图">
-                            <!-- 地面 -->
-                            <line x1="40" y1="400" x2="640" y2="400" stroke="#5C6470" stroke-width="2"/>
-                            <text x="46" y="420" font-size="12" fill="#5C6470">地面 / 启程面</text>
-                            <!-- 梯梁（斜） -->
-                            <g transform="rotate(-32 220 400)">
-                                <line x1="200" y1="80" x2="200" y2="400" stroke="#1E2126" stroke-width="5.5" stroke-linecap="round"/>
-                                <line x1="250" y1="80" x2="250" y2="400" stroke="#1E2126" stroke-width="5.5" stroke-linecap="round"/>
-                                <line x1="200" y1="130" x2="250" y2="130" stroke="#2D7EE7" stroke-width="4.5" stroke-linecap="round"/>
-                                <line x1="200" y1="185" x2="250" y2="185" stroke="#2D7EE7" stroke-width="4.5" stroke-linecap="round"/>
-                                <line x1="200" y1="240" x2="250" y2="240" stroke="#2D7EE7" stroke-width="4.5" stroke-linecap="round"/>
-                                <line x1="200" y1="295" x2="250" y2="295" stroke="#2D7EE7" stroke-width="4.5" stroke-linecap="round"/>
-                                <line x1="200" y1="350" x2="250" y2="350" stroke="#2D7EE7" stroke-width="4.5" stroke-linecap="round"/>
-                            </g>
-                            <!-- 防护栏杆（左侧敞开边，立柱+横杆） -->
-                            <line x1="200" y1="60" x2="200" y2="400" stroke="#F03752" stroke-width="3" transform="rotate(-32 220 400)"/>
-                            <line x1="200" y1="150" x2="200" y2="150" stroke="#F03752" stroke-width="3"/>
-                            <!-- 顶部横杆/扶手 -->
-                            <line x1="200" y1="150" x2="120" y2="120" stroke="#F03752" stroke-width="3.5" stroke-linecap="round"/>
-                            <text x="80" y="110" font-size="11" fill="#F03752" font-weight="600">顶部横杆(兼扶手)</text>
-                            <!-- 倾角弧 -->
-                            <path d="M 250 400 A 60 60 0 0 1 290 358" fill="none" stroke="#F03752" stroke-width="2" stroke-dasharray="4 3"/>
-                            <text x="296" y="384" font-size="13" font-weight="700" fill="#F03752">30°~35°</text>
-                            <!-- 踏步宽 g 标注 -->
-                            <line x1="225" y1="130" x2="225" y2="130" stroke="#2D7EE7" stroke-width="1" transform="rotate(-32 220 400)"/>
-                            <text x="258" y="120" font-size="10" fill="#2D7EE7" font-weight="600">g=踏步宽</text>
-                            <!-- 内侧净宽 -->
-                            <line x1="200" y1="405" x2="250" y2="405" stroke="#2D7EE7" stroke-width="1.2"/>
-                            <text x="206" y="423" font-size="11" fill="#2D7EE7" font-weight="600">内侧净宽</text>
-                            <!-- 净空高度 c -->
-                            <line x1="120" y1="120" x2="120" y2="40" stroke="#F57C00" stroke-width="1.5"/>
-                            <text x="92" y="84" font-size="11" fill="#F57C00" font-weight="600">净空≥2000</text>
-                            <!-- 图例 -->
-                            <rect x="470" y="100" width="12" height="12" rx="2" fill="#2D7EE7"/><text x="488" y="111" font-size="11" fill="#5C6470">踏板</text>
-                            <rect x="470" y="120" width="12" height="12" rx="2" fill="#1E2126"/><text x="488" y="131" font-size="11" fill="#5C6470">梯梁</text>
-                            <rect x="470" y="140" width="12" height="12" rx="2" fill="#F03752"/><text x="488" y="151" font-size="11" fill="#5C6470">防护栏杆/扶手</text>
-                        </svg>
+                        <div class="cd-caption">图　固定式金属斜梯设计要求（GB 4053.2—2025）</div>
+                        <img src="../assets/gb4053-inclined-ladder.png" alt="固定式金属斜梯设计要求示意图" class="diag-img" loading="lazy"/>
                         <p class="cd-note">斜梯倾角 &gt;20°~75°；梯段高 ≤6m；内侧净宽按通行频次 500/800/1000mm；踏步组合 L=g+2r 须 550~700mm；侧面临空 ≥1200mm 设防护栏杆；扶手顶面高 860~1000mm。</p>
                     </div>
                 </div>
@@ -541,38 +462,8 @@
                 </div>
                 <div class="param-content" id="g-diag">
                     <div class="card-diagram">
-                        <div class="cd-caption">图　工业防护栏杆（带踢脚板）结构示意</div>
-                        <svg viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="工业防护栏杆结构示意图">
-                            <!-- 平台面 -->
-                            <line x1="60" y1="300" x2="620" y2="300" stroke="#5C6470" stroke-width="2.5"/>
-                            <text x="66" y="320" font-size="12" fill="#5C6470">平台 / 工作面</text>
-                            <!-- 立柱 -->
-                            <line x1="120" y1="300" x2="120" y2="120" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
-                            <line x1="320" y1="300" x2="320" y2="120" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
-                            <line x1="520" y1="300" x2="520" y2="120" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
-                            <!-- 顶部横杆（兼扶手） -->
-                            <line x1="120" y1="120" x2="520" y2="120" stroke="#F03752" stroke-width="5" stroke-linecap="round"/>
-                            <text x="350" y="108" font-size="11" fill="#F03752" font-weight="600">顶部横杆（兼扶手）H</text>
-                            <!-- 中间横杆 -->
-                            <line x1="120" y1="210" x2="520" y2="210" stroke="#2D7EE7" stroke-width="3.5"/>
-                            <text x="528" y="214" font-size="10" fill="#2D7EE7">中间横杆</text>
-                            <!-- 中间立杆（竖，示意） -->
-                            <line x1="220" y1="120" x2="220" y2="300" stroke="#9ca3af" stroke-width="2.5"/>
-                            <line x1="420" y1="120" x2="420" y2="300" stroke="#9ca3af" stroke-width="2.5"/>
-                            <!-- 踢脚板 -->
-                            <rect x="120" y="284" width="400" height="16" fill="#F57C00"/>
-                            <text x="300" y="278" font-size="10" fill="#F57C00" font-weight="600">踢脚板 ≥100</text>
-                            <!-- 高度标注 H -->
-                            <line x1="100" y1="120" x2="100" y2="300" stroke="#F03752" stroke-width="1.2"/>
-                            <text x="70" y="215" font-size="11" fill="#F03752" font-weight="600">H 900/1050/1200</text>
-                            <!-- 立柱间距标注 -->
-                            <line x1="120" y1="335" x2="320" y2="335" stroke="#1E2126" stroke-width="1.2"/>
-                            <text x="190" y="352" font-size="11" fill="#1E2126" font-weight="600">立柱间距 ≤1000</text>
-                            <!-- 图例 -->
-                            <rect x="540" y="180" width="12" height="12" rx="2" fill="#F03752"/><text x="558" y="191" font-size="11" fill="#5C6470">顶部横杆</text>
-                            <rect x="540" y="200" width="12" height="12" rx="2" fill="#2D7EE7"/><text x="558" y="211" font-size="11" fill="#5C6470">中间横杆</text>
-                            <rect x="540" y="220" width="12" height="12" rx="2" fill="#F57C00"/><text x="558" y="231" font-size="11" fill="#5C6470">踢脚板</text>
-                        </svg>
+                        <div class="cd-caption">图　工业防护栏杆及平台设计要求（GB 4053.3—2025）</div>
+                        <img src="../assets/gb4053-guardrail.png" alt="工业防护栏杆及平台设计要求示意图" class="diag-img" loading="lazy"/>
                         <p class="cd-note">防护栏杆高度按临空高度分级：&lt;2m ≥900、2~20m ≥1050、≥20m ≥1200mm；立柱间距 ≤1000mm；顶部横杆集中荷载 ≥0.89kN；踢脚板高 ≥100mm；扶手圆管直径 30~50mm。</p>
                     </div>
                 </div>
@@ -795,10 +686,10 @@ chips.forEach(function(chip){
     closeBtn.addEventListener('click', closeLb);
     document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeLb(); });
     function openLb(diagEl){
-        var svg = diagEl.querySelector('svg');
+        var media = diagEl.querySelector('img') || diagEl.querySelector('svg');
         var caption = diagEl.querySelector('.cd-caption');
-        if(!svg) return;
-        var clone = svg.cloneNode(true);
+        if(!media) return;
+        var clone = media.cloneNode(true);
         clone.style.pointerEvents = 'auto';
         clone.removeAttribute('width');
         clone.removeAttribute('height');
