@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="固定式金属梯及平台设计参数检索工具 — GB 4053.1/2/3-2025 直梯/斜梯/工业防护栏杆及平台 荷载/尺寸/空间/结构要求一键查询 — SHEEN Toolbox">
+    <title>固定式金属梯及平台设计参数检索 — SHEEN Toolbox</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/sheen-toolbox/common.css">
+
+    <style>
+        /* ===== 本工具特有样式（复用便携梯参数检索工具） ===== */
+        .sheen-logo-sm {
+            width: 16px; height: 16px; border-radius: 4px;
+            vertical-align: text-bottom; object-fit: contain;
+        }
+        .lp-search {
+            display: flex; align-items: center; gap: 10px;
+            margin: 4px 0 22px;
+            background: #fff; border: 1px solid var(--border, #E3E6EA);
+            border-radius: 60px; padding: 10px 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .lp-search i { color: var(--brand-red, #F03752); font-size: 16px; }
+        .lp-search input {
+            border: none; outline: none; flex: 1; font-size: 15px;
+            background: transparent; color: var(--ink, #1E2126);
+        }
+        .lp-search .clear-btn {
+            border: none; background: transparent; color: #9ca3af;
+            cursor: pointer; font-size: 14px; padding: 2px 6px;
+        }
+        .lp-search .clear-btn:hover { color: var(--brand-red, #F03752); }
+        .lp-filters {
+            display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;
+        }
+        .lp-chip {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 6px 16px; border-radius: 30px; font-size: 13px;
+            font-weight: 600; cursor: pointer; user-select: none;
+            background: var(--bg-soft, #F8F9FA); color: var(--muted, #5C6470);
+            border: 1px solid var(--border, #E3E6EA);
+            transition: all .18s;
+        }
+        .lp-chip:hover { border-color: var(--brand-red, #F03752); color: var(--brand-red, #F03752); }
+        .lp-chip.active {
+            background: var(--brand-red, #F03752); color: #fff;
+            border-color: var(--brand-red, #F03752);
+        }
+        .ladder-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 16px;
+        }
+        .ladder-card {
+            background: #fff; border: 1px solid var(--border, #E3E6EA);
+            border-radius: 14px; overflow: hidden;
+            transition: box-shadow .2s, transform .2s, border-color .2s;
+        }
+        .ladder-card:hover {
+            box-shadow: 0 6px 20px rgba(240,55,82,0.10);
+            border-color: var(--brand-red, #F03752); transform: translateY(-2px);
+        }
+        .ladder-card .lc-head {
+            display: flex; align-items: center; gap: 12px;
+            padding: 16px 18px; cursor: pointer;
+            user-select: none;
+        }
+        .ladder-card .lc-icon {
+            width: 44px; height: 44px; border-radius: 11px;
+            background: linear-gradient(135deg, var(--brand-red, #F03752), #d12e47);
+            color: #fff; display: flex; align-items: center; justify-content: center;
+            font-size: 20px; flex-shrink: 0;
+        }
+        .ladder-card .lc-title { font-size: 16px; font-weight: 700; color: var(--ink, #1E2126); }
+        .ladder-card .lc-sub { font-size: 12px; color: var(--muted, #5C6470); margin-top: 2px; }
+        .ladder-card .lc-arrow {
+            margin-left: auto; color: #9ca3af; font-size: 13px;
+            transition: transform .25s;
+        }
+        .ladder-card.open .lc-arrow { transform: rotate(180deg); }
+        .lc-body { display: none; border-top: 1px solid var(--border, #E3E6EA); background: var(--bg-soft, #F8F9FA); }
+        .lc-body.show { display: block; }
+        .param-tabs {
+            display: flex; border-bottom: 1px solid var(--border, #E3E6EA);
+            background: #fff; overflow-x: auto;
+        }
+        .param-tab {
+            padding: 10px 13px; font-size: 12.5px; font-weight: 600;
+            color: var(--muted, #5C6470); cursor: pointer;
+            white-space: nowrap; border-bottom: 2px solid transparent;
+            transition: all .15s; user-select: none;
+        }
+        .param-tab:hover { color: var(--brand-red, #F03752); }
+        .param-tab.active { color: var(--brand-red, #F03752); border-bottom-color: var(--brand-red, #F03752); }
+        .param-tab.tab-diagram { color: var(--tech-blue, #2D7EE7); }
+        .param-tab.tab-diagram.active { color: var(--tech-blue, #2D7EE7); border-bottom-color: var(--tech-blue, #2D7EE7); }
+        .param-content { display: none; padding: 16px 18px; }
+        .param-content.active { display: block; }
+        .param-item {
+            display: flex; align-items: flex-start; gap: 10px;
+            padding: 10px 0; border-bottom: 1px dashed rgba(0,0,0,.06);
+            font-size: 13.5px; line-height: 1.65;
+        }
+        .param-item:last-child { border-bottom: none; }
+        .param-item .pi-bullet { flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--brand-red, #F03752); margin-top: 8px; }
+        .param-item .pi-text { flex: 1; color: var(--ink, #1E2126); }
+        .param-item .pi-val { color: var(--brand-red, #F03752); font-weight: 700; font-family: "SF Mono", Consolas, monospace; }
+        .param-item .pi-warn { color: var(--warn-orange, #F57C00); font-weight: 600; }
+        .param-item .pi-note { font-size: 12px; color: var(--muted, #5C6470); margin-top: 3px; padding-left: 16px; }
+        .formula-block {
+            background: #fff; border: 1px solid var(--border, #E3E6EA);
+            border-radius: 8px; padding: 12px 15px; margin: 8px 0;
+            font-family: "SF Mono", Consolas, monospace; font-size: 13px;
+            line-height: 1.7; color: var(--ink, #1E2126);
+        }
+        .formula-block .fb-label { font-size: 11px; color: var(--muted, #5C6470); font-family: inherit; margin-bottom: 4px; }
+        .safety-tip {
+            background: var(--brand-red-soft, #FDEEF1);
+            border-left: 3px solid var(--brand-red, #F03752);
+            border-radius: 0 8px 8px 0; padding: 10px 14px;
+            margin: 10px 0; font-size: 13px; line-height: 1.6; color: #991b1b;
+        }
+        .safety-tip i { color: var(--brand-red, #F03752); margin-right: 6px; }
+        .std-ref { text-align: right; font-size: 11.5px; color: var(--muted, #5C6470); padding: 8px 18px 0; margin-top: 4px; }
+        .std-ref a { color: var(--tech-blue, #2D7EE7); text-decoration: none; }
+        .card-diagram {
+            background: #fff; border: 1px solid var(--border, #E3E6EA);
+            border-radius: 10px; padding: 14px; text-align: center;
+            cursor: pointer; position: relative; transition: box-shadow .2s, transform .15s;
+        }
+        .card-diagram:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); transform: translateY(-1px); }
+        .card-diagram svg { width: 100%; max-width: 540px; height: auto; display: block; margin: 0 auto; pointer-events: none; }
+        .card-diagram .cd-caption { font-size: 12px; font-weight: 700; color: var(--ink, #1E2126); margin-bottom: 10px; }
+        .card-diagram .cd-note { font-size: 11.5px; color: var(--muted, #5C6470); margin-top: 10px; line-height: 1.55; text-align: left; }
+        .card-diagram .cd-hint { position: absolute; bottom: 8px; right: 12px; font-size: 10px; color: #9ca3af; pointer-events: none; display: flex; align-items: center; gap: 3px; }
+        .diag-lightbox { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.65); backdrop-filter: blur(4px); justify-content: center; align-items: center; animation: lb-fade-in .2s ease-out; }
+        .diag-lightbox.show { display: flex; }
+        .diag-lightbox-inner { background: #fff; border-radius: 14px; padding: 20px 24px 16px; max-width: 92vw; max-height: 92vh; overflow: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative; text-align: center; }
+        .diag-lightbox-inner svg { width: 680px; max-width: 90vw; height: auto; }
+        .diag-lb-title { font-size: 14px; font-weight: 700; color: var(--ink, #1E2126); margin-bottom: 12px; }
+        .diag-lb-close { position: absolute; top: 10px; right: 14px; width: 32px; height: 32px; border-radius: 50%; border: none; background: #f0f0f0; color: #666; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+        .diag-lb-close:hover { background: var(--brand-red, #F03752); color: #fff; }
+        @keyframes lb-fade-in { from{opacity:0} to{opacity:1} }
+        .lp-actions { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+        .lp-actions button { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; border-radius: 30px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--border, #E3E6EA); background: #fff; color: var(--ink, #1E2126); transition: all .15s; }
+        .lp-actions button:hover { border-color: var(--brand-red, #F03752); color: var(--brand-red, #F03752); }
+        .no-result { text-align: center; color: var(--muted, #5C6470); padding: 40px 20px; font-size: 14px; display: none; }
+        .no-result i { font-size: 36px; margin-bottom: 10px; display: block; opacity: .3; }
+        /* 小计算器 */
+        .calc-box { background: #fff; border: 1px solid var(--border, #E3E6EA); border-radius: 8px; padding: 14px 16px; margin: 10px 0; }
+        .calc-box .cb-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; flex-wrap: wrap; }
+        .calc-box label { font-size: 13px; font-weight: 600; min-width: 96px; }
+        .calc-box input { width: 110px; border: 1px solid var(--border, #E3E6EA); border-radius: 6px; padding: 6px 9px; font-size: 13px; font-family: "SF Mono", Consolas, monospace; }
+        .calc-box button { padding: 7px 16px; border-radius: 8px; border: none; background: var(--brand-red, #F03752); color: #fff; font-weight: 600; font-size: 13px; cursor: pointer; }
+        .calc-box .cb-out { margin-top: 8px; font-size: 13px; }
+        .calc-box .cb-out b { color: var(--brand-red, #F03752); font-family: "SF Mono", Consolas, monospace; }
+        .calc-box .cb-err { color: #dc2626; }
+        /* 附录表 */
+        table.gb-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12.5px; background: #fff; border: 1px solid var(--border, #E3E6EA); border-radius: 8px; overflow: hidden; }
+        table.gb-table th, table.gb-table td { border: 1px solid var(--border, #E3E6EA); padding: 7px 9px; text-align: center; }
+        table.gb-table th { background: var(--bg-soft, #F8F9FA); color: var(--ink, #1E2126); font-weight: 700; }
+        table.gb-table td:first-child { font-weight: 600; background: #fff; }
+        @media (max-width: 640px) {
+            .ladder-grid { grid-template-columns: 1fr; }
+            .param-tab { padding: 8px 10px; font-size: 11.5px; }
+        }
+        @media print {
+            .lp-search, .lp-filters, .lp-actions, .btn-print, .no-print, .param-tabs, .lc-head { display: none !important; }
+            .lc-body { display: block !important; border: none; }
+            .param-content { display: block !important; padding: 6px 0; }
+            .ladder-card { break-inside: avoid; page-break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+            .card-diagram { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="breadcrumb">
+    <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+    <span> / 固定式金属梯及平台设计参数</span>
+</div>
+
+<main class="app-container container-query">
+
+    <h1 class="page-title"><i class="fa-solid fa-stairs"></i> 固定式金属梯及平台设计参数检索</h1>
+    <p class="page-subtitle" style="margin-bottom:6px;">
+        依据 <strong>GB 4053.1—2025 直梯 / GB 4053.2—2025 斜梯 / GB 4053.3—2025 工业防护栏杆及平台</strong> 编制（2025-12-31 发布，2027-01-01 实施，代替 2009 版）。按构件检索荷载、尺寸、空间与结构要求。
+    </p>
+
+    <div class="lp-search no-print">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="搜索参数关键词：如 护笼、踏步宽、临空高度、荷载、踢脚板..." autocomplete="off">
+        <button class="clear-btn" id="clearSearch" style="display:none;">&times;</button>
+    </div>
+
+    <div class="lp-filters no-print" id="filterChips">
+        <span class="lp-chip active" data-cat="all">全部</span>
+        <span class="lp-chip" data-cat="vertical">直梯</span>
+        <span class="lp-chip" data-cat="inclined">斜梯</span>
+        <span class="lp-chip" data-cat="guardrail">防护栏杆</span>
+        <span class="lp-chip" data-cat="platform">平台</span>
+        <span class="lp-chip" data-cat="gate">门</span>
+    </div>
+
+    <div class="lp-actions no-print">
+        <button onclick="expandAll()"><i class="fa-solid fa-expand"></i> 全部展开</button>
+        <button onclick="collapseAll()"><i class="fa-solid fa-compress"></i> 全部收起</button>
+        <button onclick="window.print()" class="btn-print"><i class="fa-solid fa-print"></i> 打印</button>
+    </div>
+
+    <div class="ladder-grid" id="ladderGrid">
+
+        <!-- ════════════ 1. 固定式金属直梯 ════════════ -->
+        <div class="ladder-card" data-cat="vertical" data-keywords="直梯 垂直梯 倾角75 90 梯段高度 攀登高度 护笼 防坠器 梯梁 1.5kN 踏棍 支撑 0.5kN 周围空间 650 600 180 150 380 内侧净宽 400 600 300 单梯梁 580 踏棍间距 225 300 踏棍直径 20 35 梯梁 60 10 60 12 护笼 650 800 笼箍 50 6 立杆 40 5 梯间平台 自闭门 梯口门 延长段 760">
+            <div class="lc-head" onclick="toggleCard(this)">
+                <div class="lc-icon"><i class="fa-solid fa-arrow-up"></i></div>
+                <div>
+                    <div class="lc-title">固定式金属直梯</div>
+                    <div class="lc-sub">GB 4053.1—2025（倾角 75°~90°）</div>
+                </div>
+                <i class="fa-solid fa-chevron-down lc-arrow"></i>
+            </div>
+            <div class="lc-body">
+                <div class="param-tabs">
+                    <div class="param-tab active" onclick="switchTab(this,'v-gen')">一般要求</div>
+                    <div class="param-tab" onclick="switchTab(this,'v-load')">荷载</div>
+                    <div class="param-tab" onclick="switchTab(this,'v-space')">周围空间</div>
+                    <div class="param-tab" onclick="switchTab(this,'v-width')">内侧净宽</div>
+                    <div class="param-tab" onclick="switchTab(this,'v-rung')">踏棍与梯梁</div>
+                    <div class="param-tab" onclick="switchTab(this,'v-cage')">护笼</div>
+                    <div class="param-tab" onclick="switchTab(this,'v-plat')">梯间平台与门</div>
+                    <div class="param-tab tab-diagram" onclick="switchTab(this,'v-diag')"><i class="fa-solid fa-image"></i> 结构示意</div>
+                </div>
+                <div class="param-content active" id="v-gen">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">倾角（与水平面）：<span class="pi-val">75° ~ 90°</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">单 / 双梯梁选择：<span class="pi-warn">优先双梯梁</span>；仅安装条件受限等特殊情况采用单梯梁</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">梯段高度（攀登高度 ≤10m）：<span class="pi-val">不限制</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">梯段高度（攀登高度 &gt;10m）：无护笼(无防坠器) ≤<span class="pi-val">6m</span>；设防坠器 ≤<span class="pi-val">24m</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">坠落保护（&gt;3m 且 ≤10m）：设<span class="pi-warn">护笼或防坠器</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">坠落保护（&gt;10m）：设<span class="pi-warn">防坠器</span>（防坠器符合 6.2）</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">材料：性能满足承载力、变形及环境条件</div></div>
+                    <div class="safety-tip"><i class="fa-solid fa-triangle-exclamation"></i>梯段高度 &gt;10m 必须设置防坠器；空间受限无法设护笼/防坠器时应采取等效防坠措施并专人监护</div>
+                </div>
+                <div class="param-content" id="v-load">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">梯梁：沿高度任意位置每间隔 <span class="pi-val">3m</span> 承受 ≥<span class="pi-val">1.5kN</span> 竖向集中活荷载；延长段单个梯梁顶部任意方向 ≥<span class="pi-val">0.5kN</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">踏棍：最不利位置竖向集中活荷载 <span class="pi-val">1.5kN</span>，作用宽度 <span class="pi-val">100mm</span>；挠度容许值：双梯梁 <span class="pi-val">1/250</span>、单梯梁 <span class="pi-val">1/125</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">支撑及其连接件：水平活荷载标准值 ≥<span class="pi-val">0.5kN</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">防坠器安装时：构件及连接应承受人员坠落冲击力</div></div>
+                </div>
+                <div class="param-content" id="v-space">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">未设护笼：踏棍前方边缘 → 前方连续性障碍物 <span class="pi-val">≥650</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">未设护笼：踏棍前方边缘 → 非连续性障碍物 <span class="pi-val">≥600</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">踏棍中心线 → 后方连续性表面 <span class="pi-val">≥180</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">踏棍中心线 → 后方非连续性障碍物（平台/到达面除外）<span class="pi-val">≥150</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">前入式：梯段顶端踏棍边缘与平台/到达面边缘水平距离 <span class="pi-val">60~180</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">侧入式：直梯中心线至梯间平台/到达面 <span class="pi-val">380~500</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">前入式：直梯中心线 → 侧面物体（平台/到达面除外）<span class="pi-val">≥380</span></div></div>
+                </div>
+                <div class="param-content" id="v-width">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">双梯梁内侧净宽：<span class="pi-val">400 ~ 600</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">双梯梁（攀登高度 &lt;5m 且工作面受限）：<span class="pi-val">300 ~ 600</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">双梯梁 + 刚性导轨（贴邻梯梁内侧）：导轨内侧至另一侧梯梁内侧净水平宽满足 5.4.1</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">双梯梁 + 刚性导轨（中间安装）：梯梁与导轨净宽 ≥<span class="pi-val">150</span>，导轨宽度 ≤<span class="pi-val">80</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">单梯梁内侧净宽：<span class="pi-val">≤580</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">单梯梁：梯梁外侧与踏棍防滑出保护装置净距 <span class="pi-val">150~250</span>；梯梁宽度 ≤<span class="pi-val">80</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">同一梯段内侧净宽应一致</div></div>
+                </div>
+                <div class="param-content" id="v-rung">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">踏棍间距 s：全攀登高度相等，<span class="pi-val">225 ~ 300</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">第一级踏棍上表面与启程面/梯间平台距离 <span class="pi-val">100~400</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">踏棍踩踏面宽度 / 圆形踏棍直径 <span class="pi-val">≥20</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">踏棍截面直径或外接圆直径 <span class="pi-val">≤35</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">单梯梁防滑出保护装置高度 <span class="pi-val">≥20</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">踏棍水平、相互平行；前入式顶端踏棍与平台平齐</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">梯梁截面（强腐蚀环境）：扁钢 <span class="pi-val">≥60×12</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">梯梁截面（非强腐蚀环境）：扁钢 <span class="pi-val">≥60×10</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">延长段高度：不小于 GB 4053.3 防护栏杆高度；前入式内侧净宽 &lt;600 时延长段加宽至 <span class="pi-val">≤760</span></div></div>
+                </div>
+                <div class="param-content" id="v-cage">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">组成：至少 <span class="pi-val">2</span> 个水平笼箍 + <span class="pi-val">5</span> 根立杆</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">水平笼箍截面 <span class="pi-val">≥50×6</span> 扁钢（等效型材）</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">立杆截面 <span class="pi-val">≥40×5</span> 扁钢（等效型材）</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">护笼深度 b <span class="pi-val">650~800</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">圆形护笼直径 D <span class="pi-val">650~800</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">水平笼箍竖向净距 <span class="pi-val">≤1500</span>；立杆净距 <span class="pi-val">≤300</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">护笼各构件围成最大空隙面积 <span class="pi-val">≤0.4 m²</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">护笼底面 → 启程面/下方平台 <span class="pi-val">2100~3000</span></div></div>
+                </div>
+                <div class="param-content" id="v-plat">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">配护笼梯间平台：上、下护笼水平投影应在平台内；护笼重叠部分高度 <span class="pi-val">≥2000</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">上部护笼底面距平台 <span class="pi-val">2100~2500</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">平台与邻近结构水平间隙 <span class="pi-val">&lt;50</span>；相邻梯梁间隙 <span class="pi-val">75~100</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">梯口门：尺寸 ≥ 下方梯段护笼封闭区域水平投影；向上或水平开启</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">自闭门（到达面出入口防护栏杆处）：攀登高度 &lt;<span class="pi-val">2000</span> 除外；符合 GB 4053.3 7.1</div></div>
+                </div>
+                <div class="param-content" id="v-diag">
+                    <div class="card-diagram">
+                        <div class="cd-caption">图　固定式金属直梯（带护笼）结构示意</div>
+                        <svg viewBox="0 0 680 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="固定式金属直梯结构示意图">
+                            <!-- 地面 -->
+                            <line x1="40" y1="410" x2="640" y2="410" stroke="#5C6470" stroke-width="2"/>
+                            <text x="46" y="430" font-size="12" fill="#5C6470">启程面 / 地面</text>
+                            <!-- 梯梁（双梯梁，垂直） -->
+                            <line x1="300" y1="60" x2="300" y2="410" stroke="#1E2126" stroke-width="6" stroke-linecap="round"/>
+                            <line x1="372" y1="60" x2="372" y2="410" stroke="#1E2126" stroke-width="6" stroke-linecap="round"/>
+                            <!-- 踏棍（蓝） -->
+                            <line x1="300" y1="110" x2="372" y2="110" stroke="#2D7EE7" stroke-width="5" stroke-linecap="round"/>
+                            <line x1="300" y1="160" x2="372" y2="160" stroke="#2D7EE7" stroke-width="5" stroke-linecap="round"/>
+                            <line x1="300" y1="210" x2="372" y2="210" stroke="#2D7EE7" stroke-width="5" stroke-linecap="round"/>
+                            <line x1="300" y1="260" x2="372" y2="260" stroke="#2D7EE7" stroke-width="5" stroke-linecap="round"/>
+                            <line x1="300" y1="310" x2="372" y2="310" stroke="#2D7EE7" stroke-width="5" stroke-linecap="round"/>
+                            <line x1="300" y1="360" x2="372" y2="360" stroke="#2D7EE7" stroke-width="5" stroke-linecap="round"/>
+                            <line x1="300" y1="400" x2="372" y2="400" stroke="#2D7EE7" stroke-width="5" stroke-linecap="round"/>
+                            <!-- 护笼（半透明圆角矩形包围） -->
+                            <rect x="276" y="100" width="120" height="300" rx="14" fill="#FDEEF1" stroke="#F03752" stroke-width="2" stroke-dasharray="6 4"/>
+                            <!-- 笼箍（横） -->
+                            <line x1="276" y1="180" x2="396" y2="180" stroke="#F03752" stroke-width="3"/>
+                            <line x1="276" y1="260" x2="396" y2="260" stroke="#F03752" stroke-width="3"/>
+                            <line x1="276" y1="340" x2="396" y2="340" stroke="#F03752" stroke-width="3"/>
+                            <!-- 立杆（竖，4根示意） -->
+                            <line x1="300" y1="100" x2="300" y2="400" stroke="#F03752" stroke-width="2"/>
+                            <line x1="324" y1="100" x2="324" y2="400" stroke="#F03752" stroke-width="2"/>
+                            <line x1="348" y1="100" x2="348" y2="400" stroke="#F03752" stroke-width="2"/>
+                            <line x1="372" y1="100" x2="372" y2="400" stroke="#F03752" stroke-width="2"/>
+                            <!-- 支撑 -->
+                            <line x1="300" y1="220" x2="240" y2="220" stroke="#5C6470" stroke-width="4" stroke-linecap="round"/>
+                            <line x1="372" y1="220" x2="432" y2="220" stroke="#5C6470" stroke-width="4" stroke-linecap="round"/>
+                            <!-- 标注：内侧净宽 -->
+                            <line x1="300" y1="430" x2="372" y2="430" stroke="#2D7EE7" stroke-width="1.2"/>
+                            <text x="306" y="448" font-size="11" fill="#2D7EE7" font-weight="600">内侧净宽 400~600</text>
+                            <!-- 标注：护笼深度 -->
+                            <line x1="276" y1="86" x2="396" y2="86" stroke="#F03752" stroke-width="1"/>
+                            <text x="282" y="80" font-size="10" fill="#F03752" font-weight="600">护笼深 650~800</text>
+                            <!-- 延长段 -->
+                            <line x1="300" y1="60" x2="300" y2="20" stroke="#1E2126" stroke-width="6" stroke-linecap="round"/>
+                            <line x1="372" y1="60" x2="372" y2="20" stroke="#1E2126" stroke-width="6" stroke-linecap="round"/>
+                            <text x="400" y="44" font-size="10" fill="#5C6470">延长段</text>
+                            <!-- 图例 -->
+                            <rect x="470" y="100" width="12" height="12" rx="2" fill="#2D7EE7"/><text x="488" y="111" font-size="11" fill="#5C6470">踏棍</text>
+                            <rect x="470" y="120" width="12" height="12" rx="2" fill="#1E2126"/><text x="488" y="131" font-size="11" fill="#5C6470">梯梁</text>
+                            <rect x="470" y="140" width="12" height="12" rx="2" fill="#F03752"/><text x="488" y="151" font-size="11" fill="#5C6470">护笼</text>
+                        </svg>
+                        <p class="cd-note">直梯倾角 75°~90°；内侧净宽 400~600mm；踏棍间距 225~300mm；护笼深 650~800mm（至少 2 笼箍 + 5 立杆）；梯段高度 &gt;10m 须设防坠器；延长段高度不小于防护栏杆高度。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ════════════ 2. 固定式金属斜梯 ════════════ -->
+        <div class="ladder-card" data-cat="inclined" data-keywords="斜梯 倾角 20 75 螺旋梯 梯段高度 6m 荷载 3.5 4.4 踏板 2.2 通行空间 净空 2000 2100 坡度线 1200 850 内侧净宽 500 800 1000 650 踏步宽 踏步高 L g r 550 700 踏板 80 重叠 10 35 防滑 25 防护栏杆 扶手 860 1000 梯间平台 自闭门 倾角组合 附录A">
+            <div class="lc-head" onclick="toggleCard(this)">
+                <div class="lc-icon"><i class="fa-solid fa-diagonal-arrow-right-up"></i></div>
+                <div>
+                    <div class="lc-title">固定式金属斜梯</div>
+                    <div class="lc-sub">GB 4053.2—2025（倾角 &gt;20°~75°）</div>
+                </div>
+                <i class="fa-solid fa-chevron-down lc-arrow"></i>
+            </div>
+            <div class="lc-body">
+                <div class="param-tabs">
+                    <div class="param-tab active" onclick="switchTab(this,'i-gen')">一般要求</div>
+                    <div class="param-tab" onclick="switchTab(this,'i-load')">荷载</div>
+                    <div class="param-tab" onclick="switchTab(this,'i-space')">通行空间</div>
+                    <div class="param-tab" onclick="switchTab(this,'i-width')">内侧净宽</div>
+                    <div class="param-tab" onclick="switchTab(this,'i-step')">踏步宽与高</div>
+                    <div class="param-tab" onclick="switchTab(this,'i-tread')">踏板</div>
+                    <div class="param-tab" onclick="switchTab(this,'i-rail')">防护栏杆与扶手</div>
+                    <div class="param-tab" onclick="switchTab(this,'i-angle')">倾角组合表</div>
+                    <div class="param-tab tab-diagram" onclick="switchTab(this,'i-diag')"><i class="fa-solid fa-image"></i> 结构示意</div>
+                </div>
+                <div class="param-content active" id="i-gen">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">倾角 α（与水平面）：<span class="pi-val">&gt;20° 且 ≤75°</span>（螺旋梯同）</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">梯段高度：<span class="pi-val">≤6m</span>；总高度 H&gt;6m 应<span class="pi-warn">分段设梯</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">倾角推荐：优选 <span class="pi-val">30°~35°</span>；经常双向通行最大通常 38°；偶尔通行最大通常 42°</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">材料：性能满足承载力、变形及环境条件</div></div>
+                </div>
+                <div class="param-content" id="i-load">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">梯梁：水平投影面均布活荷载 ≥<span class="pi-val">3.5 kN/m²</span>；梯梁任意位置集中活荷载 ≥<span class="pi-val">4.4kN</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">踏板（沿梯宽均布）：≥<span class="pi-val">2.2 kN/m</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">踏板（梯宽 &lt;1200）：跨中 100×100 区域 ≥<span class="pi-val">1.5kN</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">踏板（梯宽 ≥1200）：跨中间隔 600 两个 100×100 区域同时 ≥<span class="pi-val">1.5kN</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">踏板（螺旋梯）：靠近外侧边缘 100×100 区域 ≥<span class="pi-val">1.5kN</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">踏板挠度：螺旋梯 1/100 或 10mm；非螺旋梯 1/200 或 10mm（取小）</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">防护栏杆荷载：符合 GB 4053.3 4.4</div></div>
+                </div>
+                <div class="param-content" id="i-space">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">净空高度 c（踏板突沿 → 上方障碍物）<span class="pi-val">≥2000</span>；疏散通道 <span class="pi-val">≥2100</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">坡度线 → 上方障碍物最小距离 s（α≤45°）<span class="pi-val">≥1200</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">坡度线 → 上方障碍物最小距离 s（α&gt;45°）<span class="pi-val">≥850</span></div></div>
+                </div>
+                <div class="param-content" id="i-width">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">偶尔单向通行（非螺旋梯）<span class="pi-val">≥500</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">经常性单向 / 偶尔双向 <span class="pi-val">≥800</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">经常性双向 <span class="pi-val">≥1000</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">螺旋梯 <span class="pi-val">≥650</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">注："偶尔"= 年使用 &lt;30 天且日 &lt;2h</div></div>
+                </div>
+                <div class="param-content" id="i-step">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">组合值 <span class="pi-val">L = g + 2r</span>，应 <span class="pi-val">≥550 且 ≤700</span>（mm）</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">螺旋梯：距扇形踏步窄边 300 处踏步宽 ≥<span class="pi-val">170</span>；踏步高 <span class="pi-val">160~240</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">同一梯段踏步高保持一致；第一级踏步高 ≤其他且 ≥其他的 <span class="pi-val">85%</span></div></div>
+                    <div class="calc-box">
+                        <div class="fb-label" style="font-family:inherit;font-size:11px;color:var(--muted);margin-bottom:6px;">踏步宽高组合计算器（L=g+2r，要求 550~700）</div>
+                        <div class="cb-row"><label>踏步宽 g (mm)</label><input type="number" id="calG" placeholder="如 200"><button onclick="calcStep()">计算踏步高 r</button></div>
+                        <div class="cb-row"><label>或 踏步高 r (mm)</label><input type="number" id="calR" placeholder="如 200"><button onclick="calcStep2()">计算踏步宽 g</button></div>
+                        <div class="cb-out" id="calOut"></div>
+                    </div>
+                </div>
+                <div class="param-content" id="i-tread">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">非螺旋梯踏板宽度 <span class="pi-val">≥80</span>（同梯段一致）</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">相邻踏板重叠（封闭时）<span class="pi-val">≥0</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">相邻踏板重叠（未封闭时）<span class="pi-val">10~35</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">顶部踏板与平台面平齐、无空隙</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">踩踏面：防滑材料或 ≥<span class="pi-val">25</span> 宽防滑突沿</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">格栅板踏板：符合 GB 4053.3 6.3.5</div></div>
+                </div>
+                <div class="param-content" id="i-rail">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">侧面敞开边缘临空高度 ≥<span class="pi-val">1200</span> 时设防护栏杆；符合 GB 4053.3 第5章（除 5.6）</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">α≤45°：梯宽 ≤1100 至少一侧（螺旋梯装外侧）；1100&lt;梯宽≤2200 两侧；&gt;2200 两侧+中间</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">α&gt;45°：螺旋梯外侧；非螺旋梯两侧</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">防护栏杆高度 ≤<span class="pi-val">1200</span> 时顶部横杆兼扶手</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">单独扶手顶面至踏板上表面竖直高度 h₃ <span class="pi-val">860~1000</span>；起始点距地面/平台 ≤<span class="pi-val">1000</span></div></div>
+                </div>
+                <div class="param-content" id="i-angle">
+                    <p class="pi-note" style="padding-left:0;">L = g + 2r = 600mm 时常用倾角与踏步宽/高组合（线性插值可得中间值）：</p>
+                    <table class="gb-table">
+                        <tr><th>倾角</th><th>30°</th><th>35°</th><th>40°</th><th>45°</th><th>50°</th><th>55°</th><th>60°</th><th>65°</th><th>70°</th><th>75°</th></tr>
+                        <tr><td>踏步宽 g</td><td>280</td><td>250</td><td>230</td><td>200</td><td>180</td><td>150</td><td>130</td><td>110</td><td>90</td><td>70</td></tr>
+                        <tr><td>踏步高 r</td><td>160</td><td>175</td><td>185</td><td>200</td><td>210</td><td>225</td><td>235</td><td>245</td><td>255</td><td>265</td></tr>
+                    </table>
+                </div>
+                <div class="param-content" id="i-diag">
+                    <div class="card-diagram">
+                        <div class="cd-caption">图　固定式金属斜梯（带防护栏杆）结构示意</div>
+                        <svg viewBox="0 0 680 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="固定式金属斜梯结构示意图">
+                            <!-- 地面 -->
+                            <line x1="40" y1="400" x2="640" y2="400" stroke="#5C6470" stroke-width="2"/>
+                            <text x="46" y="420" font-size="12" fill="#5C6470">地面 / 启程面</text>
+                            <!-- 梯梁（斜） -->
+                            <g transform="rotate(-32 220 400)">
+                                <line x1="200" y1="80" x2="200" y2="400" stroke="#1E2126" stroke-width="5.5" stroke-linecap="round"/>
+                                <line x1="250" y1="80" x2="250" y2="400" stroke="#1E2126" stroke-width="5.5" stroke-linecap="round"/>
+                                <line x1="200" y1="130" x2="250" y2="130" stroke="#2D7EE7" stroke-width="4.5" stroke-linecap="round"/>
+                                <line x1="200" y1="185" x2="250" y2="185" stroke="#2D7EE7" stroke-width="4.5" stroke-linecap="round"/>
+                                <line x1="200" y1="240" x2="250" y2="240" stroke="#2D7EE7" stroke-width="4.5" stroke-linecap="round"/>
+                                <line x1="200" y1="295" x2="250" y2="295" stroke="#2D7EE7" stroke-width="4.5" stroke-linecap="round"/>
+                                <line x1="200" y1="350" x2="250" y2="350" stroke="#2D7EE7" stroke-width="4.5" stroke-linecap="round"/>
+                            </g>
+                            <!-- 防护栏杆（左侧敞开边，立柱+横杆） -->
+                            <line x1="200" y1="60" x2="200" y2="400" stroke="#F03752" stroke-width="3" transform="rotate(-32 220 400)"/>
+                            <line x1="200" y1="150" x2="200" y2="150" stroke="#F03752" stroke-width="3"/>
+                            <!-- 顶部横杆/扶手 -->
+                            <line x1="200" y1="150" x2="120" y2="120" stroke="#F03752" stroke-width="3.5" stroke-linecap="round"/>
+                            <text x="80" y="110" font-size="11" fill="#F03752" font-weight="600">顶部横杆(兼扶手)</text>
+                            <!-- 倾角弧 -->
+                            <path d="M 250 400 A 60 60 0 0 1 290 358" fill="none" stroke="#F03752" stroke-width="2" stroke-dasharray="4 3"/>
+                            <text x="296" y="384" font-size="13" font-weight="700" fill="#F03752">30°~35°</text>
+                            <!-- 踏步宽 g 标注 -->
+                            <line x1="225" y1="130" x2="225" y2="130" stroke="#2D7EE7" stroke-width="1" transform="rotate(-32 220 400)"/>
+                            <text x="258" y="120" font-size="10" fill="#2D7EE7" font-weight="600">g=踏步宽</text>
+                            <!-- 内侧净宽 -->
+                            <line x1="200" y1="405" x2="250" y2="405" stroke="#2D7EE7" stroke-width="1.2"/>
+                            <text x="206" y="423" font-size="11" fill="#2D7EE7" font-weight="600">内侧净宽</text>
+                            <!-- 净空高度 c -->
+                            <line x1="120" y1="120" x2="120" y2="40" stroke="#F57C00" stroke-width="1.5"/>
+                            <text x="92" y="84" font-size="11" fill="#F57C00" font-weight="600">净空≥2000</text>
+                            <!-- 图例 -->
+                            <rect x="470" y="100" width="12" height="12" rx="2" fill="#2D7EE7"/><text x="488" y="111" font-size="11" fill="#5C6470">踏板</text>
+                            <rect x="470" y="120" width="12" height="12" rx="2" fill="#1E2126"/><text x="488" y="131" font-size="11" fill="#5C6470">梯梁</text>
+                            <rect x="470" y="140" width="12" height="12" rx="2" fill="#F03752"/><text x="488" y="151" font-size="11" fill="#5C6470">防护栏杆/扶手</text>
+                        </svg>
+                        <p class="cd-note">斜梯倾角 &gt;20°~75°；梯段高 ≤6m；内侧净宽按通行频次 500/800/1000mm；踏步组合 L=g+2r 须 550~700mm；侧面临空 ≥1200mm 设防护栏杆；扶手顶面高 860~1000mm。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ════════════ 3. 工业防护栏杆 ════════════ -->
+        <div class="ladder-card" data-cat="guardrail" data-keywords="防护栏杆 临空高度 1200 踢脚板 荷载 0.89 0.70 0.22 立柱 1000 3.0 5 6 高度 900 1050 1200 扶手 30 50 2.0 间断净空 50 120 80 外侧间隙 75 中间横杆 500 中间立杆 180 踢脚板 100 10 25 2 顶部横杆 结构形式">
+            <div class="lc-head" onclick="toggleCard(this)">
+                <div class="lc-icon"><i class="fa-solid fa-bars-progress"></i></div>
+                <div>
+                    <div class="lc-title">工业防护栏杆</div>
+                    <div class="lc-sub">GB 4053.3—2025 第5章</div>
+                </div>
+                <i class="fa-solid fa-chevron-down lc-arrow"></i>
+            </div>
+            <div class="lc-body">
+                <div class="param-tabs">
+                    <div class="param-tab active" onclick="switchTab(this,'g-gen')">一般要求</div>
+                    <div class="param-tab" onclick="switchTab(this,'g-load')">荷载</div>
+                    <div class="param-tab" onclick="switchTab(this,'g-form')">结构形式与高度</div>
+                    <div class="param-tab" onclick="switchTab(this,'g-post')">立柱</div>
+                    <div class="param-tab" onclick="switchTab(this,'g-hand')">扶手</div>
+                    <div class="param-tab" onclick="switchTab(this,'g-mid')">中间横杆与立杆</div>
+                    <div class="param-tab" onclick="switchTab(this,'g-toe')">踢脚板</div>
+                    <div class="param-tab tab-diagram" onclick="switchTab(this,'g-diag')"><i class="fa-solid fa-image"></i> 结构示意</div>
+                </div>
+                <div class="param-content active" id="g-gen">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">临空高度 ≥<span class="pi-val">1200</span> 时，敞开边缘应设防护栏杆</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">相邻设施可能垮塌/不能起防护作用时，该处敞开边缘应设防护栏杆</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">防护栏杆应设置<span class="pi-warn">踢脚板</span>（边缘结构/斜梯梯梁起踢脚板作用除外）</div></div>
+                </div>
+                <div class="param-content" id="g-load">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">顶部横杆：任意位置方向集中活荷载 ≥<span class="pi-val">0.89kN</span>；均布 ≥<span class="pi-val">0.70kN/m</span>；挠度 相邻立柱间距 <span class="pi-val">1/250</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">中间横杆 / 中间立杆 / 底部横杆：各自单独承受集中活荷载 ≥<span class="pi-val">0.22kN</span>；挠度 跨度 <span class="pi-val">1/200</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">立柱及柱底连接：承受上述传递荷载；顶部位移 ≤<span class="pi-val">30mm</span></div></div>
+                </div>
+                <div class="param-content" id="g-form">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">结构形式（二选一）：</div></div>
+                    <div class="formula-block">① 顶部横杆 + 中间横杆 + 立柱<br>② 顶部横杆 + 中间立杆 + 底部横杆 + 立柱</div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">高度（临空 &lt;2m）：<span class="pi-val">≥900</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">高度（2m≤临空&lt;20m）：<span class="pi-val">≥1050</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">高度（临空 ≥20m）：<span class="pi-val">≥1200</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">高度为平台/工作面上表面 → 顶部横杆顶面垂直高度（斜梯为踏板上表面 → 顶部横杆顶面）</div></div>
+                </div>
+                <div class="param-content" id="g-post">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">立柱间距 <span class="pi-val">≤1000</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">立柱壁厚（管材）<span class="pi-val">≥3.0mm</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">立柱壁厚（角型/T型）<span class="pi-val">≥5mm</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">立柱壁厚（板材）<span class="pi-val">≥6mm</span></div></div>
+                </div>
+                <div class="param-content" id="g-hand">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">扶手圆管直径 <span class="pi-val">30~50</span>；非圆形外接圆 ≤<span class="pi-val">57</span>，圆角半径 ≥<span class="pi-val">3</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">扶手管材壁厚 <span class="pi-val">≥2.0mm</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">扶手间断净空（未倒圆）<span class="pi-val">50~120</span>；（倒圆）<span class="pi-val">50~80</span>，倒圆半径 ≤200</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">扶手外侧预留间隙 <span class="pi-val">≥75</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">扶手末端不应有造成伤害的突出物</div></div>
+                </div>
+                <div class="param-content" id="g-mid">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">中间横杆：顶部横杆下方至少一道；与上下构件竖向净距 <span class="pi-val">≤500</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">中间立杆：与相邻立杆/立柱水平净距 <span class="pi-val">≤180</span></div></div>
+                </div>
+                <div class="param-content" id="g-toe">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">踢脚板顶部在平台/工作面之上高度 <span class="pi-val">≥100</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">踢脚板底部距离平台/工作面间隙 <span class="pi-val">≤10</span>（无排水可不留）</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">相邻防护栏杆踢脚板间间隙 <span class="pi-val">≤25</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">踢脚板厚度 <span class="pi-val">≥2</span></div></div>
+                </div>
+                <div class="param-content" id="g-diag">
+                    <div class="card-diagram">
+                        <div class="cd-caption">图　工业防护栏杆（带踢脚板）结构示意</div>
+                        <svg viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="工业防护栏杆结构示意图">
+                            <!-- 平台面 -->
+                            <line x1="60" y1="300" x2="620" y2="300" stroke="#5C6470" stroke-width="2.5"/>
+                            <text x="66" y="320" font-size="12" fill="#5C6470">平台 / 工作面</text>
+                            <!-- 立柱 -->
+                            <line x1="120" y1="300" x2="120" y2="120" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
+                            <line x1="320" y1="300" x2="320" y2="120" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
+                            <line x1="520" y1="300" x2="520" y2="120" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
+                            <!-- 顶部横杆（兼扶手） -->
+                            <line x1="120" y1="120" x2="520" y2="120" stroke="#F03752" stroke-width="5" stroke-linecap="round"/>
+                            <text x="350" y="108" font-size="11" fill="#F03752" font-weight="600">顶部横杆（兼扶手）H</text>
+                            <!-- 中间横杆 -->
+                            <line x1="120" y1="210" x2="520" y2="210" stroke="#2D7EE7" stroke-width="3.5"/>
+                            <text x="528" y="214" font-size="10" fill="#2D7EE7">中间横杆</text>
+                            <!-- 中间立杆（竖，示意） -->
+                            <line x1="220" y1="120" x2="220" y2="300" stroke="#9ca3af" stroke-width="2.5"/>
+                            <line x1="420" y1="120" x2="420" y2="300" stroke="#9ca3af" stroke-width="2.5"/>
+                            <!-- 踢脚板 -->
+                            <rect x="120" y="284" width="400" height="16" fill="#F57C00"/>
+                            <text x="300" y="278" font-size="10" fill="#F57C00" font-weight="600">踢脚板 ≥100</text>
+                            <!-- 高度标注 H -->
+                            <line x1="100" y1="120" x2="100" y2="300" stroke="#F03752" stroke-width="1.2"/>
+                            <text x="70" y="215" font-size="11" fill="#F03752" font-weight="600">H 900/1050/1200</text>
+                            <!-- 立柱间距标注 -->
+                            <line x1="120" y1="335" x2="320" y2="335" stroke="#1E2126" stroke-width="1.2"/>
+                            <text x="190" y="352" font-size="11" fill="#1E2126" font-weight="600">立柱间距 ≤1000</text>
+                            <!-- 图例 -->
+                            <rect x="540" y="180" width="12" height="12" rx="2" fill="#F03752"/><text x="558" y="191" font-size="11" fill="#5C6470">顶部横杆</text>
+                            <rect x="540" y="200" width="12" height="12" rx="2" fill="#2D7EE7"/><text x="558" y="211" font-size="11" fill="#5C6470">中间横杆</text>
+                            <rect x="540" y="220" width="12" height="12" rx="2" fill="#F57C00"/><text x="558" y="231" font-size="11" fill="#5C6470">踢脚板</text>
+                        </svg>
+                        <p class="cd-note">防护栏杆高度按临空高度分级：&lt;2m ≥900、2~20m ≥1050、≥20m ≥1200mm；立柱间距 ≤1000mm；顶部横杆集中荷载 ≥0.89kN；踢脚板高 ≥100mm；扶手圆管直径 30~50mm。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ════════════ 4. 平台 ════════════ -->
+        <div class="ladder-card" data-cat="platform" data-keywords="平台 工作平台 通行平台 梯间平台 倾角 10 荷载 2 3.5 1.5 尺寸 500 750 700 760 850 上方空间 2000 2100 平台板 防滑 高差 4 间隙 20 格栅板 35 25 100 间隙防护 25 120 180">
+            <div class="lc-head" onclick="toggleCard(this)">
+                <div class="lc-icon"><i class="fa-solid fa-table-cells-large"></i></div>
+                <div>
+                    <div class="lc-title">平台</div>
+                    <div class="lc-sub">GB 4053.3—2025 第6章</div>
+                </div>
+                <i class="fa-solid fa-chevron-down lc-arrow"></i>
+            </div>
+            <div class="lc-body">
+                <div class="param-tabs">
+                    <div class="param-tab active" onclick="switchTab(this,'p-gen')">一般要求</div>
+                    <div class="param-tab" onclick="switchTab(this,'p-size')">尺寸</div>
+                    <div class="param-tab" onclick="switchTab(this,'p-clear')">上方空间</div>
+                    <div class="param-tab" onclick="switchTab(this,'p-plate')">平台板</div>
+                    <div class="param-tab" onclick="switchTab(this,'p-gap')">间隙防护</div>
+                </div>
+                <div class="param-content active" id="p-gen">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">工作平台 / 梯间平台：<span class="pi-warn">水平设置</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">通行平台与水平面倾角 <span class="pi-val">≤10°</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">平台荷载（无设备/堆料区均布）<span class="pi-val">≥2 kN/m²</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">任意边长 200 正方形区域集中活荷载 <span class="pi-val">≥1.5kN</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">参观平台均布活荷载 <span class="pi-val">≥3.5 kN/m²</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">平台板挠度容许值 <span class="pi-val">10mm 或 跨度 1/200</span>（取小）</div></div>
+                </div>
+                <div class="param-content" id="p-size">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">通行平台净宽度（单人偶尔）<span class="pi-val">≥500</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">通行平台净宽度（其余）<span class="pi-val">≥750</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">通行平台上方 200 内有障碍物时净宽度 <span class="pi-val">≥500</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">梯间平台宽度：≥梯子宽度，且直梯 <span class="pi-val">≥700</span> / 斜梯 <span class="pi-val">≥760</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">梯间平台行进方向长度：≥梯子宽度，且直梯 <span class="pi-val">≥700</span> / 斜梯 <span class="pi-val">≥850</span></div></div>
+                </div>
+                <div class="param-content" id="p-clear">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">平台上方净空高度 <span class="pi-val">≥2000</span>；疏散通道 <span class="pi-val">≥2100</span></div></div>
+                </div>
+                <div class="param-content" id="p-plate">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">平台板应采取防滑措施（凸纹/涂层/垫/棱）</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">平台板不应相互搭接；相邻上表面高度差 <span class="pi-val">≤4</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">荷载后相邻板高度差 <span class="pi-val">≤4</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">相邻平台板间隙 <span class="pi-val">≤20</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">格栅板（非作业区净空间隙）<span class="pi-val">≤35</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">格栅板（作业区横杆中心间距 / 净空间隙）<span class="pi-val">≤100 / ≤25</span></div></div>
+                </div>
+                <div class="param-content" id="p-gap">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">间隙 &gt;25 且 ≤120：填缝板减至 ≤25 或装 ≥<span class="pi-val">50</span> 挡板</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">间隙 &gt;120 且 ≤180：填缝板减至 ≤25 或装 ≥<span class="pi-val">100</span> 挡板 + 扶手</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">间隙 &gt;180：<span class="pi-warn">装防护栏杆</span></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ════════════ 5. 门（自闭门 / 装卸作业门） ════════════ -->
+        <div class="ladder-card" data-cat="gate" data-keywords="门 自闭门 装卸作业门 打开 90 底部 120 500 不锁定 平开 档块 装卸 危险区外 防护栏杆 顶部高度 杆件间距">
+            <div class="lc-head" onclick="toggleCard(this)">
+                <div class="lc-icon"><i class="fa-solid fa-door-closed"></i></div>
+                <div>
+                    <div class="lc-title">门（自闭门 / 装卸作业门）</div>
+                    <div class="lc-sub">GB 4053.3—2025 第7章</div>
+                </div>
+                <i class="fa-solid fa-chevron-down lc-arrow"></i>
+            </div>
+            <div class="lc-body">
+                <div class="param-tabs">
+                    <div class="param-tab active" onclick="switchTab(this,'d-self')">自闭门</div>
+                    <div class="param-tab" onclick="switchTab(this,'d-load')">装卸作业门</div>
+                </div>
+                <div class="param-content active" id="d-self">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">设计荷载 / 顶部高度 / 杆件间距：满足相邻防护栏杆要求</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">自行关闭；保持在关闭位置但<span class="pi-warn">不锁定</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">平开方式向平台内打开；打开角度 <span class="pi-val">≥90°</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">关闭时由挡块阻挡，防止人员推开坠落</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">底部距平台高度 <span class="pi-val">120~500</span></div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">不设置踢脚板；关闭冲击力不伤人不卡滞</div></div>
+                </div>
+                <div class="param-content" id="d-load">
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">开口处设置；设计荷载 / 顶部高度 / 杆件间距满足相邻防护栏杆要求</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">开闭装置安全可靠，不卡滞、不关不严，不因冰冻腐蚀失效</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">开闭过程不应对人员造成伤害</div></div>
+                    <div class="param-item"><div class="pi-bullet"></div><div class="pi-text">操作人员应能在<span class="pi-warn">危险区外</span>手动或控制系统操作</div></div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /ladderGrid -->
+
+    <div class="no-result" id="noResult">
+        <i class="fa-solid fa-magnifying-glass-plus"></i>
+        未找到匹配的参数
+    </div>
+
+    <div class="std-ref no-print">
+        数据来源：<a href="https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=9405A8C8E59EE0C14277B4176BC3B8E5" target="_blank" rel="noopener">GB 4053.1—2025</a> /
+        <a href="https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=4C5E7A9B6F0A2D3E5F6A7B8C9D0E1F2" target="_blank" rel="noopener">GB 4053.2—2025</a> /
+        <a href="https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno=3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8" target="_blank" rel="noopener">GB 4053.3—2025</a>
+        &nbsp;|&nbsp; 替代 GB 4053.1/2/3—2009
+    </div>
+
+</main>
+
+<footer class="sheen-footer">
+    <img src="/sheen-toolbox/assets/sheen-logo.png" alt="" class="sheen-logo-sm">
+    SHEEN Toolbox &middot; 固定式金属梯及平台设计参数检索
+</footer>
+
+<script>
+function toggleCard(head) {
+    var card = head.closest('.ladder-card');
+    var body = card.querySelector('.lc-body');
+    var isOpen = card.classList.contains('open');
+    document.querySelectorAll('.ladder-card.open').forEach(function(c){
+        if(c !== card){ c.classList.remove('open'); c.querySelector('.lc-body').classList.remove('show'); }
+    });
+    card.classList.toggle('open', !isOpen);
+    body.classList.toggle('show', !isOpen);
+}
+function expandAll() {
+    document.querySelectorAll('.ladder-card').forEach(function(c){
+        c.classList.add('open'); c.querySelector('.lc-body').classList.add('show');
+    });
+}
+function collapseAll() {
+    document.querySelectorAll('.ladder-card').forEach(function(c){
+        c.classList.remove('open'); c.querySelector('.lc-body').classList.remove('show');
+    });
+}
+function switchTab(tab, targetId) {
+    var container = tab.closest('.lc-body');
+    container.querySelectorAll('.param-tab').forEach(function(t){ t.classList.remove('active'); });
+    container.querySelectorAll('.param-content').forEach(function(p){ p.classList.remove('active'); });
+    tab.classList.add('active');
+    document.getElementById(targetId).classList.add('active');
+}
+
+// ===== 斜梯踏步计算 =====
+function calcStep() {
+    var g = parseFloat(document.getElementById('calG').value);
+    var out = document.getElementById('calOut');
+    if(isNaN(g) || g <= 0){ out.innerHTML = '<span class="cb-err">请输入有效的踏步宽 g（mm）</span>'; return; }
+    var rMin = (550 - g) / 2, rMax = (700 - g) / 2;
+    if(rMax < 0){ out.innerHTML = '<span class="cb-err">踏步宽过大，L=g+2r 无法 ≤700，请减小 g</span>'; return; }
+    if(rMin < 0) rMin = 0;
+    out.innerHTML = '踏步高 r 应满足：<b>' + rMin.toFixed(1) + ' ~ ' + rMax.toFixed(1) + ' mm</b>（由 L=g+2r∈[550,700] 推导）';
+}
+function calcStep2() {
+    var r = parseFloat(document.getElementById('calR').value);
+    var out = document.getElementById('calOut');
+    if(isNaN(r) || r <= 0){ out.innerHTML = '<span class="cb-err">请输入有效的踏步高 r（mm）</span>'; return; }
+    var gMin = 550 - 2*r, gMax = 700 - 2*r;
+    if(gMax < 0){ out.innerHTML = '<span class="cb-err">踏步高过大，L=g+2r 无法 ≤700，请减小 r</span>'; return; }
+    if(gMin < 0) gMin = 0;
+    out.innerHTML = '踏步宽 g 应满足：<b>' + gMin.toFixed(1) + ' ~ ' + gMax.toFixed(1) + ' mm</b>（由 L=g+2r∈[550,700] 推导）';
+}
+
+// ===== 搜索过滤 =====
+var searchInput = document.getElementById('searchInput');
+var clearBtn = document.getElementById('clearSearch');
+searchInput.addEventListener('input', function(){
+    var q = this.value.trim().toLowerCase();
+    clearBtn.style.display = q ? 'block' : 'none';
+    filterCards(q);
+});
+clearBtn.addEventListener('click', function(){ searchInput.value=''; clearBtn.style.display='none'; filterCards(''); });
+
+function filterCards(q) {
+    var cards = document.querySelectorAll('.ladder-card');
+    var visibleCount = 0;
+    cards.forEach(function(card){
+        if(!q){ card.style.display=''; visibleCount++; return; }
+        var keywords = (card.getAttribute('data-keywords')||'').toLowerCase();
+        var bodyText = card.textContent.toLowerCase();
+        var match = keywords.indexOf(q)!==-1 || bodyText.indexOf(q)!==-1;
+        card.style.display = match ? '' : 'none';
+        if(match) visibleCount++;
+    });
+    document.getElementById('noResult').style.display = visibleCount===0 ? 'block' : 'none';
+}
+
+// ===== 分类 Chip 筛选 =====
+var chips = document.querySelectorAll('#filterChips .lp-chip');
+chips.forEach(function(chip){
+    chip.addEventListener('click', function(){
+        chips.forEach(function(c){ c.classList.remove('active'); });
+        this.classList.add('active');
+        var cat = this.getAttribute('data-cat');
+        document.querySelectorAll('.ladder-card').forEach(function(card){
+            if(cat==='all'){ card.style.display=''; }
+            else{ card.style.display = card.getAttribute('data-cat')===cat ? '' : 'none'; }
+        });
+        searchInput.value=''; clearBtn.style.display='none';
+        document.getElementById('noResult').style.display='none';
+    });
+});
+
+// ===== 打印时间戳 =====
+(function(){
+    var d=new Date(), pad=function(n){return n<10?'0'+n:n};
+    var ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+' '+pad(d.getHours())+':'+pad(d.getMinutes());
+    var el=document.createElement('div');
+    el.className='print-time';
+    el.textContent='打印时间：'+ts;
+    document.querySelector('main').appendChild(el);
+})();
+
+// ===== 图示点击放大 Lightbox =====
+(function(){
+    var lb = document.createElement('div');
+    lb.className = 'diag-lightbox';
+    lb.id = 'diagLightbox';
+    lb.innerHTML = '<div class="diag-lightbox-inner"><button class="diag-lb-close" id="diagLbClose">&times;</button><div class="diag-lb-title" id="diagLbTitle"></div><div id="diagLbBody"></div></div>';
+    lb.addEventListener('click', function(e){ if(e.target===lb) closeLb(); });
+    document.body.appendChild(lb);
+    var closeBtn = document.getElementById('diagLbClose');
+    closeBtn.addEventListener('click', closeLb);
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeLb(); });
+    function openLb(diagEl){
+        var svg = diagEl.querySelector('svg');
+        var caption = diagEl.querySelector('.cd-caption');
+        if(!svg) return;
+        var clone = svg.cloneNode(true);
+        clone.style.pointerEvents = 'auto';
+        clone.removeAttribute('width');
+        clone.removeAttribute('height');
+        clone.style.width = '680px';
+        clone.style.maxWidth = '90vw';
+        clone.style.height = 'auto';
+        document.getElementById('diagLbBody').innerHTML = '';
+        document.getElementById('diagLbBody').appendChild(clone);
+        document.getElementById('diagLbTitle').textContent = caption ? caption.textContent : '结构示意图';
+        lb.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeLb(){ lb.classList.remove('show'); document.body.style.overflow = ''; }
+    document.querySelectorAll('.card-diagram').forEach(function(el){
+        var hint = document.createElement('span');
+        hint.className = 'cd-hint';
+        hint.innerHTML = '<i class="fa-solid fa-expand"></i> 点击放大';
+        el.appendChild(hint);
+        el.addEventListener('click', function(){ openLb(el); });
+    });
+})();
+</script>
+
+</body>
+</html>
