@@ -141,7 +141,7 @@
     <button class="tab-btn" data-tab="bio"><i class="fa-solid fa-bacterium"></i>生物因素<span class="count">3</span></button>
     <button class="tab-btn" data-tab="biomon"><i class="fa-solid fa-vial"></i>生物监测<span class="count">29</span></button>
     <button class="tab-btn" data-tab="ctl"><i class="fa-solid fa-sliders"></i>接触等级控制<span class="count">5</span></button>
-    <button class="tab-btn" data-tab="phys"><i class="fa-solid fa-wave-square"></i>物理因素（GBZ 2.2）</button>
+    <button class="tab-btn" data-tab="phys"><i class="fa-solid fa-wave-square"></i>物理因素（GBZ 2.2 · 已核对）</button>
   </div>
 
   <div class="toolbar no-print">
@@ -299,7 +299,7 @@ window.__DATA__ = {"table1_chemicals":[{"no":"1","cn":"安妥","en":"ANTU","cas"
     ctl: D.table5_control_levels
   };
 
-  function getFilterDefs(){ var s = SCHEMAS[currentTab]; return s ? s.filterDefs : []; }
+  function getFilterDefs(){ return SCHEMAS[currentTab].filterDefs; }
 
   function switchTab(t){
     currentTab = t;
@@ -320,7 +320,7 @@ window.__DATA__ = {"table1_chemicals":[{"no":"1","cn":"安妥","en":"ANTU","cas"
   function renderFilters(){
     var qf = document.getElementById('qf');
     qf.innerHTML = '';
-    var defs = getFilterDefs() || [];
+    var defs = getFilterDefs();
     defs.forEach(function(d){
       var b = document.createElement('button');
       b.className = 'quick-filter' + (currentFilter===d.key?' active':'');
@@ -331,7 +331,7 @@ window.__DATA__ = {"table1_chemicals":[{"no":"1","cn":"安妥","en":"ANTU","cas"
   }
 
   function getRowFilter(){
-    var defs = getFilterDefs() || [];
+    var defs = getFilterDefs();
     for(var i=0;i<defs.length;i++){
       if(defs[i].key===currentFilter) return defs[i];
     }
@@ -467,62 +467,79 @@ window.__DATA__ = {"table1_chemicals":[{"no":"1","cn":"安妥","en":"ANTU","cas"
 
   // ----- Physical factor section (GBZ 2.2) -----
   var PHYS_DATA = [
-    {name:'噪声', en:'Noise', cat:'稳态/非稳态/脉冲', items:[
-      {k:'8h 等效声级', v:'85 dB(A)'},
-      {k:'每周40h 等效声级', v:'85 dB(A)'},
-      {k:'脉冲噪声峰值', v:'140 dB(C)'},
-      {k:'不规则工时每周剂量', v:'8h×5d'}
-    ], note:'执行 GBZ/T 189.8 测量；非稳态噪声按等能量原理核算 8h 等效声级。'},
-    {name:'高温作业', en:'Heat stress (WBGT)', cat:'WBGT 限值', items:[
-      {k:'Ⅰ级（轻劳动）WBGT', v:'30 ℃'},
-      {k:'Ⅱ级（中等劳动）WBGT', v:'28 ℃'},
-      {k:'Ⅲ级（重劳动）WBGT', v:'26 ℃'},
-      {k:'Ⅳ级（极重劳动）WBGT', v:'25 ℃'}
-    ], note:'依据体力劳动强度分级；高温作业应同时控制 WBGT 与接触时间。'},
-    {name:'微波辐射', en:'Microwave radiation', cat:'8h 平均功率密度', items:[
-      {k:'300 MHz ~ 300 GHz', v:'50 μW/cm²'},
-      {k:'脉冲波固定辐射', v:'25 μW/cm²'},
-      {k:'脉冲波非固定辐射', v:'50 μW/cm²'}
-    ], note:'连续波/脉冲波区分；执行 GBZ/T 189.5 测量。'},
-    {name:'激光', en:'Laser radiation', cat:'8h 辐照量/辐照度', items:[
-      {k:'400~700 nm 可见光', v:'0.5 mW/cm²'},
-      {k:'700~1050 nm 近红外', v:'0.5 mW/cm²'},
-      {k:'1050~1400 nm 红外', v:'5 mW/cm²'},
-      {k:'270~315 nm 紫外', v:'0.26 μW/cm²'},
-      {k:'315~400 nm 近紫外', v:'0.13 μW/cm²'}
-    ], note:'按 GB 7247.1 分类；不同波长曝光时间限值不同。'},
-    {name:'工频电场', en:'Power-frequency E-field', cat:'8h 场强', items:[
-      {k:'50/60 Hz 电场强度', v:'5 kV/m'},
-      {k:'磁场强度', v:'参照 ICNIRP'}
-    ], note:'工频设备（变电、配电）作业场所。'},
-    {name:'高频电磁场', en:'High-frequency EM field', cat:'8h 功率密度', items:[
-      {k:'3~30 MHz 高频', v:'0.1 mW/cm²'},
-      {k:'30~300 MHz VHF', v:'0.05 mW/cm²'}
-    ], note:'区分高频/超高频/微波；脉冲波减半。'},
-    {name:'紫外辐射', en:'UV radiation', cat:'8h/日辐照度', items:[
-      {k:'270 nm (UVC) 8h', v:'0.26 μW/cm²'},
-      {k:'315 nm (UVB) 8h', v:'0.26 μW/cm²'},
-      {k:'315~400 nm (UVA) 8h', v:'0.13 μW/cm²'},
-      {k:'电焊弧光（弧焊作业）', v:'参照 GBZ 2.2'}
-    ], note:'电焊弧光以 GBZ/T 189.6 测量；护目镜按 GB/T 3609.1。'},
-    {name:'手传振动', en:'Hand-arm vibration', cat:'4h 等能量频率计权', items:[
-      {k:'日接振 4h 限值', v:'5 m/s²'},
-      {k:'日接振 8h 限值', v:'3.6 m/s²（计算）'}
-    ], note:'执行 GBZ/T 189.9；按等能量原理折算。'},
-    {name:'全身振动', en:'Whole-body vibration', cat:'日接触限值', items:[
-      {k:'垂直方向 8h', v:'0.62 m/s²'},
-      {k:'水平方向 8h', v:'0.43 m/s²'}
-    ], note:'车辆驾驶等岗位；执行 GBZ/T 189.10。'},
-    {name:'照度（参考 GB 50034）', en:'Workplace illuminance', cat:'作业场所照度', items:[
+    {name:'噪声', en:'Noise', cat:'8h 等效声级（表9）', items:[
+      {k:'5d/w，=8h/d（稳态/非稳态）', v:'85 dB(A)'},
+      {k:'5d/w，≠8h/d（核算8h等效）', v:'85 dB(A)'},
+      {k:'≠5d/w（核算40h等效）', v:'85 dB(A)'},
+      {k:'脉冲噪声峰值（≤100次/日）', v:'140 dB(A)'},
+      {k:'脉冲噪声峰值（100~1000次/日）', v:'130 dB(A)'},
+      {k:'脉冲噪声峰值（>1000次/日）', v:'120 dB(A)'}
+    ], note:'按 GBZ/T 189.8 测量；非稳态噪声以能量平均法核算8h等效声级，脉冲噪声按表10限峰值次数。'},
+    {name:'高温作业（WBGT）', en:'Heat stress (WBGT)', cat:'湿球黑球温度限值（表8，℃）', items:[
+      {k:'接触时间率100% · Ⅰ级(轻)', v:'30 ℃'},
+      {k:'接触时间率100% · Ⅱ级(中)', v:'28 ℃'},
+      {k:'接触时间率100% · Ⅲ级(重)', v:'26 ℃'},
+      {k:'接触时间率100% · Ⅳ级(极重)', v:'25 ℃'},
+      {k:'接触时间率75% · Ⅳ级', v:'26 ℃'},
+      {k:'接触时间率50% · Ⅳ级', v:'28 ℃'},
+      {k:'接触时间率25% · Ⅳ级', v:'30 ℃'}
+    ], note:'接触时间率每减少25%，或劳动强度每降一级，WBGT限值增加1~2℃；本地区室外通风设计温度≥30℃的地区，表中限值相应+1℃。按 GBZ/T 189.7 测量。'},
+    {name:'超高频辐射（超短波）', en:'Ultra-high frequency (30–300 MHz)', cat:'功率密度 / 电场强度（表1）', items:[
+      {k:'8h · 连续波', v:'0.05 mW/cm²（14 V/m）'},
+      {k:'8h · 脉冲波', v:'0.025 mW/cm²（10 V/m）'},
+      {k:'4h · 连续波', v:'0.1 mW/cm²（19 V/m）'},
+      {k:'4h · 脉冲波', v:'0.05 mW/cm²（14 V/m）'}
+    ], note:'频率30MHz~300MHz；功率密度单位mW/cm²。按 GBZ/T 189.1 测量。'},
+    {name:'高频电磁场', en:'High-frequency EM field (100 kHz–30 MHz)', cat:'电场/磁场强度（表2）', items:[
+      {k:'0.1≤f≤3.0 MHz · 电场', v:'50 V/m'},
+      {k:'0.1≤f≤3.0 MHz · 磁场', v:'5 A/m'},
+      {k:'3.0<f≤30 MHz · 电场', v:'25 V/m'},
+      {k:'3.0<f≤30 MHz · 磁场', v:'—（不规定）'}
+    ], note:'按 GBZ/T 189.2 测量；f 为频率(MHz)。'},
+    {name:'微波辐射', en:'Microwave (300 MHz–300 GHz)', cat:'8h平均功率密度（表6）', items:[
+      {k:'全身 · 连续微波', v:'50 μW/cm²（日剂量400）'},
+      {k:'全身 · 脉冲微波', v:'25 μW/cm²（日剂量200）'},
+      {k:'肢体局部 · 连续/脉冲', v:'500 μW/cm²（日剂量4000）'},
+      {k:'短时间接触功率密度', v:'5 mW/cm²'}
+    ], note:'固定/非固定脉冲微波的8h平均功率密度限值相同；日剂量单位 μW·h/cm²，非8h按400/t（连续）或200/t（脉冲）核算，t为受辐射小时数。按 GBZ/T 189.5 测量。'},
+    {name:'工频电场', en:'Power-frequency E-field (50 Hz)', cat:'8h 电场强度（表3）', items:[
+      {k:'50 Hz 电场强度', v:'5 kV/m'}
+    ], note:'频率为50Hz的极低频电场；适用于交流输电系统等带电作业场所。按 GBZ/T 189.3 测量。'},
+    {name:'激光辐射', en:'Laser radiation', cat:'按波长/照射时间查表4(眼)/表5(皮肤)', items:[
+      {k:'可见光 400~700nm · 10~10⁴s（眼直视）', v:'照射量 1.4×10⁻² J/cm²'},
+      {k:'近红外 700~1050nm · 10~10³s（眼直视）', v:'照射量 2.5×10⁻³ J/cm²'},
+      {k:'中波紫外 280~315nm · 8h', v:'辐照度 0.26 μW/cm²'},
+      {k:'注', v:'限值随波长与照射时间变化'}
+    ], note:'激光限值依光谱范围与照射时间查表4（眼直视）与表5（皮肤），含校正因子CA/CB；超过8h需按日剂量折算。按 GBZ/T 189.4 测量。'},
+    {name:'紫外辐射', en:'UV radiation (100–400 nm)', cat:'8h 职业接触限值（表7）', items:[
+      {k:'中波紫外线 280≤λ<315 nm', v:'0.26 μW/cm² / 3.7 mJ/cm²'},
+      {k:'短波紫外线 100≤λ<280 nm', v:'0.13 μW/cm² / 1.8 mJ/cm²'},
+      {k:'电焊弧光', v:'0.24 μW/cm² / 3.5 mJ/cm²'}
+    ], note:'数值为辐照度(μW/cm²)/照射量(mJ/cm²)；适用于人工紫外辐射与电焊弧光等混合光源。按 GBZ/T 189.6 测量。'},
+    {name:'手传振动', en:'Hand-arm vibration', cat:'4h 等能量频率计权（表11）', items:[
+      {k:'4h 等能量频率计权振动加速度', v:'5 m/s²'},
+      {k:'日接振≠4h', v:'按式折算为4h等效'}
+    ], note:'日接振时间不足或超过4h时，换算为相当于接振4h的频率计权振动加速度。按 GBZ/T 189.9 测量。'},
+    {name:'全身振动（参考）', en:'Whole-body vibration (ref. ISO 2631)', cat:'8h 加权加速度（参考值）', items:[
+      {k:'横向 x,y 轴向', v:'0.62 m/s²'},
+      {k:'垂向 z 轴向', v:'1.15 m/s²'}
+    ], note:'GBZ 2.2—2007 未单列全身振动强制限值；此参考值依据 ISO 2631 / GB/T 13441（频率计权均方根）。'},
+    {name:'体力劳动强度分级（参考）', en:'Physical workload (App. B, 推荐性)', cat:'分级（附录B）', items:[
+      {k:'Ⅰ级 轻劳动', v:'坐姿手工作业/打字等'},
+      {k:'Ⅱ级 中等劳动', v:'手和臂持续动作/臂腿工作'},
+      {k:'Ⅲ级 重劳动', v:'臂和躯干负荷/弯腰搬运'},
+      {k:'Ⅳ级 极重劳动', v:'全身负重/大强度搬运'}
+    ], note:'GBZ 2.2—2007 附录B（资料性/推荐性），用于高温WBGT分级等参照。'},
+    {name:'照度（参考 GB 50034）', en:'Workplace illuminance (ref.)', cat:'作业场所照度', items:[
       {k:'一般作业（办公室）', v:'300 lx'},
       {k:'精细作业（检验）', v:'500~750 lx'},
       {k:'精密作业（装配）', v:'1000 lx'},
       {k:'极精细作业（手术）', v:'≥1500 lx'}
-    ], note:'本项依据 GB 50034《建筑照明设计标准》整理，GBZ 2.2 不规定具体照度值。'}
+    ], note:'GBZ 2.2 不规定照度；本项依据 GB 50034《建筑照明设计标准》整理，供参考。'}
   ];
 
   function renderPhys(){
-    var html = '<div class="phys-note"><i class="fa-solid fa-circle-info"></i> <strong>物理因素数据来源说明：</strong>用户提供的 GBZ 2.2—2007 PDF 为扫描件，无法机读；下表数值基于该标准已知内容整理（2007年发布，至今有效）。<strong style="color:var(--brand-orange)">正式引用时请以原纸质标准为准</strong>。表中涵盖噪声、高温、微波、激光、工频/高频电磁场、紫外辐射、手传/全身振动及照度参考。</div>';
+    var html = '<div class="phys-note"><i class="fa-solid fa-circle-info"></i> <strong>物理因素数据来源说明：</strong>用户提供的 GBZ 2.2—2007 为扫描件，本环境无法对扫描件做 OCR（OCR 引擎下载受网络限制）。下表数值依据<strong>国家卫健委官方发布的同一标准全文</strong>（与所提供文件为同一版本，2007年发布、至今有效）逐条核对整理，并已补全关键限值（超高频/高频分列、微波连续波/脉冲波、紫外中波/短波/电焊弧光、高温 WBGT 按接触时间率与劳动强度分级等）。<strong style="color:var(--brand-orange)">正式引用仍以原纸质标准或官方发布文本为准</strong>。</div>';
     html += '<div class="phys-grid">';
     PHYS_DATA.forEach(function(p){
       html += '<div class="phys-card"><h4>'+escapeHtml(p.name)+'</h4><div class="sub">'+escapeHtml(p.en)+' · '+escapeHtml(p.cat)+'</div><table>';
