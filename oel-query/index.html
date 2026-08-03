@@ -358,7 +358,7 @@ window.__DATA__ = {"table1_chemicals":[{"no":"1","cn":"安妥","en":"ANTU","cas"
     thead.innerHTML = sch.cols.map(function(c,i){
       var sorted = currentSort.col===i;
       var ind = sorted ? (currentSort.asc?'▲':'▼') : '↕';
-      return '<th data-i="'+i+'" class="'+ (sorted?'sorted':'') +'" style="min-width:'+c.w+'px">'+c.label+'<span class="sort-ind">'+ind+'</span></th>';
+      return '<th data-i="'+i+'" data-col="'+c.key+'" class="'+c.key+(sorted?' sorted':'')+'" style="min-width:'+c.w+'px">'+c.label+'<span class="sort-ind">'+ind+'</span></th>';
     }).join('');
     thead.querySelectorAll('th').forEach(function(th){
       th.addEventListener('click', function(){
