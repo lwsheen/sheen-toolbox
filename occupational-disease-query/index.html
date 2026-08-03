@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>职业病分类和目录查询 — SHEEN Toolbox</title>
+
+  <link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
+
+<link rel="stylesheet" href="/sheen-toolbox/common.css">
+
+  <style>* { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+
+      background: var(--bg-page);
+
+      color: var(--text-primary);
+
+      font-size: 14px;
+
+      line-height: 1.6;
+
+      min-height: 100vh;
+
+      display: flex;
+
+      flex-direction: column;
+
+    }
+
+    .breadcrumb a:hover { opacity: .7; text-decoration: underline; }
+
+    .breadcrumb span { color: var(--text-secondary); }
+
+    .page-title i { color: var(--brand-red); font-size:22px; }
+
+    .main-grid { display: grid; grid-template-columns: 340px 1fr; gap: 20px; }
+
+    @media (max-width: 900px) {
+
+      .main-grid { grid-template-columns: 1fr; }
+
+      .sidebar { position: static; max-height: none; padding: 12px 16px; }
+
+      .sidebar h3 { display: flex; align-items: center; justify-content: space-between; cursor: pointer; margin-bottom: 0; }
+
+      .sidebar h3 .toggle-arrow { display: inline; font-size: 12px; transition: transform .25s; color: var(--text-secondary); }
+
+      .sidebar.collapsed .sidebar-body { display: none; }
+
+      .sidebar.collapsed h3 { margin-bottom: 0; }
+
+      .sidebar.collapsed h3 .toggle-arrow { transform: rotate(-90deg); }
+
+      .sidebar:not(.collapsed) h3 { margin-bottom: 14px; }
+
+    }
+
+    .sidebar { background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 20px; position: sticky; top: 20px; max-height: calc(100vh - 160px); overflow-y: auto; }
+
+    .sidebar h3 { font-size: 16px; font-weight: 600; margin-bottom: 14px; color: var(--text-primary); }
+
+    .sidebar h3 .toggle-arrow { display: none; }
+
+    .stat-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-light); font-size:11px; }
+
+    .stat-row:last-child { border-bottom: none; }
+
+    .stat-row span:first-child { color: var(--text-secondary); }
+
+    .stat-row span:last-child { font-weight: 600; color: var(--brand-red); }
+
+    .search-box { position: relative; margin-bottom: 16px; }
+
+    .search-box input { width: 100%; padding: 10px 14px 10px 38px; border: 1.5px solid var(--border); border-radius: 60px; font-size: 14px; background: var(--bg-card); color: var(--text-primary); font-family: inherit; transition: var(--transition); }
+
+    .search-box input:focus { outline: none; border-color: var(--brand-red); box-shadow: 0 0 0 4px rgba(240,55,82,0.08); }
+
+    .search-box i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); font-size: 14px; }
+
+    .quick-filters { display: flex; flex-wrap: wrap; gap:4px; margin-bottom: 14px; }
+
+    .quick-filter { font-size: 12px; padding: 4px 12px; border-radius: 60px; background: var(--border-light); color: var(--text-secondary); cursor: pointer; border: none; font-family: inherit; transition: var(--transition); }
+
+    .quick-filter:hover { background: var(--brand-red-light); color: var(--brand-red); }
+
+    .quick-filter.active { background: var(--brand-red); color: #fff; }
+
+    .tree-container { background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 20px 24px; }
+
+    .tree-node { user-select: none; }
+
+    .tree-row { display: flex; align-items: center; padding: 6px 8px; border-radius: var(--radius-sm); cursor: pointer; transition: background .15s; gap:4px; }
+
+    .tree-row:hover { background: var(--bg-page); }
+
+    .tree-row.selected { background: var(--brand-red-light); }
+
+    .tree-toggle { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; flex: none; font-size: 10px; color: var(--text-secondary); transition: transform .2s; }
+
+    .tree-toggle.expanded { transform: rotate(90deg); }
+
+    .tree-toggle.leaf { visibility: hidden; }
+
+    .tree-code { font-size: 12px; font-weight: 600; color: var(--brand-red); min-width: 38px; padding: 2px 6px; background: var(--brand-red-light); border-radius: 4px; text-align: center; flex: none; }
+
+    .tree-code.lv1 { min-width: 26px; }
+
+    .tree-name { font-size:11px; color: var(--text-primary); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .tree-name.lv1 { font-weight: 600; font-size: 14px; }
+
+    .tree-name.lv2 { font-weight: 500; }
+
+    .tree-count { font-size: 10px; color: var(--text-secondary); flex: none; background: var(--border-light); border-radius: 10px; padding: 1px 7px; }
+
+    .tree-children { margin-left: 20px; border-left: 1px solid var(--border-light); padding-left: 8px; display: none; }
+
+    .tree-children.open { display: block; }
+
+    .tree-empty { text-align: center; padding: 40px 20px; color: var(--text-secondary); }
+
+    .tree-empty i { font-size: 40px; color: var(--border); display: block; margin-bottom: 12px; }
+
+    .detail-panel { background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 24px; margin-top: 16px; display: none; }
+
+    .detail-panel.show { display: block; }
+
+    .result-heading { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid var(--brand-red); }
+
+    .detail-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
+
+    .detail-code { font-size:22px; font-weight: 700; color: var(--brand-red); padding:5px 10px; background: var(--brand-red-light); border-radius: var(--radius-sm); white-space: nowrap; }
+
+    .detail-name { font-size:15px; font-weight: 600; color: var(--text-primary); flex: 1; }
+
+    .detail-category { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+
+    .breadcrumb span { cursor: pointer; color: var(--brand-red); }
+
+    .breadcrumb span:hover { text-decoration: underline; }
+
+    .breadcrumb i { font-size: 8px; }
+
+    .detail-desc { background: var(--bg-page); border-radius: var(--radius-sm); padding: 12px 16px; font-size:11px; color: var(--text-primary); line-height: 1.7; margin-bottom: 14px; }
+
+    .detail-desc:empty { display: none; }
+
+    .detail-note { background: #FDEEF1; border-left: 3px solid var(--brand-red); border-radius: var(--radius-sm); padding: 10px 16px; font-size:12px; color: #D12E47; line-height: 1.7; margin-bottom: 14px; }
+
+    .detail-note:empty { display: none; }
+
+    .detail-list { margin-top: 12px; padding: 16px 20px; background: var(--bg-page); border-radius: var(--radius-md); border: 1px solid var(--border-light); }
+
+    .detail-list .detail-item { font-size:11px; color: var(--text-primary); padding: 3px 0; line-height: 1.7; }
+
+    .detail-list .detail-item.anno-title { color: var(--text-secondary); font-weight: 600; padding-bottom: 6px; border-bottom: 1px solid var(--border-light); margin-bottom: 4px; }
+
+    .detail-item.clickable { cursor: pointer; padding-left: 4px; border-radius: 4px; }
+
+    .detail-item.clickable:hover { background: var(--brand-red-light); }
+
+    .detail-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .btn-sm {}
+
+    .result-info { font-size:11px; color: var(--text-secondary); padding: 8px 0; }
+
+    .result-info strong { color: var(--brand-red); }
+
+    }
+
+    @media print {
+
+      body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
+
+      .breadcrumb, .sheen-footer, .sidebar, .btn-sm, .page-title, .page-subtitle, .tree-container, .detail-actions { display: none !important; }
+
+      .detail-panel { display: block !important; box-shadow: none !important; border: 1.5px solid #333 !important; margin-top: 0 !important; }
+
+      .breadcrumb span { color: #555 !important; }
+
+      .result-heading { font-size: 20pt; color: #000 !important; border-bottom-color: #333 !important; }
+
+      .detail-code { font-size: 18pt; color: #000 !important; background: #f5f5f5 !important; }
+
+      .detail-list { background: none !important; border: none !important; padding: 8px 0 !important; }
+
+      .detail-list .detail-item { font-size: 10pt; color: #333 !important; }
+
+      .detail-list .anno-title { color: #555 !important; }
+
+      .detail-desc { background: none !important; border: 1px solid #e0e0e0 !important; }
+
+      .detail-note { background: none !important; border-left-color: #333 !important; color: #333 !important; }
+
+      .main-grid { grid-template-columns: 1fr !important; }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="breadcrumb">
+
+    <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+
+    <span> / 职业病分类和目录查询</span>
+
+</div>
+
+<main class="app-container container-query">
+
+  <div class="page-title">
+
+    <i class="fa-solid fa-notes-medical"></i> 职业病分类和目录查询
+
+  </div>
+
+  <p class="page-subtitle">《职业病分类和目录》(国卫职健发〔2024〕39号) · 12 大类 · 135 种职业病 · 按名称/关键词检索</p>
+
+  <div class="main-grid">
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar no-print collapsed">
+
+      <h3 onclick="this.parentElement.classList.toggle('collapsed')"><span><i class="fa-solid fa-magnifying-glass"></i> 搜索与筛选</span><i class="fa-solid fa-chevron-down toggle-arrow"></i></h3>
+
+      <div class="sidebar-body">
+
+      <div class="search-box">
+
+        <i class="fa-solid fa-search"></i>
+
+        <input type="text" id="searchInput" placeholder="输入名称或关键词搜索...">
+
+      </div>
+
+      <div class="quick-filters" id="quickFilters"></div>
+
+      <div class="result-info" id="resultInfo"></div>
+
+      <div class="stat-row">
+
+        <span>大类</span><span id="statCat">12</span>
+
+      </div>
+
+      <div class="stat-row">
+
+        <span>亚类</span><span id="statSub">2</span>
+
+      </div>
+
+      <div class="stat-row">
+
+        <span>病种</span><span id="statDis">135</span>
+
+      </div>
+
+      </div>
+
+    </aside>
+
+    <!-- Main Content -->
+
+    <div>
+
+      <div class="tree-container" id="treeContainer">
+
+        <div class="tree-empty"><i class="fa-solid fa-spinner fa-spin"></i> 加载中...</div>
+
+      </div>
+
+      <div class="detail-panel" id="detailPanel">
+
+        <div class="result-heading">查询结果</div>
+
+        <div class="breadcrumb" id="breadcrumb"></div>
+
+        <div class="detail-header">
+
+          <div class="detail-code" id="detailCode"></div>
+
+          <div>
+
+            <div class="detail-name" id="detailName"></div>
+
+            <div class="detail-category" id="detailCategory"></div>
+
+          </div>
+
+        </div>
+
+        <div class="detail-note" id="detailNote"></div>
+
+        <div class="detail-desc" id="detailDesc"></div>
+
+        <div class="detail-list" id="detailList"></div>
+
+        <div class="detail-actions">
+
+          <button class="btn-sm btn-primary" onclick="copyName()"><i class="fa-solid fa-copy"></i> 复制名称</button>
+
+          <button class="btn-sm btn-outline" onclick="copyFull()"><i class="fa-solid fa-copy"></i> 复制全称</button>
+
+          <button class="btn-sm btn-outline" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印</button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</main>
+
+<footer class="sheen-footer">
+
+  <i class="fa-solid fa-shield-halved" style="color:var(--amber);font-size:24px"></i> &nbsp;<strong>SHEEN Toolbox</strong> · 职业病分类和目录查询
+        <span id="busuanzi_container_site_pv" class="site-stat">全站访问 <b><span id="busuanzi_value_site_pv">0</span></b> 次</span>
+        <span id="busuanzi_container_site_uv" class="site-stat">· 独立访客 <b><span id="busuanzi_value_site_uv">0</span></b> 人</span>
+</footer>
+
+<div class="print-time" id="printTime"></div>
+
+<script>
+
+(function() {
+
+'use strict';
+
+document.getElementById('printTime').textContent = new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000).toISOString().replace('T',' ').slice(0,16);
+
+})();
+
+</script>
+
+<script>
+
+(function() {
+
+'use strict';
+
+// ── 职业病分类和目录数据（国卫职健发〔2024〕39号）──
+// level: 1=大类, 2=亚类(仅第一类有), 3=病种
+// parent 为父节点 id；首层为 null
+
+var DATA = [
+  // ===== 一、职业性尘肺病及其他呼吸系统疾病 =====
+  {id:'m1', name:'职业性尘肺病及其他呼吸系统疾病', level:1, parent:null},
+    {id:'m1a', name:'尘肺病', level:2, parent:'m1'},
+      {id:'m1a1', name:'矽肺', level:3, parent:'m1a'},
+      {id:'m1a2', name:'煤工尘肺', level:3, parent:'m1a'},
+      {id:'m1a3', name:'石墨尘肺', level:3, parent:'m1a'},
+      {id:'m1a4', name:'碳黑尘肺', level:3, parent:'m1a'},
+      {id:'m1a5', name:'石棉肺', level:3, parent:'m1a'},
+      {id:'m1a6', name:'滑石尘肺', level:3, parent:'m1a'},
+      {id:'m1a7', name:'水泥尘肺', level:3, parent:'m1a'},
+      {id:'m1a8', name:'云母尘肺', level:3, parent:'m1a'},
+      {id:'m1a9', name:'陶工尘肺', level:3, parent:'m1a'},
+      {id:'m1a10', name:'铝尘肺', level:3, parent:'m1a'},
+      {id:'m1a11', name:'电焊工尘肺', level:3, parent:'m1a'},
+      {id:'m1a12', name:'铸工尘肺', level:3, parent:'m1a'},
+      {id:'m1a13', name:'根据《尘肺病诊断标准》和《尘肺病理诊断标准》可以诊断的其他尘肺病', level:3, parent:'m1a'},
+    {id:'m1b', name:'其他呼吸系统疾病', level:2, parent:'m1'},
+      {id:'m1b1', name:'过敏性肺炎', level:3, parent:'m1b'},
+      {id:'m1b2', name:'棉尘病', level:3, parent:'m1b'},
+      {id:'m1b3', name:'哮喘', level:3, parent:'m1b'},
+      {id:'m1b4', name:'金属及其化合物粉尘肺沉着病（锡、铁、锑、钡及其化合物等）', level:3, parent:'m1b'},
+      {id:'m1b5', name:'刺激性化学物所致慢性阻塞性肺疾病', level:3, parent:'m1b'},
+      {id:'m1b6', name:'硬金属肺病', level:3, parent:'m1b'},
+
+  // ===== 二、职业性皮肤病 =====
+  {id:'m2', name:'职业性皮肤病', level:1, parent:null},
+    {id:'m2-1', name:'接触性皮炎', level:3, parent:'m2'},
+    {id:'m2-2', name:'光接触性皮炎', level:3, parent:'m2'},
+    {id:'m2-3', name:'电光性皮炎', level:3, parent:'m2'},
+    {id:'m2-4', name:'黑变病', level:3, parent:'m2'},
+    {id:'m2-5', name:'痤疮', level:3, parent:'m2'},
+    {id:'m2-6', name:'溃疡', level:3, parent:'m2'},
+    {id:'m2-7', name:'化学性皮肤灼伤', level:3, parent:'m2'},
+    {id:'m2-8', name:'白斑', level:3, parent:'m2'},
+    {id:'m2-9', name:'根据《职业性皮肤病的诊断总则》可以诊断的其他职业性皮肤病', level:3, parent:'m2'},
+
+  // ===== 三、职业性眼病 =====
+  {id:'m3', name:'职业性眼病', level:1, parent:null},
+    {id:'m3-1', name:'化学性眼部灼伤', level:3, parent:'m3'},
+    {id:'m3-2', name:'电光性眼炎', level:3, parent:'m3'},
+    {id:'m3-3', name:'白内障（含三硝基甲苯白内障）', level:3, parent:'m3'},
+
+  // ===== 四、职业性耳鼻喉口腔疾病 =====
+  {id:'m4', name:'职业性耳鼻喉口腔疾病', level:1, parent:null},
+    {id:'m4-1', name:'噪声聋', level:3, parent:'m4'},
+    {id:'m4-2', name:'铬鼻病', level:3, parent:'m4'},
+    {id:'m4-3', name:'牙酸蚀病', level:3, parent:'m4'},
+    {id:'m4-4', name:'爆震聋', level:3, parent:'m4'},
+
+  // ===== 五、职业性化学中毒 =====
+  {id:'m5', name:'职业性化学中毒', level:1, parent:null},
+    {id:'m5-1', name:'铅及其化合物中毒（不包括四乙基铅）', level:3, parent:'m5'},
+    {id:'m5-2', name:'汞及其化合物中毒', level:3, parent:'m5'},
+    {id:'m5-3', name:'锰及其化合物中毒', level:3, parent:'m5'},
+    {id:'m5-4', name:'镉及其化合物中毒', level:3, parent:'m5'},
+    {id:'m5-5', name:'铍病', level:3, parent:'m5'},
+    {id:'m5-6', name:'铊及其化合物中毒', level:3, parent:'m5'},
+    {id:'m5-7', name:'钡及其化合物中毒', level:3, parent:'m5'},
+    {id:'m5-8', name:'钒及其化合物中毒', level:3, parent:'m5'},
+    {id:'m5-9', name:'磷及其化合物中毒', level:3, parent:'m5'},
+    {id:'m5-10', name:'砷及其化合物中毒', level:3, parent:'m5'},
+    {id:'m5-11', name:'砷化氢中毒', level:3, parent:'m5'},
+    {id:'m5-12', name:'氯气中毒', level:3, parent:'m5'},
+    {id:'m5-13', name:'二氧化硫中毒', level:3, parent:'m5'},
+    {id:'m5-14', name:'光气中毒', level:3, parent:'m5'},
+    {id:'m5-15', name:'氨中毒', level:3, parent:'m5'},
+    {id:'m5-16', name:'偏二甲基肼中毒', level:3, parent:'m5'},
+    {id:'m5-17', name:'氮氧化合物中毒', level:3, parent:'m5'},
+    {id:'m5-18', name:'一氧化碳中毒', level:3, parent:'m5'},
+    {id:'m5-19', name:'二硫化碳中毒', level:3, parent:'m5'},
+    {id:'m5-20', name:'硫化氢中毒', level:3, parent:'m5'},
+    {id:'m5-21', name:'磷化氢、磷化锌、磷化铝中毒', level:3, parent:'m5'},
+    {id:'m5-22', name:'氟及其无机化合物中毒', level:3, parent:'m5'},
+    {id:'m5-23', name:'氰及腈类化合物中毒', level:3, parent:'m5'},
+    {id:'m5-24', name:'四乙基铅中毒', level:3, parent:'m5'},
+    {id:'m5-25', name:'有机锡中毒', level:3, parent:'m5'},
+    {id:'m5-26', name:'羰基镍中毒', level:3, parent:'m5'},
+    {id:'m5-27', name:'苯中毒', level:3, parent:'m5'},
+    {id:'m5-28', name:'甲苯中毒', level:3, parent:'m5'},
+    {id:'m5-29', name:'二甲苯中毒', level:3, parent:'m5'},
+    {id:'m5-30', name:'正己烷中毒', level:3, parent:'m5'},
+    {id:'m5-31', name:'汽油中毒', level:3, parent:'m5'},
+    {id:'m5-32', name:'一甲胺中毒', level:3, parent:'m5'},
+    {id:'m5-33', name:'有机氟聚合物单体及其热裂解物中毒', level:3, parent:'m5'},
+    {id:'m5-34', name:'二氯乙烷中毒', level:3, parent:'m5'},
+    {id:'m5-35', name:'四氯化碳中毒', level:3, parent:'m5'},
+    {id:'m5-36', name:'氯乙烯中毒', level:3, parent:'m5'},
+    {id:'m5-37', name:'三氯乙烯中毒', level:3, parent:'m5'},
+    {id:'m5-38', name:'氯丙烯中毒', level:3, parent:'m5'},
+    {id:'m5-39', name:'氯丁二烯中毒', level:3, parent:'m5'},
+    {id:'m5-40', name:'苯的氨基及硝基化合物(不包括三硝基甲苯)中毒', level:3, parent:'m5'},
+    {id:'m5-41', name:'三硝基甲苯中毒', level:3, parent:'m5'},
+    {id:'m5-42', name:'甲醇中毒', level:3, parent:'m5'},
+    {id:'m5-43', name:'酚中毒', level:3, parent:'m5'},
+    {id:'m5-44', name:'五氯酚（钠）中毒', level:3, parent:'m5'},
+    {id:'m5-45', name:'甲醛中毒', level:3, parent:'m5'},
+    {id:'m5-46', name:'硫酸二甲酯中毒', level:3, parent:'m5'},
+    {id:'m5-47', name:'丙烯酰胺中毒', level:3, parent:'m5'},
+    {id:'m5-48', name:'二甲基甲酰胺中毒', level:3, parent:'m5'},
+    {id:'m5-49', name:'有机磷中毒', level:3, parent:'m5'},
+    {id:'m5-50', name:'氨基甲酸酯类中毒', level:3, parent:'m5'},
+    {id:'m5-51', name:'杀虫脒中毒', level:3, parent:'m5'},
+    {id:'m5-52', name:'溴甲烷中毒', level:3, parent:'m5'},
+    {id:'m5-53', name:'拟除虫菊酯类中毒', level:3, parent:'m5'},
+    {id:'m5-54', name:'铟及其化合物中毒', level:3, parent:'m5'},
+    {id:'m5-55', name:'溴丙烷中毒', level:3, parent:'m5'},
+    {id:'m5-56', name:'碘甲烷中毒', level:3, parent:'m5'},
+    {id:'m5-57', name:'氯乙酸中毒', level:3, parent:'m5'},
+    {id:'m5-58', name:'环氧乙烷中毒', level:3, parent:'m5'},
+    {id:'m5-59', name:'上述条目未提及的与职业有害因素接触之间存在直接因果联系的其他化学中毒', level:3, parent:'m5'},
+
+  // ===== 六、物理因素所致职业病 =====
+  {id:'m6', name:'物理因素所致职业病', level:1, parent:null},
+    {id:'m6-1', name:'中暑', level:3, parent:'m6'},
+    {id:'m6-2', name:'减压病', level:3, parent:'m6'},
+    {id:'m6-3', name:'高原病', level:3, parent:'m6'},
+    {id:'m6-4', name:'航空病', level:3, parent:'m6'},
+    {id:'m6-5', name:'手臂振动病', level:3, parent:'m6'},
+    {id:'m6-6', name:'激光所致眼（角膜、晶状体、视网膜）损伤', level:3, parent:'m6'},
+    {id:'m6-7', name:'冻伤', level:3, parent:'m6'},
+
+  // ===== 七、职业性放射性疾病 =====
+  {id:'m7', name:'职业性放射性疾病', level:1, parent:null},
+    {id:'m7-1', name:'外照射急性放射病', level:3, parent:'m7'},
+    {id:'m7-2', name:'外照射亚急性放射病', level:3, parent:'m7'},
+    {id:'m7-3', name:'外照射慢性放射病', level:3, parent:'m7'},
+    {id:'m7-4', name:'内照射放射病', level:3, parent:'m7'},
+    {id:'m7-5', name:'放射性皮肤疾病', level:3, parent:'m7'},
+    {id:'m7-6', name:'放射性肿瘤（含矿工高氡暴露所致肺癌）', level:3, parent:'m7'},
+    {id:'m7-7', name:'放射性骨损伤', level:3, parent:'m7'},
+    {id:'m7-8', name:'放射性甲状腺疾病', level:3, parent:'m7'},
+    {id:'m7-9', name:'放射性性腺疾病', level:3, parent:'m7'},
+    {id:'m7-10', name:'放射复合伤', level:3, parent:'m7'},
+    {id:'m7-11', name:'放射性白内障', level:3, parent:'m7'},
+    {id:'m7-12', name:'铀及其化合物中毒', level:3, parent:'m7'},
+    {id:'m7-13', name:'根据《职业性放射性疾病诊断标准（总则）》可以诊断的其他放射性损伤', level:3, parent:'m7'},
+
+  // ===== 八、职业性传染病 =====
+  {id:'m8', name:'职业性传染病', level:1, parent:null},
+    {id:'m8-1', name:'炭疽', level:3, parent:'m8'},
+    {id:'m8-2', name:'森林脑炎', level:3, parent:'m8'},
+    {id:'m8-3', name:'布鲁氏菌病', level:3, parent:'m8'},
+    {id:'m8-4', name:'艾滋病（限于医疗卫生人员及人民警察）', level:3, parent:'m8'},
+    {id:'m8-5', name:'莱姆病', level:3, parent:'m8'},
+
+  // ===== 九、职业性肿瘤 =====
+  {id:'m9', name:'职业性肿瘤', level:1, parent:null},
+    {id:'m9-1', name:'石棉所致肺癌、间皮瘤', level:3, parent:'m9'},
+    {id:'m9-2', name:'联苯胺所致膀胱癌', level:3, parent:'m9'},
+    {id:'m9-3', name:'苯所致白血病', level:3, parent:'m9'},
+    {id:'m9-4', name:'氯甲醚、双氯甲醚所致肺癌', level:3, parent:'m9'},
+    {id:'m9-5', name:'砷及其化合物所致肺癌、皮肤癌', level:3, parent:'m9'},
+    {id:'m9-6', name:'氯乙烯所致肝血管肉瘤', level:3, parent:'m9'},
+    {id:'m9-7', name:'焦炉逸散物所致肺癌', level:3, parent:'m9'},
+    {id:'m9-8', name:'六价铬化合物所致肺癌', level:3, parent:'m9'},
+    {id:'m9-9', name:'毛沸石所致肺癌、胸膜间皮瘤', level:3, parent:'m9'},
+    {id:'m9-10', name:'煤焦油、煤焦油沥青、石油沥青所致皮肤癌', level:3, parent:'m9'},
+    {id:'m9-11', name:'β-萘胺所致膀胱癌', level:3, parent:'m9'},
+
+  // ===== 十、职业性肌肉骨骼疾病 =====
+  {id:'m10', name:'职业性肌肉骨骼疾病', level:1, parent:null},
+    {id:'m10-1', name:'腕管综合征（限于长时间腕部重复作业或用力作业的制造业工人）', level:3, parent:'m10'},
+    {id:'m10-2', name:'滑囊炎（限于井下工人）', level:3, parent:'m10'},
+
+  // ===== 十一、职业性精神和行为障碍 =====
+  {id:'m11', name:'职业性精神和行为障碍', level:1, parent:null},
+    {id:'m11-1', name:'创伤后应激障碍（限于参与突发事件处置的人民警察、医疗卫生人员、消防救援等应急救援人员）', level:3, parent:'m11'},
+
+  // ===== 十二、其他职业病 =====
+  {id:'m12', name:'其他职业病', level:1, parent:null},
+    {id:'m12-1', name:'金属烟热', level:3, parent:'m12'},
+    {id:'m12-2', name:'股静脉血栓综合征、股动脉闭塞症或淋巴管闭塞症（限于刮研作业人员）', level:3, parent:'m12'}
+];
+
+// 中文数字（1-12）
+var CN = ['','一','二','三','四','五','六','七','八','九','十','十一','十二','十三','十四','十五'];
+
+// 预计算显示编号
+(function assignCodes(){
+  var l1 = 0, l2 = {}, l3 = {};
+  DATA.forEach(function(it){
+    if (it.level === 1) { l1++; it._code = CN[l1] + '、'; }
+    else if (it.level === 2) { var p = it.parent; l2[p] = (l2[p]||0)+1; it._code = '（' + CN[l2[p]] + '）'; }
+    else { var q = it.parent; l3[q] = (l3[q]||0)+1; it._code = l3[q] + '.'; }
+  });
+})();
+
+// 构建索引
+var byId = {};
+var roots = [];
+var searchTextCache = {};
+DATA.forEach(function(it){ byId[it.id] = it; if (it.level === 1) roots.push(it); });
+
+function ancestorNames(id){
+  var names = [];
+  var cur = byId[id];
+  while (cur) { if (cur.id !== id) names.unshift(cur.name); cur = cur.parent ? byId[cur.parent] : null; }
+  return names;
+}
+
+function getSearchText(it){
+  if (searchTextCache[it.id]) return searchTextCache[it.id];
+  var t = it.name + ' ' + ancestorNames(it.id).join(' ');
+  // 提取范围限定关键词
+  var m = it.name.match(/（限于(.+?)）/);
+  if (m) t += ' ' + m[1];
+  searchTextCache[it.id] = t.toLowerCase();
+  return searchTextCache[it.id];
+}
+
+function getChildren(parentId){
+  return DATA.filter(function(it){ return it.parent === parentId; });
+}
+
+function getDescendants(id){
+  var out = [];
+  function walk(pid){ getChildren(pid).forEach(function(c){ out.push(c); walk(c.id); }); }
+  walk(id);
+  return out;
+}
+
+function descendantDiseaseCount(id){
+  return getDescendants(id).filter(function(it){ return it.level === 3; }).length;
+}
+
+// ── Stats ──
+(function(){
+  var dis = DATA.filter(function(it){ return it.level === 3; }).length;
+  var sub = DATA.filter(function(it){ return it.level === 2; }).length;
+  document.getElementById('statDis').textContent = dis;
+  document.getElementById('statSub').textContent = sub;
+})();
+
+// ── Quick filters (12 main categories) ──
+var qfContainer = document.getElementById('quickFilters');
+roots.forEach(function(cat){
+  var btn = document.createElement('button');
+  btn.className = 'quick-filter';
+  btn.textContent = cat._code.replace('、','') + ' ' + cat.name.replace(/^职业性/,'').replace(/疾病$/,'');
+  btn.title = cat.name;
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.quick-filter').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    filterByCategory(cat.id);
+  });
+  qfContainer.appendChild(btn);
+});
+
+// ── Tree render ──
+var treeContainer = document.getElementById('treeContainer');
+var selectedId = null;
+
+function renderTreeNode(item){
+  var children = getChildren(item.id);
+  var hasChildren = children.length > 0;
+  var isLeaf = !hasChildren;
+
+  var div = document.createElement('div');
+  div.className = 'tree-node';
+
+  var row = document.createElement('div');
+  row.className = 'tree-row';
+  row.setAttribute('data-id', item.id);
+  row.setAttribute('data-level', item.level);
+
+  var toggle = document.createElement('span');
+  toggle.className = 'tree-toggle';
+  if (isLeaf) toggle.classList.add('leaf');
+  else toggle.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+
+  var codeSpan = document.createElement('span');
+  codeSpan.className = 'tree-code';
+  if (item.level === 1) codeSpan.classList.add('lv1');
+  codeSpan.textContent = item._code;
+
+  var nameSpan = document.createElement('span');
+  nameSpan.className = 'tree-name';
+  if (item.level === 1) nameSpan.classList.add('lv1');
+  if (item.level === 2) nameSpan.classList.add('lv2');
+  nameSpan.textContent = item.name;
+
+  row.appendChild(toggle);
+  row.appendChild(codeSpan);
+  row.appendChild(nameSpan);
+
+  if (!isLeaf){
+    var cnt = document.createElement('span');
+    cnt.className = 'tree-count';
+    cnt.textContent = descendantDiseaseCount(item.id);
+    row.appendChild(cnt);
+  }
+
+  div.appendChild(row);
+
+  var childContainer = document.createElement('div');
+  childContainer.className = 'tree-children';
+  childContainer.dataset.built = '0';
+  div.appendChild(childContainer);
+
+  if (!isLeaf){
+    toggle.addEventListener('click', function(e){
+      e.stopPropagation();
+      var willOpen = !childContainer.classList.contains('open');
+      toggle.classList.toggle('expanded', willOpen);
+      childContainer.classList.toggle('open', willOpen);
+      if (willOpen) buildChildrenOf(item, childContainer);
+    });
+  }
+
+  row.addEventListener('click', function(){ selectItem(item); });
+
+  return div;
+}
+
+function buildChildrenOf(item, childContainer){
+  if (childContainer.dataset.built === '1') return;
+  getChildren(item.id).forEach(function(child){ childContainer.appendChild(renderTreeNode(child)); });
+  childContainer.dataset.built = '1';
+}
+
+function renderTree(filtered){
+  treeContainer.innerHTML = '';
+  if (!filtered){
+    roots.forEach(function(cat){ treeContainer.appendChild(renderTreeNode(cat)); });
+    document.getElementById('resultInfo').textContent = '';
+    return;
+  }
+  if (filtered.length === 0){
+    treeContainer.innerHTML = '<div class="tree-empty"><i class="fa-solid fa-circle-exclamation"></i> 未找到匹配结果</div>';
+    document.getElementById('resultInfo').textContent = '未找到匹配结果';
+    return;
+  }
+  document.getElementById('resultInfo').innerHTML = '找到 <strong>' + filtered.length + '</strong> 种职业病';
+  filtered.forEach(function(it){
+    var row = document.createElement('div');
+    row.className = 'tree-row';
+    row.setAttribute('data-id', it.id);
+    var toggle = document.createElement('span');
+    toggle.className = 'tree-toggle leaf';
+    row.appendChild(toggle);
+    var codeSpan = document.createElement('span');
+    codeSpan.className = 'tree-code';
+    codeSpan.textContent = it._code;
+    row.appendChild(codeSpan);
+    var nameSpan = document.createElement('span');
+    nameSpan.className = 'tree-name';
+    var prefix = ancestorNames(it.id).slice(-1)[0] ? '[' + ancestorNames(it.id).slice(-1)[0] + '] ' : '';
+    nameSpan.textContent = prefix + it.name;
+    row.appendChild(nameSpan);
+    row.addEventListener('click', function(){ selectItem(it); });
+    treeContainer.appendChild(row);
+  });
+}
+
+// ── Select & detail ──
+function selectItem(item){
+  selectedId = item.id;
+  document.querySelectorAll('.tree-row').forEach(function(r){ r.classList.remove('selected'); });
+  var row = document.querySelector('[data-id="' + item.id + '"]');
+  if (row) row.classList.add('selected');
+
+  // breadcrumb
+  var path = [];
+  var cur = item;
+  while (cur){ path.unshift(cur); cur = cur.parent ? byId[cur.parent] : null; }
+  document.getElementById('breadcrumb').innerHTML = path.map(function(p, i){
+    var sep = i > 0 ? ' <i class="fa-solid fa-chevron-right"></i> ' : '';
+    return sep + '<span onclick="jumpTo(\'' + p.id + '\')">' + (p._code + ' ' + p.name).replace(/、$/,'') + '</span>';
+  }).join('');
+
+  var panel = document.getElementById('detailPanel');
+  panel.classList.add('show');
+  document.getElementById('detailCode').textContent = item._code.replace('、','');
+  document.getElementById('detailName').textContent = item.name;
+  document.getElementById('detailCategory').textContent = item.level === 3
+    ? '归属：' + ancestorNames(item.id).join(' › ')
+    : (item.level === 2 ? '大类：' + byId[item.parent].name : '职业病大类');
+
+  // 范围限定提示
+  var nm = item.name.match(/（限于(.+?)）/);
+  document.getElementById('detailNote').textContent = nm ? '适用范围：' + nm[1] : '';
+
+  document.getElementById('detailDesc').textContent = '';
+
+  // 子项列表
+  var kids = getChildren(item.id);
+  var dl = document.getElementById('detailList');
+  if (kids.length > 0){
+    dl.innerHTML = '<div class="detail-item anno-title">包含 ' + kids.length + ' 项</div>' + kids.map(function(k){
+      return '<div class="detail-item clickable" onclick="jumpTo(\'' + k.id + '\')">' + k._code + ' ' + k.name + '</div>';
+    }).join('');
+    dl.style.display = 'block';
+  } else {
+    dl.innerHTML = '';
+    dl.style.display = 'none';
+  }
+
+  if (panel.scrollIntoView) panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ── Search ──
+var searchTimer;
+document.getElementById('searchInput').addEventListener('input', function(){
+  clearTimeout(searchTimer);
+  var val = this.value.trim();
+  if (!val){
+    renderTree();
+    document.getElementById('detailPanel').classList.remove('show');
+    return;
+  }
+  searchTimer = setTimeout(function(){ doSearch(val); }, 250);
+});
+
+function doSearch(query){
+  var q = query.toLowerCase();
+  var results = DATA.filter(function(it){ return getSearchText(it).indexOf(q) >= 0; });
+  results.sort(function(a,b){ return b.level - a.level; });
+  if (results.length > 300) results = results.slice(0, 300);
+  renderTree(results);
+  if (results.length > 0) selectItem(results[0]);
+}
+
+function filterByCategory(catId){
+  document.getElementById('searchInput').value = '';
+  var results = getDescendants(catId).filter(function(it){ return it.level === 3; });
+  results.sort(function(a,b){ return a.id.localeCompare(b.id); });
+  renderTree(results);
+  if (results.length > 0) selectItem(byId[catId]);
+}
+
+// ── Copy ──
+window.copyName = function(){  if (!selectedId) return;
+  navigator.clipboard.writeText(byId[selectedId].name).then(function(){ showToast('已复制: ' + byId[selectedId].name); });
+};
+window.copyFull = function(){
+  if (!selectedId) return;
+  var it = byId[selectedId];
+  var text = it._code.replace('、','') + ' ' + it.name + '（' + ancestorNames(it.id).join(' › ') + '）';
+  navigator.clipboard.writeText(text).then(function(){ showToast('已复制全称'); });
+};
+
+window.jumpTo = function(id){
+  var item = byId[id];
+  if (!item) return;
+  var chain = [];
+  var cur = item;
+  while (cur){ chain.unshift(cur); cur = cur.parent ? byId[cur.parent] : null; }
+  for (var i = 0; i < chain.length - 1; i++){
+    var anc = chain[i];
+    var row = document.querySelector('[data-id="' + anc.id + '"]');
+    if (!row) break;
+    var cc = row.parentElement.querySelector('.tree-children');
+    var tog = row.querySelector('.tree-toggle');
+    if (cc){
+      if (cc.dataset.built === '0') buildChildrenOf(anc, cc);
+      if (!cc.classList.contains('open')) cc.classList.add('open');
+    }
+    if (tog && !tog.classList.contains('expanded')) tog.classList.add('expanded');
+  }
+  selectItem(item);
+  var targetRow = document.querySelector('[data-id="' + id + '"]');
+  if (targetRow && targetRow.scrollIntoView) targetRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+};
+
+window.doSearch = doSearch;
+window.filterByCategory = filterByCategory;
+
+function showToast(msg){
+  var toast = document.createElement('div');
+  toast.textContent = msg;
+  toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1E2126;color:#fff;padding:10px 24px;border-radius:60px;font-size:13px;z-index:9999;animation:fadeInOut 2s forwards;';
+  document.body.appendChild(toast);
+  setTimeout(function(){ toast.remove(); }, 2100);
+}
+var style = document.createElement('style');
+style.textContent = '@keyframes fadeInOut{0%{opacity:0;transform:translateX(-50%) translateY(10px)}15%{opacity:1;transform:translateX(-50%) translateY(0)}85%{opacity:1}100%{opacity:0}}';
+document.head.appendChild(style);
+
+// ── Init ──
+renderTree();
+
+})();
+
+</script>
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+
+</html>
