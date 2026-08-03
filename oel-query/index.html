@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工作场所有害因素职业接触限值查询 — SHEEN Toolbox</title>
+<link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
+<link rel="stylesheet" href="/sheen-toolbox/common.css">
+<style>
+  body { font-family: 'Inter', -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg-page); color: var(--text-primary); font-size: 14px; line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
+  .breadcrumb a { color: var(--brand-blue); text-decoration: none; }
+  .breadcrumb a:hover { opacity: .7; text-decoration: underline; }
+  .breadcrumb i { color: var(--text-secondary); font-size: 10px; margin: 0 4px; }
+  .breadcrumb span.cur { color: var(--text-primary); font-weight: 500; }
+  .page-title i { color: var(--brand-red); font-size: 22px; margin-right: 6px; }
+  .page-title h1 { font-size: 22px; font-weight: 600; display: inline-block; vertical-align: middle; }
+  .page-title .std-tag { display: inline-block; margin-left: 12px; padding: 3px 10px; border-radius: 60px; background: var(--brand-red-light); color: var(--brand-red); font-size: 12px; font-weight: 500; vertical-align: middle; }
+  .info-card { background: linear-gradient(135deg, var(--bg-card) 0%, #fff 100%); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 20px; display: flex; gap: 24px; flex-wrap: wrap; margin-top: 16px; }
+  .info-card .stat { display: flex; flex-direction: column; }
+  .info-card .stat-label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .5px; }
+  .info-card .stat-value { font-size: 18px; font-weight: 700; color: var(--brand-red); line-height: 1.4; }
+  .info-card .stat-sub { font-size: 11px; color: var(--text-secondary); }
+  .tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin: 20px 0 0; flex-wrap: wrap; }
+  .tab-btn { padding: 10px 18px; border: none; background: none; cursor: pointer; font-size: 14px; font-weight: 500; color: var(--text-secondary); border-bottom: 3px solid transparent; margin-bottom: -2px; transition: var(--transition); display: inline-flex; align-items: center; gap: 6px; font-family: inherit; }
+  .tab-btn:hover { color: var(--brand-red); }
+  .tab-btn.active { color: var(--brand-red); border-bottom-color: var(--brand-red); font-weight: 600; }
+  .tab-btn .count { font-size: 11px; padding: 1px 8px; background: var(--border-light); border-radius: 60px; color: var(--text-secondary); }
+  .tab-btn.active .count { background: var(--brand-red-light); color: var(--brand-red); }
+  .toolbar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; padding: 16px 0; }
+  .search-box { position: relative; flex: 1; min-width: 240px; }
+  .search-box input { width: 100%; padding: 9px 14px 9px 38px; border: 1.5px solid var(--border); border-radius: 60px; font-size: 14px; background: var(--bg-card); color: var(--text-primary); font-family: inherit; transition: var(--transition); }
+  .search-box input:focus { outline: none; border-color: var(--brand-red); box-shadow: 0 0 0 4px rgba(240,55,82,0.08); }
+  .search-box i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); font-size: 14px; }
+  .quick-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+  .quick-filter { font-size: 12px; padding: 5px 12px; border-radius: 60px; background: var(--border-light); color: var(--text-secondary); cursor: pointer; border: 1px solid transparent; font-family: inherit; transition: var(--transition); }
+  .quick-filter:hover { background: var(--brand-red-light); color: var(--brand-red); border-color: var(--brand-red); }
+  .quick-filter.active { background: var(--brand-red); color: #fff; border-color: var(--brand-red); }
+  .data-table-wrap { background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border); overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.04); margin-top: 4px; }
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table thead th { background: var(--bg-page); color: var(--text-secondary); font-weight: 600; padding: 10px 12px; text-align: left; border-bottom: 2px solid var(--border); white-space: nowrap; cursor: pointer; user-select: none; position: sticky; top: 0; z-index: 5; }
+  .data-table thead th:hover { color: var(--brand-red); }
+  .data-table thead th .sort-ind { margin-left: 4px; font-size: 10px; opacity: .5; }
+  .data-table thead th.sorted .sort-ind { opacity: 1; color: var(--brand-red); }
+  .data-table tbody td { padding: 9px 12px; border-bottom: 1px solid var(--border-light); vertical-align: top; }
+  .data-table tbody tr { transition: background .12s; }
+  .data-table tbody tr:hover { background: var(--brand-red-light); cursor: pointer; }
+  .data-table tbody tr.amend { background: linear-gradient(90deg, rgba(245,124,0,.08) 0%, transparent 100%); }
+  .data-table tbody tr.amend:hover { background: linear-gradient(90deg, rgba(245,124,0,.18) 0%, rgba(240,55,82,.08) 100%); }
+  .data-table td.no { color: var(--text-secondary); font-weight: 500; width: 38px; text-align: right; }
+  .data-table td.cn { font-weight: 500; color: var(--text-primary); min-width: 140px; }
+  .data-table td.en { color: var(--text-secondary); font-style: italic; font-size: 12px; }
+  .data-table td.cas { font-family: 'JetBrains Mono', Consolas, monospace; font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
+  .data-table td.oel { font-family: 'JetBrains Mono', Consolas, monospace; text-align: center; white-space: nowrap; font-weight: 600; }
+  .data-table td.oel.has-val { color: var(--brand-red); }
+  .data-table td.oel.dash { color: var(--text-secondary); opacity: .4; font-weight: 400; }
+  .data-table td.effect { color: var(--text-secondary); font-size: 12px; line-height: 1.5; max-width: 280px; }
+  .data-table td.note { white-space: nowrap; }
+  .note-badge { display: inline-block; font-size: 11px; padding: 1px 6px; border-radius: 3px; margin-right: 3px; font-weight: 500; vertical-align: middle; }
+  .nb-skin { background: var(--brand-orange-light, #FFF3E0); color: var(--brand-orange); }
+  .nb-g1 { background: #FEE; color: #C00; font-weight: 700; }
+  .nb-g2a { background: #FFE; color: #A60; font-weight: 700; }
+  .nb-g2b { background: #FFF8E1; color: #B80; font-weight: 600; }
+  .nb-sens { background: var(--brand-blue-light, #E3F2FD); color: var(--brand-blue); }
+  .table-scroll { max-height: calc(100vh - 280px); min-height: 400px; overflow: auto; }
+  .result-count { font-size: 12px; color: var(--text-secondary); padding: 8px 0; }
+  .result-count strong { color: var(--brand-red); font-weight: 700; }
+  .empty-state { padding: 60px 20px; text-align: center; color: var(--text-secondary); }
+  .empty-state i { font-size: 36px; color: var(--border); display: block; margin-bottom: 12px; }
+  .amend-flag { display: inline-block; font-size: 10px; padding: 1px 5px; background: var(--brand-orange); color: #fff; border-radius: 3px; margin-left: 4px; vertical-align: middle; }
+  /* Detail panel */
+  .detail-overlay { display: none; position: fixed; inset: 0; background: rgba(30,33,38,.5); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+  .detail-overlay.show { display: flex; }
+  .detail-panel { background: var(--bg-card); border-radius: var(--radius-lg); width: 100%; max-width: 640px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,.18); }
+  .detail-head { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .detail-head h3 { font-size: 16px; font-weight: 600; }
+  .detail-head .close { background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 22px; padding: 0; line-height: 1; }
+  .detail-head .close:hover { color: var(--brand-red); }
+  .detail-body { padding: 20px 24px; }
+  .detail-grid { display: grid; grid-template-columns: auto 1fr; gap: 10px 16px; }
+  .detail-grid dt { color: var(--text-secondary); font-size: 12px; padding-top: 2px; }
+  .detail-grid dd { color: var(--text-primary); font-size: 13px; font-weight: 500; }
+  .oel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+  .oel-cell { text-align: center; padding: 10px; background: var(--bg-page); border-radius: var(--radius-sm); }
+  .oel-cell .label { font-size: 11px; color: var(--text-secondary); }
+  .oel-cell .val { font-size: 18px; font-weight: 700; color: var(--brand-red); margin-top: 4px; }
+  .oel-cell .val.dash { color: var(--text-secondary); opacity: .4; font-weight: 400; }
+  .oel-cell .unit { font-size: 10px; color: var(--text-secondary); margin-top: 2px; }
+  /* Physical factor cards */
+  .phys-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 14px; padding: 16px 0; }
+  .phys-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px 18px; }
+  .phys-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--text-primary); }
+  .phys-card .sub { font-size: 11px; color: var(--text-secondary); margin-bottom: 10px; }
+  .phys-card table { width: 100%; font-size: 12px; }
+  .phys-card table td { padding: 3px 6px; }
+  .phys-card table td:first-child { color: var(--text-secondary); }
+  .phys-card table td:last-child { font-weight: 600; color: var(--brand-red); text-align: right; font-family: 'JetBrains Mono', Consolas, monospace; }
+  .phys-note { padding: 12px 18px; background: #FFF8E1; border-left: 3px solid var(--brand-orange); border-radius: var(--radius-sm); margin-bottom: 12px; font-size: 12px; color: var(--text-secondary); }
+  .print-btn { padding: 7px 14px; border: 1px solid var(--border); background: var(--bg-card); border-radius: 60px; cursor: pointer; font-size: 12px; color: var(--text-secondary); font-family: inherit; transition: var(--transition); }
+  .print-btn:hover { border-color: var(--brand-red); color: var(--brand-red); }
+  .print-btn i { margin-right: 4px; }
+  @media (max-width: 900px) {
+    .data-table { font-size: 12px; }
+    .data-table thead th, .data-table tbody td { padding: 7px 8px; }
+    .info-card { gap: 12px; }
+    .oel-grid { grid-template-columns: 1fr; }
+  }
+  @media print {
+    .toolbar, .tabs, .breadcrumb, .quick-filters, .no-print { display: none !important; }
+    .data-table-wrap { border: none; box-shadow: none; }
+    .data-table thead th { background: #f0f0f0 !important; color: #000 !important; }
+    body { background: #fff; }
+  }
+</style>
+</head>
+<body>
+<div class="container-query">
+  <div class="breadcrumb">
+    <a href="/sheen-toolbox/">首页</a>
+    <i class="fa-solid fa-chevron-right"></i>
+    <span class="cur">工作场所有害因素职业接触限值查询</span>
+  </div>
+  <div class="page-title">
+    <i class="fa-solid fa-flask-vial"></i>
+    <h1>工作场所有害因素职业接触限值查询</h1>
+    <span class="std-tag">GBZ 2.1—2019 + 第1号修改单</span>
+    <button class="print-btn no-print" style="float:right;" onclick="window.print()"><i class="fa-solid fa-print"></i>打印</button>
+  </div>
+
+  <div class="info-card">
+    <div class="stat"><span class="stat-label">化学有害因素</span><span class="stat-value">358</span><span class="stat-sub">表1（GBZ 2.1）</span></div>
+    <div class="stat"><span class="stat-label">粉尘</span><span class="stat-value">49</span><span class="stat-sub">表2（总/呼吸性）</span></div>
+    <div class="stat"><span class="stat-label">生物因素</span><span class="stat-value">3</span><span class="stat-sub">表3</span></div>
+    <div class="stat"><span class="stat-label">生物接触限值</span><span class="stat-value">29</span><span class="stat-sub">表4（含第1号修改单）</span></div>
+    <div class="stat"><span class="stat-label">接触等级</span><span class="stat-value">5</span><span class="stat-sub">表5（控制分级）</span></div>
+    <div class="stat"><span class="stat-label">已含修改单</span><span class="stat-value" style="color:var(--brand-orange);">苯·三甲基氯化锡</span><span class="stat-sub">2024年发布</span></div>
+  </div>
+
+  <div class="tabs no-print" id="tabs">
+    <button class="tab-btn active" data-tab="chem"><i class="fa-solid fa-atom"></i>化学有害因素<span class="count">358</span></button>
+    <button class="tab-btn" data-tab="dust"><i class="fa-solid fa-smog"></i>粉尘<span class="count">49</span></button>
+    <button class="tab-btn" data-tab="bio"><i class="fa-solid fa-bacterium"></i>生物因素<span class="count">3</span></button>
+    <button class="tab-btn" data-tab="biomon"><i class="fa-solid fa-vial"></i>生物监测<span class="count">29</span></button>
+    <button class="tab-btn" data-tab="ctl"><i class="fa-solid fa-sliders"></i>接触等级控制<span class="count">5</span></button>
+    <button class="tab-btn" data-tab="phys"><i class="fa-solid fa-wave-square"></i>物理因素（GBZ 2.2）</button>
+  </div>
+
+  <div class="toolbar no-print">
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="search" placeholder="搜索 中文名 / 英文名 / CAS号 / 临界效应…">
+    </div>
+    <div class="quick-filters" id="qf"></div>
+  </div>
+
+  <div class="result-count" id="rc">共 <strong>0</strong> 条结果</div>
+
+  <div id="tableArea" class="data-table-wrap no-print">
+    <div class="table-scroll">
+      <table class="data-table" id="dataTable">
+        <thead><tr id="theadRow"></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="physArea" style="display:none;"></div>
+  <div id="ctlArea" style="display:none;"></div>
+
+  <div class="print-time" id="printTime"></div>
+</div>
+
+<div class="detail-overlay" id="detailOverlay">
+  <div class="detail-panel">
+    <div class="detail-head">
+      <h3 id="dpTitle">详情</h3>
+      <button class="close" onclick="closeDetail()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="detail-body" id="dpBody"></div>
+  </div>
+</div>
+
+<script>
+window.__DATA__ = {"table1_chemicals":[{"no":"1","cn":"安妥","en":"ANTU","cas":"86-88-4","mac":"—","twa":"0.3","stel":"—","effect":"甲状腺效应；恶心","note":"—"},{"no":"2","cn":"氨","en":"Ammonia","cas":"7664-41-7","mac":"—","twa":"20","stel":"30","effect":"眼和上呼吸道刺激","note":"—"},{"no":"3","cn":"2-氨基吡啶","en":"2-Aminopyridine","cas":"504-29-0","mac":"—","twa":"2","stel":"—","effect":"中枢神经系统损伤；皮肤、黏膜刺激","note":"皮"},{"no":"4","cn":"氨基磺酸铵","en":"Ammonium sulfamate","cas":"7773-06-0","mac":"—","twa":"6","stel":"—","effect":"呼吸道、眼及皮肤刺激","note":"—"},{"no":"5","cn":"氨基氰","en":"Cyanamide","cas":"420-04-2","mac":"—","twa":"2","stel":"—","effect":"眼和呼吸道刺激；皮肤刺激","note":"—"},{"no":"6","cn":"奥克托今","en":"Octogen","cas":"2691-41-0","mac":"—","twa":"2","stel":"4","effect":"眼刺激","note":"—"},{"no":"7","cn":"巴豆醛（丁烯醛）","en":"Crotonaldehyde","cas":"4170-30-3","mac":"12","twa":"—","stel":"—","effect":"眼和呼吸道刺激；慢性鼻炎；神经功能障碍","note":"—"},{"no":"8","cn":"百草枯","en":"Paraquat","cas":"4685-14-7","mac":"—","twa":"0.5","stel":"—","effect":"呼吸系统损害；皮肤、黏膜刺激","note":"—"},{"no":"9","cn":"百菌清","en":"Chlorothalonil","cas":"1897-45-6","mac":"1","twa":"—","stel":"—","effect":"皮肤刺激、致敏；眼和呼吸道刺激","note":"G2B，敏"},{"no":"10","cn":"钡及其可溶性化合物（按 Ba计）","en":"Barium and soluble compounds, as Ba","cas":"7440-39-3（Ba）","mac":"—","twa":"0.5","stel":"1.5","effect":"消化道刺激；低血钾","note":"—"},{"no":"11","cn":"倍硫磷","en":"Fenthion","cas":"55-38-9","mac":"—","twa":"0.2","stel":"0.3","effect":"胆碱酯酶抑制","note":"皮"},{"no":"12","cn":"苯","en":"Benzene","cas":"71-43-2","mac":"—","twa":"3","stel":"6","effect":"头晕、头痛、意识障碍；全血细胞减少；再障； 白血病","note":"皮，G1","amend":"GBZ 2.1—2019 第1号修改单（2024年）"},{"no":"13","cn":"苯胺","en":"Aniline","cas":"62-53-3","mac":"—","twa":"3","stel":"—","effect":"高铁血红蛋白血症","note":"皮"},{"no":"14","cn":"苯基醚（二苯醚）","en":"Phenyl ether","cas":"101-84-8","mac":"—","twa":"7","stel":"14","effect":"上呼吸道和眼刺激","note":"—"},{"no":"15","cn":"苯醌","en":"Benzoquinone","cas":"106-51-4","mac":"—","twa":"0.45","stel":"—","effect":"眼、皮肤刺激","note":"—"},{"no":"16","cn":"苯硫磷","en":"EPN","cas":"2104-64-5","mac":"—","twa":"0.5","stel":"—","effect":"胆碱酯酶抑制","note":"皮"},{"no":"17","cn":"苯乙烯","en":"Styrene","cas":"100-42-5","mac":"—","twa":"50","stel":"100","effect":"眼、上呼吸道刺激；神经衰弱；周围神经症状","note":"皮，G2B"},{"no":"18","cn":"吡啶","en":"Pyridine","cas":"110-86-1","mac":"—","twa":"4","stel":"—","effect":"眼、呼吸道、皮肤刺激；神经衰弱及植物神 经紊乱；肝、肾损害","note":"—"},{"no":"19","cn":"苄基氯","en":"Benzyl chloride","cas":"100-44-7","mac":"5","twa":"—","stel":"—","effect":"呼吸道炎症；皮肤、上呼吸道和眼刺激；肝 肾损害","note":"G2A"},{"no":"20","cn":"丙酸","en":"Propionic acid","cas":"79-09-4","mac":"—","twa":"30","stel":"—","effect":"眼、皮肤和呼吸道刺激","note":"—"},{"no":"21","cn":"丙酮","en":"Acetone","cas":"67-64-1","mac":"—","twa":"300","stel":"450","effect":"呼吸道和眼刺激；麻醉；中枢神经系统损害","note":"—"},{"no":"22","cn":"丙酮氰醇（按CN计）","en":"Acetone cyanohydrin, as CN","cas":"75-86-5","mac":"3","twa":"—","stel":"—","effect":"呼吸道刺激；头痛；缺氧/紫绀","note":"皮"},{"no":"23","cn":"丙烯醇","en":"Allyl alcohol","cas":"107-18-6","mac":"—","twa":"2","stel":"3","effect":"眼和上呼吸道刺激","note":"皮"},{"no":"24","cn":"丙烯腈","en":"Acrylonitrile","cas":"107-13-1","mac":"—","twa":"1","stel":"2","effect":"中枢神经系统损害；下呼吸道刺激","note":"皮，G2B"},{"no":"25","cn":"丙烯菊酯","en":"allethrin","cas":"584-79-2","mac":"—","twa":"5","stel":"—","effect":"皮肤刺激；神经系统损害","note":"—"},{"no":"26","cn":"丙烯醛","en":"Acrolein","cas":"107-02-8","mac":"0.3","twa":"—","stel":"—","effect":"眼和上呼吸道刺激；肺水肿；肺气肿","note":"皮"},{"no":"27","cn":"丙烯酸","en":"Acrylic acid","cas":"79-10-7","mac":"—","twa":"6","stel":"—","effect":"皮肤、眼及呼吸道刺激","note":"皮"},{"no":"28","cn":"丙烯酸甲酯","en":"Methyl acrylate","cas":"96-33-3","mac":"—","twa":"20","stel":"—","effect":"眼、皮肤和呼吸道刺激；皮肤损害及过敏","note":"皮，敏"},{"no":"29","cn":"丙烯酸正丁酯","en":"n-Butyl acrylate","cas":"141-32-2","mac":"—","twa":"25","stel":"—","effect":"皮肤、眼和呼吸道刺激；麻醉","note":"敏"},{"no":"30","cn":"丙烯酰胺","en":"Acrylamide","cas":"79-06-1","mac":"—","twa":"0.3","stel":"—","effect":"中枢神经系统损害；周围神经系统损害","note":"皮，G2A"},{"no":"31","cn":"草甘膦","en":"Glyphosate","cas":"1071-83-6","mac":"—","twa":"5","stel":"—","effect":"肝、肾功能损伤","note":"G2A"},{"no":"32","cn":"草酸","en":"Oxalic acid","cas":"144-62-7","mac":"—","twa":"1","stel":"2","effect":"呼吸道、眼和皮肤刺激","note":"—"},{"no":"33","cn":"抽余油（60 ℃~220 ℃）","en":"Raffinate oil(60 ℃~220 ℃)","cas":"―","mac":"—","twa":"300","stel":"—","effect":"麻醉；眼、皮肤和呼吸道黏膜刺激；神经系 统功能障碍；肝、肾、血液系统改变","note":"—"},{"no":"34","cn":"重氮甲烷","en":"Diazomethane","cas":"334-88-3","mac":"—","twa":"0.35","stel":"0.7","effect":"呼吸道刺激；中枢神经系统抑制","note":"—"},{"no":"35","cn":"臭氧","en":"Ozone","cas":"10028-15-6","mac":"0.3","twa":"—","stel":"—","effect":"刺激","note":"—"},{"no":"36","cn":"o,o-二甲基-S-（甲基氨基甲酰 甲基）二硫代磷酸酯（乐果）","en":"o,o-dimethyl methylcarbamoylmethyl phosphorodithioate (Rogor)","cas":"60-51-5","mac":"—","twa":"1","stel":"—","effect":"胆碱酯酶抑制","note":"皮"},{"no":"37","cn":"O,O-二甲基-（2,2,2-三氯-1- 羟基乙基）磷酸酯（敌百虫）","en":"(2,2,2-trichloro-1-hydroxyethyl)dim ethylphosphonate (Trichlorfon,Metrifonate or Dipterex)","cas":"52-68-6","mac":"—","twa":"0.5","stel":"1","effect":"胆碱酯酶抑制","note":"—"},{"no":"38","cn":"N-3,4-二氯苯基-N`,N`-二甲基 脲（敌草隆）","en":"1,1-Dimethyl-3-(3,4-Dichlorophen yl)urea(Diuron)","cas":"330-54-1","mac":"—","twa":"10","stel":"—","effect":"呼吸道、眼、皮肤刺激；贫血","note":"—"},{"no":"39","cn":"2,4-二氯苯氧基乙酸（2,4-滴）","en":"2,4-Dicholrophenoxyacetic acid （2,4-D）","cas":"94-75-7","mac":"—","twa":"10","stel":"—","effect":"甲状腺效应、肾小管损伤","note":"皮，G2B"},{"no":"40","cn":"二氯二苯基三氯乙烷（滴滴 涕，DDT）","en":"Dichlorodiphenyltrichloroethane(D DT)","cas":"50-29-3","mac":"—","twa":"0.2","stel":"—","effect":"神经系统损害；肝肾损害；呼吸道、皮肤及眼刺 激","note":"G2A"},{"no":"41","cn":"碲及其化合物（不含碲化氢） （按Te计）","en":"Tellurium and Compounds (except HTe), as Te 2","cas":"13494-80-9 （Te）","mac":"—","twa":"0.1","stel":"—","effect":"中枢神经系统损伤、肝损伤","note":"—"},{"no":"42","cn":"碲化铋（按Bi Te 计） 2 3","en":"Bismuth telluride, as Bi Te 2 3","cas":"1304-82-1","mac":"—","twa":"5","stel":"—","effect":"呼吸道、眼、皮肤刺激；肝肾影响；贫血","note":"—"},{"no":"43","cn":"碘","en":"Iodine","cas":"7553-56-2","mac":"1","twa":"—","stel":"—","effect":"眼、上呼吸道和皮肤刺激","note":"—"},{"no":"44","cn":"碘仿","en":"Iodoform","cas":"75-47-8","mac":"—","twa":"10","stel":"—","effect":"中枢神经系统损害；眼、呼吸道刺激","note":"—"},{"no":"45","cn":"碘甲烷","en":"Methyl iodide","cas":"74-88-4","mac":"—","twa":"10","stel":"—","effect":"眼刺激；中枢神经系统损害","note":"皮"},{"no":"46","cn":"叠氮酸蒸气","en":"Hydrazoic acid vapor","cas":"7782-79-8","mac":"0.2","twa":"—","stel":"—","effect":"鼻、眼刺激；低血压","note":"—"},{"no":"47","cn":"叠氮化钠","en":"Sodium azide","cas":"26628-22-8","mac":"0.3","twa":"—","stel":"—","effect":"心脏损害；肺损伤","note":"—"},{"no":"48","cn":"1,3-丁二烯","en":"1,3-Butadiene","cas":"106-99-0","mac":"—","twa":"5","stel":"—","effect":"眼和呼吸道刺激；麻醉；神经衰弱；皮肤灼伤或 冻伤","note":"G1"},{"no":"49","cn":"2-丁氧基乙醇","en":"2-butoxyethanol","cas":"111-76-2","mac":"—","twa":"97","stel":"—","effect":"刺激","note":"—"},{"no":"50","cn":"丁烯","en":"Butylene","cas":"25167-67-3","mac":"—","twa":"100","stel":"—","effect":"窒息、弱麻醉和弱刺激作用。液态丁烯皮肤冻伤","note":"—"},{"no":"51","cn":"毒死蜱","en":"Chlorpyrifos","cas":"2921-88-2","mac":"—","twa":"0.2","stel":"—","effect":"胆碱酯酶抑制","note":"皮"},{"no":"52","cn":"对苯二胺","en":"p-phenylene diamine","cas":"106-50-3","mac":"—","twa":"0.1","stel":"—","effect":"皮肤致敏、呼吸系统损伤","note":"皮，敏"},{"no":"53","cn":"对苯二甲酸","en":"Terephthalic acid","cas":"100-21-0","mac":"—","twa":"8","stel":"15","effect":"眼、皮肤、黏膜和上呼吸道刺激","note":"—"},{"no":"54","cn":"对二氯苯","en":"p-Dichlorobenzene","cas":"106-46-7","mac":"—","twa":"30","stel":"60","effect":"眼、皮肤、上呼吸道刺激；肝损害","note":"G2B"},{"no":"55","cn":"对硫磷","en":"Parathion","cas":"56-38-2","mac":"—","twa":"0.05","stel":"0.1","effect":"胆碱酯酶抑制","note":"皮，G2B"},{"no":"56","cn":"对特丁基甲苯","en":"p-Tert-butyltoluene","cas":"98-51-1","mac":"—","twa":"6","stel":"—","effect":"眼、上呼吸道刺激","note":"—"},{"no":"57","cn":"对硝基苯胺","en":"p –Nitroaniline","cas":"100-01-6","mac":"—","twa":"3","stel":"—","effect":"高铁血红蛋白血症；肝损害","note":"皮"},{"no":"58","cn":"对硝基氯苯","en":"p-Nitrochlorobenzene","cas":"100-00-5","mac":"—","twa":"0.6","stel":"—","effect":"皮肤致敏、皮炎；过敏性哮喘；肝损害","note":"皮"},{"no":"59","cn":"多次甲基多苯基多异氰酸酯","en":"Polymetyhlene polyphenyl isocyanate (PMPPI)","cas":"57029-46-6","mac":"—","twa":"0.3","stel":"0.5","effect":"皮肤、眼、呼吸道刺激；变态反应、哮喘","note":"敏"},{"no":"60","cn":"二苯胺","en":"Diphenylamine","cas":"122-39-4","mac":"—","twa":"10","stel":"—","effect":"上呼吸道、皮肤刺激；高铁血红蛋白血症；肝肾 损害","note":"—"},{"no":"61","cn":"二苯基甲烷二异氰酸酯","en":"Diphenylmethane diisocyanate","cas":"101-68-8","mac":"—","twa":"0.05","stel":"0.1","effect":"眼、上呼吸道刺激；哮喘","note":"敏"},{"no":"62","cn":"二丙二醇甲醚（2-甲氧基甲乙 氧基丙醇）","en":"Dipropylene glycol monomethyl ether（[2-Methoxymethylethoxy]pr opano，DPGMEl）","cas":"34590-94-8","mac":"—","twa":"600","stel":"900","effect":"轻度麻醉；中枢神经系统抑制","note":"皮"},{"no":"63","cn":"二丙酮醇","en":"Diacetone alcohol","cas":"123-42-2","mac":"—","twa":"240","stel":"—","effect":"眼、鼻、喉黏膜刺激；皮肤刺激","note":"—"},{"no":"64","cn":"2-N-二丁氨基乙醇","en":"2-N-Dibutylaminoethanol","cas":"102-81-8","mac":"—","twa":"4","stel":"—","effect":"眼和上呼吸道刺激；眼或皮肤灼伤","note":"皮"},{"no":"65","cn":"二噁烷","en":"1,4-Dioxane","cas":"123-91-1","mac":"—","twa":"70","stel":"—","effect":"上呼吸道和眼刺激；肝损害","note":"皮，G2B"},{"no":"66","cn":"二噁英类化合物","en":"Polychlorinated dibenzo-p-dioxins and polychlorinated dibenzofurans","cas":"1746-01-6","mac":"—","twa":"30 pgTEQ/m3","stel":"—","effect":"致癌","note":"G1"},{"no":"67","cn":"二氟氯甲烷","en":"Chlorodifluoromethane","cas":"75-45-6","mac":"—","twa":"3500","stel":"—","effect":"中枢神经系统损害；心血管系统影响","note":"—"},{"no":"68","cn":"二甲胺","en":"Dimethylamine","cas":"124-40-3","mac":"—","twa":"5","stel":"10","effect":"眼、上呼吸道刺激；皮肤灼伤","note":"—"},{"no":"69","cn":"二甲苯（全部异构体）","en":"Xylene(all isomers)","cas":"1330-20-7;95- 47-6;108-38-3","mac":"—","twa":"50","stel":"100","effect":"呼吸道和眼刺激；中枢神经系统损害","note":"—"},{"no":"70","cn":"N,N-二甲基苯胺","en":"N,N-Dimethylanilne","cas":"121-69-7","mac":"—","twa":"5","stel":"10","effect":"高铁血红蛋白血症","note":"皮"},{"no":"71","cn":"1,3-二甲基丁基乙酸酯（仲- 乙酸己酯）","en":"1,3-Dimethylbutyl acetate(sec-hexyl acetate)","cas":"108-84-9","mac":"—","twa":"300","stel":"—","effect":"眼、上呼吸道刺激；中枢神经系统抑制","note":"—"},{"no":"72","cn":"二甲基二氯硅烷","en":"Dimethyl dichlorosilane","cas":"75-78-5","mac":"2","twa":"—","stel":"—","effect":"呼吸道、眼及皮肤、黏膜强刺激","note":"—"},{"no":"73","cn":"N,N-二甲基甲酰胺","en":"N,N-Dimethylformamide(DMF)","cas":"68-12-2","mac":"—","twa":"20","stel":"—","effect":"眼和上呼吸道刺激；肝损害","note":"皮，G2A"},{"no":"74","cn":"3,3-二甲基联苯胺","en":"3,3-Dimethylbenzidine","cas":"119-93-7","mac":"0.02","twa":"—","stel":"—","effect":"眼和呼吸道刺激","note":"皮，G2B"},{"no":"75","cn":"二甲基亚砜","en":"Dimethyl sulfoxide","cas":"67-68-5","mac":"—","twa":"160","stel":"—","effect":"皮肤、黏膜刺激","note":"皮"},{"no":"76","cn":"N,N-二甲基乙酰胺","en":"N,N-Dimethyl acetamide,DMAC","cas":"127-19-5","mac":"—","twa":"20","stel":"—","effect":"致幻；呼吸道、皮肤刺激；神经衰弱","note":"皮"},{"no":"77","cn":"二甲氧基甲烷","en":"Dimethoxymethane(DMM)","cas":"109-87-5","mac":"—","twa":"3100","stel":"—","effect":"眼、黏膜刺激","note":"—"},{"no":"78","cn":"二聚环戊二烯","en":"Dicyclopentadiene","cas":"77-73-6","mac":"—","twa":"25","stel":"—","effect":"呼吸道和眼刺激；神经系统症状","note":"—"},{"no":"79","cn":"二硫化碳","en":"Carbon disulfide","cas":"75-15-0","mac":"—","twa":"5","stel":"10","effect":"眼及鼻黏膜刺激；周围神经系统损害","note":"皮"},{"no":"80","cn":"1,1-二氯-1-硝基乙烷","en":"1,1-Dichloro-1-nitroethane","cas":"594-72-9","mac":"—","twa":"12","stel":"—","effect":"上呼吸道刺激","note":"—"},{"no":"81","cn":"1,3-二氯丙醇","en":"1,3-Dichloropropanol","cas":"96-23-1","mac":"—","twa":"5","stel":"—","effect":"眼、黏膜、皮肤强刺激；呼吸道损害、中枢神 经系统抑制；麻醉；溶血","note":"皮；G2B"},{"no":"82","cn":"1,2-二氯丙烷","en":"1,2-Dichloropropane","cas":"78-87-5","mac":"—","twa":"350","stel":"500","effect":"眼、皮肤、黏膜和呼吸道刺激；中枢神经系统 抑制；肝肾损害","note":"G1"},{"no":"83","cn":"1,3-二氯丙烯","en":"1,3-Dichloropropene","cas":"542-75-6","mac":"—","twa":"4","stel":"—","effect":"上呼吸道、眼、皮肤刺激；肝肾损害","note":"皮，G2B"},{"no":"84","cn":"二氯二氟甲烷","en":"Dichlorodifluoromethane","cas":"75-71-8","mac":"—","twa":"5000","stel":"—","effect":"眼及上呼吸道刺激；心脏毒性；液体接触皮肤 灼伤","note":"—"},{"no":"85","cn":"二氯甲烷","en":"Dichloromethane","cas":"75-09-2","mac":"—","twa":"200","stel":"—","effect":"碳氧血红蛋白血症；周围神经系统损害","note":"G2A"},{"no":"86","cn":"二氯乙炔","en":"Dichloroacetylene","cas":"7572-29-4","mac":"0.4","twa":"—","stel":"—","effect":"眼和上呼吸道刺激；意识障碍及肝肾损害","note":"—"},{"no":"87","cn":"1,2-二氯乙烷","en":"1,2-Dichloroethane","cas":"107-06-2","mac":"—","twa":"7","stel":"15","effect":"中枢神经系统抑制；眼、呼吸道刺激；肺水肿； 胃肠道刺激；肝肾损害","note":"G2B"},{"no":"88","cn":"1,2-二氯乙烯（全部异构体）","en":"1,2-Dichloroethylene（all isomers）","cas":"156-59-2;156- 60-5;540-59-0","mac":"—","twa":"800","stel":"—","effect":"中枢神经系统损害；眼及上呼吸道刺激","note":"—"},{"no":"89","cn":"二硼烷","en":"Diborane","cas":"19287-45-7","mac":"—","twa":"0.1","stel":"—","effect":"上呼吸道和眼刺激；头痛","note":"—"},{"no":"90","cn":"二缩水甘油醚","en":"Diglycidyl ether","cas":"2238-07-5","mac":"—","twa":"0.5","stel":"—","effect":"眼和呼吸道刺激；麻醉作用","note":"—"},{"no":"91","cn":"二硝基苯（全部异构体）","en":"Dinitrobenzene(all isomers)","cas":"25154-54-5;52 8-29-0;99-65- 0; 100-25-4","mac":"—","twa":"1","stel":"—","effect":"高铁血红蛋白血症；眼损害","note":"皮"},{"no":"92","cn":"二硝基甲苯","en":"Dinitrotoluene","cas":"25321-14-6","mac":"—","twa":"0.2","stel":"—","effect":"高铁血红蛋白血症；生殖毒性","note":"G2B（2,4-； 2,6-），皮"},{"no":"93","cn":"4,6-二硝基邻甲酚","en":"4,6-Dinitro-o-cresol","cas":"534-52-1","mac":"—","twa":"0.2","stel":"—","effect":"基础代谢亢进；高热","note":"皮"},{"no":"94","cn":"2,4-二硝基氯苯","en":"2,4-Dinitrochlorobenzene","cas":"97-00-7","mac":"—","twa":"0.6","stel":"—","effect":"皮肤致敏；皮炎；支气管哮喘；肝损害","note":"皮，敏"},{"no":"95","cn":"氮氧化物（一氧化氮和 二氧化氮）","en":"Nitrogen oxides(Nitric oxide, Nitrogen dioxide)","cas":"10102-43-9; 10102-44-0","mac":"—","twa":"5","stel":"10","effect":"呼吸道刺激","note":"—"},{"no":"96","cn":"二氧化硫","en":"Sulfur dioxide","cas":"7446-09-5","mac":"—","twa":"5","stel":"10","effect":"呼吸道刺激","note":"—"},{"no":"97","cn":"二氧化氯","en":"Chlorine dioxide","cas":"10049-04-4","mac":"—","twa":"0.3","stel":"0.8","effect":"呼吸道刺激；慢性支气管炎","note":"—"},{"no":"98","cn":"二氧化碳","en":"Carbon dioxide","cas":"124-38-9","mac":"—","twa":"9000","stel":"18000","effect":"呼吸中枢、中枢神经系统作用；窒息","note":"—"},{"no":"99","cn":"二氧化锡（按Sn计）","en":"Tin dioxide,as Sn","cas":"18282-10-5","mac":"—","twa":"2","stel":"—","effect":"金属烟热；肺锡尘沉着症；皮炎","note":"—"},{"no":"100","cn":"2-二乙氨基乙醇","en":"2-Diethylaminoethanol","cas":"100-37-8","mac":"—","twa":"50","stel":"—","effect":"眼、皮肤、呼吸道刺激","note":"皮"},{"no":"101","cn":"二乙烯三胺","en":"Diethylene triamine","cas":"111-40-0","mac":"—","twa":"4","stel":"—","effect":"眼、皮肤、呼吸道刺激；哮喘；眼灼伤","note":"皮"},{"no":"102","cn":"二乙基甲酮","en":"Diethyl ketone","cas":"96-22-0","mac":"—","twa":"700","stel":"900","effect":"眼、呼吸道刺激；麻醉作用","note":"—"},{"no":"103","cn":"二乙烯基苯","en":"Divinyl benzene","cas":"1321-74-0","mac":"—","twa":"50","stel":"—","effect":"眼、呼吸道黏膜刺激；麻醉作用","note":"—"},{"no":"104","cn":"二异丁基甲酮","en":"Diisobutyl ketone","cas":"108-83-8","mac":"—","twa":"145","stel":"—","effect":"刺激、麻醉作用","note":"—"},{"no":"105","cn":"甲苯-2,4-二异氰酸酯 （TDI）","en":"Toluene-2,4 –diisocyanate ; Toluene-2,6 –diisocyanate（TDI）","cas":"584-84-9","mac":"—","twa":"0.1","stel":"0.2","effect":"黏膜刺激和致敏作用；哮喘、皮炎","note":"敏"},{"no":"106","cn":"二月桂酸二丁基锡","en":"Dibutyltin dilaurate","cas":"77-58-7","mac":"—","twa":"0.1","stel":"0.2","effect":"肝胆损害；皮肤黏膜刺激；接触性皮炎","note":"皮"},{"no":"107","cn":"钒及其化合物（按V计） 五氧化二钒烟尘 钒铁合金尘","en":"Vanadium and compounds,as V Vanadium pentoxide fume dust Ferrovanadium alloy dust","cas":"7440-62-6（V） 1314-62-1 12604-58-9","mac":"― ―","twa":"0.05 1","stel":"― ―","effect":"呼吸系统损害 肝、肾损害；血液学毒性","note":"G2B ―"},{"no":"108","cn":"酚","en":"Phenol","cas":"108-95-2","mac":"—","twa":"10","stel":"—","effect":"皮肤和黏膜强刺激；肝肾损害；溶血","note":"皮"},{"no":"109","cn":"呋喃","en":"Furan","cas":"110-00-9","mac":"—","twa":"0.5","stel":"—","effect":"麻醉、中枢神经系统抑制；黏膜刺激、皮炎、 肝、肾损害","note":"G2B"},{"no":"110","cn":"氟化氢（按F计）","en":"Hydrogen fluoride, as F","cas":"7664-39-3","mac":"2","twa":"—","stel":"—","effect":"呼吸道、皮肤和眼刺激；肺水肿；皮肤灼伤； 牙齿酸蚀症","note":"—"},{"no":"111","cn":"氟及其化合物（不含氟化 氢）（按F计）","en":"Fluorides and compounds(except HF) , as F","cas":"―","mac":"—","twa":"2","stel":"—","effect":"眼和上呼吸道刺激；骨损害；氟中毒","note":"—"},{"no":"112","cn":"锆及其化合物（按Zr计）","en":"Zirconium and compounds, as Zr","cas":"7440-67-7（Zr）","mac":"—","twa":"5","stel":"10","effect":"局部刺激；皮疹；肺肉芽肿","note":"—"},{"no":"113","cn":"镉及其化合物（按Cd计）","en":"Cadmium and compounds, as Cd","cas":"7440-43-9（Cd）","mac":"—","twa":"0.01","stel":"0.02","effect":"肾损害","note":"G1"},{"no":"114","cn":"汞-金属汞（蒸气）","en":"Mercury metal（vapor）","cas":"7439-97-6","mac":"—","twa":"0.02","stel":"0.04","effect":"肾损害","note":"皮"},{"no":"115","cn":"汞-有机汞化合物（按Hg 计）","en":"Mercury organic compounds, as Hg","cas":"―","mac":"—","twa":"0.01","stel":"0.03","effect":"中枢神经系统损害；肾损害","note":"皮，G2B （甲基汞）"},{"no":"116","cn":"钴及其化合物（按Co计）","en":"Cobalt and compounds, as Co","cas":"7440-48-4（Co）","mac":"—","twa":"0.05","stel":"0.1","effect":"上呼吸道刺激；皮肤黏膜损害；哮喘","note":"G2B；敏"},{"no":"117","cn":"过氧化苯甲酰","en":"Benzoyl peroxide","cas":"94-36-0","mac":"—","twa":"5","stel":"—","effect":"上呼吸道刺激；皮肤刺激和致敏","note":"—"},{"no":"118","cn":"过氧化甲乙酮","en":"Methyl ethyl ketone peroxide (MEKP)","cas":"1338-23-4","mac":"1.5","twa":"—","stel":"—","effect":"上呼吸道、眼和皮肤损害","note":"皮"},{"no":"119","cn":"过氧化氢","en":"Hydrogen peroxide","cas":"7722-84-1","mac":"—","twa":"1.5","stel":"—","effect":"上呼吸道和皮肤刺激；眼损伤","note":"—"},{"no":"120","cn":"环己胺","en":"Cyclohexylamine","cas":"108-91-8","mac":"—","twa":"10","stel":"20","effect":"上呼吸道和眼刺激；中枢神经系统兴奋","note":"—"},{"no":"121","cn":"环己醇","en":"Cyclohexanol","cas":"108-93-0","mac":"—","twa":"100","stel":"—","effect":"眼及上呼吸道刺激；中枢神经系统损害","note":"皮"},{"no":"122","cn":"环己酮","en":"Cyclohexanone","cas":"108-94-1","mac":"—","twa":"50","stel":"—","effect":"眼和上呼吸道刺激；中枢神经系统抑制；麻 醉作用","note":"皮"},{"no":"123","cn":"环己烷","en":"Cyclohexane","cas":"110-82-7","mac":"—","twa":"250","stel":"—","effect":"眼、上呼吸道刺激；中枢神经系统损害；麻 醉作用","note":"—"},{"no":"124","cn":"环三次甲基三硝胺（黑索 金）","en":"Cyclonite (RDX)","cas":"121-82-4","mac":"—","twa":"1.5","stel":"—","effect":"肝损害","note":"皮"},{"no":"125","cn":"环氧丙烷","en":"Propylene oxide","cas":"75-56-9","mac":"—","twa":"5","stel":"—","effect":"眼和上呼吸道刺激","note":"G2B"},{"no":"126","cn":"环氧氯丙烷","en":"Epichlorohydrin","cas":"106-89-8","mac":"—","twa":"1","stel":"2","effect":"上呼吸道刺激；周围神经损害","note":"皮，G2A"},{"no":"127","cn":"环氧乙烷","en":"Ethylene oxide","cas":"75-21-8","mac":"—","twa":"2","stel":"—","effect":"皮肤、呼吸道、黏膜刺激；中枢神经系统损害","note":"G1，皮"},{"no":"128","cn":"黄磷","en":"Yellow phosphorus","cas":"7723-14-0","mac":"—","twa":"0.05","stel":"0.1","effect":"眼及呼吸道刺激；吸入性损伤；肝损害","note":"—"},{"no":"129","cn":"邻-茴香胺 对-茴香胺","en":"o-Anisidine； p-Anisidine","cas":"90-04-0； 104-94-9","mac":"—","twa":"0.5","stel":"—","effect":"高铁血红蛋白血症；神经衰弱和植物神经紊乱","note":"G2B；皮 （o-）"},{"no":"130","cn":"己二醇","en":"Hexylene glycol","cas":"107-41-5","mac":"100","twa":"—","stel":"—","effect":"眼和上呼吸道刺激；麻醉","note":"—"},{"no":"131","cn":"1,6-己二异氰酸酯","en":"1,6-Diisocyantohexane （1,6-Hexamethylene diisocyanate）","cas":"822-06-0","mac":"—","twa":"0.03","stel":"—","effect":"眼及上呼吸道刺激；呼吸系统致敏","note":"敏"},{"no":"132","cn":"己内酰胺","en":"Caprolactam","cas":"105-60-2","mac":"—","twa":"5","stel":"—","effect":"眼、皮肤、上呼吸道刺激","note":"—"},{"no":"133","cn":"2-己酮（甲基正丁基甲酮）","en":"2-Hexanone（Methyl n-butyl ketone）","cas":"591-78-6","mac":"—","twa":"20","stel":"40","effect":"眼、鼻刺激；麻醉；周围神经病","note":"皮"},{"no":"134","cn":"一甲胺","en":"Monomethylamine","cas":"74-89-5","mac":"—","twa":"5","stel":"10","effect":"眼、皮肤和上呼吸道刺激","note":"—"},{"no":"135","cn":"甲拌磷","en":"Thimet","cas":"298-02-2","mac":"0.01","twa":"—","stel":"—","effect":"胆碱酯酶抑制","note":"皮"},{"no":"136","cn":"甲苯","en":"Toluene","cas":"108-88-3","mac":"—","twa":"50","stel":"100","effect":"麻醉作用；皮肤黏膜刺激","note":"皮"},{"no":"137","cn":"N-甲苯胺 o-甲苯胺","en":"N-Methyl aniline； o -Toluidine","cas":"100-61-8； 95-53-4","mac":"—","twa":"2","stel":"—","effect":"高铁血红蛋白血症；中枢神经系统及肝、肾 损害；神经衰弱","note":"皮；G1 （o -）"},{"no":"138","cn":"甲醇","en":"Methanol","cas":"67-56-1","mac":"—","twa":"25","stel":"50","effect":"麻醉作用和眼、上呼吸道刺激；眼损害","note":"皮"},{"no":"139","cn":"甲酚（全部异构体）","en":"Cresol(all isomers)","cas":"1319-77-3; 95-48-7; 108-39-4; 106-44-5","mac":"—","twa":"10","stel":"—","effect":"眼、皮肤和上呼吸道刺激","note":"皮"},{"no":"140","cn":"甲基丙烯腈","en":"Methylacrylonitrile","cas":"126-98-7","mac":"—","twa":"3","stel":"—","effect":"中枢神经系统损害；眼和皮肤刺激","note":"皮"},{"no":"141","cn":"甲基丙烯酸","en":"Methacrylic acid","cas":"79-41-4","mac":"—","twa":"70","stel":"—","effect":"皮肤和眼刺激","note":"—"},{"no":"142","cn":"甲基丙烯酸甲酯","en":"Methyl methacrylate","cas":"80-62-6","mac":"—","twa":"100","stel":"—","effect":"眼、上呼吸道、皮肤刺激；肺功能改变","note":"敏"},{"no":"143","cn":"甲基丙烯酸缩水甘油酯","en":"Glycidyl methacrylate","cas":"106-91-2","mac":"5","twa":"—","stel":"—","effect":"上呼吸道、眼和皮肤刺激","note":"—"},{"no":"144","cn":"甲基肼","en":"Methyl hydrazine","cas":"60-34-4","mac":"0.08","twa":"—","stel":"—","effect":"上呼吸道刺激；眼刺激；肝损害","note":"皮"},{"no":"145","cn":"甲基内吸磷","en":"Methyl demeton","cas":"8022-00-2","mac":"—","twa":"0.2","stel":"—","effect":"胆碱酯酶抑制","note":"皮"},{"no":"146","cn":"18-甲基炔诺酮（炔诺孕 酮）","en":"18-Methyl norgestrel","cas":"6533-00-2","mac":"—","twa":"0.5","stel":"2","effect":"类早孕反应及不规则出血；影响泌乳","note":"—"},{"no":"147","cn":"甲基叔丁基醚","en":"Methyl tert-butyl ether（MTBE）","cas":"1634-04-4","mac":"—","twa":"180","stel":"270","effect":"粘膜刺激；肝、肾损害","note":"—"},{"no":"148","cn":"甲硫醇","en":"Methyl mercaptan","cas":"74-93-1","mac":"—","twa":"1","stel":"—","effect":"肝损害","note":"—"},{"no":"149","cn":"甲醛","en":"Formaldehyde","cas":"50-00-0","mac":"0.5","twa":"—","stel":"—","effect":"上呼吸道和眼刺激","note":"敏，G1"},{"no":"150","cn":"甲酸","en":"Formic acid","cas":"64 -18-6","mac":"—","twa":"10","stel":"20","effect":"上呼吸道、眼和皮肤刺激","note":"—"},{"no":"151","cn":"甲乙酮（2-丁酮）","en":"Methyl ethyl ketone（2-Butanone）","cas":"78-93-3","mac":"—","twa":"300","stel":"600","effect":"眼、呼吸道刺激","note":"—"},{"no":"152","cn":"2-甲氧基乙醇","en":"2-Methoxyethanol","cas":"109-86-4","mac":"—","twa":"15","stel":"—","effect":"血液学效应；生殖效应","note":"皮"},{"no":"153","cn":"2-甲氧基乙基乙酸酯","en":"2-Methoxyethyl acetate","cas":"110-49-6","mac":"—","twa":"20","stel":"—","effect":"眼、黏膜和呼吸道刺激；血液学效应、生殖效应","note":"皮"},{"no":"154","cn":"甲氧氯","en":"Methoxychlor","cas":"72-43-5","mac":"—","twa":"10","stel":"—","effect":"肝损害；中枢神经系统损害","note":"—"},{"no":"155","cn":"间苯二酚","en":"Resorcinol","cas":"108-46-3","mac":"—","twa":"20","stel":"—","effect":"眼和皮肤刺激","note":"—"},{"no":"156","cn":"焦炉逸散物（按苯溶物计）","en":"Coke oven emissions, as benzene soluble matter","cas":"―","mac":"—","twa":"0.1","stel":"—","effect":"肺癌","note":"G1"},{"no":"157","cn":"肼","en":"Hydrazine","cas":"302-01-2","mac":"—","twa":"0.06","stel":"0.13","effect":"上呼吸道癌","note":"皮，G2A"},{"no":"158","cn":"久效磷","en":"Monocrotophos","cas":"6923-22-4","mac":"—","twa":"0.1","stel":"—","effect":"胆碱酯酶抑制","note":"皮"},{"no":"159","cn":"糠醇","en":"Furfuryl alcohol","cas":"98-00-0","mac":"—","twa":"40","stel":"60","effect":"上呼吸道和眼刺激","note":"皮"},{"no":"160","cn":"糠醛","en":"Furfural","cas":"98-01-1","mac":"—","twa":"5","stel":"—","effect":"上呼吸道和眼刺激","note":"皮"},{"no":"161","cn":"考的松","en":"Cortisone","cas":"53-06-5","mac":"—","twa":"1","stel":"—","effect":"抑制炎症反应和免疫反应","note":"—"},{"no":"162","cn":"苦味酸（2,4,6-三硝基苯酚）","en":"Picric acid（2,4,6-Trinitrophenol）","cas":"88-89-1","mac":"—","twa":"0.1","stel":"—","effect":"皮肤致敏、皮炎；眼刺激","note":"—"},{"no":"163","cn":"癸硼烷","en":"Decaborane","cas":"17702-41-9","mac":"—","twa":"0.25","stel":"0.75","effect":"肺损伤；心力减退；中枢神经系统中毒；肝肾损 害；皮肤黏膜刺激","note":"皮"},{"no":"164","cn":"联苯","en":"Biphenyl","cas":"92-52-4","mac":"—","twa":"1.5","stel":"—","effect":"肺功能改变","note":"—"},{"no":"165","cn":"邻苯二甲酸二丁酯","en":"Dibutyl phthalate","cas":"84-74-2","mac":"—","twa":"2.5","stel":"—","effect":"睾丸损害；眼和上呼吸道刺激","note":"—"},{"no":"166","cn":"邻苯二甲酸酐","en":"Phthalic anhydride","cas":"85-44-9","mac":"1","twa":"—","stel":"—","effect":"上呼吸道、眼和皮肤刺激","note":"敏"},{"no":"167","cn":"邻二氯苯","en":"o-Dichlorobenzene","cas":"95-50-1","mac":"—","twa":"50","stel":"100","effect":"上呼吸道和眼刺激；肝损害","note":"—"},{"no":"168","cn":"邻氯苯乙烯","en":"o-Chlorostyrene","cas":"2039-87-4","mac":"—","twa":"250","stel":"400","effect":"中枢神经系统损害；周围神经病","note":"—"},{"no":"169","cn":"邻氯苄叉丙二腈","en":"o-Chlorobenzylidene malononitrile","cas":"2698-41-1","mac":"0.4","twa":"—","stel":"—","effect":"上呼吸道刺激；皮肤致敏","note":"皮"},{"no":"170","cn":"邻仲丁基苯酚","en":"o-sec-Butylphenol","cas":"89-72-5","mac":"—","twa":"30","stel":"—","effect":"上呼吸道、眼和皮肤刺激","note":"皮"},{"no":"171","cn":"磷胺","en":"Phosphamidon","cas":"13171-21-6","mac":"—","twa":"0.02","stel":"—","effect":"剧毒；皮肤、眼刺激","note":"皮"},{"no":"172","cn":"磷化氢","en":"Phosphine","cas":"7803-51-2","mac":"0.3","twa":"—","stel":"—","effect":"上呼吸道刺激；头痛；胃肠道刺激；中枢神经 系统损害","note":"—"},{"no":"173","cn":"磷酸","en":"Phosphoric acid","cas":"7664-38-2","mac":"—","twa":"1","stel":"3","effect":"上呼吸道、眼和皮肤刺激","note":"—"},{"no":"174","cn":"磷酸二丁基苯酯","en":"Dibutyl phenyl phosphate","cas":"2528-36-1","mac":"—","twa":"3.5","stel":"—","effect":"胆碱酯酶抑制；上呼吸道刺激","note":"皮"},{"no":"175","cn":"硫化氢","en":"Hydrogen sulfide","cas":"7783-06-4","mac":"10","twa":"—","stel":"—","effect":"神经毒性；强烈黏膜刺激","note":"—"},{"no":"176","cn":"硫酸钡（按Ba计）","en":"Barium sulfate, as Ba","cas":"7727-43-7","mac":"—","twa":"10","stel":"—","effect":"机械刺激炎症反应；肺沉着症","note":"—"},{"no":"177","cn":"硫酸二甲酯","en":"Dimethyl sulfate","cas":"77-78-1","mac":"—","twa":"0.5","stel":"—","effect":"眼和皮肤刺激","note":"皮，G2A"},{"no":"178","cn":"硫酸及三氧化硫","en":"Sulfuric acid and sulfur trioxide","cas":"7664-93-9 7446-11-9","mac":"—","twa":"1","stel":"2","effect":"肺功能改变","note":"G1"},{"no":"179","cn":"硫酰氟","en":"Sulfuryl fluoride","cas":"2699-79-8","mac":"—","twa":"20","stel":"40","effect":"中枢神经系统损害；眼、皮肤、黏膜刺激","note":"—"},{"no":"180","cn":"六氟丙酮","en":"Hexafluoroacetone","cas":"684-16-2","mac":"—","twa":"0.5","stel":"—","effect":"睾丸损害；肾损害","note":"皮"},{"no":"181","cn":"六氟丙烯","en":"Hexafluoropropylene","cas":"116-15-4","mac":"—","twa":"4","stel":"—","effect":"肝肾及肺损害","note":"—"},{"no":"182","cn":"六氟化硫","en":"Sulfur hexafluoride","cas":"2551-62-4","mac":"—","twa":"6000","stel":"—","effect":"窒息","note":"—"},{"no":"183","cn":"六六六（六氯环已烷）","en":"Hexachlorocyclohexane","cas":"608-73-1","mac":"—","twa":"0.3","stel":"0.5","effect":"胆碱酯酶抑制；慢性中毒全身症状；黏膜、皮 肤刺激","note":"G2B"},{"no":"184","cn":"γ-六六六（γ-六氯环己烷）","en":"γ-Hexachlorocyclohexane","cas":"58-89-9","mac":"—","twa":"0.05","stel":"0.1","effect":"胃肠不适、接触性皮炎、神经衰弱、末梢神经 病及肝肾损害","note":"皮，G1"},{"no":"185","cn":"六氯丁二烯","en":"Hexachlorobutadiene","cas":"87-68-3","mac":"—","twa":"0.2","stel":"—","effect":"肾损害","note":"皮"},{"no":"186","cn":"六氯环戊二烯","en":"Hexachlorocyclopentadiene","cas":"77-47-4","mac":"—","twa":"0.1","stel":"—","effect":"上呼吸道刺激","note":"—"},{"no":"187","cn":"六氯萘","en":"Hexachloronaphthalene","cas":"1335-87-1","mac":"—","twa":"0.2","stel":"—","effect":"肝损害；氯唑疮","note":"皮"},{"no":"188","cn":"六氯乙烷","en":"Hexachloroethane","cas":"67-72-1","mac":"—","twa":"10","stel":"—","effect":"肝、肾损害","note":"皮，G2B"},{"no":"189","cn":"氯","en":"Chlorine","cas":"7782-50-5","mac":"1","twa":"—","stel":"—","effect":"上呼吸道和眼刺激","note":"—"},{"no":"190","cn":"氯苯","en":"Chlorobenzene","cas":"108-90-7","mac":"—","twa":"50","stel":"—","effect":"肝损害","note":"—"},{"no":"191","cn":"氯丙酮","en":"Chloroacetone","cas":"78-95-5","mac":"4","twa":"—","stel":"—","effect":"眼和上呼吸道刺激","note":"皮"},{"no":"192","cn":"氯丙烯","en":"Allyl chloride","cas":"107-05-1","mac":"—","twa":"2","stel":"4","effect":"眼和上呼吸道刺激；肝、肾损害","note":"—"},{"no":"193","cn":"β-氯丁二烯","en":"β-Chloroprene","cas":"126-99-8","mac":"—","twa":"4","stel":"—","effect":"上呼吸道和眼刺激","note":"皮，G2B"},{"no":"194","cn":"氯化铵烟","en":"Ammonium chloride fume","cas":"12125-02-9","mac":"—","twa":"10","stel":"20","effect":"眼和上呼吸道刺激","note":"—"},{"no":"195","cn":"氯化汞（升汞）","en":"Mercuric chloride","cas":"7487-94-7","mac":"—","twa":"0.025","stel":"—","effect":"中枢神经系统和周围神经系统损害；肾损害","note":"—"},{"no":"196","cn":"氯化苦","en":"Chloropicrin","cas":"76-06-2","mac":"1","twa":"—","stel":"—","effect":"眼刺激；肺水肿","note":"—"},{"no":"197","cn":"氯化氢及盐酸","en":"Hydrogen chloride and chlorhydric acid","cas":"7647-01-0","mac":"7.5","twa":"—","stel":"—","effect":"上呼吸道刺激","note":"—"},{"no":"198","cn":"氯化氰","en":"Cyanogen chloride","cas":"506-77-4","mac":"0.75","twa":"—","stel":"—","effect":"肺水肿；眼、皮肤和呼吸道刺激","note":"—"},{"no":"199","cn":"氯化锌烟","en":"Zinc chloride fume","cas":"7646-85-7","mac":"—","twa":"1","stel":"2","effect":"呼吸道刺激","note":"—"},{"no":"200","cn":"氯甲醚","en":"Chloromethyl methyl ether","cas":"107-30-2","mac":"0.005","twa":"—","stel":"—","effect":"肺癌","note":"G1"},{"no":"201","cn":"氯甲烷","en":"Methyl chloride","cas":"74-87-3","mac":"—","twa":"60","stel":"120","effect":"中枢神经系统损害；肝、肾损害；睾丸损害； 致畸","note":"皮"},{"no":"202","cn":"氯联苯（54 %氯）","en":"Chlorodiphenyl (54%Cl)","cas":"11097-69-1","mac":"—","twa":"0.5","stel":"—","effect":"上呼吸道刺激；肝损害；氯唑疮","note":"皮，G2A"},{"no":"203","cn":"氯萘","en":"Chloronaphthalene","cas":"90-13-1","mac":"—","twa":"0.5","stel":"—","effect":"氯痤疮；中毒性肝炎","note":"皮"},{"no":"204","cn":"氯乙醇","en":"Ethylene chlorohydrin","cas":"107-07-3","mac":"2","twa":"—","stel":"—","effect":"眼、上呼吸道刺激；中枢神经系统影响；皮肤 红斑；脑、肺水肿；慢性影响全身症状、血压 降低和消瘦等","note":"皮"},{"no":"205","cn":"氯乙醛","en":"Chloroacetaldehyde","cas":"107-20-0","mac":"3","twa":"—","stel":"—","effect":"上呼吸道和眼刺激","note":"—"},{"no":"206","cn":"氯乙酸","en":"Chloroacetic acid","cas":"79-11-8","mac":"2","twa":"—","stel":"—","effect":"上呼吸道刺激；心、肺、肝、肾及中枢神经损 害；眼刺激或角膜灼伤、皮肤灼伤","note":"皮"},{"no":"207","cn":"氯乙烯","en":"Vinyl chloride","cas":"75-01-4","mac":"—","twa":"10","stel":"—","effect":"肝血管肉瘤；麻醉；昏迷、抽搐；皮肤损害； 神经衰弱、肝损伤、消化功能障碍、肢端溶骨 症","note":"G1"},{"no":"208","cn":"-氯乙酰苯","en":"-Chloroacetophenone","cas":"532-27-4","mac":"—","twa":"0.3","stel":"—","effect":"眼、呼吸道和皮肤刺激","note":"—"},{"no":"209","cn":"氯乙酰氯","en":"Chloroacetyl chloride","cas":"79-04-9","mac":"—","twa":"0.2","stel":"0.6","effect":"上呼吸道刺激","note":"皮"},{"no":"210","cn":"马拉硫磷","en":"Malathion","cas":"121-75-5","mac":"—","twa":"2","stel":"—","effect":"胆碱酯酶抑制；上呼吸道刺激","note":"皮，G2A"},{"no":"211","cn":"马来酸酐","en":"Maleic anhydride","cas":"108-31-6","mac":"—","twa":"1","stel":"2","effect":"眼、上呼吸道和皮肤刺激","note":"敏"},{"no":"212","cn":"吗啉","en":"Morpholine","cas":"110-91-8","mac":"—","twa":"60","stel":"—","effect":"眼损害；上呼吸道刺激；支气管炎、肺炎、肺 水肿；皮肤灼伤","note":"皮"},{"no":"213","cn":"煤焦油沥青挥发物（按苯 溶物计）","en":"Coal tar pitch volatiles, as Benzene soluble matters","cas":"65996-93-2","mac":"—","twa":"0.2","stel":"—","effect":"肺癌","note":"G1"},{"no":"214","cn":"锰及其无机化合物（按 MnO 计） 2","en":"Manganese and inorganic compounds, as MnO 2","cas":"7439-96-5（Mn）","mac":"—","twa":"0.15","stel":"—","effect":"中枢神经系统损害","note":"—"},{"no":"215","cn":"钼及其化合物（按Mo计） 钼，不溶性化合物 钼，可溶性化合物","en":"Molybdenum and compounds, as Mo Molybdenum and insoluble compounds Molybdenum and soluble compounds","cas":"7439-98-（Mo） ― ―","mac":"― ―","twa":"6 4","stel":"― ―","effect":"― 下呼吸道刺激","note":"― ―"},{"no":"216","cn":"内吸磷","en":"Demeton","cas":"8065-48-3","mac":"—","twa":"0.05","stel":"—","effect":"胆碱酯酶抑制","note":"皮"},{"no":"217","cn":"萘","en":"Naphthalene","cas":"91-20-3","mac":"—","twa":"50","stel":"75","effect":"溶血性贫血；肝、肾损害；上呼吸道和眼刺激","note":"皮，G2B"},{"no":"218","cn":"2-萘酚","en":"2-Naphthol","cas":"135-19-3","mac":"—","twa":"0.25","stel":"0.5","effect":"皮肤强刺激；血液循环和肾损害；眼角膜损伤； 接触性皮炎","note":"—"},{"no":"219","cn":"萘烷","en":"Decalin","cas":"91-17-8","mac":"—","twa":"60","stel":"—","effect":"皮肤黏膜刺激、麻醉作用；眼刺激；周围神经 病；胃肠道影响","note":"—"},{"no":"220","cn":"尿素","en":"Urea","cas":"57-13-6","mac":"—","twa":"5","stel":"10","effect":"眼、皮肤和黏膜刺激","note":"—"},{"no":"221","cn":"镍及其无机化合物(按Ni 计) 金属镍与难溶性镍化合 物 可溶性镍化合物","en":"Nickel and inorganic compounds, as Ni Nickel metal and insoluble compounds Soluble nickel compounds","cas":"7440-02-0（Ni） ―","mac":"― ―","twa":"1 0.5","stel":"― ―","effect":"皮炎；尘肺病；肺损害；鼻癌；肺癌","note":"G1（镍化合 物），敏 G2B（金属 和合金）"},{"no":"222","cn":"铍及其化合物（按Be计）","en":"Beryllium and compounds, as Be","cas":"7440-41-7（Be）","mac":"—","twa":"0.0005","stel":"0.001","effect":"铍过敏、铍病、肺癌","note":"皮；G1"},{"no":"223","cn":"偏二甲基肼","en":"Unsymmetric dimethylhydrazine","cas":"57-14-7","mac":"—","twa":"0.5","stel":"—","effect":"上呼吸道刺激；鼻癌","note":"皮，G2B"},{"no":"224","cn":"铅及其无机化合物（按 Pb计） 铅尘 铅烟","en":"Lead and inorganic Compounds, as Pb Lead dust Lead fume","cas":"7439-92-1（Pb） ― ―","mac":"― ―","twa":"0.05 0.03","stel":"― ―","effect":"中枢神经系统损害；周围神经损害；血液学效 应","note":"G2B（铅）， G2A（铅的 无机化合 物）"},{"no":"225","cn":"氢化锂","en":"Lithium hydride","cas":"7580-67-8","mac":"—","twa":"0.025","stel":"0.05","effect":"皮肤、眼和上呼吸道刺激","note":"—"},{"no":"226","cn":"氢醌","en":"Hydroquinone","cas":"123-31-9","mac":"—","twa":"1","stel":"2","effect":"眼损害、皮肤、黏膜腐蚀；中枢神经系统抑制； 肝功能损害","note":"—"},{"no":"227","cn":"氢氧化钾","en":"Potassium hydroxide","cas":"1310-58-3","mac":"2","twa":"—","stel":"—","effect":"上呼吸道、眼和皮肤刺激","note":"—"},{"no":"228","cn":"氢氧化钠","en":"Sodium hydroxide","cas":"1310-73-2","mac":"2","twa":"—","stel":"—","effect":"上呼吸道、眼和皮肤刺激","note":"—"},{"no":"229","cn":"氢氧化铯","en":"Cesium hydroxide","cas":"21351-79-1","mac":"—","twa":"2","stel":"—","effect":"上呼吸道、皮肤和眼刺激","note":"—"},{"no":"230","cn":"氰氨化钙","en":"Calcium cyanamide","cas":"156-62-7","mac":"—","twa":"1","stel":"3","effect":"眼和上呼吸道刺激","note":"—"},{"no":"231","cn":"氰化氢（按CN计）","en":"Hydrogen cyanide,as CN","cas":"74-90-8","mac":"1","twa":"—","stel":"—","effect":"上呼吸道刺激；头痛；恶心；甲状腺效应","note":"皮"},{"no":"232","cn":"氰化物（按CN计）","en":"Cyanides, as CN","cas":"57-12-5","mac":"1","twa":"—","stel":"—","effect":"上呼吸道刺激；头痛；恶心；甲状腺效应","note":"皮"},{"no":"233","cn":"氰戊菊酯","en":"Fenvalerate","cas":"51630-58-1","mac":"—","twa":"0.05","stel":"—","effect":"皮肤、上呼吸道刺激；中枢神经和周围神经系 统症状；眼、皮肤刺激","note":"皮"},{"no":"234","cn":"全氟异丁烯","en":"Perfluoroisobutylene","cas":"382-21-8","mac":"0.08","twa":"—","stel":"—","effect":"上呼吸道刺激；血液学效应","note":"—"},{"no":"235","cn":"壬烷","en":"Nonane","cas":"111-84-2","mac":"—","twa":"500","stel":"—","effect":"中枢神经系统损害","note":"—"},{"no":"236","cn":"溶剂汽油","en":"Solvent gasolines","cas":"—","mac":"—","twa":"300","stel":"—","effect":"上呼吸道和眼刺激；中枢神经系统损害","note":"—"},{"no":"237","cn":"乳酸正丁酯","en":"n-Butyl lactate","cas":"138-22-7","mac":"—","twa":"25","stel":"—","effect":"头痛；上呼吸道刺激","note":"—"},{"no":"238","cn":"三氟化氯","en":"Chlorine trifluoride","cas":"7790-91-2","mac":"0.4","twa":"—","stel":"—","effect":"眼和上呼吸道刺激；肺损害","note":"—"},{"no":"239","cn":"三氟化硼","en":"Boron trifluoride","cas":"7637-07-2","mac":"3","twa":"—","stel":"—","effect":"下呼吸道刺激；肺炎","note":"—"},{"no":"240","cn":"三氟甲基次氟化物","en":"Trifluoromethyl hypofluorite","cas":"373-91-1","mac":"0.2","twa":"—","stel":"—","effect":"―","note":"—"},{"no":"241","cn":"三甲苯磷酸酯（全部异构 体）","en":"Tricresyl phosphate (all isomers)","cas":"1330-78-5","mac":"—","twa":"0.3","stel":"—","effect":"中毒性神经病","note":"皮"},{"no":"242","cn":"三甲基氯化锡","en":"Trimethyltin chloride","cas":"1066-45-1","mac":"0.025","twa":"—","stel":"—","effect":"低血钾；中枢神经系统损伤","note":"皮"},{"no":"243","cn":"1,2,3-三氯丙烷","en":"1,2,3-Trichloropropane","cas":"96-18-4","mac":"—","twa":"60","stel":"—","effect":"肝、肾损害．眼和上呼吸道刺激","note":"皮，G2A"},{"no":"244","cn":"三氯化磷","en":"Phosphorus trichloride","cas":"7719-12-2","mac":"—","twa":"1","stel":"2","effect":"上呼吸道、眼和皮肤刺激","note":"—"},{"no":"245","cn":"三氯甲烷（氯仿）","en":"Trichloromethane（chloroform）","cas":"67-66-3","mac":"—","twa":"20","stel":"—","effect":"肝损害；胚胎/胎儿损害；中枢神经系统损害","note":"G2B"},{"no":"246","cn":"三氯硫磷","en":"Thiophosphoryl chloride","cas":"3982-91-0","mac":"0.5","twa":"—","stel":"—","effect":"眼、皮肤、黏膜和呼吸道强烈刺激","note":"—"},{"no":"247","cn":"三氯氢硅","en":"Trichlorosilane","cas":"10025-28-2","mac":"3","twa":"—","stel":"—","effect":"眼和上呼吸道刺激","note":"—"},{"no":"248","cn":"三氯氧磷","en":"Phosphorus oxychloride","cas":"10025-87-3","mac":"—","twa":"0.3","stel":"0.6","effect":"上呼吸道刺激","note":"—"},{"no":"249","cn":"三氯乙醛","en":"Trichloroacetaldehyde","cas":"75-87-6","mac":"3","twa":"—","stel":"—","effect":"皮肤、黏膜强烈刺激；接触性皮炎","note":"G2A"},{"no":"250","cn":"1,1,1-三氯乙烷","en":"1,1,1-trichloroethane","cas":"71-55-6","mac":"—","twa":"900","stel":"—","effect":"中枢神经系统损害；心律不齐；皮肤轻度刺激","note":"—"},{"no":"251","cn":"三氯乙烯","en":"Trichloroethylene","cas":"79-01-6","mac":"—","twa":"30","stel":"—","effect":"中枢神经系统损伤","note":"G1，敏"},{"no":"252","cn":"三硝基甲苯","en":"Trinitrotoluene","cas":"118-96-7","mac":"—","twa":"0.2","stel":"0.5","effect":"高铁血红蛋白血症；肝损害；白内障","note":"皮"},{"no":"253","cn":"三溴甲烷","en":"Tribromomethane","cas":"75-25-2","mac":"—","twa":"5","stel":"—","effect":"上呼吸道和眼部刺激；肝肾毒性","note":"皮"},{"no":"254","cn":"三氧化铬、铬酸盐、重 铬酸盐（按Cr计）","en":"Chromium trioxide、chromate、 dichromate, as Cr","cas":"1333-82-0 ； 18540-29-9（六 价铬）； 7440-47-3（金 属铬）（Cr）","mac":"—","twa":"0.05","stel":"—","effect":"皮肤过敏和溃疡；鼻腔炎症、坏死；肺癌","note":"G1；敏"},{"no":"255","cn":"三乙基氯化锡","en":"Triethyltin chloride","cas":"994-31-0","mac":"—","twa":"0.05","stel":"0.1","effect":"头痛、全身症状、窦性心动过缓；皮肤、黏膜 刺激；神经衰弱","note":"皮"},{"no":"256","cn":"杀螟松","en":"Sumithion","cas":"122-14-5","mac":"—","twa":"1","stel":"2","effect":"胆碱酯酶抑制","note":"皮"},{"no":"257","cn":"杀鼠灵（3-（1-丙酮基苄 基）-4-羟基香豆素；华 法林）","en":"3-(A-acetonylbenzyl)4-hydroxycou marin(Warfarin)","cas":"81-81-2","mac":"—","twa":"0.1","stel":"—","effect":"抗凝血作用","note":"—"},{"no":"258","cn":"砷化氢（胂）","en":"Arsine","cas":"7784-42-1","mac":"0.03","twa":"—","stel":"—","effect":"强溶血作用；多发性神经炎","note":"—"},{"no":"259","cn":"砷及其无机化合物（按 As计）","en":"Arsenic and inorganic compounds, as As","cas":"7440-38-2（As）","mac":"—","twa":"0.01","stel":"0.02","effect":"肺癌、皮肤癌","note":"G1"},{"no":"260","cn":"石蜡烟","en":"Paraffin wax fume","cas":"8002-74-2","mac":"—","twa":"2","stel":"4","effect":"上呼吸道刺激；恶心","note":"—"},{"no":"261","cn":"十溴联苯醚","en":"Decabromodiphenyl ether","cas":"1163-19-5","mac":"—","twa":"5","stel":"—","effect":"内分泌干扰；神经、生殖、肝毒性","note":"—"},{"no":"262","cn":"石油沥青烟(按苯溶物 计)","en":"Asphalt (petroleum) fume, as benzene soluble matter","cas":"8052-42-4","mac":"—","twa":"5","stel":"—","effect":"上呼吸道刺激和眼刺激","note":"G2B"},{"no":"263","cn":"双（巯基乙酸）二辛基锡","en":"Bis(marcaptoacetate) dioctyltin","cas":"26401-97-8","mac":"—","twa":"0.1","stel":"0.2","effect":"皮肤致敏、中枢神经系统损害","note":"—"},{"no":"264","cn":"双酚A","en":"Bisphenol A(BPA)","cas":"80-05-7","mac":"—","twa":"5","stel":"—","effect":"生殖影响；内分泌损害","note":"—"},{"no":"265","cn":"双硫醒","en":"Disulfiram","cas":"97-77-8","mac":"—","twa":"2","stel":"—","effect":"血管舒张；恶心","note":"—"},{"no":"266","cn":"双氯甲醚","en":"Bis(chloromethyl) ether","cas":"542-88-1","mac":"0.005","twa":"—","stel":"—","effect":"肺癌","note":"G1"},{"no":"267","cn":"四氯化碳","en":"Carbon tetrachloride","cas":"56-23-5","mac":"—","twa":"15","stel":"25","effect":"肝损害","note":"皮，G2B"},{"no":"268","cn":"四氯乙烯","en":"Tetrachloroet hylene","cas":"127-18-4","mac":"—","twa":"200","stel":"—","effect":"中枢神经系统损害","note":"G2A"},{"no":"269","cn":"四氢呋喃","en":"Tetrahydrofuran","cas":"109-99-9","mac":"—","twa":"300","stel":"—","effect":"上呼吸道刺激；中枢神经系统损害；肾损害","note":"—"},{"no":"270","cn":"四氢化硅","en":"Silicon tetrahydride","cas":"7803-62-5","mac":"—","twa":"6.6","stel":"—","effect":"眼、皮肤、呼吸道刺激","note":"—"},{"no":"271","cn":"四氢化锗","en":"Germanium tetrahydride","cas":"7782-65-2","mac":"—","twa":"0.6","stel":"—","effect":"溶血；肾损害","note":"—"},{"no":"272","cn":"四溴化碳","en":"Carbon tetrabromide","cas":"558-13-4","mac":"—","twa":"1.5","stel":"4","effect":"肝损害；眼、上呼吸道和皮肤刺激","note":"—"},{"no":"273","cn":"四乙基铅（按Pb计）","en":"Tetraethyl lead, as Pb","cas":"78-00-2","mac":"—","twa":"0.02","stel":"—","effect":"中枢神经系统损害","note":"皮"},{"no":"274","cn":"松节油","en":"Turpentine","cas":"8006-64-2","mac":"—","twa":"300","stel":"—","effect":"上呼吸道、皮肤刺激；中枢神经系统损害；肺 损害","note":"—"},{"no":"275","cn":"铊及其可溶性化合物（按 Tl计）","en":"Thallium and soluble compounds, as Tl","cas":"7440-28-0（Tl）","mac":"—","twa":"0.05","stel":"0.1","effect":"胃肠损害；周围神经病","note":"皮"},{"no":"276","cn":"钽及其氧化物（按Ta计）","en":"Tantalum and oxide,as Ta","cas":"7440-25-7（Ta）","mac":"—","twa":"5","stel":"—","effect":"上呼吸道刺激","note":"—"},{"no":"277","cn":"碳酸钠","en":"Sodium carbonate","cas":"497-19-8","mac":"—","twa":"3","stel":"6","effect":"上呼吸道、眼、皮肤刺激","note":"—"},{"no":"278","cn":"碳酰氯（光气）","en":"Carbonyl chloride（Phosgene）","cas":"75-44-5","mac":"0.5","twa":"—","stel":"—","effect":"眼和上呼吸道刺激；肺损害","note":"—"},{"no":"279","cn":"羰基氟","en":"Carbonyl fluoride","cas":"353-50-4","mac":"—","twa":"5","stel":"10","effect":"下呼吸道刺激；骨损害","note":"—"},{"no":"280","cn":"羰基镍（按Ni计）","en":"Nickel carbonyl, as Ni","cas":"13463-39-3","mac":"0.002","twa":"—","stel":"—","effect":"化学性肺炎","note":"G1"},{"no":"281","cn":"锑及其化合物（按Sb计）","en":"Antimony and compounds ,as Sb","cas":"7440-36-0（Sb）","mac":"—","twa":"0.5","stel":"—","effect":"皮肤和上呼吸道刺激","note":"—"},{"no":"282","cn":"铜（按Cu计） 铜尘 铜烟","en":"Copper,as Cu Copper dust Copper fume","cas":"7440-50-8 — —","mac":"― ―","twa":"1 0.2","stel":"― ―","effect":"呼吸道、皮肤刺激；胃肠道反应；金属烟热","note":"― ―"},{"no":"283","cn":"钨及其不溶性化合物（按 W计）","en":"Tungsten and insoluble compounds, as W","cas":"7440-33-7（W）","mac":"—","twa":"5","stel":"10","effect":"下呼吸道刺激","note":"—"},{"no":"284","cn":"五氟一氯乙烷","en":"Chloropentafluoroethane","cas":"76-15-3","mac":"—","twa":"5000","stel":"—","effect":"心律不齐；昏迷甚至死亡；冻伤","note":"—"},{"no":"285","cn":"五硫化二磷","en":"Phosphorus pentasulfide","cas":"1314 -80-3","mac":"—","twa":"1","stel":"3","effect":"上呼吸道刺激","note":"—"},{"no":"286","cn":"五氯酚及其钠盐","en":"Pentachlorophenol and sodium salts","cas":"87-86-5","mac":"—","twa":"0.3","stel":"—","effect":"上呼吸道刺激；中枢神经系统损害；心脏损害； 眼刺激","note":"皮，G2B"},{"no":"287","cn":"五羰基铁（按Fe计）","en":"Iron pentacarbonyl, as Fe","cas":"13463-40-6","mac":"—","twa":"0.25","stel":"0.5","effect":"肺水肿；中枢神经系统损害","note":"—"},{"no":"288","cn":"五氧化二磷","en":"Phosphorus pentoxide","cas":"1314-56-3","mac":"1","twa":"—","stel":"—","effect":"皮肤、眼及上呼吸道刺激；肺炎或肺水肿；齿、 龈和下颌骨损害","note":"—"},{"no":"289","cn":"戊醇","en":"Amyl alcohol","cas":"71-41-0","mac":"—","twa":"100","stel":"—","effect":"眼、皮肤和上呼吸道刺激","note":"—"},{"no":"290","cn":"戊烷（全部异构体）","en":"Pentane (all isomers)","cas":"78-78-4 109-66-0 463-82-1","mac":"—","twa":"500","stel":"1000","effect":"周围神经病","note":"—"},{"no":"291","cn":"硒化氢（按Se计）","en":"Hydrogen selenide, as Se","cas":"7783-07-5","mac":"—","twa":"0.15","stel":"0.3","effect":"上呼吸道和眼刺激；恶心","note":"—"},{"no":"292","cn":"硒及其化合物（按Se 计）（不包括六氟化硒、 硒化氢）","en":"Selenium and compounds, as Se (except hexafluoride, hydrogen selenide)","cas":"7782-49-2（Se）","mac":"—","twa":"0.1","stel":"—","effect":"眼和上呼吸道刺激","note":"—"},{"no":"293","cn":"纤维素","en":"Cellulose","cas":"9004-34-6","mac":"—","twa":"10","stel":"—","effect":"上呼吸道刺激","note":"—"},{"no":"294","cn":"硝化甘油","en":"Nitroglycerine","cas":"55-63-0","mac":"1","twa":"—","stel":"—","effect":"舒张血管","note":"皮"},{"no":"295","cn":"硝基苯","en":"Nitrobenzene","cas":"98-95-3","mac":"—","twa":"2","stel":"—","effect":"高铁血红蛋白血症","note":"皮，G2B"},{"no":"296","cn":"1-硝基丙烷","en":"1-Nitropropane","cas":"108-03-2","mac":"—","twa":"90","stel":"—","effect":"上呼吸道刺激；肝损害；眼刺激","note":"—"},{"no":"297","cn":"2-硝基丙烷","en":"2-Nitropropane","cas":"79-46-9","mac":"—","twa":"30","stel":"—","effect":"肝损害；肝癌","note":"G2B"},{"no":"298","cn":"硝基甲苯（全部异构体）","en":"Nitrotoluene (all isomers)","cas":"88-72-2; 99-08-1; 99-99-0","mac":"—","twa":"10","stel":"—","effect":"高铁血红蛋白血症","note":"皮，G2A"},{"no":"299","cn":"硝基甲烷","en":"Nitromethane","cas":"75-52-5","mac":"—","twa":"50","stel":"—","effect":"甲状腺效应；上呼吸道刺激；肺损害","note":"G2B"},{"no":"300","cn":"硝基乙烷","en":"Nitroethane","cas":"79-24-3","mac":"—","twa":"300","stel":"—","effect":"上呼吸道刺激；中枢神经系统损害；肝损害","note":"G2B"},{"no":"301","cn":"辛烷","en":"Octane","cas":"111-65-9","mac":"—","twa":"500","stel":"—","effect":"上呼吸道刺激","note":"—"},{"no":"302","cn":"溴","en":"Bromine","cas":"7726-95-6","mac":"—","twa":"0.6","stel":"2","effect":"呼吸道刺激、肺损害","note":"—"},{"no":"303","cn":"溴化氢","en":"Hydrogen bromide","cas":"10035-10-6","mac":"10","twa":"—","stel":"—","effect":"上呼吸道刺激","note":"—"},{"no":"304","cn":"1-溴丙烷","en":"1-Bromopropane（1-BP）","cas":"106-94-5","mac":"—","twa":"21","stel":"—","effect":"肝脏和胚胎/胎儿损害；神经毒性","note":"G2B"},{"no":"305","cn":"溴甲烷","en":"Methyl bromide","cas":"74-83-9","mac":"—","twa":"2","stel":"—","effect":"上呼吸道和皮肤刺激","note":"皮"},{"no":"306","cn":"溴氰菊酯","en":"Deltamethrin","cas":"52918-63-5","mac":"—","twa":"0.03","stel":"—","effect":"中枢神经和周围神经系统症状；眼、皮肤刺激","note":"—"},{"no":"307","cn":"溴鼠灵","en":"Brodifacoum","cas":"56073-10-0","mac":"—","twa":"0.002","stel":"—","effect":"抗凝血作用；经皮毒性","note":"—"},{"no":"308","cn":"氧化钙","en":"Calcium oxide","cas":"1305-78-8","mac":"—","twa":"2","stel":"—","effect":"上呼吸道刺激","note":"—"},{"no":"309","cn":"氧化镁烟","en":"Magnesium oxide fume","cas":"1309-48-4","mac":"—","twa":"10","stel":"—","effect":"黏膜刺激；金属烟热","note":"—"},{"no":"310","cn":"氧化锌","en":"Zinc oxide","cas":"1314-13-2","mac":"—","twa":"3","stel":"5","effect":"金属烟热","note":"—"},{"no":"311","cn":"氧乐果","en":"Omethoate","cas":"1113-02-6","mac":"—","twa":"0.15","stel":"—","effect":"胆碱酯酶抑制","note":"皮"},{"no":"312","cn":"液化石油气","en":"Liquified petroleum gas(L.P.G.)","cas":"68476-85-7","mac":"—","twa":"1000","stel":"1500","effect":"麻醉；植物神经功能紊乱；冻伤","note":"—"},{"no":"313","cn":"一氧化碳 非高原 高原 海拔2000 m~3000 m 海拔＞3000 m","en":"Carbon monoxide not in high altitude area In high altitude area 2000 m~3000 m ＞3000 m","cas":"630-08-0 — — — —","mac":"― ― 20 15","twa":"20 ― ― ―","stel":"30 ― ― ―","effect":"碳氧血红蛋白血症","note":"― ― ― ―"},{"no":"314","cn":"乙胺","en":"Ethylamine","cas":"75-04-7","mac":"—","twa":"9","stel":"18","effect":"皮肤、眼刺激；眼损害","note":"皮"},{"no":"315","cn":"乙苯","en":"Ethyl benzene","cas":"100-41-4","mac":"—","twa":"100","stel":"150","effect":"上呼吸道及眼刺激；中枢神经系统损害","note":"G2B"},{"no":"316","cn":"乙醇胺","en":"Ethanolamine","cas":"141-43-5","mac":"—","twa":"8","stel":"15","effect":"眼和皮肤刺激","note":"—"},{"no":"317","cn":"乙二胺","en":"Ethylenediamine","cas":"107-15-3","mac":"—","twa":"4","stel":"10","effect":"皮肤、黏膜强刺激；肝、肾损害；皮肤和眼灼 伤；哮喘","note":"皮；敏"},{"no":"318","cn":"乙二醇","en":"Ethylene glycol","cas":"107-21-1","mac":"—","twa":"20","stel":"40","effect":"上呼吸道和眼刺激","note":"—"},{"no":"319","cn":"乙二醇二硝酸酯","en":"Ethylene glycol dinitrate","cas":"628-96-6","mac":"—","twa":"0.3","stel":"—","effect":"血管舒张；头痛","note":"皮"},{"no":"320","cn":"乙酐","en":"Acetic anhydride","cas":"108-24-7","mac":"—","twa":"16","stel":"—","effect":"眼和上呼吸道刺激","note":"—"},{"no":"321","cn":"N-乙基吗啉","en":"N-Ethylmorpholine","cas":"100-74-3","mac":"—","twa":"25","stel":"—","effect":"上呼吸道刺激；眼损害","note":"皮"},{"no":"322","cn":"乙基戊基甲酮","en":"Ethyl amyl ketone","cas":"541-85-5","mac":"—","twa":"130","stel":"—","effect":"上呼吸道和眼刺激；中枢神经系统损害","note":"—"},{"no":"323","cn":"乙腈","en":"Acetonitrile","cas":"75-05-8","mac":"—","twa":"30","stel":"—","effect":"下呼吸道刺激","note":"皮"},{"no":"324","cn":"乙硫醇","en":"Ethyl mercaptan","cas":"75-08-1","mac":"—","twa":"1","stel":"—","effect":"上呼吸道刺激；中枢神经系统损害","note":"—"},{"no":"325","cn":"乙醚","en":"Ethyl ether","cas":"60-29-7","mac":"—","twa":"300","stel":"500","effect":"中枢神经系统损害；上呼吸道刺激","note":"—"},{"no":"326","cn":"乙醛","en":"Acetaldehyde","cas":"75-07-0","mac":"45","twa":"—","stel":"—","effect":"眼和上呼吸道刺激","note":"G2B"},{"no":"327","cn":"乙酸","en":"Acetic acid","cas":"64-19-7","mac":"—","twa":"10","stel":"20","effect":"上呼吸道和眼刺激；肺功能","note":"—"},{"no":"328","cn":"乙酸丙酯","en":"Propyl acetate","cas":"109-60-4","mac":"—","twa":"200","stel":"300","effect":"眼和上呼吸道刺激","note":"—"},{"no":"329","cn":"乙酸丁酯","en":"Butyl acetate","cas":"123-86-4","mac":"—","twa":"200","stel":"300","effect":"眼和上呼吸道刺激","note":"—"},{"no":"330","cn":"乙酸甲酯","en":"Methyl acetate","cas":"79-20-9","mac":"—","twa":"200","stel":"500","effect":"头痛；眼和上呼吸道刺激；眼神经损害","note":"—"},{"no":"331","cn":"乙酸戊酯（全部异构体）","en":"Amyl acetate (all isomers)","cas":"628-63-7","mac":"—","twa":"100","stel":"200","effect":"眼、上呼吸道及皮肤刺激；消化道症状；贫血 和嗜酸性粒细胞增多","note":"—"},{"no":"332","cn":"乙酸乙烯酯","en":"Vinyl acetate","cas":"108-05-4","mac":"—","twa":"10","stel":"15","effect":"上呼吸道、眼和皮肤刺激；中枢神经系统损害","note":"G2B"},{"no":"333","cn":"乙酸乙酯","en":"Ethyl acetate","cas":"141-78-6","mac":"—","twa":"200","stel":"300","effect":"上呼吸道和眼刺激","note":"—"},{"no":"334","cn":"乙烯酮","en":"Ketene","cas":"463-51-4","mac":"—","twa":"0.8","stel":"2.5","effect":"上呼吸道刺激；肺水肿","note":"—"},{"no":"335","cn":"乙酰甲胺磷","en":"Acephate","cas":"30560-19-1","mac":"—","twa":"0.3","stel":"—","effect":"胆碱酯酶抑制","note":"皮"},{"no":"336","cn":"乙酰水杨酸（阿司匹林）","en":"Acetylsalicylic acid(aspirin)","cas":"50-78-2","mac":"—","twa":"5","stel":"—","effect":"皮肤和眼刺激","note":"—"},{"no":"337","cn":"2-乙氧基乙醇","en":"2-Ethoxyethanol","cas":"110-80-5","mac":"—","twa":"18","stel":"36","effect":"男性生殖系损害；胚胎/胎儿损害","note":"皮"},{"no":"338","cn":"2-乙氧基乙基乙酸酯","en":"2-Ethoxyethyl acetate","cas":"111-15-9","mac":"—","twa":"30","stel":"—","effect":"男性生殖系损害","note":"皮"},{"no":"339","cn":"钇及其化合物（按Y计）","en":"Yttrium and compounds (as Y)","cas":"7440-65-5(Y)","mac":"—","twa":"1","stel":"—","effect":"肺纤维化","note":"—"},{"no":"340","cn":"异丙胺","en":"Isopropylamine","cas":"75-31-0","mac":"—","twa":"12","stel":"24","effect":"上呼吸道刺激；眼损害","note":"—"},{"no":"341","cn":"异丙醇","en":"Isopropyl alcohol (IPA)","cas":"67-63-0","mac":"—","twa":"350","stel":"700","effect":"眼和上呼吸道刺激；中枢神经系统损害","note":"—"},{"no":"342","cn":"N-异丙基苯胺","en":"N-Isopropylaniline","cas":"768-52-5","mac":"—","twa":"10","stel":"—","effect":"高铁血红蛋白血症","note":"皮"},{"no":"343","cn":"异稻瘟净","en":"Iprobenfos","cas":"26087-47-8","mac":"—","twa":"2","stel":"5","effect":"胆碱酯酶抑制","note":"皮"},{"no":"344","cn":"异佛尔酮","en":"Isophorone","cas":"78-59-1","mac":"30","twa":"—","stel":"—","effect":"眼、上呼吸道和皮肤刺激；中枢神经系统损害； 全身不适；疲劳","note":"—"},{"no":"345","cn":"异佛尔酮二异氰酸酯","en":"Isophorone diisocyanate (IPDI)","cas":"4098-71-9","mac":"—","twa":"0.05","stel":"0.1","effect":"呼吸系统致敏","note":"敏"},{"no":"346","cn":"异氰酸甲酯","en":"Methyl isocyanate","cas":"624-83-9","mac":"—","twa":"0.05","stel":"0.08","effect":"上呼吸道刺激","note":"皮"},{"no":"347","cn":"异亚丙基丙酮","en":"Mesityl oxide","cas":"141-79-7","mac":"—","twa":"60","stel":"100","effect":"眼和上呼吸道刺激；中枢神经系统损害","note":"—"},{"no":"348","cn":"铟及其化合物（按In计）","en":"Indium and compounds, as In","cas":"7440-74-6(In)","mac":"—","twa":"0.1","stel":"0.3","effect":"肺炎、肺水肿；牙蚀症；全身不适","note":"—"},{"no":"349","cn":"茚","en":"Indene","cas":"95-13-6","mac":"—","twa":"50","stel":"—","effect":"肝、肾损害；上呼吸道刺激","note":"—"},{"no":"350","cn":"莠去津","en":"Atrazine","cas":"1912-24-9","mac":"—","twa":"2.0","stel":"—","effect":"血液、生殖和发育损害","note":""},{"no":"351","cn":"正丙醇","en":"n-Propyl alcohol","cas":"71-23-8","mac":"—","twa":"200","stel":"300","effect":"上呼吸道和眼刺激；中枢神经系统抑制","note":"—"},{"no":"352","cn":"正丁胺","en":"n-Butylamine","cas":"109-73-9","mac":"15","twa":"—","stel":"—","effect":"头痛；上呼吸道和眼刺激","note":"皮"},{"no":"353","cn":"正丁醇","en":"n-Butyl alcohol","cas":"71-36-3","mac":"—","twa":"100","stel":"—","effect":"眼和上呼吸道刺激；中枢神经系统抑制","note":"—"},{"no":"354","cn":"正丁基硫醇","en":"n-Butyl mercaptan","cas":"109-79-5","mac":"—","twa":"2","stel":"—","effect":"上呼吸道刺激","note":"—"},{"no":"355","cn":"正丁基缩水甘油醚","en":"n-Butyl glycidyl ether","cas":"2426-08-6","mac":"—","twa":"60","stel":"—","effect":"睾丸损害","note":"—"},{"no":"356","cn":"正丁醛","en":"n-Butylaldehyde","cas":"123-72-8","mac":"—","twa":"5","stel":"10","effect":"眼及呼吸道刺激；麻醉；变态反应","note":"—"},{"no":"357","cn":"正庚烷","en":"n-Heptane","cas":"142-82-5","mac":"—","twa":"500","stel":"1000","effect":"中枢神经系统损害；上呼吸道刺激","note":"—"},{"no":"358","cn":"正己烷","en":"n-Hexane","cas":"110-54-3","mac":"—","twa":"100","stel":"180","effect":"周围神经系统损害；上呼吸道和眼刺激","note":"皮"}],"table2_dust":[{"no":"1","cn":"白云石粉尘","en":"Dolomite dust","cas":"―","twa_total":"8","twa_resp":"4","effect":"尘肺病","note":"―"},{"no":"2","cn":"玻璃钢粉尘","en":"Fiberglass reinforced plastic dust","cas":"―","twa_total":"3","twa_resp":"―","effect":"尘肺病；呼吸道、皮肤刺激","note":"―"},{"no":"3","cn":"茶尘","en":"Tea dust","cas":"―","twa_total":"2","twa_resp":"―","effect":"哮喘","note":"―"},{"no":"4","cn":"沉淀SiO （白炭黑） 2","en":"Precipitated silica dust","cas":"112926-00-8","twa_total":"5","twa_resp":"―","effect":"上呼吸道及皮肤刺激","note":"―"},{"no":"5","cn":"大理石粉尘 （碳酸钙）","en":"Marble dust","cas":"（1317-65-3）","twa_total":"8","twa_resp":"4","effect":"眼、皮肤刺激；尘肺病","note":"―"},{"no":"6","cn":"电焊烟尘","en":"Welding fume","cas":"―","twa_total":"4","twa_resp":"―","effect":"电焊工尘肺","note":"G2B"},{"no":"7","cn":"二氧化钛粉尘","en":"Titanium dioxide dust","cas":"13463-67-7","twa_total":"8","twa_resp":"―","effect":"下呼吸道刺激","note":"G2B"},{"no":"8","cn":"沸石粉尘","en":"Zeolite dust","cas":"―","twa_total":"5","twa_resp":"―","effect":"尘肺病，；肺癌","note":"G1"},{"no":"9","cn":"酚醛树酯粉尘","en":"Phenolic aldehyde resin dust","cas":"―","twa_total":"6","twa_resp":"―","effect":"上呼吸道刺激","note":"―"},{"no":"10","cn":"工业酶混合尘","en":"Industrial enzyme-containing dust","cas":"―","twa_total":"2","twa_resp":"―","effect":"皮肤、眼、上呼吸道刺激","note":"敏"},{"no":"11","cn":"谷物粉尘（游离SiO 含量＜10%） 2","en":"Grain dust(free SiO ＜10%) 2","cas":"―","twa_total":"4","twa_resp":"―","effect":"上呼吸道刺激；尘肺；过敏性哮喘","note":"敏"},{"no":"12","cn":"硅灰石粉尘","en":"Wollastonite dust","cas":"13983-17-0","twa_total":"5","twa_resp":"―","effect":"―","note":"―"},{"no":"13","cn":"硅藻土粉尘（游离SiO 含量＜10%） 2","en":"Diatomite dust(free SiO ＜10%) 2","cas":"61790-53-2","twa_total":"6","twa_resp":"―","effect":"尘肺病","note":"―"},{"no":"14","cn":"过氯酸铵粉尘","en":"Ammonium Perchlorate","cas":"7790-98-9","twa_total":"8","twa_resp":"―","effect":"肺间质纤维化","note":"―"},{"no":"15","cn":"滑石粉尘（游离SiO 含量＜10%） 2","en":"Talc dust (free SiO ＜10%) 2","cas":"14807-96-6","twa_total":"3","twa_resp":"1","effect":"滑石尘肺","note":"―"},{"no":"16","cn":"活性炭粉尘","en":"Active carbon dust","cas":"64365-11-3","twa_total":"5","twa_resp":"―","effect":"尘肺病","note":"―"},{"no":"17","cn":"聚丙烯粉尘","en":"Polypropylene dust","cas":"―","twa_total":"5","twa_resp":"―","effect":"―","note":"―"},{"no":"18","cn":"聚丙烯腈纤维粉尘","en":"Polyacrylonitrile fiber dust","cas":"―","twa_total":"2","twa_resp":"―","effect":"肺通气功能损伤","note":"―"},{"no":"19","cn":"聚氯乙烯粉尘","en":"Polyvinyl chloride (PVC) dust","cas":"9002-86-2","twa_total":"5","twa_resp":"―","effect":"下呼吸道刺激；肺功能改变","note":"―"},{"no":"20","cn":"聚乙烯粉尘","en":"Polyethylene dust","cas":"9002-88-4","twa_total":"5","twa_resp":"―","effect":"呼吸道刺激","note":"―"},{"no":"21","cn":"铝尘 铝金属、铝合金粉尘 氧化铝粉尘","en":"Aluminum dust: Metal & alloys dust Aluminium oxide dust","cas":"7429-90-5","twa_total":"3 4","twa_resp":"― —","effect":"铝尘肺；眼损害；黏膜、皮肤刺激","note":"— —"},{"no":"22","cn":"麻尘 （游离SiO 含量＜10%） 2 亚麻 黄麻 苎麻","en":"Flax, jute and ramie dust (free SiO ＜10%) 2 Flax Jute Ramie","cas":"— — —","twa_total":"1.5 2 3","twa_resp":"— — —","effect":"棉尘病","note":"— — —"},{"no":"23","cn":"煤尘（游离SiO 含量＜10%） 2","en":"Coal dust(free SiO ＜10%) 2","cas":"―","twa_total":"4","twa_resp":"2.5","effect":"煤工尘肺","note":"―"},{"no":"24","cn":"棉尘","en":"Cotton dust","cas":"―","twa_total":"1","twa_resp":"―","effect":"棉尘病","note":"―"},{"no":"25","cn":"木粉尘（硬）","en":"Wood dust","cas":"―","twa_total":"3","twa_resp":"―","effect":"皮炎、鼻炎、结膜炎；哮喘、外源性过敏性肺 炎；鼻咽癌等","note":"G1；敏"},{"no":"26","cn":"凝聚SiO 粉尘 2","en":"Condensed silica dust","cas":"―","twa_total":"1.5","twa_resp":"0.5","effect":"―","note":"―"},{"no":"27","cn":"膨润土粉尘","en":"Bentonite dust","cas":"1302-78-9","twa_total":"6","twa_resp":"―","effect":"鼻、喉、肺、眼刺激；支气管哮喘","note":"―"},{"no":"28","cn":"皮毛粉尘","en":"Fur dust","cas":"―","twa_total":"8","twa_resp":"―","effect":"过敏性肺泡炎；支气管哮喘","note":"敏"},{"no":"29","cn":"人造矿物纤维绝热棉粉尘（玻 璃棉、矿渣棉、岩棉）","en":"Man-made mineral fiber insulation wools（Glass wool, Slag wool, Rock wool）","cas":"―","twa_total":"5 1 f/mL","twa_resp":"— —","effect":"质量浓度：皮肤和眼刺激 纤维浓度：呼吸道不良健康效应","note":"— —"},{"no":"30","cn":"桑蚕丝尘","en":"Mulberry silk dust","cas":"―","twa_total":"8","twa_resp":"―","effect":"眼和上呼吸道刺激；肺功能损伤","note":"―"},{"no":"31","cn":"砂轮磨尘","en":"Grinding wheel dust","cas":"―","twa_total":"8","twa_resp":"―","effect":"轻微致肺纤维化作用","note":"―"},{"no":"32","cn":"石膏粉尘","en":"Gypsum dust","cas":"10101-41-4","twa_total":"8","twa_resp":"4","effect":"上呼吸道、眼和皮肤刺激；肺炎等","note":"―"},{"no":"33","cn":"石灰石粉尘","en":"Limestone dust","cas":"1317-65-3","twa_total":"8","twa_resp":"4","effect":"眼、皮肤刺激；尘肺","note":"―"},{"no":"34","cn":"石棉（石棉含量＞10%） 粉尘 纤维","en":"Asbestos（Asbestos＞10%） dust Asbestos fibre","cas":"1332-21-4","twa_total":"0.8 0.8 f/mL","twa_resp":"— —","effect":"石棉肺；肺癌、间皮瘤","note":"G1"},{"no":"35","cn":"石墨粉尘","en":"Graphite dust","cas":"7782-42-5","twa_total":"4","twa_resp":"2","effect":"石墨尘肺","note":"―"},{"no":"36","cn":"水泥粉尘（游离SiO 含量<10 %） 2","en":"Cement dust (free SiO <10%) 2","cas":"―","twa_total":"4","twa_resp":"1.5","effect":"水泥尘肺","note":"―"},{"no":"37","cn":"炭黑粉尘","en":"Carbon black dust","cas":"1333-86-4","twa_total":"4","twa_resp":"―","effect":"炭黑尘肺","note":"G2B"},{"no":"38","cn":"碳化硅粉尘","en":"Silicon carbide dust","cas":"409-21-2","twa_total":"8","twa_resp":"4","effect":"尘肺病；上呼吸道刺激","note":"―"},{"no":"39","cn":"碳纤维粉尘","en":"Carbon fiber dust","cas":"―","twa_total":"3","twa_resp":"―","effect":"上呼吸道、 眼及皮肤刺激","note":"―"},{"no":"40","cn":"矽尘 10 %≤游离SiO 含量≤50 % 2 50 %＜游离SiO 含量≤80 % 2 游离SiO 含量＞80 % 2","en":"Silica dust 10 %≤free SiO ≤50 % 2 50 %＜free SiO ≤80 % 2 free SiO ＞80 % 2","cas":"14808-60-7","twa_total":"1 0.7 0.5","twa_resp":"0.7 0.3 0.2","effect":"矽肺","note":"G1（结晶型）"},{"no":"41","cn":"稀土粉尘（游离SiO 含量<10 %） 2","en":"Rare – earth dust (free SiO <10%) 2","cas":"―","twa_total":"2.5","twa_resp":"―","effect":"稀土尘肺；皮肤刺激","note":"―"},{"no":"42","cn":"洗衣粉混合尘","en":"Detergent mixed dust","cas":"―","twa_total":"1","twa_resp":"―","effect":"皮肤、眼和上呼吸道刺激；致敏","note":"敏"},{"no":"43","cn":"烟草尘","en":"Tobacco dust","cas":"―","twa_total":"2","twa_resp":"―","effect":"鼻咽炎；肺损伤","note":"―"},{"no":"44","cn":"萤石混合性粉尘","en":"Fluorspar mixed dust","cas":"―","twa_total":"1","twa_resp":"0.7","effect":"矽肺","note":"―"},{"no":"45","cn":"云母粉尘","en":"Mica dust","cas":"12001-26-2","twa_total":"2","twa_resp":"1.5","effect":"云母尘肺","note":"―"},{"no":"46","cn":"珍珠岩粉尘","en":"Perlite dust","cas":"93763-70-3","twa_total":"8","twa_resp":"4","effect":"眼、皮肤、上呼吸道刺激","note":"―"},{"no":"47","cn":"蛭石粉尘","en":"Vermiculite dust","cas":"―","twa_total":"3","twa_resp":"―","effect":"眼、上呼吸道刺激","note":"―"},{"no":"48","cn":"重晶石粉尘","en":"Barite dust","cas":"7727-43-7","twa_total":"5","twa_resp":"―","effect":"眼刺激；尘肺","note":"―"},{"no":"49","cn":"其他粉尘a","en":"Particles not otherwise regulated","cas":"―","twa_total":"8","twa_resp":"―","effect":"―","note":"―"}],"table3_biological":[{"no":"1","cn":"白僵蚕孢子","en":"Beauveria bassiana","cas":"—","oel":"6×107 孢子数/m3","effect":"—","note":"—"},{"no":"2","cn":"枯草杆菌蛋白酶","en":"Subtilisins","cas":"1395-21-7；9014-01-1","oel":"15 ng/m3","effect":"—","note":"敏"},{"no":"3","cn":"工业酶","en":"Industrial enzyme","cas":"—","oel":"1.5 μg/m3","effect":"肺功能下降","note":"敏"}],"table4_biomonitoring":[{"no":"1","factor_cn":"苯","factor_en":"Benzene","indicator_cn":"尿中苯巯基尿酸","indicator_en":"S-phenylmercapturic acid in urine（S-PMA）","limit":"47 μmol/mol Cr（100 μg/g Cr）","sample_time":"工作班后"},{"no":"2","factor_cn":"苯乙烯","factor_en":"Styrene","indicator_cn":"尿中苯乙醇酸加苯乙醛酸","indicator_en":"Mandelic acid plus phenylglyoxylic acid in urine","limit":"295 mmol/mol Cr（400 mg/g Cr）","sample_time":"工作班末"},{"no":"3","factor_cn":"丙酮","factor_en":"Acetone","indicator_cn":"尿中丙酮","indicator_en":"Acetone in urine","limit":"50 mg/L","sample_time":"工作班末"},{"no":"4","factor_cn":"草甘膦","factor_en":"Glyphosate","indicator_cn":"尿中草甘膦","indicator_en":"Glyphosate in urine","limit":"0.6 mg/L","sample_time":"工作班末"},{"no":"5","factor_cn":"1,3-丁二烯","factor_en":"1,3-Butadiene","indicator_cn":"尿中1,2-双羟基-4-（N-乙酰 半胱胺酸）丁烷","indicator_en":"1,2-bis-hydroxy -4- (N- acetylcysteine) butane （DHBMA）in urine","limit":"2.9 mg/g Cr","sample_time":"工作班末"},{"no":"6","factor_cn":"二甲苯","factor_en":"Xylene","indicator_cn":"尿中甲基马尿酸","indicator_en":"Methylhippuric acids in urine","limit":"0.3 g/g Cr或0.4 g/L","sample_time":"工作班末"},{"no":"7","factor_cn":"N,N-二甲基甲酰胺","factor_en":"N,N-Dimethylformamide","indicator_cn":"血中N-甲基氨甲酰血红蛋白 加合物（NMHb）","indicator_en":"N- methylcarbyl hemoglobin adduct","limit":"135 nmol/g Hb","sample_time":"持续接触4个月后 任意时间"},{"no":"8","factor_cn":"N,N-二甲基乙酰胺","factor_en":"N,N-Dimethylacetamide","indicator_cn":"尿中N-甲基乙酰胺","indicator_en":"N-Methylacetamide in urine","limit":"20.0 mg/g Cr","sample_time":"工作周末的班末"},{"no":"9","factor_cn":"二氯甲烷","factor_en":"Dichloromethane","indicator_cn":"尿中二氯甲烷","indicator_en":"Dichloromethane in urine","limit":"0.3 mg/L","sample_time":"工作班末"},{"no":"10","factor_cn":"二硫化碳","factor_en":"Carbon disulfide","indicator_cn":"尿中2 -硫代噻唑烷-4-羧酸","indicator_en":"2-Thiothiazolidine-4-carboxylic acid (TTCA) in urine","limit":"1.5 mmol/ mol C（r 2.2 mg/g Cr）","sample_time":"工作班末或接触末"},{"no":"11","factor_cn":"酚","factor_en":"Phenol","indicator_cn":"尿中总酚","indicator_en":"Total phenol in urine","limit":"150 mmol/mol Cr（125 mg/g Cr）","sample_time":"工作周末的班末"},{"no":"12","factor_cn":"氟及其无机化合物","factor_en":"Fluorides and its inorganic compounds","indicator_cn":"尿中氟","indicator_en":"Fluorides in urine","limit":"42 mmol/mol Cr（7 mg/g Cr）","sample_time":"工作班后"},{"no":"13","factor_cn":"镉及其无机化合物","factor_en":"Cadmium and inorganic compounds","indicator_cn":"尿中镉","indicator_en":"Cadmium in urine","limit":"5 µmol/mol Cr（5 µg/g Cr）","sample_time":"不做严格规定"},{"no":"14","factor_cn":"汞及其无机化 合物","factor_en":"Mercury and inorganic compounds","indicator_cn":"尿中总汞","indicator_en":"Total inorganic mercury in urine","limit":"20 μmol/mol Cr（35 µg/g Cr）","sample_time":"接触6个月后工作班前"},{"no":"15","factor_cn":"甲苯","factor_en":"Toluene","indicator_cn":"尿中马尿酸","indicator_en":"Hippuric acid in urine","limit":"1 mol/mol Cr（1.5g/g Cr）","sample_time":"工作班末（停止接触后）"},{"no":"16","factor_cn":"甲苯二异氰酸 酯","factor_en":"toluene diisocyanate，TDI","indicator_cn":"尿中甲苯二胺","indicator_en":"Toluenediamine(2,4-TDA) in urine","limit":"1 μmol/mol Cr","sample_time":"工作班末"},{"no":"17","factor_cn":"可溶性铬盐","factor_en":"Soluble Chromate","indicator_cn":"尿中总铬","indicator_en":"Total Chromium in urine","limit":"65 μmol/mol Cr（30 µg/g Cr）","sample_time":"接触一个月后工作周末 的班末"},{"no":"18","factor_cn":"铅及其化合物","factor_en":"Lead and compounds","indicator_cn":"血中铅","indicator_en":"Lead in blood","limit":"2.0 μmol/L（400 µg/L）","sample_time":"接触三周后的任意时间"},{"no":"19","factor_cn":"三氯乙烯","factor_en":"Trichloroethylene","indicator_cn":"尿中三氯乙酸","indicator_en":"Trichloroacetic acid in urine","limit":"0.3 mmol/L（50 mg/L）","sample_time":"工作周末的班末"},{"no":"20","factor_cn":"三硝基甲苯","factor_en":"Trinitrotoluene","indicator_cn":"血中4-氨基-2,6-二硝基甲苯 -血红蛋白加合物","indicator_en":"Hemoglobin Adducts of 4-Amino-2,6-Dinitrotoluene in Blood","limit":"200 ng/g Hb","sample_time":"接触4个月后任意时间"},{"no":"21","factor_cn":"四氯乙烯","factor_en":"Tetrachloroethylene","indicator_cn":"血中四氯乙烯","indicator_en":"Tetrachloroethylene in blood","limit":"0.3 mg/L","sample_time":"工作周末的班前"},{"no":"22","factor_cn":"锑及其化合物","factor_en":"Antimony and its compounds","indicator_cn":"尿中锑","indicator_en":"Antimony in urine","limit":"85 μg/L","sample_time":"工作班末"},{"no":"23","factor_cn":"五氯酚","factor_en":"Pentachlorophenol","indicator_cn":"尿中总五氯酚","indicator_en":"Total pentachlorophenol in urine","limit":"0.64 mmol/mol Cr（1.5 mg/g Cr）","sample_time":"工作周末的班末"},{"no":"24","factor_cn":"1-溴丙烷","factor_en":"1-Bromopropane","indicator_cn":"尿中1-溴丙烷","indicator_en":"1-Bromopropane in urine","limit":"20 ug/L","sample_time":"工作班后"},{"no":"25","factor_cn":"一氧化碳","factor_en":"Carbon monoxide","indicator_cn":"血中碳氧血红蛋白","indicator_en":"Carboxyhemoglobin in blood","limit":"5% HbCO","sample_time":"工作班末"},{"no":"26","factor_cn":"乙苯","factor_en":"Ethyl benzene","indicator_cn":"尿中苯乙醇酸加苯乙醛酸","indicator_en":"Mandelic acid and phenylglyoxylic acid（MA and PGA）in urine","limit":"0.8 g/g Cr","sample_time":"工作班末"},{"no":"27","factor_cn":"有机磷酸酯 类农药","factor_en":"Organophosphate insecticides","indicator_cn":"全血胆碱酯酶活性（校正值）","indicator_en":"cholinesterase activity of Whole blood (correction value)","limit":"原基础值或参考值的70 %","sample_time":"开始接触后3个月 内，任意时间"},{"no":"28","factor_cn":"正己烷","factor_en":"n-Hexane","indicator_cn":"尿中2,5-己二酮","indicator_en":"2,5-Hexanedione in urine","limit":"35.0 μmol/L（4.0 mg/L）","sample_time":"工作班后"},{"no":"29","factor_cn":"三甲基氯化锡","factor_en":"Trimethyltin chloride","indicator_cn":"尿中三甲基氯化锡 / 血中三甲基氯化锡","indicator_en":"Trimethyltin chloride in urine / in blood (TMT)","limit":"尿 500 µg/g Cr；血 200 µg/L","sample_time":"不做严格限定","amend":"GBZ 2.1—2019 第1号修改单"}],"table5_control_levels":[{"level":"0（≤1% OEL）","desc":"基本无接触","control":"不需采取行动"},{"level":"Ⅰ（＞1%，≤10% OEL）","desc":"接触极低，根据已有信息无相关效应","control":"一般危害告知，如标签、SDS等"},{"level":"Ⅱ（＞10%，≤50% OEL）","desc":"有接触但无明显健康效应","control":"一般危害告知，特殊危害告知，即针对具体因素 的危害进行告知"},{"level":"Ⅲ（＞50%，≤OEL）","desc":"显著接触，需采取行动限制活动","control":"一般危害告知、特殊危害告知、职业卫生监测、 职业健康监护、作业管理"},{"level":"Ⅳ（＞OEL）","desc":"超过OELs","control":"一般危害告知、特殊危害告知、职业卫生监测、 职业健康监护、作业管理、个体防护用品和工程、 工艺控制"}],"meta":{"source_primary":"GBZ 2.1—2019 工作场所有害因素职业接触限值 第1部分：化学有害因素","source_amend":"GBZ 2.1—2019 第1号修改单（2024）","unit":"mg/m³（除非另有说明）","note_physical":"本工具仅含化学有害因素、粉尘、生物因素、生物接触限值及控制分级。物理因素（GBZ 2.2—2007）需配合纸质标准使用（PDF为扫描件，未纳入数据库）。","amend_changes":["苯（序号12）: PC-TWA 6→3, PC-STEL 10→6","三甲基氯化锡（表4 序号29）新增"]}};
+</script>
+<script>
+(function(){
+  'use strict';
+  var D = window.__DATA__;
+  var currentTab = 'chem';
+  var currentFilter = '';
+  var currentSort = { col: -1, asc: true };
+  var searchTerm = '';
+
+  function escapeHtml(s){ if(s==null)return ''; return String(s).replace(/[&<>"']/g, function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+
+  function parseBadges(note){
+    if(!note || note==='—' || note==='-') return '<span style="color:var(--text-secondary);opacity:.4">—</span>';
+    var html = '';
+    var parts = note.split(/[,，]/);
+    for(var i=0;i<parts.length;i++){
+      var p = parts[i].trim();
+      if(p==='皮') html += '<span class="note-badge nb-skin">皮</span>';
+      else if(p==='敏') html += '<span class="note-badge nb-sens">敏</span>';
+      else if(p==='G1') html += '<span class="note-badge nb-g1">G1</span>';
+      else if(p==='G2A') html += '<span class="note-badge nb-g2a">G2A</span>';
+      else if(p==='G2B') html += '<span class="note-badge nb-g2b">G2B</span>';
+      else if(p) html += '<span class="note-badge" style="background:#f0f0f0;color:#666;">'+escapeHtml(p)+'</span>';
+    }
+    return html;
+  }
+
+  function oelCell(v){
+    if(!v || v==='—' || v==='-') return '<span class="oel dash">—</span>';
+    return '<span class="oel has-val">'+escapeHtml(v)+'</span>';
+  }
+
+  // Tab schemas
+  var SCHEMAS = {
+    chem: {
+      cols: [
+        {key:'no', label:'#', w:38},
+        {key:'cn', label:'中文名', w:140},
+        {key:'en', label:'英文名', w:140},
+        {key:'cas', label:'CAS号', w:90},
+        {key:'mac', label:'MAC', w:60, fmt:'oel'},
+        {key:'twa', label:'PC-TWA', w:60, fmt:'oel'},
+        {key:'stel', label:'PC-STEL', w:60, fmt:'oel'},
+        {key:'effect', label:'临界不良健康效应', w:240},
+        {key:'note', label:'备注', w:120, fmt:'badge'},
+      ],
+      filterDefs: [
+        {key:'mac', label:'有MAC'},
+        {key:'stel', label:'有PC-STEL'},
+        {key:'skin', label:'皮(皮肤)', match:function(r){return r.note&&r.note.indexOf('皮')>=0;}},
+        {key:'g1', label:'G1 确认致癌', match:function(r){return r.note&&r.note.indexOf('G1')>=0;}},
+        {key:'g2a', label:'G2A 可疑致癌', match:function(r){return r.note&&r.note.indexOf('G2A')>=0;}},
+        {key:'g2b', label:'G2B 疑似致癌', match:function(r){return r.note&&r.note.indexOf('G2B')>=0;}},
+        {key:'sens', label:'敏(致敏)', match:function(r){return r.note&&r.note.indexOf('敏')>=0;}},
+        {key:'amend', label:'⚠ 修改单更新', match:function(r){return r.amend;}},
+      ]
+    },
+    dust: {
+      cols: [
+        {key:'no', label:'#', w:38},
+        {key:'cn', label:'中文名', w:160},
+        {key:'en', label:'英文名', w:180},
+        {key:'cas', label:'CAS号', w:90},
+        {key:'twa_total', label:'PC-TWA 总', w:80, fmt:'oel'},
+        {key:'twa_resp', label:'PC-TWA 呼', w:80, fmt:'oel'},
+        {key:'effect', label:'临界不良健康效应', w:280},
+        {key:'note', label:'备注', w:90, fmt:'badge'},
+      ],
+      filterDefs: [
+        {key:'resp', label:'有呼吸性限值', match:function(r){return r.twa_resp&&r.twa_resp!=='—'&&r.twa_resp!=='-';}},
+        {key:'skin', label:'皮(皮肤)', match:function(r){return r.note&&r.note.indexOf('皮')>=0;}},
+      ]
+    },
+    bio: {
+      cols: [
+        {key:'no', label:'#', w:38},
+        {key:'cn', label:'中文名', w:160},
+        {key:'en', label:'英文名', w:180},
+        {key:'cas', label:'CAS号', w:120},
+        {key:'oel', label:'OEL', w:140, fmt:'oel'},
+        {key:'effect', label:'临界效应', w:200},
+        {key:'note', label:'备注', w:90, fmt:'badge'},
+      ],
+      filterDefs: []
+    },
+    biomon: {
+      cols: [
+        {key:'no', label:'#', w:38},
+        {key:'factor_cn', label:'接触因素', w:120},
+        {key:'factor_en', label:'Factor (EN)', w:140},
+        {key:'indicator_cn', label:'生物监测指标', w:160},
+        {key:'indicator_en', label:'Indicator (EN)', w:200},
+        {key:'limit', label:'职业接触生物限值', w:200},
+        {key:'sample_time', label:'采样时间', w:160},
+      ],
+      filterDefs: [
+        {key:'amend', label:'⚠ 第1号修改单新增', match:function(r){return r.amend;}},
+      ]
+    },
+    ctl: {
+      cols: [
+        {key:'level', label:'接触等级', w:160},
+        {key:'desc', label:'等级描述', w:240},
+        {key:'control', label:'推荐控制措施', w:560},
+      ],
+      filterDefs: []
+    }
+  };
+
+  var DATA = {
+    chem: D.table1_chemicals,
+    dust: D.table2_dust,
+    bio: D.table3_biological,
+    biomon: D.table4_biomonitoring,
+    ctl: D.table5_control_levels
+  };
+
+  function getFilterDefs(){ var s = SCHEMAS[currentTab]; return s ? s.filterDefs : []; }
+
+  function switchTab(t){
+    currentTab = t;
+    currentFilter = '';
+    searchTerm = '';
+    document.getElementById('search').value = '';
+    document.querySelectorAll('.tab-btn').forEach(function(b){
+      b.classList.toggle('active', b.dataset.tab===t);
+    });
+    document.getElementById('physArea').style.display = t==='phys'?'block':'none';
+    document.getElementById('ctlArea').style.display = t==='ctl'?'block':'none';
+    document.getElementById('tableArea').style.display = (t==='phys')?'none':'';
+    document.getElementById('rc').style.display = (t==='phys')?'none':'';
+    if(t==='phys') renderPhys(); else if(t==='ctl') renderCtl(); else renderTable();
+    renderFilters();
+  }
+
+  function renderFilters(){
+    var qf = document.getElementById('qf');
+    qf.innerHTML = '';
+    var defs = getFilterDefs() || [];
+    defs.forEach(function(d){
+      var b = document.createElement('button');
+      b.className = 'quick-filter' + (currentFilter===d.key?' active':'');
+      b.textContent = d.label;
+      b.onclick = function(){ currentFilter = currentFilter===d.key?'':d.key; renderTable(); renderFilters(); };
+      qf.appendChild(b);
+    });
+  }
+
+  function getRowFilter(){
+    var defs = getFilterDefs() || [];
+    for(var i=0;i<defs.length;i++){
+      if(defs[i].key===currentFilter) return defs[i];
+    }
+    return null;
+  }
+
+  function filterRows(rows){
+    var f = getRowFilter();
+    var term = searchTerm.trim().toLowerCase();
+    return rows.filter(function(r){
+      if(f && f.match && !f.match(r)) return false;
+      if(term){
+        var blob = (r.cn||'')+(r.en||'')+(r.cas||'')+(r.effect||'')+(r.factor_cn||'')+(r.factor_en||'')+(r.indicator_cn||'')+(r.limit||'')+' '+(r.no||'');
+        if(blob.toLowerCase().indexOf(term)<0) return false;
+      }
+      return true;
+    });
+  }
+
+  function renderTable(){
+    var sch = SCHEMAS[currentTab];
+    // header
+    var thead = document.getElementById('theadRow');
+    thead.innerHTML = sch.cols.map(function(c,i){
+      var sorted = currentSort.col===i;
+      var ind = sorted ? (currentSort.asc?'▲':'▼') : '↕';
+      return '<th data-i="'+i+'" class="'+ (sorted?'sorted':'') +'" style="min-width:'+c.w+'px">'+c.label+'<span class="sort-ind">'+ind+'</span></th>';
+    }).join('');
+    thead.querySelectorAll('th').forEach(function(th){
+      th.addEventListener('click', function(){
+        var i = parseInt(th.dataset.i, 10);
+        if(currentSort.col===i) currentSort.asc = !currentSort.asc;
+        else { currentSort.col=i; currentSort.asc = true; }
+        renderTable();
+      });
+    });
+    // body
+    var rows = filterRows(DATA[currentTab].slice());
+    // sort
+    if(currentSort.col>=0){
+      var k = sch.cols[currentSort.col].key;
+      rows.sort(function(a,b){
+        var av = a[k], bv = b[k];
+        if(k==='no'){ av=parseInt(av,10)||0; bv=parseInt(bv,10)||0; }
+        else { av=(av||'').toString(); bv=(bv||'').toString(); }
+        if(av<bv) return currentSort.asc?-1:1;
+        if(av>bv) return currentSort.asc?1:-1;
+        return 0;
+      });
+    }
+    var tb = document.getElementById('tbody');
+    if(!rows.length){
+      tb.innerHTML = '<tr><td colspan="'+sch.cols.length+'" class="empty-state"><i class="fa-solid fa-inbox"></i>无匹配结果</td></tr>';
+    } else {
+      tb.innerHTML = rows.map(function(r, idx){
+        var amendCls = r.amend ? ' class="amend"' : '';
+        var amendFlag = r.amend ? ' <span class="amend-flag" title="'+escapeHtml(r.amend)+'">修</span>' : '';
+        var tds = sch.cols.map(function(c){
+          var v = r[c.key];
+          var disp;
+          if(c.fmt==='oel') disp = oelCell(v);
+          else if(c.fmt==='badge') disp = parseBadges(v);
+          else if(c.key==='no') disp = escapeHtml(v);
+          else disp = escapeHtml(v);
+          return '<td class="'+c.key+'">'+disp+'</td>';
+        }).join('');
+        return '<tr'+amendCls+' data-idx="'+idx+'">'+tds+'</tr>';
+      }).join('');
+      // bind row click
+      tb.querySelectorAll('tr[data-idx]').forEach(function(tr){
+        tr.addEventListener('click', function(){
+          var idx = parseInt(tr.dataset.idx, 10);
+          openDetail(rows[idx]);
+        });
+      });
+    }
+    document.getElementById('rc').innerHTML = '共 <strong>'+rows.length+'</strong> / '+DATA[currentTab].length+' 条';
+  }
+
+  function openDetail(r){
+    document.getElementById('dpTitle').textContent = (r.cn||r.factor_cn||'详情') + (r.en?' ('+r.en+')':'');
+    var body = '';
+    if(currentTab==='chem' || currentTab==='dust' || currentTab==='bio'){
+      body += '<dl class="detail-grid">';
+      body += '<dt>序号</dt><dd>'+escapeHtml(r.no)+'</dd>';
+      body += '<dt>中文名</dt><dd>'+escapeHtml(r.cn)+(r.amend?' <span class="amend-flag">修</span>':'')+'</dd>';
+      body += '<dt>英文名</dt><dd>'+escapeHtml(r.en)+'</dd>';
+      body += '<dt>CAS号</dt><dd>'+escapeHtml(r.cas||'—')+'</dd>';
+      body += '<dt>临界不良健康效应</dt><dd style="white-space:normal">'+escapeHtml(r.effect||'—')+'</dd>';
+      body += '<dt>备注</dt><dd>'+parseBadges(r.note)+(r.amend?' <span style="color:var(--brand-orange);font-size:11px;margin-left:6px">'+escapeHtml(r.amend)+'</span>':'')+'</dd>';
+      body += '</dl>';
+      // OEL cells
+      if(currentTab==='chem'){
+        body += '<div style="margin-top:14px;font-size:12px;color:var(--text-secondary)">OELs (mg/m³)</div>';
+        body += '<div class="oel-grid">';
+        body += '<div class="oel-cell"><div class="label">MAC 最高</div><div class="val '+(r.mac&&r.mac!=='—'?'has-val':'dash')+'">'+escapeHtml(r.mac||'—')+'</div><div class="unit">mg/m³</div></div>';
+        body += '<div class="oel-cell"><div class="label">PC-TWA 时间加权</div><div class="val '+(r.twa&&r.twa!=='—'?'has-val':'dash')+'">'+escapeHtml(r.twa||'—')+'</div><div class="unit">mg/m³</div></div>';
+        body += '<div class="oel-cell"><div class="label">PC-STEL 短时间</div><div class="val '+(r.stel&&r.stel!=='—'?'has-val':'dash')+'">'+escapeHtml(r.stel||'—')+'</div><div class="unit">mg/m³</div></div>';
+        body += '</div>';
+      } else if(currentTab==='dust'){
+        body += '<div style="margin-top:14px;font-size:12px;color:var(--text-secondary)">粉尘 OEL (mg/m³)</div>';
+        body += '<div class="oel-grid">';
+        body += '<div class="oel-cell"><div class="label">PC-TWA 总粉尘</div><div class="val '+(r.twa_total&&r.twa_total!=='—'?'has-val':'dash')+'">'+escapeHtml(r.twa_total||'—')+'</div><div class="unit">mg/m³</div></div>';
+        body += '<div class="oel-cell"><div class="label">PC-TWA 呼吸性</div><div class="val '+(r.twa_resp&&r.twa_resp!=='—'?'has-val':'dash')+'">'+escapeHtml(r.twa_resp||'—')+'</div><div class="unit">mg/m³</div></div>';
+        body += '</div>';
+      } else if(currentTab==='bio'){
+        body += '<div style="margin-top:14px;font-size:12px;color:var(--text-secondary)">生物因素 OEL</div>';
+        body += '<div class="oel-cell" style="margin-top:8px"><div class="val '+(r.oel&&r.oel!=='—'?'has-val':'dash')+'">'+escapeHtml(r.oel||'—')+'</div></div>';
+      }
+    } else if(currentTab==='biomon'){
+      body += '<dl class="detail-grid">';
+      body += '<dt>序号</dt><dd>'+escapeHtml(r.no)+(r.amend?' <span class="amend-flag">修</span>':'')+'</dd>';
+      body += '<dt>接触因素</dt><dd>'+escapeHtml(r.factor_cn)+'</dd>';
+      body += '<dt>Factor (EN)</dt><dd style="font-style:italic">'+escapeHtml(r.factor_en)+'</dd>';
+      body += '<dt>监测指标（中文）</dt><dd>'+escapeHtml(r.indicator_cn)+'</dd>';
+      body += '<dt>Indicator (EN)</dt><dd style="font-style:italic">'+escapeHtml(r.indicator_en)+'</dd>';
+      body += '<dt>职业接触生物限值</dt><dd style="color:var(--brand-red);font-weight:700">'+escapeHtml(r.limit)+'</dd>';
+      body += '<dt>采样时间</dt><dd>'+escapeHtml(r.sample_time)+'</dd>';
+      if(r.amend) body += '<dt>修改单</dt><dd style="color:var(--brand-orange);font-size:12px">'+escapeHtml(r.amend)+'</dd>';
+      body += '</dl>';
+    } else if(currentTab==='ctl'){
+      body += '<dl class="detail-grid">';
+      body += '<dt>接触等级</dt><dd style="font-size:18px;color:var(--brand-red);font-weight:700">'+escapeHtml(r.level)+'</dd>';
+      body += '<dt>等级描述</dt><dd>'+escapeHtml(r.desc)+'</dd>';
+      body += '<dt>推荐控制措施</dt><dd style="white-space:normal">'+escapeHtml(r.control)+'</dd>';
+      body += '</dl>';
+    }
+    document.getElementById('dpBody').innerHTML = body;
+    document.getElementById('detailOverlay').classList.add('show');
+  }
+  window.closeDetail = function(){ document.getElementById('detailOverlay').classList.remove('show'); };
+  document.getElementById('detailOverlay').addEventListener('click', function(e){ if(e.target===this) closeDetail(); });
+
+  // ----- Physical factor section (GBZ 2.2) -----
+  var PHYS_DATA = [
+    {name:'噪声', en:'Noise', cat:'稳态/非稳态/脉冲', items:[
+      {k:'8h 等效声级', v:'85 dB(A)'},
+      {k:'每周40h 等效声级', v:'85 dB(A)'},
+      {k:'脉冲噪声峰值', v:'140 dB(C)'},
+      {k:'不规则工时每周剂量', v:'8h×5d'}
+    ], note:'执行 GBZ/T 189.8 测量；非稳态噪声按等能量原理核算 8h 等效声级。'},
+    {name:'高温作业', en:'Heat stress (WBGT)', cat:'WBGT 限值', items:[
+      {k:'Ⅰ级（轻劳动）WBGT', v:'30 ℃'},
+      {k:'Ⅱ级（中等劳动）WBGT', v:'28 ℃'},
+      {k:'Ⅲ级（重劳动）WBGT', v:'26 ℃'},
+      {k:'Ⅳ级（极重劳动）WBGT', v:'25 ℃'}
+    ], note:'依据体力劳动强度分级；高温作业应同时控制 WBGT 与接触时间。'},
+    {name:'微波辐射', en:'Microwave radiation', cat:'8h 平均功率密度', items:[
+      {k:'300 MHz ~ 300 GHz', v:'50 μW/cm²'},
+      {k:'脉冲波固定辐射', v:'25 μW/cm²'},
+      {k:'脉冲波非固定辐射', v:'50 μW/cm²'}
+    ], note:'连续波/脉冲波区分；执行 GBZ/T 189.5 测量。'},
+    {name:'激光', en:'Laser radiation', cat:'8h 辐照量/辐照度', items:[
+      {k:'400~700 nm 可见光', v:'0.5 mW/cm²'},
+      {k:'700~1050 nm 近红外', v:'0.5 mW/cm²'},
+      {k:'1050~1400 nm 红外', v:'5 mW/cm²'},
+      {k:'270~315 nm 紫外', v:'0.26 μW/cm²'},
+      {k:'315~400 nm 近紫外', v:'0.13 μW/cm²'}
+    ], note:'按 GB 7247.1 分类；不同波长曝光时间限值不同。'},
+    {name:'工频电场', en:'Power-frequency E-field', cat:'8h 场强', items:[
+      {k:'50/60 Hz 电场强度', v:'5 kV/m'},
+      {k:'磁场强度', v:'参照 ICNIRP'}
+    ], note:'工频设备（变电、配电）作业场所。'},
+    {name:'高频电磁场', en:'High-frequency EM field', cat:'8h 功率密度', items:[
+      {k:'3~30 MHz 高频', v:'0.1 mW/cm²'},
+      {k:'30~300 MHz VHF', v:'0.05 mW/cm²'}
+    ], note:'区分高频/超高频/微波；脉冲波减半。'},
+    {name:'紫外辐射', en:'UV radiation', cat:'8h/日辐照度', items:[
+      {k:'270 nm (UVC) 8h', v:'0.26 μW/cm²'},
+      {k:'315 nm (UVB) 8h', v:'0.26 μW/cm²'},
+      {k:'315~400 nm (UVA) 8h', v:'0.13 μW/cm²'},
+      {k:'电焊弧光（弧焊作业）', v:'参照 GBZ 2.2'}
+    ], note:'电焊弧光以 GBZ/T 189.6 测量；护目镜按 GB/T 3609.1。'},
+    {name:'手传振动', en:'Hand-arm vibration', cat:'4h 等能量频率计权', items:[
+      {k:'日接振 4h 限值', v:'5 m/s²'},
+      {k:'日接振 8h 限值', v:'3.6 m/s²（计算）'}
+    ], note:'执行 GBZ/T 189.9；按等能量原理折算。'},
+    {name:'全身振动', en:'Whole-body vibration', cat:'日接触限值', items:[
+      {k:'垂直方向 8h', v:'0.62 m/s²'},
+      {k:'水平方向 8h', v:'0.43 m/s²'}
+    ], note:'车辆驾驶等岗位；执行 GBZ/T 189.10。'},
+    {name:'照度（参考 GB 50034）', en:'Workplace illuminance', cat:'作业场所照度', items:[
+      {k:'一般作业（办公室）', v:'300 lx'},
+      {k:'精细作业（检验）', v:'500~750 lx'},
+      {k:'精密作业（装配）', v:'1000 lx'},
+      {k:'极精细作业（手术）', v:'≥1500 lx'}
+    ], note:'本项依据 GB 50034《建筑照明设计标准》整理，GBZ 2.2 不规定具体照度值。'}
+  ];
+
+  function renderPhys(){
+    var html = '<div class="phys-note"><i class="fa-solid fa-circle-info"></i> <strong>物理因素数据来源说明：</strong>用户提供的 GBZ 2.2—2007 PDF 为扫描件，无法机读；下表数值基于该标准已知内容整理（2007年发布，至今有效）。<strong style="color:var(--brand-orange)">正式引用时请以原纸质标准为准</strong>。表中涵盖噪声、高温、微波、激光、工频/高频电磁场、紫外辐射、手传/全身振动及照度参考。</div>';
+    html += '<div class="phys-grid">';
+    PHYS_DATA.forEach(function(p){
+      html += '<div class="phys-card"><h4>'+escapeHtml(p.name)+'</h4><div class="sub">'+escapeHtml(p.en)+' · '+escapeHtml(p.cat)+'</div><table>';
+      p.items.forEach(function(it){
+        html += '<tr><td>'+escapeHtml(it.k)+'</td><td>'+escapeHtml(it.v)+'</td></tr>';
+      });
+      html += '</table><div style="margin-top:8px;font-size:11px;color:var(--text-secondary);line-height:1.5">'+escapeHtml(p.note)+'</div></div>';
+    });
+    html += '</div>';
+    document.getElementById('physArea').innerHTML = html;
+  }
+
+  function renderCtl(){
+    var html = '<table class="data-table"><thead><tr><th>接触等级</th><th>等级描述</th><th>推荐控制措施</th></tr></thead><tbody>';
+    D.table5_control_levels.forEach(function(r){
+      html += '<tr><td style="font-weight:700;color:var(--brand-red)">'+escapeHtml(r.level)+'</td><td>'+escapeHtml(r.desc)+'</td><td style="white-space:normal">'+escapeHtml(r.control)+'</td></tr>';
+    });
+    html += '</tbody></table>';
+    html += '<div style="margin-top:12px;font-size:12px;color:var(--text-secondary);padding:10px 14px;background:var(--bg-page);border-radius:var(--radius-sm)"><strong>注：</strong>作业管理包括对作业方法、作业时间等制定作业标准，使其标准化；改善作业方法；对作业人员进行指导培训以及改善作业条件或工作场所环境等。</div>';
+    document.getElementById('ctlArea').innerHTML = html;
+  }
+
+  // ----- Init -----
+  document.querySelectorAll('.tab-btn').forEach(function(b){
+    b.addEventListener('click', function(){ switchTab(b.dataset.tab); });
+  });
+  document.getElementById('search').addEventListener('input', function(e){
+    searchTerm = e.target.value;
+    if(currentTab!=='phys') renderTable();
+  });
+  switchTab('chem');
+  // print timestamp
+  var pt = document.getElementById('printTime');
+  if(pt){ var d=new Date(); pt.textContent = '打印时间：'+d.toLocaleString('zh-CN'); }
+})();
+</script>
+</body>
+</html>
