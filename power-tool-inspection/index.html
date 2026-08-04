@@ -521,9 +521,7 @@
                 }
             }
 
-            // 初始化第9行自动判定
-            var row9=tbody.querySelectorAll('tr[data-tool="'+toolCode+'"][data-item-code="9"]')[0];
-            // 用 toolCount 重新查找
+            // 用 toolCount 查找第9行（line 525 曾因未定义变量 toolCode 报错，已删除该死代码）
             var all9=tbody.querySelectorAll('tr[data-tool="'+toolCount+'"][data-item-code="9"]');
             if(all9.length>0) updateRow9Conclusion(all9[0]);
             updateVerdict();
