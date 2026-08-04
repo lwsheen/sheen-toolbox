@@ -36,12 +36,12 @@
   .quick-filter:hover { background: var(--brand-red-light); color: var(--brand-red); border-color: var(--brand-red); }
   .quick-filter.active { background: var(--brand-red); color: #fff; border-color: var(--brand-red); }
   .data-table-wrap { background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border); overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.04); margin-top: 4px; }
-  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 13px; }
   .data-table thead th { background: var(--bg-page); color: var(--text-secondary); font-weight: 600; padding: 10px 12px; text-align: left; border-bottom: 2px solid var(--border); white-space: nowrap; cursor: pointer; user-select: none; position: sticky; top: 0; z-index: 5; }
   .data-table thead th:hover { color: var(--brand-red); }
   .data-table thead th .sort-ind { margin-left: 4px; font-size: 10px; opacity: .5; }
   .data-table thead th.sorted .sort-ind { opacity: 1; color: var(--brand-red); }
-  .data-table tbody td { padding: 9px 12px; border-bottom: 1px solid var(--border-light); vertical-align: top; }
+  .data-table tbody td { padding: 9px 12px; border-bottom: 1px solid var(--border-light); vertical-align: top; word-break: break-word; overflow-wrap: anywhere; }
   .data-table tbody tr { transition: background .12s; }
   .data-table tbody tr:hover { background: var(--brand-red-light); cursor: pointer; }
   .data-table tbody tr.amend { background: linear-gradient(90deg, rgba(245,124,0,.08) 0%, transparent 100%); }
@@ -62,6 +62,8 @@
   .nb-g2b { background: #FFF8E1; color: #B80; font-weight: 600; }
   .nb-sens { background: var(--brand-blue-light, #E3F2FD); color: var(--brand-blue); }
   .table-scroll { max-height: calc(100vh - 280px); min-height: 400px; overflow: auto; }
+  /* 桌面端：表格已 table-layout:fixed 且所有列均在容器内，关闭横向滚动条（纵向滚动条占位引起的伪横向滚动条）。移动端保留 overflow:auto 以便宽表横向滚动查看 */
+  @media (min-width: 901px) { .table-scroll { overflow-x: hidden; } }
   .result-count { font-size: 12px; color: var(--text-secondary); padding: 8px 0; }
   .result-count strong { color: var(--brand-red); font-weight: 700; }
   .empty-state { padding: 60px 20px; text-align: center; color: var(--text-secondary); }
@@ -308,7 +310,7 @@ window.__DATA__ = {"table1_chemicals":[{"no":"1","cn":"安妥","en":"ANTU","cas"
     ctl: D.table5_control_levels
   };
 
-  function getFilterDefs(){ return SCHEMAS[currentTab].filterDefs; }
+  function getFilterDefs(){ return (SCHEMAS[currentTab] && SCHEMAS[currentTab].filterDefs) || []; }
 
   function switchTab(t){
     currentTab = t;
@@ -367,7 +369,7 @@ window.__DATA__ = {"table1_chemicals":[{"no":"1","cn":"安妥","en":"ANTU","cas"
     thead.innerHTML = sch.cols.map(function(c,i){
       var sorted = currentSort.col===i;
       var ind = sorted ? (currentSort.asc?'▲':'▼') : '↕';
-      return '<th data-i="'+i+'" data-col="'+c.key+'" class="'+c.key+(sorted?' sorted':'')+'" style="min-width:'+c.w+'px">'+c.label+'<span class="sort-ind">'+ind+'</span></th>';
+      return '<th data-i="'+i+'" data-col="'+c.key+'" class="'+c.key+(sorted?' sorted':'')+'" style="width:'+c.w+'px">'+c.label+'<span class="sort-ind">'+ind+'</span></th>';
     }).join('');
     thead.querySelectorAll('th').forEach(function(th){
       th.addEventListener('click', function(){
