@@ -335,6 +335,12 @@
 
         // 初始化
         renderBasicTable(basicAccidents);
+
+        // 暴露给 inline onclick/oninput 使用
+        window.switchTab = switchTab;
+        window.filterBasic = filterBasic;
+        window.quickSearch = quickSearch;
+        window.calcAll = calcAll;
     })();
     </script>
 
