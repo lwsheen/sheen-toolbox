@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head data-seo="sheen">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高处作业分级查询 — SHEEN Toolbox</title>
+    <meta name="description" content="高处作业分级查询：依据 GB 3608-2025《高处作业分级》，提供 A/B 分类法分级判定、坠落范围半径查定与 10 类客观危险因素清单。">
+    <meta property="og:title" content="高处作业分级查询 | SHEEN Toolbox">
+    <meta property="og:description" content="依据 GB 3608-2025《高处作业分级》（2026-05-01 实施，代替 GB/T 3608-2008），提供分级判定、坠落范围半径查定与客观危险因素清单。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lwsheen.github.io/sheen-toolbox/working-height-classification/">
+    <meta property="og:image" content="https://lwsheen.github.io/sheen-toolbox/assets/share/working-height-classification.png">
+    <link rel="canonical" href="https://lwsheen.github.io/sheen-toolbox/working-height-classification/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"高处作业分级查询","url":"https://lwsheen.github.io/sheen-toolbox/working-height-classification/","description":"依据 GB 3608-2025《高处作业分级》的高处作业分级判定、坠落范围半径查定与客观危险因素查询工具","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","inLanguage":"zh-CN","offers":{"@type":"Offer","price":"0","priceCurrency":"CNY"},"publisher":{"@type":"Organization","name":"SHEEN Toolbox"}}</script>
+
+    <link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
+    <link rel="stylesheet" href="/sheen-toolbox/common.css">
+
+    <style>
+        /* 本工具特有样式（公共样式见 common.css，仅在此定义工具专属组件） */
+        .breadcrumb span { color: var(--text-secondary); }
+        .page-title i { color: var(--brand-red); font-size: 22px; }
+
+        /* 标签页 */
+        .tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 24px; gap: 4px; flex-wrap: wrap; }
+        .tab-btn { padding: 12px 22px; background: none; border: none; font-size: 15px; font-weight: 500;
+            color: var(--text-secondary); cursor: pointer; transition: var(--transition);
+            border-radius: var(--radius-md) var(--radius-md) 0 0; font-family: inherit; }
+        .tab-btn:hover { background: var(--bg-page); color: var(--text-primary); }
+        .tab-btn.active { color: var(--brand-red); border-bottom: 3px solid var(--brand-red); background: var(--bg-card); }
+        .tab-content { display: none; animation: fadeIn .35s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 信息提示块 */
+        .info-note { background: var(--bg-page); padding: 14px 16px; border-left: 4px solid var(--tech-blue);
+            margin-bottom: 18px; font-size: 13px; color: var(--text-secondary); line-height: 1.75;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+        .info-note b { color: var(--text-primary); }
+        .info-note i.fa-lightbulb { color: var(--tech-blue); margin-right: 6px; }
+
+        /* 双栏布局 */
+        .grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 760px) { .grid-2col { grid-template-columns: 1fr; } }
+
+        .panel { background: var(--bg-card); padding: 20px; border-radius: var(--radius-lg);
+            border: 1px solid var(--border); }
+        .panel-title { font-size: 16px; font-weight: 600; margin-bottom: 14px; color: var(--text-primary);
+            border-bottom: 1px dashed var(--border-light); padding-bottom: 8px; }
+
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-weight: 500; margin-bottom: 5px; color: var(--text-primary); font-size: 13px; }
+        .form-group .form-control { width: 100%; }
+
+        /* 危险因数勾选 */
+        .risk-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+        .risk-item { background: var(--bg-card); padding: 7px 12px; border: 1px solid var(--border);
+            border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition);
+            font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; user-select: none; }
+        .risk-item:hover { border-color: var(--brand-red); color: var(--brand-red); }
+        .risk-item input { width: 15px; height: 15px; cursor: pointer; accent-color: var(--brand-red); }
+        .risk-cap { font-size: 12px; color: var(--text-secondary); margin-top: 8px; line-height: 1.6; }
+
+        /* 主按钮（品牌红） */
+        .btn-primary { padding: 12px 25px; background: var(--brand-red); color: #fff; border: none;
+            border-radius: var(--radius-md); font-size: 15px; cursor: pointer; transition: var(--transition);
+            width: 100%; font-weight: 600; font-family: inherit; }
+        .btn-primary:hover { background: #D12E47; }
+
+        /* 结果卡 */
+        .hw-result { margin-top: 4px; }
+        .hw-result .hint { color: var(--text-secondary); font-size: 14px; margin-top: 20px; }
+        .result-card { background: var(--brand-red-light); border: 1px solid var(--brand-red);
+            border-radius: var(--radius-md); padding: 16px; }
+        .result-card.ok { background: rgba(22,163,74,.08); border-color: #16A34A; }
+        .result-card .rc-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .result-card .rc-label { font-size: 13px; color: var(--text-secondary); }
+        .result-card .rc-grade { font-size: 24px; font-weight: 700; color: var(--brand-red); }
+        .result-card.ok .rc-grade { color: #16A34A; }
+        .result-card .rc-hw { font-size: 20px; font-weight: 700; color: var(--text-primary); }
+        .result-card .rc-foot { margin-top: 12px; border-top: 1px solid rgba(0,0,0,.06); padding-top: 10px;
+            font-size: 13px; color: var(--text-secondary); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; }
+        .rc-risk-yes { color: var(--brand-red); font-weight: 600; }
+        .rc-risk-no { color: #16A34A; font-weight: 600; }
+
+        /* 等级徽标（语义色：绿→蓝→橙→红，严重度递增） */
+        .grade-badge { display: inline-block; padding: 3px 12px; border-radius: 999px; font-weight: 700; color: #fff; font-size: 13px; }
+        .grade-I   { background: #16A34A; }
+        .grade-II  { background: var(--tech-blue); }
+        .grade-III { background: var(--brand-orange, #F57C00); }
+        .grade-IV  { background: var(--brand-red); }
+
+        .ref-note { background: var(--bg-page); padding: 12px 14px; border-left: 4px solid #16A34A;
+            margin-top: 14px; font-size: 12.5px; color: var(--text-secondary); line-height: 1.7; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+        .ref-note b { color: var(--text-primary); }
+
+        ol.factor-list { font-size: 14px; line-height: 1.9; padding-left: 22px; color: var(--text-primary); }
+        ol.factor-list li { margin-bottom: 2px; }
+
+        @media (max-width: 600px) {
+            .tabs { flex-wrap: wrap; }
+            .tab-btn { flex: 1; text-align: center; padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 面包屑导航 -->
+    <div class="breadcrumb">
+        <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+        <span> / 高处作业分级查询</span>
+    </div>
+
+    <!-- 主内容区域（查询/数据表类 → container-query 1200px） -->
+    <main class="app-container container-query">
+
+        <h1 class="page-title">高处作业分级查询 <i class="fa-solid fa-stairs"></i></h1>
+        <p class="page-subtitle" style="margin-bottom:20px;">依据 GB 3608-2025《高处作业分级》（2026-05-01 实施，全部代替 GB/T 3608-2008），提供 A/B 分类法分级判定、坠落范围半径查定与客观危险因素清单。</p>
+
+        <!-- 标签页 -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="assess" onclick="switchTab('assess')">① 分级判定</button>
+            <button class="tab-btn" data-tab="reference" onclick="switchTab('reference')">② 标准查阅</button>
+        </div>
+
+        <!-- ① 分级判定 -->
+        <div id="tab-assess" class="tab-content active">
+            <div class="info-note">
+                <i class="fa-solid fa-lightbulb"></i><b>高处作业</b>：在距坠落高度基准面 <b>2 m 及以上</b>、且存在发生坠落可能性的作业。<br>
+                <b>分级原理</b>：基于<b>高处作业高度 h<sub>w</sub></b>（距坠落基准面垂直距离最大值）及<b>客观危险因素</b>，按 A 类法（无危险因素）或 B 类法（存在 1 项及以上）综合判定等级（Ⅰ～Ⅳ级）。
+            </div>
+
+            <div class="grid-2col">
+                <!-- 输入 -->
+                <div class="panel">
+                    <div class="panel-title">输入参数</div>
+                    <div class="form-group">
+                        <label for="heightInput">作业高度 h<sub>w</sub>（距坠落基准面垂直距离最大值，单位：m）</label>
+                        <input type="number" id="heightInput" class="form-control" placeholder="输入高度，如 8.5" step="0.1" min="0" value="5">
+                    </div>
+                    <div class="form-group">
+                        <label>客观危险因素（存在 1 项或多项即按 B 类法判定）</label>
+                        <div class="risk-list">
+                            <label class="risk-item"><input type="checkbox" class="risk-cb" value="wind"> 5 级及以上风力</label>
+                            <label class="risk-item"><input type="checkbox" class="risk-cb" value="temp_high"> Ⅱ级及以上高温作业</label>
+                            <label class="risk-item"><input type="checkbox" class="risk-cb" value="temp_low"> 平均气温 ≤ 5℃</label>
+                            <label class="risk-item"><input type="checkbox" class="risk-cb" value="cold_water"> 接触冷水 ≤ 12℃</label>
+                            <label class="risk-item"><input type="checkbox" class="risk-cb" value="slippery"> 冰/雪/霜/水/油等易滑物</label>
+                            <label class="risk-item"><input type="checkbox" class="risk-cb" value="dark"> 照度 < 15 lx</label>
+                            <label class="risk-item"><input type="checkbox" class="risk-cb" value="voltage"> 与危险带电体过近</label>
+                            <label class="risk-item"><input type="checkbox" class="risk-cb" value="unstable"> 立足处 < 500 mm</label>
+                            <label class="risk-item"><input type="checkbox" class="risk-cb" value="labor"> Ⅲ级及以上体力劳动</label>
+                            <label class="risk-item"><input type="checkbox" class="risk-cb" value="toxic"> 含氧量<19.5%或有毒</label>
+                        </div>
+                        <div class="risk-cap">注：GB 3608-2025 取消了“阵风风力五级”作为客观危险因素；本工具保留该项作为实践安全提示，存在时仍按 B 类法判定。</div>
+                    </div>
+                    <button class="btn-primary" onclick="evaluateHeight()">评估高处作业分级</button>
+                </div>
+
+                <!-- 结果 -->
+                <div class="panel">
+                    <div class="panel-title">判定结果</div>
+                    <div id="resultContainer" class="hw-result">
+                        <div class="hint">⚡ 输入左侧参数并点击“评估”按钮查看分级结果。</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 分级对照表（表 2） -->
+            <div style="margin-top:28px;">
+                <div class="panel-title" style="border:none; padding:0; margin-bottom:10px;">分级对照表（依据 GB 3608-2025 表 2）</div>
+                <div class="table-scroll">
+                    <table class="data-table">
+                        <thead>
+                            <tr><th rowspan="2">分类法</th><th colspan="4">高处作业高度 h<sub>w</sub> / m</th></tr>
+                            <tr><th>2 ≤ h<sub>w</sub> ≤ 5</th><th>5 &lt; h<sub>w</sub> ≤ 15</th><th>15 &lt; h<sub>w</sub> ≤ 30</th><th>h<sub>w</sub> &gt; 30</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><b>A 类法</b>（无危险因素）</td>
+                                <td><span class="grade-badge grade-I">Ⅰ级</span></td>
+                                <td><span class="grade-badge grade-II">Ⅱ级</span></td>
+                                <td><span class="grade-badge grade-III">Ⅲ级</span></td>
+                                <td><span class="grade-badge grade-IV">Ⅳ级</span></td>
+                            </tr>
+                            <tr>
+                                <td><b>B 类法</b>（有 1 种及以上危险因素）</td>
+                                <td><span class="grade-badge grade-II">Ⅱ级</span></td>
+                                <td><span class="grade-badge grade-III">Ⅲ级</span></td>
+                                <td><span class="grade-badge grade-IV">Ⅳ级</span></td>
+                                <td><span class="grade-badge grade-IV">Ⅳ级</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ② 标准查阅 -->
+        <div id="tab-reference" class="tab-content">
+            <div class="grid-2col">
+                <!-- 坠落范围半径 表3 -->
+                <div class="panel">
+                    <div class="panel-title">坠落范围半径 R 查定（表 3）</div>
+                    <div style="font-size:13px; color:var(--text-secondary); line-height:1.7; margin-bottom:12px;">
+                        可能坠落范围半径 <b>R</b> 由<b>基础高度 h<sub>b</sub></b> 确定。
+                    </div>
+                    <div class="table-scroll">
+                        <table class="data-table">
+                            <thead><tr><th>基础高度 h<sub>b</sub> / m</th><th>可能坠落范围半径 R / m</th></tr></thead>
+                            <tbody>
+                                <tr><td>2 ≤ h<sub>b</sub> ≤ 5</td><td>3</td></tr>
+                                <tr><td>5 &lt; h<sub>b</sub> ≤ 15</td><td>4</td></tr>
+                                <tr><td>15 &lt; h<sub>b</sub> ≤ 30</td><td>5</td></tr>
+                                <tr><td>h<sub>b</sub> &gt; 30</td><td>6</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="ref-note">
+                        <b>注</b>：基础高度 h<sub>b</sub> 是以作业位置为中心、<b>6 m</b> 为半径的柱形空间内的最低处与作业位置的高度差。
+                    </div>
+                </div>
+
+                <!-- 10类客观危险因素 -->
+                <div class="panel">
+                    <div class="panel-title">客观危险因素清单（10 类）</div>
+                    <ol class="factor-list">
+                        <li>5 级及以上风力</li>
+                        <li>Ⅱ级及以上高温作业</li>
+                        <li>作业时段平均气温 ≤ 5℃</li>
+                        <li>接触冷水温度 ≤ 12℃</li>
+                        <li>场地有冰、雪、霜、水、油等易滑物</li>
+                        <li>照度低于标准值 10% 或 &lt; 15 lx</li>
+                        <li>与危险电压带电体距离过小（见标准表 1）</li>
+                        <li>立足处非平面或太小（任一边 &lt; 500 mm）</li>
+                        <li>Ⅲ级及以上体力劳动强度</li>
+                        <li>含氧量 &lt; 19.5% 或有毒气体作业环境</li>
+                    </ol>
+                    <div class="ref-note">
+                        <b>说明</b>：上述清单依据 GB 3608-2025 第 4.2 条客观危险因素框架整理。该标准已取消“阵风风力五级”一项，本工具在判定页仍保留作实践提示，正式判定请以官方发布文本为准。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 标准信息块（由 add_tool_meta.py 注入，位于 footer 上方） -->
+
+    <!-- 页脚 -->
+    <section class="tool-meta" data-toolmeta="sheen">
+  <div class="tm-line tm-stds"><i class="fa-solid fa-book-bookmark"></i><span class="tm-stds-list">GB 3608-2025《高处作业分级》</span></div>
+  <div class="tm-line tm-dates"><span><b>发布</b> 2025-10-05 ｜ <b>实施</b> 2026-05-01（代替 GB/T 3608-2008） ｜ <b>更新</b> 2026-08-06</span></div>
+  <p class="tm-disc"><i class="fa-solid fa-circle-info"></i> 免责声明：本工具依据公开国家标准、行业规范及官方文件整理，仅供参考与内部初步筛查之用，不构成任何专业法律、安全或工程意见。实际合规判定请以最新官方发布文本及具备资质的专业机构评估为准。使用者应自行核实相关标准的现行有效性。</p>
+</section>
+
+    <footer class="sheen-footer">
+        <img src="../assets/sheen-logo.png" alt="SHEEN Toolbox" class="sheen-logo-sm"> &nbsp;<strong>SHEEN Toolbox</strong> · 高处作业分级查询
+    </footer>
+
+    <!-- 打印时间戳 -->
+    <div class="print-time" id="printTime"></div>
+
+    <script>
+    // 打印时间
+    document.getElementById('printTime').textContent =
+        new Date().toISOString().replace('T', ' ').slice(0, 16);
+
+    // ===== Tab 切换（全局函数，供 inline onclick 调用） =====
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(function (el) { el.classList.remove('active'); });
+        document.querySelectorAll('.tab-btn').forEach(function (el) { el.classList.remove('active'); });
+        var tab = document.getElementById('tab-' + tabId);
+        if (tab) tab.classList.add('active');
+        var btn = document.querySelector('.tab-btn[data-tab="' + tabId + '"]');
+        if (btn) btn.classList.add('active');
+    }
+
+    // ===== 分级判定核心逻辑 =====
+    function evaluateHeight() {
+        var height = parseFloat(document.getElementById('heightInput').value);
+        var riskCheckboxes = document.querySelectorAll('#tab-assess .risk-cb');
+        var hasRisk = false, riskCount = 0;
+        riskCheckboxes.forEach(function (cb) {
+            if (cb.checked) { hasRisk = true; riskCount++; }
+        });
+
+        var container = document.getElementById('resultContainer');
+
+        if (isNaN(height) || height < 0) {
+            container.innerHTML =
+                '<div class="result-card"><div class="rc-top">' +
+                '<div><div class="rc-label">判定结果</div>' +
+                '<div class="rc-grade" style="font-size:18px;"><i class="fa-solid fa-circle-exclamation"></i> 输入错误</div></div></div>' +
+                '<div class="rc-foot">请填入有效的高度数值（≥ 0）。</div></div>';
+            return;
+        }
+
+        var grade = "", gradeClass = "", classType = hasRisk ? "B 类法" : "A 类法";
+
+        if (height < 2) {
+            grade = "不属于高处作业"; gradeClass = "none";
+        } else if (height <= 5) {
+            grade = hasRisk ? "Ⅱ级" : "Ⅰ级";
+            gradeClass = hasRisk ? "grade-II" : "grade-I";
+        } else if (height <= 15) {
+            grade = hasRisk ? "Ⅲ级" : "Ⅱ级";
+            gradeClass = hasRisk ? "grade-III" : "grade-II";
+        } else if (height <= 30) {
+            grade = hasRisk ? "Ⅳ级" : "Ⅲ级";
+            gradeClass = hasRisk ? "grade-IV" : "grade-III";
+        } else {
+            grade = "Ⅳ级"; gradeClass = "grade-IV";
+        }
+
+        var riskHtml = hasRisk
+            ? '<span class="rc-risk-yes"><i class="fa-solid fa-triangle-exclamation"></i> 存在 ' + riskCount + ' 项客观危险因素</span>'
+            : '<span class="rc-risk-no"><i class="fa-solid fa-circle-check"></i> 无客观危险因素</span>';
+
+        if (grade === "不属于高处作业") {
+            container.innerHTML =
+                '<div class="result-card ok"><div class="rc-top">' +
+                '<div><div class="rc-label">判定结果</div>' +
+                '<div class="rc-grade">' + grade + '</div></div>' +
+                '<div style="text-align:right;"><div class="rc-label">作业高度 h<sub>w</sub></div>' +
+                '<div class="rc-hw">' + height + ' m</div></div></div>' +
+                '<div class="rc-foot"><span>作业高度低于 2 m，不属于本文件规定的高处作业范围。</span></div></div>';
+        } else {
+            container.innerHTML =
+                '<div class="result-card"><div class="rc-top">' +
+                '<div><div class="rc-label">判定等级</div>' +
+                '<div class="rc-grade"><span class="grade-badge ' + gradeClass + '">' + grade + '</span></div></div>' +
+                '<div style="text-align:right;"><div class="rc-label">作业高度 h<sub>w</sub></div>' +
+                '<div class="rc-hw">' + height + ' m</div></div></div>' +
+                '<div class="rc-foot"><span>分类方法：<b>' + classType + '</b></span><span>' + riskHtml + '</span></div></div>';
+        }
+    }
+
+    // 默认执行一次（脚本位于 DOM 末尾，元素已存在）
+    evaluateHeight();
+    </script>
+
+</body>
+</html>
