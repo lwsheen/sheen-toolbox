@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head data-seo="sheen">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生产安全事故分类查询 — SHEEN Toolbox</title>
+    <meta name="description" content="生产安全事故分类查询：依据 GB 6441-2025《生产安全事故分类与编码》，27 类基本事故类型与编码、人身伤害程度（GB 15499-2025）、相对统计指标计算器。">
+    <meta property="og:title" content="生产安全事故分类查询 | SHEEN Toolbox">
+    <meta property="og:description" content="依据 GB 6441-2025 与 GB 15499-2025，提供 27 类基本事故类型与编码、人身伤害程度判定及相对统计指标计算。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lwsheen.github.io/sheen-toolbox/accident-classification/">
+    <meta property="og:image" content="https://lwsheen.github.io/sheen-toolbox/assets/share/accident-classification.png">
+    <link rel="canonical" href="https://lwsheen.github.io/sheen-toolbox/accident-classification/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"生产安全事故分类查询","url":"https://lwsheen.github.io/sheen-toolbox/accident-classification/","description":"依据 GB 6441-2025 与 GB 15499-2025 的生产安全事故分类、人身伤害程度判定与相对统计指标计算工具","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","inLanguage":"zh-CN","offers":{"@type":"Offer","price":"0","priceCurrency":"CNY"},"publisher":{"@type":"Organization","name":"SHEEN Toolbox"}}</script>
+
+    <link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
+    <link rel="stylesheet" href="/sheen-toolbox/common.css">
+
+    <style>
+        /* 本工具特有样式（公共样式见 common.css，仅在此定义工具专属组件） */
+        .breadcrumb span { color: var(--text-secondary); }
+        .page-title i { color: var(--brand-red); font-size: 22px; }
+
+        /* 标签页 */
+        .tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 24px; gap: 4px; flex-wrap: wrap; }
+        .tab-btn { padding: 12px 22px; background: none; border: none; font-size: 15px; font-weight: 500;
+            color: var(--text-secondary); cursor: pointer; transition: var(--transition);
+            border-radius: var(--radius-md) var(--radius-md) 0 0; font-family: inherit; }
+        .tab-btn:hover { background: var(--bg-page); color: var(--text-primary); }
+        .tab-btn.active { color: var(--brand-red); border-bottom: 3px solid var(--brand-red); background: var(--bg-card); }
+        .tab-content { display: none; animation: fadeIn .35s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 信息提示块 */
+        .info-note { background: var(--bg-page); padding: 14px 16px; border-left: 4px solid var(--tech-blue);
+            margin-bottom: 18px; font-size: 13px; color: var(--text-secondary); line-height: 1.75;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+        .info-note b { color: var(--text-primary); }
+        .info-note-green { background: rgba(22,163,74,.08); padding: 14px 16px; border-left: 4px solid #16A34A;
+            margin-bottom: 18px; font-size: 13px; color: var(--text-primary); line-height: 1.75;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+        .info-note-green b { color: var(--brand-red); }
+
+        /* 搜索与筛选 */
+        .search-area { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+        .search-area .form-control { flex: 1; min-width: 200px; }
+        .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+        .tag { background: var(--border-light); padding: 5px 14px; border-radius: 999px; font-size: 13px;
+            cursor: pointer; color: var(--text-secondary); border: 1px solid transparent;
+            transition: var(--transition); user-select: none; }
+        .tag:hover { background: var(--brand-red-light); color: var(--brand-red); border-color: var(--brand-red); }
+
+        /* 编码徽标 */
+        .code-badge { background: var(--brand-red-light); color: var(--brand-red); padding: 3px 10px;
+            border-radius: var(--radius-sm); font-family: var(--font-mono, monospace); font-weight: 600;
+            font-size: 13px; white-space: nowrap; }
+
+        /* 统计指标计算器 */
+        .calc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+        .calc-card { background: var(--bg-page); padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border); }
+        .calc-card h3 { font-size: 15px; margin-bottom: 12px; color: var(--text-primary); }
+        .calc-card label { display: block; margin-bottom: 4px; font-size: 13px; color: var(--text-secondary); }
+        .calc-card .form-control { margin-bottom: 12px; }
+        .result-box { background: var(--bg-card); padding: 10px 12px; border-radius: var(--radius-sm);
+            border: 1px solid var(--border); margin-top: 8px; font-weight: 600; color: var(--brand-red); font-size: 15px; }
+
+        @media (max-width: 600px) {
+            .tabs { flex-wrap: wrap; }
+            .tab-btn { flex: 1; text-align: center; padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 面包屑导航 -->
+    <div class="breadcrumb">
+        <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+        <span> / 生产安全事故分类查询</span>
+    </div>
+
+    <!-- 主内容区域（查询/数据表类 → container-query 1200px） -->
+    <main class="app-container container-query">
+
+        <h1 class="page-title">生产安全事故分类查询 <i class="fa-solid fa-triangle-exclamation"></i></h1>
+        <p class="page-subtitle" style="margin-bottom:20px;">依据 GB 6441-2025《生产安全事故分类与编码》与 GB 15499-2025，提供 27 类基本事故类型与编码、人身伤害程度判定及相对统计指标计算。</p>
+
+        <!-- 标签页 -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('basic')">基本事故类型</button>
+            <button class="tab-btn" onclick="switchTab('injury')">人身伤害程度</button>
+            <button class="tab-btn" onclick="switchTab('stats')">统计指标计算器</button>
+        </div>
+
+        <!-- 基本事故类型 -->
+        <div id="tab-basic" class="tab-content active">
+            <div class="info-note">
+                💡 依据 GB 6441-2025 表 1，基本事故类型共 <b>27 类</b>。若事故同时具备多种特征，以<b>先发诱导性原因</b>和致害严重程度划分。编码前缀为 <b>WSA1</b>（第 27 类“其他”编码为 <b>WSA10099</b>）。
+                <br>⚠️ 本工具采用的 <b>WSA1/WSA2 编码为简明标识方案</b>，正式编码规则以 GB 6441-2025 第 5 章为准。
+            </div>
+            <div class="search-area">
+                <input type="text" id="searchBasic" class="form-control" placeholder="输入事故名称（如：火灾、爆炸、中毒）..." oninput="filterBasic()">
+                <select id="filterBasic" class="form-control" onchange="filterBasic()">
+                    <option value="all">全部类型</option>
+                    <option value="explosion">爆炸类（容器/管道/气体/粉尘等）</option>
+                    <option value="vehicle">车辆/机械类</option>
+                    <option value="fall">坠落/坍塌类</option>
+                    <option value="harm">伤害/中毒类</option>
+                </select>
+            </div>
+            <div class="tags">
+                <span class="tag" onclick="quickSearch('火灾')">🔥 火灾</span>
+                <span class="tag" onclick="quickSearch('触电')">⚡ 触电</span>
+                <span class="tag" onclick="quickSearch('爆炸')">💥 爆炸</span>
+                <span class="tag" onclick="quickSearch('高处坠落')">📉 高处坠落</span>
+                <span class="tag" onclick="quickSearch('中毒')">☠️ 中毒</span>
+            </div>
+            <div class="table-scroll">
+                <table class="data-table">
+                    <thead><tr><th style="width:60px">序号</th><th>类型名称</th><th>说明</th><th style="width:150px">编码</th></tr></thead>
+                    <tbody id="basicTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 人身伤害程度 -->
+        <div id="tab-injury" class="tab-content">
+            <div class="info-note">
+                💡 依据 GB 6441-2025 表 2，按事故对人身伤害程度分类。编码前缀为 <b>WSA2</b>。
+            </div>
+
+            <div class="info-note-green">
+                <strong>📋 GB 15499-2025 判定标准参考：</strong><br>
+                根据 <b>GB 15499-2025</b> 中相关条款，人身伤害程度可通过计算<b>损失工作日</b>进行判定，分界如下：
+                <ul style="margin-top:8px; padding-left:20px;">
+                    <li><b>轻伤</b>：损失工作日 &lt; 105 日</li>
+                    <li><b>重伤</b>：损失工作日 ≥ 105 日，且 &lt; 6000 日</li>
+                    <li><b>死亡</b>：损失工作日 = 6000 日（或直接判定为死亡）</li>
+                </ul>
+            </div>
+
+            <div class="table-scroll">
+                <table class="data-table">
+                    <thead><tr><th style="width:60px">序号</th><th>类型名称</th><th>说明</th><th style="width:150px">编码</th></tr></thead>
+                    <tbody>
+                        <tr><td>1</td><td>零伤亡事故</td><td>无轻伤、重伤和死亡的事故</td><td><span class="code-badge">WSA20001</span></td></tr>
+                        <tr><td>2</td><td>轻伤事故</td><td>只有轻伤的事故</td><td><span class="code-badge">WSA20002</span></td></tr>
+                        <tr><td>3</td><td>重伤事故</td><td>有重伤但无死亡的事故</td><td><span class="code-badge">WSA20003</span></td></tr>
+                        <tr><td>4</td><td>死亡事故</td><td>有死亡的事故</td><td><span class="code-badge">WSA20004</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 统计指标计算器 -->
+        <div id="tab-stats" class="tab-content">
+            <div class="info-note">
+                📊 依据 GB 6441-2025 附录 A，提供 4 种相对统计指标的计算方法。输入对应数值即可自动计算。
+            </div>
+            <div class="calc-grid">
+                <div class="calc-card">
+                    <h3>单位 GDP 事故死亡率</h3>
+                    <label>死亡人数（人）</label><input type="number" id="gdp_dead" class="form-control" placeholder="0" oninput="calcAll()">
+                    <label>国内生产总值 GDP（元）</label><input type="number" id="gdp_val" class="form-control" placeholder="0" oninput="calcAll()">
+                    <div class="result-box">死亡率：<span id="gdp_result">0.00</span> 人/亿元</div>
+                </div>
+                <div class="calc-card">
+                    <h3>单位产量死亡率（百万吨）</h3>
+                    <label>死亡人数（人）</label><input type="number" id="mt_dead" class="form-control" placeholder="0" oninput="calcAll()">
+                    <label>实际产量（吨）</label><input type="number" id="mt_val" class="form-control" placeholder="0" oninput="calcAll()">
+                    <div class="result-box">死亡率：<span id="mt_result">0.00</span> 人/百万吨</div>
+                </div>
+                <div class="calc-card">
+                    <h3>千人事故死亡率</h3>
+                    <label>死亡人数（人）</label><input type="number" id="pt_dead" class="form-control" placeholder="0" oninput="calcAll()">
+                    <label>平均从业人数（人）</label><input type="number" id="pt_emp" class="form-control" placeholder="0" oninput="calcAll()">
+                    <div class="result-box">死亡率：<span id="pt_result">0.00</span> ‰</div>
+                </div>
+                <div class="calc-card">
+                    <h3>千人事故受伤率</h3>
+                    <label>受伤人数（人）</label><input type="number" id="injury_num" class="form-control" placeholder="0" oninput="calcAll()">
+                    <label>平均从业人数（人）</label><input type="number" id="injury_emp" class="form-control" placeholder="0" oninput="calcAll()">
+                    <div class="result-box">受伤率：<span id="injury_result">0.00</span> ‰</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 标准信息块（由 add_tool_meta.py 注入，位于 footer 上方） -->
+
+    <!-- 页脚 -->
+    <section class="tool-meta" data-toolmeta="sheen">
+  <div class="tm-head"><i class="fa-solid fa-book-bookmark"></i> 标准信息</div>
+  <dl class="tm-grid">
+    <div class="tm-row"><dt>标准号</dt><dd>GB 6441-2025《生产安全事故分类与编码》<br>GB 15499-2025《生产安全事故伤害损失工作日判定》</dd></div>
+    <div class="tm-row"><dt>发布 · 实施日期</dt><dd>发布 2025-12-31 ｜ 实施 2026-07-01（GB 15499-2025 实施 2027-01-01）</dd></div>
+    <div class="tm-row"><dt>数据更新时间</dt><dd>2026-08-06</dd></div>
+  </dl>
+  <p class="tm-disc"><i class="fa-solid fa-circle-info"></i> 免责声明：本工具依据公开国家标准、行业规范及官方文件整理，仅供参考与内部初步筛查之用，不构成任何专业法律、安全或工程意见。实际合规判定请以最新官方发布文本及具备资质的专业机构评估为准。使用者应自行核实相关标准的现行有效性。</p>
+</section>
+
+    <footer class="sheen-footer">
+        <img src="../assets/sheen-logo.png" alt="SHEEN Toolbox" class="sheen-logo-sm"> &nbsp;<strong>SHEEN Toolbox</strong> · 生产安全事故分类查询
+    </footer>
+
+    <!-- 打印时间戳 -->
+    <div class="print-time" id="printTime"></div>
+
+    <script>
+    (function () {
+        'use strict';
+
+        // 打印时间
+        document.getElementById('printTime').textContent =
+            new Date().toISOString().replace('T', ' ').slice(0, 16);
+
+        // ===== 1. 标准数据（表1 基本事故类型，GB 6441-2025） =====
+        const basicAccidents = [
+            { id: 1, name: "物体打击", desc: "物体在受重力或其他外力的作用下产生运动，打击人体或设备设施造成的事故" },
+            { id: 2, name: "厂(场)内车辆致害", desc: "车辆在生产经营单位内部或生产作业场所内进行生产经营活动过程中由于碰撞、刮擦、碾压、挤压、翻车、脱轨等造成的事故" },
+            { id: 3, name: "道路(轨道)车辆致害", desc: "车辆在公共道路或轨道上进行生产经营活动过程中由于碰撞、刮擦、碾压、挤压、翻车、脱轨等造成的事故" },
+            { id: 4, name: "机械致害", desc: "机械设备(含部件)或加工件直接与人体或设备设施接触造成的夹击、碾压、绞、剪切、割、刺及物体飞溅等事故" },
+            { id: 5, name: "起重致害", desc: "起重机械在运行、检修、试验过程中因发生挤压、倾覆、折断、倒塌、部件坠落、吊具打击、起重物坠落等造成的事故" },
+            { id: 6, name: "触电", desc: "由于电流通过人体或带电体与人体间发生放电造成的事故" },
+            { id: 7, name: "淹溺", desc: "大量液体或液态物质经口、鼻进入肺部使呼吸道阻塞，引起人体急性缺氧窒息伤亡的事故" },
+            { id: 8, name: "灼烫", desc: "高温物质、高温物体或化学品作用于人体造成伤亡的事故" },
+            { id: 9, name: "火灾", desc: "在时间或空间上失去控制的燃烧造成的事故" },
+            { id: 10, name: "高处坠落", desc: "高处作业时发生坠落造成的事故" },
+            { id: 11, name: "跌落", desc: "非高处作业时，坠落或跌倒至非液体或非液态物质基准面造成的事故" },
+            { id: 12, name: "坍塌", desc: "建筑物、构筑物或堆置物等在外力、重力或环境作用下超过自身的强度极限或因结构稳定性破坏发生塌落、倾倒造成的事故" },
+            { id: 13, name: "水害", desc: "由于防治水措施不到位导致地表水或地下水无控制地进入生产作业区造成的事故" },
+            { id: 14, name: "容器爆炸", desc: "各类容器由于质量缺陷、使用不当或维护不当等原因发生爆炸造成的事故" },
+            { id: 15, name: "管道爆炸", desc: "各类管道由于质量缺陷、使用不当或维护不当等原因发生爆炸造成的事故" },
+            { id: 16, name: "可燃气体爆炸", desc: "可燃气体与空气(氧气或其他氧化性气体)形成爆炸性混合物，遇点火源发生爆炸造成的事故" },
+            { id: 17, name: "可燃液体蒸气爆炸", desc: "可燃液体蒸气与空气(氧气或其他氧化性气体)形成爆炸性混合物，遇点火源发生爆炸造成的事故" },
+            { id: 18, name: "粉尘爆炸", desc: "粉尘与空气(氧气或其他氧化性气体)形成爆炸性混合物，遇点火源发生爆炸造成的事故" },
+            { id: 19, name: "民用爆炸物品爆炸", desc: "民用爆炸物品在生产、经营、存储、运输或使用过程中发生爆炸造成的事故" },
+            { id: 20, name: "烟花爆竹爆炸", desc: "烟花爆竹在生产、经营、存储、运输或燃放过程中发生爆炸造成的事故" },
+            { id: 21, name: "其他可燃固体爆炸", desc: "除粉尘、民用爆炸物品、烟花爆竹之外的可燃固体发生爆炸造成的事故" },
+            { id: 22, name: "高温熔融物爆炸", desc: "高温熔融物遇水发生爆炸造成的事故" },
+            { id: 23, name: "中毒", desc: "人体经消化系统、呼吸系统摄入或皮肤接触有毒物质造成的急性中毒事故" },
+            { id: 24, name: "窒息", desc: "由于环境缺氧或机械性窒息造成的事故" },
+            { id: 25, name: "滑坡", desc: "由生产经营活动引发的斜坡岩土体沿着贯通剪切破坏面产生相对滑移造成的事故" },
+            { id: 26, name: "泄漏", desc: "仅发生气体、液体或固体颗粒等流出或漏出造成的事故" },
+            { id: 27, name: "其他", desc: "不能归于前26种类型的事故" }
+        ];
+
+        // 编码逻辑：第27类直接赋值为 WSA10099
+        function getCode(id) {
+            if (id === 27) {
+                return "WSA10099";
+            }
+            return `WSA1${String(id).padStart(4, '0')}`;
+        }
+
+        function renderBasicTable(data) {
+            const tbody = document.getElementById('basicTableBody');
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--text-secondary);padding:20px;">未找到匹配的事故类型</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = data.map(item => `
+                <tr>
+                    <td>${item.id}</td>
+                    <td><strong>${item.name}</strong></td>
+                    <td>${item.desc}</td>
+                    <td><span class="code-badge">${getCode(item.id)}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        function filterBasic() {
+            const keyword = document.getElementById('searchBasic').value.trim();
+            const filterType = document.getElementById('filterBasic').value;
+
+            let filtered = basicAccidents;
+
+            if (filterType !== 'all') {
+                if (filterType === 'explosion') {
+                    filtered = filtered.filter(item => item.name.includes('爆炸'));
+                } else if (filterType === 'vehicle') {
+                    filtered = filtered.filter(item => item.name.includes('车辆') || item.name.includes('机械') || item.name.includes('起重'));
+                } else if (filterType === 'fall') {
+                    filtered = filtered.filter(item => item.name.includes('坠落') || item.name.includes('坍塌') || item.name.includes('跌落'));
+                } else if (filterType === 'harm') {
+                    filtered = filtered.filter(item => item.name.includes('中毒') || item.name.includes('窒息') || item.name.includes('灼烫') || item.name.includes('触电'));
+                }
+            }
+
+            if (keyword !== '') {
+                filtered = filtered.filter(item =>
+                    item.name.includes(keyword) || item.desc.includes(keyword)
+                );
+            }
+            renderBasicTable(filtered);
+        }
+
+        function quickSearch(keyword) {
+            document.getElementById('searchBasic').value = keyword;
+            document.getElementById('filterBasic').value = 'all';
+            filterBasic();
+        }
+
+        // ===== 2. Tab 切换 =====
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            document.querySelector(`.tab-btn[onclick="switchTab('${tabId}')"]`).classList.add('active');
+        }
+
+        // ===== 3. 统计指标计算器 =====
+        function calcAll() {
+            // 单位 GDP 事故死亡率： (死亡人数 / GDP) × 10^8
+            const gdpDead = parseFloat(document.getElementById('gdp_dead').value) || 0;
+            const gdpVal = parseFloat(document.getElementById('gdp_val').value) || 1;
+            document.getElementById('gdp_result').innerText = (gdpDead / gdpVal * 1e8).toFixed(4);
+
+            // 单位产量死亡率（百万吨）： (死亡人数 / 产量) × 10^6
+            const mtDead = parseFloat(document.getElementById('mt_dead').value) || 0;
+            const mtVal = parseFloat(document.getElementById('mt_val').value) || 1;
+            document.getElementById('mt_result').innerText = (mtDead / mtVal * 1e6).toFixed(4);
+
+            // 千人事故死亡率： (死亡人数 / 从业人数) × 10^3
+            const ptDead = parseFloat(document.getElementById('pt_dead').value) || 0;
+            const ptEmp = parseFloat(document.getElementById('pt_emp').value) || 1;
+            document.getElementById('pt_result').innerText = (ptDead / ptEmp * 1e3).toFixed(4);
+
+            // 千人事故受伤率： (受伤人数 / 从业人数) × 10^3
+            const injuryNum = parseFloat(document.getElementById('injury_num').value) || 0;
+            const injuryEmp = parseFloat(document.getElementById('injury_emp').value) || 1;
+            document.getElementById('injury_result').innerText = (injuryNum / injuryEmp * 1e3).toFixed(4);
+        }
+
+        // 初始化
+        renderBasicTable(basicAccidents);
+    })();
+    </script>
+
+</body>
+</html>
