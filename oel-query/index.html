@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
 <link rel="stylesheet" href="/sheen-toolbox/common.css">
 <style>
-  body { font-family: 'Inter', -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg-page); color: var(--text-primary); font-size: 14px; line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
+  body { font-family: 'Inter', -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg-page); color: var(--text-primary); font-size: 15px; line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
   .breadcrumb a { color: var(--brand-blue); text-decoration: none; }
   .breadcrumb a:hover { opacity: .7; text-decoration: underline; }
   .breadcrumb i { color: var(--text-secondary); font-size: 10px; margin: 0 4px; }
@@ -58,8 +58,8 @@
   .data-table td.no { color: var(--text-secondary); font-weight: 500; width: 38px; text-align: right; }
   .data-table td.cn { font-weight: 500; color: var(--text-primary); min-width: 140px; }
   .data-table td.en { color: var(--text-secondary); font-style: italic; font-size: 12px; }
-  .data-table td.cas { font-family: 'JetBrains Mono', Consolas, monospace; font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
-  .data-table td.oel { font-family: 'JetBrains Mono', Consolas, monospace; text-align: center; white-space: nowrap; font-weight: 600; }
+  .data-table td.cas { font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
+  .data-table td.oel { font-family: var(--font-mono); text-align: center; white-space: nowrap; font-weight: 600; }
   .data-table td.oel.has-val { color: var(--brand-red); }
   .data-table td.oel.dash { color: var(--text-secondary); opacity: .4; font-weight: 400; }
   .data-table td.effect { color: var(--text-secondary); font-size: 12px; line-height: 1.5; max-width: 280px; }
@@ -104,7 +104,7 @@
   .phys-card table { width: 100%; font-size: 12px; }
   .phys-card table td { padding: 3px 6px; }
   .phys-card table td:first-child { color: var(--text-secondary); }
-  .phys-card table td:last-child { font-weight: 600; color: var(--brand-red); text-align: right; font-family: 'JetBrains Mono', Consolas, monospace; }
+  .phys-card table td:last-child { font-weight: 600; color: var(--brand-red); text-align: right; font-family: var(--font-mono); }
   .phys-note { padding: 12px 18px; background: #FFF8E1; border-left: 3px solid var(--brand-orange); border-radius: var(--radius-sm); margin-bottom: 12px; font-size: 12px; color: var(--text-secondary); }
   .print-btn { padding: 7px 14px; border: 1px solid var(--border); background: var(--bg-card); border-radius: 60px; cursor: pointer; font-size: 12px; color: var(--text-secondary); font-family: inherit; transition: var(--transition); }
   .print-btn:hover { border-color: var(--brand-red); color: var(--brand-red); }
