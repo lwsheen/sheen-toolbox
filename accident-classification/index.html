@@ -45,11 +45,6 @@
         /* 搜索与筛选 */
         .search-area { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
         .search-area .form-control { flex: 1; min-width: 200px; }
-        .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
-        .tag { background: var(--border-light); padding: 5px 14px; border-radius: 999px; font-size: 13px;
-            cursor: pointer; color: var(--text-secondary); border: 1px solid transparent;
-            transition: var(--transition); user-select: none; }
-        .tag:hover { background: var(--brand-red-light); color: var(--brand-red); border-color: var(--brand-red); }
 
         /* 编码徽标 */
         .code-badge { background: var(--brand-red-light); color: var(--brand-red); padding: 3px 10px;
@@ -95,25 +90,18 @@
         <!-- 基本事故类型 -->
         <div id="tab-basic" class="tab-content active">
             <div class="info-note">
-                💡 依据 GB 6441-2025 表 1，基本事故类型共 <b>27 类</b>。若事故同时具备多种特征，以<b>先发诱导性原因</b>和致害严重程度划分。编码前缀为 <b>WSA1</b>（第 27 类“其他”编码为 <b>WSA10099</b>）。
-                <br>⚠️ 本工具采用的 <b>WSA1/WSA2 编码为简明标识方案</b>，正式编码规则以 GB 6441-2025 第 5 章为准。
+                💡 基本事故类型共 <b>27 类</b>（标准表 1）。编码前缀 <b>WSA1</b>，第 27 类"其他"为 <b>WSA10099</b>。若同时具备多种特征，以先发诱导性原因和致害严重程度划分。
+                <br>⚠️ <b>WSA1/WSA2 为简明标识方案</b>，正式编码以标准第 5 章为准。
             </div>
             <div class="search-area">
-                <input type="text" id="searchBasic" class="form-control" placeholder="输入事故名称（如：火灾、爆炸、中毒）..." oninput="filterBasic()">
+                <input type="text" id="searchBasic" class="form-control" placeholder="输入事故名称或编码（如：火灾、爆炸、WSA10005）..." oninput="filterBasic()">
                 <select id="filterBasic" class="form-control" onchange="filterBasic()">
-                    <option value="all">全部类型</option>
-                    <option value="explosion">爆炸类（容器/管道/气体/粉尘等）</option>
-                    <option value="vehicle">车辆/机械类</option>
-                    <option value="fall">坠落/坍塌类</option>
-                    <option value="harm">伤害/中毒类</option>
+                    <option value="all">全部分类</option>
+                    <option value="explosion">爆炸类</option>
+                    <option value="vehicle">车辆 / 机械 / 起重类</option>
+                    <option value="fall">坠落 / 坍塌 / 滑坡类</option>
+                    <option value="harm">伤害 / 中毒 / 窒息类</option>
                 </select>
-            </div>
-            <div class="tags">
-                <span class="tag" onclick="quickSearch('火灾')">🔥 火灾</span>
-                <span class="tag" onclick="quickSearch('触电')">⚡ 触电</span>
-                <span class="tag" onclick="quickSearch('爆炸')">💥 爆炸</span>
-                <span class="tag" onclick="quickSearch('高处坠落')">📉 高处坠落</span>
-                <span class="tag" onclick="quickSearch('中毒')">☠️ 中毒</span>
             </div>
             <div class="table-scroll">
                 <table class="data-table">
@@ -126,7 +114,7 @@
         <!-- 人身伤害程度 -->
         <div id="tab-injury" class="tab-content">
             <div class="info-note">
-                💡 依据 GB 6441-2025 表 2，按事故对人身伤害程度分类。编码前缀为 <b>WSA2</b>。
+                💡 按人身伤害程度分类（标准表 2），编码前缀 <b>WSA2</b>。
             </div>
 
             <div class="info-note-green">
@@ -155,7 +143,7 @@
         <!-- 统计指标计算器 -->
         <div id="tab-stats" class="tab-content">
             <div class="info-note">
-                📊 依据 GB 6441-2025 附录 A，提供 4 种相对统计指标的计算方法。输入对应数值即可自动计算。
+                📊 4 种相对统计指标计算方法（标准附录 A），输入数值自动计算。
             </div>
             <div class="calc-grid">
                 <div class="calc-card">
@@ -285,17 +273,12 @@
             }
 
             if (keyword !== '') {
+                const kw = keyword.toUpperCase();
                 filtered = filtered.filter(item =>
-                    item.name.includes(keyword) || item.desc.includes(keyword)
+                    item.name.includes(keyword) || item.desc.includes(keyword) || getCode(item.id).includes(kw)
                 );
             }
             renderBasicTable(filtered);
-        }
-
-        function quickSearch(keyword) {
-            document.getElementById('searchBasic').value = keyword;
-            document.getElementById('filterBasic').value = 'all';
-            filterBasic();
         }
 
         // ===== 2. Tab 切换 =====
@@ -306,27 +289,19 @@
             document.querySelector(`.tab-btn[onclick="switchTab('${tabId}')"]`).classList.add('active');
         }
 
-        // ===== 3. 统计指标计算器 =====
+        // ===== 3. 统计指标计算器（数据驱动，4 项共用同一计算逻辑） =====
+        const calcConfig = [
+            { dead: 'gdp_dead',    val: 'gdp_val',   out: 'gdp_result',    factor: 1e8 },
+            { dead: 'mt_dead',     val: 'mt_val',    out: 'mt_result',     factor: 1e6 },
+            { dead: 'pt_dead',     val: 'pt_emp',    out: 'pt_result',     factor: 1e3 },
+            { dead: 'injury_num',  val: 'injury_emp',out: 'injury_result', factor: 1e3 },
+        ];
         function calcAll() {
-            // 单位 GDP 事故死亡率： (死亡人数 / GDP) × 10^8
-            const gdpDead = parseFloat(document.getElementById('gdp_dead').value) || 0;
-            const gdpVal = parseFloat(document.getElementById('gdp_val').value) || 1;
-            document.getElementById('gdp_result').innerText = (gdpDead / gdpVal * 1e8).toFixed(4);
-
-            // 单位产量死亡率（百万吨）： (死亡人数 / 产量) × 10^6
-            const mtDead = parseFloat(document.getElementById('mt_dead').value) || 0;
-            const mtVal = parseFloat(document.getElementById('mt_val').value) || 1;
-            document.getElementById('mt_result').innerText = (mtDead / mtVal * 1e6).toFixed(4);
-
-            // 千人事故死亡率： (死亡人数 / 从业人数) × 10^3
-            const ptDead = parseFloat(document.getElementById('pt_dead').value) || 0;
-            const ptEmp = parseFloat(document.getElementById('pt_emp').value) || 1;
-            document.getElementById('pt_result').innerText = (ptDead / ptEmp * 1e3).toFixed(4);
-
-            // 千人事故受伤率： (受伤人数 / 从业人数) × 10^3
-            const injuryNum = parseFloat(document.getElementById('injury_num').value) || 0;
-            const injuryEmp = parseFloat(document.getElementById('injury_emp').value) || 1;
-            document.getElementById('injury_result').innerText = (injuryNum / injuryEmp * 1e3).toFixed(4);
+            calcConfig.forEach(c => {
+                const dead = parseFloat(document.getElementById(c.dead).value) || 0;
+                const val  = parseFloat(document.getElementById(c.val).value)  || 1;
+                document.getElementById(c.out).innerText = (dead / val * c.factor).toFixed(4);
+            });
         }
 
         // 初始化
@@ -335,7 +310,6 @@
         // 暴露给 inline onclick/oninput 使用
         window.switchTab = switchTab;
         window.filterBasic = filterBasic;
-        window.quickSearch = quickSearch;
         window.calcAll = calcAll;
     })();
     </script>
