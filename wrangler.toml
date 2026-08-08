@@ -1,0 +1,10 @@
+name = "sheen-toolbox"
+pages_build_output_dir = "dist"
+compatibility_date = "2024-09-01"
+
+# 说明：
+# - 本项目用 GitHub Pages 的 /sheen-toolbox/ 子路径约定（全站资源绝对路径 /sheen-toolbox/...）。
+# - Cloudflare Pages 根域为 sheen-toolbox.pages.dev/（无子路径），因此构建脚本 build_cf.sh
+#   会把整站包进 dist/sheen-toolbox/，使 pages.dev/sheen-toolbox/ 完美命中，零代码改动。
+# - 本地预览命令：bash scripts/build_cf.sh && npx wrangler pages dev dist
+# - 部署命令（需 CLOUDFLARE_API_TOKEN）：npx wrangler pages deploy dist
