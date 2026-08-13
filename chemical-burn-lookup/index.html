@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head data-seo="sheen">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>常见化学品灼伤急救查询 — SHEEN Toolbox</title>
+    <meta name="description" content="常见化学品灼伤急救查询在线工具：基于 GBZ 51-2002《职业性化学性皮肤灼伤诊断标准》附录 D 表 D.1，按无机酸/有机酸/无机碱/有机碱/酚类/其他 6 大类别，列出 28 种常见化学品的清洗剂与特殊治疗方案。支持名称搜索与类别筛选。">
+    <meta property="og:title" content="常见化学品灼伤急救查询 | SHEEN Toolbox">
+    <meta property="og:description" content="按化学品名称搜索或按类别筛选，查询该化学品的清洗剂与特殊治疗方案。共 28 种常见化学品 · 6 大类别。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lwsheen.pages.dev/sheen-toolbox/chemical-burn-lookup/">
+    <meta property="og:image" content="https://lwsheen.pages.dev/sheen-toolbox/assets/sheen-logo.png">
+    <link rel="canonical" href="https://lwsheen.pages.dev/sheen-toolbox/chemical-burn-lookup/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"常见化学品灼伤急救查询","url":"https://lwsheen.pages.dev/sheen-toolbox/chemical-burn-lookup/","description":"按化学品名称搜索或按类别筛选，查询该化学品的清洗剂与特殊治疗方案","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","inLanguage":"zh-CN","offers":{"@type":"Offer","price":"0","priceCurrency":"CNY"},"publisher":{"@type":"Organization","name":"SHEEN Toolbox"}}</script>
+
+    <!-- Font Awesome 本地路径（禁止 CDN） -->
+    <link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
+    <!-- 公共样式（绝对路径，勿改） -->
+    <link rel="stylesheet" href="/sheen-toolbox/common.css">
+
+    <style>
+        /* ============================================
+           仅放本工具特有样式，公共样式已在 common.css
+           未重新定义以下公共类：
+             .breadcrumb/.sheen-footer/.btn-*/.card/.result-card
+             .form-control/.page-title/.page-subtitle/.badge/.tool-meta/.print-time
+             :root 变量
+           ============================================ */
+
+        /* 搜索条 + 类别筛选 */
+        .search-row {
+            display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+        }
+        .search-row input.form-control { flex: 1; min-width: 220px; }
+        .cat-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+        .chip {
+            padding: 6px 12px;
+            border-radius: 60px;
+            border: 1.5px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        .chip:hover { border-color: var(--brand-red); color: var(--brand-red); }
+        .chip.active {
+            background: var(--brand-red); border-color: var(--brand-red); color: #fff;
+        }
+
+        /* ============================================
+           化学品表（GBZ 51-2002 附录 D 表 D.1 表格化 · 去竖线版）
+           ============================================ */
+        .chem-table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: var(--radius-md);
+            background: var(--bg-card);
+            /* v42 根除所有竖线：去外圈 box-shadow；用横分隔线做结构 */
+        }
+        table.chem-table {
+            width: 100%;
+            min-width: 760px;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        table.chem-table thead th {
+            background: var(--bg-page);
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 12.5px;
+            padding: 10px 10px;
+            border-bottom: 2px solid var(--brand-red);
+            text-align: left;
+            white-space: nowrap;
+        }
+        table.chem-table thead th.col-cat { width: 88px; text-align: center; }
+        table.chem-table thead th.col-name { width: 150px; }
+        table.chem-table tbody td {
+            padding: 10px 10px;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text-primary);
+            vertical-align: top;
+            line-height: 1.55;
+        }
+        table.chem-table tbody tr:last-child td { border-bottom: 0; }
+        table.chem-table tbody tr:nth-child(even) td { background: rgba(0,0,0,0.015); }
+        table.chem-table tbody tr:hover td { background: rgba(45,126,231,0.04); }
+        /* v42.1 连 emoji 圆点也去掉：仅用浅底色作无线条区分（红/橙底不带任何线/框/shadow）
+           危险行=极浅红底，警示行=极浅橙底；彻底零视觉线条 */
+        table.chem-table tbody tr.chem-row-danger td {
+            background: #FFF6F7;
+        }
+        table.chem-table tbody tr.chem-row-warn td {
+            background: #FFF9F2;
+        }
+
+        .chem-cell-name .cn {
+            font-weight: 700; font-size: 14px; color: var(--text-primary);
+            display: block;
+        }
+        .chem-cell-name .en {
+            font-size: 11px; color: var(--text-secondary); font-style: italic;
+            display: block; margin-top: 1px;
+        }
+        /* EN 模式切换：英文名变主（粗体），中文名隐藏（学名不是英文，直接隐藏避免混淆） */
+        .chem-cell-name .cn.is-sub { display: none; }
+        .chem-cell-name .en.is-main {
+            font-weight: 700; font-size: 14px; color: var(--text-primary);
+            font-style: normal; margin-top: 0; margin-bottom: 2px;
+        }
+        .chem-cell-name .crit {
+            display: block; margin-top: 5px;
+            padding: 4px 8px;
+            background: var(--brand-red-light);
+            border-radius: var(--radius-sm);
+            font-size: 11.5px; color: var(--brand-red);
+            font-weight: 600; line-height: 1.4;
+        }
+        .chem-cell-name .crit i { margin-right: 3px; }
+        /* 表格 cell 内的类别 chip */
+        table.chem-table .cat-tag {
+            display: inline-block;
+            font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 60px;
+            color: #fff; white-space: nowrap;
+            letter-spacing: 0.2px;
+        }
+        table.chem-table .cat-tag.cat-inorg-acid { background: #DC2626; }
+        table.chem-table .cat-tag.cat-org-acid   { background: #F59E0B; }
+        table.chem-table .cat-tag.cat-inorg-base { background: #2563EB; }
+        table.chem-table .cat-tag.cat-org-base   { background: #7C3AED; }
+        table.chem-table .cat-tag.cat-phenol     { background: #BE185D; }
+        table.chem-table .cat-tag.cat-other      { background: #5C6470; }
+
+        .chem-cell-treat ul {
+            list-style: none; padding: 0; margin: 0;
+        }
+        .chem-cell-treat ul li {
+            padding: 2px 0; font-size: 12.5px;
+            border-bottom: 1px dotted var(--border-light);
+        }
+        .chem-cell-treat ul li:last-child { border-bottom: 0; }
+        .chem-cell-treat .fnmark {
+            color: var(--brand-red); font-weight: 700; margin-right: 2px;
+            font-size: 11px; vertical-align: super;
+        }
+        @media (max-width: 760px) {
+            table.chem-table { font-size: 12.5px; }
+            table.chem-table thead th { padding: 8px 6px; font-size: 11.5px; }
+            table.chem-table tbody td { padding: 8px 6px; }
+            .chem-cell-name .cn { font-size: 13px; }
+        }
+        @media print {
+            table.chem-table thead th { background: #f5f5f5 !important; }
+            table.chem-table tbody tr.chem-row-danger td { background: #FFF4F4 !important; }
+        }
+
+        /* —— 底部操作按钮：本页居中（化学灼伤查询页专属） —— */
+        .action-row { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+        /* —— 标准信息块：本页居中（D 版式：内联文本） —— */
+        .tool-meta { text-align: center; }
+        .tool-meta .tm-stds,
+        .tool-meta .tm-line { text-align: center; }
+
+        /* 空结果 */
+        .no-result {
+            text-align: center; padding: 40px 20px;
+            color: var(--text-secondary); font-size: 14px;
+        }
+        .no-result i { display: block; font-size: 32px; margin-bottom: 12px; opacity: 0.4; }
+
+        /* 统计 + 链接行 */
+        .result-stat {
+            font-size: 12px; color: var(--text-secondary);
+            margin-bottom: 10px; padding: 0 2px;
+        }
+        .result-stat b { color: var(--brand-red); }
+
+        .related-link {
+            font-size: 12px; color: var(--text-secondary);
+            padding: 8px 12px; background: var(--bg-page);
+            border-radius: var(--radius-sm); margin-bottom: 14px;
+        }
+        .related-link a { color: var(--brand-red); font-weight: 600; text-decoration: none; }
+        .related-link a:hover { text-decoration: underline; }
+    </style>
+    <!-- Baidu Tongji -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9b8c3df212619adec1f70f01695f4160";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+</head>
+<body>
+
+    <!-- 面包屑导航 -->
+    <div class="breadcrumb">
+        <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+        <span> / 常见化学品灼伤急救查询</span>
+    </div>
+
+    <!-- 主内容区域（查询类工具 → container-query 1200px） -->
+    <main class="app-container container-query">
+
+        <h1 class="page-title">常见化学品灼伤急救查询 <i class="fa-solid fa-vials"></i></h1>
+        <p class="page-subtitle" style="margin-bottom:18px;">
+            基于 <b>GBZ 51-2002 附录 D 表 D.1</b>，按化学品名称搜索或按类别筛选，立即查看对应的<b>清洗剂</b>与<b>特殊治疗方案</b>。
+            共 <b>28 种</b>常见化学品 · <b>6 大</b>类别。本工具仅供现场初步参考，<b>严重灼伤请立即拨打 120</b>。
+        </p>
+
+        <!-- 搜索 + 类别筛选 -->
+        <div class="card mb-24 no-pr">
+            <div class="search-row">
+                <input class="form-control" id="chemSearch" placeholder="搜索化学品名称（如：硫酸、HF、苯酚）" autocomplete="off">
+                <div class="cat-chips" id="catChips">
+                    <button class="chip active" data-cat="all">全部</button>
+                    <button class="chip" data-cat="inorg-acid">无机酸</button>
+                    <button class="chip" data-cat="org-acid">有机酸</button>
+                    <button class="chip" data-cat="inorg-base">无机碱</button>
+                    <button class="chip" data-cat="org-base">有机碱</button>
+                    <button class="chip" data-cat="phenol">酚类</button>
+                    <button class="chip" data-cat="other">其他</button>
+                </div>
+            </div>
+            <p class="result-stat no-pr" id="resultStat" style="margin-top:10px; margin-bottom:0;"></p>
+        </div>
+
+        <!-- 化学品表（GBZ 51-2002 附录 D 表 D.1） -->
+        <div class="card mb-24 no-pr">
+            <div class="chem-table-wrap">
+                <table class="chem-table" id="chemTable">
+                    <thead>
+                        <tr>
+                            <th class="col-cat">类别</th>
+                            <th class="col-name">化学品</th>
+                            <th>作用</th>
+                            <th>清洗剂</th>
+                            <th>特殊治疗</th>
+                        </tr>
+                    </thead>
+                    <tbody id="chemGrid"></tbody>
+                </table>
+            </div>
+            <div class="no-result" id="noResult" style="display:none;">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                没有匹配的化学品，请尝试其他关键词或切换类别。
+            </div>
+        </div>
+
+        <!-- 脚注说明 -->
+        <div class="card mb-24 no-pr">
+            <h3>脚注说明</h3>
+            <div class="info-note br-none" style="margin-bottom:0;">
+                <b>a</b> 皮肤接触油性化学物后，应立即先用吸附棉（纸）等尽可能地吸附掉化学物，然后再用清洗剂冲洗。<br>
+                <b>b</b> 氢氟酸灼伤治疗液：5%氯化钙溶液 20 mL、2%利多卡因 20 mL、地塞米松 5 mg、二甲亚砜 60 mL。<br>
+                <b>c</b> 硫酸铜作为显示剂、解毒剂。大面积使用时应注意硫酸铜中毒。
+            </div>
+        </div>
+
+        <!-- 底部操作 -->
+        <div class="action-row no-pr">
+            <button class="btn-outline btn-lg" onclick="resetAll()"><i class="fa-solid fa-rotate-left"></i> 重置</button>
+            <button class="btn-print btn-lg" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印查询</button>
+            <button class="btn-outline btn-lg" onclick="shareTool()"><i class="fa-solid fa-share-nodes"></i> 分享</button>
+        </div>
+
+    </main>
+
+    <!-- 标准信息块（由 add_tool_meta.py 注入：标准号/发布·实施日期/数据更新时间/免责声明） -->
+    <section class="tool-meta" data-toolmeta="sheen">
+  <div class="tm-head">
+<span class="tm-std-code">GBZ 51-2002</span>
+<span class="tm-std-name">《职业性化学性皮肤灼伤诊断标准》</span>
+<span class="tm-apx">附录 D</span>
+  </div>
+  <div class="tm-line"><span class="tm-dt"><i>发布</i><span class="tm-dt-val">2002-04-08</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>实施</i><span class="tm-dt-val">2002-06-01</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>更新</i><span class="tm-dt-val">2026-08-08</span></span></div>
+</section>
+
+    <!-- 页脚（公共样式 .sheen-footer 来自 common.css，勿重新定义） -->
+    <footer class="sheen-footer">
+        <img src="../assets/sheen-logo.png" alt="SHEEN Toolbox" class="sheen-logo-sm"> &nbsp;<strong>SHEEN Toolbox</strong> · 常见化学品灼伤急救查询
+    </footer>
+
+    <!-- 打印时间戳 -->
+    <div class="print-time" id="printTime"></div>
+
+    <script>
+    // ⚠️ 函数必须裸声明（全局作用域），禁止 IIFE 包裹，否则 inline onclick 不可见
+    // ✅ function myFn() { ... }
+    // ❌ (function() { function myFn() { ... } })();
+
+    // 打印时间
+    document.getElementById('printTime').textContent =
+        new Date().toISOString().replace('T', ' ').slice(0, 16);
+
+    // ===== 业务逻辑 =====
+    function isEn() { try { return localStorage.getItem('sheen_lang') === 'en'; } catch (e) { return false; } }
+
+    // —— 化学品数据（GBZ/T 259-2017 附录 D.1）——
+    const CHEMICALS = [
+        // ===== 无机酸类 =====
+        { id: 1,  name: '硫酸',     en: 'Sulfuric acid',         cat: 'inorg-acid', effect: '脱水性',   effectEn: 'Dehydrating',         cleaner: '流动清水（先吸咐创面硫酸）', cleanerEn: 'Running water (first absorb the acid from the wound with absorbent cotton/paper)', treatment: ['5% 碳酸氢钠溶液'],                                                     treatmentEn: ['5% sodium bicarbonate solution'],                                                          danger: false },
+        { id: 2,  name: '盐酸',     en: 'Hydrochloric acid',     cat: 'inorg-acid', effect: '脱水性',   effectEn: 'Dehydrating',         cleaner: '流动清水',                       cleanerEn: 'Running water',                                                  treatment: ['5% 碳酸氢钠溶液'],                                                     treatmentEn: ['5% sodium bicarbonate solution'],                                                          danger: false },
+        { id: 3,  name: '硝酸',     en: 'Nitric acid',           cat: 'inorg-acid', effect: '氧化性',   effectEn: 'Oxidizing',           cleaner: '流动清水',                       cleanerEn: 'Running water',                                                  treatment: ['5% 碳酸氢钠溶液'],                                                     treatmentEn: ['5% sodium bicarbonate solution'],                                                          danger: false },
+        { id: 4,  name: '氢氟酸',   en: 'Hydrofluoric acid',     cat: 'inorg-acid', effect: '氟化腐蚀', effectEn: 'Fluoride etching',    cleaner: '流动清水',                       cleanerEn: 'Running water',                                                  treatment: [
+            'a) 25% 硫酸镁溶液',
+            'b) 10% 葡萄糖酸钙溶液',
+            'c) 石灰水溶液',
+            'd) 季铵化合物（如苯扎氯铵溶液）浸泡、湿敷',
+            'e) 氢氟酸灼伤治疗凝胶 ᵇ、浸敷、湿敷'
+        ], treatmentEn: [
+            'a) 25% magnesium sulfate solution',
+            'b) 10% calcium gluconate solution',
+            'c) Lime water',
+            'd) Quaternary ammonium compounds (e.g., benzalkonium chloride solution) for soak / wet dressing',
+            'e) HF burn treatment gel ᵇ for soak / wet dressing'
+        ], danger: true,
+            crit: '氢氟酸可致命！即使小面积也须立即就医，延误可致死（低钙血症、心脏骤停）。',
+            critEn: 'Hydrofluoric acid can be fatal! Even a small area requires immediate medical care; delay can be deadly (hypocalcemia, cardiac arrest).' },
+        { id: 5,  name: '氢溴酸',   en: 'Hydrobromic acid',      cat: 'inorg-acid', effect: '氧化',     effectEn: 'Oxidizing',           cleaner: '流动清水',                       cleanerEn: 'Running water',                                                  treatment: [
+            '氨松霜',
+            '硫基乙醇 1 份 + 5% 碱基水 1 份',
+            '95% 乙醇'
+        ], treatmentEn: [
+            'Ammonium pine tar cream',
+            'Mercaptoethanol 1 part + 5% alkaline water 1 part',
+            '95% ethanol'
+        ], danger: false },
+
+        // ===== 有机酸类 =====
+        { id: 6,  name: '铬酸',     en: 'Chromic acid',          cat: 'org-acid',   effect: '氧化',     effectEn: 'Oxidizing',           cleaner: '流动清水',                       cleanerEn: 'Running water',                                                  treatment: ['5% 硫代硫酸钠溶液'],                                                    treatmentEn: ['5% sodium thiosulfate solution'],                                                          danger: false },
+        { id: 7,  name: '草酸',     en: 'Oxalic acid',           cat: 'org-acid',   effect: '腐蚀',     effectEn: 'Corrosive',           cleaner: '流动清水',                       cleanerEn: 'Running water',                                                  treatment: ['10% 葡萄糖酸钙溶液'],                                                    treatmentEn: ['10% calcium gluconate solution'],                                                          danger: false },
+        { id: 8,  name: '三氯乙酸', en: 'Trichloroacetic acid',  cat: 'org-acid',   effect: '原生质毒', effectEn: 'Protoplasmic poison', cleaner: '流动清水',                       cleanerEn: 'Running water',                                                  treatment: ['5% 碳酸氢钠溶液'],                                                     treatmentEn: ['5% sodium bicarbonate solution'],                                                          danger: false },
+        { id: 9,  name: '冰乙酸',   en: 'Glacial acetic acid',   cat: 'org-acid',   effect: '腐蚀',     effectEn: 'Corrosive',           cleaner: '流动清水',                       cleanerEn: 'Running water',                                                  treatment: ['5% 碳酸氢钠溶液'],                                                     treatmentEn: ['5% sodium bicarbonate solution'],                                                          danger: false },
+        { id: 10, name: '乙酸',     en: 'Acetic acid',           cat: 'org-acid',   effect: '腐蚀',     effectEn: 'Corrosive',           cleaner: '流动清水',                       cleanerEn: 'Running water',                                                  treatment: ['5% 碳酸氢钠溶液'],                                                     treatmentEn: ['5% sodium bicarbonate solution'],                                                          danger: false },
+        { id: 11, name: '氯乙酸',   en: 'Chloroacetic acid',     cat: 'org-acid',   effect: '腐蚀',     effectEn: 'Corrosive',           cleaner: '流动清水',                       cleanerEn: 'Running water',                                                  treatment: ['5% 碳酸氢钠溶液'],                                                     treatmentEn: ['5% sodium bicarbonate solution'],                                                          danger: false },
+        { id: 12, name: '丙烯酸',   en: 'Acrylic acid',          cat: 'org-acid',   effect: '腐蚀',     effectEn: 'Corrosive',           cleaner: '流动清水',                       cleanerEn: 'Running water',                                                  treatment: ['5% 碳酸氢钠溶液'],                                                     treatmentEn: ['5% sodium bicarbonate solution'],                                                          danger: false },
+        { id: 13, name: '甲酸',     en: 'Formic acid',           cat: 'org-acid',   effect: '原生质毒', effectEn: 'Protoplasmic poison', cleaner: '流动清水',                       cleanerEn: 'Running water',                                                  treatment: ['5% 碳酸氢钠溶液'],                                                     treatmentEn: ['5% sodium bicarbonate solution'],                                                          danger: false },
+
+        // ===== 无机碱类 =====
+        { id: 14, name: '氢氧化钾(钠)', en: 'Potassium/Sodium hydroxide', cat: 'inorg-base', effect: '脱水性、腐蚀', effectEn: 'Dehydrating, corrosive', cleaner: '流动清水',                       cleanerEn: 'Running water',                                                  treatment: ['0.5%–5% 乙酸溶液或 10% 枸橼酸溶液'],                                              treatmentEn: ['0.5%–5% acetic acid solution or 10% citric acid solution'],                                       danger: false },
+        { id: 15, name: '氢氧化铵(氨水)', en: 'Ammonium hydroxide (ammonia)', cat: 'inorg-base', effect: '腐蚀',     effectEn: 'Corrosive',           cleaner: '流动清水',                       cleanerEn: 'Running water',                                                  treatment: ['0.5%–5% 乙酸溶液或 10% 枸橼酸溶液'],                                              treatmentEn: ['0.5%–5% acetic acid solution or 10% citric acid solution'],                                       danger: false },
+
+        // ===== 有机碱类 =====
+        { id: 16, name: '甲胺',     en: 'Methylamine',           cat: 'org-base',   effect: '腐蚀',     effectEn: 'Corrosive',           cleaner: '流动清水',                       cleanerEn: 'Running water',                                                  treatment: ['3% 硼酸溶液'],                                                        treatmentEn: ['3% boric acid solution'],                                                                                  danger: false },
+        { id: 17, name: '乙醇胺',   en: 'Ethanolamine',          cat: 'org-base',   effect: '腐蚀',     effectEn: 'Corrosive',           cleaner: '流动清水',                       cleanerEn: 'Running water',                                                  treatment: ['3% 硼酸溶液'],                                                        treatmentEn: ['3% boric acid solution'],                                                                                  danger: false },
+        { id: 18, name: '硫酸二甲酯', en: 'Dimethyl sulfate',     cat: 'org-base',   effect: '起皰',     effectEn: 'Blistering',          cleaner: '流动清水',                       cleanerEn: 'Running water',                                                  treatment: ['5% 碳酸氢钠溶液'],                                                     treatmentEn: ['5% sodium bicarbonate solution'],                                                          danger: false },
+        { id: 19, name: '二甲亚砜', en: 'Dimethyl sulfoxide (DMSO)', cat: 'org-base', effect: '起皰',     effectEn: 'Blistering',          cleaner: '流动清水',                       cleanerEn: 'Running water',                                                  treatment: ['5% 碳酸氢钠溶液'],                                                     treatmentEn: ['5% sodium bicarbonate solution'],                                                          danger: false },
+
+        // ===== 酚类 =====
+        { id: 20, name: '苯酚',     en: 'Phenol',                cat: 'phenol',     effect: '原生质毒', effectEn: 'Protoplasmic poison', cleaner: '流动清水',                       cleanerEn: 'Running water',                                                  treatment: [
+            'a) 用浸过聚乙二醇（PEG400 或 PEG300）的棉球擦洗创面',
+            'b) 或用浸透 30%–50% 乙醇擦洗创面',
+            'c) 或用 4%–5% 碳酸氢钠溶液湿敷创面'
+        ], treatmentEn: [
+            'a) Wipe the wound with cotton balls soaked in polyethylene glycol (PEG 400 or PEG 300)',
+            'b) Or wipe the wound with cotton soaked in 30%–50% ethanol',
+            'c) Or apply 4%–5% sodium bicarbonate solution wet dressing on the wound'
+        ], danger: false },
+        { id: 21, name: '甲酚',     en: 'Cresol',                cat: 'phenol',     effect: '原生质毒', effectEn: 'Protoplasmic poison', cleaner: '流动清水',                       cleanerEn: 'Running water',                                                  treatment: ['与苯酚相同'],                                                          treatmentEn: ['Same as phenol'],                                                                          danger: false },
+        { id: 22, name: '二氯酚',   en: 'Dichlorophenol',        cat: 'phenol',     effect: '原生质毒', effectEn: 'Protoplasmic poison', cleaner: '流动清水',                       cleanerEn: 'Running water',                                                  treatment: ['与苯酚相同'],                                                          treatmentEn: ['Same as phenol'],                                                                          danger: false },
+
+        // ===== 其他 =====
+        { id: 23, name: '金属钾(钠)', en: 'Potassium/Sodium metal', cat: 'other',     effect: '腐蚀',     effectEn: 'Corrosive',           cleaner: '用油覆盖，忌用少量水冲洗',          cleanerEn: 'Cover with oil; never use small amounts of water to rinse', treatment: ['3% 硼酸溶液'],                                                        treatmentEn: ['3% boric acid solution'],                                                                                  danger: true,
+            crit: '金属钾/钠遇水剧烈反应，可燃爆！严禁少量水冲洗；先用油（矿物油/煤油）覆盖隔绝空气。',
+            critEn: 'Potassium/sodium metal reacts violently with water—fire/explosion risk! Never rinse with small amounts of water; first cover with oil (mineral oil / kerosene) to isolate from air.' },
+        { id: 24, name: '石灰石',   en: 'Limestone / quicklime', cat: 'other',       effect: '腐蚀',     effectEn: 'Corrosive',           cleaner: '用油覆盖，忌用少量水冲洗',          cleanerEn: 'Cover with oil; never use small amounts of water to rinse', treatment: ['3% 硼酸溶液'],                                                        treatmentEn: ['3% boric acid solution'],                                                                                  danger: true,
+            crit: '生石灰（氧化钙）遇水大量放热！严禁少量水冲洗；先用干布/油覆盖后再处理。',
+            critEn: 'Quicklime (calcium oxide) releases intense heat with water! Never rinse with small amounts of water; first cover with dry cloth / oil.' },
+        { id: 25, name: '电石',     en: 'Calcium carbide',       cat: 'other',       effect: '腐蚀',     effectEn: 'Corrosive',           cleaner: '用油覆盖，忌用少量水冲洗',          cleanerEn: 'Cover with oil; never use small amounts of water to rinse', treatment: ['3% 硼酸溶液'],                                                        treatmentEn: ['3% boric acid solution'],                                                                                  danger: true,
+            crit: '电石（碳化钙）遇水产生可燃乙炔气体！严禁任何形式的水冲洗；先用干法去除固体。',
+            critEn: 'Calcium carbide produces flammable acetylene gas with water! Never rinse with any amount of water; first remove solids by dry method.' },
+        { id: 26, name: '黄磷',     en: 'Yellow phosphorus',     cat: 'other',       effect: '原生质毒', effectEn: 'Protoplasmic poison', cleaner: '流动清水（冲洗前在暗处先剔除黄磷颗粒），湿包', cleanerEn: 'Running water (first remove phosphorus particles in the dark before rinsing), wet pack', treatment: [
+            'a) 1%–2% 硫酸铜溶液 ᶜ（显示剂 / 解毒剂）',
+            'b) 3% 硝酸银溶液',
+            'c) 5% 碳酸氢钠溶液'
+        ], treatmentEn: [
+            'a) 1%–2% copper sulfate solution ᶜ (developer / antidote)',
+            'b) 3% silver nitrate solution',
+            'c) 5% sodium bicarbonate solution'
+        ], danger: true,
+            crit: '黄磷可在空气中自燃！暗处剔除可见颗粒（黄磷在黑暗中发光）；用湿包保持湿润，避免复燃。',
+            critEn: 'Yellow phosphorus may ignite spontaneously in air! Remove visible particles in the dark (phosphorus glows); keep wound wet-pack moist to prevent re-ignition.' },
+        { id: 27, name: '三氯化磷', en: 'Phosphorus trichloride', cat: 'other',      effect: '氧化、刺激', effectEn: 'Oxidizing, irritating', cleaner: '忌用少量水冲洗',                  cleanerEn: 'Never rinse with small amounts of water',                       treatment: ['5% 碳酸氢钠溶液'],                                                     treatmentEn: ['5% sodium bicarbonate solution'],                                                          danger: true,
+            crit: '三氯化磷遇水反应放热并产生氯化氢！禁止少量水冲洗；先干拭，再用大量清水。',
+            critEn: 'Phosphorus trichloride reacts with water releasing heat and HCl! Never rinse with small amounts of water; first wipe dry, then rinse with copious water.' },
+        { id: 28, name: '液体沥青', en: 'Liquid asphalt / bitumen', cat: 'other',     effect: '刺激',     effectEn: 'Irritating',           cleaner: '流动清水',                       cleanerEn: 'Running water',                                                  treatment: ['医用液体石蜡擦洗创面'],                                                  treatmentEn: ['Wipe wound with medical liquid paraffin'],                                                       danger: false }
+    ];
+
+    // —— 类别元数据（CN/EN 标签）——
+    const CATEGORIES = {
+        'all':        { zh: '全部',       en: 'All' },
+        'inorg-acid': { zh: '无机酸类',   en: 'Inorganic acids' },
+        'org-acid':   { zh: '有机酸类',   en: 'Organic acids' },
+        'inorg-base': { zh: '无机碱类',   en: 'Inorganic bases' },
+        'org-base':   { zh: '有机碱类',   en: 'Organic bases / esters' },
+        'phenol':     { zh: '酚类',       en: 'Phenols' },
+        'other':      { zh: '其他',       en: 'Others' }
+    };
+
+    let activeCat = 'all';
+    let activeSearch = '';
+
+    // —— 表头标签（CN/EN）——
+    const HEADERS = {
+        cat:    { zh: '类别',    en: 'Category' },
+        name:   { zh: '化学品',  en: 'Chemical' },
+        effect: { zh: '作用',    en: 'Effect' },
+        cleaner:{ zh: '清洗剂',  en: 'Cleaner' },
+        treat:  { zh: '特殊治疗', en: 'Treatment' }
+    };
+
+    // —— 渲染单行化学品（表格行）——
+    function renderRow(c) {
+        const en = isEn();
+        const catLabel = CATEGORIES[c.cat][en ? 'en' : 'zh'];
+        const effect = en ? c.effectEn : c.effect;
+        const cleaner = en ? c.cleanerEn : c.cleaner;
+        const treatment = en ? c.treatmentEn : c.treatment;
+        const cls = c.danger ? 'chem-row-danger' : (c.cat === 'inorg-base' ? 'chem-row-warn' : '');
+        const crit = c.crit ? (en ? c.critEn : c.crit) : '';
+
+        // 类别 chip（列内单独配色）
+        const catCell = '<span class="cat-tag cat-' + c.cat + '">' + catLabel + '</span>';
+
+        // 名称 cell（EN 模式：英文名为主；中文名作副；危急品附红字提示）
+        const nameCell = '<div class="chem-cell-name">'
+            + '<span class="cn' + (en ? ' is-sub' : '') + '">' + c.name + '</span>'
+            + '<span class="en' + (en ? ' is-main' : '') + '">' + c.en + '</span>'
+            + (crit ? '<span class="crit"><i class="fa-solid fa-skull-crossbones"></i>' + crit + '</span>' : '')
+            + '</div>';
+
+        // 作用 / 清洗剂：纯文本
+        const effectCell = escapeHtml(effect);
+        const cleanerCell = escapeHtml(cleaner);
+
+        // 处理：多方案 <ul>，单方案纯文本
+        const treatCell = treatment.length > 1
+            ? '<div class="chem-cell-treat"><ul>' + treatment.map(t => '<li>' + escapeHtml(t) + '</li>').join('') + '</ul></div>'
+            : '<div class="chem-cell-treat">' + escapeHtml(treatment[0]) + '</div>';
+
+        return '<tr class="' + cls + '">'
+             +   '<td>' + catCell + '</td>'
+             +   '<td>' + nameCell + '</td>'
+             +   '<td>' + effectCell + '</td>'
+             +   '<td>' + cleanerCell + '</td>'
+             +   '<td>' + treatCell + '</td>'
+             + '</tr>';
+    }
+
+    // —— HTML 转义（化学品数据中可能有 &/<>/引号，但目前没有；保留防 XSS）——
+    function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, function (m) {
+            return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m];
+        });
+    }
+
+    // —— 更新表格 thead 列名（语言切换时调用）——
+    function updateTableHeader() {
+        const en = isEn();
+        const thCat = document.querySelector('th.col-cat');
+        const thName = document.querySelector('th.col-name');
+        const ths = document.querySelectorAll('table.chem-table thead th');
+        if (thCat) thCat.textContent = HEADERS.cat[en ? 'en' : 'zh'];
+        if (thName) thName.textContent = HEADERS.name[en ? 'en' : 'zh'];
+        if (ths[2]) ths[2].textContent = HEADERS.effect[en ? 'en' : 'zh'];
+        if (ths[3]) ths[3].textContent = HEADERS.cleaner[en ? 'en' : 'zh'];
+        if (ths[4]) ths[4].textContent = HEADERS.treat[en ? 'en' : 'zh'];
+    }
+
+    // —— 渲染网格（受搜索 + 类别筛选）——
+    function renderGrid() {
+        const grid = document.getElementById('chemGrid');
+        const noRes = document.getElementById('noResult');
+        const stat = document.getElementById('resultStat');
+        const en = isEn();
+        const q = (activeSearch || '').trim().toLowerCase();
+
+        let list = CHEMICALS;
+        if (activeCat !== 'all') list = list.filter(c => c.cat === activeCat);
+        if (q) {
+            list = list.filter(c => {
+                const hay = (c.name + ' ' + c.en + ' ' + c.effect + ' ' + c.effectEn + ' ' + c.cleaner + ' ' + c.cleanerEn).toLowerCase();
+                return hay.indexOf(q) !== -1;
+            });
+        }
+
+        // 统计行
+        const totalText = en ? '<b>' + list.length + '</b> / ' + CHEMICALS.length + ' chemicals shown'
+                              : '显示 <b>' + list.length + '</b> / ' + CHEMICALS.length + ' 种';
+        const catTxt = activeCat !== 'all' ? ' · ' + (en ? 'Category: ' : '类别：') + CATEGORIES[activeCat][en ? 'en' : 'zh'] : '';
+        const qTxt = q ? ' · ' + (en ? 'Search: ' : '搜索：') + '“' + activeSearch + '”' : '';
+        stat.innerHTML = totalText + catTxt + qTxt;
+
+        if (list.length === 0) {
+            grid.innerHTML = '';
+            noRes.style.display = 'block';
+            return;
+        }
+        noRes.style.display = 'none';
+        grid.innerHTML = list.map(renderRow).join('');
+    }
+
+    // —— 类别 chips 切换 ——
+    function setCat(cat, ev) {
+        activeCat = cat;
+        const chips = document.querySelectorAll('#catChips .chip');
+        chips.forEach(b => b.classList.toggle('active', b.getAttribute('data-cat') === cat));
+        renderGrid();
+    }
+    function bindChips() {
+        const chips = document.querySelectorAll('#catChips .chip');
+        chips.forEach(b => b.addEventListener('click', function () {
+            setCat(this.getAttribute('data-cat'));
+        }));
+    }
+
+    // —— 搜索框（实时过滤）——
+    function bindSearch() {
+        const inp = document.getElementById('chemSearch');
+        inp.addEventListener('input', function () {
+            activeSearch = this.value;
+            renderGrid();
+        });
+    }
+
+    // —— 重置 ——
+    function resetAll() {
+        activeCat = 'all';
+        activeSearch = '';
+        document.getElementById('chemSearch').value = '';
+        document.querySelectorAll('#catChips .chip').forEach(b => b.classList.toggle('active', b.getAttribute('data-cat') === 'all'));
+        renderGrid();
+    }
+
+    // —— 分享 ——
+    function shareTool() {
+        const url = location.href;
+        const title = isEn() ? 'Common Chemical Burn First-Aid Lookup — SHEEN Toolbox' : '常见化学品灼伤急救查询 — SHEEN Toolbox';
+        if (navigator.share) {
+            navigator.share({ title: title, url: url }).catch(() => {});
+        } else if (navigator.clipboard) {
+            navigator.clipboard.writeText(url).then(() => {
+                alert('链接已复制：' + url);
+            }).catch(() => {
+                alert('分享链接：' + url);
+            });
+        } else {
+            alert('分享链接：' + url);
+        }
+    }
+
+    // —— 语言切换时重新渲染（表格行 + 表头 + 统计）——
+    window.addEventListener('sheen:langchange', function () {
+        updateTableHeader();
+        renderGrid();
+    });
+
+    // —— 初始化 ——
+    bindChips();
+    bindSearch();
+    updateTableHeader();
+    renderGrid();
+    </script>
+
+    <!-- 常见化学品灼伤急救查询：静态正文英文词典（动态卡片由上方 JS 按语言渲染） -->
+    <script>
+    window.__I18N_BODY__ = window.__I18N_BODY__ || {};
+    Object.assign(window.__I18N_BODY__, {
+        // —— H1 ——
+        "常见化学品灼伤急救查询": "Common Chemical Burn First-Aid Lookup",
+
+        // —— 页面副标题（静态正文，<b> 把整句切成多个文本节点，逐条匹配）——
+        "基于": "Based on ",
+        "GBZ 51-2002 附录 D 表 D.1": "GBZ 51-2002 Annex D, Table D.1",
+        "，按化学品名称搜索或按类别筛选，立即查看对应的": ", search by chemical name or filter by category to view the corresponding ",
+        "与": " and ",
+        "特殊治疗方案": "special treatment plan",
+        "。共": ". Total ",
+        "种": " ",
+        "常见化学品 ·": " common chemicals ·",
+        "大": " ",
+        "类别。本工具仅供现场初步参考，": " categories. This tool is for on-site preliminary reference only, ",
+        "严重灼伤请立即拨打 120": "for severe burns, call 120 immediately",
+
+        // —— 搜索框 / chips / 统计 ——
+        "搜索化学品名称（如：硫酸、HF、苯酚）": "Search chemical name (e.g., Sulfuric acid, HF, Phenol)",
+        "全部": "All",
+        "无机酸": "Inorg. acid",
+        "有机酸": "Org. acid",
+        "无机碱": "Inorg. base",
+        "有机碱": "Org. base",
+        "酚类": "Phenol",
+        "其他": "Other",
+
+        // —— 关联工具提示 ——
+        "不知道属于哪类？先用": "Not sure which category? Start with ",
+        "按类别获取通用急救步骤。": " to get general first-aid steps by category.",
+        "化学品灼伤应急处置": "Chemical Burn Emergency Treatment",
+
+        // —— 卡片字段（每行左边的 label）——
+        "作用": "Effect",
+        "清洗剂": "Cleaner",
+        "特殊治疗": "Treatment",
+
+        // —— 搜索结果 / 空结果 / 统计行 ——
+        "没有匹配的化学品，请尝试其他关键词或切换类别。": "No matching chemicals. Try other keywords or switch categories.",
+        "显示": "Showing",
+
+        // —— 脚注说明 ——
+        "脚注说明": "Footnotes",
+        "皮肤接触油性化学物后，应立即先用吸附棉（纸）等尽可能地吸附掉化学物，然后再用清洗剂冲洗。": "After skin contact with oily chemicals, first absorb as much as possible with absorbent cotton/paper, then flush with the cleaning agent.",
+        "氢氟酸灼伤治疗液：5%氯化钙溶液 20 mL、2%利多卡因 20 mL、地塞米松 5 mg、二甲亚砜 60 mL。": "HF burn treatment liquid: 5% calcium chloride 20 mL, 2% lidocaine 20 mL, dexamethasone 5 mg, DMSO 60 mL.",
+        "硫酸铜作为显示剂、解毒剂。大面积使用时应注意硫酸铜中毒。": "Copper sulfate acts as a developer and antidote. Watch for copper-sulfate poisoning when used over large areas.",
+
+        // —— tool-meta 块 ——
+        "GBZ 51-2002": "GBZ 51-2002",
+        "《职业性化学性皮肤灼伤诊断标准》": "《Diagnostic Criteria for Occupational Chemical Skin Burns》",
+        "附录 D": "Annex D",
+        "发布": "Published",
+        "2002-04-08": "2002-04-08",
+        "实施": "Effective",
+        "2002-06-01": "2002-06-01",
+        "更新": "Updated",
+        "2026-08-08": "2026-08-08",
+        "免责声明：本表数据来源于 GBZ 51-2002《职业性化学性皮肤灼伤诊断标准》附录 D，仅供现场初步参考；": " Disclaimer: Data in this table is from Annex D of GBZ 51-2002 'Diagnostic Criteria for Occupational Chemical Skin Burns', for on-site preliminary reference only;",
+        "不能替代专业医疗救治": "cannot replace professional medical treatment",
+        "。具体处置应以该化学品最新 SDS 及专业医疗意见为准。任何严重灼伤请立即拨打 120 或就近就医。": ". Specific management should follow the chemical's latest SDS and professional medical advice. For any severe burn, call 120 immediately or seek nearby care.",
+
+        // —— 底部按钮 ——
+        "重置": "Reset",
+        "打印查询": "Print Lookup",
+        "分享": "Share"
+    });
+    </script>
+
+    <script src="/sheen-toolbox/assets/i18n.js"></script>
+</body>
+</html>
