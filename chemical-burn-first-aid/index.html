@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head data-seo="sheen">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>化学品灼伤应急处置 — SHEEN Toolbox</title>
+    <meta name="description" content="化学品灼伤应急处置在线工具：按强酸/强碱/氢氟酸/酚类/遇水反应/有机溶剂等化学品类别单选，即时获取对应的现场急救步骤与关键禁忌。附通用处置原则与严重程度判定。">
+    <meta property="og:title" content="化学品灼伤应急处置 | SHEEN Toolbox">
+    <meta property="og:description" content="按化学品类别（强酸/强碱/氢氟酸/酚类/遇水反应/其他）单选，直接给出现场急救步骤与关键禁忌。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lwsheen.pages.dev/sheen-toolbox/chemical-burn-first-aid/">
+    <meta property="og:image" content="https://lwsheen.pages.dev/sheen-toolbox/assets/sheen-logo.png">
+    <link rel="canonical" href="https://lwsheen.pages.dev/sheen-toolbox/chemical-burn-first-aid/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"化学品灼伤应急处置","url":"https://lwsheen.pages.dev/sheen-toolbox/chemical-burn-first-aid/","description":"按化学品类别单选，给出对应的化学品灼伤现场急救步骤与关键禁忌","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","inLanguage":"zh-CN","offers":{"@type":"Offer","price":"0","priceCurrency":"CNY"},"publisher":{"@type":"Organization","name":"SHEEN Toolbox"}}</script>
+
+    <!-- Font Awesome 本地路径（禁止 CDN） -->
+    <link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
+    <!-- 公共样式（绝对路径，勿改） -->
+    <link rel="stylesheet" href="/sheen-toolbox/common.css">
+
+    <style>
+        /* ============================================
+           仅放本工具特有样式，公共样式已在 common.css
+           未重新定义以下公共类：
+             .breadcrumb/.sheen-footer/.btn-*/.card/.result-card
+             .form-control/.page-title/.page-subtitle/.badge/.tool-meta/.print-time
+             :root 变量
+           ============================================ */
+
+        /* 顶部紧急提示 */
+        .alert-warn.no-pr { margin-bottom: 18px; }
+        .alert-warn a.tel { color: var(--brand-red); font-weight: 700; text-decoration: underline; }
+
+        /* 类别卡片网格（单选 radio 风格） */
+        .tier-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        @media (min-width: 560px) {
+            .tier-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        .tier-card {
+            position: relative;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            background: var(--bg-card);
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .tier-card:hover { border-color: var(--brand-red); }
+        .tier-card.active {
+            border-color: var(--brand-red);
+            background: var(--brand-red-light);
+        }
+        .tier-card.active::before {
+            content: "✓";
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--brand-red);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tier-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .tier-badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 60px;
+            color: #fff;
+            white-space: nowrap;
+        }
+        .tier-badge.t1 { background: #16A34A; }
+        .tier-badge.t2 { background: var(--warn-orange); }
+        .tier-badge.t3 { background: var(--brand-red); }
+        .tier-badge.t4 { background: var(--brand-red); }
+        .tier-badge.t5 { background: var(--brand-red); }
+        .tier-badge.t6 { background: var(--tech-blue); }
+        .tier-badge.crit {
+            position: relative;
+            padding-left: 22px;
+        }
+        .tier-badge.crit::before {
+            content: "!";
+            position: absolute;
+            left: 7px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #fff;
+            color: var(--brand-red);
+            font-size: 10px;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tier-name {
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+        .tier-sub {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+        .tier-hint {
+            margin-top: 2px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .tier-card.active .tier-hint { color: var(--brand-red); font-weight: 600; }
+
+        /* 处置步骤列表（工具专属组件） */
+        .step-list { list-style: none; counter-reset: step; margin: 0; padding: 0; }
+        .step-list li {
+            position: relative;
+            padding: 11px 0 11px 38px;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+        .step-list li:last-child { border-bottom: none; }
+        .step-list li::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 11px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--brand-red);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 危急横幅 */
+        .critical-banner {
+            background: var(--brand-red-light);
+            border: 1.5px solid var(--brand-red);
+            border-left-width: 6px;
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            margin: 14px 0;
+            font-size: 14px;
+            color: var(--brand-red);
+            font-weight: 600;
+            line-height: 1.6;
+        }
+        .critical-banner i { margin-right: 6px; }
+
+        /* 关键禁忌横幅（琥珀色） */
+        .warn-banner {
+            background: #FFF4E5;
+            border: 1.5px solid var(--amber);
+            border-left-width: 6px;
+            border-radius: var(--radius-md);
+            padding: 13px 16px;
+            margin: 14px 0;
+            font-size: 13.5px;
+            color: #9A4A00;
+            font-weight: 600;
+            line-height: 1.6;
+        }
+        .warn-banner i { margin-right: 6px; }
+
+        /* 典型化学品展示块 */
+        .chem-examples {
+            background: var(--bg-page);
+            padding: 12px 16px;
+            border-left: 4px solid var(--tech-blue);
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin: 14px 0;
+        }
+        .chem-examples b { color: var(--text-primary); }
+
+        /* 通用原则 / 严重程度 块（沿用公共视觉语言） */
+        .info-note {
+            background: var(--bg-page);
+            padding: 14px 16px;
+            border-left: 4px solid var(--tech-blue);
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.75;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+        .info-note b { color: var(--text-primary); }
+        .info-note.br-none { border-radius: 0; }
+
+        /* 底部操作（非急救，打印隐藏） */
+        .action-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 4px; }
+        .action-row .btn-lg { padding: 11px 22px; font-size: 14px; }
+
+        /* 手机端固定急救栏：始终可见的拨打120 + 重置 */
+        .emergency-bar { display: none; }
+        @media (max-width: 768px) {
+            body { padding-bottom: 76px; }
+            .emergency-bar {
+                display: flex;
+                position: fixed;
+                left: 0; right: 0; bottom: 0;
+                gap: 10px;
+                padding: 10px 12px;
+                background: var(--bg-card);
+                box-shadow: 0 -2px 12px rgba(0,0,0,.12);
+                z-index: 50;
+            }
+            .emergency-bar .btn-lg { flex: 1; justify-content: center; padding: 13px 0; font-size: 15px; }
+            .emergency-bar .btn-call { flex: 2; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 面包屑导航 -->
+    <div class="breadcrumb">
+        <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+        <span> / 化学品灼伤应急处置</span>
+    </div>
+
+    <!-- 主内容区域（单一交互工具 → container-calc 800px） -->
+    <main class="app-container container-calc">
+
+        <h1 class="page-title">化学品灼伤应急处置 <i class="fa-solid fa-flask"></i></h1>
+        <p class="page-subtitle" style="margin-bottom:18px;">按灼伤涉及的<b>化学品类别</b>（<b>单选</b>）选择，系统即时给出对应的现场急救步骤与关键禁忌。化学灼伤后首要动作通常是<b>脱离污染源 + 大量清水冲洗</b>（遇水反应类除外）。</p>
+
+        <!-- 紧急提示 -->
+        <div class="alert-warn no-pr">
+            <i class="fa-solid fa-triangle-exclamation"></i> 若出现<b>大面积灼伤、眼/呼吸道灼伤、误服、氢氟酸灼伤、意识改变或全身中毒表现</b>，请立即拨打 <a class="tel" href="tel:120">120</a>，<b>不要等待判定结果</b>。
+        </div>
+
+        <!-- 类别选择卡片（单选） -->
+        <div class="card mb-24 no-pr">
+            <h3>选择灼伤涉及的化学品类别</h3>
+            <div class="tier-grid" id="tierGrid"></div>
+        </div>
+
+        <!-- 结果区：单选即自动判定并显示处置步骤 -->
+        <div class="card mb-24">
+            <div class="result-card" id="levelCard">
+                <div class="number" id="levelName">请选择上方化学品类别</div>
+                <div class="label" id="levelDesc">选择灼伤涉及的化学品类别（强酸 / 强碱 / 氢氟酸 / 酚类 / 遇水反应 / 其他），系统将直接给出对应的现场急救步骤与关键禁忌。</div>
+            </div>
+
+            <div id="critBox" style="display:none;">
+                <div class="critical-banner">
+                    <i class="fa-solid fa-skull-crossbones"></i> <span id="critText"></span>
+                </div>
+            </div>
+
+            <div id="warnBox" style="display:none;">
+                <div class="warn-banner">
+                    <i class="fa-solid fa-triangle-exclamation"></i> <span id="warnText"></span>
+                </div>
+            </div>
+
+            <div class="chem-examples" id="examplesBox" style="display:none;"></div>
+
+            <h3 id="stepTitle" style="display:none; margin-top:16px;">现场急救步骤</h3>
+            <ol class="step-list" id="stepList"></ol>
+        </div>
+
+        <!-- 通用处置原则（始终可见） -->
+        <div class="card mb-24 no-pr">
+            <h3>化学品灼伤现场处置五原则</h3>
+            <div class="info-note br-none" style="margin-bottom:0;">
+                <b>1. 脱离：</b>立即脱离污染源，脱去污染衣物，边冲边脱，避免污染物扩散。<br>
+                <b>2. 冲洗：</b>除"遇水反应化学品"外，用<b>大量流动清水</b>持续冲洗 ≥15–20 分钟；眼灼伤须撑开眼睑冲洗。<br>
+                <b>3. 禁忌：</b>禁止盲目用酸碱"中和"（放热加重损伤）；禁止涂牙膏、酱油、油膏等偏方；粘住的衣物不要强行撕扯，应剪开周边。<br>
+                <b>4. 携标：</b>保留化学品标签、容器或 SDS（安全技术说明书），随伤者一并送医。<br>
+                <b>5. 送医：</b>大面积、眼/呼吸道、误服、氢氟酸、全身反应 → 立即拨打 120。
+            </div>
+        </div>
+
+        <!-- 严重程度判定（始终可见） -->
+        <div class="card mb-24 no-pr">
+            <h3>什么情况算严重（须立即拨打 120）</h3>
+            <div class="info-note br-none" style="margin-bottom:0;">
+                • 灼伤面积大：成人超过体表约 10%，或任何面积的<b>面、手、会阴、眼</b>。<br>
+                • <b>眼、呼吸道或消化道</b>灼伤。<br>
+                • <b>氢氟酸、酚类、强碱</b>等特殊化学品灼伤。<br>
+                • <b>误服或吸入</b>导致恶心、呕吐、呼吸困难、意识改变。<br>
+                • 出现<b>休克、抽搐、心律失常</b>等全身反应。
+            </div>
+        </div>
+
+        <!-- 底部操作（非急救功能，打印隐藏） -->
+        <div class="action-row no-pr" style="justify-content:center;">
+            <button class="btn-outline btn-lg" onclick="resetAll()"><i class="fa-solid fa-rotate-left"></i> 重置</button>
+            <button class="btn-print btn-lg" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印处置卡</button>
+            <button class="btn-outline btn-lg" onclick="shareTool()"><i class="fa-solid fa-share-nodes"></i> 分享</button>
+        </div>
+
+    </main>
+
+    <!-- 手机端固定急救栏（始终可见的拨打120 + 重置，打印隐藏） -->
+    <div class="emergency-bar no-pr">
+        <button class="btn-outline btn-lg" onclick="resetAll()"><i class="fa-solid fa-rotate-left"></i> 重置</button>
+        <a class="btn-danger btn-lg btn-call" href="tel:120"><i class="fa-solid fa-phone"></i> 立即拨打 120</a>
+    </div>
+
+    <!-- 标准信息块（无标准号，仅免责声明，位于 footer 上方） -->
+    <section class="tool-meta no-standard" data-toolmeta="sheen">
+  <p class="tm-disc"><i class="fa-solid fa-circle-info"></i> 免责声明：本工具依据公开国家标准、行业规范及官方文件整理，仅供参考与内部初步筛查之用，不构成任何专业法律、安全或工程意见。实际合规判定请以最新官方发布文本及具备资质的专业机构评估为准。使用者应自行核实相关标准的现行有效性。</p>
+</section>
+
+    <!-- 页脚（公共样式 .sheen-footer 来自 common.css，勿重新定义） -->
+    <footer class="sheen-footer">
+        <img src="../assets/sheen-logo.png" alt="SHEEN Toolbox" class="sheen-logo-sm"> &nbsp;<strong>SHEEN Toolbox</strong> · 化学品灼伤应急处置
+    </footer>
+
+    <!-- 打印时间戳 -->
+    <div class="print-time" id="printTime"></div>
+
+    <script>
+    // ⚠️ 函数必须裸声明（全局作用域），禁止 IIFE 包裹，否则 inline onclick 不可见
+    // ✅ function myFn() { ... }
+
+    // 打印时间
+    document.getElementById('printTime').textContent =
+        new Date().toISOString().replace('T', ' ').slice(0, 16);
+
+    // ===== 化学品类别数据 =====
+    function isEn(){ try { return localStorage.getItem('sheen_lang') === 'en'; } catch(e){ return false; } }
+
+    const TYPES = [
+        {
+            id: 1, badge: '强酸', name: '强酸类灼伤',
+            sub: '硫酸、盐酸、硝酸、铬酸、氢溴酸、磷酸等',
+            examples: '硫酸、盐酸、硝酸、铬酸、氢溴酸、磷酸等无机酸',
+            warn: '禁止用强碱液"中和"！中和放热会加重损伤；眼内严禁使用中和液！',
+            steps: [
+                '立即脱离污染源，脱去污染衣物；用大量流动清水持续冲洗皮肤至少 15–20 分钟（眼灼伤须撑开眼睑冲洗）。',
+                '冲洗时边冲边脱衣物，防止污染物随水流扩散；不要尝试用碱液中和。',
+                '皮肤冲洗后，可遵医嘱用 2%–5% 碳酸氢钠溶液轻拭（眼部禁用），再用清洁纱布覆盖。',
+                '面积大、眼灼伤或误服时，立即送医或拨打 120，并携带化学品标签 / SDS。'
+            ],
+            en: {
+                badge: 'Acid', name: 'Strong Acid Burn',
+                sub: 'Sulfuric, hydrochloric, nitric, chromic, hydrobromic, phosphoric acids, etc.',
+                examples: 'Sulfuric, hydrochloric, nitric, chromic, hydrobromic, phosphoric and other inorganic acids',
+                warn: 'Never neutralize with strong alkali! The heat of neutralization worsens the injury; never use neutralizing solutions in the eyes!',
+                steps: [
+                    'Immediately remove from the source and take off contaminated clothing; rinse the skin with copious running water for at least 15–20 min (hold eyelids open for eye burns).',
+                    'Rinse while removing clothing to prevent the contaminant from spreading with the water; do not try to neutralize with alkali.',
+                    'After skin rinsing, gently wipe with 2%–5% sodium bicarbonate solution if advised (never in the eyes), then cover with a clean dressing.',
+                    'For large area, eye burn, or ingestion, go to hospital or call 120 immediately, and bring the chemical label / SDS.'
+                ]
+            }
+        },
+        {
+            id: 2, badge: '强碱', name: '强碱类灼伤',
+            sub: '氢氧化钠、氢氧化钾、氨水、石灰水、碳酸钠等',
+            examples: '氢氧化钠（烧碱）、氢氧化钾、氨水、石灰水、碳酸钠等',
+            warn: '碱灼伤比酸更深更重、易向深部穿透，冲洗须更充分、时间更长；禁用酸中和！',
+            steps: [
+                '立即脱去污染衣物，用大量流动清水持续冲洗至少 20–30 分钟（碱渗透深、损伤重，冲洗时间应更长）。',
+                '眼灼伤须立即、持续用流动清水冲洗至少 15–30 分钟，边冲边翻开眼睑。',
+                '禁止用酸液中和；可遵医嘱用 3% 硼酸溶液轻拭皮肤（眼部禁用）。',
+                '冲洗后用清洁纱布覆盖，立即送医或拨打 120，携带化学品标签 / SDS。'
+            ],
+            en: {
+                badge: 'Alkali', name: 'Strong Alkali Burn',
+                sub: 'Sodium hydroxide, potassium hydroxide, ammonia, lime water, sodium carbonate, etc.',
+                examples: 'Sodium hydroxide (caustic soda), potassium hydroxide, ammonia, lime water, sodium carbonate, etc.',
+                warn: 'Alkali burns penetrate deeper and more severely than acid; rinsing must be more thorough and longer; never neutralize with acid!',
+                steps: [
+                    'Immediately take off contaminated clothing and rinse with copious running water for at least 20–30 min (alkali penetrates deeply and injures severely, so rinse longer).',
+                    'For eye burns, rinse immediately and continuously with running water for at least 15–30 min, holding eyelids open while rinsing.',
+                    'Never neutralize with acid; gently wipe skin with 3% boric acid solution if advised (never in the eyes).',
+                    'After rinsing, cover with a clean dressing, go to hospital or call 120 immediately, and bring the chemical label / SDS.'
+                ]
+            }
+        },
+        {
+            id: 3, badge: 'HF', crit: true, name: '氢氟酸灼伤',
+            sub: '氢氟酸 / 氟化物（可致命，须特殊处理）',
+            examples: '氢氟酸（HF）及各类氟化物',
+            warn: '氢氟酸可致命！即使小面积也须立即就医，延误可致死（低钙血症、心脏骤停）。',
+            crit: '危急：氢氟酸灼伤！哪怕面积很小也可能致命——立即拨打 120，明确告知医生为氢氟酸灼伤；转运途中持续冲洗并监测心律。',
+            steps: [
+                '立即用大量流动清水持续冲洗至少 30 分钟，边冲边脱去污染衣物。',
+                '冲洗后尽快在灼伤处涂抹 2.5%–10% 葡萄糖酸钙凝胶并轻柔按摩（可反复），或用葡萄糖酸钙溶液湿敷。',
+                '哪怕面积很小也必须立即就医（拨打 120）；严重或大面积须由医院静脉注射 / 动脉内给予葡萄糖酸钙。',
+                '若误服或吸入，立即拨打 120；转运途中持续冲洗，密切观察呼吸与心律。'
+            ],
+            en: {
+                badge: 'HF', name: 'Hydrofluoric Acid Burn',
+                sub: 'Hydrofluoric acid / fluorides (can be fatal; special treatment required)',
+                examples: 'Hydrofluoric acid (HF) and various fluorides',
+                warn: 'Hydrofluoric acid can be fatal! Even a small area requires immediate medical care; delay can be deadly (hypocalcemia, cardiac arrest).',
+                crit: 'CRITICAL: Hydrofluoric acid burn! Even a tiny area can be fatal—call 120 immediately, tell the doctor explicitly it is an HF burn; keep rinsing and monitor heart rhythm during transport.',
+                steps: [
+                    'Rinse immediately with copious running water for at least 30 min, removing contaminated clothing while rinsing.',
+                    'After rinsing, apply 2.5%–10% calcium gluconate gel to the burn and massage gently (repeat as needed), or use calcium gluconate solution wet dressings.',
+                    'Even a small area requires immediate medical care (call 120); severe or large areas need intravenous/intra-arterial calcium gluconate given by hospital.',
+                    'If ingested or inhaled, call 120 immediately; keep rinsing during transport and closely monitor breathing and heart rhythm.'
+                ]
+            }
+        },
+        {
+            id: 4, badge: '酚', name: '酚类灼伤',
+            sub: '苯酚、甲酚、焦油等（难溶于水）',
+            examples: '苯酚（石炭酸）、甲酚、杂酚油、煤焦油等',
+            warn: '苯酚难溶于水，先用聚乙二醇（PEG）/ 酒精擦拭去除，再用大量清水冲洗；眼内禁用酒精！',
+            steps: [
+                '立即脱去污染衣物，用聚乙二醇（PEG 300/400）或酒精（如 50% 乙醇）擦拭去除皮肤上的苯酚。',
+                '擦拭后再用大量流动清水冲洗至少 15 分钟。',
+                '眼灼伤立即用大量清水冲洗 15 分钟以上；禁止用酒精冲洗眼部。',
+                '立即送医或拨打 120，携带化学品标签 / SDS。'
+            ],
+            en: {
+                badge: 'Phenol', name: 'Phenol Burn',
+                sub: 'Phenol, cresol, tar, etc. (poorly water-soluble)',
+                examples: 'Phenol (carbolic acid), cresol, creosote, coal tar, etc.',
+                warn: 'Phenol is poorly water-soluble; first wipe with polyethylene glycol (PEG)/alcohol to remove, then rinse with copious water; never use alcohol in the eyes!',
+                steps: [
+                    'Immediately take off contaminated clothing and wipe phenol off the skin with polyethylene glycol (PEG 300/400) or alcohol (e.g., 50% ethanol).',
+                    'After wiping, rinse with copious running water for at least 15 min.',
+                    'For eye burns, rinse immediately with copious water for over 15 min; never rinse eyes with alcohol.',
+                    'Go to hospital or call 120 immediately, and bring the chemical label / SDS.'
+                ]
+            }
+        },
+        {
+            id: 5, badge: '水反应', crit: true, name: '遇水反应化学品',
+            sub: '生石灰、电石、金属钠/钾、烷基铝等',
+            examples: '生石灰、电石（碳化钙）、金属钠 / 钾、烷基铝、三氯化磷等',
+            warn: '严禁直接用水冲洗！生石灰遇水放热、钠钾遇水生氢燃爆、电石生乙炔——先用干法去除固体！',
+            crit: '危急：遇水反应化学品！直接冲水会放热或产生易燃 / 爆炸气体——先用干布、干燥砂土或软刷拭去固体，确认安全后再冲洗，立即拨打 120，注意防火防爆。',
+            steps: [
+                '切勿直接用水冲洗！先用干布、干燥砂土或软毛刷将固体 / 粉尘轻轻拭去、扫去。',
+                '确认无明显放热、无残留反应性物质后，再用大量流动清水冲洗至少 15–20 分钟。',
+                '若化学品已溅入眼内，仍须立即用大量流动清水持续冲洗（眼部不能用干拭）。',
+                '立即送医或拨打 120，携带化学品标签 / SDS；处置中注意防火防爆。'
+            ],
+            en: {
+                badge: 'Water-react', name: 'Water-Reactive Chemicals',
+                sub: 'Quicklime, calcium carbide, sodium/potassium metal, alkyl aluminum, etc.',
+                examples: 'Quicklime, calcium carbide, sodium/potassium metal, alkyl aluminum, phosphorus trichloride, etc.',
+                warn: 'Never rinse directly with water! Quicklime releases heat with water, sodium/potassium generate explosive hydrogen, calcium carbide produces acetylene—remove solids by dry method first!',
+                crit: 'CRITICAL: Water-reactive chemical! Rinsing directly releases heat or flammable/explosive gas—first wipe off solids with a dry cloth, dry sand, or soft brush, rinse only after confirmed safe, call 120 immediately, and watch for fire/explosion.',
+                steps: [
+                    'Never rinse directly with water! First gently wipe or brush off solids/dust with a dry cloth, dry sand, or soft brush.',
+                    'After confirming no obvious heat release or residual reactive material, rinse with copious running water for at least 15–20 min.',
+                    'If the chemical has splashed into the eyes, still rinse immediately and continuously with copious running water (never dry-wipe the eyes).',
+                    'Go to hospital or call 120 immediately, and bring the chemical label / SDS; take fire/explosion precautions during handling.'
+                ]
+            }
+        },
+        {
+            id: 6, badge: '其他', name: '有机溶剂 / 其他腐蚀品',
+            sub: '汽油、苯、酮、醛、中性盐、氧化剂等',
+            examples: '汽油、苯、酮类、醛类、中性盐、氧化剂等',
+            warn: '处置前先查阅该化学品 SDS；误服或吸入按急性中毒处置，立即拨打 120！',
+            steps: [
+                '立即脱去污染衣物，用大量流动清水冲洗皮肤至少 15 分钟；参照该化学品 SDS 处置。',
+                '眼灼伤立即撑开眼睑用大量清水冲洗 15 分钟以上。',
+                '误服 / 吸入者按急性中毒处置，立即拨打 120，保留呕吐物 / 污染物供检测。',
+                '大面积或全身症状者立即送医，携带化学品标签 / SDS。'
+            ],
+            en: {
+                badge: 'Other', name: 'Organic Solvents / Other Corrosives',
+                sub: 'Gasoline, benzene, ketones, aldehydes, neutral salts, oxidizers, etc.',
+                examples: 'Gasoline, benzene, ketones, aldehydes, neutral salts, oxidizers, etc.',
+                warn: 'Consult the chemical SDS first; for ingestion or inhalation treat as acute poisoning and call 120 immediately!',
+                steps: [
+                    'Immediately take off contaminated clothing and rinse skin with copious running water for at least 15 min; manage per the chemical SDS.',
+                    'For eye burns, hold eyelids open and rinse with copious water for over 15 min.',
+                    'For ingestion/inhalation, treat as acute poisoning, call 120 immediately, and keep vomitus/contaminant for testing.',
+                    'For large area or systemic symptoms, go to hospital immediately and bring the chemical label / SDS.'
+                ]
+            }
+        }
+    ];
+
+    // 当前选中的类别（0=未选，1-6=对应类别）
+    let selectedType = 0;
+
+    // 渲染类别卡片网格
+    function renderTypes() {
+        const grid = document.getElementById('tierGrid');
+        const en = isEn();
+        grid.innerHTML = TYPES.map(t => `
+            <div class="tier-card" id="type-${t.id}" onclick="selectType(${t.id})" role="radio" aria-checked="false" tabindex="0">
+                <div class="tier-head">
+                    <span class="tier-badge t${t.id} ${t.crit ? 'crit' : ''}">${en ? t.en.badge : t.badge}${t.crit ? (en ? ' CRITICAL' : ' 危急') : ''}</span>
+                    <span class="tier-name">${en ? t.en.name : t.name}</span>
+                </div>
+                <div class="tier-sub">${en ? t.en.sub : t.sub}</div>
+                <div class="tier-hint"><i class="fa-solid fa-hand-pointer"></i> ${en ? 'Click to select this category' : '点击选择此类别'}</div>
+            </div>
+        `).join('');
+    }
+
+    // 单选：点击类别（再次点击同一卡则取消选中）
+    function selectType(id) {
+        selectedType = (selectedType === id) ? 0 : id;
+        TYPES.forEach(t => {
+            const el = document.getElementById('type-' + t.id);
+            if (el) {
+                el.classList.toggle('active', selectedType === t.id);
+                el.setAttribute('aria-checked', selectedType === t.id ? 'true' : 'false');
+            }
+        });
+        assess();
+    }
+
+    // 判定类别并直接渲染处置步骤
+    function assess() {
+        const card = document.getElementById('levelCard');
+        const nameEl = document.getElementById('levelName');
+        const descEl = document.getElementById('levelDesc');
+        const stepTitle = document.getElementById('stepTitle');
+        const stepList = document.getElementById('stepList');
+        const critBox = document.getElementById('critBox');
+        const critText = document.getElementById('critText');
+        const warnBox = document.getElementById('warnBox');
+        const warnText = document.getElementById('warnText');
+        const examplesBox = document.getElementById('examplesBox');
+        const en = isEn();
+
+        if (selectedType === 0) {
+            card.className = 'result-card';
+            nameEl.textContent = en ? 'Please select a chemical category above' : '请选择上方化学品类别';
+            descEl.textContent = en
+                ? 'Select the chemical category involved (strong acid / strong alkali / hydrofluoric acid / phenols / water-reactive / others); the tool will directly show the corresponding on-site first-aid steps and key contraindications.'
+                : '选择灼伤涉及的化学品类别（强酸 / 强碱 / 氢氟酸 / 酚类 / 遇水反应 / 其他），系统将直接给出对应的现场急救步骤与关键禁忌。';
+            critBox.style.display = 'none';
+            warnBox.style.display = 'none';
+            examplesBox.style.display = 'none';
+            stepTitle.style.display = 'none';
+            stepList.innerHTML = '';
+            return;
+        }
+
+        const tp = TYPES[selectedType - 1];
+        card.className = 'result-card ' + (tp.crit ? 'danger' : 'warning');
+        nameEl.textContent = en ? tp.en.name : tp.name;
+        descEl.textContent = en ? tp.en.sub : tp.sub;
+        critBox.style.display = tp.crit ? 'block' : 'none';
+        if (tp.crit) critText.textContent = en ? tp.en.crit : tp.crit;
+        warnBox.style.display = 'block';
+        warnText.textContent = en ? tp.en.warn : tp.warn;
+        examplesBox.style.display = 'block';
+        examplesBox.innerHTML = '<b>' + (en ? 'Typical chemicals: ' : '典型化学品：') + '</b>' + (en ? tp.en.examples : tp.examples);
+        stepTitle.style.display = 'block';
+        stepList.innerHTML = (en ? tp.en.steps : tp.steps).map(s => `<li>${s}</li>`).join('');
+    }
+
+    // 重置
+    function resetAll() {
+        selectedType = 0;
+        TYPES.forEach(t => {
+            const el = document.getElementById('type-' + t.id);
+            if (el) {
+                el.classList.remove('active');
+                el.setAttribute('aria-checked', 'false');
+            }
+        });
+        assess();
+    }
+
+    // 分享
+    function shareTool() {
+        const url = location.href;
+        const title = isEn() ? 'Chemical Burn Emergency Treatment — SHEEN Toolbox' : '化学品灼伤应急处置 — SHEEN Toolbox';
+        if (navigator.share) {
+            navigator.share({ title: title, url: url }).catch(() => {});
+        } else if (navigator.clipboard) {
+            navigator.clipboard.writeText(url).then(() => {
+                alert('链接已复制：' + url);
+            }).catch(() => {
+                alert('分享链接：' + url);
+            });
+        } else {
+            alert('分享链接：' + url);
+        }
+    }
+
+    // 语言切换时重新渲染动态内容
+    window.addEventListener('sheen:langchange', function (e) {
+        renderTypes();
+        assess();
+    });
+
+    // 初始化
+    renderTypes();
+    assess();
+    </script>
+
+    <!-- 化学品灼伤应急处置：静态正文英文词典（动态内容由上方 JS 按语言渲染） -->
+    <script>
+    window.__I18N_BODY__ = window.__I18N_BODY__ || {};
+    Object.assign(window.__I18N_BODY__, {
+        "选择灼伤涉及的化学品类别": "Select the chemical category involved in the burn",
+        "化学品灼伤现场处置五原则": "Five Principles of On-site Chemical Burn Management",
+        "什么情况算严重（须立即拨打 120）": "When Is It Severe? (Call 120 Immediately)",
+        "现场急救步骤": "On-site First Aid Steps",
+        "打印处置卡": "Print Care Card",
+        "分享": "Share",
+        "立即拨打 120": "Call 120 Now",
+        "若出现": "If there is",
+        "大面积灼伤、眼/呼吸道灼伤、误服、氢氟酸灼伤、意识改变或全身中毒表现": " large-area burn, eye/respiratory burn, ingestion, hydrofluoric-acid burn, altered consciousness or systemic poisoning",
+        "，请立即拨打": ", call ",
+        "，": ", ",
+        "。": ".",
+        "不要等待判定结果": "do not wait for the assessment",
+        "1. 脱离：": "1. Remove:",
+        "立即脱离污染源，脱去污染衣物，边冲边脱，避免污染物扩散。": "Immediately remove from the source and take off contaminated clothing; rinse while removing to prevent spread.",
+        "2. 冲洗：": "2. Rinse:",
+        "除“遇水反应化学品”外，用大量流动清水持续冲洗 ≥15–20 分钟；眼灼伤须撑开眼睑冲洗。": "Except for water-reactive chemicals, rinse with copious running water for ≥15–20 min; for eye burns, hold eyelids open while rinsing.",
+        "3. 禁忌：": "3. Contraindications:",
+        "禁止盲目用酸碱“中和”（放热加重损伤）；禁止涂牙膏、酱油、油膏等偏方；粘住的衣物不要强行撕扯，应剪开周边。": "Never blindly neutralize with acid/alkali (the heat worsens injury); never apply toothpaste, soy sauce, ointments, or folk remedies; do not tear adhered clothing—cut around it.",
+        "4. 携标：": "4. Bring label:",
+        "保留化学品标签、容器或 SDS（安全技术说明书），随伤者一并送医。": "Keep the chemical label, container, or SDS (Safety Data Sheet) and bring it with the patient to hospital.",
+        "5. 送医：": "5. Seek care:",
+        "大面积、眼/呼吸道、误服、氢氟酸、全身反应 → 立即拨打 120。": "Large area, eye/respiratory, ingestion, hydrofluoric acid, or systemic reaction → call 120 immediately.",
+        "• 灼伤面积大：成人超过体表约 10%，或任何面积的面、手、会阴、眼。": "• Large burned area: adult over ~10% of body surface, or any area of face, hands, perineum, or eyes.",
+        "• 眼、呼吸道或消化道灼伤。": "• Burns to eyes, respiratory tract, or digestive tract.",
+        "• 氢氟酸、酚类、强碱等特殊化学品灼伤。": "• Burns from special chemicals such as hydrofluoric acid, phenols, or strong alkali.",
+        "• 误服或吸入导致恶心、呕吐、呼吸困难、意识改变。": "• Ingestion or inhalation causing nausea, vomiting, dyspnea, or altered consciousness.",
+        "• 出现休克、抽搐、心律失常等全身反应。": "• Systemic reactions such as shock, seizures, or arrhythmia.",
+        "免责声明：本工具依据通用化学品灼伤急救原则及 GBZ 1-2010《工业企业设计卫生标准》、GB 38144-2025《眼面部防护 应急喷淋和洗眼设备》等公开资料整理，仅供现场初步处置参考，": " Disclaimer: This tool is compiled from general chemical-burn first-aid principles and public references such as GBZ 1-2010 and GB 38144-2025, for on-site preliminary reference only,",
+        "不能替代专业医疗救治": " and cannot replace professional medical treatment",
+        "。具体处置应以该化学品最新 SDS 及专业医疗意见为准。任何严重灼伤请立即拨打 120 或就近就医。": ". Specific management should follow the chemical's latest SDS and professional medical advice. For any severe burn, call 120 immediately or seek nearby care.",
+
+        // —— 化学品灼伤现场处置五原则（静态正文）——
+        "1. 脱离：": "1. Remove:",
+        "立即脱离污染源，脱去污染衣物，边冲边脱，避免污染物扩散。": "Immediately remove from the source, take off contaminated clothing, rinse while removing, and avoid spreading contaminants.",
+        "2. 冲洗：": "2. Rinse:",
+        "除\"遇水反应化学品\"外，用": "Except for water-reactive chemicals, use ",
+        "大量流动清水": "copious running water",
+        "持续冲洗 ≥15–20 分钟；眼灼伤须撑开眼睑冲洗。": "to rinse continuously for ≥15–20 min; for eye burns, hold eyelids open and rinse.",
+        "3. 禁忌：": "3. Contraindications:",
+        "禁止盲目用酸碱\"中和\"（放热加重损伤）；禁止涂牙膏、酱油、油膏等偏方；粘住的衣物不要强行撕扯，应剪开周边。": "Never blindly neutralize with acid/alkali (the heat worsens injury); never apply toothpaste, soy sauce, ointments, or folk remedies; do not tear adhered clothing—cut around it.",
+        "4. 携标：": "4. Bring label:",
+        "保留化学品标签、容器或 SDS（安全技术说明书），随伤者一并送医。": "Keep the chemical label, container, or SDS (Safety Data Sheet) and bring it with the patient to hospital.",
+        "5. 送医：": "5. Seek care:",
+        "大面积、眼/呼吸道、误服、氢氟酸、全身反应 → 立即拨打 120。": "Large area, eye/respiratory, ingestion, hydrofluoric acid, or systemic reaction → call 120 immediately.",
+
+        // —— 什么情况算严重（静态正文）——
+        "• 灼伤面积大：成人超过体表约 10%，或任何面积的": "• Large burned area: adult over ~10% of body surface, or any area of ",
+        "面、手、会阴、眼": "face, hands, perineum, eyes",
+        "眼、呼吸道或消化道": "eyes, respiratory tract, or digestive tract",
+        "灼伤。": "burns.",
+        "氢氟酸、酚类、强碱": "hydrofluoric acid, phenols, or strong alkali",
+        "等特殊化学品灼伤。": "burns from special chemicals.",
+        "误服或吸入": "ingestion or inhalation",
+        "导致恶心、呕吐、呼吸困难、意识改变。": "causing nausea, vomiting, dyspnea, or altered consciousness.",
+        "• 出现": "• Systemic reactions such as ",
+        "休克、抽搐、心律失常": "shock, seizures, or arrhythmia",
+        "等全身反应。": "."
+    });
+    </script>
+
+    <script src="/sheen-toolbox/assets/i18n.js"></script>
+</body>
+</html>
