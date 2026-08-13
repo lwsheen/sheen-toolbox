@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head data-seo="sheen">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中暑应急处置 — SHEEN Toolbox</title>
+    <meta name="description" content="中暑应急处置在线工具：按先兆/轻症/重症（热痉挛热衰竭）/重症（热射病）4 级中暑分类，勾选伤者所属分级即可直接获取分级降温与送医处置步骤。依据 GBZ 41-2019《职业性中暑诊断标准》。">
+    <meta property="og:title" content="中暑应急处置 | SHEEN Toolbox">
+    <meta property="og:description" content="按 4 级中暑分类（先兆/轻症/重症-热痉挛热衰竭/重症-热射病），单选分级即可直接给出分级降温与送医处置步骤。依据 GBZ 41-2019。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lwsheen.pages.dev/sheen-toolbox/heat-stroke-first-aid/">
+    <meta property="og:image" content="https://lwsheen.pages.dev/sheen-toolbox/assets/sheen-logo.png">
+    <link rel="canonical" href="https://lwsheen.pages.dev/sheen-toolbox/heat-stroke-first-aid/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"中暑应急处置","url":"https://lwsheen.pages.dev/sheen-toolbox/heat-stroke-first-aid/","description":"依据 GBZ 41-2019 的中暑分级判定与应急处置步骤工具","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","inLanguage":"zh-CN","offers":{"@type":"Offer","price":"0","priceCurrency":"CNY"},"publisher":{"@type":"Organization","name":"SHEEN Toolbox"}}</script>
+
+    <!-- Font Awesome 本地路径（禁止 CDN） -->
+    <link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
+    <!-- 公共样式（绝对路径，勿改） -->
+    <link rel="stylesheet" href="/sheen-toolbox/common.css">
+
+    <style>
+        /* ============================================
+           仅放本工具特有样式，公共样式已在 common.css
+           未重新定义以下公共类：
+             .breadcrumb/.sheen-footer/.btn-*/.card/.form-card/.result-card
+             .form-control/.page-title/.page-subtitle/.badge/.tool-meta/.print-time
+             :root 变量
+           ============================================ */
+
+        /* 顶部紧急提示 */
+        .alert-warn.no-pr { margin-bottom: 18px; }
+        .alert-warn a.tel { color: var(--brand-red); font-weight: 700; text-decoration: underline; }
+
+        /* 分级卡片网格（单选 radio 风格） */
+        .tier-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        @media (min-width: 560px) {
+            .tier-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        .tier-card {
+            position: relative;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            background: var(--bg-card);
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .tier-card:hover { border-color: var(--brand-red); }
+        .tier-card.active {
+            border-color: var(--brand-red);
+            background: var(--brand-red-light);
+        }
+        .tier-card.active::before {
+            content: "✓";
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--brand-red);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tier-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .tier-badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 60px;
+            color: #fff;
+            white-space: nowrap;
+        }
+        .tier-badge.t1 { background: #16A34A; }
+        .tier-badge.t2 { background: var(--warn-orange); }
+        .tier-badge.t3 { background: var(--brand-red); }
+        .tier-badge.t4 { background: var(--brand-red); }
+        .tier-badge.crit {
+            position: relative;
+            padding-left: 22px;
+        }
+        .tier-badge.crit::before {
+            content: "!";
+            position: absolute;
+            left: 7px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #fff;
+            color: var(--brand-red);
+            font-size: 10px;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tier-name {
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+        .tier-sub {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+        .tier-symptoms {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            gap: 4px;
+        }
+        .tier-symptoms li {
+            font-size: 13px;
+            color: var(--text-primary);
+            padding-left: 18px;
+            position: relative;
+            line-height: 1.55;
+        }
+        .tier-symptoms li::before {
+            content: "•";
+            position: absolute;
+            left: 4px;
+            top: 0;
+            color: var(--brand-red);
+            font-weight: 700;
+        }
+        .tier-hint {
+            margin-top: 2px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .tier-card.active .tier-hint { color: var(--brand-red); font-weight: 600; }
+
+        /* 处置步骤列表（工具专属组件） */
+        .step-list { list-style: none; counter-reset: step; margin: 0; padding: 0; }
+        .step-list li {
+            position: relative;
+            padding: 11px 0 11px 38px;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+        .step-list li:last-child { border-bottom: none; }
+        .step-list li::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 11px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--brand-red);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 危急横幅 */
+        .critical-banner {
+            background: var(--brand-red-light);
+            border: 1.5px solid var(--brand-red);
+            border-left-width: 6px;
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            margin: 14px 0;
+            font-size: 14px;
+            color: var(--brand-red);
+            font-weight: 600;
+            line-height: 1.6;
+        }
+        .critical-banner i { margin-right: 6px; }
+
+        /* 信息提示块（工具专属，沿用公共视觉语言） */
+        .info-note {
+            background: var(--bg-page);
+            padding: 14px 16px;
+            border-left: 4px solid var(--tech-blue);
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.75;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+        .info-note b { color: var(--text-primary); }
+        .info-note.br-none { border-radius: 0; }
+
+        /* 底部操作（非急救，打印隐藏） */
+        .action-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 4px; }
+        .action-row .btn-lg { padding: 11px 22px; font-size: 14px; }
+
+        /* 手机端固定急救栏：始终可见的拨打120 + 重置 */
+        .emergency-bar { display: none; }
+        @media (max-width: 768px) {
+            body { padding-bottom: 76px; }
+            .emergency-bar {
+                display: flex;
+                position: fixed;
+                left: 0; right: 0; bottom: 0;
+                gap: 10px;
+                padding: 10px 12px;
+                background: var(--bg-card);
+                box-shadow: 0 -2px 12px rgba(0,0,0,.12);
+                z-index: 50;
+            }
+            .emergency-bar .btn-lg { flex: 1; justify-content: center; padding: 13px 0; font-size: 15px; }
+            .emergency-bar .btn-call { flex: 2; }
+        }
+    </style>
+    <!-- Baidu Tongji -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9b8c3df212619adec1f70f01695f4160";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+</head>
+<body>
+
+    <!-- 面包屑导航 -->
+    <div class="breadcrumb">
+        <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+        <span> / 中暑应急处置</span>
+    </div>
+
+    <!-- 主内容区域（单一交互工具 → container-calc 800px） -->
+    <main class="app-container container-calc">
+
+        <h1 class="page-title">中暑应急处置 <i class="fa-solid fa-temperature-full"></i></h1>
+        <p class="page-subtitle" style="margin-bottom:18px;">按 <b>4 级中暑分类</b> 选择伤者所属分级（<b>单选</b>），系统即时给出对应的分级处置步骤。依据 GBZ 41-2019《职业性中暑诊断标准》。</p>
+
+        <!-- 紧急提示 -->
+        <div class="alert-warn no-pr">
+            <i class="fa-solid fa-triangle-exclamation"></i> 若伤者出现<b>体温 ≥ 40℃、意识模糊、昏迷或抽搐</b>，高度怀疑<b>热射病（T4）</b>，可危及生命——请立即拨打 <a class="tel" href="tel:120">120</a> 并持续降温，<b>不要等待判定结果</b>。
+        </div>
+
+        <!-- 分级选择卡片（单选 radio） -->
+        <div class="card mb-24 no-pr">
+            <h3>选择伤者所属的中暑分级</h3>
+            <div class="tier-grid" id="tierGrid"></div>
+        </div>
+
+        <!-- 结果区：单选即自动判定并显示处置步骤 -->
+        <div class="card mb-24">
+            <div class="result-card" id="levelCard">
+                <div class="number" id="levelName">请选择上方分级</div>
+                <div class="label" id="levelDesc">勾选伤者所属的中暑分级（先兆 / 轻症 / 重症），系统将直接给出对应的分级处置步骤。</div>
+            </div>
+
+            <div id="critBox" style="display:none;">
+                <div class="critical-banner">
+                    <i class="fa-solid fa-skull-crossbones"></i> 危急：热射病（重症中暑），死亡率高！立即拨打 120，边降温边等待救援，切勿单独处置。
+                </div>
+            </div>
+
+            <h3 id="stepTitle" style="display:none; margin-top:16px;">分级处置步骤</h3>
+            <ol class="step-list" id="stepList"></ol>
+        </div>
+
+        <!-- 现场降温指南（始终可见） -->
+        <div class="card mb-24 no-pr">
+            <h3>现场快速降温指南</h3>
+            <div class="info-note br-none" style="margin-bottom:0;">
+                <b>1. 转移：</b>迅速将伤者移至阴凉通风处，平卧并稍抬高下肢。<br>
+                <b>2. 脱衣：</b>松开或脱去多余衣物，利于散热。<br>
+                <b>3. 降温：</b>用冷水擦拭全身、扇风；冰袋/凉毛巾敷颈部、腋下、大腿根等大动脉处；意识清醒者可少量多次饮用淡盐水或运动饮料。<br>
+                <b>4. 监测：</b>持续观察体温、意识与呼吸；若加重或疑似热射病，立即送医。<br>
+                <b>⚠ 注意：</b>意识障碍者<b>切勿强行喂水</b>，以免呛咳窒息。
+            </div>
+        </div>
+
+        <!-- 预防贴士 -->
+        <div class="card mb-24 no-pr">
+            <h3>高温作业预防贴士</h3>
+            <div class="info-note br-none" style="margin-bottom:0;">
+                避开 11:00–15:00 高温时段露天作业；足量饮水（含电解质）；穿戴透气浅色工装与遮阳帽；出现头晕、多汗等先兆立即停工休息；班组间相互监护，发现异常及时互救。
+            </div>
+        </div>
+
+        <!-- 底部操作（非急救功能，打印隐藏） -->
+        <div class="action-row no-pr" style="justify-content:center;">
+            <button class="btn-outline btn-lg" onclick="resetAll()"><i class="fa-solid fa-rotate-left"></i> 重置</button>
+            <button class="btn-print btn-lg" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印处置卡</button>
+            <button class="btn-outline btn-lg" onclick="shareTool()"><i class="fa-solid fa-share-nodes"></i> 分享</button>
+        </div>
+
+    </main>
+
+    <!-- 手机端固定急救栏（始终可见的拨打120 + 重置，打印隐藏） -->
+    <div class="emergency-bar no-pr">
+        <button class="btn-outline btn-lg" onclick="resetAll()"><i class="fa-solid fa-rotate-left"></i> 重置</button>
+        <a class="btn-danger btn-lg btn-call" href="tel:120"><i class="fa-solid fa-phone"></i> 立即拨打 120</a>
+    </div>
+
+    <!-- 标准信息块（无标准号，仅免责声明，位于 footer 上方） -->
+    <section class="tool-meta no-standard" data-toolmeta="sheen">
+  <p class="tm-disc"><i class="fa-solid fa-circle-info"></i> 免责声明：本工具依据公开国家标准、行业规范及官方文件整理，仅供参考与内部初步筛查之用，不构成任何专业法律、安全或工程意见。实际合规判定请以最新官方发布文本及具备资质的专业机构评估为准。使用者应自行核实相关标准的现行有效性。</p>
+</section>
+
+    <!-- 页脚（公共样式 .sheen-footer 来自 common.css，勿重新定义） -->
+    <footer class="sheen-footer">
+        <img src="../assets/sheen-logo.png" alt="SHEEN Toolbox" class="sheen-logo-sm"> &nbsp;<strong>SHEEN Toolbox</strong> · 中暑应急处置
+    </footer>
+
+    <!-- 打印时间戳 -->
+    <div class="print-time" id="printTime"></div>
+
+    <script>
+    // ⚠️ 函数必须裸声明（全局作用域），禁止 IIFE 包裹，否则 inline onclick 不可见
+    // ✅ function myFn() { ... }
+
+    // 打印时间
+    document.getElementById('printTime').textContent =
+        new Date().toISOString().replace('T', ' ').slice(0, 16);
+
+    // ===== 分级数据（按 GBZ 41-2019） =====
+    function isEn(){ try { return localStorage.getItem('sheen_lang') === 'en'; } catch(e){ return false; } }
+
+    const TIERS = [
+        {
+            id: 1, badge: 'T1', name: '先兆中暑',
+            sub: '早期表现，体温多正常或略高（≤38℃）',
+            symptoms: ['头痛、头晕', '口渴、多汗', '四肢无力、疲乏', '注意力不集中、动作不协调'],
+            en: { name: 'Mild (Prodromal) Heat Illness', sub: 'Early signs; temperature usually normal or slightly high (≤38℃)', symptoms: ['Headache, dizziness', 'Thirst, heavy sweating', 'Limb weakness, fatigue', 'Poor concentration, incoordination'] }
+        },
+        {
+            id: 2, badge: 'T2', name: '轻症中暑',
+            sub: '体温 ≥38℃，伴面色潮红、大量出汗或恶心呕吐',
+            symptoms: ['体温升高（≥38℃）', '面色潮红、皮肤灼热、大量出汗', '恶心、呕吐'],
+            en: { name: 'Mild Heat Exhaustion', sub: 'Temperature ≥38℃ with flushed face, heavy sweating, or nausea/vomiting', symptoms: ['Elevated temperature (≥38℃)', 'Flushed face, hot skin, heavy sweating', 'Nausea, vomiting'] }
+        },
+        {
+            id: 3, badge: 'T3', name: '重症中暑 · 热痉挛 / 热衰竭',
+            sub: '循环衰竭表现（多汗、恶心、眩晕、晕厥），体温可升高但多 <40℃',
+            symptoms: ['肌肉痉挛（小腿/腹部）', '多汗、恶心、眩晕或晕厥', '体温可升高但多 <40℃'],
+            en: { name: 'Severe Heat Illness · Heat Cramps / Heat Exhaustion', sub: 'Circulatory failure (heavy sweating, nausea, dizziness, fainting); temperature may rise but usually <40℃', symptoms: ['Muscle cramps (calves/abdomen)', 'Heavy sweating, nausea, dizziness or fainting', 'Temperature may rise but usually <40℃'] }
+        },
+        {
+            id: 4, badge: 'T4', crit: true, name: '重症中暑 · 热射病',
+            sub: '核心体温 ≥40℃ 伴意识障碍（谵妄/昏迷/抽搐），危及生命',
+            symptoms: ['意识模糊、谵妄、昏迷或抽搐', '体温 ≥ 40℃', '皮肤干燥、无汗'],
+            en: { name: 'Severe Heat Illness · Heat Stroke', sub: 'Core temperature ≥40℃ with impaired consciousness (delirium/coma/seizures); life-threatening', symptoms: ['Confusion, delirium, coma or seizures', 'Temperature ≥ 40℃', 'Dry skin, no sweating'] }
+        }
+    ];
+
+    // ===== 等级与处置步骤（按分级 id 索引） =====
+    const LEVELS = {
+        1: { name: '先兆中暑', cls: 'warning', desc: '出现早期中暑表现，体温多正常或略高（≤38℃），及时处置可迅速缓解。', crit: false,
+             steps: ['立即转移至阴凉通风处，平卧休息。', '松开衣物，冷水擦拭或扇风散热。', '少量多次饮用淡盐水或运动饮料。', '密切观察，若症状加重按轻症处理。'],
+             en: { name: 'Mild (Prodromal) Heat Illness', desc: 'Early heat-illness signs with temperature usually normal or slightly high (≤38℃); prompt care relieves quickly.', steps: ['Move immediately to a cool, ventilated place; lie down and rest.', 'Loosen clothing; wipe with cold water or fan to dissipate heat.', 'Drink small amounts of mild saline or sports drink frequently.', 'Observe closely; if worsening, manage as mild heat exhaustion.'] } },
+        2: { name: '轻症中暑', cls: 'warning', desc: '体温多 ≥38℃，伴面色潮红、大量出汗或恶心呕吐，需积极降温并密切观察。', crit: false,
+             steps: ['迅速转移至阴凉处，脱去多余衣物。', '冷水擦拭全身+扇风，冰敷颈部/腋下/大腿根。', '意识清醒者饮淡盐水；恶心呕吐明显则侧卧防误吸。', '持续降温并观察，若加重或体温升高立即就医。'],
+             en: { name: 'Mild Heat Exhaustion', cls: 'warning', desc: 'Temperature usually ≥38℃ with flushed face, heavy sweating, or nausea/vomiting; active cooling and close observation needed.', steps: ['Move quickly to a cool place and remove excess clothing.', 'Wipe the whole body with cold water + fan; ice-pack the neck/armpits/groin.', 'If conscious, give mild saline; if nausea/vomiting is marked, place on side to prevent aspiration.', 'Keep cooling and observing; if worsening or temperature rises, seek medical care immediately.'] } },
+        3: { name: '重症中暑（热痉挛 / 热衰竭）', cls: 'danger', desc: '出现肌肉痉挛或循环衰竭表现（多汗、恶心、眩晕、晕厥），体温可升高但多 <40℃，须立即降温并送医。', crit: false,
+             steps: ['立即转移至阴凉处，平卧并稍抬高下肢。', '快速降温：冷水擦浴、冰敷大动脉、扇风。', '补充电解质（淡盐水/运动饮料），痉挛肢体轻柔拉伸。', '立即送医或拨打 120，途中持续监测意识与体温。'],
+             en: { name: 'Severe Heat Illness (Heat Cramps / Heat Exhaustion)', cls: 'danger', desc: 'Muscle cramps or circulatory failure (heavy sweating, nausea, dizziness, fainting); temperature may rise but usually <40℃; cool immediately and transport to hospital.', steps: ['Move immediately to a cool place, lie flat and slightly elevate the lower limbs.', 'Rapid cooling: cold-water sponging, ice packs on large arteries, fanning.', 'Replenish electrolytes (mild saline/sports drink); gently stretch cramped limbs.', 'Go to hospital or call 120 immediately; keep monitoring consciousness and temperature en route.'] } },
+        4: { name: '重症中暑（热射病）', cls: 'danger', desc: '核心体温 ≥40℃ 伴意识障碍（谵妄/昏迷/抽搐），可伴多器官衰竭，危及生命，须争分夺秒抢救。', crit: true,
+             steps: ['立即拨打 120，说明"热射病/疑似中暑昏迷"。', '边等救援边降温：冷水浸浴或全身冷水擦拭+冰敷大动脉+扇风，目标快速降至 38.5℃ 以下。', '意识不清者切勿喂水，侧卧防误吸，保持气道通畅。', '持续监测体温、呼吸、脉搏，直到急救人员接手。'],
+             en: { name: 'Severe Heat Illness (Heat Stroke)', cls: 'danger', desc: 'Core temperature ≥40℃ with impaired consciousness (delirium/coma/seizures), possibly multi-organ failure; life-threatening—rescue every second.', steps: ['Call 120 immediately, stating "heat stroke / suspected heat-stroke coma".', 'Cool while awaiting help: cold-water immersion or whole-body cold sponging + ice packs on large arteries + fanning, aiming to drop below 38.5℃ rapidly.', 'If unconscious, do NOT give water; place on side to prevent aspiration and keep airway clear.', 'Keep monitoring temperature, breathing, and pulse until EMS takes over.'] } }
+    };
+
+    // 当前选中的分级（0=未选，1-4=对应分级）
+    let selectedTier = 0;
+
+    // 渲染分级卡片网格
+    function renderTiers() {
+        const grid = document.getElementById('tierGrid');
+        const en = isEn();
+        grid.innerHTML = TIERS.map(t => `
+            <div class="tier-card" id="tier-${t.id}" onclick="selectTier(${t.id})" role="radio" aria-checked="false" tabindex="0">
+                <div class="tier-head">
+                    <span class="tier-badge t${t.id} ${t.crit ? 'crit' : ''}">${en ? t.badge : t.badge}${t.crit ? (en ? ' CRITICAL' : ' 危急') : ''}</span>
+                    <span class="tier-name">${en ? t.en.name : t.name}</span>
+                </div>
+                <div class="tier-sub">${en ? t.en.sub : t.sub}</div>
+                <ul class="tier-symptoms">
+                    ${t.symptoms.map((s, i) => `<li>${en ? t.en.symptoms[i] : s}</li>`).join('')}
+                </ul>
+                <div class="tier-hint"><i class="fa-solid fa-hand-pointer"></i> ${en ? 'Click to select this grade' : '点击选择此分级'}</div>
+            </div>
+        `).join('');
+    }
+
+    // 单选：点击分级（再次点击同一卡则取消选中）
+    function selectTier(id) {
+        selectedTier = (selectedTier === id) ? 0 : id;
+        TIERS.forEach(t => {
+            const el = document.getElementById('tier-' + t.id);
+            if (el) {
+                el.classList.toggle('active', selectedTier === t.id);
+                el.setAttribute('aria-checked', selectedTier === t.id ? 'true' : 'false');
+            }
+        });
+        assess();
+    }
+
+    // 判定等级并直接渲染处置步骤
+    function assess() {
+        const card = document.getElementById('levelCard');
+        const nameEl = document.getElementById('levelName');
+        const descEl = document.getElementById('levelDesc');
+        const stepTitle = document.getElementById('stepTitle');
+        const stepList = document.getElementById('stepList');
+        const critBox = document.getElementById('critBox');
+        const en = isEn();
+
+        if (selectedTier === 0) {
+            card.className = 'result-card';
+            nameEl.textContent = en ? 'Please select a grade above' : '请选择上方分级';
+            descEl.textContent = en
+                ? 'Select the heat-stroke grade the patient belongs to (prodromal / mild / severe); the tool will directly show the corresponding graded management steps.'
+                : '勾选伤者所属的中暑分级（先兆 / 轻症 / 重症），系统将直接给出对应的分级处置步骤。';
+            critBox.style.display = 'none';
+            stepTitle.style.display = 'none';
+            stepList.innerHTML = '';
+            return;
+        }
+
+        const lv = LEVELS[selectedTier];
+        card.className = 'result-card ' + lv.cls;
+        nameEl.textContent = en ? lv.en.name : lv.name;
+        descEl.textContent = en ? lv.en.desc : lv.desc;
+        critBox.style.display = lv.crit ? 'block' : 'none';
+        stepTitle.style.display = 'block';
+        stepList.innerHTML = (en ? lv.en.steps : lv.steps).map(s => `<li>${s}</li>`).join('');
+    }
+
+    // 重置
+    function resetAll() {
+        selectedTier = 0;
+        TIERS.forEach(t => {
+            const el = document.getElementById('tier-' + t.id);
+            if (el) {
+                el.classList.remove('active');
+                el.setAttribute('aria-checked', 'false');
+            }
+        });
+        assess();
+    }
+
+    // 分享
+    function shareTool() {
+        const url = location.href;
+        const title = isEn() ? 'Heat Stroke Emergency Treatment — SHEEN Toolbox' : '中暑应急处置 — SHEEN Toolbox';
+        if (navigator.share) {
+            navigator.share({ title: title, url: url }).catch(() => {});
+        } else if (navigator.clipboard) {
+            navigator.clipboard.writeText(url).then(() => {
+                alert('链接已复制：' + url);
+            }).catch(() => {
+                alert('分享链接：' + url);
+            });
+        } else {
+            alert('分享链接：' + url);
+        }
+    }
+
+    // 语言切换时重新渲染动态内容
+    window.addEventListener('sheen:langchange', function (e) {
+        renderTiers();
+        assess();
+    });
+
+    // 初始化
+    renderTiers();
+    assess();
+    </script>
+
+    <!-- 中暑应急处置：静态正文英文词典 -->
+    <script>
+    window.__I18N_BODY__ = window.__I18N_BODY__ || {};
+    Object.assign(window.__I18N_BODY__, {
+        "选择伤者所属的中暑分级": "Select the heat-stroke grade the patient belongs to",
+        "现场快速降温指南": "On-site Rapid Cooling Guide",
+        "高温作业预防贴士": "Heat-illness Prevention Tips",
+        "分级处置步骤": "Graded Management Steps",
+        "打印处置卡": "Print Care Card",
+        "分享": "Share",
+        "立即拨打 120": "Call 120 Now",
+        "1. 转移：": "1. Move:",
+        "迅速将伤者移至阴凉通风处，平卧并稍抬高下肢。": "Move the patient quickly to a cool, ventilated place; lie flat and slightly elevate the lower limbs.",
+        "2. 脱衣：": "2. Remove clothing:",
+        "松开或脱去多余衣物，利于散热。": "Loosen or remove excess clothing to aid heat dissipation.",
+        "3. 降温：": "3. Cool:",
+        "用冷水擦拭全身、扇风；冰袋/凉毛巾敷颈部、腋下、大腿根等大动脉处；意识清醒者可少量多次饮用淡盐水或运动饮料。": "Wipe the whole body with cold water and fan; apply ice packs / cool towels to large arteries (neck, armpits, groin); if conscious, give small frequent sips of mild saline or sports drink.",
+        "4. 监测：": "4. Monitor:",
+        "持续观察体温、意识与呼吸；若加重或疑似热射病，立即送医。": "Keep observing temperature, consciousness, and breathing; if worsening or suspected heat stroke, go to hospital immediately.",
+        "⚠ 注意：": "⚠ Note: ",
+        "意识障碍者": "If the person has impaired consciousness, ",
+        "切勿强行喂水": "never force water",
+        "，以免呛咳窒息。": ", to avoid choking or aspiration.",
+        "避开 11:00–15:00 高温时段露天作业；足量饮水（含电解质）；穿戴透气浅色工装与遮阳帽；出现头晕、多汗等先兆立即停工休息；班组间相互监护，发现异常及时互救。": "Avoid outdoor work during the 11:00–15:00 peak-heat window; drink enough (with electrolytes); wear breathable light-colored work clothes and a sun hat; stop and rest at once if prodromal signs (dizziness, sweating) appear; workers watch each other and give prompt mutual aid on abnormality.",
+        "若伤者出现": "If the patient shows",
+        "体温 ≥ 40℃、意识模糊、昏迷或抽搐": " temperature ≥40℃, confusion, coma, or seizures",
+        "，高度怀疑": ", strongly suspect ",
+        "热射病（T4）": " heat stroke (T4)",
+        "，可危及生命——请立即拨打": ", which can be life-threatening—call ",
+        "并持续降温，": " and keep cooling,",
+        "。": ".",
+        "不要等待判定结果": " do not wait for the assessment",
+        "危急：热射病（重症中暑），死亡率高！立即拨打 120，边降温边等待救援，切勿单独处置。": "CRITICAL: Heat stroke (severe heat illness), high mortality! Call 120 immediately, cool while awaiting rescue, never manage alone.",
+        "免责声明：本工具依据 GBZ 41-2019 等公开资料整理，仅供现场初步识别与处置参考，": " Disclaimer: This tool is compiled from public references such as GBZ 41-2019, for on-site preliminary identification and management reference only,",
+        "不能替代专业医疗诊断": " and cannot replace professional medical diagnosis",
+        "。任何中暑尤其重症情况，请立即拨打 120 或就近就医。": ". For any heat illness, especially severe cases, call 120 immediately or seek nearby care."
+    });
+    </script>
+
+    <script src="/sheen-toolbox/assets/i18n.js"></script>
+</body>
+</html>
