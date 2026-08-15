@@ -113,6 +113,12 @@
       hm.src = "https://hm.baidu.com/hm.js?9b8c3df212619adec1f70f01695f4160";
       var s = document.getElementsByTagName("script")[0];
       s.parentNode.insertBefore(hm, s);
+      // github.io 镜像站统计(公众号阅读原文通道)
+      if (location.hostname.indexOf("github.io") >= 0) {
+        var hm2 = document.createElement("script");
+        hm2.src = "https://hm.baidu.com/hm.js?5ceec8bd8bf10bd9d1f4ddceaebdae6f";
+        s.parentNode.insertBefore(hm2, s);
+      }
     })();
     </script>
 </head>
