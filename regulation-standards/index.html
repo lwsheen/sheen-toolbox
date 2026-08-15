@@ -77,6 +77,29 @@
   .ce-menu-law{flex:1}
   .ce-menu-badge{font-size:11px;color:var(--brand-red);background:var(--brand-red-light);border-radius:99px;padding:2px 8px;font-weight:600;white-space:nowrap}
   @media(max-width:640px){.ce-table{font-size:12px}.ce-table .ce-cell{font-size:12px;padding:5px 6px}}
+  .qa-card{background:#fff;border:1px solid var(--border-light,#E3E6EA);border-radius:12px;overflow:hidden;margin-top:16px}
+  .qa-body{padding:16px 16px 8px;max-height:420px;overflow-y:auto}
+  .qa-msg{display:flex;gap:10px;margin-bottom:14px}
+  .qa-msg .qa-avatar{width:30px;height:30px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;background:#E1F5EE;color:#0F6E56}
+  .qa-msg.qa-user{flex-direction:row-reverse}
+  .qa-msg.qa-user .qa-avatar{background:#FDEEF1;color:var(--brand-red,#F03752)}
+  .qa-msg .qa-bubble{max-width:82%;border-radius:12px;padding:9px 13px;font-size:13.5px;line-height:1.7;color:var(--text-main,#1E2126)}
+  .qa-msg.qa-user .qa-bubble{background:#FDEEF1}
+  .qa-msg.qa-ai .qa-bubble{background:var(--bg-secondary,#F5F6F8);border:1px solid var(--border-light,#E3E6EA)}
+  .qa-bubble .qa-lead{font-weight:500;margin-bottom:6px}
+  .qa-bubble .qa-lead i{color:#0F6E56;margin-right:6px}
+  .qa-ref{border-left:3px solid #16A34A;background:#F2FBF6;border-radius:6px;padding:7px 10px;margin-top:8px;font-size:12.5px;color:var(--text-main,#1E2126);line-height:1.6}
+  .qa-ref .qa-rlaw{font-weight:600;color:#085041;margin-bottom:2px}
+  .qa-ref .qa-rno{display:inline-block;background:#16A34A;color:#fff;font-size:11px;border-radius:4px;padding:0 6px;margin-right:6px;font-weight:500}
+  .qa-input{border-top:1px solid var(--border-light,#E3E6EA);padding:12px 14px;display:flex;gap:8px;align-items:center}
+  .qa-input input{flex:1;border:1.5px solid var(--border-light,#E3E6EA);border-radius:10px;padding:10px 14px;font-size:13.5px;outline:none;font-family:inherit;color:var(--text-main,#1E2126);background:#fff}
+  .qa-input input:focus{border-color:var(--brand-red,#F03752)}
+  .qa-input button{background:var(--brand-red,#F03752);border:none;color:#fff;border-radius:10px;padding:10px 16px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .15s}
+  .qa-input button:hover{background:#D12E47}
+  .qa-samples{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .qa-sample{font-size:12px;color:var(--tech-blue,#2D7EE7);background:#E6F1FB;border:1px solid #C7DDF5;border-radius:99px;padding:6px 12px;cursor:pointer;transition:all .15s}
+  .qa-sample:hover{background:#B5D4F4}
+  .qa-note{font-size:11.5px;color:var(--text-tertiary,#9AA3AF);margin-top:10px;line-height:1.7}
   .no-print{display:inherit}
 </style>
 <!-- Baidu Tongji -->
@@ -106,6 +129,7 @@ var _hmt = _hmt || [];
   <div class="rs-tabs">
     <button class="rs-tab active" id="tabBtnList" onclick="switchTab('list')"><i class="fa-solid fa-list"></i>法规标准清单</button>
     <button class="rs-tab" id="tabBtnEval" onclick="switchTab('eval')"><i class="fa-solid fa-clipboard-check"></i>合规性评价</button>
+    <button class="rs-tab" id="tabBtnQA" onclick="switchTab('qa')"><i class="fa-solid fa-robot"></i>法规问答</button>
   </div>
 
   <div id="tabList">
@@ -154,6 +178,34 @@ var _hmt = _hmt || [];
     </div>
 
     <div id="list"></div>
+  </div>
+
+  <div id="tabQA" style="display:none">
+    <div class="qa-card">
+      <div class="qa-body" id="qaBody">
+        <div class="qa-msg qa-ai">
+          <div class="qa-avatar"><i class="fa-solid fa-robot"></i></div>
+          <div class="qa-bubble">
+            <div class="qa-lead"><i class="fa-solid fa-circle-info"></i>你好,我是 EHS 法规问答助手</div>
+            可以问我关于安全生产、消防、职业健康、危化品、环境保护等方面的法规问题,例如:<br>
+            · 危化品仓库与办公楼的安全距离要求?<br>
+            · 企业应急预案多久演练一次?<br>
+            · 接触噪声岗位的职业健康检查周期?<br>
+            回答会标注法规出处,请以官方最新文本为准。
+          </div>
+        </div>
+      </div>
+      <div class="qa-input">
+        <input id="qaQ" type="text" placeholder="输入你的 EHS 法规问题…" onkeydown="if(event.key==='Enter')qaAsk()">
+        <button onclick="qaAsk()"><i class="fa-solid fa-paper-plane"></i> 提问</button>
+      </div>
+    </div>
+    <div class="qa-samples">
+      <span class="qa-sample" onclick="qaAskSample(this.textContent)">危化品仓库与办公楼的安全距离要求?</span>
+      <span class="qa-sample" onclick="qaAskSample(this.textContent)">企业应急预案多久演练一次?</span>
+      <span class="qa-sample" onclick="qaAskSample(this.textContent)">接触噪声岗位的职业健康检查周期?</span>
+    </div>
+    <div class="qa-note"><i class="fa-solid fa-circle-info"></i> 回答由 AI 基于知识库法规生成,仅供检索参考,具体合规判定请以官方最新文本为准。</div>
   </div>
 </main>
 
@@ -277,9 +329,56 @@ document.getElementById('printTime').textContent = new Date().toISOString().repl
 function switchTab(t){
   document.getElementById('tabList').style.display = t === 'list' ? 'block' : 'none';
   document.getElementById('tabEval').style.display = t === 'eval' ? 'block' : 'none';
+  document.getElementById('tabQA').style.display = t === 'qa' ? 'block' : 'none';
   document.getElementById('tabBtnList').classList.toggle('active', t === 'list');
   document.getElementById('tabBtnEval').classList.toggle('active', t === 'eval');
+  document.getElementById('tabBtnQA').classList.toggle('active', t === 'qa');
 }
+
+// ===== 法规问答(演示版:内置示例;正式版接入 Worker + GLM)=====
+var QA_SAMPLES = {
+  '危化品仓库与办公楼的安全距离要求?': {
+    answer: '依据现行法规,危险化学品仓库与人员密集场所(含办公楼)的防火间距有明确要求:',
+    refs: [
+      {law:'《危险化学品安全管理条例》', no:'第20条', txt:'生产、储存危险化学品的单位,应当根据其生产、储存的危险化学品的种类和危险特性,在作业场所设置相应的监测、监控、通风、防晒、调温、防火、灭火、防爆、泄压、防毒、中和、防潮、防雷、防静电、防腐、防泄漏以及防护围堤或者隔离操作等安全设施、设备。'},
+      {law:'《建筑防火通用规范》GB 55037-2022', no:'第3.2.2条', txt:'甲、乙类厂房与民用建筑之间的防火间距应符合规定;危险化学品仓库的设置位置应满足防火间距要求。'}
+    ]
+  },
+  '企业应急预案多久演练一次?': {
+    answer: '综合应急预案和专项应急预案的演练频次有硬性规定:',
+    refs: [
+      {law:'《生产安全事故应急预案管理办法》', no:'第33条', txt:'生产经营单位应当制定本单位的应急预案演练计划,根据本单位的事故风险特点,每年至少组织一次综合应急预案演练或者专项应急预案演练,每半年至少组织一次现场处置方案演练。'}
+    ]
+  },
+  '接触噪声岗位的职业健康检查周期?': {
+    answer: '接触噪声作业人员的职业健康检查频次按危害程度确定:',
+    refs: [
+      {law:'《职业健康监护技术规范》GBZ 188-2014', no:'第4部分', txt:'接触噪声作业人员的职业健康检查周期为:作业场所噪声强度 80-85dB(A)时每 3 年一次,85dB(A)以上时每 1 年一次(在岗期间)。'},
+      {law:'《工作场所有害因素职业接触限值》GBZ 2.2-2007', no:'第2部分', txt:'物理因素职业接触限值:噪声的职业接触限值为 85dB(A)。'}
+    ]
+  }
+};
+function qaEsc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function qaAppend(role, html){
+  var b = document.getElementById('qaBody');
+  var d = document.createElement('div');
+  d.className = 'qa-msg qa-' + role;
+  d.innerHTML = '<div class="qa-avatar"><i class="fa-solid fa-' + (role==='user' ? 'user' : 'robot') + '"></i></div><div class="qa-bubble">' + html + '</div>';
+  b.appendChild(d); b.scrollTop = b.scrollHeight;
+}
+function qaAsk(){
+  var q = document.getElementById('qaQ').value.trim();
+  if(!q) return;
+  qaAppend('user', qaEsc(q));
+  document.getElementById('qaQ').value = '';
+  var r = QA_SAMPLES[q] || { answer: '这个问题需要检索知识库后回答。当前为演示版,仅内置 3 个示例问题;正式版将接入智能检索 + AI 生成,届时任何 EHS 法规问题都能回答。', refs: [] };
+  var html = '<div class="qa-lead"><i class="fa-solid fa-circle-check"></i>' + qaEsc(r.answer) + '</div>';
+  r.refs.forEach(function(x){
+    html += '<div class="qa-ref"><div class="qa-rlaw">' + qaEsc(x.law) + '</div><div><span class="qa-rno">' + qaEsc(x.no) + '</span><span>' + qaEsc(x.txt) + '</span></div></div>';
+  });
+  qaAppend('ai', html);
+}
+function qaAskSample(t){ document.getElementById('qaQ').value = t; qaAsk(); }
 
 var LAWS = [];
 function todayStr(){ return new Date().toISOString().slice(0,10); }
