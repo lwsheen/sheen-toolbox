@@ -243,6 +243,7 @@ var _hmt = _hmt || [];
 document.getElementById('printTime').textContent = new Date().toISOString().replace('T',' ').slice(0,16);
 </script>
 <script src="data.js"></script>
+<script src="laws-qa-data.js"></script>
 <script>
 (function(){
   var DATA = window.REG_STD_DATA || [];
@@ -335,7 +336,31 @@ function switchTab(t){
   document.getElementById('tabBtnQA').classList.toggle('active', t === 'qa');
 }
 
-// ===== 法规问答(纯 AI 版:复用合规评价的 API 配置与 callApi)=====
+// ===== 法规问答(RAG 版:检索法律条文 → GLM 生成带出处回答)=====
+var QA_STOP = {};
+('的是吗呢什么多少如何怎么怎样要求规定距离周期多久一次企业需要应该要和与及或不得应当必须可以下列违反根据按照相关有关哪些').split('').forEach(function(c){ QA_STOP[c]=true; });
+function qaWords(q){
+  q = q.replace(/[^\u4e00-\u9fff]/g, '');
+  var out = [];
+  for(var i=0;i<q.length-1;i++){ var w=q.slice(i,i+2); if(!QA_STOP[w[0]] && !QA_STOP[w[1]] && w!=='企业' && w!=='如何' && w!=='什么') out.push(w); }
+  return out;
+}
+function qaRetrieve(q, top_k){
+  var arts = window.LAWS_QA || [];
+  var words = qaWords(q);
+  if(!words.length || !arts.length) return [];
+  var scored = [];
+  arts.forEach(function(a){
+    var s = 0;
+    words.forEach(function(w){
+      var idx = a.text.indexOf(w);
+      if(idx >= 0) s += 1 + 2 * (a.text.split(w).length - 1);
+    });
+    if(s > 0) scored.push({s:s, a:a});
+  });
+  scored.sort(function(x,y){ return y.s - x.s; });
+  return scored.slice(0, top_k).map(function(x){ return x.a; });
+}
 function qaEsc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function qaAppend(role, html){
   var b = document.getElementById('qaBody');
@@ -350,19 +375,30 @@ function qaAsk(){
   if(!q) return;
   qaAppend('user', qaEsc(q));
   document.getElementById('qaQ').value = '';
-  var thinking = qaAppend('ai', '<i class="fa-solid fa-spinner fa-spin"></i> AI 生成中,请稍候…');
+  var thinking = qaAppend('ai', '<i class="fa-solid fa-spinner fa-spin"></i> 正在检索法条并生成回答,请稍候…');
+
+  // ① 检索命中法律条文
+  var hits = qaRetrieve(q, 3);
+  var context = '';
+  if(hits.length){
+    context = '以下是从中国法律库中检索到的相关法条原文(严格依据这些法条回答,不得编造其他条款):\n\n' +
+      hits.map(function(a,i){ return '【依据'+(i+1)+'】' + a.law.replace(/\s*\(.*?\)\s*$/, '') + ' ' + a.no + ': ' + a.text; }).join('\n\n');
+  }
   var prompt = '你是资深 EHS(环境、健康、安全)合规顾问,熟悉中国安全生产、消防、职业健康、危险化学品、环境保护等领域的法律法规。\n'
     + '用户会提出一个 EHS 法规合规问题,请专业回答。\n'
-    + '要求:\n'
-    + '1. 只依据你确切掌握的知识回答;不确定的内容不要编造,如实说明"这一点需要以官方文本核实"。\n'
-    + '2. 回答结构:先给结论,再分点说明要点,最后说明依据(可提到法规名称如《安全生产法》,但不要编造具体条款号;只有当你100%确定条款号时才给出,否则只说法规名称)。\n'
+    + (context
+      ? '注意:下方提供了检索到的相关法条,请优先依据这些法条回答,并明确引用「依据:法规名 条款号」;回答内容不得超出这些法条范围。\n\n' + context
+      : '注意:本次未检索到直接相关的法律条文,请依据你的专业知识谨慎回答,如实说明"现行法律中未检索到直接对应条款,此回答仅供参考"。\n')
+    + '\n回答要求:\n'
+    + '1. 先给结论,再分点说明。\n'
+    + '2. 引用法条时格式:「依据:《XX法》第X条」,只引用上面提供的法条,绝不编造条款号。\n'
     + '3. 语言简洁专业,面向企业 EHS 管理人员。\n\n'
     + '用户问题:' + q;
   callApi(prompt).then(function(txt){
     thinking.remove();
     var clean = txt.replace(/\n{3,}/g, '\n\n').trim();
     var html = clean.split('\n').map(function(line){ return qaEsc(line); }).join('<br>');
-    html += '<div class="disclaimer">以上内容由 AI 生成,仅供参考;具体合规判定请以官方最新文本为准。</div>';
+    html += '<div class="disclaimer">以上内容由 AI 基于法律条文生成,仅供参考;具体合规判定请以官方最新文本为准。</div>';
     qaAppend('ai', html);
   }).catch(function(err){
     thinking.remove();
