@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EHS 法规标准清单 — SHEEN Toolbox</title>
-<meta name="description" content="EHS 环境健康安全法律法规与标准清单,含 47 款免费工具对照跳转。数据来源:订阅知识库,由 WorkBuddy 定期同步。">
+<meta name="description" content="EHS 环境健康安全法律法规与标准清单,含 47 款免费工具对照跳转。数据来源:订阅知识库。">
 <link rel="stylesheet" href="../common.css">
 <link rel="stylesheet" href="../assets/fa/all.min.css">
 <style>
@@ -12,9 +12,13 @@
   .rs-search{flex:1;min-width:220px;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border-light,#E3E6EA);border-radius:8px;padding:9px 12px}
   .rs-search i{color:var(--text-tertiary,#9AA3AF)}
   .rs-search input{flex:1;border:0;outline:0;font-size:14px;background:transparent;color:var(--text-main,#1E2126)}
-  .rs-chips{display:flex;gap:8px;flex-wrap:wrap}
-  .rs-chip{border:1px solid var(--border-light,#E3E6EA);background:#fff;color:var(--text-secondary,#5C6470);border-radius:999px;padding:5px 14px;font-size:13px;cursor:pointer;transition:all .15s}
+  .rs-chips{display:flex;gap:6px;flex-wrap:wrap}
+  .rs-chip{border:1px solid var(--border-light,#E3E6EA);background:#fff;color:var(--text-secondary,#5C6470);border-radius:999px;padding:4px 11px;font-size:12px;cursor:pointer;transition:all .15s;white-space:nowrap}
+  .rs-chip:hover{background:#F5F6F8}
   .rs-chip.active{background:var(--brand-red,#F03752);border-color:var(--brand-red,#F03752);color:#fff}
+  .rs-chip-law{border-color:#FAC9D3}
+  .rs-chip-std{border-color:#C7DDF5}
+  .rs-chip-ref{border-color:#D3D5DA}
   .rs-cat{margin:20px 0 8px;font-size:14px;font-weight:500;color:var(--text-main,#1E2126);display:flex;align-items:center;gap:8px}
   .rs-cat::before{content:"";width:4px;height:14px;background:var(--brand-red,#F03752);border-radius:2px}
   .rs-count{font-size:12px;color:var(--text-tertiary,#9AA3AF);font-weight:400}
@@ -46,7 +50,7 @@
   <div id="rsList"></div>
 
   <div class="rs-note">
-    <i class="fa-solid fa-circle-info"></i> 数据由 WorkBuddy 定期从订阅知识库同步生成(当前共 <span id="rsTotal"></span> 条);法律法规以官方现行版本为准,标准原文版权归发布单位,本站仅作检索索引。部分条目未收录标准号,请以官方发布为准。
+    <i class="fa-solid fa-circle-info"></i> 数据来源于订阅知识库定期同步生成(当前共 <span id="rsTotal"></span> 条);法律法规以官方现行版本为准,标准原文版权归发布单位,本站仅作检索索引。部分条目未收录标准号,请以官方发布为准。
   </div>
 </div>
 
@@ -71,6 +75,21 @@ document.getElementById('printTime').textContent = new Date().toISOString().repl
 
   document.getElementById('rsTotal').textContent = DATA.length;
 
+  function shortCat(c){
+    if(c === '根目录') return '根目录';
+    if(c.indexOf('00 工具箱') === 0) return '工具箱';
+    var parts = c.split('/');
+    return parts[parts.length - 1];
+  }
+  function catClass(c){
+    if(c.indexOf('01 法律法规') === 0) return ' rs-chip-law';
+    if(c.indexOf('02 技术标准') === 0) return ' rs-chip-std';
+    if(c.indexOf('03 参考资料') === 0 || c === '根目录') return ' rs-chip-ref';
+    if(c.indexOf('00 工具箱') === 0) return ' rs-chip-ref';
+    if(c.indexOf('00 分类与目录') === 0) return ' rs-chip-ref';
+    return '';
+  }
+
   var chips = document.getElementById('rsChips');
   var all = document.createElement('span');
   all.className = 'rs-chip active'; all.textContent = '全部 ' + DATA.length;
@@ -79,13 +98,20 @@ document.getElementById('printTime').textContent = new Date().toISOString().repl
   CATS.forEach(function(c){
     var n = DATA.filter(function(r){ return r.c === c; }).length;
     var s = document.createElement('span');
-    s.className = 'rs-chip'; s.textContent = c + ' ' + n;
+    s.className = 'rs-chip' + catClass(c);
+    s.textContent = shortCat(c) + ' ' + n;
+    s.title = c;
     s.onclick = function(){ setCat(c); };
     chips.appendChild(s);
   });
 
   var curCat = '', curQ = '';
-  function setCat(c){ curCat = c; document.querySelectorAll('.rs-chip').forEach(function(x){ x.classList.remove('active'); }); event.target.classList.add('active'); render(); }
+  function setCat(c){
+    curCat = c;
+    document.querySelectorAll('.rs-chip').forEach(function(x){ x.classList.remove('active'); });
+    if(event && event.target) event.target.classList.add('active');
+    render();
+  }
   document.getElementById('rsQ').addEventListener('input', function(){ curQ = this.value.trim().toLowerCase(); render(); });
 
   function render(){
@@ -102,7 +128,7 @@ document.getElementById('printTime').textContent = new Date().toISOString().repl
     rows.forEach(function(r){ (byCat[r.c] = byCat[r.c] || []).push(r); });
     var html = '';
     Object.keys(byCat).sort().forEach(function(c){
-      html += '<div class="rs-cat">' + esc(c) + ' <span class="rs-count">' + byCat[c].length + ' 条</span></div>';
+      html += '<div class="rs-cat">' + esc(shortCat(c)) + ' <span class="rs-count">' + byCat[c].length + ' 条</span></div>';
       html += '<table class="rs-table"><thead><tr><th style="width:52%">法规/标准</th><th style="width:18%">标准号</th><th>对应工具</th></tr></thead><tbody>';
       byCat[c].forEach(function(r){
         html += '<tr><td>' + esc(r.n) + '</td><td class="rs-stdno">' + (r.s ? esc(r.s) : '—') + '</td><td>';
