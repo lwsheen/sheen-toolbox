@@ -335,29 +335,7 @@ function switchTab(t){
   document.getElementById('tabBtnQA').classList.toggle('active', t === 'qa');
 }
 
-// ===== 法规问答(演示版:内置示例;正式版接入 Worker + GLM)=====
-var QA_SAMPLES = {
-  '危化品仓库与办公楼的安全距离要求?': {
-    answer: '依据现行法规,危险化学品仓库与人员密集场所(含办公楼)的防火间距有明确要求:',
-    refs: [
-      {law:'《危险化学品安全管理条例》', no:'第20条', txt:'生产、储存危险化学品的单位,应当根据其生产、储存的危险化学品的种类和危险特性,在作业场所设置相应的监测、监控、通风、防晒、调温、防火、灭火、防爆、泄压、防毒、中和、防潮、防雷、防静电、防腐、防泄漏以及防护围堤或者隔离操作等安全设施、设备。'},
-      {law:'《建筑防火通用规范》GB 55037-2022', no:'第3.2.2条', txt:'甲、乙类厂房与民用建筑之间的防火间距应符合规定;危险化学品仓库的设置位置应满足防火间距要求。'}
-    ]
-  },
-  '企业应急预案多久演练一次?': {
-    answer: '综合应急预案和专项应急预案的演练频次有硬性规定:',
-    refs: [
-      {law:'《生产安全事故应急预案管理办法》', no:'第33条', txt:'生产经营单位应当制定本单位的应急预案演练计划,根据本单位的事故风险特点,每年至少组织一次综合应急预案演练或者专项应急预案演练,每半年至少组织一次现场处置方案演练。'}
-    ]
-  },
-  '接触噪声岗位的职业健康检查周期?': {
-    answer: '接触噪声作业人员的职业健康检查频次按危害程度确定:',
-    refs: [
-      {law:'《职业健康监护技术规范》GBZ 188-2014', no:'第4部分', txt:'接触噪声作业人员的职业健康检查周期为:作业场所噪声强度 80-85dB(A)时每 3 年一次,85dB(A)以上时每 1 年一次(在岗期间)。'},
-      {law:'《工作场所有害因素职业接触限值》GBZ 2.2-2007', no:'第2部分', txt:'物理因素职业接触限值:噪声的职业接触限值为 85dB(A)。'}
-    ]
-  }
-};
+// ===== 法规问答(纯 AI 版:复用合规评价的 API 配置与 callApi)=====
 function qaEsc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function qaAppend(role, html){
   var b = document.getElementById('qaBody');
@@ -365,18 +343,31 @@ function qaAppend(role, html){
   d.className = 'qa-msg qa-' + role;
   d.innerHTML = '<div class="qa-avatar"><i class="fa-solid fa-' + (role==='user' ? 'user' : 'robot') + '"></i></div><div class="qa-bubble">' + html + '</div>';
   b.appendChild(d); b.scrollTop = b.scrollHeight;
+  return d;
 }
 function qaAsk(){
   var q = document.getElementById('qaQ').value.trim();
   if(!q) return;
   qaAppend('user', qaEsc(q));
   document.getElementById('qaQ').value = '';
-  var r = QA_SAMPLES[q] || { answer: '这个问题需要检索知识库后回答。当前为演示版,仅内置 3 个示例问题;正式版将接入智能检索 + AI 生成,届时任何 EHS 法规问题都能回答。', refs: [] };
-  var html = '<div class="qa-lead"><i class="fa-solid fa-circle-check"></i>' + qaEsc(r.answer) + '</div>';
-  r.refs.forEach(function(x){
-    html += '<div class="qa-ref"><div class="qa-rlaw">' + qaEsc(x.law) + '</div><div><span class="qa-rno">' + qaEsc(x.no) + '</span><span>' + qaEsc(x.txt) + '</span></div></div>';
+  var thinking = qaAppend('ai', '<i class="fa-solid fa-spinner fa-spin"></i> AI 生成中,请稍候…');
+  var prompt = '你是资深 EHS(环境、健康、安全)合规顾问,熟悉中国安全生产、消防、职业健康、危险化学品、环境保护等领域的法律法规。\n'
+    + '用户会提出一个 EHS 法规合规问题,请专业回答。\n'
+    + '要求:\n'
+    + '1. 只依据你确切掌握的知识回答;不确定的内容不要编造,如实说明"这一点需要以官方文本核实"。\n'
+    + '2. 回答结构:先给结论,再分点说明要点,最后说明依据(可提到法规名称如《安全生产法》,但不要编造具体条款号;只有当你100%确定条款号时才给出,否则只说法规名称)。\n'
+    + '3. 语言简洁专业,面向企业 EHS 管理人员。\n\n'
+    + '用户问题:' + q;
+  callApi(prompt).then(function(txt){
+    thinking.remove();
+    var clean = txt.replace(/\n{3,}/g, '\n\n').trim();
+    var html = clean.split('\n').map(function(line){ return qaEsc(line); }).join('<br>');
+    html += '<div class="disclaimer">以上内容由 AI 生成,仅供参考;具体合规判定请以官方最新文本为准。</div>';
+    qaAppend('ai', html);
+  }).catch(function(err){
+    thinking.remove();
+    qaAppend('ai', '<i class="fa-solid fa-triangle-exclamation"></i> 回答失败:' + qaEsc(err.message || String(err)) + '<br><span style="font-size:12px;color:var(--text-tertiary,#9AA3AF)">请检查右上角「API 设置」是否正确配置(与合规性评价共用同一配置)。</span>');
   });
-  qaAppend('ai', html);
 }
 function qaAskSample(t){ document.getElementById('qaQ').value = t; qaAsk(); }
 
