@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EHS 法规标准清单 — SHEEN Toolbox</title>
+<meta name="description" content="EHS 环境健康安全法律法规与标准清单,含 47 款免费工具对照跳转。数据来源:订阅知识库,由 WorkBuddy 定期同步。">
+<link rel="stylesheet" href="../common.css">
+<link rel="stylesheet" href="../assets/fa/all.min.css">
+<style>
+  .rs-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:16px 0 14px}
+  .rs-search{flex:1;min-width:220px;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border-light,#E3E6EA);border-radius:8px;padding:9px 12px}
+  .rs-search i{color:var(--text-tertiary,#9AA3AF)}
+  .rs-search input{flex:1;border:0;outline:0;font-size:14px;background:transparent;color:var(--text-main,#1E2126)}
+  .rs-chips{display:flex;gap:8px;flex-wrap:wrap}
+  .rs-chip{border:1px solid var(--border-light,#E3E6EA);background:#fff;color:var(--text-secondary,#5C6470);border-radius:999px;padding:5px 14px;font-size:13px;cursor:pointer;transition:all .15s}
+  .rs-chip.active{background:var(--brand-red,#F03752);border-color:var(--brand-red,#F03752);color:#fff}
+  .rs-cat{margin:20px 0 8px;font-size:14px;font-weight:500;color:var(--text-main,#1E2126);display:flex;align-items:center;gap:8px}
+  .rs-cat::before{content:"";width:4px;height:14px;background:var(--brand-red,#F03752);border-radius:2px}
+  .rs-count{font-size:12px;color:var(--text-tertiary,#9AA3AF);font-weight:400}
+  .rs-table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:inset 0 0 0 1px var(--border-light,#E3E6EA);font-size:13.5px}
+  .rs-table th{background:var(--bg-secondary,#F1F2F4);color:var(--text-secondary,#5C6470);font-weight:500;text-align:left;padding:9px 12px;font-size:12.5px;border-bottom:1px solid var(--border-light,#E3E6EA)}
+  .rs-table td{padding:9px 12px;border-bottom:1px solid var(--border-light,#E3E6EA);vertical-align:middle}
+  .rs-table tr:last-child td{border-bottom:0}
+  .rs-stdno{font-family:var(--font-mono,monospace);color:var(--text-secondary,#5C6470);font-size:12.5px;white-space:nowrap}
+  .rs-tools{display:flex;gap:5px;flex-wrap:wrap}
+  .rs-tool{display:inline-block;background:#FDEEF1;color:var(--brand-red,#F03752);border:1px solid #F7C9D0;border-radius:6px;padding:1px 8px;font-size:12px;text-decoration:none;transition:all .15s}
+  .rs-tool:hover{background:var(--brand-red,#F03752);color:#fff}
+  .rs-empty{padding:40px;text-align:center;color:var(--text-tertiary,#9AA3AF)}
+  .rs-note{background:#FFF9F0;border:1px solid #F5E3C8;border-radius:10px;padding:12px 16px;font-size:12.5px;color:#7A5A2A;line-height:1.8;margin-top:18px}
+  .no-print{display:inherit}
+</style>
+</head>
+<body>
+<div class="breadcrumb"><a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a><span> / EHS 法规标准清单</span></div>
+
+<div class="container-wf">
+  <h1 class="page-title">EHS 法规标准清单 <i class="fa-solid fa-scale-balanced"></i></h1>
+  <p class="page-subtitle">法律法规、部门规章与技术标准的速查清单,标注对应免费工具;数据与订阅知识库同步。</p>
+
+  <div class="rs-toolbar">
+    <div class="rs-search"><i class="fa-solid fa-magnifying-glass"></i><input id="rsQ" type="text" placeholder="搜索法规/标准名称或标准号…"></div>
+    <div class="rs-chips" id="rsChips"></div>
+  </div>
+
+  <div id="rsList"></div>
+
+  <div class="rs-note">
+    <i class="fa-solid fa-circle-info"></i> 数据由 WorkBuddy 定期从订阅知识库同步生成(当前共 <span id="rsTotal"></span> 条);法律法规以官方现行版本为准,标准原文版权归发布单位,本站仅作检索索引。部分条目未收录标准号,请以官方发布为准。
+  </div>
+</div>
+
+<section class="tool-meta no-standard" data-toolmeta="sheen">
+  <p class="tm-disc"><i class="fa-solid fa-circle-info"></i> 免责声明：本工具依据公开国家标准、行业规范及官方文件整理，仅供参考与内部初步筛查之用，不构成任何专业法律、安全或工程意见。实际合规判定请以最新官方发布文本及具备资质的专业机构评估为准。使用者应自行核实相关标准的现行有效性。</p>
+</section>
+
+    <footer class="sheen-footer">
+    <img src="../assets/sheen-logo.png" alt="SHEEN Toolbox" class="sheen-logo-sm"> &nbsp;<strong>SHEEN Toolbox</strong> · EHS 法规标准清单
+</footer>
+<div class="print-time" id="printTime"></div>
+
+<script>
+document.getElementById('printTime').textContent = new Date().toISOString().replace('T',' ').slice(0,16);
+</script>
+<script src="data.js"></script>
+<script>
+(function(){
+  var DATA = window.REG_STD_DATA || [];
+  var CATS = [];
+  DATA.forEach(function(r){ if(CATS.indexOf(r.c) < 0) CATS.push(r.c); });
+
+  document.getElementById('rsTotal').textContent = DATA.length;
+
+  var chips = document.getElementById('rsChips');
+  var all = document.createElement('span');
+  all.className = 'rs-chip active'; all.textContent = '全部 ' + DATA.length;
+  all.onclick = function(){ setCat(''); };
+  chips.appendChild(all);
+  CATS.forEach(function(c){
+    var n = DATA.filter(function(r){ return r.c === c; }).length;
+    var s = document.createElement('span');
+    s.className = 'rs-chip'; s.textContent = c + ' ' + n;
+    s.onclick = function(){ setCat(c); };
+    chips.appendChild(s);
+  });
+
+  var curCat = '', curQ = '';
+  function setCat(c){ curCat = c; document.querySelectorAll('.rs-chip').forEach(function(x){ x.classList.remove('active'); }); event.target.classList.add('active'); render(); }
+  document.getElementById('rsQ').addEventListener('input', function(){ curQ = this.value.trim().toLowerCase(); render(); });
+
+  function render(){
+    var rows = DATA.filter(function(r){
+      if(curCat && r.c !== curCat) return false;
+      if(curQ){
+        var q = curQ.replace(/\s+/g, '');
+        var hay = (r.n + ' ' + r.s + ' ' + r.t.join(' ')).toLowerCase().replace(/\s+/g, '');
+        if(hay.indexOf(q) < 0) return false;
+      }
+      return true;
+    });
+    var byCat = {};
+    rows.forEach(function(r){ (byCat[r.c] = byCat[r.c] || []).push(r); });
+    var html = '';
+    Object.keys(byCat).sort().forEach(function(c){
+      html += '<div class="rs-cat">' + esc(c) + ' <span class="rs-count">' + byCat[c].length + ' 条</span></div>';
+      html += '<table class="rs-table"><thead><tr><th style="width:52%">法规/标准</th><th style="width:18%">标准号</th><th>对应工具</th></tr></thead><tbody>';
+      byCat[c].forEach(function(r){
+        html += '<tr><td>' + esc(r.n) + '</td><td class="rs-stdno">' + (r.s ? esc(r.s) : '—') + '</td><td>';
+        if(r.t.length){
+          r.t.forEach(function(t){ html += '<a class="rs-tool" href="/sheen-toolbox/' + t + '/">' + t + '</a>'; });
+        } else { html += '<span style="color:var(--text-tertiary,#9AA3AF);font-size:12px">—</span>'; }
+        html += '</td></tr>';
+      });
+      html += '</tbody></table>';
+    });
+    document.getElementById('rsList').innerHTML = html || '<div class="rs-empty"><i class="fa-solid fa-magnifying-glass"></i> 无匹配结果</div>';
+  }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  render();
+})();
+</script>
+</body>
+</html>
