@@ -70,6 +70,9 @@ document.getElementById('printTime').textContent = new Date().toISOString().repl
 <script>
 (function(){
   var DATA = window.REG_STD_DATA || [];
+  // 暂不展示的分类(用户尚未归位的根目录散落文件,等整理后从此处移除即可恢复)
+  var HIDDEN = { '根目录': true };
+  DATA = DATA.filter(function(r){ return !HIDDEN[r.c]; });
   var CATS = [];
   DATA.forEach(function(r){ if(CATS.indexOf(r.c) < 0) CATS.push(r.c); });
 
