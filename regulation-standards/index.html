@@ -460,22 +460,49 @@ async function callApi(prompt){
   return data.choices[0].message.content;
 }
 
+// ===== RAG 检索:按法规名从索引取真实条文 =====
+function ragFindLaw(name){
+  var arts = window.LAWS_QA || [];
+  var key = name.replace(/《|》|中华人民共和国/g, '').replace(/\s+/g, '');
+  var match = arts.filter(function(a){
+    var lk = a.law.replace(/中华人民共和国|_20\d+/g, '').replace(/\s+/g, '');
+    return lk.indexOf(key) >= 0 || key.indexOf(lk) >= 0;
+  });
+  return match;
+}
+
 async function aiExtract(){
   var raw = document.getElementById('lawInput').value.trim();
   if(!raw){ alert('请先输入法规名称（每行一部）'); return; }
   document.getElementById('btnAi').disabled = true;
   document.getElementById('aiSpin').style.display = 'inline';
   try{
+    var lawNames = raw.split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
+    var found = [], missing = [];
+    lawNames.forEach(function(nm){
+      var hit = ragFindLaw(nm);
+      if(hit.length){ found.push({ name: nm, arts: hit }); }
+      else { missing.push(nm); }
+    });
+
+    // 组装真实条文上下文
+    var context = '';
+    found.forEach(function(f){
+      context += '\n【' + f.name + '】共检索到 ' + f.arts.length + ' 条条文。\n';
+      f.arts.forEach(function(a){ context += '[' + a.no + '] ' + a.text + '\n'; });
+    });
+
     var prompt = '你是资深 EHS（环境、健康、安全）合规顾问。\n'
-      + '针对下面给出的法规名称（可能多部，每行一部），筛选与企业日常合规管理最相关的主要条款。\n'
+      + '下面是检索到的法规真实条文原文（条款号与内容均真实，不要改动）。\n'
+      + '请从这些条文中，筛选出与企业日常合规管理最相关的关键条文，生成合规性评价条目。\n'
       + '要求：\n'
-      + '1. 只考虑真实存在的法规；条款号使用准确编号，不要编造不存在的法条。\n'
-      + '2. 聚焦：安全生产、环境保护、职业健康、劳动用工、消防、特种设备、危险化学品、应急管理、数据与个人信息合规。\n'
-      + '3. 每部法规列出 5-9 条关键条文。\n'
-      + '4. 每条给出：条款号(no)、条文关键摘要(summary)、企业应满足的合规要求(requirement)。\n\n'
-      + '严格只输出一个 JSON 数组，不要任何解释或 markdown 代码块：\n'
-      + '[{"law":"法规名","no":"第X条","summary":"条文关键摘要","requirement":"企业合规要求"}]\n\n'
-      + '法规名称：\n' + raw;
+      + '1. 只使用下方提供的真实条文，条款号(no)必须与原文一致，禁止编造任何不存在的条款。\n'
+      + '2. 每部法规选择 5-9 条最关键条文（聚焦：安全生产、环境保护、职业健康、劳动用工、消防、特种设备、危险化学品、应急管理）。\n'
+      + '3. 每条给出：law(法规名)、no(条款号，用原文编号)、summary(条文关键摘要，50字内)、requirement(企业应满足的合规要求，结合条文展开)。\n\n'
+      + '检索到的真实条文：\n' + (context || '(未检索到任何条文)')
+      + '\n\n严格只输出一个 JSON 数组，不要任何解释或 markdown 代码块：\n'
+      + '[{"law":"法规名","no":"第X条","summary":"条文关键摘要","requirement":"企业合规要求"}]\n'
+      + (missing.length ? '\n注意：以下法规未在知识库中检索到，不要输出它们的任何条文：' + missing.join('、') + '\n' : '');
     var txt = await callApi(prompt);
     var m = txt.match(/\[[\s\S]*\]/);
     if(!m){ throw new Error('AI 未返回有效 JSON'); }
@@ -484,6 +511,9 @@ async function aiExtract(){
     arr.forEach(function(a){
       LAWS.push({id:uid(), law:a.law||raw.split('\n')[0]||'', no:a.no||'', summary:a.summary||'', requirement:a.requirement||'', status:'', evidence:'', dept:'', evaluator:'', date:todayStr()});
     });
+    if(missing.length){
+      alert('已在知识库中找到 ' + found.length + ' 部法规并生成评价；以下法规未在知识库中检索到，已跳过：\n' + missing.join('\n'));
+    }
     render(); saveState();
   }catch(err){
     alert('AI 提取失败：' + err.message + '\n可检查 API 设置，或改用「手动添加条文」。');
