@@ -247,9 +247,9 @@ document.getElementById('printTime').textContent = new Date().toISOString().repl
 <script>
 (function(){
   var DATA = window.REG_STD_DATA || [];
-  // 暂不展示的分类(工具箱2条非法规,根目录待归位)
+  // 暂不展示的分类(工具箱/参考资料/HOP 等非法规内容)
   var HIDDEN = { '根目录': true, '00 工具箱 SHEENT Toolbox': true };
-  DATA = DATA.filter(function(r){ return !HIDDEN[r.c]; });
+  DATA = DATA.filter(function(r){ return !HIDDEN[r.c] && r.c.indexOf('03 参考资料') !== 0; });
   var CATS = [];
   DATA.forEach(function(r){ if(CATS.indexOf(r.c) < 0) CATS.push(r.c); });
   // 按目录段落编号逐段排序(01→02→03→…; 同段下子目录 01→02→03→…),无数字垫后
