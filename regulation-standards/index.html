@@ -348,15 +348,19 @@ function qaWords(q){
 function qaRetrieve(q, top_k){
   var arts = window.LAWS_QA || [];
   var words = qaWords(q);
-  if(!words.length || !arts.length) return [];
+  if(words.length < 2 || !arts.length) return [];
   var scored = [];
   arts.forEach(function(a){
-    var s = 0;
+    var s = 0, hitWords = 0;
     words.forEach(function(w){
-      var idx = a.text.indexOf(w);
-      if(idx >= 0) s += 1 + 2 * (a.text.split(w).length - 1);
+      var c = a.text.split(w).length - 1;
+      if(c > 0){ s += 1 + 2 * c; hitWords++; }
     });
-    if(s > 0) scored.push({s:s, a:a});
+    if(hitWords >= 2 && hitWords / words.length >= 0.4){
+      // 长度惩罚: 条文越长, 词命中越容易, 除以 sqrt(长度) 拉平
+      s = s / Math.sqrt(a.text.length);
+      scored.push({s:s, a:a});
+    }
   });
   scored.sort(function(x,y){ return y.s - x.s; });
   return scored.slice(0, top_k).map(function(x){ return x.a; });
