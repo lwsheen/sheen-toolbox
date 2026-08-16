@@ -247,11 +247,25 @@ document.getElementById('printTime').textContent = new Date().toISOString().repl
 <script>
 (function(){
   var DATA = window.REG_STD_DATA || [];
-  // 暂不展示的分类(用户尚未归位的根目录散落文件,等整理后从此处移除即可恢复)
-  var HIDDEN = { '根目录': true };
+  // 暂不展示的分类(工具箱2条非法规,根目录待归位)
+  var HIDDEN = { '根目录': true, '00 工具箱 SHEENT Toolbox': true };
   DATA = DATA.filter(function(r){ return !HIDDEN[r.c]; });
   var CATS = [];
   DATA.forEach(function(r){ if(CATS.indexOf(r.c) < 0) CATS.push(r.c); });
+  // 按目录段落编号逐段排序(01→02→03→…; 同段下子目录 01→02→03→…),无数字垫后
+  function numKey(s){
+    var m = s.match(/(\d+)/g);
+    return m ? m.map(function(x){ return parseInt(x, 10); }) : [];
+  }
+  CATS.sort(function(a, b){
+    var ka = numKey(a), kb = numKey(b);
+    for(var i = 0; i < Math.max(ka.length, kb.length); i++){
+      var x = ka[i] != null ? ka[i] : 999;
+      var y = kb[i] != null ? kb[i] : 999;
+      if(x !== y) return x - y;
+    }
+    return 0;
+  });
 
   document.getElementById('rsTotal').textContent = DATA.length;
 
