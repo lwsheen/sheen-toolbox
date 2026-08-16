@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head data-seo="sheen">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="施工现场临时用电安全检查表：配电箱、开关箱、漏电保护、接地保护、线路敷设、箱体管理、电工持证等检查项，依据 JGJ/T 46-2024《建筑与市政工程施工现场临时用电安全技术标准》。">
+    <title>施工现场临时用电检查表 — SHEEN Toolbox</title>
+    <meta property="og:title" content="施工现场临时用电检查表 — SHEEN Toolbox">
+    <meta property="og:description" content="施工现场临时用电安全检查：开关箱/漏保/接地/线路/箱体/持证,依据 JGJ/T 46-2024,一键导出">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://sheen-toolbox.pages.dev/sheen-toolbox/assets/sheen-logo.png">
+    <link rel="canonical" href="https://sheen-toolbox.pages.dev/sheen-toolbox/temporary-power-checklist/">
+
+    <!-- Font Awesome 本地路径（禁止 CDN） -->
+    <link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
+    <!-- 公共样式（绝对路径，勿改） -->
+    <link rel="stylesheet" href="/sheen-toolbox/common.css">
+
+    <style>
+        /* 仅本工具特有样式，前缀 tpc- 防冲突 */
+        .page-title i{color:#F03752;font-size:22px;margin-right:8px}
+        .tpc-meta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+        .tpc-meta .field{flex:1;min-width:180px}
+        .tpc-meta label{display:block;font-size:12px;color:var(--text-secondary,#5C6470);margin-bottom:4px;font-weight:500}
+        .tpc-summary{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0;align-items:center}
+        .tpc-stat{flex:1 1 110px;min-width:96px;background:#fff;border:1px solid var(--border-light,#E3E6EA);border-radius:10px;padding:8px 12px;text-align:center}
+        .tpc-stat .n{font-size:24px;font-weight:800;line-height:1.1;color:var(--text-primary,#1E2126)}
+        .tpc-stat .l{font-size:12px;color:var(--text-secondary,#5C6470);margin-top:4px}
+        .tpc-stat.ok{border-color:#BBF7D0}
+        .tpc-stat.ok .n{color:#166534}
+        .tpc-stat.warn{border-color:#FECACA;background:#FDEEF1}
+        .tpc-stat.warn .n{color:var(--brand-red,#F03752)}
+        .tpc-stat.na{border-color:#E3E6EA}
+        .tpc-stat.na .n{color:#5C6470}
+        .tpc-stat.pending .n{color:#B45309}
+        .tpc-table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:inset 0 0 0 1px var(--border-light,#E3E6EA);font-size:13.5px}
+        .tpc-table th{background:var(--bg-secondary,#F1F2F4);color:var(--text-secondary,#5C6470);font-weight:500;text-align:left;padding:9px 12px;font-size:12.5px;border-bottom:1px solid var(--border-light,#E3E6EA)}
+        .tpc-table td{padding:9px 12px;border-bottom:1px solid var(--border-light,#E3E6EA);vertical-align:middle}
+        .tpc-table tr:last-child td{border-bottom:0}
+        .tpc-table .tpc-item{min-width:260px}
+        .tpc-table .tpc-std{min-width:320px;color:var(--text-secondary,#5C6470);font-size:12.5px;line-height:1.6}
+        .tpc-table select{width:100%;padding:6px 8px;border:1.5px solid var(--border-light,#E3E6EA);border-radius:8px;font-size:13px;background:#fff;color:var(--text-main,#1E2126);font-family:inherit}
+        .tpc-table select:focus{outline:none;border-color:var(--brand-red,#F03752)}
+        .tpc-table input[type=text]{width:100%;padding:6px 8px;border:1.5px solid var(--border-light,#E3E6EA);border-radius:8px;font-size:13px;background:#fff;color:var(--text-main,#1E2126);font-family:inherit}
+        .tpc-row.ok td{background:#F0FDF4}
+        .tpc-row.warn td{background:#FFF8E6}
+        .tpc-row.bad td{background:#FFF6F7}
+        .tpc-alert{display:none;background:#FFF6F7;border:1px solid #F7C9D0;color:#A32D2D;border-radius:10px;padding:10px 14px;font-size:13px;margin:12px 0}
+        .tpc-alert.show{display:block}
+        .tpc-ref{margin-top:14px;font-size:12px;color:var(--text-tertiary,#9AA3AF);line-height:1.8;background:#FFF9F0;border:1px solid #F5E3C8;border-radius:10px;padding:10px 14px}
+        .no-print{display:inherit}
+    </style>
+    <!-- Baidu Tongji -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9b8c3df212619adec1f70f01695f4160";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+      // github.io 镜像站统计(公众号阅读原文通道)
+      if (location.hostname.indexOf("github.io") >= 0) {
+        var hm2 = document.createElement("script");
+        hm2.src = "https://hm.baidu.com/hm.js?5ceec8bd8bf10bd9d1f4ddceaebdae6f";
+        s.parentNode.insertBefore(hm2, s);
+      }
+    })();
+    </script>
+</head>
+<body>
+
+    <!-- 面包屑导航 -->
+    <div class="breadcrumb">
+        <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+        <span> / 施工现场临时用电检查表</span>
+    </div>
+
+    <main class="app-container container-query">
+
+        <h1 class="page-title"><i class="fa-solid fa-bolt"></i> 施工现场临时用电检查表</h1>
+        <p class="page-subtitle">依据 JGJ/T 46-2024《建筑与市政工程施工现场临时用电安全技术标准》· 覆盖开关箱、漏电保护、接地保护、线路敷设、箱体管理、电工持证等检查项,三态判定 + 一键导出。</p>
+
+        <!-- 头部信息 -->
+        <div class="tpc-meta no-print">
+            <div class="field"><label>检查日期</label><input type="date" id="checkDate" class="form-control"></div>
+            <div class="field"><label>工程项目 / 区域</label><input type="text" id="checkArea" class="form-control" placeholder="如：3#楼主体施工区"></div>
+            <div class="field"><label>检查人</label><input type="text" id="checkPerson" class="form-control" placeholder="检查人员姓名"></div>
+        </div>
+
+        <!-- 工具栏 -->
+        <div class="tpc-summary no-print">
+            <button class="btn btn-print btn-sm" onclick="doPrint()"><i class="fa-solid fa-print"></i> 打印</button>
+            <button class="btn btn-outline btn-sm" onclick="exportExcel()"><i class="fa-solid fa-file-excel"></i> 导出 Excel</button>
+            <button class="btn btn-outline btn-sm" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> 导出 CSV</button>
+            <button class="btn btn-danger btn-sm" onclick="resetAll()"><i class="fa-solid fa-rotate-left"></i> 重置</button>
+        </div>
+
+        <!-- 统计 -->
+        <div class="tpc-summary">
+            <div class="tpc-stat pending"><div class="n" id="stTotal">0</div><div class="l">检查项</div></div>
+            <div class="tpc-stat ok"><div class="n" id="stOk">0</div><div class="l">符合</div></div>
+            <div class="tpc-stat warn"><div class="n" id="stWarn">0</div><div class="l">不符合</div></div>
+            <div class="tpc-stat na"><div class="n" id="stNa">0</div><div class="l">不适用</div></div>
+            <div class="tpc-stat pending"><div class="n" id="stPend">0</div><div class="l">未检查</div></div>
+        </div>
+
+        <!-- 不符合提示 -->
+        <div class="tpc-alert" id="tpcAlert"><i class="fa-solid fa-triangle-exclamation"></i> 存在 <b id="badCount">0</b> 项不符合,请立即整改并复查!不符合项:<span id="badList"></span></div>
+
+        <!-- 检查表 -->
+        <div class="card">
+            <div class="table-scroll">
+                <table class="tpc-table" id="tpcTable">
+                    <thead>
+                        <tr>
+                            <th style="width:52px">序号</th>
+                            <th class="tpc-item">检查项目</th>
+                            <th class="tpc-std">检查标准 / 要求</th>
+                            <th style="width:120px">检查结果</th>
+                            <th style="width:180px">备注 / 问题描述</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tpcBody"><!-- JS 渲染 --></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tpc-ref"><i class="fa-solid fa-circle-info"></i> 依据《建筑与市政工程施工现场临时用电安全技术标准》JGJ/T 46-2024(替代 JGJ 46-2005):开关箱漏电保护器额定漏电动作电流应不大于 30mA,额定漏电动作时间应小于 0.1s;潮湿或有腐蚀介质场所应不大于 15mA。总配电箱漏电保护器额定漏电动作电流应大于 30mA,额定漏电动作时间应大于 0.1s,但两者乘积应不大于 30mA·s。开关箱与用电设备水平距离不宜超过 3m。检查发现不符合项应立即整改,严禁带病用电。</div>
+
+    </main>
+
+    <!-- 标准信息块（由 add_tool_meta.py 注入） -->
+
+    <section class="tool-meta" data-toolmeta="sheen">
+  <div class="tm-head">
+<span class="tm-std-code">JGJ/T 46-2024 建筑与市政工程施工现场临时用电安全技术标准</span>
+  </div>
+  <div class="tm-line"><span class="tm-dt"><i>发布</i><span class="tm-dt-val">2024-09-09</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>实施</i><span class="tm-dt-val">2025-01-01</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>更新</i><span class="tm-dt-val">2026-08-16</span></span></div>
+</section>
+
+    <footer class="sheen-footer">
+        <img src="../assets/sheen-logo.png" alt="SHEEN Toolbox" class="sheen-logo-sm"> &nbsp;<strong>SHEEN Toolbox</strong> · 施工现场临时用电检查表
+    </footer>
+
+    <!-- 打印时间戳 -->
+    <div class="print-time" id="printTime"></div>
+
+    <script>
+    // 打印时间（北京时间）
+    (function () {
+        var d = new Date();
+        var utc = d.getTime() + d.getTimezoneOffset() * 60000;
+        var cn = new Date(utc + 8 * 3600000);
+        var p = function (n) { return (n < 10 ? '0' : '') + n; };
+        var s = cn.getFullYear() + '-' + p(cn.getMonth() + 1) + '-' + p(cn.getDate()) + ' ' + p(cn.getHours()) + ':' + p(cn.getMinutes());
+        var el = document.getElementById('printTime');
+        if (el) el.textContent = '打印时间：' + s + '（北京时间）';
+        var cd = document.getElementById('checkDate');
+        if (cd && !cd.value) cd.value = cn.getFullYear() + '-' + p(cn.getMonth() + 1) + '-' + p(cn.getDate());
+    })();
+
+    // ===== 检查项数据 =====
+    var ITEMS = [
+        { no: 1, item: '一闸一机', std: '每台用电设备应有各自专用的开关箱,严禁一个开关箱直接控制两台及以上用电设备(一闸一机,无一闸多用)。' },
+        { no: 2, item: '隔离开关', std: '开关箱内隔离开关应具有可见分断点,能同时断开所有极,并置于电源进线端(负荷侧不得设隔离开关)。' },
+        { no: 3, item: '短路/过载保护', std: '开关箱内应装设断路器或熔断器等短路、过载保护电器,参数与用电设备匹配。' },
+        { no: 4, item: '开关箱漏保参数', std: '开关箱漏电保护器:额定漏电动作电流 ≤30mA,额定漏电动作时间 ≤0.1s;潮湿或有腐蚀介质场所应 ≤15mA。' },
+        { no: 5, item: '总配电箱漏保参数', std: '总配电箱漏电保护器:额定漏电动作电流 ＞30mA,额定漏电动作时间 ＞0.1s,且两者乘积 ≤30mA·s。' },
+        { no: 6, item: '开关箱距设备距离', std: '开关箱与用电设备的水平距离不宜超过 3m,便于紧急情况下快速断电。' },
+        { no: 7, item: '接地与接零保护', std: '设备金属外壳应做保护接零(PE)或保护接地;配电箱、开关箱箱体金属部分应做保护接地。TN-S 系统必须采用三级配电两级保护。' },
+        { no: 8, item: '线路敷设', std: '电缆线路应采用埋地或架空敷设,严禁沿地面明设、泡水、被机械碾压或受拉。埋地深度、过路保护符合要求。' },
+        { no: 9, item: '箱体管理', std: '配电箱、开关箱应防雨、防砸、防尘,箱门配锁,由专人负责管理,箱内不得堆放杂物,标识清晰。' },
+        { no: 10, item: '电工持证上岗', std: '现场电工应持有特种作业操作证(低压电工),作业时在岗,严禁无证人员从事电气安装、维修作业。' }
+    ];
+
+    var tbody = document.getElementById('tpcBody');
+    function render(){
+        var html = '';
+        ITEMS.forEach(function(it){
+            html += '<tr class="tpc-row" data-no="' + it.no + '">'
+                + '<td style="text-align:center">' + it.no + '</td>'
+                + '<td class="tpc-item"><b>' + it.item + '</b></td>'
+                + '<td class="tpc-std">' + it.std + '</td>'
+                + '<td><select class="tpc-result" onchange="onResult(this,' + it.no + ')">'
+                + '<option value="">— 选择 —</option>'
+                + '<option value="ok">符合</option>'
+                + '<option value="warn">不符合</option>'
+                + '<option value="na">不适用</option>'
+                + '</select></td>'
+                + '<td><input type="text" class="tpc-remark" placeholder="问题描述 / 整改措施" oninput="saveState()"></td>'
+                + '</tr>';
+        });
+        tbody.innerHTML = html;
+        loadState();
+        updateStats();
+    }
+
+    function onResult(sel, no){
+        var row = sel.closest('tr');
+        row.classList.remove('ok','warn','bad');
+        if(sel.value === 'ok') row.classList.add('ok');
+        else if(sel.value === 'warn') row.classList.add('warn');
+        else if(sel.value === 'bad') row.classList.add('bad');
+        saveState();
+        updateStats();
+    }
+
+    function updateStats(){
+        var rows = tbody.querySelectorAll('tr');
+        var total = rows.length, ok = 0, warn = 0, na = 0, pend = 0, badList = [];
+        rows.forEach(function(r){
+            var v = r.querySelector('.tpc-result').value;
+            if(v === 'ok') ok++;
+            else if(v === 'warn'){ warn++; badList.push(r.querySelector('b').textContent); }
+            else if(v === 'na') na++;
+            else pend++;
+        });
+        document.getElementById('stTotal').textContent = total;
+        document.getElementById('stOk').textContent = ok;
+        document.getElementById('stWarn').textContent = warn;
+        document.getElementById('stNa').textContent = na;
+        document.getElementById('stPend').textContent = pend;
+        var alert = document.getElementById('tpcAlert');
+        if(warn > 0){
+            alert.classList.add('show');
+            document.getElementById('badCount').textContent = warn;
+            document.getElementById('badList').textContent = ' ' + badList.join('、');
+        } else {
+            alert.classList.remove('show');
+        }
+    }
+
+    function saveState(){
+        var st = { date: document.getElementById('checkDate').value, area: document.getElementById('checkArea').value, person: document.getElementById('checkPerson').value, results: {} };
+        tbody.querySelectorAll('tr').forEach(function(r){
+            var no = r.dataset.no;
+            st.results[no] = {
+                v: r.querySelector('.tpc-result').value,
+                rm: r.querySelector('.tpc-remark').value
+            };
+        });
+        try { localStorage.setItem('tpc-state', JSON.stringify(st)); } catch(e){}
+    }
+    function loadState(){
+        try {
+            var st = JSON.parse(localStorage.getItem('tpc-state') || '{}');
+            if(st.date) document.getElementById('checkDate').value = st.date;
+            if(st.area) document.getElementById('checkArea').value = st.area;
+            if(st.person) document.getElementById('checkPerson').value = st.person;
+            if(st.results){
+                Object.keys(st.results).forEach(function(no){
+                    var row = tbody.querySelector('tr[data-no="' + no + '"]');
+                    if(!row) return;
+                    var r = st.results[no];
+                    var sel = row.querySelector('.tpc-result');
+                    sel.value = r.v || '';
+                    row.querySelector('.tpc-remark').value = r.rm || '';
+                    if(r.v === 'ok') row.classList.add('ok');
+                    else if(r.v === 'warn') row.classList.add('warn');
+                    else if(r.v === 'bad') row.classList.add('bad');
+                });
+            }
+        } catch(e){}
+    }
+    function resetAll(){
+        if(!confirm('确定清空全部检查结果？此操作不可撤销。')) return;
+        try { localStorage.removeItem('tpc-state'); } catch(e){}
+        tbody.querySelectorAll('tr').forEach(function(r){
+            r.querySelector('.tpc-result').value = '';
+            r.querySelector('.tpc-remark').value = '';
+            r.classList.remove('ok','warn','bad');
+        });
+        document.getElementById('checkDate').value = '';
+        document.getElementById('checkArea').value = '';
+        document.getElementById('checkPerson').value = '';
+        updateStats();
+    }
+    function collectRows(){
+        var rows = [];
+        tbody.querySelectorAll('tr').forEach(function(r){
+            rows.push({
+                no: r.dataset.no,
+                item: r.querySelector('b').textContent,
+                std: r.querySelector('.tpc-std').textContent,
+                v: r.querySelector('.tpc-result').value,
+                vText: ({ok:'符合',warn:'不符合',na:'不适用'})[r.querySelector('.tpc-result').value] || '未检查',
+                rm: r.querySelector('.tpc-remark').value
+            });
+        });
+        return rows;
+    }
+    function exportCSV(){
+        var d = document.getElementById('checkDate').value || '—';
+        var a = document.getElementById('checkArea').value || '—';
+        var p = document.getElementById('checkPerson').value || '—';
+        var head = ['序号','检查项目','检查标准','检查结果','备注'];
+        var lines = [head.join(',')];
+        collectRows().forEach(function(r){
+            lines.push([r.no, '"' + r.item + '"', '"' + r.std.replace(/"/g,'""') + '"', r.vText, '"' + r.rm.replace(/"/g,'""') + '"'].join(','));
+        });
+        lines.push(''); lines.push('检查日期:,' + d + ',检查区域:,' + a + ',检查人:,' + p);
+        var blob = new Blob(['\ufeff' + lines.join('\n')], {type:'text/csv;charset=utf-8'});
+        var link = document.createElement('a'); link.href = URL.createObjectURL(blob);
+        link.download = '施工现场临时用电检查表_' + d + '.csv'; link.click();
+    }
+    function exportExcel(){
+        var d = document.getElementById('checkDate').value || '—';
+        var a = document.getElementById('checkArea').value || '—';
+        var p = document.getElementById('checkPerson').value || '—';
+        var rows = collectRows();
+        var head = ['序号','检查项目','检查标准','检查结果','备注'];
+        function escV(v){ return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+        var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"></head><body>'
+            + '<table border="1" cellspacing="0" cellpadding="4">'
+            + '<tr><td colspan="5" style="font-weight:700;font-size:14px;text-align:center;background:#FDEEF1">施工现场临时用电检查表</td></tr>'
+            + '<tr><td colspan="2">检查日期: ' + escV(d) + '</td><td colspan="3">检查区域: ' + escV(a) + ' / 检查人: ' + escV(p) + '</td></tr>'
+            + '<tr>' + head.map(function(h){ return '<th style="background:#F1F2F4">' + h + '</th>'; }).join('') + '</tr>'
+            + rows.map(function(r){
+                var bg = r.v === 'ok' ? 'background:#F0FDF4' : r.v === 'warn' ? 'background:#FFF6F7' : '';
+                return '<tr style="' + bg + '"><td>' + r.no + '</td><td>' + escV(r.item) + '</td><td>' + escV(r.std) + '</td><td>' + escV(r.vText) + '</td><td>' + escV(r.rm) + '</td></tr>';
+            }).join('')
+            + '</table></body></html>';
+        var blob = new Blob(['\ufeff' + html], {type:'application/vnd.ms-excel;charset=utf-8'});
+        var link = document.createElement('a'); link.href = URL.createObjectURL(blob);
+        link.download = '施工现场临时用电检查表_' + d + '.xls'; link.click();
+    }
+    function doPrint(){ saveState(); window.print(); }
+
+    // 输入监听(保存状态)
+    ['checkDate','checkArea','checkPerson'].forEach(function(id){
+        document.getElementById(id).addEventListener('change', saveState);
+        document.getElementById(id).addEventListener('input', saveState);
+    });
+
+    render();
+    </script>
+
+</body>
+</html>
