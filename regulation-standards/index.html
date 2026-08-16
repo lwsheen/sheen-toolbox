@@ -471,6 +471,21 @@ function ragFindLaw(name){
   return match;
 }
 
+// ===== 预筛选:EHS 高频关键词打分,排除法律责任/罚则条款 =====
+var RAG_KEYWORDS = ['责任制','培训','隐患','应急','特种作业','劳动防护','职业健康','消防','三同时','资质','保险','检查','危险作业','告知','档案','演练','报告','监测','许可证','整改','管理机构','安全管理人员','发包','承包','有限空间','动火','吊装','警示','操作规程','从业人员','公告','公示'];
+var RAG_PENALTY = /责令|罚款|处[一二三四五六七八九十百千\d]+万元|处[一二三四五六七八九十百千\d]+元以上|予以取缔|构成犯罪的/;
+function ragPreFilter(arts, top){
+  var scored = [];
+  arts.forEach(function(a){
+    if(RAG_PENALTY.test(a.text)) return;         // 跳过罚则条款
+    var s = 0;
+    RAG_KEYWORDS.forEach(function(k){ if(a.text.indexOf(k) >= 0) s++; });
+    if(s > 0) scored.push({s:s, a:a});
+  });
+  scored.sort(function(x,y){ return y.s - x.s; });
+  return scored.slice(0, top || 20).map(function(x){ return x.a; });
+}
+
 async function aiExtract(){
   var raw = document.getElementById('lawInput').value.trim();
   if(!raw){ alert('请先输入法规名称（每行一部）'); return; }
@@ -485,20 +500,21 @@ async function aiExtract(){
       else { missing.push(nm); }
     });
 
-    // 组装真实条文上下文
+    // 组装真实条文上下文(预筛:只取 EHS 相关的高频条款,排除罚则,每部最多 20 条)
     var context = '';
     found.forEach(function(f){
-      context += '\n【' + f.name + '】共检索到 ' + f.arts.length + ' 条条文。\n';
-      f.arts.forEach(function(a){ context += '[' + a.no + '] ' + a.text + '\n'; });
+      var picked = ragPreFilter(f.arts, 20);
+      context += '\n【' + f.name + '】检索到 ' + f.arts.length + ' 条,预筛出 ' + picked.length + ' 条与企业日常合规最相关的条文:\n';
+      picked.forEach(function(a){ context += '[' + a.no + '] ' + a.text + '\n'; });
     });
 
-    var prompt = '你是资深 EHS（环境、健康、安全）合规顾问。\n'
+    var prompt = '你是资深 EHS（环境、健康、安全）合规顾问，为企业合规性评价提供专业支持。\n'
       + '下面是检索到的法规真实条文原文（条款号与内容均真实，不要改动）。\n'
-      + '请从这些条文中，筛选出与企业日常合规管理最相关的关键条文，生成合规性评价条目。\n'
+      + '请从这些条文中，选择与企业日常合规管理最相关、最能落地执行的关键条文，生成合规性评价条目。\n'
       + '要求：\n'
       + '1. 只使用下方提供的真实条文，条款号(no)必须与原文一致，禁止编造任何不存在的条款。\n'
       + '2. 每部法规选择 5-9 条最关键条文（聚焦：安全生产、环境保护、职业健康、劳动用工、消防、特种设备、危险化学品、应急管理）。\n'
-      + '3. 每条给出：law(法规名)、no(条款号，用原文编号)、summary(条文关键摘要，50字内)、requirement(企业应满足的合规要求，结合条文展开)。\n\n'
+      + '3. 每条给出：law(法规名)、no(条款号，用原文编号)、summary(条文关键摘要，40字内，提炼核心义务)、requirement(企业应满足的合规要求，必须落到具体可执行动作：建立什么制度、配备什么人员/设施、履行什么手续、保留什么记录，60-100字)。\n\n'
       + '检索到的真实条文：\n' + (context || '(未检索到任何条文)')
       + '\n\n严格只输出一个 JSON 数组，不要任何解释或 markdown 代码块：\n'
       + '[{"law":"法规名","no":"第X条","summary":"条文关键摘要","requirement":"企业合规要求"}]\n'
