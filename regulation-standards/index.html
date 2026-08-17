@@ -101,6 +101,14 @@
   .qa-sample:hover{background:#B5D4F4}
   .qa-note{font-size:11.5px;color:var(--text-tertiary,#9AA3AF);margin-top:10px;line-height:1.7}
   .no-print{display:inherit}
+  .rs-mp{margin-top:20px;background:linear-gradient(120deg,#FDEEF1 0%,#fff 60%);border:1px solid #F7C9D0;border-radius:12px;padding:16px 20px;display:flex;justify-content:center}
+  .rs-mp-inner{display:flex;align-items:center;gap:16px;max-width:640px;width:100%}
+  .rs-mp-qr{width:86px;height:86px;flex-shrink:0;background:#fff;border-radius:10px;padding:5px;box-shadow:0 2px 8px rgba(30,33,38,.08)}
+  .rs-mp-qr img{width:100%;height:100%;object-fit:contain;border-radius:6px}
+  .rs-mp-title{font-size:15px;font-weight:600;color:#F03752;margin-bottom:6px}
+  .rs-mp-title i{margin-right:6px}
+  .rs-mp-desc{font-size:12.5px;color:#5C6470;line-height:1.7}
+  @media(max-width:480px){.rs-mp{padding:14px 16px}.rs-mp-qr{width:72px;height:72px}.rs-mp-title{font-size:13.5px}}
 </style>
 <!-- Baidu Tongji -->
 <script>
@@ -211,6 +219,19 @@ var _hmt = _hmt || [];
 
 <section class="tool-meta no-standard" data-toolmeta="sheen">
   <p class="tm-disc"><i class="fa-solid fa-circle-info"></i> 免责声明：本工具依据公开国家标准、行业规范及官方文件整理，仅供参考与内部初步筛查之用，不构成任何专业法律、安全或工程意见。合规性评价由 AI 基于公开法律法规自动生成关键条文摘要，AI 生成内容可能存在遗漏或偏差。实际合规判定请以最新官方发布文本及具备资质的专业机构评估为准。使用者应自行核实相关标准的现行有效性。</p>
+</section>
+
+<!-- 公众号引流 -->
+<section class="rs-mp">
+  <div class="rs-mp-inner">
+    <div class="rs-mp-qr">
+      <img src="../assets/qrcode-ima.png" alt="IMA 知识库订阅号" onerror="this.style.display='none'">
+    </div>
+    <div class="rs-mp-txt">
+      <div class="rs-mp-title"><i class="fa-solid fa-database"></i> 法规标准实时同步 · 订阅「IMA 知识库」</div>
+      <div class="rs-mp-desc">扫一扫订阅 IMA 知识库,本站所有法规条文、问答与合规评价均来自此库,订阅后法规更新第一时间触达。</div>
+    </div>
+  </div>
 </section>
 
     <footer class="sheen-footer">
