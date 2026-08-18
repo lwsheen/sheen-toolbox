@@ -114,8 +114,8 @@
         /* 四级风险色（与 NWS 图表一致） */
         .risk-safe      { background: #D1FAE5; color: #065F46; }       /* 绿 - 安全 */
         .risk-caution   { background: #FEF08A; color: #854D0E; }       /* 黄 - 注意 */
-        .risk-extreme   { background: #FED7AA; color: #9A3412; }       /* 橙 - 极度注意 */
-        .risk-danger    { background: #FECACA; color: #991B1B; }       /* 红 - 危险 */
+        .risk-extreme   { background: #FED7AA; color: var(--warn-deep); }       /* 橙 - 极度注意 */
+        .risk-danger    { background: var(--fail-soft); color: var(--fail-deep); }       /* 红 - 危险 */
         .risk-extdanger{ background: #7F1D1D; color: #FFF; }           /* 深红 - 极度危险 */
 
         /* ---- 建议面板 ---- */
@@ -718,5 +718,7 @@
     })();
     </script>
     <script src="/sheen-toolbox/assets/i18n.js"></script>
+<script src="/sheen-toolbox/assets/share.js"></script>
+
 </body>
 </html>
