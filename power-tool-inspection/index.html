@@ -122,14 +122,20 @@
         .res-group { display: flex; gap: 4px; justify-content: center; flex-wrap: nowrap; }
         .res-opt {
             display: inline-flex; align-items: center; gap: 3px;
-            border: 1px solid var(--border, #E3E6EA); border-radius: 999px;
+            border: 1px solid var(--border, #E3E6EA); border-radius: 8px;
             padding: 3px 8px; font-size: 11px !important; cursor: pointer;
             transition: all 0.15s; background: #fff; text-align: center;
             justify-content: center; min-width: auto !important; width: auto !important; border: none !important;
         }
-        .res-opt.active-y  { background: #D1FAE5; color: #065F46; border-color: #34D399 !important; font-weight: 600; }
-        .res-opt.active-n  { background: #FEE2E2; color: #991B1B; border-color: #F87171 !important; font-weight: 600; }
-        .res-opt.active-na { background: #F3F4F6; color: #4B5563; border-color: #9CA3AF !important; }
+        .res-opt.active-y  { background: #D1FAE5; color: #065F46; border-color: #34D399 !important; font-weight: 600;
+            border-radius: 8px;
+        }
+        .res-opt.active-n  { background: #FEE2E2; color: #991B1B; border-color: #F87171 !important; font-weight: 600;
+            border-radius: 8px;
+        }
+        .res-opt.active-na { background: #F3F4F6; color: #4B5563; border-color: #9CA3AF !important;
+            border-radius: 8px;
+        }
 
         /* 工具类别 badge */
         .tool-class-badge {
@@ -150,14 +156,24 @@
         .verdict-card {
             margin-top: 18px; padding: 14px 20px;
             background: linear-gradient(135deg, #FDEEF1 0%, #FFF7ED 100%);
-            border: 1.5px solid var(--brand-red, #F03752); border-radius: var(--radius-md, 8px);
+            border: 1.5px solid var(--brand-red, #F03752); border-radius: 8px 8px;
             display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center;
         }
-        .verdict-card .vc-label { font-weight: 700; font-size: 14px; color: var(--brand-red, #F03752); }
-        .verdict-card .vc-value { font-size: 15px; font-weight: 800; }
-        .verdict-card .vc-good { color: #166534; }
-        .verdict-card .vc-bad  { color: var(--brand-red, #F03752); }
-        .verdict-card .vc-warn { color: #92400E; }
+        .verdict-card .vc-label { font-weight: 700; font-size: 14px; color: var(--brand-red, #F03752);
+            border-radius: 8px;
+        }
+        .verdict-card .vc-value { font-size: 15px; font-weight: 800;
+            border-radius: 8px;
+        }
+        .verdict-card .vc-good { color: #166534;
+            border-radius: 8px;
+        }
+        .verdict-card .vc-bad  { color: var(--brand-red, #F03752);
+            border-radius: 8px;
+        }
+        .verdict-card .vc-warn { color: #92400E;
+            border-radius: 8px;
+        }
 
         /* 指南内对照表 */
         .ref-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 10px 0; }
@@ -191,12 +207,16 @@
             .form-header { background: transparent !important; border: none !important; padding: 4px 0 !important; font-size: 9px !important; }
             .form-header input, .form-header select { border: 0.5pt solid #999 !important; padding: 1px 3px !important; font-size: 9px !important; }
             .form-footer { border-color: #999 !important; font-size: 9px !important; }
-            .res-opt { font-size: 8px !important; padding: 1px 4px !important; }
+            .res-opt { font-size: 8px !important; padding: 1px 4px !important;
+            border-radius: 8px;
+        }
             .table-scroll { overflow: visible !important; margin: 0 !important; padding: 0 !important; }
             .card { box-shadow: none !important; border-radius: 0 !important; border: 1.5px solid #333 !important; page-break-inside: auto !important; }
             .breadcrumb, .page-subtitle, .sheen-footer { display: none !important; }
             h1.page-title { font-size: 16px !important; margin-bottom: 4px !important; }
-            .verdict-card { display: block !important; border: 1pt solid #333 !important; page-break-inside: avoid; background: #f5f5f5 !important; }
+            .verdict-card { display: block !important; border: 1pt solid #333 !important; page-break-inside: avoid; background: #f5f5f5 !important;
+            border-radius: 8px;
+        }
         }
     </style>
     <!-- Baidu Tongji -->
