@@ -66,25 +66,35 @@
 
     .search-box i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); font-size: 14px; }
 
-    .class-filter { margin-bottom: 16px; }
+    .class-filter { margin-bottom: 16px;
+            border-radius: 8px;
+        }
 
-    .class-filter h4 { font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+    .class-filter h4 { font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px;
+            border-radius: 8px;
+        }
 
-    .class-chips { display: flex; flex-wrap: wrap; gap:4px; }
+    .class-chips { display: flex; flex-wrap: wrap; gap:4px;
+            border-radius: 8px;
+        }
 
-    .class-chip { font-size: 12px; padding: 5px 12px; border-radius: 60px; background: var(--border-light); color: var(--text-secondary); cursor: pointer; border: none; font-family: inherit; transition: var(--transition); white-space: nowrap; }
+    .class-chip { font-size: 12px; padding: 5px 12px; border-radius: 8px; background: var(--border-light); color: var(--text-secondary); cursor: pointer; border: none; font-family: inherit; transition: var(--transition); white-space: nowrap; }
 
     .class-chip:hover { background: var(--brand-red-light); color: var(--brand-red); }
 
-    .class-chip.active { background: var(--brand-red); color: #fff; font-weight: 600; }
+    .class-chip.active { background: var(--brand-red); color: #fff; font-weight: 600;
+            border-radius: 8px;
+        }
 
     .sub-class { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 4px; }
 
-    .sub-chip { font-size: 11px; padding: 3px 10px; border-radius: 60px; background: var(--bg-page); color: var(--text-secondary); cursor: pointer; border: 1px solid var(--border); font-family: inherit; transition: var(--transition); }
+    .sub-chip { font-size: 11px; padding: 3px 10px; border-radius: 8px; background: var(--bg-page); color: var(--text-secondary); cursor: pointer; border: 1px solid var(--border); font-family: inherit; transition: var(--transition); }
 
     .sub-chip:hover { border-color: var(--brand-red); color: var(--brand-red); }
 
-    .sub-chip.active { background: var(--brand-red-light); color: var(--brand-red); border-color: var(--brand-red); font-weight: 600; }
+    .sub-chip.active { background: var(--brand-red-light); color: var(--brand-red); border-color: var(--brand-red); font-weight: 600;
+            border-radius: 8px;
+        }
 
     .stats-bar { border-top: 1px solid var(--border-light); padding-top: 12px; }
 
