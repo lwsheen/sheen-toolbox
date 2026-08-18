@@ -90,10 +90,10 @@
 
         .guide-suggest {
             background: #FFF7ED; border: 1px solid #FDBA74; border-radius: var(--radius-sm, 4px);
-            padding: 10px 14px; margin-top: 12px; font-size: 13px; color: #9A3412;
+            padding: 10px 14px; margin-top: 12px; font-size: 13px; color: var(--warn-deep);
             display: flex; align-items: flex-start; gap: 8px;
         }
-        .guide-suggest i { color: #F97316; margin-top: 2px; }
+        .guide-suggest i { color: var(--warn); margin-top: 2px; }
 
         /* ===== 记录表（每项一行，与用电安全检查表一致） ===== */
         .check-table { table-layout: fixed; min-width: 900px; width: 100%; }
@@ -130,7 +130,7 @@
         .res-opt.active-y  { background: #D1FAE5; color: #065F46; border-color: #34D399 !important; font-weight: 600;
             border-radius: 8px;
         }
-        .res-opt.active-n  { background: #FEE2E2; color: #991B1B; border-color: #F87171 !important; font-weight: 600;
+        .res-opt.active-n  { background: var(--fail-soft-2); color: var(--fail-deep); border-color: #F87171 !important; font-weight: 600;
             border-radius: 8px;
         }
         .res-opt.active-na { background: #F3F4F6; color: #4B5563; border-color: #9CA3AF !important;
@@ -146,11 +146,11 @@
         .tc-i    { background: #DBEAFE !important; color: #1E40AF !important; }
         .tc-ii   { background: #E0E7FF !important; color: #3730A3 !important; }
         .tc-iii  { background: #D1FAE5 !important; color: #065F46 !important; }
-        .tc-batt { background: #FEF3C7 !important; color: #92400E !important; }
+        .tc-batt { background: var(--warn-soft-2) !important; color: #92400E !important; }
 
         /* 结论颜色 */
         .conclusion-bad  { color: var(--brand-red, #F03752) !important; font-weight: 700; }
-        .conclusion-good { color: #166534 !important; font-weight: 600; }
+        .conclusion-good { color: var(--ok-deep) !important; font-weight: 600; }
 
         /* 综合判定卡片 */
         .verdict-card {
@@ -165,7 +165,7 @@
         .verdict-card .vc-value { font-size: 15px; font-weight: 800;
             border-radius: 8px;
         }
-        .verdict-card .vc-good { color: #166534;
+        .verdict-card .vc-good { color: var(--ok-deep);
             border-radius: 8px;
         }
         .verdict-card .vc-bad  { color: var(--brand-red, #F03752);
@@ -658,7 +658,7 @@
             body+='<b>下次检查日期：</b>'+(nextDt||'____年__月__日');
             body+='</div>';
 
-            var doc='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"></head><body>'+body+'</body></html>';
+            var doc='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"></head><body>'+body+'<script src="/sheen-toolbox/assets/share.js"><\/script></body></html>';
             var mime=type==='xls'?'application/vnd.ms-excel':'application/msword',
                 blob=new Blob(['\ufeff'+doc],{type:mime}),
                 url=URL.createObjectURL(blob),
@@ -699,5 +699,7 @@
     })();
     </script>
     <script src="/sheen-toolbox/assets/i18n.js"></script>
+<script src="/sheen-toolbox/assets/share.js"></script>
+
 </body>
 </html>
