@@ -81,7 +81,7 @@
   .ce-table thead th{background:#F8F9FA;color:var(--text-secondary);font-weight:600;text-align:left;padding:8px 10px;border-bottom:1.5px solid var(--border);white-space:nowrap;position:sticky;top:0;z-index:1}
   .ce-table tbody tr:hover{background:#FBFCFD}
   .ce-table tbody tr.ce-ok{background:#F0FDF4}
-  .ce-table tbody tr.ce-ok:hover{background:#DCFCE7}
+  .ce-table tbody tr.ce-ok:hover{background:var(--ok-soft)}
   .ce-table tbody tr.ce-warn{background:#FFF8E6}
   .ce-table tbody tr.ce-warn:hover{background:#FFEFC2}
   .ce-table tbody tr.ce-bad{background:#FFF6F7}
@@ -196,7 +196,7 @@ var _hmt = _hmt || [];
             <button class="ce-menu-item" onclick="importSample('zybf')"><span class="ce-menu-law">中华人民共和国职业病防治法</span><span class="ce-menu-badge">29 条</span></button>
           </div>
         </div>
-        <button class="btn btn-outline btn-sm" onclick="toggleApi()"><i class="fa-solid fa-key"></i> API 设置</button>
+        <button class="btn btn-outline" onclick="toggleApi()"><i class="fa-solid fa-key"></i> API 设置</button>
       </div>
     </div>
 
@@ -242,9 +242,7 @@ var _hmt = _hmt || [];
   </div>
 </main>
 
-<section class="tool-meta no-standard" data-toolmeta="sheen">
-  <p class="tm-disc"><i class="fa-solid fa-circle-info"></i> 免责声明：本工具依据公开国家标准、行业规范及官方文件整理，仅供参考与内部初步筛查之用，不构成任何专业法律、安全或工程意见。合规性评价由 AI 基于公开法律法规自动生成关键条文摘要，AI 生成内容可能存在遗漏或偏差。实际合规判定请以最新官方发布文本及具备资质的专业机构评估为准。使用者应自行核实相关标准的现行有效性。</p>
-</section>
+
 
 <!-- 公众号引流 -->
 <section class="rs-mp">
@@ -817,7 +815,7 @@ function exportExcel(){
     + rows.map(function(r){
       return '<tr>' + r.map(function(c){ return '<td>'+escV(c==null?'':c)+'</td>'; }).join('') + '</tr>';
     }).join('')
-    + '</table></body></html>';
+    + '</table><script src="/sheen-toolbox/assets/share.js"><\/script></body></html>';
   var blob = new Blob(['\ufeff' + html], {type:'application/vnd.ms-excel;charset=utf-8'});
   var a = document.createElement('a'); a.href=URL.createObjectURL(blob);
   a.download = '合规性评价_' + todayStr() + '.xls';
@@ -833,5 +831,7 @@ function doPrint(){ window.print(); }
 loadState();
 render();
 </script>
+<script src="/sheen-toolbox/assets/share.js"></script>
+
 </body>
 </html>
