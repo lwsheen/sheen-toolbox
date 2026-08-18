@@ -217,7 +217,9 @@
 
         /* 底部操作（非急救，打印隐藏） */
         .action-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 4px; }
-        .action-row .btn-lg { padding: 11px 22px; font-size: 14px; }
+        .action-row .btn-lg { padding: 12px 28px; font-size: 14px;
+            border-radius: 8px;
+        }
 
         /* 手机端固定急救栏：始终可见的拨打120 + 重置 */
         .emergency-bar { display: none; }
@@ -233,8 +235,12 @@
                 box-shadow: 0 -2px 12px rgba(0,0,0,.12);
                 z-index: 50;
             }
-            .emergency-bar .btn-lg { flex: 1; justify-content: center; padding: 13px 0; font-size: 15px; }
-            .emergency-bar .btn-call { flex: 2; }
+            .emergency-bar .btn-lg { flex: 1; justify-content: center; padding: 13px 0; font-size: 15px;
+            border-radius: 8px;
+        }
+            .emergency-bar .btn-call { flex: 2;
+            border-radius: 8px;
+        }
         }
     </style>
     <!-- Baidu Tongji -->
