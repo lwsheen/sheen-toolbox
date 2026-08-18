@@ -41,16 +41,18 @@
         .lp-search .clear-btn {
             border: none; background: transparent; color: #9ca3af;
             cursor: pointer; font-size: 14px; padding: 2px 6px;
+            border-radius: 8px;
         }
         .lp-search .clear-btn:hover { color: var(--brand-red, #F03752); }
 
         /* 分类筛选 chips */
         .lp-filters {
             display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;
+            border-radius: 8px;
         }
         .lp-chip {
             display: inline-flex; align-items: center; gap: 5px;
-            padding: 6px 16px; border-radius: 30px; font-size: 13px;
+            padding: 6px 16px; border-radius: 8px; font-size: 13px;
             font-weight: 600; cursor: pointer; user-select: none;
             background: var(--bg-soft, #F8F9FA); color: var(--muted, #5C6470);
             border: 1px solid var(--border, #E3E6EA);
@@ -60,6 +62,7 @@
         .lp-chip.active {
             background: var(--brand-red, #F03752); color: #fff;
             border-color: var(--brand-red, #F03752);
+            border-radius: 8px;
         }
 
         /* 梯型卡片网格 */
@@ -113,14 +116,20 @@
             color: var(--muted, #5C6470); cursor: pointer;
             white-space: nowrap; border-bottom: 2px solid transparent;
             transition: all .15s; user-select: none;
+            border-radius: 8px;
         }
         .param-tab:hover { color: var(--brand-red, #F03752); }
         .param-tab.active {
             color: var(--brand-red, #F03752);
             border-bottom-color: var(--brand-red, #F03752);
+            border-radius: 8px;
         }
-        .param-tab.tab-diagram { color: var(--tech-blue, #2D7EE7); }
-        .param-tab.tab-diagram.active { color: var(--tech-blue, #2D7EE7); border-bottom-color: var(--tech-blue, #2D7EE7); }
+        .param-tab.tab-diagram { color: var(--tech-blue, #2D7EE7);
+            border-radius: 8px;
+        }
+        .param-tab.tab-diagram.active { color: var(--tech-blue, #2D7EE7); border-bottom-color: var(--tech-blue, #2D7EE7);
+            border-radius: 8px;
+        }
         .param-tab.tab-diagram:hover { color: var(--tech-blue, #2D7EE7); }
         .param-content { display: none; padding: 16px 18px; }
         .param-content.active { display: block; }
@@ -240,7 +249,7 @@
         }
         .lp-actions button {
             display: inline-flex; align-items: center; gap: 6px;
-            padding: 8px 18px; border-radius: 30px; font-size: 13px;
+            padding: 8px 18px; border-radius: 8px; font-size: 13px;
             font-weight: 600; cursor: pointer; border: 1px solid var(--border, #E3E6EA);
             background: #fff; color: var(--ink, #1E2126);
             transition: all .15s;
@@ -259,7 +268,9 @@
         @media (max-width: 640px) {
             .ladder-grid { grid-template-columns: 1fr; }
             .param-tabs { gap: 0; }
-            .param-tab { padding: 8px 10px; font-size: 11.5px; }
+            .param-tab { padding: 8px 10px; font-size: 11.5px;
+            border-radius: 8px;
+        }
         }
 
         @media print {
