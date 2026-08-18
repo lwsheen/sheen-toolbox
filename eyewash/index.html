@@ -17,15 +17,21 @@
     <link rel="stylesheet" href="/sheen-toolbox/common.css">
     <style>
 
-        .filter-bar { display:flex; flex-wrap:wrap; gap:14px; align-items:center; margin:6px 0 16px; }
+        .filter-bar { display:flex; flex-wrap:wrap; gap:14px; align-items:center; margin:6px 0 16px;
+            border-radius: 8px;
+        }
         .filter-bar .search-wrap { position:relative; flex:1 1 260px; min-width:220px; }
         .filter-bar .search-wrap i { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--text-secondary); }
         .filter-bar input.form-control { padding-left:34px; }
-        .chip-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
+        .chip-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;
+            border-radius: 8px;
+        }
         .chip { border:1px solid var(--border); background:var(--bg-card); color:var(--text-secondary);
-                border-radius:999px; padding:6px 14px; font-size:12px; cursor:pointer; transition:.15s; white-space:nowrap; }
+                border-radius: 8px; padding:6px 14px; font-size:12px; cursor:pointer; transition:.15s; white-space:nowrap; }
         .chip:hover { border-color:var(--brand-red); color:var(--brand-red); }
-        .chip.active { background:var(--brand-red); border-color:var(--brand-red); color:#fff; }
+        .chip.active { background:var(--brand-red); border-color:var(--brand-red); color:#fff;
+            border-radius: 8px;
+        }
         .result-meta { font-size:12px; color:var(--text-secondary); margin-bottom:14px; }
         .result-meta b { color:var(--brand-red); }
         .param-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:14px; }
@@ -69,29 +75,43 @@
                     background:var(--brand-red-light); padding:1px 7px; border-radius:5px; flex:0 0 auto; margin-top:1px; }
         .item-ctrl { display:flex; flex-direction:column; gap:6px; align-items:flex-end; flex:0 0 auto; }
         .status-seg { display:inline-flex; border:1px solid var(--border); border-radius:8px; overflow:hidden; }
-        .status-seg button { border:none; background:transparent; padding:5px 11px; font-size:12px; cursor:pointer; color:var(--text-secondary); }
+        .status-seg button { border:none; background:transparent; padding:5px 11px; font-size:12px; cursor:pointer; color:var(--text-secondary);
+            border-radius: 8px;
+        }
         .status-seg button:hover { background:var(--border-light); }
-        .status-seg button.active-yes { background:#16A34A; color:#fff; }
-        .status-seg button.active-no { background:#F03752; color:#fff; }
-        .status-seg button.active-na { background:#5C6470; color:#fff; }
+        .status-seg button.active-yes { background:#16A34A; color:#fff;
+            border-radius: 8px;
+        }
+        .status-seg button.active-no { background:#F03752; color:#fff;
+            border-radius: 8px;
+        }
+        .status-seg button.active-na { background:#5C6470; color:#fff;
+            border-radius: 8px;
+        }
         .note-input { width:240px; max-width:100%; font-size:12px; padding:5px 8px; border:1px solid var(--border); border-radius:6px; display:none; }
         .note-input.show { display:block; }
-        .item-print-status { display:none; font-size:12px; font-weight:700; padding:2px 8px; border-radius:5px; }
+        .item-print-status { display:none; font-size:12px; font-weight:700; padding:2px 8px; border-radius: 8px; }
         .report-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:16px 20px; margin-top:8px; }
         .report-card h3 { font-size:15px; margin:0 0 10px; }
         .nc-item { font-size:12px; padding:8px 10px; border-left:3px solid #F03752; background:var(--bg-page); border-radius:0 6px 6px 0; margin-bottom:8px; line-height:1.6; }
         .nc-item .nc-ref { color:var(--brand-red); font-family:ui-monospace,Menlo,monospace; }
         .empty-nc { font-size:12px; color:#16A34A; }
         @media print {
-            .item-print-status { display:inline-block; }
+            .item-print-status { display:inline-block;
+            border-radius: 8px;
+        }
             .item-ctrl { display:none !important; }
             .section-body { display:block !important; }
-            .section-head .toggle-i { display:none; }
+            .section-head .toggle-i { display:none;
+            border-radius: 8px;
+        }
             .progress-fill { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
         }
         @media (max-width:768px){
             .item-ctrl { align-items:stretch; width:100%; }
-            .status-seg { width:100%; } .status-seg button{ flex:1; }
+            .status-seg { width:100%; } .status-seg button{ flex:1;
+            border-radius: 8px;
+        }
             .note-input { width:100%; }
         }
     
@@ -99,9 +119,13 @@
         .tab-bar { display:flex; gap:6px; margin:4px 0 18px; border-bottom:1px solid var(--border); flex-wrap:wrap; }
         .tab-btn { border:none; background:transparent; padding:10px 18px; font-size:14px; cursor:pointer;
                    color:var(--text-secondary); border-bottom:2px solid transparent; margin-bottom:-1px;
-                   font-weight:600; font-family:inherit; display:inline-flex; align-items:center; gap:7px; }
+                   font-weight:600; font-family:inherit; display:inline-flex; align-items:center; gap:7px;
+            border-radius: 8px;
+        }
         .tab-btn:hover { color:var(--brand-red); }
-        .tab-btn.active { color:var(--brand-red); border-bottom-color:var(--brand-red); }
+        .tab-btn.active { color:var(--brand-red); border-bottom-color:var(--brand-red);
+            border-radius: 8px;
+        }
         .tab-panel { display:none; }
         .tab-panel.active { display:block; }
     </style>
