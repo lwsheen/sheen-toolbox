@@ -140,16 +140,16 @@
         .check-table input:focus,
         .check-table textarea:focus { border-color: var(--brand-red); }
 
-        /* 区段标题行 */
+        /* 区段标题行(浅底深字,深浅色环境都清晰) */
         .section-row td {
-            background: #1F2A37;
-            color: #fff;
+            background: #F4F6F8;
+            color: #1E2126;
             font-weight: 700;
-            font-size: 13px;
-            padding: 9px 10px !important;
-            letter-spacing: 0.5px;
+            font-size: 14px;
+            padding: 10px 12px !important;
+            letter-spacing: 0.3px;
         }
-        .section-row .sec-no { color: var(--amber, #F57C00); font-weight: 800; margin-right: 6px; }
+        .section-row .sec-no { color: var(--brand-red, #F03752); font-weight: 800; margin-right: 6px; }
 
         /* 结果单选药丸 */
         .res-group { display: flex; gap: 4px; justify-content: center; flex-wrap: nowrap; }
@@ -158,7 +158,7 @@
             align-items: center;
             gap: 2px;
             border: 1px solid var(--border);
-            border-radius: 999px;
+            border-radius: 8px;
             padding: 3px 7px;
             font-size: 12px;
             cursor: pointer;
@@ -170,9 +170,15 @@
         }
         .res-opt input { display: none; }
         .res-opt:hover { border-color: #9CA3AF; }
-        .res-opt.active-ok    { background: #DCFCE7; border-color: #16A34A; color: #166534; font-weight: 700; }
-        .res-opt.active-bad   { background: #FEE2E2; border-color: var(--brand-red); color: var(--brand-red); font-weight: 700; }
-        .res-opt.active-na    { background: #F3F4F6; border-color: #9CA3AF; color: #4B5563; }
+        .res-opt.active-ok    { background: #DCFCE7; border-color: #16A34A; color: #166534; font-weight: 700;
+            border-radius: 8px;
+        }
+        .res-opt.active-bad   { background: #FEE2E2; border-color: var(--brand-red); color: var(--brand-red); font-weight: 700;
+            border-radius: 8px;
+        }
+        .res-opt.active-na    { background: #F3F4F6; border-color: #9CA3AF; color: #4B5563;
+            border-radius: 8px;
+        }
 
         /* 不符合行高亮 */
         tr.row-bad td { background: #FDEEF1 !important; }
@@ -246,12 +252,22 @@
                 background: transparent !important;
             }
             .check-table .std-input { min-height: 0 !important; }
-            .del-btn { display: none !important; }
-            .section-row td { background: #1F2A37 !important; color: #fff !important; -webkit-print-color-adjust: exact; font-size: 9px !important; padding: 4px 6px !important; }
-            .res-opt { border: 1px solid #999 !important; padding: 1px 4px !important; font-size: 8px !important; }
-            .res-opt.active-ok  { background: #DCFCE7 !important; }
-            .res-opt.active-bad { background: #FEE2E2 !important; }
-            .res-opt.active-na  { background: #F3F4F6 !important; }
+            .del-btn { display: none !important;
+            border-radius: 8px;
+        }
+            .section-row td { background: #F4F6F8 !important; color: #1E2126 !important; -webkit-print-color-adjust: exact; font-size: 9px !important; padding: 4px 6px !important; }
+            .res-opt { border: 1px solid #999 !important; padding: 1px 4px !important; font-size: 8px !important;
+            border-radius: 8px;
+        }
+            .res-opt.active-ok  { background: #DCFCE7 !important;
+            border-radius: 8px;
+        }
+            .res-opt.active-bad { background: #FEE2E2 !important;
+            border-radius: 8px;
+        }
+            .res-opt.active-na  { background: #F3F4F6 !important;
+            border-radius: 8px;
+        }
             .table-scroll { overflow: visible !important; margin: 0 !important; padding: 0 !important; }
             /* 长表超过一页时允许跨页断行，避免整张 .card 被推到第二页造成第一页空白 */
             .card { box-shadow: none !important; border-radius: 0 !important; border: 1.5px solid #333 !important; page-break-inside: auto !important; }
@@ -364,10 +380,10 @@
     <!-- 页脚 -->
     <section class="tool-meta" data-toolmeta="sheen">
   <div class="tm-head">
-<span class="tm-std-code">GB/T 13869-2017</span>
+<span class="tm-std-code">GB/T 13869-2026</span>
 <span class="tm-std-name">《用电安全导则》</span>
   </div>
-  <div class="tm-line"><span class="tm-dt"><i>发布</i><span class="tm-dt-val">2017-12-29</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>实施</i><span class="tm-dt-val">2018-07-01</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>更新</i><span class="tm-dt-val">2026-08-04</span></span></div>
+  <div class="tm-line"><span class="tm-dt"><i>发布</i><span class="tm-dt-val">2026-07-02</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>实施</i><span class="tm-dt-val">2027-02-01</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>更新</i><span class="tm-dt-val">2026-08-18</span></span></div>
 </section>
 
     <footer class="sheen-footer">
@@ -654,7 +670,7 @@
                 var tr = rows[i];
                 if (tr.classList.contains('section-row')) {
                     var t = tr.querySelector('td').textContent.trim();
-                    body += '<tr><td colspan="5" style="background:#1F2A37;color:#fff;font-weight:700;">' + esc(t) + '</td></tr>';
+                    body += '<tr><td colspan="5" style="background:#F4F6F8;color:#1E2126;font-weight:700;">' + esc(t) + '</td></tr>';
                     continue;
                 }
                 var code = tr.getAttribute('data-code') || '';
