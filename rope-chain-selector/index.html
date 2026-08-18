@@ -21,9 +21,15 @@
 .sel-inputs .form-full { grid-column: 1 / -1; }
 .angle-hint { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
 
-.btn-row { display: flex; gap: 10px; margin-top: 18px; }
-.btn-row .btn-primary { flex: 2; }
-.btn-row .btn-print, .btn-row .btn-outline { flex: 1; }
+.btn-row { display: flex; gap: 10px; margin-top: 18px;
+            border-radius: 8px;
+        }
+.btn-row .btn-primary { flex: 2;
+            border-radius: 8px;
+        }
+.btn-row .btn-print, .btn-row .btn-outline { flex: 1;
+            border-radius: 8px;
+        }
 
 /* 结果区 */
 .result-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 18px; }
@@ -56,12 +62,16 @@
 }
 
 .sel-verdict {
-  margin-top: 16px; padding: 12px 16px; border-radius: var(--radius-sm);
+  margin-top: 16px; padding: 12px 16px; border-radius: 8px;
   font-size: 13px; background: var(--brand-red-light); border: 1px solid var(--brand-red);
   color: var(--brand-red); display: none;
 }
-.sel-verdict.show { display: block; }
-.sel-verdict.warn { background: #FEF3E2; border-color: var(--amber); color: #B45309; }
+.sel-verdict.show { display: block;
+            border-radius: 8px;
+        }
+.sel-verdict.warn { background: #FEF3E2; border-color: var(--amber); color: #B45309;
+            border-radius: 8px;
+        }
 
 .related-box {
   margin-top: 22px; padding: 14px 18px; background: var(--bg-page);
@@ -79,7 +89,9 @@
 
 @media (max-width: 768px) {
   .sel-inputs, .result-grid-2 { grid-template-columns: 1fr; }
-  .btn-row { flex-direction: column; }
+  .btn-row { flex-direction: column;
+            border-radius: 8px;
+        }
   .sel-number { font-size: 36px; }
 }
 </style>
