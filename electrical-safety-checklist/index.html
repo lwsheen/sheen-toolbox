@@ -75,13 +75,13 @@
         }
         .stat-card .num { font-size: 24px; font-weight: 800; line-height: 1.1; color: var(--text-primary); }
         .stat-card .lab { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
-        .stat-card.s-ok    { border-color: #BBF7D0; }
-        .stat-card.s-ok .num   { color: #166534; }
-        .stat-card.s-bad   { border-color: #FECACA; background: #FDEEF1; }
+        .stat-card.s-ok    { border-color: var(--ok-soft-2); }
+        .stat-card.s-ok .num   { color: var(--ok-deep); }
+        .stat-card.s-bad   { border-color: var(--fail-soft); background: #FDEEF1; }
         .stat-card.s-bad .num  { color: var(--brand-red); }
         .stat-card.s-na    { border-color: #E3E6EA; }
         .stat-card.s-na .num   { color: #5C6470; }
-        .stat-card.s-pending .num { color: #B45309; }
+        .stat-card.s-pending .num { color: var(--warn-700); }
 
         /* ===== 检查说明折叠 ===== */
         .guide-box {
@@ -170,10 +170,10 @@
         }
         .res-opt input { display: none; }
         .res-opt:hover { border-color: #9CA3AF; }
-        .res-opt.active-ok    { background: #DCFCE7; border-color: #16A34A; color: #166534; font-weight: 700;
+        .res-opt.active-ok    { background: var(--ok-soft); border-color: #16A34A; color: var(--ok-deep); font-weight: 700;
             border-radius: 8px;
         }
-        .res-opt.active-bad   { background: #FEE2E2; border-color: var(--brand-red); color: var(--brand-red); font-weight: 700;
+        .res-opt.active-bad   { background: var(--fail-soft-2); border-color: var(--brand-red); color: var(--brand-red); font-weight: 700;
             border-radius: 8px;
         }
         .res-opt.active-na    { background: #F3F4F6; border-color: #9CA3AF; color: #4B5563;
@@ -201,7 +201,7 @@
         .alert-bad {
             display: none;
             background: #FDEEF1;
-            border: 1px solid #FECACA;
+            border: 1px solid var(--fail-soft);
             color: var(--brand-red);
             border-radius: var(--radius-md);
             padding: 10px 14px;
@@ -259,10 +259,10 @@
             .res-opt { border: 1px solid #999 !important; padding: 1px 4px !important; font-size: 8px !important;
             border-radius: 8px;
         }
-            .res-opt.active-ok  { background: #DCFCE7 !important;
+            .res-opt.active-ok  { background: var(--ok-soft) !important;
             border-radius: 8px;
         }
-            .res-opt.active-bad { background: #FEE2E2 !important;
+            .res-opt.active-bad { background: var(--fail-soft-2) !important;
             border-radius: 8px;
         }
             .res-opt.active-na  { background: #F3F4F6 !important;
@@ -692,7 +692,7 @@
                       body +
                       '<div style="margin-top:20px;font-size:14px;">' +
                       '检查人签字：________________ &nbsp;&nbsp;&nbsp; 审核人签字：________________ &nbsp;&nbsp;&nbsp; 日期：____年____月____日</div>' +
-                      '</body></html>';
+                      '<script src="/sheen-toolbox/assets/share.js"><\/script></body></html>';
 
             var mime = (type === 'xls') ? 'application/vnd.ms-excel' : 'application/msword';
             var blob = new Blob(['\uFEFF' + doc], { type: mime });
@@ -721,5 +721,7 @@
 
     <!-- 访问统计（与 Toolbox 一致） -->
     <script src="/sheen-toolbox/assets/i18n.js"></script>
+<script src="/sheen-toolbox/assets/share.js"></script>
+
 </body>
 </html>
