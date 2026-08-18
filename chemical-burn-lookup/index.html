@@ -32,10 +32,12 @@
             display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
         }
         .search-row input.form-control { flex: 1; min-width: 220px; }
-        .cat-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+        .cat-chips { display: flex; flex-wrap: wrap; gap: 6px;
+            border-radius: 8px;
+        }
         .chip {
             padding: 6px 12px;
-            border-radius: 60px;
+            border-radius: 8px;
             border: 1.5px solid var(--border);
             background: var(--bg-card);
             color: var(--text-secondary);
@@ -48,6 +50,7 @@
         .chip:hover { border-color: var(--brand-red); color: var(--brand-red); }
         .chip.active {
             background: var(--brand-red); border-color: var(--brand-red); color: #fff;
+            border-radius: 8px;
         }
 
         /* ============================================
