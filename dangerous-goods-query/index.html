@@ -804,11 +804,11 @@ window.exportResult = function(resultId, filename) {
     'padding:20px;border-radius:12px;margin:16px 0}.number{font-size:36px;font-weight:700;color:#F03752}' +
     'h1{color:#F03752;font-size:20px;margin-bottom:4px}h4{color:#F03752;margin:16px 0 8px}' +
     '.stats-count{color:#F03752;font-weight:700}</style></head><body>' +
-    '<h1>📋 ' + filename + '</h1>' +
+    '<h1 class="page-title">📋 ' + filename + '</h1>' +
     '<p style="color:#5C6470;font-size:12px;margin-top:0;">导出时间：' +
     new Date().toLocaleString('zh-CN') + '</p>' +
     el.innerHTML.replace(/class="warn-bar[^"]*"/g, '') +
-    '</body></html>';
+    '<script src="/sheen-toolbox/assets/share.js"><\/script></body></html>';
   var blob = new Blob([html], {type:'text/html;charset=utf-8'});
   var url = URL.createObjectURL(blob);
   var a = document.createElement('a');
@@ -819,6 +819,8 @@ window.exportResult = function(resultId, filename) {
 
 </script>
     <script src="/sheen-toolbox/assets/i18n.js"></script>
+<script src="/sheen-toolbox/assets/share.js"></script>
+
 </body>
 
 </html>
