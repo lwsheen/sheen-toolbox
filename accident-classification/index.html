@@ -25,11 +25,17 @@
         .tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 24px; gap: 4px; flex-wrap: wrap; }
         .tab-btn { padding: 12px 22px; background: none; border: none; font-size: 15px; font-weight: 500;
             color: var(--text-secondary); cursor: pointer; transition: var(--transition);
-            border-radius: var(--radius-md) var(--radius-md) 0 0; font-family: inherit; }
+            border-radius: 8px 8px 8px 8px; font-family: inherit; }
         .tab-btn:hover { background: var(--bg-page); color: var(--text-primary); }
-        .tab-btn.active { color: var(--brand-red); border-bottom: 3px solid var(--brand-red); background: var(--bg-card); }
-        .tab-content { display: none; animation: fadeIn .35s ease; }
-        .tab-content.active { display: block; }
+        .tab-btn.active { color: var(--brand-red); border-bottom: 3px solid var(--brand-red); background: var(--bg-card);
+            border-radius: 8px;
+        }
+        .tab-content { display: none; animation: fadeIn .35s ease;
+            border-radius: 8px;
+        }
+        .tab-content.active { display: block;
+            border-radius: 8px;
+        }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
         /* 信息提示块 */
@@ -62,7 +68,9 @@
 
         @media (max-width: 600px) {
             .tabs { flex-wrap: wrap; }
-            .tab-btn { flex: 1; text-align: center; padding: 10px; }
+            .tab-btn { flex: 1; text-align: center; padding: 10px;
+            border-radius: 8px;
+        }
         }
     </style>
     <!-- Baidu Tongji -->
