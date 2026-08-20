@@ -666,8 +666,6 @@ document.getElementById('printTime').textContent = new Date().toISOString().repl
 
             const tbody = document.getElementById('resultTableBody');
 
-            
-
             if (filteredData.length === 0) {
 
                 tbody.innerHTML = `
@@ -724,8 +722,6 @@ document.getElementById('printTime').textContent = new Date().toISOString().repl
 
             const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
-            
-
             if (totalPages <= 1) {
 
                 document.getElementById('pagination').style.display = 'none';
@@ -737,8 +733,6 @@ document.getElementById('printTime').textContent = new Date().toISOString().repl
             document.getElementById('pagination').style.display = 'flex';
 
             let html = '';
-
-            
 
             // 上一页
 
@@ -806,7 +800,6 @@ document.getElementById('printTime').textContent = new Date().toISOString().repl
 
         window.addEventListener('DOMContentLoaded', loadData);
 
-    
 window.exportResult = function(resultId, filename) {
   var el = document.getElementById(resultId);
   if (!el) { alert('暂无可导出的结果'); return; }
