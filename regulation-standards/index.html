@@ -830,7 +830,11 @@ function exportExcel(){
     + rows.map(function(r){
       return '<tr>' + r.map(function(c){ return '<td>'+escV(c==null?'':c)+'</td>'; }).join('') + '</tr>';
     }).join('')
-    + '</table><script src="/sheen-toolbox/assets/share.js"><\/script></body></html>';
+    + '</table><script src="/sheen-toolbox/assets/share.js"><\/script>
+    <!-- SHEEN Toolbox 统一打印预览 -->
+    <script src="/sheen-toolbox/assets/print-preview.js"></script>
+    <script>initPrintPreview();</script>
+</body></html>';
   var blob = new Blob(['\ufeff' + html], {type:'application/vnd.ms-excel;charset=utf-8'});
   var a = document.createElement('a'); a.href=URL.createObjectURL(blob);
   a.download = '合规性评价_' + todayStr() + '.xls';
