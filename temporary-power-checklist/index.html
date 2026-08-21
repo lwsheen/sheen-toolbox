@@ -334,7 +334,11 @@
                 var bg = r.v === 'ok' ? 'background:#F0FDF4' : r.v === 'warn' ? 'background:#FFF6F7' : '';
                 return '<tr style="' + bg + '"><td>' + r.no + '</td><td>' + escV(r.item) + '</td><td>' + escV(r.std) + '</td><td>' + escV(r.vText) + '</td><td>' + escV(r.rm) + '</td></tr>';
             }).join('')
-            + '</table><script src="/sheen-toolbox/assets/share.js"><\/script></body></html>';
+            + '</table><script src="/sheen-toolbox/assets/share.js"><\/script>
+    <!-- SHEEN Toolbox 统一打印预览 -->
+    <script src="/sheen-toolbox/assets/print-preview.js"></script>
+    <script>initPrintPreview();</script>
+</body></html>';
         var blob = new Blob(['\ufeff' + html], {type:'application/vnd.ms-excel;charset=utf-8'});
         var link = document.createElement('a'); link.href = URL.createObjectURL(blob);
         link.download = '施工现场临时用电检查表_' + d + '.xls'; link.click();
