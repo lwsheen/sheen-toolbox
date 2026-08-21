@@ -948,6 +948,8 @@
         if (detail) detail.classList.toggle('open');
     }
 
+    var LEVEL_BADGE = { '报告书': 'badge-red', '报告表': 'badge-blue', '登记表': 'badge-amber' };
+
     function buildEiaCard(item) {
         var code = item.code, name = item.name, rptBook = item.reportBook, rptForm = item.reportForm, regForm = item.registration, sens = item.sensitiveAreas;        var level = '', levelClass = '';
         if (rptBook && rptBook !== '/') { level = '报告书'; levelClass = LEVEL_BADGE['报告书']; }
