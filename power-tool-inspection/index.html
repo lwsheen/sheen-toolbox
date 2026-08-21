@@ -201,6 +201,19 @@
             @page { size: landscape; margin: 10mm 7mm; }
             body { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             .guide-box, .tool-toolbar { display: none !important; }
+            .check-table {
+                table-layout: fixed !important;
+                min-width: 0 !important;
+                width: 100% !important;
+            }
+            .check-table .col-seq    { width: 4%  !important; min-width: 0 !important; font-size: 9px !important; }
+            .check-table .col-item   { width: 14% !important; min-width: 0 !important; font-size: 9px !important; word-wrap: break-word; }
+            .check-table .col-std    { width: 32% !important; font-size: 8.5px !important; line-height: 1.35 !important; }
+            .check-table .col-result { width: 16% !important; min-width: 0 !important; }
+            .check-table .col-class  { width: 8%  !important; min-width: 0 !important; }
+            .check-table .col-insul  { width: 8%  !important; min-width: 0 !important; }
+            .check-table .col-concl  { width: 8%  !important; min-width: 0 !important; }
+            .check-table .col-remark { width: 10% !important; min-width: 0 !important; }
             .check-table thead th { background: #e5e5e5 !important; color: #000 !important; position: static !important; font-size: 8.5px !important; }
             .check-table tbody td { border-color: #ccc !important; font-size: 8.5px !important; padding: 2px 2px !important; }
             .check-table input, .check-table select { font-size: 8.5px !important; padding: 1px !important; min-width: 28px !important; border: 0.5pt solid #999 !important; }
@@ -233,6 +246,7 @@
       }
     })();
     </script>
+
 </head>
 <body>
 
@@ -252,7 +266,7 @@
             <button type="button" class="btn btn-sm btn-primary" id="addBtn"><i class="fa-solid fa-plus"></i> 新增工具</button>
             <button type="button" class="btn btn-sm btn-outline" id="excelBtn"><i class="fa-solid fa-file-excel"></i> 导出 Excel</button>
             <button type="button" class="btn btn-sm btn-outline" id="wordBtn"><i class="fa-solid fa-file-word"></i> 导出 Word</button>
-            <button type="button" class="btn btn-sm btn-print" id="printBtn"><i class="fa-solid fa-print"></i> 打印</button>
+            
             <button type="button" class="btn btn-sm btn-danger" id="delLastBtn"><i class="fa-solid fa-minus"></i> 删除最后一台</button>
             <button type="button" class="btn btn-sm btn-danger" id="clearBtn"><i class="fa-solid fa-trash-can"></i> 清空</button>
             <button type="button" class="btn btn-sm btn-outline" id="guideBtn"><i class="fa-solid fa-book-open"></i> 绝缘电阻标准</button>
@@ -656,8 +670,8 @@
             body+='<b>下次检查日期：</b>'+(nextDt||'____年__月__日');
             body+='</div>';
 
-            var doc='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"></head><body>'+body+'<script src="/sheen-toolbox/assets/share.js"><\/script>
-</body></html>';
+            var doc='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"></head><body>'+body+'<script src="/sheen-toolbox/assets/share.js"><\/script>' +
+'</body></html>';
             var mime=type==='xls'?'application/vnd.ms-excel':'application/msword',
                 blob=new Blob(['\ufeff'+doc],{type:mime}),
                 url=URL.createObjectURL(blob),
@@ -671,7 +685,6 @@
         document.getElementById('addBtn').addEventListener('click',function(){addTool();});
         document.getElementById('excelBtn').addEventListener('click',function(){exportTable('xls');});
         document.getElementById('wordBtn').addEventListener('click',function(){exportTable('doc');});
-        document.getElementById('printBtn').addEventListener('click',function(){window.print();});
         document.getElementById('delLastBtn').addEventListener('click',function(){deleteLastTool();});
         document.getElementById('clearBtn').addEventListener('click',function(){clearAll();});
         document.getElementById('guideBtn').addEventListener('click',function(){toggleGuide();});
