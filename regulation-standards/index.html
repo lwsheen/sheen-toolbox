@@ -164,6 +164,7 @@ var _hmt = _hmt || [];
   }
 })();
 </script>
+
 </head>
 <body>
 <div class="breadcrumb"><a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a><span> / EHS 法规标准清单</span></div>
@@ -216,7 +217,7 @@ var _hmt = _hmt || [];
     <div id="stats">还没有条文。</div>
     <div class="ce-toolbar no-print">
       <div class="ce-prog"><i id="progBar"></i></div>
-      <button class="btn btn-print btn-sm" onclick="doPrint()"><i class="fa-solid fa-print"></i> 打印</button>
+      
       <button class="btn btn-outline btn-sm" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> 导出 CSV</button>
       <button class="btn btn-outline btn-sm" onclick="exportExcel()"><i class="fa-solid fa-file-excel"></i> 导出 Excel</button>
       <button class="btn btn-outline btn-sm" onclick="exportJSON()"><i class="fa-solid fa-file-code"></i> 导出 JSON</button>
@@ -830,11 +831,11 @@ function exportExcel(){
     + rows.map(function(r){
       return '<tr>' + r.map(function(c){ return '<td>'+escV(c==null?'':c)+'</td>'; }).join('') + '</tr>';
     }).join('')
-    + '</table><script src="/sheen-toolbox/assets/share.js"><\/script>
-    <!-- SHEEN Toolbox 统一打印预览 -->
-    <script src="/sheen-toolbox/assets/print-preview.js"></script>
-    <script>initPrintPreview();</script>
-</body></html>';
+    + '</table><script src="/sheen-toolbox/assets/share.js"><\/script>' +
+    '<!-- SHEEN Toolbox 统一打印预览 -->' +
+    '<script src="/sheen-toolbox/assets/print-preview.js"><\/script>' +
+    '<script>initPrintPreview();<\/script>' +
+'</body></html>';
   var blob = new Blob(['\ufeff' + html], {type:'application/vnd.ms-excel;charset=utf-8'});
   var a = document.createElement('a'); a.href=URL.createObjectURL(blob);
   a.download = '合规性评价_' + todayStr() + '.xls';
