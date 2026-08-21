@@ -1030,7 +1030,11 @@
             '<p class="meta">查询关键词：<b>' + escHtml(keyword) + '</b>　　生成时间：<b>' + new Date().toLocaleString('zh-CN', {timeZone:'Asia/Shanghai'}).replace('/','年').replace('/','月').replace(' ',' ') + '时</b></p>' +
             html +
             '<div class="disclaimer">注：本报告仅供合规初判参考，具体审批要求和文件清单以主管部门审批意见和现行有效法规为准。分类数据更新至 2026-08。</div>' +
-            '</body></html>';
+            '
+    <!-- SHEEN Toolbox 统一打印预览 -->
+    <script src="/sheen-toolbox/assets/print-preview.js"></script>
+    <script>initPrintPreview();</script>
+</body></html>';
 
         var blob = new Blob(['﻿' + docHtml], { type: 'application/msword' });
         var url = URL.createObjectURL(blob);
