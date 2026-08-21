@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head data-seo="sheen">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="建设项目三同时分类管理查询：职业病危害风险分类(严重/一般)+环境影响评价分类(报告书/报告表/登记表)+安全设施三同时监督管理办法(安监总局令第36号)，一键检索建设项目的职业健康、环保、安全合规要求。 — SHEEN Toolbox">
+    <title>建设项目"三同时"分类管理查询 — SHEEN Toolbox</title>
+    <link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
+    <link rel="stylesheet" href="/sheen-toolbox/common.css">
+    <style>
+        .tab-nav { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:20px; border-bottom:2px solid var(--border); padding-bottom:0; }
+        .tab-btn { border:none; background:transparent; padding:10px 18px; font-size:var(--fs-base); cursor:pointer; color:var(--text-secondary); border-bottom:3px solid transparent; margin-bottom:-2px; font-weight:600; font-family:inherit; display:inline-flex; align-items:center; gap:7px; transition:color .15s; }
+        .tab-btn:hover { color:var(--brand-red); }
+        .tab-btn.active { color:var(--brand-red); border-bottom-color:var(--brand-red); }
+        .tab-panel { display:none; }
+        .tab-panel.active { display:block; animation:fadeSlide .25s ease; }
+        @keyframes fadeSlide { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+        .search-bar { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:14px; }
+        .search-bar .form-control { flex:1; min-width:220px; }
+        .legend-row { display:flex; gap:16px; flex-wrap:wrap; align-items:center; margin-bottom:14px; padding:10px 16px; background:var(--bg-page); border:1px solid var(--border); border-radius:var(--radius-md); font-size:var(--fs-sm); color:var(--text-secondary); }
+        .legend-row .lg-item { display:inline-flex; align-items:center; gap:6px; }
+        .stat-line { font-size:var(--fs-sm); color:var(--text-secondary); margin-bottom:12px; }
+        .cat-group { margin-bottom:22px; }
+        .cat-title { font-size:var(--fs-md); font-weight:700; color:var(--text-primary); background:var(--bg-page); border-left:4px solid var(--brand-red); padding:8px 14px; border-radius:0 var(--radius-sm) var(--radius-sm) 0; margin-bottom:10px; }
+        .cat-title .cat-sub { font-weight:400; color:var(--text-secondary); margin-left:6px; }
+        .result-list { display:flex; flex-direction:column; gap:6px; }
+        .result-item { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 16px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; transition:border-color .15s; }
+        .result-item:hover { border-color:var(--tech-blue); }
+        .item-left { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+        .item-code { font-weight:700; color:var(--text-primary); font-size:var(--fs-base); letter-spacing:.5px; min-width:64px; font-family:var(--font-mono); }
+        .item-name { font-size:var(--fs-base); color:var(--text-primary); }
+        .item-note { font-size:var(--fs-xs); color:var(--amber); background:#FFF8ED; padding:2px 10px; border-radius:4px; }
+        .eia-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-md); padding:14px 18px; transition:border-color .15s; margin-bottom:10px; }
+        .eia-card:hover { border-color:var(--tech-blue); }
+        .card-header { display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:8px; cursor:pointer; user-select:none; }
+        .header-left { display:flex; align-items:center; gap:12px; flex-wrap:wrap; flex:1; min-width:260px; }
+        .item-condition { font-size:var(--fs-sm); color:var(--text-secondary); background:var(--bg-page); padding:0 10px; border-radius:12px; line-height:24px; }
+        .card-detail { display:none; margin-top:12px; padding-top:12px; border-top:1px dashed var(--border); }
+        .card-detail.open { display:block; }
+        .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+        @media (max-width:700px) { .detail-grid { grid-template-columns:1fr; } }
+        .detail-col { background:var(--bg-page); padding:12px 14px; border-radius:var(--radius-sm); border-left:4px solid var(--amber); font-size:var(--fs-sm); }
+        .detail-col.report { border-left-color:var(--brand-red); }
+        .detail-col h4 { font-size:var(--fs-sm); color:var(--text-primary); margin-bottom:6px; font-weight:600; }
+        .detail-col p { font-size:var(--fs-sm); color:var(--text-primary); line-height:1.6; margin:2px 0; }
+        .toggle-btn { background:none; border:none; color:var(--tech-blue); font-weight:600; font-size:var(--fs-sm); cursor:pointer; padding:4px 0; }
+        .toggle-btn:hover { text-decoration:underline; }
+        .ssd-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+        @media (max-width:800px) { .ssd-grid { grid-template-columns:1fr; } }
+        .ssd-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-md); padding:16px 18px; transition:border-color .15s; }
+        .ssd-card:hover { border-color:var(--tech-blue); }
+        .ssd-card.high-risk { border-left:4px solid var(--brand-red); }
+        .ssd-card.normal-risk { border-left:4px solid var(--amber); }
+        .ssd-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; flex-wrap:wrap; gap:6px; }
+        .ssd-title { font-size:var(--fs-base); font-weight:700; color:var(--text-primary); }
+        .ssd-code { font-size:var(--fs-sm); font-weight:700; color:var(--brand-red); font-family:var(--font-mono); }
+        .ssd-row { font-size:var(--fs-sm); color:var(--text-primary); line-height:1.7; margin:4px 0; }
+        .ssd-row b { color:var(--text-primary); font-weight:600; }
+        .ssd-ref { font-size:var(--fs-xs); color:var(--text-secondary); margin-top:8px; border-top:1px dashed var(--border); padding-top:6px; }
+        .ssd-note { margin-top:16px; background:var(--bg-page); border:1px solid var(--border); border-radius:var(--radius-md); padding:14px 18px; font-size:var(--fs-sm); color:var(--text-primary); line-height:1.8; }
+        .ssd-note b { color:var(--brand-red); }
+        .no-result { text-align:center; color:var(--text-secondary); padding:40px 0; font-size:var(--fs-md); }
+        @media (max-width:600px) { .result-item { flex-direction:column; align-items:flex-start; } .item-left { width:100%; } }
+        .ssd-summary-section { margin-top:16px; border-top:2px solid var(--border); padding-top:16px; }
+    </style>
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9b8c3df212619adec1f70f01695f4160";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+</head>
+<body>
+    <div class="breadcrumb">
+        <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+        <span> / 建设项目"三同时"分类管理查询</span>
+    </div>
+    <main class="app-container container-wf">
+        <h1 class="page-title"><i class="fa-solid fa-clipboard-check"></i> 建设项目"三同时"分类管理查询</h1>
+        <p class="page-subtitle" style="margin-bottom:20px;">一个工具汇总建设项目的三类法定分类管理要求：职业病危害风险分类（2021版）、环境影响评价分类（2021版）、安全设施"三同时"监督管理办法（安监总局令第36号），用于新建/改建/扩建项目合规初判。</p>
+        <div class="tab-nav no-pr">
+            <button type="button" class="tab-btn active" data-tab="summary" onclick="showTab('summary')"><i class="fa-solid fa-table-columns"></i> 总览</button>
+            <button type="button" class="tab-btn" data-tab="occ" onclick="showTab('occ')"><i class="fa-solid fa-shield-heart"></i> 职业病风险</button>
+            <button type="button" class="tab-btn" data-tab="eia" onclick="showTab('eia')"><i class="fa-solid fa-leaf"></i> 环境影响评价</button>
+            <button type="button" class="tab-btn" data-tab="ssd" onclick="showTab('ssd')"><i class="fa-solid fa-hard-hat"></i> 安全设施三同时</button>
+        </div>
+        <!-- Tab0 总览 -->
+        <div id="panel-summary" class="tab-panel active">
+            <div class="form-card no-pr">
+                <div class="search-bar">
+                    <input type="text" id="searchSummary" class="form-control" placeholder="输入项目名称关键词，一键查看三类分类结果" aria-label="总览搜索">
+                    <button type="button" class="btn-primary" onclick="doSearchSummary()"><i class="fa-solid fa-magnifying-glass"></i> 查询</button>
+                    <button type="button" class="btn-outline" onclick="clearSummary()"><i class="fa-solid fa-eraser"></i> 清空</button>
+                </div>
+                <div class="legend-row">
+                    <span class="lg-item"><i class="fa-solid fa-shield-heart" style="color:var(--brand-red);"></i> 职业病危害风险</span>
+                    <span class="lg-item"><i class="fa-solid fa-leaf" style="color:var(--tech-blue);"></i> 环境影响评价</span>
+                    <span class="lg-item"><i class="fa-solid fa-hard-hat" style="color:var(--amber);"></i> 安全设施三同时</span>
+                </div>
+                <div class="stat-line" id="statSummary"></div>
+            </div>
+            <div id="resultsSummary" class="result-list"></div>
+            <div id="ssdSummary" class="ssd-summary-section" style="display:none;">
+                <div class="cat-title" style="margin-top:20px;"><i class="fa-solid fa-hard-hat"></i> 安全设施三同时分类参考</div>
+                <div id="resultsSsdSummary" class="ssd-grid"></div>
+            </div>
+        </div>
+        <!-- Tab1 职业病 -->
+        <div id="panel-occ" class="tab-panel active">
+            <div class="form-card no-pr">
+                <div class="search-bar">
+                    <input type="text" id="searchOcc" class="form-control" placeholder="搜索行业编码（如 C195）或类别名称（如 制鞋业）" aria-label="搜索职业病行业编码或名称">
+                    <button type="button" class="btn-primary" onclick="doSearchOcc()"><i class="fa-solid fa-magnifying-glass"></i> 搜索</button>
+                    <button type="button" class="btn-outline" onclick="resetOcc()"><i class="fa-solid fa-list"></i> 显示全部</button>
+                </div>
+                <div class="legend-row">
+                    <span class="lg-item"><span class="badge badge-red">严重</span> 预评价 + 设计审查 + 控评 + 验收</span>
+                    <span class="lg-item"><span class="badge badge-green">一般</span> 预评价 + 控评，自行验收</span>
+                </div>
+                <div class="stat-line" id="statOcc"></div>
+            </div>
+            <div id="resultsOcc" class="result-list"></div>
+        </div>
+        <!-- Tab2 环评 -->
+        <div id="panel-eia" class="tab-panel">
+            <div class="form-card no-pr">
+                <div class="search-bar">
+                    <input type="text" id="searchEia" class="form-control" placeholder="搜索项目代码（如 C261）或名称（如 水泥）" aria-label="搜索环评项目代码或名称">
+                    <button type="button" class="btn-primary" onclick="doSearchEia()"><i class="fa-solid fa-magnifying-glass"></i> 查询</button>
+                    <button type="button" class="btn-outline" onclick="resetEia()"><i class="fa-solid fa-list"></i> 显示全部</button>
+                </div>
+                <div class="legend-row">
+                    <span class="lg-item"><span class="badge badge-red">报告书</span> 全面评价，报生态环境部门审批</span>
+                    <span class="lg-item"><span class="badge badge-blue">报告表</span> 简要评价，报生态环境部门审批/备案</span>
+                    <span class="lg-item"><span class="badge badge-amber">登记表</span> 备案管理（网上填报即可）</span>
+                </div>
+                <div class="stat-line" id="statEia"></div>
+            </div>
+            <div id="resultsEia" class="result-list"></div>
+        </div>
+        <!-- Tab3 三同时 -->
+        <div id="panel-ssd" class="tab-panel">
+            <div class="form-card no-pr">
+                <div class="legend-row">
+                    <span class="lg-item"><i class="fa-solid fa-hard-hat" style="color:var(--brand-red);"></i> 依据《建设项目安全设施"三同时"监督管理办法》（安监总局令第36号，2015年修正）</span>
+                </div>
+                <div class="stat-line">第7条：下列项目须进行安全预评价；其他项目进行综合分析形成书面报告备查（第9条）。</div>
+            </div>
+            <div id="resultsSsd" class="ssd-grid"></div>
+            <div class="ssd-note">
+                <b>核心要求：</b>安全设施必须与主体工程同时设计、同时施工、同时投入生产和使用；安全设施投资纳入建设项目概算（第4条）。<br>
+                <b>试运行：</b>第7条项目竣工后需试运行的，试运行不少于30日、最长不超过180日；危化品和化工项目试运行方案须事先备案（第21条）。<br>
+                <b>验收：</b>第7条项目竣工或试运行后须委托资质机构做安全验收评价（第22条）；所有项目竣工验收合格后方可投入生产和使用（第23条）。<br>
+                <b>法律责任：</b>未按规定进行安全评价/设计审查/验收的，责令停止建设或停产停业整顿，逾期未改正处50万~100万罚款（第28条）。
+            </div>
+        </div>
+        <div class="disclaimer no-pr" style="margin-top:20px;">注：本查询仅供合规初判参考，具体以主管部门审批意见和现行有效法规为准。分类数据更新至 2026-08。</div>
+    </main>
+    <section class="tool-meta" data-toolmeta="sheen">
+  <div class="tm-head">
+<span class="tm-std-code"></span>
+<span class="tm-std-name">《建设项目职业病危害风险分类管理目录》</span>
+ <span class="tm-sep">·</span> 
+<span class="tm-std-code"></span>
+<span class="tm-std-name">《建设项目环境影响评价分类管理名录（2021年版）》</span>
+ <span class="tm-sep">·</span> 
+<span class="tm-std-code"></span>
+<span class="tm-std-name">《建设项目安全设施&quot;三同时&quot;监督管理办法》</span>
+  </div>
+  <div class="tm-line"><span class="tm-dt"><i>发布</i><span class="tm-dt-val">2021</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>实施</i><span class="tm-dt-val">2021</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>更新</i><span class="tm-dt-val">2026-08-21</span></span></div>
+</section>
+
+    <footer class="sheen-footer">
+        <img src="../assets/sheen-logo.png" alt="SHEEN Toolbox" class="sheen-logo-sm"> &nbsp;<strong>SHEEN Toolbox</strong> · 建设项目"三同时"分类管理查询
+    </footer>
+    <div class="print-time" id="printTime"></div>
+    <script>
+    document.getElementById('printTime').textContent =
+        new Date().toISOString().replace('T', ' ').slice(0, 16);
+
+    function showTab(name) {
+        document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+        var panel = document.getElementById('panel-' + name);
+        if (panel) panel.classList.add('active');
+        document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.toggle('active', b.getAttribute('data-tab') === name); });
+        if (name === 'occ') { if (!window._occLoaded) { resetOcc(); window._occLoaded = true; } }
+        if (name === 'eia') { if (!window._eiaLoaded) { resetEia(); window._eiaLoaded = true; } }
+        if (name === 'ssd') { if (!window._ssdLoaded) { renderSsd(); window._ssdLoaded = true; } }
+        if (name === 'summary') {
+            var keyword = document.getElementById('searchSummary').value.trim();
+            if (keyword) doSearchSummary();
+        }
+    }
+
+    var OCC_DATA = [
+        // A 农、林、牧、渔业
+        ["A011","谷物种植","一般"],["A012","豆类、油料和薯类种植","一般"],["A013","棉、麻、糖、烟草种植","一般"],
+        ["A014","蔬菜、食用菌及园艺作物种植","一般"],["A015","水果种植","一般"],["A016","坚果、含油果、香料和饮料作物种植","一般"],
+        ["A017","中药材种植","一般"],["A018","草种植及割草","一般"],["A019","其他农业","一般"],
+        ["A021","林木育种和育苗","一般"],["A022","造林和更新","一般"],["A023","森林经营、管护和改培","一般"],
+        ["A024","木材和竹材采运","一般"],["A025","林产品采集","一般"],
+        ["A031","牲畜饲养（牛、羊）","严重"],["A031","牲畜饲养（其他）","一般"],["A032","家禽饲养","一般"],
+        ["A033","狩猎和捕捉动物","一般"],["A039","其他畜牧业","一般"],
+        ["A041","水产养殖","一般"],["A042","水产捕捞","一般"],
+        ["A051","农业专业及辅助性活动","一般"],["A052","林业专业及辅助性活动","一般"],
+        ["A053","畜牧业专业及辅助性活动（牛、羊）","严重"],["A053","畜牧业专业及辅助性活动（其他）","一般"],
+        ["A054","渔业专业及辅助性活动","一般"],
+        // B 采矿业
+        ["B061","烟煤和无烟煤开采洗选","严重"],["B062","褐煤开采洗选","严重"],["B069","其他煤炭采选","严重"],
+        ["B071","石油开采","严重"],["B072","含硫天然气开采","严重"],["B072","其他天然气开采","一般"],
+        ["B081","铁矿采选","严重"],["B082","锰矿、铬矿采选","严重"],["B089","其他黑色金属矿采选","严重"],
+        ["B091","常用有色金属矿采选","严重"],["B092","贵金属矿采选","严重"],["B093","稀有稀土金属矿采选","严重"],
+        ["B101","土砂石开采","严重"],["B102","化学矿开采","严重"],["B103","采盐","一般"],
+        ["B109","石棉、石英砂及其他非金属矿采选","严重"],
+        ["B111","煤炭开采和洗选专业及辅助性活动","严重"],["B112","石油和天然气开采专业及辅助性活动","严重"],
+        ["B119","其他开采专业及辅助性活动","严重"],["B120","其他采矿业","严重"],
+        // C 制造业
+        ["C131","谷物磨制","一般"],["C132","饲料加工","一般"],["C133","植物油加工","一般"],
+        ["C134","制糖业","一般"],["C135","屠宰及肉类加工","严重"],["C136","水产品加工","一般"],
+        ["C137","蔬菜、菌类、水果和坚果加工","一般"],["C139","其他农副食品加工","一般"],
+        ["C141","焙烤食品制造","一般"],["C142","糖果、巧克力及蜜饯制造","一般"],["C143","方便食品制造","一般"],
+        ["C144","乳制品制造","一般"],["C145","罐头食品制造","一般"],["C146","调味品、发酵制品制造","一般"],
+        ["C149","其他食品制造","一般"],
+        ["C151","酒的制造","一般"],["C152","饮料制造","一般"],["C153","精制茶加工","一般"],
+        ["C161","烟叶复烤","一般"],["C162","卷烟制造","严重"],["C169","其他烟草制品制造","一般"],
+        ["C171","棉纺织及印染精加工","严重"],["C172","毛纺织及染整精加工","严重"],["C173","麻纺织及染整精加工","严重"],
+        ["C174","丝绸纺织及印染精加工","严重"],["C175","化纤织造及印染精加工","严重"],["C176","针织或钩针编织物及其制品制造","一般"],
+        ["C177","家用纺织制成品制造","一般"],["C178","产业用纺织制成品制造","一般"],
+        ["C181","机织服装制造","一般"],["C182","针织或钩针编织服装制造","一般"],["C183","服饰制造","一般"],
+        ["C191","皮革鞣制加工","严重"],["C192","皮革制品制造","一般"],["C193","毛皮鞣制及制品加工","严重"],
+        ["C194","羽毛(绒)加工及制品制造","一般"],["C195","制鞋业*","严重"],
+        ["C201","木材加工","严重"],["C202","人造板制造","严重"],["C203","木质制品制造*","严重"],
+        ["C204","竹、藤、棕、草等制品制造","一般"],
+        ["C211","木质家具制造*","严重"],["C212","竹、藤家具制造","一般"],["C213","金属家具制造*","严重"],
+        ["C214","塑料家具制造","一般"],["C219","其他家具制造","一般"],
+        ["C221","纸浆制造","严重"],["C222","造纸","严重"],["C223","纸制品制造","一般"],
+        ["C231","印刷*","严重"],["C232","装订及印刷相关服务","一般"],
+        ["C241","文教办公用品制造","一般"],["C242","乐器制造","一般"],
+        ["C243","工艺美术及礼仪用品制造（雕塑、金属、漆器、珠宝）","严重"],["C243","工艺美术及礼仪用品制造（其他）","一般"],
+        ["C244","体育用品制造（高尔夫球制品）","严重"],["C244","体育用品制造（其他）","一般"],
+        ["C245","玩具制造","一般"],["C246","游艺器材及娱乐用品制造","一般"],
+        ["C251","精炼石油产品制造","严重"],["C252","煤炭加工","严重"],["C253","核燃料加工","严重"],
+        ["C254","生物质燃料加工","一般"],
+        ["C261","基础化学原料制造","严重"],["C262","肥料制造","严重"],["C263","农药制造","严重"],
+        ["C264","涂料、油墨、颜料及类似产品制造","严重"],["C265","合成材料制造","严重"],
+        ["C266","专用化学产品制造","严重"],["C267","炸药、火工及焰火产品制造","严重"],
+        ["C268","日用化学产品制造","严重"],
+        ["C271","化学药品原料药制造","严重"],["C272","化学药品制剂制造","一般"],["C273","中药饮片加工","严重"],
+        ["C274","中成药生产","一般"],["C275","兽用药品制造","一般"],["C276","生物药品制品制造","一般"],
+        ["C277","卫生材料及医药用品制造","一般"],["C278","药用辅料及包装材料制造","一般"],
+        ["C281","纤维素纤维原料及纤维制造","一般"],["C282","合成纤维制造","一般"],["C283","生物基材料制造","一般"],
+        ["C291","橡胶制品业","严重"],["C292","塑料制品业","严重"],
+        ["C301","水泥、石灰和石膏制造","严重"],["C302","石膏、水泥制品及类似制品制造","严重"],
+        ["C303","砖瓦、石材等建筑材料制造","严重"],["C304","玻璃制造","严重"],["C305","玻璃制品制造","严重"],
+        ["C306","玻璃纤维和玻璃纤维增强塑料制品制造","严重"],["C307","陶瓷制品制造","严重"],
+        ["C308","耐火材料制品制造","严重"],["C309","石墨及其他非金属矿物制品制造","严重"],
+        ["C311","炼铁","严重"],["C312","炼钢","严重"],["C313","钢压延加工","严重"],["C314","铁合金冶炼","严重"],
+        ["C321","常用有色金属冶炼","严重"],["C322","贵金属冶炼","严重"],["C323","稀有稀土金属冶炼","严重"],
+        ["C324","有色金属合金制造","严重"],["C325","有色金属压延加工","一般"],
+        ["C331","结构性金属制品制造","一般"],["C332","金属工具制造","一般"],["C333","集装箱及金属包装容器制造","一般"],
+        ["C334","金属丝绳及其制品制造","一般"],["C335","建筑、安全用金属制品制造","一般"],
+        ["C336","金属表面处理及热处理加工","严重"],["C337","搪瓷制品制造","一般"],["C338","金属制日用品制造","一般"],
+        ["C339","铸造及其他金属制品制造","严重"],
+        ["C341","锅炉及原动设备制造","一般"],["C342","金属加工机械制造","一般"],["C343","物料搬运设备制造","一般"],
+        ["C344","泵、阀门、压缩机及类似机械制造","一般"],["C345","轴承、齿轮和传动部件制造","一般"],
+        ["C346","烘炉、风机、包装等设备制造","一般"],["C347","文化、办公用机械制造","一般"],
+        ["C348","通用零部件制造","一般"],["C349","其他通用设备制造业","一般"],
+        ["C351","采矿、冶金、建筑专用设备制造","严重"],["C352","化工、木材、非金属加工专用设备制造","严重"],
+        ["C353","食品、饮料、烟草及饲料生产专用设备制造","一般"],["C354","印刷、制药、日化及日用品生产专用设备制造","一般"],
+        ["C355","纺织、服装和皮革加工专用设备制造","一般"],["C356","电子和电工机械专用设备制造","一般"],
+        ["C357","农、林、牧、渔专用机械制造","一般"],["C358","医疗仪器设备及器械制造","一般"],
+        ["C359","环保、邮政、社会公共服务及其他专用设备制造","一般"],
+        ["C361","汽车整车制造","严重"],["C362","汽车用发动机制造","严重"],["C363","改装汽车制造","严重"],
+        ["C364","低速汽车制造","一般"],["C365","电车制造","一般"],["C366","汽车车身、挂车制造","一般"],
+        ["C367","汽车零部件及配件制造","严重"],
+        ["C371","铁路运输设备制造","严重"],["C372","城市轨道交通设备制造","一般"],
+        ["C373","船舶及相关装置制造","严重"],["C374","航空、航天器及设备制造","严重"],
+        ["C375","摩托车制造","一般"],["C376","自行车和残疾人座车制造","一般"],["C377","助动车制造","一般"],
+        ["C378","非公路休闲车及零配件制造","一般"],["C379","潜水救捞及其他未列明运输设备制造","一般"],
+        ["C381","电机制造","一般"],["C382","输配电及控制设备制造","一般"],["C383","电线、电缆、光缆及电工器材制造","一般"],
+        ["C384","电池制造","严重"],["C385","家用电力器具制造","一般"],["C386","非电力家用器具制造","一般"],
+        ["C387","照明器具制造","一般"],["C389","其他电气机械及器材制造","一般"],
+        ["C391","计算机制造","一般"],["C392","通信设备制造","一般"],["C393","广播电视设备制造","一般"],
+        ["C394","雷达及配套设备制造","一般"],["C395","非专业视听设备制造","一般"],["C396","智能消费设备制造","一般"],
+        ["C397","电子器件制造","严重"],["C398","电子元件及电子专用材料制造","严重"],["C399","其他电子设备制造","一般"],
+        ["C401","通用仪器仪表制造","一般"],["C402","专用仪器仪表制造","一般"],["C403","钟表与计时仪器制造","一般"],
+        ["C404","光学仪器制造","一般"],["C405","衡器制造","一般"],["C409","其他仪器仪表制造业","一般"],
+        ["C411","日用杂品制造","一般"],["C412","核辐射加工","严重"],["C419","其他未列明制造业","一般"],
+        ["C421","金属废料和碎屑加工处理","一般"],["C422","非金属废料和碎屑加工处理","一般"],
+        ["C431","金属制品修理","一般"],["C432","通用设备修理","一般"],["C433","专用设备修理","一般"],
+        ["C434","铁路、船舶、航空航天等运输设备修理","严重"],["C435","电气设备修理","一般"],["C436","仪器仪表修理","一般"],
+        ["C439","其他机械和设备修理业","一般"],
+        // D 电力、热力、燃气及水
+        ["D441","电力生产（火力发电、热电联产、核力发电、生物质能发电）","严重"],["D441","电力生产（其他）","一般"],
+        ["D442","电力供应","一般"],["D443","热力生产和供应（燃煤、核能）","严重"],["D443","热力生产和供应（其他）","一般"],
+        ["D451","燃气生产","严重"],["D451","燃气供应","一般"],["D452","生物质燃气生产和供应业","一般"],
+        ["D461","自来水生产和供应","一般"],["D462","污水处理及其再生利用","一般"],["D463","海水淡化处理","一般"],
+        ["D469","其他水的处理、利用和分配","一般"],
+        // E 建筑业
+        ["E471","住宅房屋建筑","一般"],["E472","体育场馆建筑","一般"],["E479","其他房屋建筑业","一般"],
+        ["E481","铁路、道路、隧道和桥梁工程建筑","严重"],["E482","水利和水运工程建筑","严重"],
+        ["E483","海洋工程建筑","严重"],["E484","工矿工程建筑","严重"],["E485","架线和管道工程建筑","严重"],
+        ["E486","节能环保工程施工","严重"],["E487","电力工程施工","严重"],["E489","其他土木工程建筑","严重"],
+        ["E491","电气安装","一般"],["E492","管道和设备安装","一般"],["E499","其他建筑安装业","一般"],
+        ["E501","建筑装饰和装修业","一般"],["E502","建筑物拆除和场地准备","一般"],["E503","提供施工设备服务","一般"],
+        ["E509","其他未列明建筑业","一般"],
+        // F 批发和零售业
+        ["F516","矿产品、建材及化工产品批发","一般"],["F5265","机动车燃油零售","严重"],["F5266","机动车燃气零售","严重"],
+        // G 交通运输、仓储
+        ["G533","铁路运输辅助活动","一般"],["G541","城市公共交通运输（城市轨道交通）","一般"],
+        ["G544","道路运输辅助活动","一般"],["G551","水上旅客运输","一般"],["G552","水上货物运输","一般"],
+        ["G553","水上运输辅助活动","一般"],["G561","航空客货运输","一般"],["G562","通用航空服务","一般"],
+        ["G563","航空运输辅助活动","一般"],["G571","海底管道运输","一般"],["G572","陆地管道运输","一般"],
+        ["G591","装卸搬运","严重"],["G593","低温仓储","一般"],["G594","危险品仓储","严重"],
+        ["G595","谷物、棉花等农产品仓储","一般"],["G596","中药材仓储","一般"],["G599","其他仓储业","一般"],
+        // H 住宿和餐饮
+        ["H621","正餐服务","一般"],["H622","快餐服务","一般"],
+        // M 科学研究和技术服务业
+        ["M731","自然科学研究和试验发展","一般"],["M732","工程和技术研究和试验发展","一般"],
+        ["M733","农业科学和试验发展","一般"],["M734","医学研究和试验发展","一般"],
+        ["M746","环境与生态监测检测服务","一般"],
+        // N 水利、环境和公共设施
+        ["N772","环境治理业（危险废物治理、放射性废物治理）","严重"],["N772","环境治理业（其他）","一般"],
+        ["N782","环境卫生管理","一般"],
+        // O 居民服务、修理
+        ["O803","洗染服务","一般"],["O808","殡葬服务","一般"],["O811","汽车、摩托车修理与维护*","一般"],
+        ["O822","宠物服务","一般"],
+        // Q 卫生
+        ["Q841","医院","一般"]
+    ];
+    var CAT_NAMES = {
+        'A': '农、林、牧、渔业', 'B': '采矿业', 'C': '制造业',
+        'D': '电力、热力、燃气及水生产和供应业', 'E': '建筑业', 'F': '批发和零售业',
+        'G': '交通运输、仓储和邮政业', 'H': '住宿和餐饮业', 'M': '科学研究和技术服务业',
+        'N': '水利、环境和公共设施管理业', 'O': '居民服务、修理和其他服务业', 'Q': '卫生和社会工作'
+    };
+    function renderOcc(items, isFullCatalog) {
+        var container = document.getElementById('resultsOcc');
+        var statLine = document.getElementById('statOcc');
+        if (!items || items.length === 0) {
+            container.innerHTML = '<div class="no-result"><i class="fa-solid fa-magnifying-glass-minus"></i> 未找到匹配项，请调整关键词。</div>';
+            statLine.textContent = '';
+            return;
+        }
+        var severeCount = items.filter(function(i){ return i[2] === '严重'; }).length;
+        statLine.textContent = '共 ' + items.length + ' 条 · 严重 ' + severeCount + ' 条 · 一般 ' + (items.length - severeCount) + ' 条';
+        if (!isFullCatalog) {
+            var html = '';
+            items.forEach(function(item) { html += buildOccItem(item); });
+            container.innerHTML = html;
+            return;
+        }
+        var groups = {};
+        items.forEach(function(item) { var cat = item[0].charAt(0); if (!groups[cat]) groups[cat] = []; groups[cat].push(item); });
+        var sortedCats = Object.keys(groups).sort();
+        var html = '';
+        sortedCats.forEach(function(cat) {
+            var catName = CAT_NAMES[cat] || '其他';
+            html += '<div class="cat-group"><div class="cat-title">' + cat + ' 类<span class="cat-sub">' + catName + '</span></div><div class="result-list">';
+            groups[cat].forEach(function(item) { html += buildOccItem(item); });
+            html += '</div></div>';
+        });
+        container.innerHTML = html;
+    }
+    function buildOccItem(item) {
+        var code = item[0], name = item[1], risk = item[2];
+        var isStar = name.indexOf('*') !== -1;
+        var noteHtml = '';
+        if (isStar) noteHtml = '<span class="item-note">* 可降级（无毒溶剂）</span>';
+        var badgeCls = risk === '严重' ? 'badge-red' : 'badge-green';
+        return '<div class="result-item"><div class="item-left">' +
+            '<span class="item-code">' + code + '</span>' +
+            '<span class="item-name">' + name.replace('*', '') + '</span>' +
+            noteHtml + '</div>' +
+            '<span class="badge ' + badgeCls + '">' + risk + '</span></div>';
+    }
+    function doSearchOcc() {
+        var input = document.getElementById('searchOcc').value.trim();
+        if (!input) { resetOcc(); return; }
+        var keyword = input.toLowerCase();
+        var matched = OCC_DATA.filter(function(item) {
+            return item[0].toLowerCase().indexOf(keyword) !== -1 || item[1].toLowerCase().indexOf(keyword) !== -1;
+        });
+        renderOcc(matched, false);
+    }
+    function resetOcc() {
+        document.getElementById('searchOcc').value = '';
+        renderOcc(OCC_DATA, true);
+    }
+    document.getElementById('searchOcc').addEventListener('keyup', function(e) { if (e.key === 'Enter') doSearchOcc(); });
+
+    var EIA_DATA = [
+        ["A013", "农产品基地", "涉及环境敏感区", "其他", "/", "第三条(一)全部；第三条(二)中的生态红线、基本草原等"],
+        ["A031", "牲畜饲养", "年出栏生猪5000头及以上；涉及环境敏感区", "其他（规模化以下除外）", "/", "第三条(一)全部；第三条(三)全部"],
+        ["A041", "海水养殖", "用海面积≥1000亩；围海养殖1000亩以下；涉及环境敏感区", "其他", "/", "第三条(一)中的自然保护区等；第三条(二)中的生态红线、海洋公园等"],
+        ["B061", "烟煤和无烟煤开采洗选", "全部（含尾矿库）", "煤炭洗选、配煤；储存集运；风井场地", "/", "第三条(一)全部；第三条(二)中的生态红线、基本农田等"],
+        ["B071", "陆地石油开采", "新区块开发；页岩油开采；涉及环境敏感区", "其他", "/", "同上"],
+        ["B091", "常用有色金属矿采选", "全部（含独立尾矿库）", "单独的矿石破碎、集运；矿区修复", "/", "同上"],
+        ["C131", "谷物磨制*", "/", "含发酵工艺；年加工1万吨及以上", "/", "/"],
+        ["C134", "制糖业*", "日加工糖料1000吨及以上", "其他（单纯分装除外）", "/", "/"],
+        ["C135", "屠宰及肉类加工*", "屠宰规模（10万头生猪/1万头牛/15万只羊/1000万只禽）及以上", "其他屠宰；年加工2万吨及以上", "/", "第三条(一)全部；第三条(二)全部"],
+        ["C171", "棉纺织及印染精加工*", "有洗毛、脱胶、缫丝；有染整（前处理、染色印花）", "数码印花；后整理使用有机溶剂；喷水织造", "/", "/"],
+        ["C191", "皮革鞣制加工", "有鞣制、染色工艺", "其他", "/", "/"],
+        ["C195", "制鞋业*", "有橡胶硫化、塑料注塑；年用溶剂型胶粘剂≥10吨", "其他", "/", "/"],
+        ["C251", "精炼石油产品制造", "全部", "单纯物理分离、混合、分装", "/", "/"],
+        ["C261", "基础化学原料制造", "全部（含研发中试）", "单纯物理分离、混合、分装", "/", "/"],
+        ["C264", "涂料、油墨、颜料制造", "全部", "单纯物理分离、混合、分装", "/", "/"],
+        ["C271", "化学药品原料药制造", "全部", "单纯药品复配；仅化学药品制剂制造", "/", "/"],
+        ["C273", "中药饮片加工", "有提炼工艺（醇提、水提除外）", "其他（切片、打包除外）", "/", "/"],
+        ["C301", "水泥、石灰和石膏制造", "水泥制造（粉磨站除外）", "水泥粉磨站；石灰和石膏制造", "/", "/"],
+        ["C304", "玻璃制造", "平板玻璃制造", "特种玻璃；其他玻璃制造", "/", "/"],
+        ["C311", "炼铁", "全部", "/", "/", "/"],
+        ["C336", "金属表面处理及热处理", "有电镀工艺；有钝化工艺的热镀锌", "其他（喷粉、电泳除外）", "/", "/"],
+        ["C361", "汽车整车制造", "整车制造；发动机制造；有电镀；年用溶剂型涂料≥10吨", "其他（低VOCs涂料10吨以下除外）", "/", "/"],
+        ["D441", "火力发电、热电联产", "火电、热电（燃气发电、余热发电除外）", "燃气发电；单纯余热、余气发电", "/", "/"],
+        ["D443", "热力生产和供应", "/", "燃煤、燃油锅炉总容量≥65吨/小时；天然气锅炉>1吨/小时", "/", "/"],
+        ["D462", "污水处理及再生利用", "新建、扩建日处理10万吨以下；工业废水处理", "其他（不含提标改造）", "/", "/"],
+        ["N782", "生活垃圾转运", "/", "日转运能力≥150吨", "其他", "/"],
+        ["Q841", "医院", "新建、扩建住院床位≥500张", "其他（少于20张除外）", "/", "/"],
+        ["W124", "水库", "库容≥1000万立方米；涉及环境敏感区", "其他", "/", "第三条(一)全部；第三条(二)中的生态红线、重要水生生物通道"],
+        ["T130", "等级公路", "新建30公里以上二级及以上公路；涉及环境敏感区", "其他（三级、四级公路除外）", "/", "第三条(一)全部；第三条(二)全部；第三条(三)全部"],
+        ["T132", "新建、增建铁路", "新建、增建铁路（30公里及以下专用线除外）", "30公里及以下铁路联络线、专用线", "/", "第三条(一)全部；第三条(二)全部；第三条(三)全部"],
+        ["T138", "油气、液体化工码头", "新建；岸线、水工构筑物扩建", "其他", "/", "/"],
+        ["T149", "危险品仓储", "总容量20万立方米及以上油库；地下油、气库", "其他（有毒、有害、危险品仓储）", "/", "/"],
+        ["R161", "输变电工程", "500千伏及以上；涉及环境敏感区", "其他（100千伏以下除外）", "/", "第三条(一)全部；第三条(三)中的居住、教育、办公区"]
+    ];
+    var LEVEL_BADGE = { '报告书': 'badge-red', '报告表': 'badge-blue', '登记表': 'badge-amber' };
+    function renderEia(items) {
+        var container = document.getElementById('resultsEia');
+        var statLine = document.getElementById('statEia');
+        if (!items || items.length === 0) {
+            container.innerHTML = '<div class="no-result"><i class="fa-solid fa-magnifying-glass-minus"></i> 未找到匹配项，请调整关键词。</div>';
+            statLine.textContent = '';
+            return;
+        }
+        statLine.textContent = '共 ' + items.length + ' 条项目';
+        var html = '<div class="result-list">';
+        items.forEach(function(item) {
+            var code = item[0], name = item[1], rptBook = item[2], rptForm = item[3], regForm = item[4], sens = item[5];
+            var level = '', levelClass = '';
+            if (rptBook && rptBook !== '/') { level = '报告书'; levelClass = LEVEL_BADGE['报告书']; }
+            else if (rptForm && rptForm !== '/') { level = '报告表'; levelClass = LEVEL_BADGE['报告表']; }
+            else if (regForm && regForm !== '/') { level = '登记表'; levelClass = LEVEL_BADGE['登记表']; }
+            var conditionText = '';
+            if (level === '报告书') conditionText = '报告书条件：' + rptBook;
+            else if (level === '报告表') conditionText = '报告表条件：' + rptForm;
+            else conditionText = '登记表条件：' + regForm;
+            var nameClean = name.replace('*', '');
+            var starNote = name.indexOf('*') !== -1 ? ' <span class="item-note">*</span>' : '';
+            html += '<div class="eia-card"><div class="card-header" onclick="toggleEia(this)">' +
+                '<div class="header-left">' +
+                    '<span class="item-code">' + code + '</span>' +
+                    '<span class="item-name">' + nameClean + starNote + '</span>' +
+                    '<span class="item-condition">' + conditionText + '</span>' +
+                '</div>' +
+                '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">' +
+                    '<span class="badge ' + levelClass + '">' + level + '</span>' +
+                    '<span class="toggle-btn"><i class="fa-solid fa-chevron-down"></i> 详情</span>' +
+                '</div></div>' +
+                '<div class="card-detail"><div class="detail-grid">' +
+                    '<div class="detail-col report"><h4><i class="fa-solid fa-file-lines"></i> 环评类别判定逻辑</h4>' +
+                        '<p><b>报告书：</b>' + (rptBook && rptBook !== '/' ? rptBook : '—') + '</p>' +
+                        '<p><b>报告表：</b>' + (rptForm && rptForm !== '/' ? rptForm : '—') + '</p>' +
+                        '<p><b>登记表：</b>' + (regForm && regForm !== '/' ? regForm : '—') + '</p></div>' +
+                    '<div class="detail-col"><h4><i class="fa-solid fa-earth-asia"></i> 环境敏感区触发点</h4>' +
+                        '<p>' + (sens && sens !== '/' ? sens : '无特殊敏感区要求（或不涉及）') + '</p></div>' +
+                '</div></div></div>';
+        });
+        html += '</div>';
+        container.innerHTML = html;
+    }
+    function toggleEia(el) {
+        var detail = el.nextElementSibling;
+        var btn = el.querySelector('.toggle-btn');
+        if (detail.classList.contains('open')) {
+            detail.classList.remove('open');
+            btn.innerHTML = '<i class="fa-solid fa-chevron-down"></i> 详情';
+        } else {
+            detail.classList.add('open');
+            btn.innerHTML = '<i class="fa-solid fa-chevron-up"></i> 收起';
+        }
+    }
+    function doSearchEia() {
+        var input = document.getElementById('searchEia').value.trim();
+        if (!input) { resetEia(); return; }
+        var keyword = input.toLowerCase();
+        var matched = EIA_DATA.filter(function(item) {
+            return item[0].toLowerCase().indexOf(keyword) !== -1 || item[1].toLowerCase().indexOf(keyword) !== -1;
+        });
+        renderEia(matched);
+    }
+    function resetEia() {
+        document.getElementById('searchEia').value = '';
+        renderEia(EIA_DATA);
+    }
+    document.getElementById('searchEia').addEventListener('keyup', function(e) { if (e.key === 'Enter') doSearchEia(); });
+
+    var SSD = [{"code": "Ⅰ", "name": "非煤矿矿山建设项目", "risk": "高危", "pre": "安全预评价（委托资质机构）", "design": "安全设施设计报安监部门审查", "accept": "验收评价+竣工验收，安监部门监督核查", "ref": "第7条(一)、第12条、第22条"}, {"code": "Ⅱ", "name": "生产、储存危险化学品建设项目", "risk": "高危", "pre": "安全预评价（委托资质机构）", "design": "安全设施设计报安监部门审查", "accept": "试运行备案+验收评价+竣工验收", "ref": "第7条(二)、第12条、第21条"}, {"code": "Ⅲ", "name": "生产、储存烟花爆竹建设项目", "risk": "高危", "pre": "安全预评价（委托资质机构）", "design": "安全设施设计报安监部门审查", "accept": "验收评价+竣工验收，安监部门监督核查", "ref": "第7条(三)、第12条、第22条"}, {"code": "Ⅳ", "name": "金属冶炼建设项目", "risk": "高危", "pre": "安全预评价（委托资质机构）", "design": "安全设施设计报安监部门审查", "accept": "验收评价+竣工验收，安监部门监督核查", "ref": "第7条(四)、第12条、第22条"}, {"code": "Ⅴ", "name": "使用危化品从事生产且用量达规定数量的化工建设项目", "risk": "高危", "pre": "安全预评价（委托资质机构）", "design": "安全设施设计报安监部门审查", "accept": "验收评价+竣工验收，安监部门监督核查", "ref": "第7条(五)、第12条、第22条"}, {"code": "Ⅵ", "name": "法律、行政法规和国务院规定的其他建设项目", "risk": "高危", "pre": "按国家规定进行安全预评价", "design": "按相关规定审查", "accept": "按相关规定验收", "ref": "第7条(六)"}, {"code": "一般", "name": "除上述以外的其他建设项目", "risk": "一般", "pre": "安全生产条件和设施综合分析，形成书面报告备查", "design": "安全设施设计由生产经营单位组织审查，形成书面报告备查", "accept": "安全设施竣工验收合格后投入使用，形成书面报告备查", "ref": "第9条、第16条、第23条"}];
+    function renderSsd() {
+        var container = document.getElementById('resultsSsd');
+        var html = '';
+        SSD.forEach(function(item) {
+            var cls = item.risk === '高危' ? 'high-risk' : 'normal-risk';
+            var riskBadge = item.risk === '高危' ? '<span class="badge badge-red">高危</span>' : '<span class="badge badge-amber">一般</span>';
+            html += '<div class="ssd-card ' + cls + '">' +
+                '<div class="ssd-head"><span class="ssd-title">' + item.name + '</span><span class="ssd-code">' + item.code + '</span></div>' +
+                '<div style="margin-bottom:8px;">' + riskBadge + '</div>' +
+                '<div class="ssd-row"><b>安全预评价：</b>' + item.pre + '</div>' +
+                '<div class="ssd-row"><b>安全设施设计：</b>' + item.design + '</div>' +
+                '<div class="ssd-row"><b>验收管理：</b>' + item.accept + '</div>' +
+                '<div class="ssd-ref">依据：' + item.ref + '</div>' +
+            '</div>';
+        });
+        container.innerHTML = html;
+    }
+
+    function doSearchSummary() {
+        var input = document.getElementById('searchSummary').value.trim();
+        var container = document.getElementById('resultsSummary');
+        var statLine = document.getElementById('statSummary');
+        var ssdSection = document.getElementById('ssdSummary');
+        if (!input) { clearSummary(); return; }
+        var keyword = input.toLowerCase();
+        // OCC search
+        var occMatches = OCC_DATA.filter(function(item) {
+            return item[0].toLowerCase().indexOf(keyword) !== -1 || item[1].toLowerCase().indexOf(keyword) !== -1;
+        });
+        // EIA search
+        var eiaMatches = EIA_DATA.filter(function(item) {
+            return item[0].toLowerCase().indexOf(keyword) !== -1 || item[1].toLowerCase().indexOf(keyword) !== -1;
+        });
+        // SSD: match project names
+        var ssdMatches = SSD.filter(function(item) {
+            return item.name.toLowerCase().indexOf(keyword) !== -1 || item.code.toLowerCase().indexOf(keyword) !== -1;
+        });
+        var total = occMatches.length + eiaMatches.length + ssdMatches.length;
+        statLine.textContent = '关键词「' + input + '」匹配：职业病 ' + occMatches.length + ' 条 · 环评 ' + eiaMatches.length + ' 条 · 安全三同时 ' + ssdMatches.length + ' 条';
+        var html = '';
+        if (total === 0) {
+            html = '<div class="no-result"><i class="fa-solid fa-magnifying-glass-minus"></i> 未找到匹配项，请调整关键词。</div>';
+        } else {
+            if (occMatches.length > 0) {
+                html += '<div class="cat-group"><div class="cat-title"><i class="fa-solid fa-shield-heart" style="color:var(--brand-red);font-size:14px;margin-right:6px;"></i>职业病危害风险分类</div><div class="result-list">';
+                occMatches.forEach(function(item) { html += buildOccItem(item); });
+                html += '</div></div>';
+            }
+            if (eiaMatches.length > 0) {
+                html += '<div class="cat-group"><div class="cat-title"><i class="fa-solid fa-leaf" style="color:var(--tech-blue);font-size:14px;margin-right:6px;"></i>环境影响评价分类</div><div class="result-list">';
+                eiaMatches.forEach(function(item) { html += buildEiaCard(item); });
+                html += '</div></div>';
+            }
+            if (ssdMatches.length > 0) {
+                html += '<div class="cat-group"><div class="cat-title"><i class="fa-solid fa-hard-hat" style="color:var(--amber);font-size:14px;margin-right:6px;"></i>安全设施三同时分类</div>';
+                html += '<div class="ssd-grid">';
+                ssdMatches.forEach(function(item) {
+                    var cls = item.risk === '高危' ? 'high-risk' : 'normal-risk';
+                    var riskBadge = item.risk === '高危' ? '<span class="badge badge-red">高危</span>' : '<span class="badge badge-amber">一般</span>';
+                    html += '<div class="ssd-card ' + cls + '">' +
+                        '<div class="ssd-head"><span class="ssd-title">' + item.name + '</span><span class="ssd-code">' + item.code + '</span></div>' +
+                        '<div style="margin-bottom:8px;">' + riskBadge + '</div>' +
+                        '<div class="ssd-row"><b>预评价：</b>' + item.pre + '</div>' +
+                        '<div class="ssd-row"><b>设计审查：</b>' + item.design + '</div>' +
+                        '<div class="ssd-row"><b>验收：</b>' + item.accept + '</div>' +
+                        '<div class="ssd-ref">依据：' + item.ref + '</div>' +
+                    '</div>';
+                });
+                html += '</div></div>';
+            }
+        }
+        container.innerHTML = html;
+        // Show full SSD reference if no direct match
+        ssdSection.style.display = total > 0 && ssdMatches.length === 0 ? 'block' : 'none';
+        if (total > 0 && ssdMatches.length === 0) {
+            var ssdContainer = document.getElementById('resultsSsdSummary');
+            var ssdHtml = '';
+            SSD.forEach(function(item) {
+                var cls = item.risk === '高危' ? 'high-risk' : 'normal-risk';
+                var riskBadge = item.risk === '高危' ? '<span class="badge badge-red">高危</span>' : '<span class="badge badge-amber">一般</span>';
+                ssdHtml += '<div class="ssd-card ' + cls + '">' +
+                    '<div class="ssd-head"><span class="ssd-title">' + item.name + '</span><span class="ssd-code">' + item.code + '</span></div>' +
+                    '<div style="margin-bottom:8px;">' + riskBadge + '</div>' +
+                    '<div class="ssd-row"><b>预评价：</b>' + item.pre + '</div>' +
+                    '<div class="ssd-row"><b>设计审查：</b>' + item.design + '</div>' +
+                    '<div class="ssd-row"><b>验收：</b>' + item.accept + '</div>' +
+                    '<div class="ssd-ref">依据：' + item.ref + '</div>' +
+                '</div>';
+            });
+            ssdContainer.innerHTML = ssdHtml;
+        }
+    }
+    function buildEiaCard(item) {
+        var code = item[0], name = item[1], rptBook = item[2], rptForm = item[3], regForm = item[4], sens = item[5];
+        var level = '', levelClass = '';
+        if (rptBook && rptBook !== '/') { level = '报告书'; levelClass = LEVEL_BADGE['报告书']; }
+        else if (rptForm && rptForm !== '/') { level = '报告表'; levelClass = LEVEL_BADGE['报告表']; }
+        else if (regForm && regForm !== '/') { level = '登记表'; levelClass = LEVEL_BADGE['登记表']; }
+        var conditionText = '';
+        if (level === '报告书') conditionText = '报告书条件：' + rptBook;
+        else if (level === '报告表') conditionText = '报告表条件：' + rptForm;
+        else conditionText = '登记表条件：' + regForm;
+        var nameClean = name.replace('*', '');
+        var starNote = name.indexOf('*') !== -1 ? ' <span class="item-note">*</span>' : '';
+        return '<div class="eia-card"><div class="card-header" onclick="toggleEia(this)">' +
+            '<div class="header-left">' +
+                '<span class="item-code">' + code + '</span>' +
+                '<span class="item-name">' + nameClean + starNote + '</span>' +
+                '<span class="item-condition">' + conditionText + '</span>' +
+            '</div>' +
+            '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">' +
+                '<span class="badge ' + levelClass + '">' + level + '</span>' +
+                '<span class="toggle-btn"><i class="fa-solid fa-chevron-down"></i> 详情</span>' +
+            '</div></div>' +
+            '<div class="card-detail"><div class="detail-grid">' +
+                '<div class="detail-col report"><h4><i class="fa-solid fa-file-lines"></i> 环评类别判定逻辑</h4>' +
+                    '<p><b>报告书：</b>' + (rptBook && rptBook !== '/' ? rptBook : '—') + '</p>' +
+                    '<p><b>报告表：</b>' + (rptForm && rptForm !== '/' ? rptForm : '—') + '</p>' +
+                    '<p><b>登记表：</b>' + (regForm && regForm !== '/' ? regForm : '—') + '</p></div>' +
+                '<div class="detail-col"><h4><i class="fa-solid fa-earth-asia"></i> 环境敏感区触发点</h4>' +
+                    '<p>' + (sens && sens !== '/' ? sens : '无特殊敏感区要求（或不涉及）') + '</p></div>' +
+            '</div></div></div>';
+    }
+    function clearSummary() {
+        document.getElementById('searchSummary').value = '';
+        document.getElementById('resultsSummary').innerHTML = '<div class="no-result"><i class="fa-solid fa-table-columns"></i> 输入项目关键词，一键查看职业病危害风险、环境影响评价、安全设施三同时三类分类结果</div>';
+        document.getElementById('statSummary').textContent = '';
+        document.getElementById('ssdSummary').style.display = 'none';
+    }
+    document.getElementById('searchSummary').addEventListener('keyup', function(e) { if (e.key === 'Enter') doSearchSummary(); });
+
+    window.onload = function() {
+        resetOcc();
+        window._occLoaded = true;
+        clearSummary();
+    };
+    </script>
+</body>
+</html>
