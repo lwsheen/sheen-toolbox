@@ -656,7 +656,8 @@
             body+='<b>下次检查日期：</b>'+(nextDt||'____年__月__日');
             body+='</div>';
 
-            var doc='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"></head><body>'+body+'<script src="/sheen-toolbox/assets/share.js"><\/script></body></html>';
+            var doc='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"></head><body>'+body+'<script src="/sheen-toolbox/assets/share.js"><\/script>
+</body></html>';
             var mime=type==='xls'?'application/vnd.ms-excel':'application/msword',
                 blob=new Blob(['\ufeff'+doc],{type:mime}),
                 url=URL.createObjectURL(blob),
@@ -699,5 +700,9 @@
     <script src="/sheen-toolbox/assets/i18n.js"></script>
 <script src="/sheen-toolbox/assets/share.js"></script>
 
+
+    <!-- SHEEN Toolbox 统一打印预览 -->
+    <script src="/sheen-toolbox/assets/print-preview.js"></script>
+    <script>initPrintPreview();</script>
 </body>
 </html>
