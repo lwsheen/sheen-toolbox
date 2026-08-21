@@ -3,53 +3,19 @@
 <head data-seo="sheen">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="洗眼器技术参数检索与安全检查表 — 依据 GB 38144-2025《眼面部防护 应急喷淋和洗眼设备》">
-    <title>洗眼器技术参数与检查表 — SHEEN Toolbox</title>
-    <meta property="og:title" content="洗眼器技术参数与检查表 | SHEEN Toolbox">
-    <meta property="og:description" content="洗眼器技术参数检索 + 安全检查表，依据 GB 38144-2025">
+    <meta name="description" content="洗眼器安全技术检查表 — 依据 GB 38144-2025《眼面部防护 应急喷淋和洗眼设备》">
+    <title>洗眼器安全技术检查表 — SHEEN Toolbox</title>
+    <meta property="og:title" content="洗眼器安全技术检查表 | SHEEN Toolbox">
+    <meta property="og:description" content="洗眼器安全技术检查表，依据 GB 38144-2025">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://lwsheen.pages.dev/sheen-toolbox/eyewash/">
     <meta property="og:image" content="https://lwsheen.pages.dev/sheen-toolbox/assets/share/eyewash.png">
     <link rel="canonical" href="https://lwsheen.pages.dev/sheen-toolbox/eyewash/">
-    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "洗眼器技术参数与检查表", "url": "https://lwsheen.pages.dev/sheen-toolbox/eyewash/", "description": "洗眼器技术参数检索与安全检查表：GB 38144-2025 限值速查与现场检查", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "inLanguage": "zh-CN", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "CNY"}, "publisher": {"@type": "Organization", "name": "SHEEN Toolbox"}}</script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "洗眼器安全技术检查表", "url": "https://lwsheen.pages.dev/sheen-toolbox/eyewash/", "description": "洗眼器安全技术检查表：GB 38144-2025 现场检查与不合格项记录", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "inLanguage": "zh-CN", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "CNY"}, "publisher": {"@type": "Organization", "name": "SHEEN Toolbox"}}</script>
 
     <link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
     <link rel="stylesheet" href="/sheen-toolbox/common.css">
     <style>
-
-        .filter-bar { display:flex; flex-wrap:wrap; gap:14px; align-items:center; margin:6px 0 16px;
-            border-radius: 8px;
-        }
-        .filter-bar .search-wrap { position:relative; flex:1 1 260px; min-width:220px; }
-        .filter-bar .search-wrap i { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--text-secondary); }
-        .filter-bar input.form-control { padding-left:34px; }
-        .chip-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;
-            border-radius: 8px;
-        }
-        .chip { border:1px solid var(--border); background:var(--bg-card); color:var(--text-secondary);
-                border-radius: 8px; padding:6px 14px; font-size:12px; cursor:pointer; transition:.15s; white-space:nowrap; }
-        .chip:hover { border-color:var(--brand-red); color:var(--brand-red); }
-        .chip.active { background:var(--brand-red); border-color:var(--brand-red); color:#fff;
-            border-radius: 8px;
-        }
-        .result-meta { font-size:12px; color:var(--text-secondary); margin-bottom:14px; }
-        .result-meta b { color:var(--brand-red); }
-        .param-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:14px; }
-        .param-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm);
-                      padding:14px 16px; display:flex; flex-direction:column; gap:8px; transition:.15s; }
-        .param-card:hover { border-color:var(--brand-red); box-shadow:0 4px 16px rgba(240,55,82,.10); }
-        .pc-head { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
-        .pc-clause { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px; font-weight:700;
-                     color:var(--brand-red); background:var(--brand-red-light); padding:2px 8px; border-radius:6px; }
-        .pc-cat { font-size:11px; color:var(--text-primary); border:1px solid var(--border); padding:1px 8px; border-radius:6px; }
-        .pc-req { font-size:11px; color:var(--text-secondary); }
-        .pc-param { font-size:15px; font-weight:700; color:var(--text-primary); margin-top:6px; }
-        .pc-value { font-size:13px; color:var(--brand-red); font-weight:600; line-height:1.6;
-                    background:var(--bg-page); border-left:3px solid var(--brand-red); padding:7px 10px; border-radius:0 6px 6px 0; margin-top:4px; }
-        mark { background:#fff2a8; color:inherit; padding:0 1px; border-radius:2px; }
-        .empty-state { text-align:center; color:var(--text-secondary); padding:40px; font-size:13px; }
-        @media (max-width:768px){ .param-grid{ grid-template-columns:1fr; } }
-
         .info-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-bottom:6px; }
         .info-grid .form-control { margin-top:4px; }
         .toolbar { display:flex; flex-wrap:wrap; gap:10px; margin:14px 0; }
@@ -113,20 +79,6 @@
         }
             .note-input { width:100%; }
         }
-    
-        /* ===== 标签页 ===== */
-        .tab-bar { display:flex; gap:6px; margin:4px 0 18px; border-bottom:1px solid var(--border); flex-wrap:wrap; }
-        .tab-btn { border:none; background:transparent; padding:10px 18px; font-size:14px; cursor:pointer;
-                   color:var(--text-secondary); border-bottom:2px solid transparent; margin-bottom:-1px;
-                   font-weight:600; font-family:inherit; display:inline-flex; align-items:center; gap:7px;
-            border-radius: 8px;
-        }
-        .tab-btn:hover { color:var(--brand-red); }
-        .tab-btn.active { color:var(--brand-red); border-bottom-color:var(--brand-red);
-            border-radius: 8px;
-        }
-        .tab-panel { display:none; }
-        .tab-panel.active { display:block; }
     </style>
     <!-- Baidu Tongji -->
     <script>
@@ -148,39 +100,17 @@
 <body>
     <div class="breadcrumb">
         <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
-        <span> / 洗眼器技术参数与检查表</span>
+        <span> / 洗眼器安全技术检查表</span>
     </div>
 
     <main class="app-container container-calc">
-        <h1 class="page-title">洗眼器技术参数与检查表</h1>
+        <h1 class="page-title">洗眼器安全技术检查表</h1>
         <p class="page-subtitle" style="margin-bottom:16px;">
             依据 <strong>GB 38144-2025《眼面部防护 应急喷淋和洗眼设备》</strong>（2026-09-01 实施，代替 GB/T 38144.1/.2—2019）。
-            提供「技术参数检索」与「安全检查表」两种模式，可切换使用。
+            现场检查与安全合规判定。
         </p>
 
-        <div class="tab-bar no-pr">
-            <button type="button" class="tab-btn active" data-tab="params" onclick="showTab('params')"><i class="fa-solid fa-magnifying-glass"></i> 技术参数检索</button>
-            <button type="button" class="tab-btn" data-tab="checklist" onclick="showTab('checklist')"><i class="fa-solid fa-clipboard-check"></i> 安全检查表</button>
-        </div>
-
-        <section id="panel-params" class="tab-panel active">
-<div class="filter-bar no-pr">
-            <div class="search-wrap">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="kw" class="form-control" placeholder="搜索参数或限值，如 流量 / 76 / 153 / 温度 / 阀门" autocomplete="off">
-            </div>
-        </div>
-
-        <div class="chip-row no-pr" id="catChips"></div>
-        <div class="chip-row no-pr" id="reqChips"></div>
-
-        <div class="result-meta" id="meta"></div>
-        <div class="param-grid" id="grid"></div>
-        <div class="empty-state" id="empty" style="display:none;">未找到匹配的技术参数，请调整筛选条件。</div>
-        </section>
-
-        <section id="panel-checklist" class="tab-panel">
-<div class="form-card">
+        <div class="form-card">
             <h3>检查基本信息</h3>
             <div class="info-grid">
                 <div><label style="font-size:12px;color:var(--text-secondary);">受检单位 / 地点</label>
@@ -216,7 +146,6 @@
             <h3><i class="fa-solid fa-clipboard-list"></i> 检查报告摘要</h3>
             <div id="reportBody"></div>
         </div>
-        </section>
     </main>
 
     <section class="tool-meta" data-toolmeta="sheen">
@@ -228,102 +157,14 @@
 </section>
 
     <footer class="sheen-footer">
-        <img src="../assets/sheen-logo.png" alt="SHEEN Toolbox" class="sheen-logo-sm"> &nbsp;<strong>SHEEN Toolbox</strong> · 洗眼器技术参数与检查表
+        <img src="../assets/sheen-logo.png" alt="SHEEN Toolbox" class="sheen-logo-sm"> &nbsp;<strong>SHEEN Toolbox</strong> · 洗眼器安全技术检查表
     </footer>
     <div class="print-time" id="printTime"></div>
 
     <script>
     (function(){
         'use strict';
-        var DATA = [{"clause":"5.2.1.1","cat":"应急喷淋器","req":"通用要求","param":"冲洗液温度","value":"符合生产者说明书给出的温度范围（整体 16 ℃~38 ℃）","desc":"应急喷淋器喷出的冲洗液温度应符合生产者在说明书中给出的温度范围。","test":"温度范围依据附录 B.5：16 ℃~38 ℃"},{"clause":"5.2.1.2","cat":"应急喷淋器","req":"通用要求","param":"密封性（无泄漏）","value":"1.5 倍设计压力保压 10 min，无可见泄漏","desc":"正确连接冲洗液供应源头并关闭阀门时，按 5.3.1 方法测试不应有可见泄漏。","test":"按 5.3.1：1.5 倍设计压力测 10 min，目测泄漏（范围未定上限按 1.0 MPa 上限）"},{"clause":"5.2.1.3","cat":"应急喷淋器","req":"通用要求","param":"冲洗液流量","value":"≥ 76 L/min，连续冲洗 ≥ 15 min","desc":"以至少 76 L/min 的流量提供冲洗液，保持连续冲洗至少 15 min。","test":"按 5.3.2：称重法/流量计法，每 3 min 记录，持续 15 min，取最小值"},{"clause":"5.2.1.4","cat":"应急喷淋器","req":"通用要求","param":"喷淋头最低点高度","value":"2080 mm ~ 2440 mm（从站立平面计）","desc":"喷淋头最低点的垂直高度按 GB/T 10000 设计，从使用者站立平面计算应在 2080 mm~2440 mm。","test":"按 5.3.3：示值误差 ≤±1 mm 的长度测量装置测量"},{"clause":"5.2.1.5","cat":"应急喷淋器","req":"通用要求","param":"喷淋范围与分散性","value":"1520 mm±5 mm 高处直径 ≥ 510 mm；510 mm 柱内 ≥60%，800 mm 柱内 ≥80%","desc":"距站立平面上方 1520 mm±5 mm 处，喷淋范围直径最小 510 mm；分散形式一致：直径 510 mm 圆柱体内喷淋量占比 ≥60%，直径 800 mm 圆柱体内 ≥80%。","test":"按 5.3.4 / 5.3.5：510 mm±3 mm 与 800 mm±5 mm 同心圆柱测量"},{"clause":"5.2.1.6","cat":"应急喷淋器","req":"通用要求","param":"障碍物净距","value":"以喷淋头为中心、最小半径 410 mm 圆柱内无障碍物","desc":"从喷淋头到站立平面、以喷淋头为中心最小半径 410 mm 的圆柱体内，除阀门驱动装置外不应有障碍物。","test":"按 5.3.6：测量喷淋头中心与障碍物距离，取最小值"},{"clause":"5.2.1.7","cat":"应急喷淋器","req":"通用要求","param":"材料","value":"不污染冲洗液的材料","desc":"应使用不污染冲洗液的材料制造，永久标识声明材料，说明书说明符合标准。","test":"查永久标识与说明书"},{"clause":"5.2.2.1","cat":"应急喷淋器","req":"控制阀门","param":"阀门开启时间","value":"≤ 1 s 完全打开并喷出；一经打开保持开启","desc":"阀门应在 1 s 内完全打开并喷出冲洗液；除使用者有意关闭外始终保持完全开启。","test":"按 5.3.7：2 人测试，取 6 次平均，修约至 0.1 s"},{"clause":"5.2.2.2","cat":"应急喷淋器","req":"控制阀门","param":"阀门驱动装置高度","value":"≤ 1730 mm（从站立平面计）","desc":"阀门驱动装置到使用者站立平面的垂直高度按 GB/T 10000 设计，不应超过 1730 mm。","test":"按 5.3.8：示值误差 ≤±1 mm 的长度测量装置测量"},{"clause":"5.2.2.3","cat":"应急喷淋器","req":"控制阀门","param":"阀门材料","value":"不污染冲洗液、耐腐蚀","desc":"控制阀门应使用不污染冲洗液的材料制造，并应耐腐蚀。","test":"查说明书说明材料与符合标准"},{"clause":"5.2.3.1","cat":"应急喷淋器","req":"特殊要求","param":"喷淋房无障碍空间","value":"以喷淋头为中心半径 ≥ 450 mm","desc":"应急喷淋房应提供以喷淋头为中心的半径不小于 450 mm 的无障碍空间。","test":"按 5.3.9：测量喷淋头与房体距离，取最小值"},{"clause":"5.2.3.2","cat":"应急喷淋器","req":"特殊要求","param":"喷淋房门","value":"开启方向与到达方向一致且不能上锁","desc":"当应急喷淋房有门时，门的开启方向应与到达设备的方向一致且门不能上锁。","test":"目测"},{"clause":"6.2.1.1","cat":"洗眼器","req":"通用要求","param":"冲洗液温度","value":"符合生产者说明书给出的温度范围（整体 16 ℃~38 ℃）","desc":"洗眼器喷出的冲洗液温度应符合生产者在说明书中给出的温度范围。","test":"温度范围依据附录 B.5：16 ℃~38 ℃"},{"clause":"6.2.1.2","cat":"洗眼器","req":"通用要求","param":"密封性（无泄漏）","value":"连接源关闭阀门，无可见泄漏","desc":"正确连接冲洗液供应源头并关闭阀门时，按 6.3.1 方法测试不应有可见泄漏。","test":"按 6.3.1：1.5 倍设计压力测 10 min，目测泄漏"},{"clause":"6.2.1.3","cat":"洗眼器","req":"通用要求","param":"冲洗液流量","value":"≥ 1.5 L/min，连续冲洗 ≥ 15 min","desc":"以至少 1.5 L/min 的流量提供冲洗液，保持连续冲洗至少 15 min。","test":"按 6.3.3：称重法/流量计法，每 3 min 记录，持续 15 min，取最小值"},{"clause":"6.2.1.4","cat":"洗眼器","req":"通用要求","param":"双眼同时供应","value":"双眼同时供应；喷头上方 <200 mm 标准尺内外区域线内","desc":"应能给双眼同时供应冲洗液；冲洗液应包含在位于洗眼喷头上方小于 200 mm 处的标准尺内部和外部之间的区域线内。","test":"按 6.3.4：标准尺内位线 32 mm 对分、外位线 82.5 mm 对分"},{"clause":"6.2.1.5","cat":"洗眼器","req":"通用要求","param":"喷头高度与净距","value":"喷头高度 838 mm~1143 mm；距障碍物 ≥153 mm；喷液高度 150 mm~300 mm","desc":"喷头位于站立水平面垂直距离至少 838 mm 但不超 1143 mm，距最近障碍物至少 153 mm；喷出冲洗液高度应为 150 mm~300 mm。","test":"按 6.3.5：测量喷头高度、与障碍物距离、喷液高度（1 min 内最小值）"},{"clause":"6.2.1.6","cat":"洗眼器","req":"通用要求","param":"喷头防护","value":"防污染物；开启时被冲洗液自动冲开","desc":"喷头应受保护防止接触空气污染物；实施保护时保证开启洗眼器时防护装置能被冲洗液自动冲开。","test":"按 6.3.6：目测防护装置及开启时是否被冲开"},{"clause":"6.2.1.7","cat":"洗眼器","req":"通用要求","param":"材料","value":"不污染冲洗液的材料","desc":"应使用不污染冲洗液的材料制造，永久标识声明材料，说明书说明符合标准。","test":"查永久标识与说明书"},{"clause":"6.2.2.1","cat":"洗眼器","req":"控制阀门","param":"阀门开启时间","value":"≤ 1 s 完全打开并喷出；保持开启","desc":"阀门应在 1 s 内完全打开并喷出冲洗液；除有意关闭外始终保持开启。","test":"按 6.3.7：2 人测试，取 6 次平均，修约至 0.1 s"},{"clause":"6.2.2.2","cat":"洗眼器","req":"控制阀门","param":"阀门驱动装置","value":"易找、易操作","desc":"阀门驱动装置应能让使用者容易找到并操作。","test":"目测/操作验证"},{"clause":"6.2.2.3","cat":"洗眼器","req":"控制阀门","param":"阀门材料","value":"不污染冲洗液、耐腐蚀","desc":"控制阀门应使用不污染冲洗液的材料制造，并应耐腐蚀。","test":"查说明书说明材料与符合标准"},{"clause":"6.2.3.2","cat":"洗眼器","req":"特殊要求","param":"自容式密封性","value":"重量供液者 24 h 无泄漏；其余 1.5 倍设计压力无泄漏","desc":"采用冲洗液重量提供冲洗液的自容式按 6.3.2（24 h）测试，其他按 6.3.1 测试，不应有可见泄漏。","test":"按 6.3.2：储液箱灌满，关闭阀门，≥24 h 目测；或 6.3.1"},{"clause":"6.2.3.3","cat":"洗眼器","req":"特殊要求","param":"自容式冲洗液保护","value":"储存冲洗液受保护不被污染","desc":"自容式洗眼器储存的冲洗液应受保护，不被大气或其他物质所污染。","test":"目测储存与防护措施"},{"clause":"7.2.1","cat":"洗眼/洗脸器","req":"通用要求","param":"综合技术要求","value":"符合 6.2.1.2、6.2.1.4~6.2.1.6；温度符合说明书；材料不污染冲洗液","desc":"除应符合 6.2.1.2、6.2.1.4~6.2.1.6 外：冲洗液温度符合说明书；使用不污染冲洗液材料。","test":"同洗眼器相关要求"},{"clause":"7.2.1","cat":"洗眼/洗脸器","req":"通用要求","param":"冲洗液流量","value":"≥ 11.4 L/min，连续冲洗 ≥ 15 min","desc":"以至少 11.4 L/min 的流量提供冲洗液，保持连续冲洗至少 15 min。","test":"按 6.3.3：称重法/流量计法，持续 15 min，取最小值"},{"clause":"7.2.2","cat":"洗眼/洗脸器","req":"控制阀门","param":"控制阀门","value":"符合 6.2.2（≤1 s 开启、保持开启、易操作、耐腐蚀）","desc":"控制阀门应符合 6.2.2 的要求。","test":"按 6.3.7 等"},{"clause":"7.2.3","cat":"洗眼/洗脸器","req":"特殊要求","param":"自容式","value":"泄漏测试符合 6.2.3；冲洗液受保护不被污染","desc":"自容式洗眼/洗脸器泄漏测试同 6.2.3；储存冲洗液应受保护不被污染。","test":"按 6.3.2 / 6.3.1"},{"clause":"8.2.1","cat":"复合式装置","req":"通用要求","param":"同时使用","value":"喷淋器/洗眼器/洗眼洗脸器可同时使用，分别符合第 5/6/7 章","desc":"复合式装置中各组件应能同时使用，单独或同时使用时均应符合第 5、6、7 章规定。","test":"按 5.3 / 6.3 试验方法"},{"clause":"8.2.2","cat":"复合式装置","req":"控制阀门","param":"控制阀门","value":"分别符合 5.2.2 / 6.2.2 / 7.2.2","desc":"应急喷淋器、洗眼器、洗眼/洗脸器的控制阀门应分别符合对应章节规定。","test":"按对应条款"},{"clause":"9.1","cat":"通用设备","req":"标识与说明","param":"产品永久性标识","value":"名称型号/标准编号/出厂日期/生产者/设计压力(自容式除外)/接触液部件材料/法规标识","desc":"永久性标识至少包括：产品名称型号、执行标准编号、出厂日期、生产者名称地址、设计压力（自容式除外）、接触冲洗液部件材料、法律法规规定标识。","test":"目测标识"},{"clause":"9.2","cat":"通用设备","req":"标识与说明","param":"产品信息（合格证+说明书）","value":"含温度、供给、选型、安装、调试、维护、培训、安全注意事项、故障排除","desc":"说明书至少包括：名称型号规格、生产者信息、接触冲洗液部件材料符合标准、阀门材料符合标准、冲洗液温度、冲洗液供给说明、选型、安装、调试、维护、人员培训、安全注意事项、故障排除。","test":"查说明书内容完整性"},{"clause":"B.1.2","cat":"通用设备","req":"安装与选型","param":"选型原则","value":"固定供水区选固定式；受限制区选自容式","desc":"有固定供水系统区域宜选固定式；受现场环境或水源限制区域宜选自容式应急设备。","test":"—"},{"clause":"B.1.3","cat":"通用设备","req":"安装与选型","param":"高风险区补充","value":"危害较高区域建议配个人冲洗装置","desc":"危害程度较高区域，除配备应急喷淋和洗眼设备外，建议适当配备个人冲洗装置。","test":"—"},{"clause":"B.2.1","cat":"通用设备","req":"安装与选型","param":"高温环境","value":"环境温度 > 38 ℃ 选高温保护/自排空/防烫保护阀","desc":"环境温度高于 38 ℃ 区域，宜选配高温保护装置（自排空装置或防烫保护阀）或降温保温处理。","test":"—"},{"clause":"B.2.2","cat":"通用设备","req":"安装与选型","param":"防冻保护（结冰）","value":"有结冰可能选防冻保护（如防冻阀）","desc":"鉴于冲洗液结冰可能，宜选带防冻保护的设备或进行保温处理。","test":"—"},{"clause":"B.2.3","cat":"通用设备","req":"安装与选型","param":"防冻保护（长期冰冻）","value":"长期冰冻选自带电伴热保温","desc":"存在冲洗液长期冰冻可能，宜选带电伴热保温的设备或伴热保温处理。","test":"—"},{"clause":"B.5","cat":"通用设备","req":"安装与选型","param":"冲洗液温度范围","value":"16 ℃ ~ 38 ℃","desc":"冲洗液温度范围为 16 ℃~38 ℃；低于 16 ℃ 影响体温致中断，高于 38 ℃ 伤眼并加速反应。","test":"—"},{"clause":"B.2.1","cat":"通用设备","req":"安装与选型","param":"可达性","value":"10 s 内到达（约 15 m），同平面，路线无障碍","desc":"设备宜安装在作业人员 10 s 内可到达区域，与危险区同平面，路线避免障碍物阻挡（10 s 约走 15 m）。","test":"—"},{"clause":"B.3.1","cat":"通用设备","req":"安装与选型","param":"喷淋器安装位置","value":"喷头高度 2080~2440 mm；出液口距障碍物 ≥ 410 mm","desc":"喷淋器喷头宜安装在距站立面 2080 mm~2440 mm，出液口中心距障碍物最小 410 mm。","test":"—"},{"clause":"B.3.2","cat":"通用设备","req":"安装与选型","param":"洗眼器安装位置","value":"喷头高度 838~1143 mm；距墙/障碍物 ≥ 153 mm","desc":"洗眼器或洗眼/洗脸器喷头宜安装在距站立面 838 mm~1143 mm，距墙或最近障碍物 ≥153 mm。","test":"—"},{"clause":"B.3.3","cat":"通用设备","req":"安装与选型","param":"进入方向","value":"使用者可从三个方向进入操作（喷淋房除外）","desc":"安装时需考虑使用者可从三个方向进入设备进行操作。","test":"—"},{"clause":"B.6","cat":"通用设备","req":"安装与选型","param":"提示标志","value":"按 GB 2894-2025 设置，高度可视、照明良好","desc":"使用范围内宜有高度可视且明显的提示标志，附近照明良好；按 GB 2894-2025 设置。","test":"—"},{"clause":"B.7","cat":"通用设备","req":"安装与选型","param":"报警装置","value":"少人/偏远区域宜装声光报警","desc":"在人员较少或偏远区域，宜在设备上安装声光报警装置及时报警救援。","test":"—"},{"clause":"C.1","cat":"通用设备","req":"维护与培训","param":"维护频次","value":"至少每周一次操作检查与维护并记录","desc":"应至少每周一次对应急喷淋和洗眼设备操作检查与维护并记录，补充/替换冲洗液，清洗沉淀物，减少细菌污染。","test":"查维护记录"},{"clause":"C.2","cat":"通用设备","req":"维护与培训","param":"盲管段冲洗","value":"维护持续由盲管段存水量决定，完全冲洗并替换存水","desc":"维护持续时间由设备内及不持续流动管道段（盲管段）存水量决定，应完全冲洗盲管段并替换所有存水。","test":"—"},{"clause":"C.3","cat":"通用设备","req":"维护与培训","param":"管线阀门关闭授权","value":"关闭管线阀门需经授权规定","desc":"维护需关闭管线阀门时，应制定规定，经授权方可实施，防止未经许可直接关闭。","test":"—"},{"clause":"C.4","cat":"通用设备","req":"维护与培训","param":"维护后恢复","value":"维护完成恢复可正常使用状态","desc":"维护工作完成后，应将设备恢复到可正常使用状态。","test":"—"},{"clause":"C.5","cat":"通用设备","req":"维护与培训","param":"部件更换","value":"喷头等损坏及时更换，必要时更换设备","desc":"维护中发现洗眼/洗脸器喷头等部件损坏，应及时更换，必要时更换设备。","test":"—"},{"clause":"11.2","cat":"通用设备","req":"维护与培训","param":"人员培训","value":"接触有害物质员工掌握地点与用法；新员工上岗前培训","desc":"可能接触有害物质员工应掌握设备地点与正确使用方法；新员工上岗前应进行使用培训。","test":"查培训记录"},{"clause":"11.3","cat":"通用设备","req":"维护与培训","param":"急救训练频次","value":"急救训练间隔不超过 1 年","desc":"安装完成投入使用前应进行急救训练，之后急救训练间隔不应超过 1 年。","test":"查训练记录"},{"clause":"11.4","cat":"通用设备","req":"维护与培训","param":"培训记录","value":"培训情况记录存档","desc":"对于员工的培训情况，应记录存档。","test":"查档案"},{"clause":"12.1","cat":"通用设备","req":"维护与培训","param":"PPE 不替代","value":"设备不能替代个体防护装备","desc":"应急喷淋和洗眼设备不能替代个体防护装备，作业人员应穿戴个体防护装备防护飞溅。","test":"—"},{"clause":"12.2","cat":"通用设备","req":"维护与培训","param":"废水处理","value":"使用后废水收集处理，避免直接排放污染现场","desc":"对应急喷淋和洗眼设备使用后的废水应收集处理，避免直接排放到工作现场引起污染。","test":"—"}];
-        var CATS = ["应急喷淋器", "洗眼器", "洗眼/洗脸器", "复合式装置", "通用设备"];
-        var REQS = ["通用要求", "控制阀门", "特殊要求", "标识与说明", "安装与选型", "维护与培训"];
-        var state = { kw:'', cat:'all', req:'all' };
-
-        document.getElementById('printTime').textContent =
-            new Date().toISOString().replace('T',' ').slice(0,16);
-
-        function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-        function hl(s, kw){
-            s = esc(s);
-            kw = (kw||'').trim();
-            if(!kw) return s;
-            var low = s.toLowerCase(), k = kw.toLowerCase(), out = '', i = 0, j;
-            while((j = low.indexOf(k, i)) !== -1){
-                out += s.slice(i, j) + '<mark>' + s.slice(j, j + k.length) + '</mark>';
-                i = j + k.length;
-            }
-            out += s.slice(i);
-            return out;
-        }
-
-        function buildChips(containerId, items, key){
-            var box = document.getElementById(containerId);
-            var all = document.createElement('div');
-            all.className = 'chip active'; all.textContent = '全部'; all.dataset.val = 'all';
-            all.onclick = function(){ setFilter(key,'all'); };
-            box.appendChild(all);
-            items.forEach(function(it){
-                var c = document.createElement('div');
-                c.className = 'chip'; c.textContent = it; c.dataset.val = it;
-                c.onclick = function(){ setFilter(key, it); };
-                box.appendChild(c);
-            });
-        }
-
-        function setFilter(key, val){
-            state[key] = val;
-            var box = document.getElementById(key==='cat' ? 'catChips' : 'reqChips');
-            Array.prototype.forEach.call(box.children, function(ch){
-                ch.classList.toggle('active', ch.dataset.val === val);
-            });
-            render();
-        }
-
-        function render(){
-            var kw = state.kw.trim().toLowerCase();
-            var list = DATA.filter(function(d){
-                if(state.cat!=='all' && d.cat!==state.cat) return false;
-                if(state.req!=='all' && d.req!==state.req) return false;
-                if(kw){
-                    var hay = (d.clause+' '+d.cat+' '+d.req+' '+d.param+' '+d.value).toLowerCase();
-                    if(hay.indexOf(kw)===-1) return false;
-                }
-                return true;
-            });
-            var grid = document.getElementById('grid');
-            grid.innerHTML = '';
-            document.getElementById('empty').style.display = list.length? 'none':'block';
-            document.getElementById('meta').innerHTML = '共 <b>'+list.length+'</b> 条技术参数'+
-                (state.cat!=='all'?' · '+esc(state.cat):'')+(state.req!=='all'?' · '+esc(state.req):'');
-            list.forEach(function(d){
-                var c = document.createElement('div');
-                c.className = 'param-card';
-                c.innerHTML =
-                    '<div class="pc-head">'+
-                        '<span class="pc-clause">'+esc(d.clause)+'</span>'+
-                        '<span class="pc-cat">'+esc(d.cat)+'</span>'+
-                        '<span class="pc-req">'+esc(d.req)+'</span>'+
-                    '</div>'+
-                    '<div class="pc-param">'+hl(d.param, state.kw.trim())+'</div>'+
-                    '<div class="pc-value">'+hl(d.value, state.kw.trim())+'</div>';
-                grid.appendChild(c);
-            });
-        }
-
-        document.getElementById('kw').addEventListener('input', function(e){
-            state.kw = e.target.value; render();
-        });
-
-        buildChips('catChips', CATS, 'cat');
-        buildChips('reqChips', REQS, 'req');
-        render();
-    })();
-    </script>
-    <script>
-    (function(){
-        'use strict';
-        var SECTIONS = [{"title": "1. 安装位置与可达性", "items": [{"text": "设备位于作业人员 10 s 内（约 15 m）可到达区域，并与危险区处于同一平面", "ref": "B.2.1", "id": "s0_0"}, {"text": "前往设备的路线中无门、柜等障碍物阻挡（危险区无腐蚀且门同向、不上锁时可保留）", "ref": "B.2.1", "id": "s0_1"}, {"text": "设备安放接近危险位置，但已考虑冲洗液飞溅、暴露带电导体等附加危险", "ref": "B.2.3", "id": "s0_2"}, {"text": "应急喷淋器喷头高度 2080 mm~2440 mm，出液口中心距障碍物最小 410 mm", "ref": "B.3.1", "id": "s0_3"}, {"text": "洗眼器/洗眼洗脸器喷头高度 838 mm~1143 mm，距墙或最近障碍物 ≥153 mm", "ref": "B.3.2", "id": "s0_4"}, {"text": "使用者可从三个方向进入设备进行操作（应急喷淋房除外）", "ref": "B.3.3", "id": "s0_5"}, {"text": "使用范围内设有高度可视的提示标志、附近照明良好（按 GB 2894-2025）", "ref": "B.6", "id": "s0_6"}, {"text": "人员较少或偏远区域，设备已安装声光报警装置", "ref": "B.7", "id": "s0_7"}, {"text": "供水管线布置不干扰应急喷淋和洗眼设备的正常使用", "ref": "B.4", "id": "s0_8"}]}, {"title": "2. 应急喷淋器技术参数", "items": [{"text": "冲洗液流量 ≥76 L/min，并能保持连续冲洗至少 15 min", "ref": "5.2.1.3", "id": "s1_0"}, {"text": "喷淋头最低点垂直高度在 2080 mm~2440 mm（从站立平面计）", "ref": "5.2.1.4", "id": "s1_1"}, {"text": "距站立平面 1520 mm±5 mm 处，喷淋范围最小直径 ≥510 mm", "ref": "5.2.1.5", "id": "s1_2"}, {"text": "分散性：510 mm 圆柱体内喷淋量 ≥60%，800 mm 圆柱体内 ≥80%", "ref": "5.2.1.5", "id": "s1_3"}, {"text": "以喷淋头为中心、最小半径 410 mm 圆柱内（除阀门驱动装置）无障碍物", "ref": "5.2.1.6", "id": "s1_4"}, {"text": "冲洗液温度在 16 ℃~38 ℃ 且符合说明书给出的温度范围", "ref": "5.2.1.1/B.5", "id": "s1_5"}, {"text": "应急喷淋房提供以喷淋头为中心半径 ≥450 mm 的无障碍空间", "ref": "5.2.3.1", "id": "s1_6"}, {"text": "应急喷淋房有门时，开启方向与到达方向一致且门不能上锁", "ref": "5.2.3.2", "id": "s1_7"}]}, {"title": "3. 洗眼器 / 洗眼洗脸器技术参数", "items": [{"text": "洗眼器冲洗液流量 ≥1.5 L/min，连续冲洗 ≥15 min", "ref": "6.2.1.3", "id": "s2_0"}, {"text": "洗眼/洗脸器冲洗液流量 ≥11.4 L/min，连续冲洗 ≥15 min", "ref": "7.2.1", "id": "s2_1"}, {"text": "洗眼器能给双眼同时供应，冲洗液在喷头上方 <200 mm 标准尺内外区域线内", "ref": "6.2.1.4", "id": "s2_2"}, {"text": "洗眼喷头高度 838 mm~1143 mm，距最近障碍物 ≥153 mm", "ref": "6.2.1.5", "id": "s2_3"}, {"text": "洗眼器喷出冲洗液高度在 150 mm~300 mm", "ref": "6.2.1.5", "id": "s2_4"}, {"text": "喷头有防护装置防污染物，开启时防护装置能被冲洗液自动冲开", "ref": "6.2.1.6", "id": "s2_5"}, {"text": "洗眼/洗脸器符合对应通用要求（温度、材料、双眼供应等）", "ref": "7.2.1", "id": "s2_6"}]}, {"title": "4. 控制阀门与操作", "items": [{"text": "阀门在 1 s 内完全打开并喷出冲洗液", "ref": "5.2.2.1/6.2.2.1", "id": "s3_0"}, {"text": "阀门一经打开始终保持完全开启（除使用者有意关闭）", "ref": "5.2.2.1", "id": "s3_1"}, {"text": "阀门驱动装置到站立平面垂直高度 ≤1730 mm", "ref": "5.2.2.2", "id": "s3_2"}, {"text": "阀门驱动装置易找、易操作", "ref": "6.2.2.2", "id": "s3_3"}, {"text": "复合式装置各组件控制阀门独立，喷淋器与洗眼器可同时使用", "ref": "8.2.1/8.2.2", "id": "s3_4"}]}, {"title": "5. 冲洗液（水质 / 温度 / 供给）", "items": [{"text": "冲洗液温度范围保持在 16 ℃~38 ℃", "ref": "B.5", "id": "s4_0"}, {"text": "环境温度 >38 ℃ 区域，设备配高温保护/自排空/防烫保护阀或降温保温", "ref": "B.2.1", "id": "s4_1"}, {"text": "有结冰可能配防冻保护（如防冻阀）；长期冰冻选自带电伴热保温", "ref": "B.2.2/B.2.3", "id": "s4_2"}, {"text": "固定式设备冲洗液一般用饮用水", "ref": "3.5 注", "id": "s4_3"}, {"text": "自容式设备储存的冲洗液受保护，不被大气或其他物质污染", "ref": "6.2.3.3", "id": "s4_4"}, {"text": "冲洗液供给正常，无缺水或断流", "ref": "9.2f", "id": "s4_5"}]}, {"title": "6. 标识与说明", "items": [{"text": "永久标识含：名称型号、执行标准编号、出厂日期、生产者、设计压力（自容式除外）、接触冲洗液部件材料", "ref": "9.1", "id": "s5_0"}, {"text": "设备附合格证与产品说明书", "ref": "9.2", "id": "s5_1"}, {"text": "说明书含冲洗液温度、供给、选型、安装、调试、维护、培训、安全注意事项、故障排除", "ref": "9.2", "id": "s5_2"}, {"text": "说明书声明接触冲洗液部件及阀门材料符合的标准", "ref": "9.2c/d", "id": "s5_3"}]}, {"title": "7. 维护与检查", "items": [{"text": "至少每周一次操作检查与维护并记录，补充/替换冲洗液，清洗沉淀物", "ref": "C.1", "id": "s6_0"}, {"text": "维护完全冲洗盲管段并替换其中所有存水", "ref": "C.2", "id": "s6_1"}, {"text": "关闭管线阀门需经授权规定，防止未经许可直接关闭", "ref": "C.3", "id": "s6_2"}, {"text": "维护工作完成后，设备恢复到可正常使用状态", "ref": "C.4", "id": "s6_3"}, {"text": "喷头等部件损坏及时更换，必要时更换设备", "ref": "C.5", "id": "s6_4"}, {"text": "连接冲洗液源并关闭阀门时无可见泄漏（1.5 倍设计压力保压 10 min）", "ref": "5.2.1.2/6.2.1.2", "id": "s6_5"}]}, {"title": "8. 人员培训与安全管理", "items": [{"text": "可能接触有害物质的员工掌握设备地点与正确使用方法", "ref": "11.2", "id": "s7_0"}, {"text": "新员工进入岗位前已进行设备使用方法培训", "ref": "11.2", "id": "s7_1"}, {"text": "安装完成投入使用前已进行急救训练，之后间隔不超过 1 年", "ref": "11.3", "id": "s7_2"}, {"text": "员工培训情况记录存档", "ref": "11.4", "id": "s7_3"}, {"text": "设备不替代个体防护装备，作业人员仍须穿戴 PPE 防护飞溅", "ref": "12.1", "id": "s7_4"}, {"text": "使用后废水收集处理，避免直接排放污染工作现场", "ref": "12.2", "id": "s7_5"}]}];
+        var SECTIONS = [{"title": "1. 安装位置与可达性", "items": [{"text": "设备位于作业人员 10 s 内（约 15 m）可到达区域，并与危险区处于同一平面", "ref": "B.2.1", "id": "s0_0"}, {"text": "前往设备的路线中无门、柜等障碍物阻挡（危险区无腐蚀且门同向、不上锁时可保留）", "ref": "B.2.1", "id": "s0_1"}, {"text": "设备安放接近危险位置，但已考虑冲洗液飞溅、暴露带电导体等附加危险", "ref": "B.2.3", "id": "s0_2"}, {"text": "应急喷淋器喷头高度 2080 mm~2440 mm，出液口中心距障碍物最小 410 mm", "ref": "B.3.1", "id": "s0_3"}, {"text": "洗眼器/洗眼洗脸器喷头高度 838 mm~1143 mm，距墙或最近障碍物 ≥153 mm", "ref": "B.3.2", "id": "s0_4"}, {"text": "使用者可从三个方向进入设备进行操作（应急喷淋房除外）", "ref": "B.3.3", "id": "s0_5"}, {"text": "使用范围内设有高度可视的提示标志、附近照明良好（按 GB 2894-2025）", "ref": "B.6", "id": "s0_6"}, {"text": "人员较少或偏远区域，设备已安装声光报警装置", "ref": "B.7", "id": "s0_7"}, {"text": "供水管线布置不干扰应急喷淋和洗眼设备的正常使用", "ref": "B.4", "id": "s0_8"}]}, {"title": "2. 应急喷淋器技术参数", "items": [{"text": "冲洗液流量 ≥76 L/min，并能保持连续冲洗至少 15 min", "ref": "5.2.1.3", "id": "s1_0"}, {"text": "喷淋头最低点垂直高度在 2080 mm~2440 mm（从站立平面计）", "ref": "5.2.1.4", "id": "s1_1"}, {"text": "距站立平面 1520 mm±5 mm 处，喷淋范围最小直径 ≥510 mm", "ref": "5.2.1.5", "id": "s1_2"}, {"text": "分散性：510 mm 圆柱体内喷淋量 ≥60%，800 mm 圆柱体内 ≥80%", "ref": "5.2.1.5", "id": "s1_3"}, {"text": "以喷淋头为中心、最小半径 410 mm 圆柱内（除阀门驱动装置）无障碍物", "ref": "5.2.1.6", "id": "s1_4"}, {"text": "冲洗液温度在 16 ℃~38 ℃ 且符合说明书给出的温度范围", "ref": "5.2.1.1/B.5", "id": "s1_5"}, {"text": "应急喷淋房提供以喷淋头为中心半径 ≥450 mm 的无障碍空间", "ref": "5.2.3.1", "id": "s1_6"}, {"text": "应急喷淋房有门时，开启方向与到达方向一致且门不能上锁", "ref": "5.2.3.2", "id": "s1_7"}]}, {"title": "3. 洗眼器 / 洗眼洗脸器技术参数", "items": [{"text": "洗眼器冲洗液流量 ≥1.5 L/min，连续冲洗 ≥15 min", "ref": "6.2.1.3", "id": "s2_0"}, {"text": "洗眼/洗脸器冲洗液流量 ≥11.4 L/min，连续冲洗 ≥15 min", "ref": "7.2.1", "id": "s2_1"}, {"text": "洗眼器能给双眼同时供应，冲洗液在喷头上方 <200 mm 标准尺内外区域线内", "ref": "6.2.1.4", "id": "s2_2"}, {"text": "洗眼喷头高度 838 mm~1143 mm，距最近障碍物 ≥153 mm", "ref": "6.2.1.5", "id": "s2_3"}, {"text": "洗眼器喷出冲洗液高度在 150 mm~300 mm", "ref": "6.2.1.5", "id": "s2_4"}, {"text": "喷头有防护装置防污染物，开启时防护装置能被冲洗液自动冲开", "ref": "6.2.1.6", "id": "s2_5"}, {"text": "洗眼/洗脸器符合对应通用要求（温度、材料、双眼供应等）", "ref": "7.2.... [truncated]
         var LS_KEY = 'eyewash_checklist_v1';
         var metaKey = 'eyewash_checklist_meta_v1';
 
@@ -518,16 +359,6 @@
         load();
         render();
     })();
-    </script>
-    <script>
-    function showTab(name){
-        document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
-        var panel = document.getElementById('panel-' + name);
-        if(panel) panel.classList.add('active');
-        document.querySelectorAll('.tab-btn').forEach(function(b){
-            b.classList.toggle('active', b.getAttribute('data-tab') === name);
-        });
-    }
     </script>
     <script src="/sheen-toolbox/assets/i18n.js"></script>
 <script src="/sheen-toolbox/assets/share.js"></script>
