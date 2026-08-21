@@ -61,7 +61,24 @@
         .ssd-note b { color:var(--brand-red); }
         .no-result { text-align:center; color:var(--text-secondary); padding:40px 0; font-size:var(--fs-md); }
         @media (max-width:600px) { .result-item { flex-direction:column; align-items:flex-start; } .item-left { width:100%; } }
-        .ssd-summary-section { margin-top:16px; border-top:2px solid var(--border); padding-top:16px; }
+        /* 总览待办清单样式 */
+        .todo-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-md); overflow:hidden; margin-bottom:14px; }
+        .todo-head { display:flex; align-items:center; gap:10px; padding:12px 18px; border-bottom:1px solid var(--border); background:var(--bg-page); }
+        .todo-head-icon { font-size:18px; width:28px; text-align:center; }
+        .todo-head-title { font-size:var(--fs-base); font-weight:700; color:var(--text-primary); flex:1; }
+        .todo-head-level { font-size:var(--fs-xs); font-weight:600; padding:3px 10px; border-radius:12px; }
+        .todo-body { padding:12px 18px; }
+        .todo-row { display:flex; align-items:flex-start; gap:10px; padding:7px 0; border-bottom:1px dashed var(--border); font-size:var(--fs-sm); }
+        .todo-row:last-child { border-bottom:none; }
+        .todo-step { flex-shrink:0; width:22px; height:22px; border-radius:50%; background:var(--brand-red); color:#fff; font-size:11px; font-weight:700; display:inline-flex; align-items:center; justify-content:center; margin-top:1px; }
+        .todo-step.green { background:var(--success-green, #16A34A); }
+        .todo-step.blue { background:var(--tech-blue); }
+        .todo-step.amber { background:var(--amber); }
+        .todo-text { flex:1; color:var(--text-primary); line-height:1.6; }
+        .todo-text b { color:var(--text-primary); font-weight:600; }
+        .todo-hint { font-size:var(--fs-xs); color:var(--text-secondary); margin-top:2px; }
+        .todo-ssd-none { padding:16px 18px; font-size:var(--fs-sm); color:var(--text-secondary); background:var(--bg-page); border-radius:var(--radius-sm); text-align:center; }
+        .todo-ssd-none i { margin-right:6px; }
     </style>
     <script>
     var _hmt = _hmt || [];
@@ -103,10 +120,6 @@
                 <div class="stat-line" id="statSummary"></div>
             </div>
             <div id="resultsSummary" class="result-list"></div>
-            <div id="ssdSummary" class="ssd-summary-section" style="display:none;">
-                <div class="cat-title" style="margin-top:20px;"><i class="fa-solid fa-hard-hat"></i> 安全设施三同时分类参考</div>
-                <div id="resultsSsdSummary" class="ssd-grid"></div>
-            </div>
         </div>
         <!-- Tab1 职业病 -->
         <div id="panel-occ" class="tab-panel active">
@@ -521,7 +534,6 @@
         var input = document.getElementById('searchSummary').value.trim();
         var container = document.getElementById('resultsSummary');
         var statLine = document.getElementById('statSummary');
-        var ssdSection = document.getElementById('ssdSummary');
         if (!input) { clearSummary(); return; }
         var keyword = input.toLowerCase();
         // OCC search
@@ -532,7 +544,7 @@
         var eiaMatches = EIA_DATA.filter(function(item) {
             return item[0].toLowerCase().indexOf(keyword) !== -1 || item[1].toLowerCase().indexOf(keyword) !== -1;
         });
-        // SSD: match project names
+        // SSD: match project names in the category list
         var ssdMatches = SSD.filter(function(item) {
             return item.name.toLowerCase().indexOf(keyword) !== -1 || item.code.toLowerCase().indexOf(keyword) !== -1;
         });
@@ -542,54 +554,129 @@
         if (total === 0) {
             html = '<div class="no-result"><i class="fa-solid fa-magnifying-glass-minus"></i> 未找到匹配项，请调整关键词。</div>';
         } else {
+            // === 职业病危害风险分类 ===
             if (occMatches.length > 0) {
-                html += '<div class="cat-group"><div class="cat-title"><i class="fa-solid fa-shield-heart" style="color:var(--brand-red);font-size:14px;margin-right:6px;"></i>职业病危害风险分类</div><div class="result-list">';
-                occMatches.forEach(function(item) { html += buildOccItem(item); });
+                var occ = occMatches[0]; // 取第一条（通常只有一个）
+                var riskLevel = occ[2];
+                var isSevere = riskLevel === '严重';
+                var levelBadge = isSevere
+                    ? '<span style="display:inline-flex;align-items:center;padding:3px 12px;border-radius:12px;background:#FDEEF1;color:var(--brand-red);font-size:var(--fs-xs);font-weight:700;">严重</span>'
+                    : '<span style="display:inline-flex;align-items:center;padding:3px 12px;border-radius:12px;background:#ECFDF5;color:var(--success-green,#16A34A);font-size:var(--fs-xs);font-weight:700;">一般</span>';
+                var codeClean = occ[0];
+                var nameClean = occ[1].replace('*','');
+                html += '<div class="todo-card">' +
+                    '<div class="todo-head">' +
+                        '<span class="todo-head-icon" style="color:var(--brand-red);"><i class="fa-solid fa-shield-heart"></i></span>' +
+                        '<span class="todo-head-title">' + codeClean + ' ' + nameClean + '</span>' +
+                        levelBadge +
+                    '</div>' +
+                    '<div class="todo-body">';
+                if (isSevere) {
+                    html += buildOccTodo(true);
+                } else {
+                    html += buildOccTodo(false);
+                }
                 html += '</div></div>';
             }
+            // === 环境影响评价分类 ===
             if (eiaMatches.length > 0) {
-                html += '<div class="cat-group"><div class="cat-title"><i class="fa-solid fa-leaf" style="color:var(--tech-blue);font-size:14px;margin-right:6px;"></i>环境影响评价分类</div><div class="result-list">';
-                eiaMatches.forEach(function(item) { html += buildEiaCard(item); });
-                html += '</div></div>';
-            }
-            if (ssdMatches.length > 0) {
-                html += '<div class="cat-group"><div class="cat-title"><i class="fa-solid fa-hard-hat" style="color:var(--amber);font-size:14px;margin-right:6px;"></i>安全设施三同时分类</div>';
-                html += '<div class="ssd-grid">';
-                ssdMatches.forEach(function(item) {
-                    var cls = item.risk === '高危' ? 'high-risk' : 'normal-risk';
-                    var riskBadge = item.risk === '高危' ? '<span class="badge badge-red">高危</span>' : '<span class="badge badge-amber">一般</span>';
-                    html += '<div class="ssd-card ' + cls + '">' +
-                        '<div class="ssd-head"><span class="ssd-title">' + item.name + '</span><span class="ssd-code">' + item.code + '</span></div>' +
-                        '<div style="margin-bottom:8px;">' + riskBadge + '</div>' +
-                        '<div class="ssd-row"><b>预评价：</b>' + item.pre + '</div>' +
-                        '<div class="ssd-row"><b>设计审查：</b>' + item.design + '</div>' +
-                        '<div class="ssd-row"><b>验收：</b>' + item.accept + '</div>' +
-                        '<div class="ssd-ref">依据：' + item.ref + '</div>' +
-                    '</div>';
+                eiaMatches.forEach(function(item) {
+                    html += buildEiaTodoCard(item);
                 });
-                html += '</div></div>';
             }
+            // === 安全设施三同时 ===
+            html += buildSsdTodoCard(ssdMatches);
         }
         container.innerHTML = html;
-        // Show full SSD reference if no direct match
-        ssdSection.style.display = total > 0 && ssdMatches.length === 0 ? 'block' : 'none';
-        if (total > 0 && ssdMatches.length === 0) {
-            var ssdContainer = document.getElementById('resultsSsdSummary');
-            var ssdHtml = '';
-            SSD.forEach(function(item) {
-                var cls = item.risk === '高危' ? 'high-risk' : 'normal-risk';
-                var riskBadge = item.risk === '高危' ? '<span class="badge badge-red">高危</span>' : '<span class="badge badge-amber">一般</span>';
-                ssdHtml += '<div class="ssd-card ' + cls + '">' +
-                    '<div class="ssd-head"><span class="ssd-title">' + item.name + '</span><span class="ssd-code">' + item.code + '</span></div>' +
-                    '<div style="margin-bottom:8px;">' + riskBadge + '</div>' +
-                    '<div class="ssd-row"><b>预评价：</b>' + item.pre + '</div>' +
-                    '<div class="ssd-row"><b>设计审查：</b>' + item.design + '</div>' +
-                    '<div class="ssd-row"><b>验收：</b>' + item.accept + '</div>' +
-                    '<div class="ssd-ref">依据：' + item.ref + '</div>' +
-                '</div>';
-            });
-            ssdContainer.innerHTML = ssdHtml;
+    }
+
+    function buildOccTodo(isSevere) {
+        var steps = isSevere
+            ? [
+                { num: '1', cls: 'red', label: '编制职业病危害预评价报告', hint: '委托有资质机构编制，项目可行性论证阶段完成' },
+                { num: '2', cls: 'red', label: '安全设施设计审查', hint: '向应急管理部门申报安全设施设计，取得审查意见' },
+                { num: '3', cls: 'red', label: '编制职业病控制效果评价报告', hint: '项目竣工后、验收前委托有资质机构编制' },
+                { num: '4', cls: 'red', label: '组织职业病防护设施竣工验收', hint: '建设单位组织验收，形成验收报告并归档' }
+              ]
+            : [
+                { num: '1', cls: 'green', label: '编制职业病危害预评价报告', hint: '委托有资质机构编制，项目可行性论证阶段完成' },
+                { num: '2', cls: 'green', label: '编制职业病控制效果评价报告', hint: '项目竣工后、验收前委托有资质机构编制' },
+                { num: '3', cls: 'green', label: '组织职业病防护设施竣工验收', hint: '建设单位自行组织验收，形成验收报告并归档' }
+              ];
+        var html = '';
+        steps.forEach(function(s) {
+            var dotCls = s.cls === 'red' ? '' : (s.cls === 'blue' ? 'blue' : 'amber');
+            html += '<div class="todo-row"><span class="todo-step' + (dotCls ? ' ' + dotCls : '') + '">' + s.num + '</span><div class="todo-text"><b>' + s.label + '</b><div class="todo-hint">' + s.hint + '</div></div></div>';
+        });
+        return html;
+    }
+
+    function buildEiaTodoCard(item) {
+        var code = item[0], name = item[1], rptBook = item[2], rptForm = item[3], regForm = item[4], sens = item[5];
+        var level = '', levelBadge = '', levelCls = '';
+        if (rptBook && rptBook !== '/') { level = '报告书'; levelBadge = '严重'; levelCls = 'red'; }
+        else if (rptForm && rptForm !== '/') { level = '报告表'; levelBadge = '一般'; levelCls = 'blue'; }
+        else { level = '登记表'; levelBadge = '备案'; levelCls = 'amber'; }
+        var nameClean = name.replace('*','');
+        var starNote = name.indexOf('*') !== -1 ? ' <span class="item-note">*</span>' : '';
+        var html = '<div class="todo-card">' +
+            '<div class="todo-head">' +
+                '<span class="todo-head-icon" style="color:var(--tech-blue);"><i class="fa-solid fa-leaf"></i></span>' +
+                '<span class="todo-head-title">' + code + ' ' + nameClean + starNote + '</span>' +
+                '<span style="display:inline-flex;align-items:center;padding:3px 12px;border-radius:12px;background:' + (levelCls==='red'?'#FDEEF1':levelCls==='blue'?'#EEF4FD':'#FFF8ED') + ';' + (levelCls==='red'?'color:var(--brand-red)':levelCls==='blue'?'color:var(--tech-blue)':'color:var(--amber)') + ';font-size:var(--fs-xs);font-weight:700;">' + level + '</span>' +
+            '</div><div class="todo-body">';
+        var steps = [];
+        if (level === '报告书') {
+            steps.push({ num:'1', dotCls:'', label:'编制环境影响报告书', hint:'委托有资质机构编制，报有审批权的生态环境部门审批' });
+            steps.push({ num:'2', dotCls:'blue', label:'取得生态环境部门审批批复', hint:'报告书经技术评估后，由审批部门出具批复文件' });
+        } else if (level === '报告表') {
+            steps.push({ num:'1', dotCls:'', label:'编制环境影响报告表', hint:'委托有资质机构编制，报有审批权的生态环境部门审批/备案' });
+            steps.push({ num:'2', dotCls:'blue', label:'取得生态环境部门审批/备案', hint:'报告表经形式审查或技术评估后取得批复或备案回执' });
+        } else {
+            steps.push({ num:'1', dotCls:'amber', label:'在网上填报环境影响登记表', hint:'登录全国建设项目环评审批信息管理服务平台在线填报，即时备案' });
         }
+        if (sens && sens !== '/') {
+            steps.push({ num:'!', dotCls:'red', label:'注意敏感区要求', hint:sens });
+        }
+        steps.forEach(function(s) {
+            html += '<div class="todo-row"><span class="todo-step' + (s.dotCls ? ' ' + s.dotCls : '') + '">' + s.num + '</span><div class="todo-text"><b>' + s.label + '</b><div class="todo-hint">' + s.hint + '</div></div></div>';
+        });
+        html += '</div></div>';
+        return html;
+    }
+
+    function buildSsdTodoCard(matches) {
+        var html = '<div class="todo-card">';
+        var headIcon = '<span class="todo-head-icon" style="color:var(--amber);"><i class="fa-solid fa-hard-hat"></i></span>';
+        var headTitle = '<span class="todo-head-title">安全设施"三同时"管理要求</span>';
+        if (matches.length > 0) {
+            var m = matches[0];
+            var riskBadge = m.risk === '高危'
+                ? '<span style="display:inline-flex;align-items:center;padding:3px 12px;border-radius:12px;background:#FDEEF1;color:var(--brand-red);font-size:var(--fs-xs);font-weight:700;">高危 — 须安全预评价</span>'
+                : '<span style="display:inline-flex;align-items:center;padding:3px 12px;border-radius:12px;background:#FFF8ED;color:var(--amber);font-size:var(--fs-xs);font-weight:700;">一般 — 综合分析备查</span>';
+            html += '<div class="todo-head">' + headIcon + headTitle + riskBadge + '</div><div class="todo-body">';
+            html += '<div class="todo-row"><span class="todo-step red">1</span><div class="todo-text"><b>安全预评价（如适用）</b><div class="todo-hint">' + m.pre + '</div></div></div>';
+            html += '<div class="todo-row"><span class="todo-step red">2</span><div class="todo-text"><b>安全设施设计审查（如适用）</b><div class="todo-hint">' + m.design + '</div></div></div>';
+            html += '<div class="todo-row"><span class="todo-step red">3</span><div class="todo-text"><b>安全验收评价+竣工验收</b><div class="todo-hint">' + m.accept + '</div></div></div>';
+            html += '<div class="todo-row"><span class="todo-step amber">!</span><div class="todo-text"><b>试运行要求</b><div class="todo-hint">试运行不少于30日、最长不超过180日；危化品和化工项目试运行方案须事先备案</div></div></div>';
+            html += '</div></div>';
+        } else {
+            // 无精确匹配：展示"一般建设项目"兜底类别
+            var general = SSD.find(function(s) { return s.code === '一般'; });
+            if (general) {
+                html += '<div class="todo-head">' + headIcon + headTitle + '<span style="display:inline-flex;align-items:center;padding:3px 12px;border-radius:12px;background:#FFF8ED;color:var(--amber);font-size:var(--fs-xs);font-weight:700;">一般建设项目（兜底）</span></div>';
+                html += '<div class="todo-body">';
+                html += '<div class="todo-row"><span class="todo-step amber">1</span><div class="todo-text"><b>安全生产条件和设施综合分析</b><div class="todo-hint">形成书面报告备查，由生产经营单位自行组织</div></div></div>';
+                html += '<div class="todo-row"><span class="todo-step amber">2</span><div class="todo-text"><b>安全设施设计审查</b><div class="todo-hint">由生产经营单位组织审查，形成书面报告备查</div></div></div>';
+                html += '<div class="todo-row"><span class="todo-step amber">3</span><div class="todo-text"><b>安全设施竣工验收</b><div class="todo-hint">竣工验收合格后投入使用，形成书面报告备查</div></div></div>';
+                html += '<div class="todo-hint" style="padding:4px 0 0 32px;">注：安全三同时关键词「' + document.getElementById('searchSummary').value.trim() + '」未在高危目录中精确匹配，按一般建设项目处理。请对照《建设项目安全设施"三同时"监督管理办法》第7条自行确认是否属于高危类别。</div>';
+                html += '</div></div>';
+            } else {
+                html += '<div class="todo-head">' + headIcon + headTitle + '</div>';
+                html += '<div class="todo-body"><div class="todo-ssd-none"><i class="fa-solid fa-circle-info"></i>安全三同时暂无匹配</div></div></div>';
+            }
+        }
+        return html;
     }
     function buildEiaCard(item) {
         var code = item[0], name = item[1], rptBook = item[2], rptForm = item[3], regForm = item[4], sens = item[5];
@@ -626,7 +713,6 @@
         document.getElementById('searchSummary').value = '';
         document.getElementById('resultsSummary').innerHTML = '<div class="no-result"><i class="fa-solid fa-table-columns"></i> 输入项目关键词，一键查看职业病危害风险、环境影响评价、安全设施三同时三类分类结果</div>';
         document.getElementById('statSummary').textContent = '';
-        document.getElementById('ssdSummary').style.display = 'none';
     }
     document.getElementById('searchSummary').addEventListener('keyup', function(e) { if (e.key === 'Enter') doSearchSummary(); });
 
