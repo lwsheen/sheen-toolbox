@@ -287,6 +287,7 @@
       }
     })();
     </script>
+
 </head>
 <body>
 
@@ -347,7 +348,7 @@
         <div class="tool-toolbar no-print">
             <button type="button" class="btn btn-sm btn-primary" id="excelBtn"><i class="fa-solid fa-file-excel"></i> 导出 Excel</button>
             <button type="button" class="btn btn-sm btn-outline" id="wordBtn"><i class="fa-solid fa-file-word"></i> 导出 Word</button>
-            <button type="button" class="btn btn-sm btn-print" id="printBtn"><i class="fa-solid fa-print"></i> 打印</button>
+            
             <button type="button" class="btn btn-sm btn-danger" id="resetBtn"><i class="fa-solid fa-rotate-left"></i> 重置</button>
             <button type="button" class="btn btn-sm btn-outline" id="guideBtn"><i class="fa-solid fa-book-open"></i> 使用说明</button>
         </div>
@@ -985,11 +986,11 @@
                       '<h2 style="text-align:center;">便携式金属梯安全检查表</h2>' +
                       '<p style="text-align:center;font-size:12px;color:#555;">' + esc(meta) + '</p>' +
                       body + verdictBlock + warnBlock +
-                      '<script src="/sheen-toolbox/assets/share.js"><\/script>
-    <!-- SHEEN Toolbox 统一打印预览 -->
-    <script src="/sheen-toolbox/assets/print-preview.js"></script>
-    <script>initPrintPreview();</script>
-</body></html>';
+                      '<script src="/sheen-toolbox/assets/share.js"><\/script>' +
+    '<!-- SHEEN Toolbox 统一打印预览 -->' +
+    '<script src="/sheen-toolbox/assets/print-preview.js"><\/script>' +
+    '<script>initPrintPreview();<\/script>' +
+'</body></html>';
 
             var mime = (type === 'xls') ? 'application/vnd.ms-excel' : 'application/msword';
             var blob = new Blob(['﻿' + doc], { type: mime });
@@ -1006,7 +1007,6 @@
         // ===== 绑定按钮 =====
         document.getElementById('excelBtn').addEventListener('click', function () { exportTable('xls'); });
         document.getElementById('wordBtn').addEventListener('click', function () { exportTable('doc'); });
-        document.getElementById('printBtn').addEventListener('click', function () { window.print(); });
         document.getElementById('resetBtn').addEventListener('click', resetAll);
         document.getElementById('guideBtn').addEventListener('click', toggleGuide);
 
