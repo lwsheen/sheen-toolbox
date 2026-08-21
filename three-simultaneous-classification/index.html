@@ -117,7 +117,11 @@
                     <span class="lg-item"><i class="fa-solid fa-leaf" style="color:var(--tech-blue);"></i> 环境影响评价</span>
                     <span class="lg-item"><i class="fa-solid fa-hard-hat" style="color:var(--amber);"></i> 安全设施三同时</span>
                 </div>
-                <div class="stat-line" id="statSummary"></div>
+                <div class="stat-line no-pr" id="statSummary"></div>
+                <div class="action-row no-print" style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px;">
+                    <button type="button" class="btn btn-print btn-sm" onclick="doPrint()"><i class="fa-solid fa-print"></i> 打印</button>
+                    <button type="button" class="btn btn-outline btn-sm" id="wordBtn" onclick="exportWord()"><i class="fa-solid fa-file-word"></i> 导出 Word</button>
+                </div>
             </div>
             <div id="resultsSummary" class="result-list"></div>
         </div>
@@ -715,6 +719,66 @@
         document.getElementById('statSummary').textContent = '';
     }
     document.getElementById('searchSummary').addEventListener('keyup', function(e) { if (e.key === 'Enter') doSearchSummary(); });
+
+    function doPrint() { window.print(); }
+
+    function exportWord() {
+        var keyword = document.getElementById('searchSummary').value.trim() || '未指定关键词';
+        var container = document.getElementById('resultsSummary');
+        var html = container.innerHTML;
+        if (!html || html.indexOf('no-result') !== -1) {
+            alert('请先输入关键词查询，再生成 Word 报告。');
+            return;
+        }
+        // 构建一份适合打印的 Word 文档（HTML+MIME 格式）
+        var docHtml = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns="http://www.w3.org/TR/REC-html40">' +
+            '<head><meta charset="UTF-8"><title>建设项目三同时分类管理查询报告</title>' +
+            '<style>' +
+            'body{font-family:SimSun,Microsoft YaHei,Arial,sans-serif;font-size:14px;color:#1E2126;line-height:1.8;margin:40px;}' +
+            'h1{font-size:22px;color:#F03752;text-align:center;border-bottom:2px solid #F03752;padding-bottom:12px;margin-bottom:24px;}' +
+            'h2{font-size:16px;color:#1E2126;border-left:4px solid #F03752;padding-left:12px;margin:24px 0 12px;}' +
+            '.meta{font-size:12px;color:#5C6470;text-align:center;margin-bottom:24px;}' +
+            '.todo-card{border:1px solid #E3E6EA;border-radius:8px;margin-bottom:20px;overflow:hidden;}' +
+            '.todo-head{background:#F8F9FA;border-bottom:1px solid #E3E6EA;padding:10px 16px;display:flex;align-items:center;gap:10px;}' +
+            '.todo-head-icon{font-size:16px;width:24px;text-align:center;}' +
+            '.todo-head-title{font-weight:700;font-size:14px;flex:1;}' +
+            '.todo-body{padding:12px 16px;}' +
+            '.todo-row{display:flex;align-items:flex-start;gap:10px;padding:6px 0;border-bottom:1px dashed #E3E6EA;font-size:13px;}' +
+            '.todo-row:last-child{border-bottom:none;}' +
+            '.todo-step{flex-shrink:0;width:20px;height:20px;border-radius:50%;background:#F03752;color:#fff;font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;margin-top:2px;}' +
+            '.todo-step.green{background:#16A34A;}' +
+            '.todo-step.blue{background:#2D7EE7;}' +
+            '.todo-step.amber{background:#F57C00;}' +
+            '.todo-text b{color:#1E2126;font-weight:600;}' +
+            '.todo-hint{font-size:12px;color:#5C6470;margin-top:2px;}' +
+            '.badge-red{background:#FDEEF1;color:#F03752;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:700;}' +
+            '.badge-green{background:#ECFDF5;color:#16A34A;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:700;}' +
+            '.badge-blue{background:#EEF4FD;color:#2D7EE7;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:700;}' +
+            '.badge-amber{background:#FFF8ED;color:#F57C00;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:700;}' +
+            '.disclaimer{font-size:11px;color:#5C6470;margin-top:24px;padding:12px;background:#F8F9FA;border-radius:6px;}' +
+            '@media print{body{margin:20px;}}' +
+            '</style></head>' +
+            '<body>' +
+            '<h1>建设项目"三同时"分类管理查询报告</h1>' +
+            '<p class="meta">查询关键词：<b>' + escHtml(keyword) + '</b>　　生成时间：<b>' + new Date().toLocaleString('zh-CN', {timeZone:'Asia/Shanghai'}).replace('/','年').replace('/','月').replace(' ',' ') + '时</b></p>' +
+            html +
+            '<div class="disclaimer">注：本报告仅供合规初判参考，具体审批要求和文件清单以主管部门审批意见和现行有效法规为准。分类数据更新至 2026-08。</div>' +
+            '</body></html>';
+
+        var blob = new Blob(['﻿' + docHtml], { type: 'application/msword' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = '建设项目三同时分类管理查询报告.doc';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    }
+
+    function escHtml(s) {
+        return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
 
     window.onload = function() {
         resetOcc();
