@@ -675,7 +675,11 @@
                       '<h2 style="text-align:center;">安全带（坠落防护）检查表</h2>' +
                       '<p style="text-align:center;font-size:12px;color:#555;">' + esc(meta) + '</p>' +
                       body + verdictBlock + warnBlock +
-                      '<script src="/sheen-toolbox/assets/share.js"><\/script></body></html>';
+                      '<script src="/sheen-toolbox/assets/share.js"><\/script>
+    <!-- SHEEN Toolbox 统一打印预览 -->
+    <script src="/sheen-toolbox/assets/print-preview.js"></script>
+    <script>initPrintPreview();</script>
+</body></html>';
 
             var mime = (type === 'xls') ? 'application/vnd.ms-excel' : 'application/msword';
             var blob = new Blob(['﻿' + doc], { type: mime });
