@@ -690,7 +690,11 @@
                       body +
                       '<div style="margin-top:20px;font-size:14px;">' +
                       '检查人签字：________________ &nbsp;&nbsp;&nbsp; 审核人签字：________________ &nbsp;&nbsp;&nbsp; 日期：____年____月____日</div>' +
-                      '<script src="/sheen-toolbox/assets/share.js"><\/script></body></html>';
+                      '<script src="/sheen-toolbox/assets/share.js"><\/script>
+    <!-- SHEEN Toolbox 统一打印预览 -->
+    <script src="/sheen-toolbox/assets/print-preview.js"></script>
+    <script>initPrintPreview();</script>
+</body></html>';
 
             var mime = (type === 'xls') ? 'application/vnd.ms-excel' : 'application/msword';
             var blob = new Blob(['\uFEFF' + doc], { type: mime });
