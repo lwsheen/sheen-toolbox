@@ -239,6 +239,7 @@
       }
     })();
     </script>
+
 </head>
 
 <body>
@@ -353,9 +354,9 @@
 
             <div class="detail-actions">
 
-              <button class="btn-primary" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印</button> <button class="btn-outline no-print" onclick="exportResult('detailContent','危险货物查询结果')"><i class="fa-solid fa-file-export"></i> 导出</button>
+               <button class="btn-outline no-print" onclick="exportResult('detailContent','危险货物查询结果')"><i class="fa-solid fa-file-export"></i> 导出</button>
 
-              <button class="btn-print" onclick="copyDetail()"><i class="fa-solid fa-copy"></i> 复制信息</button>
+              
 
             </div>
 
@@ -807,11 +808,11 @@ window.exportResult = function(resultId, filename) {
     '<p style="color:#5C6470;font-size:12px;margin-top:0;">导出时间：' +
     new Date().toLocaleString('zh-CN') + '</p>' +
     el.innerHTML.replace(/class="warn-bar[^"]*"/g, '') +
-    '<script src="/sheen-toolbox/assets/share.js"><\/script>
-    <!-- SHEEN Toolbox 统一打印预览 -->
-    <script src="/sheen-toolbox/assets/print-preview.js"></script>
-    <script>initPrintPreview();</script>
-</body></html>';
+    '<script src="/sheen-toolbox/assets/share.js"><\/script>' +
+    '<!-- SHEEN Toolbox 统一打印预览 -->' +
+    '<script src="/sheen-toolbox/assets/print-preview.js"><\/script>' +
+    '<script>initPrintPreview();<\/script>' +
+'</body></html>';
   var blob = new Blob([html], {type:'text/html;charset=utf-8'});
   var url = URL.createObjectURL(blob);
   var a = document.createElement('a');
