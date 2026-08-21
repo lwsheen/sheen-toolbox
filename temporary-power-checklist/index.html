@@ -81,6 +81,7 @@
       }
     })();
     </script>
+
 </head>
 <body>
 
@@ -104,7 +105,7 @@
 
         <!-- 工具栏 -->
         <div class="tpc-summary no-print">
-            <button class="btn btn-print btn-sm" onclick="doPrint()"><i class="fa-solid fa-print"></i> 打印</button>
+            
             <button class="btn btn-outline btn-sm" onclick="exportExcel()"><i class="fa-solid fa-file-excel"></i> 导出 Excel</button>
             <button class="btn btn-outline btn-sm" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> 导出 CSV</button>
             <button class="btn btn-danger btn-sm" onclick="resetAll()"><i class="fa-solid fa-rotate-left"></i> 重置</button>
@@ -334,11 +335,11 @@
                 var bg = r.v === 'ok' ? 'background:#F0FDF4' : r.v === 'warn' ? 'background:#FFF6F7' : '';
                 return '<tr style="' + bg + '"><td>' + r.no + '</td><td>' + escV(r.item) + '</td><td>' + escV(r.std) + '</td><td>' + escV(r.vText) + '</td><td>' + escV(r.rm) + '</td></tr>';
             }).join('')
-            + '</table><script src="/sheen-toolbox/assets/share.js"><\/script>
-    <!-- SHEEN Toolbox 统一打印预览 -->
-    <script src="/sheen-toolbox/assets/print-preview.js"></script>
-    <script>initPrintPreview();</script>
-</body></html>';
+            + '</table><script src="/sheen-toolbox/assets/share.js"><\/script>' +
+    '<!-- SHEEN Toolbox 统一打印预览 -->' +
+    '<script src="/sheen-toolbox/assets/print-preview.js"><\/script>' +
+    '<script>initPrintPreview();<\/script>' +
+'</body></html>';
         var blob = new Blob(['\ufeff' + html], {type:'application/vnd.ms-excel;charset=utf-8'});
         var link = document.createElement('a'); link.href = URL.createObjectURL(blob);
         link.download = '施工现场临时用电检查表_' + d + '.xls'; link.click();
