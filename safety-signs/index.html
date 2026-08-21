@@ -150,6 +150,14 @@ var _hmt = _hmt || [];
 </div>
 
 <main class="app-container container-calc">
+<div class="action-row no-print" style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+  <button type="button" class="btn-print" onclick="window.print()">
+    <i class="fa-solid fa-print"></i> 打印此页
+  </button>
+  <button type="button" class="btn-outline btn-sm" onclick="openPrintPreview()">
+    <i class="fa-solid fa-eye"></i> 预览
+  </button>
+</div>
 <h1 class="page-title">安全色和安全标志查询 <i class="fa-solid fa-shield-halved"></i></h1>
 <p class="page-subtitle" style="margin-bottom:20px;">依据 GB 2894-2025《安全色和安全标志》· 含 139 个图形标志 1:1 切图 · 含 8 种工业管道识别色与标识方法</p>
 
@@ -315,6 +323,9 @@ var _hmt = _hmt || [];
   <div class="tm-line"><span class="tm-dt"><i>发布</i><span class="tm-dt-val">2025-05-30</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>实施</i><span class="tm-dt-val">2026-03-01</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>更新</i><span class="tm-dt-val">2026-08-09</span></span></div>
 </section>
 </main>
+    <!-- 打印时间戳 -->
+    <div class="print-time" id="printTime"></div>
+
 
 <footer class="sheen-footer">
   <div class="footer-inner">
@@ -444,5 +455,9 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 <script src="/sheen-toolbox/assets/share.js"></script>
 
+
+    <!-- SHEEN Toolbox 统一打印预览 -->
+    <script src="/sheen-toolbox/assets/print-preview.js"></script>
+    <script>initPrintPreview();</script>
 </body>
 </html>
