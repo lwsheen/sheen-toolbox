@@ -124,6 +124,7 @@
       }
     })();
     </script>
+
 </head>
 <body>
 
@@ -169,7 +170,7 @@
 
     <div class="btn-row no-pr">
       <button class="btn-primary" onclick="calculate(true)"><i class="fa-solid fa-calculator"></i> 立即计算推荐规格</button>
-      <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印</button>
+      
       <button class="btn-outline" onclick="exportResult()"><i class="fa-solid fa-file-export"></i> 导出</button>
     </div>
   </div>
@@ -344,11 +345,11 @@ window.exportResult = function() {
     '<div class="meta">起重链条 G80 最小推荐直径　WLL ' + document.getElementById('chainLoad').textContent + ' t（SF 4×）</div>' +
     '<div class="formula">WLL(t) = 0.032 × d²（G80，安全系数 4× 已内含）</div></div>' +
     (document.getElementById('scenarioAlert').innerHTML || '') +
-    '<script src="/sheen-toolbox/assets/share.js"><\/script>
-    <!-- SHEEN Toolbox 统一打印预览 -->
-    <script src="/sheen-toolbox/assets/print-preview.js"></script>
-    <script>initPrintPreview();</script>
-</body></html>';
+    '<script src="/sheen-toolbox/assets/share.js"><\/script>' +
+    '<!-- SHEEN Toolbox 统一打印预览 -->' +
+    '<script src="/sheen-toolbox/assets/print-preview.js"><\/script>' +
+    '<script>initPrintPreview();<\/script>' +
+'</body></html>';
   var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
   var url = URL.createObjectURL(blob);
   var a = document.createElement('a');
