@@ -1,0 +1,61 @@
+{
+  "$schema": "sheen-tool-bridge/v1",
+  "generated": "2026-08-24",
+  "_note": "SHEEN Toolbox AI 工具调用层能力清单。设计原则：①不改55个工具页，每个工具页在<script>末尾调用 window.SHEEN_BRIDGE.register(id,{run,meta}) 暴露纯函数；②本清单描述AI怎么调工具，与工具页实现解耦；③copyright=boundary 标记涉及受版权保护标准全文，AI层据此控制只调工具出结果/给条款号，不输出全文。",
+  "tools": [
+    {
+      "id": "enterprise-size-classification",
+      "title": "企业规模划分查询",
+      "category": "查询",
+      "desc": "依据从业人员、营业收入、资产总额判定大/中/小/微型",
+      "trigger": ["企业规模", "大中小", "微型", "规模划分", "算什么型企业", "中小微", "工业", "制造业", "建筑业", "施工", "批发", "零售", "超市", "商店", "交通运输", "运输", "物流", "仓储", "邮政", "快递", "住宿", "酒店", "餐饮", "饭店", "软件", "信息技术", "互联网", "房地产", "物业", "租赁", "农业", "农林牧渔"],
+      "standards": [
+        "GB/T 4754-2017《国民经济行业分类》",
+        "国家统计局《统计上大中小微型企业划分办法》(2017)"
+      ],
+      "copyright": "boundary",
+      "params": [
+        { "key": "industryId", "type": "enum", "required": true,
+          "label": "行业", "source": "INDUSTRIES[].id" },
+        { "key": "X", "type": "number", "required": false, "label": "从业人员(人)" },
+        { "key": "Y", "type": "number", "required": false, "label": "营业收入(万元)" },
+        { "key": "Z", "type": "number", "required": false, "label": "资产总额(万元)" }
+      ],
+      "returns": { "level": "large|medium|small|micro", "detail": "object" },
+      "bridge": "window.SHEEN_TOOLS['enterprise-size-classification'].run"
+    },
+    {
+      "id": "dangerous-goods-query",
+      "title": "危险货物查询",
+      "category": "查询",
+      "desc": "按 UN 编号 / 品名查询危险货物分类与运输要求",
+      "trigger": ["危险货物", "UN编号", "GB 12268", "危货"],
+      "standards": ["GB 12268-2025《危险货物品名表》"],
+      "copyright": "boundary",
+      "params": [
+        { "key": "q", "type": "string", "required": true, "label": "UN编号或品名" }
+      ],
+      "returns": { "rows": "array" },
+      "bridge": "window.SHEEN_TOOLS['dangerous-goods-query'].run"
+    },
+    {
+      "id": "accident-classification",
+      "title": "事故分类查询",
+      "category": "查询",
+      "desc": "按 GB 6441 判定事故类别与损失工作日",
+      "trigger": ["事故分类", "事故类别", "GB 6441", "损失工作日"],
+      "standards": ["GB 6441-2025《生产安全事故分类与编码》"],
+      "copyright": "boundary",
+      "params": [
+        { "key": "keyword", "type": "string", "required": true, "label": "伤害类型/事故描述" }
+      ],
+      "returns": { "category": "string" },
+      "bridge": "window.SHEEN_TOOLS['accident-classification'].run"
+    }
+  ],
+  "fallback": {
+    "noTool": "未匹配到可调用工具，转 RAG 知识库检索（仅给指引，不替代专业判断）",
+    "paramMissing": "参数不足，向用户追问缺失字段",
+    "copyrightBlock": "涉及受版权保护标准全文，AI 仅调用工具出结果 / 给条款号，不输出全文"
+  }
+}
