@@ -362,5 +362,15 @@
     <!-- SHEEN Toolbox 统一打印预览 -->
     <script src="/sheen-toolbox/assets/print-preview.js"></script>
     <script>initPrintPreview();</script>
+    <!-- AI 助手深链预填：?q= 自动填入基本事故搜索框并过滤 -->
+    <script>
+    (function () {
+      try {
+        var q = new URLSearchParams(location.search).get('q');
+        var inp = document.getElementById('searchBasic');
+        if (q && inp) { inp.value = q; if (typeof filterBasic === 'function') filterBasic(); }
+      } catch (e) {}
+    })();
+    </script>
 </body>
 </html>
