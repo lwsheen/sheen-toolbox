@@ -823,7 +823,17 @@ window.exportResult = function(resultId, filename) {
 
 </script>
     <script src="/sheen-toolbox/assets/i18n.js"></script>
-<script src="/sheen-toolbox/assets/share.js"></script>
+    <script src="/sheen-toolbox/assets/share.js"></script>
+    <!-- AI 助手深链预填：?q= 自动填入搜索框并过滤 -->
+    <script>
+    (function () {
+      try {
+        var q = new URLSearchParams(location.search).get('q');
+        var inp = document.getElementById('searchInput');
+        if (q && inp) { inp.value = q; inp.dispatchEvent(new Event('input')); }
+      } catch (e) {}
+    })();
+    </script>
 
 </body>
 
