@@ -362,15 +362,34 @@
     <!-- SHEEN Toolbox 统一打印预览 -->
     <script src="/sheen-toolbox/assets/print-preview.js"></script>
     <script>initPrintPreview();</script>
-    <!-- AI 助手深链预填：?q= 自动填入基本事故搜索框并过滤 -->
-    <script>
-    (function () {
-      try {
-        var q = new URLSearchParams(location.search).get('q');
-        var inp = document.getElementById('searchBasic');
-        if (q && inp) { inp.value = q; if (typeof filterBasic === 'function') filterBasic(); }
-      } catch (e) {}
-    })();
-    </script>
+    
+
+
+<!-- AI 助手深链预填 -->
+<script>
+(function () {
+  try {
+    var p = new URLSearchParams(location.search);
+    var q = p.get('q');
+    if (!q) return;
+    var SID = "searchBasic";
+    var FNS = [];
+    var tries = 0;
+    function tick() {
+      var el = document.getElementById(SID);
+      if (el) {
+        el.value = q;
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        el.dispatchEvent(new Event('change', { bubbles: true }));
+        try { el.dispatchEvent(new KeyboardEvent('keypress', { key: 'Enter', bubbles: true })); } catch (e) {}
+        FNS.forEach(function (fn) { try { if (typeof window[fn] === 'function') window[fn](); } catch (e) {} });
+        try { (window.__sheenPrefill = window.__sheenPrefill || []).push({ id: SID, q: q }); } catch (e) {}
+      }
+      if (tries < 40) { tries++; setTimeout(tick, 100); }
+    }
+    tick();
+  } catch (e) {}
+})();
+</script>
 </body>
 </html>
