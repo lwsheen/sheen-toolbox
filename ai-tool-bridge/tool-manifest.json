@@ -14,6 +14,7 @@
         "国家统计局《统计上大中小微型企业划分办法》(2017)"
       ],
       "copyright": "boundary",
+      "page": "/sheen-toolbox/enterprise-size-classification/",
       "params": [
         { "key": "industryId", "type": "enum", "required": false,
           "label": "行业", "default": "other", "source": "INDUSTRIES[].id" },
@@ -32,6 +33,8 @@
       "trigger": ["危险货物", "UN编号", "GB 12268", "危货"],
       "standards": ["GB 12268-2025《危险货物品名表》"],
       "copyright": "boundary",
+      "page": "/sheen-toolbox/dangerous-goods-query/",
+      "queryParam": "q",
       "params": [
         { "key": "q", "type": "string", "required": true, "label": "UN编号或品名" }
       ],
@@ -46,6 +49,8 @@
       "trigger": ["事故分类", "事故类别", "GB 6441", "损失工作日"],
       "standards": ["GB 6441-2025《生产安全事故分类与编码》"],
       "copyright": "boundary",
+      "page": "/sheen-toolbox/accident-classification/",
+      "queryParam": "q",
       "params": [
         { "key": "keyword", "type": "string", "required": true, "label": "伤害类型/事故描述" }
       ],
