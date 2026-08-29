@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head data-seo="sheen">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="变更管理（MOC）评估工具：依据 GB/T 33000-2025、GB/T 45001-2020、AQ/T 3034-2022 等，判定变更等级（重大 / 一般 / 微小），生成对应的 MOC 审查要素清单与变更申请单 — SHEEN Toolbox">
+    <title>变更管理评估工具 · SHEEN Toolbox</title>
+    <meta property="og:title" content="变更管理评估工具 · SHEEN Toolbox">
+    <meta property="og:description" content="MOC 评估：一键判定变更等级，生成审查要素清单与变更申请单">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lwsheen.pages.dev/sheen-toolbox/change-management/">
+    <meta property="og:image" content="https://lwsheen.pages.dev/sheen-toolbox/assets/share/change-management.png">
+    <link rel="canonical" href="https://lwsheen.pages.dev/sheen-toolbox/change-management/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"变更管理评估工具","url":"https://lwsheen.pages.dev/sheen-toolbox/change-management/","description":"依据 GB/T 33000-2025、GB/T 45001-2020、AQ/T 3034-2022 等，判定变更等级并生成 MOC 审查要素清单与变更申请单","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","inLanguage":"zh-CN","offers":{"@type":"Offer","price":"0","priceCurrency":"CNY"},"publisher":{"@type":"Organization","name":"SHEEN Toolbox"}}</script>
+
+    <!-- Font Awesome 本地路径（禁止 CDN） -->
+    <link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
+    <!-- 公共样式（绝对路径，勿改） -->
+    <link rel="stylesheet" href="/sheen-toolbox/common.css">
+
+    <style>
+        /* ============================================
+           仅放本工具特有样式，公共样式已在 common.css
+           请勿重定义：.breadcrumb / .sheen-footer / .btn-* /
+           .card / .form-card / .result-card / .form-control /
+           .page-title / .page-subtitle / .badge / .data-table /
+           .print-time / @media print / :root 变量
+           ============================================ */
+        .moc-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; }
+        .moc-field { display:flex; flex-direction:column; gap:6px; }
+        .moc-field > label { font-size:13px; font-weight:600; color:var(--text-secondary); }
+        .moc-radio-row { display:flex; gap:10px; flex-wrap:wrap; }
+        .moc-radio {
+            display:flex; align-items:center; gap:7px; cursor:pointer;
+            font-size:14px; font-weight:600; padding:9px 14px;
+            border:1.5px solid var(--border); border-radius:60px;
+            transition:all .15s; user-select:none; background:var(--bg-card);
+        }
+        .moc-radio input { display:none; }
+        .moc-radio:has(input:checked) { border-color:var(--brand-red); background:var(--brand-red-light); color:var(--brand-red); }
+        .moc-dims { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin-top:4px; }
+        .moc-chip {
+            display:flex; align-items:flex-start; gap:8px; cursor:pointer;
+            font-size:13px; line-height:1.45; padding:10px 12px;
+            border:1.5px solid var(--border); border-radius:12px;
+            transition:all .15s; user-select:none; background:var(--bg-card); color:var(--text-primary);
+        }
+        .moc-chip input { margin-top:3px; accent-color:var(--brand-red); width:15px; height:15px; }
+        .moc-chip:has(input:checked) { border-color:var(--brand-red); background:var(--brand-red-light); }
+        .moc-chip.major:has(input:checked) { border-color:#DC2626; background:#FEE2E2; }
+        .moc-actions { display:flex; gap:10px; margin-top:18px; flex-wrap:wrap; }
+        .moc-result-extra {
+            margin-top:14px; padding:16px 18px; border-radius:var(--radius-lg);
+            background:var(--bg-card); border:1px solid var(--border); border-left:5px solid var(--brand-red);
+        }
+        .moc-result-extra h3 { font-size:15px; font-weight:700; margin-bottom:8px; }
+        .moc-result-extra p { font-size:14px; line-height:1.7; color:var(--text-primary); }
+        .moc-result-extra .moc-triggers { margin-top:8px; display:flex; flex-wrap:wrap; gap:6px; }
+        .moc-tag { font-size:12px; padding:3px 10px; border-radius:60px; background:var(--warn-orange-soft); color:#9A3412; font-weight:600; }
+        .moc-tag.major { background:#FEE2E2; color:#991B1B; }
+
+        .moc-table { width:100%; border-collapse:collapse; margin-top:4px; }
+        .moc-table th { text-align:left; font-size:12px; font-weight:700; color:var(--text-secondary); padding:9px 10px; background:var(--bg-page); border-bottom:2px solid var(--border); white-space:nowrap; }
+        .moc-table td { padding:11px 10px; border-bottom:1px solid var(--border-light); vertical-align:top; font-size:13.5px; line-height:1.5; }
+        .moc-table tr:nth-child(even) td { background:#fafbfc; }
+        .moc-table .col-no { width:46px; color:#888; font-weight:600; }
+        .moc-table .col-role { width:130px; color:var(--text-secondary); }
+        .moc-table .col-out { width:160px; color:var(--text-secondary); font-size:12.5px; }
+        .moc-table .col-check { width:54px; text-align:center; }
+        .moc-table input[type=checkbox] { width:18px; height:18px; accent-color:var(--brand-red); cursor:pointer; }
+        .moc-progress { display:flex; align-items:center; gap:10px; margin:6px 0 14px; font-size:13px; color:var(--text-secondary); }
+        .moc-progress .bar { flex:1; height:8px; border-radius:4px; background:#e0e7f0; overflow:hidden; }
+        .moc-progress .bar > i { display:block; height:100%; background:var(--brand-red); transition:width .3s; }
+        .moc-progress .pct { font-weight:700; color:var(--brand-red); min-width:42px; text-align:right; }
+
+        .moc-app { margin-top:8px; }
+        .moc-app-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-bottom:12px; }
+        .moc-app-field { display:flex; flex-direction:column; gap:4px; }
+        .moc-app-field label { font-size:12px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:.4px; }
+        .moc-app-field input, .moc-app-field textarea { border:1.5px solid var(--border); border-radius:8px; padding:8px 10px; font-size:13px; font-family:inherit; color:var(--text-primary); background:var(--bg-page); resize:vertical; }
+        .moc-app-field input:focus, .moc-app-field textarea:focus { outline:none; border-color:var(--brand-red); background:#fff; }
+
+        .moc-toolbar { display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+        @media (max-width:480px){ .moc-dims{ grid-template-columns:1fr; } }
+
+        @media print {
+            .moc-form-card, .moc-toolbar, .moc-actions { display:none !important; }
+            .moc-table th { background:#f5f5f5 !important; }
+            .result-card { box-shadow:none !important; }
+            .moc-result-extra { box-shadow:none !important; }
+            .section, .card, .form-card { break-inside:avoid; page-break-inside:avoid; }
+        }
+    </style>
+    <!-- Baidu Tongji -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9b8c3df212619adec1f70f01695f4160";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+      if (location.hostname.indexOf("github.io") >= 0) {
+        var hm2 = document.createElement("script");
+        hm2.src = "https://hm.baidu.com/hm.js?5ceec8bd8bf10bd9d1f4ddceaebdae6f";
+        s.parentNode.insertBefore(hm2, s);
+      }
+    })();
+    </script>
+</head>
+<body>
+
+    <!-- 面包屑导航 -->
+    <div class="breadcrumb">
+        <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+        <span> / 变更管理评估工具</span>
+    </div>
+
+    <!-- 主内容区域 -->
+    <main class="app-container container-wf">
+
+        <h1 class="page-title">变更管理评估工具</h1>
+        <p class="page-subtitle" style="margin-bottom:20px;">Management of Change（MOC）评估助手：判定变更等级（重大 / 一般 / 微小），生成对应的审查要素清单与变更申请单。</p>
+
+        <!-- 输入表单 -->
+        <div class="form-card moc-form-card">
+            <h3>1 · 变更基本信息</h3>
+            <div class="moc-grid">
+                <div class="moc-field">
+                    <label for="mocCat">变更类型</label>
+                    <select class="form-control" id="mocCat">
+                        <option value="">请选择变更类型…</option>
+                        <option value="tech">工艺技术变更（原料 / 配方 / 工艺路线 / 工艺参数）</option>
+                        <option value="equip">设备设施变更（设备 / 管线 / 仪表 / 安全装置）</option>
+                        <option value="chem">化学品变更（新物料 / 新反应引入）</option>
+                        <option value="manage">管理变更（组织 / 职责 / 程序 / 规程）</option>
+                        <option value="person">人员变更（关键岗位 / 承包商 / 供应商）</option>
+                    </select>
+                </div>
+                <div class="moc-field">
+                    <label>是否同类替换（like-for-like）</label>
+                    <div class="moc-radio-row">
+                        <label class="moc-radio"><input type="radio" name="mocLike" value="yes"> 是（完全相同型号 / 参数）</label>
+                        <label class="moc-radio"><input type="radio" name="mocLike" value="no"> 否（存在差异）</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="moc-field" style="margin-top:14px;">
+                <label for="mocDesc">变更描述（选填，用于申请单）</label>
+                <textarea class="form-control" id="mocDesc" rows="2" placeholder="简要描述变更内容、范围与原因…"></textarea>
+            </div>
+
+            <div class="moc-field" style="margin-top:16px;">
+                <label>2 · 影响维度（勾选所有适用项）</label>
+                <div class="moc-dims" id="mocDims">
+                    <label class="moc-chip major"><input type="checkbox" data-dim="psi"> 涉及工艺安全信息（PSI）变化</label>
+                    <label class="moc-chip major"><input type="checkbox" data-dim="hazmat"> 涉及危险化学品或重大危险源</label>
+                    <label class="moc-chip major"><input type="checkbox" data-dim="exceed"> 改变原设计工艺参数或超出设计范围</label>
+                    <label class="moc-chip major"><input type="checkbox" data-dim="sis"> 涉及安全联锁 / 泄放 / 保护层改动</label>
+                    <label class="moc-chip major"><input type="checkbox" data-dim="newchem"> 引入新化学品或新反应</label>
+                    <label class="moc-chip"><input type="checkbox" data-dim="reg"> 涉及法规 / 标准新要求</label>
+                    <label class="moc-chip"><input type="checkbox" data-dim="op"> 影响操作规程或培训要求</label>
+                    <label class="moc-chip"><input type="checkbox" data-dim="ppe"> 影响应急或个体防护要求</label>
+                </div>
+            </div>
+
+            <div class="moc-actions">
+                <button class="btn-primary" onclick="assess()"><i class="fa-solid fa-magnifying-glass-chart"></i> 评估变更等级</button>
+                <button class="btn-outline" onclick="resetAll()"><i class="fa-solid fa-rotate-left"></i> 重置</button>
+            </div>
+        </div>
+
+        <!-- 评估结果 -->
+        <div class="result-card danger" id="mocResult" style="display:none; margin-top:18px;">
+            <div class="number" id="mocLevel">—</div>
+            <div class="label" id="mocNeed">—</div>
+        </div>
+
+        <div class="moc-result-extra" id="mocExtra" style="display:none;">
+            <h3 id="mocExtraTitle">判定说明</h3>
+            <p id="mocDescText"></p>
+            <div class="moc-triggers" id="mocTriggers"></div>
+        </div>
+
+        <!-- 审查要素清单 -->
+        <div class="card" id="mocCheckCard" style="display:none; margin-top:18px;">
+            <h3 style="margin-bottom:4px;">3 · MOC 审查要素清单</h3>
+            <p style="font-size:13px;color:var(--text-secondary);margin-bottom:6px;">按本变更等级应执行的评审步骤，逐项确认后可用于 PSSR 与变更关闭。</p>
+            <div class="moc-progress">
+                <span id="mocProgText">0 / 0 项完成</span>
+                <span class="bar"><i id="mocProgBar" style="width:0%"></i></span>
+                <span class="pct" id="mocProgPct">0%</span>
+            </div>
+            <div class="table-scroll">
+                <table class="moc-table">
+                    <thead>
+                        <tr>
+                            <th class="col-no">序号</th>
+                            <th>审查要素</th>
+                            <th class="col-role">责任部门</th>
+                            <th class="col-out">主要输出物</th>
+                            <th class="col-check">完成</th>
+                        </tr>
+                    </thead>
+                    <tbody id="mocCheckBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 变更申请单 -->
+        <div class="card moc-app" id="mocAppCard" style="display:none; margin-top:18px;">
+            <h3 style="margin-bottom:12px;">4 · 变更申请单（可打印）</h3>
+            <div class="moc-app-grid">
+                <div class="moc-app-field"><label>变更编号</label><input type="text" id="appNo" placeholder="如 MOC-2026-001"></div>
+                <div class="moc-app-field"><label>申请日期</label><input type="date" id="appDate"></div>
+                <div class="moc-app-field"><label>申请人 / 部门</label><input type="text" id="appBy" placeholder="姓名 / 部门"></div>
+                <div class="moc-app-field"><label>变更等级</label><input type="text" id="appLevel" readonly></div>
+            </div>
+            <div class="moc-app-field" style="margin-bottom:12px;"><label>变更描述</label><textarea id="appDesc" rows="2" placeholder="变更内容、范围与原因"></textarea></div>
+            <div class="moc-toolbar">
+                <button class="btn btn-outline" onclick="shareTool()"><i class="fa-solid fa-share-nodes"></i> 分享</button>
+                <button class="btn btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印申请单</button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 标准信息块 -->
+    <section class="tool-meta" data-toolmeta="sheen">
+  <div class="tm-head">
+<span class="tm-std-code">GB/T 33000-2025</span>
+<span class="tm-std-name">《大中型企业安全生产标准化管理体系要求》</span>
+<span class="tm-sep">·</span>
+<span class="tm-std-code">GB/T 45001-2020</span>
+<span class="tm-std-name">《职业健康安全管理体系 要求及使用指南》</span>
+<span class="tm-sep">·</span>
+<span class="tm-std-code">AQ/T 3034-2022</span>
+<span class="tm-std-name">《化工过程安全管理导则》（4.15 变更管理）</span>
+  </div>
+  <div class="tm-line"><span class="tm-dt"><i>发布</i><span class="tm-dt-val">2025-10-31 / 2020-03-06 / 2022</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>实施</i><span class="tm-dt-val">2025-10-31 / 2020-03-06 / 2023-04-01</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>更新</i><span class="tm-dt-val">2026-08-29</span></span></div>
+</section>
+
+    <!-- 页脚 -->
+    <footer class="sheen-footer">
+        <img src="../assets/sheen-logo.png" alt="SHEEN Toolbox" class="sheen-logo-sm"> &nbsp;<strong>SHEEN Toolbox</strong> · 变更管理评估工具
+    </footer>
+
+    <!-- 打印时间戳 -->
+    <div class="print-time" id="printTime"></div>
+
+    <!-- 分享脚本（全站统一） -->
+    <script src="/sheen-toolbox/assets/share.js"></script>
+
+    <script>
+    // ⚠️ 业务函数全局裸声明（inline onclick 依赖），禁止 IIFE 包裹
+    document.getElementById('printTime').textContent =
+        new Date().toISOString().replace('T', ' ').slice(0, 16);
+
+    var STORE_KEY = 'sheen_moc_v1';
+
+    // 重大变更触发项
+    var MAJOR_DIMS = ['psi', 'hazmat', 'exceed', 'sis', 'newchem'];
+    var DIM_TEXT = {
+        psi: '涉及工艺安全信息（PSI）变化',
+        hazmat: '涉及危险化学品或重大危险源',
+        exceed: '改变原设计工艺参数或超出设计范围',
+        sis: '涉及安全联锁 / 泄放 / 保护层改动',
+        newchem: '引入新化学品或新反应',
+        reg: '涉及法规 / 标准新要求',
+        op: '影响操作规程或培训要求',
+        ppe: '影响应急或个体防护要求'
+    };
+
+    // 各等级审查要素：[要素, 责任部门, 输出物]
+    var CHECKLISTS = {
+        major: [
+            ['变更申请与必要性说明', '申请部门', '变更申请单'],
+            ['工艺安全信息（PSI）更新', '工艺 / 技术', 'P&ID、MSDS、参数表'],
+            ['危害分析（PHA / HAZOP / JSA）', '工艺安全', '分析报告与建议闭环'],
+            ['操作规程与应急预案修订', '生产 / 安全', '新规程、预案版本'],
+            ['人员培训与资质确认', '培训 / HR', '培训记录、上岗资质'],
+            ['设备检验 / 标定与单机试车', '设备 / 仪表', '检验报告、试车记录'],
+            ['安全联锁与泄放系统验证', '仪表 / SIS', '联锁测试、SIL 验证'],
+            ['承包商与施工质量管控', '项目 / 采购', '施工验收、材质证明'],
+            ['PSSR 启动前安全检查', 'PSSR 小组', '检查表与签字'],
+            ['MOC 委员会 / 主管部门批准与归档', '主管部门', '批准文件、变更台账']
+        ],
+        normal: [
+            ['变更申请与说明', '申请部门', '变更申请单'],
+            ['部门级评审', '主管部门', '评审记录'],
+            ['图纸 / 规程 / 参数更新', '技术 / 工艺', '更新文件'],
+            ['操作人员培训', '培训', '培训签到'],
+            ['设备检验或验收', '设备', '验收单'],
+            ['PSSR 检查', '安全', '检查表'],
+            ['批准关闭与归档', '主管部门', '关闭记录']
+        ],
+        minor: [
+            ['变更登记 / 备案', '主管部门', '变更台账条目'],
+            ['受影响人员告知', '申请部门', '告知记录'],
+            ['记录归档', '档案', '归档文件']
+        ]
+    };
+
+    var LEVEL_META = {
+        major: { cls: 'danger', name: '重大变更', need: '需启动完整 MOC 流程（含 PHA/HAZOP、MOC 委员会评审、PSSR）',
+                 desc: '本变更触及重大触发条件，属于关键变更，必须执行完整的变更管理流程：危害分析、多层评审、PSSR 启动前安全审查，并经主管部门或 MOC 委员会批准后方可实施与关闭。' },
+        normal: { cls: 'warning', name: '一般变更', need: '需启动简化 MOC 流程（部门级评审 + 培训 + PSSR）',
+                 desc: '本变更不涉及重大触发条件，但属于非同类替换的实质变更，应执行简化版的变更管理流程：部门级评审、相关文件与参数更新、人员培训、PSSR 检查，批准关闭后归档。' },
+        minor: { cls: 'safe', name: '微小变更', need: '可豁免正式 MOC，登记备案即可',
+                 desc: '本变更为同类替换（like-for-like），不改变任何工艺安全信息，可不启动正式 MOC 流程，但仍须登记备案、告知受影响人员并归档，确保可追溯。' }
+    };
+
+    function getDims() {
+        var out = [];
+        var boxes = document.querySelectorAll('#mocDims input[type=checkbox]');
+        boxes.forEach(function (b) { if (b.checked) out.push(b.getAttribute('data-dim')); });
+        return out;
+    }
+
+    function getLike() {
+        var el = document.querySelector('input[name=mocLike]:checked');
+        return el ? el.value : '';
+    }
+
+    function assess() {
+        var cat = document.getElementById('mocCat').value;
+        var like = getLike();
+        var dims = getDims();
+
+        if (!cat) { alert('请先选择「变更类型」。'); return; }
+        if (!like) { alert('请先选择「是否同类替换」。'); return; }
+
+        var hasMajor = dims.some(function (d) { return MAJOR_DIMS.indexOf(d) >= 0; });
+        var level;
+        var conflict = (like === 'yes' && hasMajor);
+
+        if (hasMajor) level = 'major';
+        else if (like === 'yes') level = 'minor';
+        else level = 'normal';
+
+        renderResult(level, dims, conflict);
+        renderChecklist(level);
+        syncAppForm(level);
+        saveState(level, dims);
+    }
+
+    function renderResult(level, dims, conflict) {
+        var m = LEVEL_META[level];
+        var rc = document.getElementById('mocResult');
+        rc.className = 'result-card ' + m.cls;
+        rc.style.display = '';
+        document.getElementById('mocLevel').textContent = m.name;
+        document.getElementById('mocNeed').textContent = m.need;
+
+        var extra = document.getElementById('mocExtra');
+        extra.style.display = '';
+        document.getElementById('mocExtraTitle').textContent = '判定说明' + (conflict ? '（注意：选择「同类替换」但同时勾选了重大触发项，已按重大变更处理）' : '');
+        document.getElementById('mocDescText').textContent = m.desc;
+
+        var trig = document.getElementById('mocTriggers');
+        trig.innerHTML = '';
+        if (dims.length === 0) {
+            var t = document.createElement('span');
+            t.className = 'moc-tag';
+            t.textContent = '未勾选影响维度';
+            trig.appendChild(t);
+        } else {
+            dims.forEach(function (d) {
+                var t = document.createElement('span');
+                var isMajor = MAJOR_DIMS.indexOf(d) >= 0;
+                t.className = 'moc-tag' + (isMajor ? ' major' : '');
+                t.textContent = DIM_TEXT[d];
+                trig.appendChild(t);
+            });
+        }
+    }
+
+    function renderChecklist(level) {
+        var body = document.getElementById('mocCheckBody');
+        var items = CHECKLISTS[level];
+        body.innerHTML = '';
+        items.forEach(function (it, i) {
+            var tr = document.createElement('tr');
+            tr.innerHTML =
+                '<td class="col-no">' + (i + 1) + '</td>' +
+                '<td>' + it[0] + '</td>' +
+                '<td class="col-role">' + it[1] + '</td>' +
+                '<td class="col-out">' + it[2] + '</td>' +
+                '<td class="col-check"><input type="checkbox" data-i="' + i + '" onchange="onCheck(\'' + level + '\',this)"></td>';
+            body.appendChild(tr);
+        });
+        document.getElementById('mocCheckCard').style.display = '';
+        updateProgress(level);
+    }
+
+    function onCheck(level, el) {
+        var i = parseInt(el.getAttribute('data-i'), 10);
+        var key = 'checks_' + level;
+        var saved = loadChecks();
+        saved[key] = saved[key] || {};
+        saved[key][i] = el.checked;
+        try { localStorage.setItem(STORE_KEY + '_checks', JSON.stringify(saved)); } catch (e) {}
+        updateProgress(level);
+    }
+
+    function loadChecks() {
+        try { return JSON.parse(localStorage.getItem(STORE_KEY + '_checks') || '{}'); }
+        catch (e) { return {}; }
+    }
+
+    function updateProgress(level) {
+        var items = CHECKLISTS[level];
+        var saved = loadChecks();
+        var done = 0;
+        var boxes = document.querySelectorAll('#mocCheckBody input[type=checkbox]');
+        boxes.forEach(function (b) {
+            var i = parseInt(b.getAttribute('data-i'), 10);
+            var v = saved['checks_' + level] && saved['checks_' + level][i];
+            b.checked = !!v;
+            if (v) done++;
+        });
+        var total = items.length;
+        var pct = total ? Math.round(done / total * 100) : 0;
+        document.getElementById('mocProgText').textContent = done + ' / ' + total + ' 项完成';
+        document.getElementById('mocProgBar').style.width = pct + '%';
+        document.getElementById('mocProgPct').textContent = pct + '%';
+    }
+
+    function syncAppForm(level, desc) {
+        var m = LEVEL_META[level];
+        document.getElementById('appLevel').value = m.name;
+        var d = document.getElementById('mocDesc').value;
+        document.getElementById('appDesc').value = d;
+        if (!document.getElementById('appDate').value) {
+            document.getElementById('appDate').value = new Date().toISOString().slice(0, 10);
+        }
+        document.getElementById('mocAppCard').style.display = '';
+    }
+
+    function saveState(level, dims) {
+        try {
+            var s = {
+                cat: document.getElementById('mocCat').value,
+                like: getLike(),
+                dims: dims,
+                desc: document.getElementById('mocDesc').value,
+                level: level
+            };
+            localStorage.setItem(STORE_KEY, JSON.stringify(s));
+        } catch (e) {}
+    }
+
+    function resetAll() {
+        document.getElementById('mocCat').value = '';
+        document.querySelectorAll('input[name=mocLike]').forEach(function (r) { r.checked = false; });
+        document.querySelectorAll('#mocDims input[type=checkbox]').forEach(function (b) { b.checked = false; });
+        document.getElementById('mocDesc').value = '';
+        document.getElementById('mocResult').style.display = 'none';
+        document.getElementById('mocExtra').style.display = 'none';
+        document.getElementById('mocCheckCard').style.display = 'none';
+        document.getElementById('mocAppCard').style.display = 'none';
+        try { localStorage.removeItem(STORE_KEY); localStorage.removeItem(STORE_KEY + '_checks'); } catch (e) {}
+    }
+
+    // 页面加载：恢复上次输入
+    (function restore() {
+        try {
+            var s = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
+            if (!s) return;
+            if (s.cat) document.getElementById('mocCat').value = s.cat;
+            if (s.like) {
+                var r = document.querySelector('input[name=mocLike][value=' + s.like + ']');
+                if (r) r.checked = true;
+            }
+            if (s.dims && s.dims.length) {
+                s.dims.forEach(function (d) {
+                    var b = document.querySelector('#mocDims input[data-dim=' + d + ']');
+                    if (b) b.checked = true;
+                });
+            }
+            if (s.desc) document.getElementById('mocDesc').value = s.desc;
+            if (s.level) {
+                renderResult(s.level, s.dims || [], false);
+                renderChecklist(s.level);
+                syncAppForm(s.level);
+                saveState(s.level, s.dims || []);
+            }
+        } catch (e) {}
+    })();
+    </script>
+
+</body>
+</html>
