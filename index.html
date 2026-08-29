@@ -636,21 +636,21 @@
 
         /* 语言切换按钮（中/EN） */
         .lang-toggle {
-            margin-left: 10px;
-            padding: 5px 12px;
+            padding: 0;
+            margin-left: 0;
             font-size: 12px;
-            font-weight: 600;
-            line-height: 1;
-            color: var(--text-primary);
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 60px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.6);
+            background: transparent;
+            border: none;
             cursor: pointer;
-            transition: var(--transition);
             white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-family: var(--font);
         }
-        .lang-toggle:hover { border-color: var(--brand-red); color: var(--brand-red); }
-        .lang-toggle:active { transform: scale(.96); }
+        .lang-toggle i { font-size: 12px; }
 
         /* ===== 打赏支持按钮 + 弹窗 ===== */
         .donate-btn {
@@ -862,7 +862,7 @@
         <div class="sheen-header-info">
             <span><i class="fa-solid fa-clock"></i> <span id="liveTime"></span></span>
             <button type="button" id="donateBtn" class="donate-btn" onclick="openDonate()"><i class="fa-solid fa-heart"></i> <span data-i18n="donateBtn">支持作者</span></button>
-            <button type="button" id="langToggle" class="lang-toggle" aria-label="切换语言 / Switch language">EN</button>
+            <button type="button" id="langToggle" class="lang-toggle" aria-label="切换语言 / Switch language"><i class="fa-solid fa-globe" aria-hidden="true"></i><span id="langLabel">EN</span></button>
         </div>
     </header>
 
@@ -2257,7 +2257,8 @@
                     arrow.innerHTML = (lang === 'en' ? ARROW_EN : (arrow.dataset.zh || ARROW_ZH)) + '<i class="fa-solid fa-arrow-right"></i>';
                 }
             });
-            if (langToggle) langToggle.textContent = (lang === 'en') ? '中' : 'EN';
+            var langLabel = document.getElementById('langLabel');
+            if (langLabel) langLabel.textContent = (lang === 'en') ? '中' : 'EN';
             applyFilter();
         }
         var langToggle = document.getElementById('langToggle');
