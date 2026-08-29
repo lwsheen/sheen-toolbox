@@ -16,7 +16,7 @@
 <style>
   /* 本页专属样式加 ra- 前缀，避免与 common.css 冲突 */
   .ra-wrap { display: grid; grid-template-columns: 360px 1fr; gap: 24px; align-items: start; }
-  .ra-search { position: sticky; top: 16px; }
+  .ra-search { position: sticky; top: 16px; min-width: 0; }
   .ra-input { width: 100%; padding: 12px 14px; border: 1px solid var(--border-light); border-radius: 10px; font-size: 15px; font-family: inherit; box-sizing: border-box; background: #fff; }
   .ra-input:focus { outline: none; border-color: var(--brand-red); box-shadow: 0 0 0 3px var(--brand-red-tint, #FDEEF1); }
   .ra-btn-row { display: flex; gap: 8px; margin-top: 10px; }
@@ -31,7 +31,7 @@
   .ra-abbr { font-size: 17px; font-weight: 700; color: var(--brand-red); letter-spacing: .3px; }
   .ra-cn { font-size: 13px; color: var(--text-main); margin-top: 2px; }
   .ra-tag { font-size: 11px; color: var(--text-secondary); border: 1px solid var(--border-light); border-radius: 20px; padding: 2px 9px; white-space: nowrap; }
-  .ra-detail { background: #fff; border: 1px solid var(--border-light); border-radius: 14px; padding: 22px 24px; min-height: 320px; }
+  .ra-detail { background: #fff; border: 1px solid var(--border-light); border-radius: 14px; padding: 22px 24px; min-height: 320px; min-width: 0; }
   .ra-detail-empty { color: var(--text-secondary); display: flex; align-items: center; justify-content: center; min-height: 320px; text-align: center; }
   .ra-d-abbr { font-size: 22px; font-weight: 800; color: var(--brand-red); }
   .ra-d-cn { font-size: 15px; color: var(--text-secondary); margin-left: 8px; }
@@ -62,12 +62,9 @@
     <span>风险评估工具</span>
   </nav>
 
-  <header class="page-header">
+  <main class="app-container container-wf">
     <h1 class="page-title">风险评估工具</h1>
-    <p class="page-subtitle">整合九种主流风险分析方法，一键检索核心定义、分析逻辑方向、典型应用场景、实操步骤与示例模板。</p>
-  </header>
-
-  <main class="container-wf">
+    <p class="page-subtitle" style="margin-bottom:20px;">整合九种主流风险分析方法，一键检索核心定义、分析逻辑方向、典型应用场景、实操步骤与示例模板。</p>
     <div class="ra-wrap">
       <!-- 左：检索 + 列表 -->
       <section class="ra-search" aria-label="方法检索">
