@@ -12,25 +12,24 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://lwsheen.pages.dev/sheen-toolbox/risk-assessment/">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"风险评估工具","url":"https://lwsheen.pages.dev/sheen-toolbox/risk-assessment/","description":"整合九种主流风险分析方法，提供核心定义、分析逻辑方向与典型应用场景检索","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","inLanguage":"zh-CN","offers":{"@type":"Offer","price":"0","priceCurrency":"CNY"},"publisher":{"@type":"Organization","name":"SHEEN Toolbox"}}</script>
+<link rel="stylesheet" href="../assets/fa/all.min.css">
 <link rel="stylesheet" href="../common.css">
 <style>
   /* 本页专属样式加 ra- 前缀，避免与 common.css 冲突 */
-  .ra-wrap { display: grid; grid-template-columns: 360px 1fr; gap: 24px; align-items: start; }
-  .ra-search { position: sticky; top: 16px; min-width: 0; }
+  .ra-wrap { display: block; }
+  .ra-search { position: static; min-width: 0; }
   .ra-input { width: 100%; padding: 12px 14px; border: 1px solid var(--border-light); border-radius: 10px; font-size: 15px; font-family: inherit; box-sizing: border-box; background: #fff; }
   .ra-input:focus { outline: none; border-color: var(--brand-red); box-shadow: 0 0 0 3px var(--brand-red-tint, #FDEEF1); }
   .ra-btn-row { display: flex; gap: 8px; margin-top: 10px; }
   .ra-mini-btn { flex: 1; padding: 9px 10px; border: 1px solid var(--border-light); background: #fff; border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--text-secondary); transition: .15s; }
   .ra-mini-btn:hover { border-color: var(--brand-red); color: var(--brand-red); }
   .ra-count { font-size: 12px; color: var(--text-secondary); margin-top: 10px; }
-  .ra-list { display: flex; flex-direction: column; gap: 10px; }
-  .ra-card { border: 1px solid var(--border-light); border-radius: 12px; padding: 14px 16px; background: #fff; cursor: pointer; transition: .15s; }
+  .ra-list { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 8px; overflow: visible; padding-bottom: 4px; }
+  .ra-card { border: 1px solid var(--border-light); border-radius: 12px; padding: 12px 6px; background: #fff; cursor: pointer; transition: .15s; text-align: center; display: flex; flex-direction: column; gap: 5px; }
+  @media (max-width: 768px) { .ra-list { display: flex; flex-wrap: nowrap; grid-template-columns: none; overflow-x: auto; -webkit-overflow-scrolling: touch; } .ra-card { min-width: 82px; } }
   .ra-card:hover { border-color: var(--brand-red); box-shadow: 0 4px 14px rgba(240,55,82,.10); }
   .ra-card.active { border-color: var(--brand-red); background: var(--brand-red-tint, #FDEEF1); }
-  .ra-card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-  .ra-abbr { font-size: 17px; font-weight: 700; color: var(--brand-red); letter-spacing: .3px; }
-  .ra-cn { font-size: 13px; color: var(--text-main); margin-top: 2px; }
-  .ra-tag { font-size: 11px; color: var(--text-secondary); border: 1px solid var(--border-light); border-radius: 20px; padding: 2px 9px; white-space: nowrap; }
+  .ra-abbr { display: block; width: 100%; max-width: 100%; font-size: 15px; font-weight: 700; color: var(--brand-red); letter-spacing: .3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .ra-detail { background: #fff; border: 1px solid var(--border-light); border-radius: 14px; padding: 22px 24px; min-height: 320px; min-width: 0; }
   .ra-detail-empty { color: var(--text-secondary); display: flex; align-items: center; justify-content: center; min-height: 320px; text-align: center; }
   .ra-d-abbr { font-size: 22px; font-weight: 800; color: var(--brand-red); }
@@ -50,10 +49,6 @@
   .ra-d-table th, .ra-d-table td { border: 1px solid var(--border-light); padding: 8px 10px; text-align: left; vertical-align: top; color: var(--text-main); }
   .ra-d-table th { background: var(--brand-red-tint, #FDEEF1); color: var(--brand-red); font-weight: 700; white-space: nowrap; }
   .ra-d-table tbody tr:nth-child(even) { background: #fafbfc; }
-  @media (max-width: 820px) {
-    .ra-wrap { grid-template-columns: 1fr; }
-    .ra-search { position: static; }
-  }
 </style>
 </head>
 <body>
@@ -79,7 +74,7 @@
 
       <!-- 右：详情 -->
       <section class="ra-detail" id="raDetail" aria-live="polite">
-        <div class="ra-detail-empty">← 从左侧选择或检索一种方法，查看完整说明。</div>
+        <div class="ra-detail-empty">↑ 从上方选择或检索一种方法，查看完整说明。</div>
       </section>
     </div>
 
@@ -101,9 +96,8 @@
     </div>
   </main>
 
-  <footer class="site-footer">
-    <img src="../assets/sheen-logo.png" class="sheen-logo-sm" alt="SHEEN">
-    <p>© SHEEN 环境健康安全 · 让风险可控，让安全可查</p>
+  <footer class="sheen-footer">
+    <img src="../assets/sheen-logo.png" alt="SHEEN Toolbox" class="sheen-logo-sm"> &nbsp;<strong>SHEEN Toolbox</strong> · 风险评估工具
   </footer>
 
   <script src="risk-methods-data.js"></script>
@@ -165,10 +159,7 @@
           var card = document.createElement("div");
           card.className = "ra-card" + (m.key === activeKey ? " active" : "");
           card.setAttribute("data-key", m.key);
-          card.innerHTML =
-            '<div class="ra-card-head"><span class="ra-abbr">' + esc(m.nameEn) +
-            '</span><span class="ra-tag">' + esc(m.logicType || "") + "</span></div>" +
-            '<div class="ra-cn">' + esc(m.nameCn) + "</div>";
+          card.innerHTML = '<div class="ra-abbr">' + esc(m.nameEn) + "</div>";
           card.addEventListener("click", function () { showDetail(m.key); });
           listEl.appendChild(card);
         });
