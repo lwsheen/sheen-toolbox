@@ -20,9 +20,9 @@
     <link rel="icon" type="image/png" sizes="512x512" href="/sheen-toolbox/assets/icon-512.png">
 
     <title>SHEEN Toolbox · 环境健康安全专业工具箱</title>
-    <meta name="description" content="EHS  专业计算、查询与分析工具集 · 55 款免费在线工具">
+    <meta name="description" content="EHS  专业计算、查询与分析工具集 · 57 款免费在线工具">
     <meta property="og:title" content="SHEEN Toolbox · 环境健康安全专业工具箱">
-    <meta property="og:description" content="EHS 专业计算、查询与分析工具集 · 55 款免费在线工具">
+    <meta property="og:description" content="EHS 专业计算、查询与分析工具集 · 57 款免费在线工具">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="zh_CN">
     <meta property="og:locale:alternate" content="en_US">
@@ -927,6 +927,22 @@
             <div class="tool-icon"><i class="fa-solid fa-clipboard-check"></i></div>
             <div class="card-text"><h3 title="PSSR 开车前安全检查表">PSSR 开车前安全检查表</h3>
             <p class="desc">多行业增强版检查表</p></div>
+            <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+        <a href="/sheen-toolbox/change-management/" class="tool-card is-new" draggable="true" data-cat="分析" data-slug="change-management">
+            <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
+            <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
+            <div class="tool-icon"><i class="fa-solid fa-arrows-rotate"></i></div>
+            <div class="card-text"><h3 title="变更管理评估工具">变更管理评估工具</h3>
+            <p class="desc">MOC · 变更分级 · 审查要素清单</p></div>
+            <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+        <a href="/sheen-toolbox/risk-assessment/" class="tool-card is-new" draggable="true" data-cat="分析" data-slug="risk-assessment">
+            <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
+            <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
+            <div class="tool-icon"><i class="fa-solid fa-shield-halved"></i></div>
+            <div class="card-text"><h3 title="风险评估工具">风险评估工具</h3>
+            <p class="desc">HAZOP · FMEA · FTA · LOPA 等九法速查</p></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
         <a href="/sheen-toolbox/safety-signs/" class="tool-card" draggable="true" data-cat="查询" data-slug="safety-signs">
@@ -2208,7 +2224,7 @@
             // 文档标题 & description
             document.title = en ? 'SHEEN Toolbox · Professional EHS Toolbox' : ORIG_TITLE;
             var metaDesc = document.querySelector('meta[name="description"]');
-            if (metaDesc) metaDesc.content = en ? 'EHS calculation, query and analysis tools · 55 free online tools' : 'EHS 专业计算、查询与分析工具集 · 55 款免费在线工具';
+            if (metaDesc) metaDesc.content = en ? 'EHS calculation, query and analysis tools · 57 free online tools' : 'EHS 专业计算、查询与分析工具集 · 57 款免费在线工具';
             // 通用 data-i18n 文本
             document.querySelectorAll('[data-i18n]').forEach(function(el) {
                 var key = el.getAttribute('data-i18n');
