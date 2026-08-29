@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>风险评估工具 — SHEEN Toolbox</title>
-<meta name="description" content="风险评估工具：整合 HAZOP、FMEA、FTA、ETA、Bow-Tie、HAZID、What-If、LOPA、Checklist 九种主流风险分析方法，提供核心定义、分析逻辑方向与典型应用场景检索 — SHEEN Toolbox">
+<meta name="description" content="风险评估工具：整合 HAZOP、FMEA、FTA、ETA、Bow-Tie、HAZID、What-If、LOPA、Checklist 九种主流风险分析方法，提供核心定义、分析逻辑方向、典型应用场景、实操步骤与示例模板检索 — SHEEN Toolbox">
 <meta property="og:title" content="风险评估工具 — SHEEN Toolbox">
-<meta property="og:description" content="九种主流风险分析方法速查：核心定义、分析逻辑方向与典型应用场景，支持按方法名检索详情。">
+<meta property="og:description" content="九种主流风险分析方法速查：核心定义、分析逻辑方向、典型应用场景、实操步骤与示例模板，支持按方法名检索详情。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://lwsheen.pages.dev/sheen-toolbox/risk-assessment/">
 <meta name="twitter:card" content="summary_large_image">
@@ -41,6 +41,15 @@
   .ra-d-label { font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 5px; display: flex; align-items: center; gap: 6px; }
   .ra-d-label i { color: var(--brand-red); }
   .ra-d-text { font-size: 14px; line-height: 1.8; color: var(--text-main); }
+  .ra-d-steps { margin: 4px 0 0; padding-left: 20px; }
+  .ra-d-steps li { font-size: 14px; line-height: 1.85; color: var(--text-main); margin-bottom: 6px; }
+  .ra-d-steps li::marker { color: var(--brand-red); font-weight: 700; }
+  .ra-d-ex-cap { font-size: 13px; color: var(--text-secondary); margin: 0 0 8px; }
+  .ra-d-table-wrap { overflow-x: auto; margin-top: 4px; -webkit-overflow-scrolling: touch; }
+  .ra-d-table { width: 100%; border-collapse: collapse; font-size: 13px; line-height: 1.6; }
+  .ra-d-table th, .ra-d-table td { border: 1px solid var(--border-light); padding: 8px 10px; text-align: left; vertical-align: top; color: var(--text-main); }
+  .ra-d-table th { background: var(--brand-red-tint, #FDEEF1); color: var(--brand-red); font-weight: 700; white-space: nowrap; }
+  .ra-d-table tbody tr:nth-child(even) { background: #fafbfc; }
   @media (max-width: 820px) {
     .ra-wrap { grid-template-columns: 1fr; }
     .ra-search { position: static; }
@@ -55,7 +64,7 @@
 
   <header class="page-header">
     <h1 class="page-title">风险评估工具</h1>
-    <p class="page-subtitle">整合九种主流风险分析方法，一键检索核心定义、分析逻辑方向与典型应用场景。</p>
+    <p class="page-subtitle">整合九种主流风险分析方法，一键检索核心定义、分析逻辑方向、典型应用场景、实操步骤与示例模板。</p>
   </header>
 
   <main class="container-wf">
@@ -182,7 +191,18 @@
           '<div class="ra-d-tags">' + tags + "</div>" +
           '<div class="ra-d-block"><div class="ra-d-label"><i class="fa-solid fa-book"></i>核心定义</div><div class="ra-d-text">' + esc(m.coreDefinition) + "</div></div>" +
           '<div class="ra-d-block"><div class="ra-d-label"><i class="fa-solid fa-diagram-project"></i>分析逻辑方向</div><div class="ra-d-text">' + esc(m.logicDirection) + "</div></div>" +
-          '<div class="ra-d-block"><div class="ra-d-label"><i class="fa-solid fa-industry"></i>典型应用场景</div><div class="ra-d-text">' + esc(m.scenarios) + "</div></div>";
+          '<div class="ra-d-block"><div class="ra-d-label"><i class="fa-solid fa-industry"></i>典型应用场景</div><div class="ra-d-text">' + esc(m.scenarios) + "</div></div>" +
+          '<div class="ra-d-block"><div class="ra-d-label"><i class="fa-solid fa-list-ol"></i>如何使用</div><ol class="ra-d-steps">' + (m.howToUse || []).map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol></div>" +
+          (m.example ? renderExample(m.example) : "");
+
+        function renderExample(ex) {
+          var cap = ex.caption ? '<p class="ra-d-ex-cap">' + esc(ex.caption) + "</p>" : "";
+          var thead = '<thead><tr>' + (ex.headers || []).map(function (h) { return "<th>" + esc(h) + "</th>"; }).join("") + "</tr></thead>";
+          var tbody = '<tbody>' + (ex.rows || []).map(function (r) {
+            return "<tr>" + r.map(function (c) { return "<td>" + esc(c === undefined ? "" : String(c)) + "</td>"; }).join("") + "</tr>";
+          }).join("") + "</tbody>";
+          return '<div class="ra-d-block"><div class="ra-d-label"><i class="fa-solid fa-table"></i>' + esc(ex.title || "示例模板") + '</div>' + cap + '<div class="ra-d-table-wrap"><table class="ra-d-table">' + thead + tbody + "</table></div></div>";
+        }
       }
 
       function doSearch(q) {
