@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>风险评估工具 — SHEEN Toolbox</title>
+<meta name="description" content="风险评估工具：整合 HAZOP、FMEA、FTA、ETA、Bow-Tie、HAZID、What-If、LOPA、Checklist 九种主流风险分析方法，提供核心定义、分析逻辑方向与典型应用场景检索 — SHEEN Toolbox">
+<meta property="og:title" content="风险评估工具 — SHEEN Toolbox">
+<meta property="og:description" content="九种主流风险分析方法速查：核心定义、分析逻辑方向与典型应用场景，支持按方法名检索详情。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lwsheen.pages.dev/sheen-toolbox/risk-assessment/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://lwsheen.pages.dev/sheen-toolbox/risk-assessment/">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"风险评估工具","url":"https://lwsheen.pages.dev/sheen-toolbox/risk-assessment/","description":"整合九种主流风险分析方法，提供核心定义、分析逻辑方向与典型应用场景检索","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","inLanguage":"zh-CN","offers":{"@type":"Offer","price":"0","priceCurrency":"CNY"},"publisher":{"@type":"Organization","name":"SHEEN Toolbox"}}</script>
+<link rel="stylesheet" href="../common.css">
+<style>
+  /* 本页专属样式加 ra- 前缀，避免与 common.css 冲突 */
+  .ra-wrap { display: grid; grid-template-columns: 360px 1fr; gap: 24px; align-items: start; }
+  .ra-search { position: sticky; top: 16px; }
+  .ra-input { width: 100%; padding: 12px 14px; border: 1px solid var(--border-light); border-radius: 10px; font-size: 15px; font-family: inherit; box-sizing: border-box; background: #fff; }
+  .ra-input:focus { outline: none; border-color: var(--brand-red); box-shadow: 0 0 0 3px var(--brand-red-tint, #FDEEF1); }
+  .ra-btn-row { display: flex; gap: 8px; margin-top: 10px; }
+  .ra-mini-btn { flex: 1; padding: 9px 10px; border: 1px solid var(--border-light); background: #fff; border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--text-secondary); transition: .15s; }
+  .ra-mini-btn:hover { border-color: var(--brand-red); color: var(--brand-red); }
+  .ra-count { font-size: 12px; color: var(--text-secondary); margin-top: 10px; }
+  .ra-list { display: flex; flex-direction: column; gap: 10px; }
+  .ra-card { border: 1px solid var(--border-light); border-radius: 12px; padding: 14px 16px; background: #fff; cursor: pointer; transition: .15s; }
+  .ra-card:hover { border-color: var(--brand-red); box-shadow: 0 4px 14px rgba(240,55,82,.10); }
+  .ra-card.active { border-color: var(--brand-red); background: var(--brand-red-tint, #FDEEF1); }
+  .ra-card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .ra-abbr { font-size: 17px; font-weight: 700; color: var(--brand-red); letter-spacing: .3px; }
+  .ra-cn { font-size: 13px; color: var(--text-main); margin-top: 2px; }
+  .ra-tag { font-size: 11px; color: var(--text-secondary); border: 1px solid var(--border-light); border-radius: 20px; padding: 2px 9px; white-space: nowrap; }
+  .ra-detail { background: #fff; border: 1px solid var(--border-light); border-radius: 14px; padding: 22px 24px; min-height: 320px; }
+  .ra-detail-empty { color: var(--text-secondary); display: flex; align-items: center; justify-content: center; min-height: 320px; text-align: center; }
+  .ra-d-abbr { font-size: 22px; font-weight: 800; color: var(--brand-red); }
+  .ra-d-cn { font-size: 15px; color: var(--text-secondary); margin-left: 8px; }
+  .ra-d-tags { margin: 10px 0 18px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .ra-d-tags span { font-size: 11px; background: var(--brand-red-tint,#FDEEF1); color: var(--brand-red); border-radius: 20px; padding: 3px 10px; }
+  .ra-d-block { margin-bottom: 16px; }
+  .ra-d-label { font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 5px; display: flex; align-items: center; gap: 6px; }
+  .ra-d-label i { color: var(--brand-red); }
+  .ra-d-text { font-size: 14px; line-height: 1.8; color: var(--text-main); }
+  @media (max-width: 820px) {
+    .ra-wrap { grid-template-columns: 1fr; }
+    .ra-search { position: static; }
+  }
+</style>
+</head>
+<body>
+  <nav class="breadcrumb" aria-label="breadcrumb">
+    <a href="../index.html">SHEEN Toolbox</a><span class="sep">/</span>
+    <span>风险评估工具</span>
+  </nav>
+
+  <header class="page-header">
+    <h1 class="page-title">风险评估工具</h1>
+    <p class="page-subtitle">整合九种主流风险分析方法，一键检索核心定义、分析逻辑方向与典型应用场景。</p>
+  </header>
+
+  <main class="container-wf">
+    <div class="ra-wrap">
+      <!-- 左：检索 + 列表 -->
+      <section class="ra-search" aria-label="方法检索">
+        <input id="raInput" class="ra-input" type="text" placeholder="输入方法名 / 缩写，如 HAZOP、故障树、LOPA…" autocomplete="off">
+        <div class="ra-btn-row">
+          <button id="raListAll" class="ra-mini-btn" type="button">列出全部方法</button>
+          <button id="raClear" class="ra-mini-btn" type="button">清空</button>
+        </div>
+        <div id="raCount" class="ra-count"></div>
+        <div id="raList" class="ra-list" style="margin-top:10px;"></div>
+      </section>
+
+      <!-- 右：详情 -->
+      <section class="ra-detail" id="raDetail" aria-live="polite">
+        <div class="ra-detail-empty">← 从左侧选择或检索一种方法，查看完整说明。</div>
+      </section>
+    </div>
+
+    <!-- 数据来源 / 标准提示 -->
+    <div class="tool-meta" style="margin-top:28px;">
+      <div class="tm-head">
+        <span class="tm-icon"><i class="fa-solid fa-shield-halved"></i></span>
+        <span class="tm-title">方法与标准依据</span>
+      </div>
+      <div class="tm-body">
+        <p>本工具汇总九种通行风险分析方法（HAZOP / FMEA / FTA / ETA / Bow-Tie / HAZID / What-If / LOPA / Checklist）的核心定义、分析逻辑方向与典型应用场景，用于方法选型与快速学习参考。</p>
+        <p class="tm-note">⚠️ 各方法在不同行业有相应国家标准 / 行业标准 / 国际组织标准（如 GB/T、IEC、API 等）支撑；具体标准的现行有效版本请以官方发布为准，本页不直接引用标准全文。</p>
+      </div>
+      <div class="tm-line">
+        <span class="tm-dt"><i>更新</i><span class="tm-dt-val">2026-08-29</span></span>
+        <span class="tm-sep">·</span>
+        <span class="tm-dt"><i>方法数</i><span class="tm-dt-val" id="tmCount">9</span></span>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <img src="../assets/sheen-logo.png" class="sheen-logo-sm" alt="SHEEN">
+    <p>© SHEEN 环境健康安全 · 让风险可控，让安全可查</p>
+  </footer>
+
+  <script src="risk-methods-data.js"></script>
+  <script>
+    (function () {
+      "use strict";
+      var DATA = window.RISK_METHODS || [];
+      var byKey = {};
+      DATA.forEach(function (m) {
+        byKey[m.key.toLowerCase()] = m;
+        (m.aliases || []).forEach(function (a) { byKey[a.toLowerCase()] = m; });
+      });
+
+      var inputEl = document.getElementById("raInput");
+      var listEl = document.getElementById("raList");
+      var detailEl = document.getElementById("raDetail");
+      var countEl = document.getElementById("raCount");
+      var activeKey = null;
+
+      function esc(s) {
+        return (s || "").replace(/[&<>"']/g, function (c) {
+          return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+        });
+      }
+      function norm(s) { return (s || "").toString().trim().toLowerCase(); }
+
+      function getByKey(k) { return byKey[(k || "").toLowerCase()] || null; }
+
+      function getByText(name) {
+        var n = norm(name);
+        if (!n) return null;
+        if (byKey[n]) return byKey[n];
+        var hit = DATA.filter(function (m) {
+          return m.nameCn.indexOf(name) !== -1 ||
+                 m.nameEn.toLowerCase().indexOf(n) !== -1 ||
+                 (m.aliases || []).some(function (a) { return a.toLowerCase().indexOf(n) !== -1; });
+        });
+        return hit.length ? hit[0] : null;
+      }
+
+      function search(q) {
+        var n = norm(q);
+        if (!n) return DATA.slice();
+        return DATA.filter(function (m) {
+          var hay = m.nameCn + " " + m.nameEn + " " + (m.aliases || []).join(" ") + " " +
+                    m.coreDefinition + " " + m.logicDirection + " " + m.scenarios + " " +
+                    m.category + " " + m.logicType + " " + (m.tags || []).join(" ");
+          return hay.toLowerCase().indexOf(n) !== -1;
+        });
+      }
+
+      function renderList(items) {
+        listEl.innerHTML = "";
+        if (!items.length) {
+          listEl.innerHTML = '<div class="ra-detail-empty" style="min-height:60px;">未找到匹配的方法，换个关键词试试。</div>';
+          return;
+        }
+        items.forEach(function (m) {
+          var card = document.createElement("div");
+          card.className = "ra-card" + (m.key === activeKey ? " active" : "");
+          card.setAttribute("data-key", m.key);
+          card.innerHTML =
+            '<div class="ra-card-head"><span class="ra-abbr">' + esc(m.nameEn) +
+            '</span><span class="ra-tag">' + esc(m.logicType || "") + "</span></div>" +
+            '<div class="ra-cn">' + esc(m.nameCn) + "</div>";
+          card.addEventListener("click", function () { showDetail(m.key); });
+          listEl.appendChild(card);
+        });
+      }
+
+      function showDetail(key) {
+        var m = getByKey(key);
+        if (!m) return;
+        activeKey = key;
+        Array.prototype.forEach.call(listEl.querySelectorAll(".ra-card"), function (c) {
+          c.classList.toggle("active", c.getAttribute("data-key") === key);
+        });
+        var tags = (m.tags || []).map(function (t) { return "<span>" + esc(t) + "</span>"; }).join("");
+        detailEl.innerHTML =
+          '<div><span class="ra-d-abbr">' + esc(m.nameEn) + '</span>' +
+          '<span class="ra-d-cn">' + esc(m.nameCn) + "</span></div>" +
+          '<div class="ra-d-tags">' + tags + "</div>" +
+          '<div class="ra-d-block"><div class="ra-d-label"><i class="fa-solid fa-book"></i>核心定义</div><div class="ra-d-text">' + esc(m.coreDefinition) + "</div></div>" +
+          '<div class="ra-d-block"><div class="ra-d-label"><i class="fa-solid fa-diagram-project"></i>分析逻辑方向</div><div class="ra-d-text">' + esc(m.logicDirection) + "</div></div>" +
+          '<div class="ra-d-block"><div class="ra-d-label"><i class="fa-solid fa-industry"></i>典型应用场景</div><div class="ra-d-text">' + esc(m.scenarios) + "</div></div>";
+      }
+
+      function doSearch(q) {
+        var items = q && q.trim() ? search(q) : DATA.slice();
+        countEl.textContent = "共 " + items.length + " / " + DATA.length + " 种方法" + (q && q.trim() ? "（匹配 “" + q.trim() + "”）" : "");
+        renderList(items);
+        if (items.length && !activeKey) showDetail(items[0].key);
+      }
+
+      inputEl.addEventListener("input", function () { doSearch(this.value); });
+      document.getElementById("raListAll").addEventListener("click", function () {
+        inputEl.value = ""; activeKey = null; doSearch("");
+      });
+      document.getElementById("raClear").addEventListener("click", function () {
+        inputEl.value = ""; activeKey = null; doSearch("");
+      });
+
+      // 初始：列出全部
+      document.getElementById("tmCount").textContent = DATA.length;
+      doSearch("");
+    })();
+  </script>
+</body>
+</html>
