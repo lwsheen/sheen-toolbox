@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head data-seo="sheen">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="灭火器配置工具 · SHEEN Toolbox：配置计算（依据 GB 50140-2005 计算灭火器数量/规格，支持危险等级与场景预设）与机动车车载灭火器配置要求（GB 7258-2017 / GB 34655-2017）。">
+    <title>灭火器配置工具 · 配置计算与车载要求 — SHEEN Toolbox</title>
+    <meta property="og:title" content="灭火器配置工具 · 配置计算与车载要求 | SHEEN Toolbox">
+    <meta property="og:description" content="灭火器配置计算（GB 50140-2005）＋ 机动车车载灭火器配置要求（GB 7258-2017 / GB 34655-2017），一站查询。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lwsheen.pages.dev/sheen-toolbox/fire-extinguisher/">
+    <meta property="og:image" content="https://lwsheen.pages.dev/sheen-toolbox/assets/share/fire-extinguisher-calculator.png">
+    <meta property="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://lwsheen.pages.dev/sheen-toolbox/fire-extinguisher/">
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "灭火器配置工具", "url": "https://lwsheen.pages.dev/sheen-toolbox/fire-extinguisher/", "description": "灭火器配置计算（GB 50140-2005）与机动车车载灭火器配置要求（GB 7258-2017/GB 34655-2017）", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "inLanguage": "zh-CN", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "CNY"}, "publisher": {"@type": "Organization", "name": "SHEEN Toolbox"}}</script>
+
+    <link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
+    <link rel="stylesheet" href="/sheen-toolbox/common.css">
+
+    <style>
+        /* ===== 本工具特有样式（公共样式见 common.css） ===== */
+        .breadcrumb span { color: var(--text-secondary); }
+        .page-title i { color: var(--brand-red); font-size: 22px; }
+
+        /* ===== 标签页 ===== */
+        .tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 24px; gap: 4px; flex-wrap: wrap; }
+        .tab-btn { padding: 12px 22px; background: none; border: none; font-size: 15px; font-weight: 500;
+            color: var(--text-secondary); cursor: pointer; transition: var(--transition);
+            border-radius: 8px 8px 8px 8px; font-family: inherit; }
+        .tab-btn:hover { background: var(--bg-page); color: var(--text-primary); }
+        .tab-btn.active { color: var(--brand-red); border-bottom: 3px solid var(--brand-red); background: var(--bg-card);
+            border-radius: 8px;
+        }
+        .tab-content { display: none; animation: fadeIn .35s ease;
+            border-radius: 8px;
+        }
+        .tab-content.active { display: block;
+            border-radius: 8px;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ===== 配置计算：快捷场景选择器 ===== */
+        .scene-selector { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;
+            padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+        .scene-selector-label { width: 100%; font-size: var(--fs-sm); font-weight: 600;
+            color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .scene-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; cursor: pointer;
+            transition: all var(--transition); border: 1px solid var(--border); background: var(--bg-page);
+            color: var(--text-primary); font-size: 13px; font-weight: 500; font-family: inherit;
+            border-radius: var(--radius-sm); white-space: nowrap; }
+        .scene-btn i { font-size: 14px; }
+        .scene-btn:hover { background: var(--brand-red-light); border-color: var(--brand-red); color: var(--brand-red); }
+        .scene-btn.active { background: var(--brand-red); border-color: var(--brand-red); color: #fff; }
+        .scene-btn.active i { color: #fff; }
+        .scene-badge { font-size: 11px; padding: 1px 8px; border-radius: 8px; font-weight: 600;
+            margin-left: 4px; background: var(--border); color: var(--text-secondary); }
+        .scene-btn.active .scene-badge { background: rgba(255,255,255,0.25); color: #fff; }
+
+        .panel { display: block; animation: fadeSlide 0.3s ease; }
+        @keyframes fadeSlide { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        .form-card .card-title { font-size: 16px; font-weight: 600; color: var(--text-primary);
+            margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 24px; }
+        .form-group { margin-bottom: 6px; }
+        .form-group label { display: block; font-size: var(--fs-base); font-weight: 500;
+            color: var(--text-primary); margin-bottom: 4px; }
+        .form-group .hint { font-size: var(--fs-sm); color: var(--text-secondary); margin-top: 2px; }
+        select.form-control { appearance: none; cursor: pointer; }
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 12px 24px; padding-top: 4px; }
+        .checkbox-item { display: flex; align-items: center; gap: 8px; font-size: var(--fs-base);
+            cursor: pointer; color: var(--text-primary); }
+        .checkbox-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--brand-red); }
+        .btn-row { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; border-radius: 8px; }
+
+        .result-card .result-title { font-size: 16px; font-weight: 600; color: var(--text-primary);
+            margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+        .result-value.flash { background: #fef9c3; border-left-color: var(--amber); }
+        .result-value .number { font-size: 36px; font-weight: 700; color: var(--brand-red); }
+        .result-value .number .unit { font-size: 15px; font-weight: 400; color: var(--text-secondary); margin-left: 4px; }
+        .result-value .label { font-size: var(--fs-base); color: var(--text-secondary); margin-top: 2px; }
+        .result-detail { background: var(--bg-page); border-radius: 14px; padding: 16px 20px;
+            margin-top: 16px; font-size: var(--fs-base); color: var(--text-primary); line-height: 1.8; }
+        .detail-row { display: flex; justify-content: space-between; align-items: baseline;
+            border-bottom: 1px dashed var(--border); padding-bottom: 6px; flex-wrap: wrap; gap: 8px; }
+        .detail-row:last-child { border-bottom: none; padding-bottom: 0; }
+        .detail-label { color: var(--text-primary); font-weight: 500; }
+        .detail-value { font-weight: 600; text-align: right; }
+        .formula-text { font-family: var(--font-mono); background: var(--border-light);
+            padding: 2px 8px; border-radius: 6px; }
+        .formula-note { margin-top: 16px; border: 1px solid var(--border);
+            border-radius: var(--radius-sm); background: var(--bg-page); overflow: hidden; }
+        .formula-note summary { padding: 10px 14px; font-size: var(--fs-sm); font-weight: 600;
+            color: var(--text-primary); cursor: pointer; user-select: none;
+            display: flex; align-items: center; gap: 8px; list-style: none; }
+        .formula-note summary::-webkit-details-marker { display: none; }
+        .formula-note summary i { color: var(--brand-red); }
+        .formula-note summary:hover { color: var(--brand-red); }
+        .formula-note[open] summary { border-bottom: 1px solid var(--border); }
+        .formula-body { padding: 12px 16px; font-size: var(--fs-sm); color: var(--text-secondary); line-height: 2; }
+        .formula-body p { margin-bottom: 4px; }
+        .formula-body ul { margin: 6px 0 0 18px; }
+        .warning { background: #fff7ed; border-left: 4px solid var(--warn); padding: 8px 12px;
+            border-radius: var(--radius-sm); font-size: 11px; color: var(--warn-deep); margin-top: 12px; }
+        .footnote { margin-top: 12px; font-size: 11px; color: var(--text-secondary);
+            border-top: 1px solid var(--border); padding-top: 12px; }
+
+        /* ===== 车载配置：特有样式 ===== */
+        #tab-vehicle .result-card { display: none; }
+        .veh-form { margin-bottom: 20px; }
+        .veh-form .row { display: flex; flex-wrap: wrap; gap: 16px; }
+        .veh-form .field { flex: 1 1 240px; min-width: 220px; }
+        .veh-form .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-primary); }
+        .veh-form .field .form-control { width: 100%; }
+        .toggle-row { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 18px; }
+        .toggle-row label { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text-secondary); cursor: pointer; }
+        .toggle-row input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--brand-red); }
+        .action-row { margin: 18px 0; display: flex; gap: 12px; flex-wrap: wrap; }
+        .veh-result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin: 16px 0 4px; }
+        .veh-stat { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; }
+        .veh-stat .v { font-size: 26px; font-weight: 800; color: var(--brand-red); display: block; }
+        .veh-stat .l { font-size: 13px; color: var(--text-secondary); }
+        .veh-badge { display: inline-block; background: var(--brand-red-light); color: var(--brand-red);
+            font-weight: 700; font-size: 13px; padding: 3px 12px; border-radius: 60px; }
+        .pos-list { margin: 10px 0 4px; padding-left: 0; list-style: none; }
+        .pos-list li { padding: 10px 0; border-bottom: 1px solid var(--border-light); font-size: 14px; color: #333; }
+        .pos-list li:last-child { border-bottom: none; }
+        .pos-list i.fa { color: var(--brand-red); margin-right: 8px; }
+        .note-box { background: var(--bg-page); border: 1px solid var(--border-light);
+            border-left: 4px solid var(--warn-orange); border-radius: 12px; padding: 14px 16px;
+            font-size: 13px; color: var(--text-secondary); margin-top: 16px; }
+        .note-box strong { color: var(--text-primary); }
+        table.veh-ref { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 14px;
+            table-layout: fixed; }
+        table.veh-ref th, table.veh-ref td { border: 1px solid var(--border); padding: 10px 12px;
+            text-align: left; word-break: break-word; }
+        table.veh-ref th { background: var(--border-light); font-weight: 700; }
+        table.veh-ref td.center, table.veh-ref th.center { text-align: center; }
+
+        .disclaimer { margin-top: 20px; font-size: 11px; color: #D12E47; background: #fff1f2;
+            padding: 12px 18px; border-radius: var(--radius-md); border: 1px solid var(--fail-soft); text-align: center; }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 820px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .result-value .number { font-size: 28px; }
+        }
+        @media (max-width: 600px) {
+            .tabs { flex-wrap: wrap; }
+            .tab-btn { flex: 1; text-align: center; padding: 10px;
+            border-radius: 8px;
+        }
+            .veh-form .row { flex-direction: column; }
+            .veh-form .field { min-width: 0; }
+        }
+    </style>
+        <style>
+            @media print {
+                @page { size: A4; margin: 18mm 15mm 20mm 15mm; }
+                body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
+                .app-wrapper { box-shadow: none !important; border-radius: 0 !important; max-width: 100% !important; border: none !important; }
+                .breadcrumb, .side-nav, .btn-primary, .btn-print, .form-card, .sheen-footer, .footnote, .disclaimer, .no-print, .tabs { display: none !important; }
+                .main-body { flex-direction: column; }
+                .content-area { padding: 0 !important; }
+                @page { size: A4; margin: 18mm 15mm 20mm 15mm;
+                    @bottom-center { content: "SHEEN Toolbox · 灭火器配置工具"; font-size: 8pt; color: #666; }
+                }
+            }
+        </style>
+    <!-- Baidu Tongji -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9b8c3df212619adec1f70f01695f4160";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+      // github.io 镜像站统计(公众号阅读原文通道)
+      if (location.hostname.indexOf("github.io") >= 0) {
+        var hm2 = document.createElement("script");
+        hm2.src = "https://hm.baidu.com/hm.js?5ceec8bd8bf10bd9d1f4ddceaebdae6f";
+        s.parentNode.insertBefore(hm2, s);
+      }
+    })();
+    </script>
+</head>
+<body>
+
+    <div class="breadcrumb">
+        <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+        <span> / 灭火器配置工具</span>
+    </div>
+
+    <!-- 主内容区域 -->
+    <main class="app-container container-calc">
+        <h1 class="page-title"><i class="fa-solid fa-fire-extinguisher"></i> 灭火器配置工具</h1>
+        <p class="page-subtitle" style="margin-bottom:20px;">依据 GB 50140-2005 计算场所灭火器配置数量与规格；依据 GB 7258-2017 / GB 34655-2017 查询机动车车载灭火器配置要求。</p>
+
+        <!-- 标签页 -->
+        <div class="tabs no-pr">
+            <button class="tab-btn active" onclick="switchFExtab('configure')"><i class="fa-solid fa-building"></i> 配置计算</button>
+            <button class="tab-btn" onclick="switchFExtab('vehicle')"><i class="fa-solid fa-truck-fast"></i> 车载配置</button>
+        </div>
+
+        <!-- ========== Tab 1：配置计算（原 fire-extinguisher-calculator） ========== -->
+        <div id="tab-configure" class="tab-content active">
+
+            <!-- 快捷场景选择 -->
+            <div class="scene-selector" id="sceneNav">
+                <div class="scene-selector-label">快捷场景</div>
+                <button class="scene-btn active" data-scene="office" type="button"><i class="fa-solid fa-building"></i>普通办公室<span class="scene-badge">轻危</span></button>
+                <button class="scene-btn" data-scene="hotel" type="button"><i class="fa-solid fa-hotel"></i>酒店客房<span class="scene-badge">轻危</span></button>
+                <button class="scene-btn" data-scene="school" type="button"><i class="fa-solid fa-school"></i>学校教室<span class="scene-badge">中危</span></button>
+                <button class="scene-btn" data-scene="hospital" type="button"><i class="fa-solid fa-hospital"></i>医院病房<span class="scene-badge">中危</span></button>
+                <button class="scene-btn" data-scene="mall" type="button"><i class="fa-solid fa-store"></i>百货商场<span class="scene-badge">中危</span></button>
+                <button class="scene-btn" data-scene="warehouse" type="button"><i class="fa-solid fa-warehouse"></i>仓库厂房<span class="scene-badge">严重</span></button>
+                <button class="scene-btn" data-scene="theater" type="button"><i class="fa-solid fa-film"></i>影院剧院<span class="scene-badge">严重</span></button>
+                <button class="scene-btn" data-scene="station" type="button"><i class="fa-solid fa-train"></i>车站码头<span class="scene-badge">严重</span></button>
+            </div>
+
+            <section class="panel" id="panel-extinguisher">
+                <div class="form-card">
+                    <div class="card-title"><i class="fa-solid fa-sliders"></i> 输入参数</div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="category">🏢 场所大类</label>
+                            <select id="category" class="form-control">
+                                <option value="civil">民用建筑</option>
+                                <option value="industrial">工业与仓储</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="placeType">📍 具体场所类型</label>
+                            <select id="placeType" class="form-control"></select>
+                            <div class="hint" id="riskLevelDisplay">当前危险等级：<strong>—</strong></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="fireClass">🔥 火灾类别</label>
+                            <select id="fireClass" class="form-control">
+                                <option value="A" selected>A 类 – 固体物质火灾</option>
+                                <option value="B">B 类 – 液体或可熔化固体火灾</option>
+                                <option value="C">C 类 – 气体火灾</option>
+                                <option value="D">D 类 – 金属火灾</option>
+                                <option value="E">E 类 – 带电火灾</option>
+                            </select>
+                            <div class="hint">C类按B类配置，E类按A类配置</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="area">📐 保护面积 S (m²)</label>
+                            <input type="number" id="area" class="form-control" placeholder="例：2000" value="2000" min="1" step="any" />
+                        </div>
+                        <div class="form-group">
+                            <label for="setPoint">📍 设置点数 N (≥1)</label>
+                            <input type="number" id="setPoint" class="form-control" value="1" min="1" step="1" />
+                            <div class="hint">每个计算单元至少2具，每设置点≤5具</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top:8px;">
+                        <label>🏗️ 消防设施及修正系数 K</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item"><input type="checkbox" id="hasHydrant" /> 设有室内消火栓系统</label>
+                            <label class="checkbox-item"><input type="checkbox" id="hasSprinkler" /> 设有自动灭火系统</label>
+                            <label class="checkbox-item"><input type="checkbox" id="isOutdoor" /> 可燃物露天堆场/储罐区 (K=0.3)</label>
+                        </div>
+                        <span style="font-size:13px; color:var(--text-secondary);" id="kDisplay">当前 K = 1.0</span>
+                    </div>
+
+                    <div class="form-group" style="margin-top:8px;">
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="specialPlace" /> 🏬 歌舞娱乐/网吧/商场/寺庙/地下场所 (增配30%)
+                        </label>
+                    </div>
+
+                    <div class="form-group" style="margin-top:8px;">
+                        <label for="extinguisher">🧴 灭火器型号（自动筛选）</label>
+                        <select id="extinguisher" class="form-control"></select>
+                        <div class="hint">根据火灾类别和危险等级自动匹配可用型号</div>
+                    </div>
+
+                    <div class="btn-row">
+                        <button class="btn-primary" onclick="computeExtinguisher()" type="button"><i class="fa-solid fa-calculator"></i> 重新计算</button>
+                    </div>
+                </div>
+
+                <details class="formula-note">
+                    <summary><i class="fa-solid fa-square-root-variable"></i> 计算公式说明</summary>
+                    <div class="formula-body">
+                        <p><span class="formula-text">Q = K × S / U</span> — 计算单元最小需配灭火级别</p>
+                        <p><span class="formula-text">Qe = Q / N</span> — 每个设置点需配灭火级别</p>
+                        <p><span class="formula-text">N具 = ⌈Qe / Ue⌉</span> — 每设置点灭火器数量（向上取整）</p>
+                        <ul>
+                            <li>Q：最小需配灭火级别（A 或 B）</li>
+                            <li>K：修正系数（0.3~1.0，按消防设施配置）</li>
+                            <li>S：保护面积（m²）</li>
+                            <li>U：单位灭火级别最大保护面积（m²/A 或 m²/B）</li>
+                            <li>N：设置点数（≥1）</li>
+                            <li>Ue：所选灭火器的单具灭火级别</li>
+                        </ul>
+                        <p>依据 GB 50140-2005 第 6 章配置计算。每设置点宜 2~5 具。</p>
+                    </div>
+                </details>
+
+                <div class="result-card" id="resultPanel">
+                    <div class="result-title"><i class="fa-solid fa-file-invoice"></i> 计算结果</div>
+                    <div class="result-value" id="resultValueBox">
+                        <div class="number" id="resultCount">-- <span class="unit">具</span></div>
+                        <div class="label" id="resultLabel">请填写参数后计算</div>
+                    </div>
+                    <div class="result-detail" id="detailArea"></div>
+                    <div id="warningBox" class="warning" style="display:none;"></div>
+                    <div class="footnote">⚙️ 自动联动计算，实时更新</div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ========== Tab 2：车载配置（原 vehicle-fire-extinguisher） ========== -->
+        <div id="tab-vehicle" class="tab-content">
+
+            <div class="form-card">
+                <h3>参数选择</h3>
+                <div class="veh-form">
+                    <div class="row">
+                        <div class="field">
+                            <label>车辆类型</label>
+                            <select id="vehType" class="form-control" onchange="onVehTypeChange()">
+                                <option value="passenger">客车（含公交、客运）</option>
+                                <option value="hazmat">危险货物运输车辆</option>
+                                <option value="rv">旅居车（房车）</option>
+                            </select>
+                        </div>
+                        <div class="field" id="lenField" style="flex:1 1 200px; min-width:200px;">
+                            <label>车长（米，客车适用）</label>
+                            <input id="vehLen" class="form-control" type="number" min="0" step="0.1" placeholder="如 8.5" oninput="vehCalculate()">
+                        </div>
+                    </div>
+                    <div class="toggle-row">
+                        <label><input type="checkbox" id="isArticulated"> 铰接客车</label>
+                        <label><input type="checkbox" id="isDouble"> 双层客车</label>
+                        <label><input type="checkbox" id="isBClass"> B 级客车（可载≤22人、不允许站立）</label>
+                        <label><input type="checkbox" id="isSchool"> 专用校车</label>
+                    </div>
+                    <div class="action-row">
+                        <button class="btn btn-primary" onclick="vehCalculate()"><i class="fa-solid fa-calculator"></i> 查询配置</button>
+                        <button class="btn btn-outline" onclick="shareTool()"><i class="fa-solid fa-share-nodes"></i> 分享</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-card" id="resultCard">
+                <div class="veh-result-grid" id="statGrid"></div>
+                <h3 style="margin-top:18px;">灭火剂与级别要求</h3>
+                <p id="agentType" style="font-size:14px;color:#333;"></p>
+                <h3 style="margin-top:18px;">放置位置</h3>
+                <ul class="pos-list" id="posList"></ul>
+                <div class="note-box" id="noteBox"></div>
+            </div>
+
+            <div class="card" style="margin-top:24px;">
+                <h3>GB 34655-2017 客车灭火器配置表（参考）</h3>
+                <div class="table-scroll">
+                    <table class="veh-ref">
+                        <thead>
+                            <tr>
+                                <th>车型及车长</th>
+                                <th class="center">数量（具）</th>
+                                <th class="center">单具最小充装</th>
+                                <th class="center">灭火级别</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>车长 L≤6m</td><td class="center">≥1</td><td class="center">≥2 kg</td><td class="center">1A / 21B</td></tr>
+                            <tr><td>6m&lt;L≤8m</td><td class="center">≥2</td><td class="center">≥2 kg</td><td class="center">1A / 21B</td></tr>
+                            <tr><td>L&gt;8m</td><td class="center">≥3</td><td class="center">≥4 kg</td><td class="center">2A / 55B</td></tr>
+                            <tr><td>铰接客车</td><td class="center">≥4</td><td class="center">≥4 kg</td><td class="center">2A / 55B</td></tr>
+                            <tr><td>双层客车（上下层各 2 具）</td><td class="center">≥4</td><td class="center">≥4 kg</td><td class="center">2A / 55B</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p style="font-size:13px;color:var(--text-secondary);margin-top:8px;">灭火剂性能应符合 GB 4066-2017（ABC 干粉），可扑救 A/B/C/E 类火灾。</p>
+            </div>
+        </div>
+
+    </main>
+
+    <section class="tool-meta" data-toolmeta="sheen">
+        <div class="tm-head">
+            <span class="tm-std-code">GB 50140-2005</span>
+            <span class="tm-std-name">《建筑灭火器配置设计规范》</span>
+            <span class="tm-sep">·</span>
+            <span class="tm-std-code">GB 7258-2017</span>
+            <span class="tm-std-name">《机动车运行安全技术条件》</span>
+            <span class="tm-sep">·</span>
+            <span class="tm-std-code">GB 34655-2017</span>
+            <span class="tm-std-name">《客车灭火器配置要求》</span>
+        </div>
+        <div class="tm-line">
+            <span class="tm-dt"><i>发布</i><span class="tm-dt-val">2005-07-15 / 2017-09-29</span></span>
+            <span class="tm-sep">·</span>
+            <span class="tm-dt"><i>实施</i><span class="tm-dt-val">2005-10-01 / 2018-01-01 / 2018-04-01</span></span>
+            <span class="tm-sep">·</span>
+            <span class="tm-dt"><i>更新</i><span class="tm-dt-val">2026-08-23</span></span>
+        </div>
+    </section>
+
+    <footer class="sheen-footer">
+        <img src="../assets/sheen-logo.png" alt="SHEEN Toolbox" class="sheen-logo-sm"> &nbsp;<strong>SHEEN Toolbox</strong> · 灭火器配置工具
+    </footer>
+
+    <div class="print-time" id="printTime"></div>
+
+    <script>
+    // Tab 切换
+    function switchFExtab(tabId, skipHash) {
+        document.querySelectorAll('#tab-configure, #tab-vehicle').forEach(function (p) { p.classList.remove('active'); });
+        document.querySelectorAll('.tab-btn').forEach(function (el) { el.classList.remove('active'); });
+        var pane = document.getElementById('tab-' + tabId);
+        if (pane) pane.classList.add('active');
+        var btn = document.querySelector('.tab-btn[data-tab="' + tabId + '"]') || document.querySelectorAll('.tab-btn')[tabId === 'configure' ? 0 : 1];
+        if (btn) btn.classList.add('active');
+        if (!skipHash && history.replaceState) {
+            try { history.replaceState(null, '', '?tab=' + tabId + location.hash); } catch (e) {}
+        }
+        // 切换后重算可见 Tab 的展示
+        if (tabId === 'vehicle') { try { vehCalculate(); } catch (e) {} }
+        else { try { computeExtinguisher(); } catch (e) {} }
+    }
+    window.switchFExtab = switchFExtab;
+    // 给按钮补 data-tab 以支持统一高亮
+    (function () {
+        var map = { configure: 0, vehicle: 1 };
+        var btns = document.querySelectorAll('.tab-btn');
+        btns.forEach(function (b, i) { b.setAttribute('data-tab', i === 0 ? 'configure' : 'vehicle'); });
+    })();
+    </script>
+
+    <script>
+    (function() {
+    'use strict';
+    // ============ 配置计算（原 fire-extinguisher-calculator） ============
+
+    var now = new Date(Date.now()+(480+new Date().getTimezoneOffset())*60000);
+    var ptEl = document.getElementById('printTime');
+    if (ptEl) ptEl.textContent = '打印时间：' + now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+
+    // 1. 场所-危险等级映射
+    var placeMapping = {
+        civil: {
+            severe: ['县级及以上文保单位/档案馆/博物馆库房','设备贵重或可燃物多的实验室','广播电台/电视台演播室/道具间/发射塔楼','专用电子计算机房','城镇及以上邮政信函/包裹分捡房/通信枢纽','客房数≥50间的旅馆/饭店公共活动用房/厨房','体育场/电影院/剧院/礼堂舞台及后台','住院床位≥50张医院的手术室/药房/住院部','建筑面积≥2000m²图书馆/展览馆珍藏室/书库','民用机场候机厅/安检厅/空管中心/雷达机房','超高层建筑/一类高层写字楼/公寓楼','电影/电视摄影棚','建筑面积≥1000m²经营易燃易爆化学品商场库房','建筑面积≥200m²公共娱乐场所','老人住宿床位≥50张养老院','幼儿住宿床位≥50张托儿所/幼儿园','学生住宿床位≥100张学校集体宿舍','县级及以上党政机关办公大楼会议室','建筑面积≥500m²车站/码头候车(船)室/行李房','城市地下铁道/地下观光隧道'],
+            medium: ['县级以下文保单位/档案馆/博物馆库房','一般实验室','广播电台/电视台会议室/资料室','设有集中空调/电子计算机/复印机的办公室','城镇以下邮政信函/包裹分捡房/通信枢纽','客房数＜50间的旅馆/饭店公共活动用房/厨房','体育场/电影院/剧院/礼堂观众厅','住院床位＜50张医院的手术室/药房/住院部','建筑面积＜2000m²图书馆/展览馆珍藏室/书库','民用机场检票厅/行李厅','二类高层写字楼/公寓楼','高级住宅/别墅','建筑面积＜1000m²经营易燃易爆化学品商场库房','建筑面积＜200m²公共娱乐场所','老人住宿床位＜50张养老院','幼儿住宿床位＜50张托儿所/幼儿园','学生住宿床位＜100张学校集体宿舍','县级以下党政机关办公大楼会议室','学校教室/教研室','建筑面积＜500m²车站/码头候车(船)室/行李房','百货楼/超市/综合商场库房/铺面','民用燃油/燃气锅炉房','民用油浸变压器室/高、低压配电室'],
+            light: ['日常用品小卖店/难燃建筑装饰材料商店','未设集中空调/电子计算机/复印机的普通办公室','旅馆/饭店客房','普通住宅','难燃或非燃构件分隔的辅助房间']
+        },
+        industrial: {
+            severe: ['闪点＜60℃油品/有机溶剂提炼/泵房','橡胶制品涂胶/胶浆部位','二硫化碳粗馏/精馏工段','甲醇/乙醇/丙酮/苯等合成/精制厂房','植物油加工浸出厂房','洗涤剂厂房石蜡裂解/冰醋酸裂解','环氧氢丙烷/苯乙烯厂房','液化石油气灌瓶间','天然气/水煤气/焦炉煤气净化厂房压缩机室','乙炔站/氢气站/煤气站/氧气站','硝化棉/赛璐珞厂房','黄磷/赤磷制备厂房','樟脑/松香提炼/焦化厂精萘厂房','煤粉厂房/面粉厂房碾磨部位','谷物筒仓工作塔/亚麻厂除尘器','氯酸钾厂房','发烟硫酸/发烟硝酸浓缩部位','高锰酸钾/重铬酸钠厂房','过氧化钠/过氧化钾/次氯酸钙厂房','各工厂总控制室/分控制室','国家和省级重点工程施工现场','发电厂/电网经营企业控制室/设备间','化学危险物品库房','装卸原油/化学危险物品车站/码头','甲/乙类液体储罐区/桶装库房','液化石油气储罐区/桶装库房','棉花库房及散装堆场','稻草/芦苇/麦秸堆场','赛璐珞及其制品/漆布/油布/油纸库房','酒精度≥60度白酒库房','汽车加油站/加气站','机动车交易市场/展销厅','民用液化气/天然气灌装站/换瓶站'],
+            medium: ['闪点≥60℃油品/有机溶剂提炼/泵房','柴油/机器油/变压器油灌桶间','润滑油再生/沥青加工厂房','植物油加工精炼部位','油浸变压器室/高、低压配电室','工业用燃油/燃气锅炉房','各种电缆廊道','油淬火处理车间','橡胶制品压延/成型/硫化厂房','木工厂房/竹藤加工厂房','针织品厂房/纺织印染化纤干燥部位','服装加工厂房/印染厂成品厂房','麻纺厂粗加工/毛涤厂选毛厂房','谷物加工厂房','卷烟厂切丝/卷制/包装厂房','印刷厂印刷厂房','电视机/收录机装配厂房','显像管厂装配工段烧枪间','磁带装配厂房','泡沫塑料厂发泡/成型/印片/压花','饲料加工厂房','地市级及以下重点工程施工现场','丙类液体储罐区/桶装库房','化学/人造纤维及其织物库房','纸/竹/木及其制品库房','火柴/香烟/糖/茶叶库房','中药材库房','橡胶/塑料及其制品库房','粮食/食品库房/堆场','电脑/电视机/电子产品库房','汽车/大型拖拉机停车库','酒精度＜60度白酒库房','低温冷库'],
+            light: ['金属冶炼/铸造/铆焊/热轧/锻造/热处理','玻璃原料熔化厂房','陶瓷制品烘干/烧成厂房','酚醛泡沫塑料加工厂房','印染厂漂炼部位','化纤厂后加工润湿部位','造纸厂/化纤厂浆粕蒸煮工段','仪表/器械/车辆装配车间','不燃液体泵房/阀门室','金属（镁合金除外）冷加工车间','氟里昂厂房','钢材库房/堆场','水泥库房/堆场','搪瓷/陶瓷制品库房/堆场','难燃或非燃建筑装饰材料库房/堆场','原木库房/堆场','丁/戊类液体储罐区/桶装库房']
+        }
+    };
+
+    // 2. 危险等级参数
+    var riskParams = {
+        severe: { label: '严重危险级', protectionA: 50, protectionB: 0.5, minLevelA: 3, minLevelB: 89 },
+        medium: { label: '中危险级',   protectionA: 75, protectionB: 1.0, minLevelA: 2, minLevelB: 55 },
+        light:  { label: '轻危险级',   protectionA: 100, protectionB: 1.5, minLevelA: 1, minLevelB: 21 }
+    };
+
+    // 3. 灭火器数据库
+    var extinguishersDB = [
+        { name: 'MF/ABC1 (1kg)',  levelA: 1, levelB: 21,  types: ['A','B','C','E'] },
+        { name: 'MF/ABC2 (2kg)',  levelA: 1, levelB: 21,  types: ['A','B','C','E'] },
+        { name: 'MF/ABC3 (3kg)',  levelA: 2, levelB: 34,  types: ['A','B','C','E'] },
+        { name: 'MF/ABC4 (4kg)',  levelA: 2, levelB: 55,  types: ['A','B','C','E'] },
+        { name: 'MF/ABC5 (5kg)',  levelA: 3, levelB: 89,  types: ['A','B','C','E'] },
+        { name: 'MF/ABC6 (6kg)',  levelA: 3, levelB: 89,  types: ['A','B','C','E'] },
+        { name: 'MF/ABC8 (8kg)',  levelA: 4, levelB: 144, types: ['A','B','C','E'] },
+        { name: 'MF/ABC10 (10kg)',levelA: 6, levelB: 144, types: ['A','B','C','E'] },
+        { name: 'MT2 (2kg CO₂)',  levelA: 0, levelB: 21,  types: ['B','C','E'] },
+        { name: 'MT3 (3kg CO₂)',  levelA: 0, levelB: 21,  types: ['B','C','E'] },
+        { name: 'MT5 (5kg CO₂)',  levelA: 0, levelB: 34,  types: ['B','C','E'] },
+        { name: 'MT7 (7kg CO₂)',  levelA: 0, levelB: 55,  types: ['B','C','E'] },
+        { name: 'MS/Q3 (3L 水基)',     levelA: 1, levelB: 0,  types: ['A'] },
+        { name: 'MS/T3 (3L 水基添加剂)',levelA: 1, levelB: 55, types: ['A','B'] },
+        { name: 'MS/Q6 (6L 水基)',     levelA: 1, levelB: 0,  types: ['A'] },
+        { name: 'MS/T6 (6L 水基添加剂)',levelA: 1, levelB: 55, types: ['A','B'] },
+        { name: 'MS/Q9 (9L 水基)',     levelA: 2, levelB: 0,  types: ['A'] },
+        { name: 'MS/T9 (9L 水基添加剂)',levelA: 2, levelB: 89, types: ['A','B'] },
+        { name: 'MP/AR3 (3L 抗溶泡沫)', levelA: 1, levelB: 55, types: ['A','B'] },
+        { name: 'MP/AR4 (4L 抗溶泡沫)', levelA: 1, levelB: 55, types: ['A','B'] },
+        { name: 'MP/AR6 (6L 抗溶泡沫)', levelA: 1, levelB: 55, types: ['A','B'] },
+        { name: 'MP/AR9 (9L 抗溶泡沫)', levelA: 2, levelB: 89, types: ['A','B'] }
+    ];
+
+    // 4. 场景预设
+    var scenePresets = {
+        office:     { category: 'civil',      place: '未设集中空调/电子计算机/复印机的普通办公室' },
+        hotel:      { category: 'civil',      place: '旅馆/饭店客房' },
+        school:     { category: 'civil',      place: '学校教室/教研室' },
+        hospital:   { category: 'civil',      place: '住院床位＜50张医院的手术室/药房/住院部' },
+        mall:       { category: 'civil',      place: '百货楼/超市/综合商场库房/铺面' },
+        warehouse:  { category: 'industrial', place: '化学危险物品库房' },
+        theater:    { category: 'civil',      place: '体育场/电影院/剧院/礼堂舞台及后台' },
+        station:    { category: 'civil',      place: '建筑面积≥500m²车站/码头候车(船)室/行李房' }
+    };
+
+    // 5. DOM 缓存
+    function $(id) { return document.getElementById(id); }
+    var categorySelect = $('category');
+    var placeTypeSelect = $('placeType');
+    var riskLevelDisplay = $('riskLevelDisplay');
+    var fireClassSelect = $('fireClass');
+    var areaInput = $('area');
+    var setPointInput = $('setPoint');
+    var hasHydrant = $('hasHydrant');
+    var hasSprinkler = $('hasSprinkler');
+    var isOutdoor = $('isOutdoor');
+    var specialPlace = $('specialPlace');
+    var extinguisherSelect = $('extinguisher');
+    var kDisplay = $('kDisplay');
+    var resultCount = $('resultCount');
+    var resultLabel = $('resultLabel');
+    var resultValueBox = $('resultValueBox');
+    var detailArea = $('detailArea');
+    var warningBox = $('warningBox');
+
+    function getRiskLevelForPlace(category, placeName) {
+        var map = placeMapping[category];
+        if (!map) return 'medium';
+        for (var level in map) {
+            if (map.hasOwnProperty(level) && map[level].indexOf(placeName) >= 0) return level;
+        }
+        return 'medium';
+    }
+
+    function populatePlaces() {
+        var category = categorySelect.value;
+        var map = placeMapping[category];
+        if (!map) return;
+        var groups = [
+            { key: 'severe', label: '🔴 严重危险级' },
+            { key: 'medium', label: '🟡 中危险级' },
+            { key: 'light',  label: '🟢 轻危险级' }
+        ];
+        var currentValue = placeTypeSelect.value;
+        placeTypeSelect.innerHTML = '';
+        groups.forEach(function (group) {
+            var items = map[group.key];
+            if (!items || items.length === 0) return;
+            var optgroup = document.createElement('optgroup');
+            optgroup.label = group.label;
+            items.forEach(function (name) {
+                var opt = document.createElement('option');
+                opt.value = name;
+                opt.textContent = name;
+                optgroup.appendChild(opt);
+            });
+            placeTypeSelect.appendChild(optgroup);
+        });
+        var opts = placeTypeSelect.options;
+        var found = false;
+        for (var i = 0; i < opts.length; i++) { if (opts[i].value === currentValue) { found = true; break; } }
+        placeTypeSelect.value = found ? currentValue : (opts.length ? opts[0].value : '');
+        updateRiskDisplay();
+    }
+
+    function updateRiskDisplay() {
+        var place = placeTypeSelect.value;
+        if (!place) {
+            riskLevelDisplay.innerHTML = '当前危险等级：<strong>—</strong>';
+            return;
+        }
+        var risk = getRiskLevelForPlace(categorySelect.value, place);
+        riskLevelDisplay.innerHTML = '当前危险等级：<strong>' + riskParams[risk].label + '</strong>';
+    }
+
+    function calcK() {
+        if (isOutdoor.checked) return 0.3;
+        var hydrant = hasHydrant.checked;
+        var sprinkler = hasSprinkler.checked;
+        if (hydrant && sprinkler) return 0.5;
+        if (sprinkler) return 0.7;
+        if (hydrant) return 0.9;
+        return 1.0;
+    }
+
+    function getCalcGroup(fireClass) {
+        return (fireClass === 'B' || fireClass === 'C') ? 'B' : 'A';
+    }
+
+    function filterExtinguishers(fireClass, riskLevel) {
+        if (fireClass === 'D') return [];
+        var group = getCalcGroup(fireClass);
+        var params = riskParams[riskLevel];
+        return extinguishersDB.filter(function (ext) {
+            if (ext.types.indexOf(fireClass) < 0 && fireClass !== 'E') return false;
+            if (fireClass === 'E' && ext.types.indexOf('E') < 0) return false;
+            if (group === 'B') return ext.levelB >= params.minLevelB;
+            return ext.levelA >= params.minLevelA;
+        });
+    }
+
+    function rebuildExtinguisherOptions() {
+        var fireClass = fireClassSelect.value;
+        var risk = getRiskLevelForPlace(categorySelect.value, placeTypeSelect.value);
+        var filtered = filterExtinguishers(fireClass, risk);
+        var currentValue = extinguisherSelect.value;
+        extinguisherSelect.innerHTML = '';
+        if (filtered.length === 0) {
+            var opt0 = document.createElement('option');
+            opt0.value = '';
+            opt0.textContent = fireClass === 'D' ? 'D类需专用灭火器' : '无合适灭火器';
+            extinguisherSelect.appendChild(opt0);
+            return;
+        }
+        var group = getCalcGroup(fireClass);
+        filtered.forEach(function (ext) {
+            var opt = document.createElement('option');
+            opt.value = ext.levelA + ',' + ext.levelB;
+            var levelText = (group === 'B') ? ext.levelB + 'B' : ext.levelA + 'A';
+            opt.textContent = ext.name + ' [' + levelText + ']';
+            extinguisherSelect.appendChild(opt);
+        });
+        var opts = extinguisherSelect.options;
+        var found = false;
+        for (var i = 0; i < opts.length; i++) { if (opts[i].value === currentValue) { found = true; break; } }
+        extinguisherSelect.value = found ? currentValue : (opts.length ? opts[0].value : '');
+    }
+
+    function computeExtinguisher() {
+        var fireClass = fireClassSelect.value;
+        var place = placeTypeSelect.value;
+        var area = parseFloat(areaInput.value);
+        var setPoints = parseInt(setPointInput.value, 10) || 1;
+        var k = calcK();
+        var isSpecial = specialPlace.checked;
+        var risk = getRiskLevelForPlace(categorySelect.value, place);
+        var params = riskParams[risk];
+        var group = getCalcGroup(fireClass);
+
+        if (!place) {
+            resultCount.innerHTML = '-- <span class="unit">请选择场所类型</span>';
+            resultLabel.textContent = '请选择具体场所';
+            detailArea.innerHTML = '';
+            warningBox.style.display = 'none';
+            return;
+        }
+        if (isNaN(area) || area <= 0) {
+            resultCount.innerHTML = '-- <span class="unit">请输入有效面积</span>';
+            resultLabel.textContent = '请填写参数后计算';
+            detailArea.innerHTML = '';
+            warningBox.style.display = 'none';
+            return;
+        }
+        if (setPoints < 1) {
+            resultCount.innerHTML = '-- <span class="unit">设置点数需≥1</span>';
+            return;
+        }
+        if (fireClass === 'D') {
+            resultCount.innerHTML = '⚠️ <span class="unit">需专用D类灭火器</span>';
+            resultLabel.textContent = 'D类金属火灾应根据金属种类选择专用灭火器';
+            detailArea.innerHTML = '<p>D类金属火灾建议选用专用干粉灭火器或沙土覆盖。</p>';
+            warningBox.style.display = 'none';
+            return;
+        }
+        var extValue = extinguisherSelect.value;
+        if (!extValue) {
+            resultCount.innerHTML = '-- <span class="unit">请选择灭火器型号</span>';
+            resultLabel.textContent = '请选择灭火器型号';
+            detailArea.innerHTML = '';
+            warningBox.style.display = 'none';
+            return;
+        }
+        var parts = extValue.split(',');
+        var levelA = Number(parts[0]), levelB = Number(parts[1]);
+        var usedLevel = (group === 'B') ? levelB : levelA;
+        var U = (group === 'B') ? params.protectionB : params.protectionA;
+        var Q = (area * k) / U;
+        if (isSpecial) Q *= 1.3;
+        var Qe = Q / setPoints;
+        var countPerPoint = Math.ceil(Qe / usedLevel);
+        var totalCount = countPerPoint * setPoints;
+        if (totalCount < 2) totalCount = 2;
+        var finalPerPoint = Math.ceil(totalCount / setPoints);
+
+        resultValueBox.classList.add('flash');
+        setTimeout(function () { resultValueBox.classList.remove('flash'); }, 400);
+
+        resultCount.innerHTML = totalCount + ' <span class="unit">具</span>';
+        resultLabel.textContent = '每设置点 ' + finalPerPoint + ' 具 · 共 ' + setPoints + ' 个设置点';
+
+        var unit = (group === 'B') ? 'B' : 'A';
+        var fireLabelMap = { A:'A类(固体)', B:'B类(液体)', C:'C类(气体)', D:'D类(金属)', E:'E类(带电)' };
+        var fireLabel = fireLabelMap[fireClass];
+        var extName = extinguisherSelect.options[extinguisherSelect.selectedIndex] ? extinguisherSelect.options[extinguisherSelect.selectedIndex].textContent : '—';
+
+        detailArea.innerHTML =
+            '<div class="detail-row"><span class="detail-label">📍 场所类型</span><span class="detail-value">' + place + '</span></div>' +
+            '<div class="detail-row"><span class="detail-label">⚠️ 危险等级</span><span class="detail-value">' + params.label + '</span></div>' +
+            '<div class="detail-row"><span class="detail-label">🔥 火灾类别</span><span class="detail-value">' + fireLabel + '</span></div>' +
+            '<div class="detail-row"><span class="detail-label">📐 保护面积 S</span><span class="detail-value">' + area + ' m²</span></div>' +
+            '<div class="detail-row"><span class="detail-label">🔧 修正系数 K</span><span class="detail-value">' + k.toFixed(1) + '</span></div>' +
+            '<div class="detail-row"><span class="detail-label">🏷️ 特殊场所系数</span><span class="detail-value">' + (isSpecial ? '×1.3' : '无') + '</span></div>' +
+            '<div class="detail-row"><span class="detail-label">📏 单位灭火级别最大保护面积 U</span><span class="detail-value">' + U + ' m²/' + unit + '</span></div>' +
+            '<div class="detail-row"><span class="detail-label">🧮 总需配灭火级别 Q</span><span class="detail-value"><span class="formula-text">' + area + '×' + k.toFixed(1) + '/' + U + (isSpecial ? '×1.3' : '') + '</span> ≈ ' + Q.toFixed(2) + ' ' + unit + '</span></div>' +
+            '<div class="detail-row"><span class="detail-label">📍 设置点数 N</span><span class="detail-value">' + setPoints + '</span></div>' +
+            '<div class="detail-row"><span class="detail-label">⚖️ 每设置点需配级别 Qe</span><span class="detail-value">' + Qe.toFixed(2) + ' ' + unit + '</span></div>' +
+            '<div class="detail-row"><span class="detail-label">🧯 所选灭火器</span><span class="detail-value">' + extName + '</span></div>' +
+            '<div class="detail-row"><span class="detail-label">⚡ 单具灭火级别</span><span class="detail-value">' + usedLevel + ' ' + unit + '</span></div>' +
+            '<div class="detail-row"><span class="detail-label">📊 每设置点数量</span><span class="detail-value">⌈' + Qe.toFixed(2) + '/' + usedLevel + '⌉ = ' + countPerPoint + ' 具</span></div>' +
+            '<div class="detail-row" style="font-weight:700; border-bottom:none; padding-bottom:0;">' +
+                '<span class="detail-label">✅ 最少总数量 (≥2具)</span>' +
+                '<span class="detail-value" style="color:var(--brand-red); font-size:1.1rem;">' + totalCount + ' 具 (每设置点 ' + finalPerPoint + ' 具)</span>' +
+            '</div>';
+
+        var warnings = [];
+        if (finalPerPoint > 5) warnings.push('每设置点灭火器数量不宜超过5具，建议增加设置点。');
+        if (setPoints === 1 && totalCount > 5) warnings.push('建议划分多个设置点，避免集中配置。');
+        if (totalCount > 20) warnings.push('配置数量较多，建议复核场所面积及危险等级。');
+        warningBox.style.display = warnings.length ? 'block' : 'none';
+        warningBox.innerHTML = warnings.map(function (w) { return '⚠️ ' + w; }).join('<br>');
+    }
+
+    function applyScene(sceneId) {
+        var preset = scenePresets[sceneId];
+        if (!preset) return;
+        categorySelect.value = preset.category;
+        populatePlaces();
+        placeTypeSelect.value = preset.place;
+        updateRiskDisplay();
+        rebuildExtinguisherOptions();
+        computeExtinguisher();
+    }
+
+    function updateKDisplay() {
+        kDisplay.textContent = '当前 K = ' + calcK().toFixed(1);
+    }
+
+    // 事件绑定
+    categorySelect.addEventListener('change', function () { populatePlaces(); updateRiskDisplay(); rebuildExtinguisherOptions(); computeExtinguisher(); });
+    placeTypeSelect.addEventListener('change', function () { updateRiskDisplay(); rebuildExtinguisherOptions(); computeExtinguisher(); });
+    fireClassSelect.addEventListener('change', function () { rebuildExtinguisherOptions(); computeExtinguisher(); });
+    areaInput.addEventListener('input', computeExtinguisher);
+    setPointInput.addEventListener('input', computeExtinguisher);
+    [hasHydrant, hasSprinkler, isOutdoor].forEach(function (el) {
+        el.addEventListener('change', function () { updateKDisplay(); computeExtinguisher(); });
+    });
+    specialPlace.addEventListener('change', computeExtinguisher);
+    extinguisherSelect.addEventListener('change', computeExtinguisher);
+    document.querySelectorAll('#tab-configure .scene-btn').forEach(function (item) {
+        item.addEventListener('click', function () {
+            document.querySelectorAll('#tab-configure .scene-btn').forEach(function (n) { n.classList.remove('active'); });
+            this.classList.add('active');
+            applyScene(this.dataset.scene);
+        });
+    });
+
+    // 初始化
+    applyScene('office');
+    areaInput.value = 2000;
+    setPointInput.value = 1;
+    updateKDisplay();
+    computeExtinguisher();
+
+    window.computeExtinguisher = computeExtinguisher;
+    })();
+    </script>
+
+    <script>
+    // ============ 车载配置（原 vehicle-fire-extinguisher） ============
+    // 函数裸声明（onclick 内联引用），加 veh 前缀避免与配置计算命名冲突
+
+    function vehCalculate() {
+        var type = document.getElementById('vehType').value;
+        var lenEl = document.getElementById('vehLen');
+        var lenField = document.getElementById('lenField');
+        var articulated = document.getElementById('isArticulated').checked;
+        var doubleDecker = document.getElementById('isDouble').checked;
+        var bClass = document.getElementById('isBClass').checked;
+        var school = document.getElementById('isSchool').checked;
+
+        if (type === 'passenger') {
+            lenField.style.display = '';
+        } else {
+            lenField.style.display = 'none';
+        }
+
+        var card = document.getElementById('resultCard');
+        var statGrid = document.getElementById('statGrid');
+        var agentType = document.getElementById('agentType');
+        var posList = document.getElementById('posList');
+        var noteBox = document.getElementById('noteBox');
+
+        var agent = 'ABC 干粉灭火剂（符合 GB 4066-2017），可扑救 A / B / C / E 类火灾。';
+
+        var countText = '';
+        var posText = [];
+
+        if (type === 'passenger') {
+            var L = parseFloat(lenEl.value);
+            if (isNaN(L) || L <= 0) {
+                card.style.display = 'block';
+                statGrid.innerHTML = '';
+                agentType.innerHTML = '请填写车长（米）以获得准确数量与规格。';
+                posList.innerHTML = '';
+                noteBox.innerHTML = '<strong>提示：</strong>客车需按车长确定灭火器数量与规格，请在上方的「车长」输入框填写实际车长。';
+                return;
+            }
+            var baseCount, unitKg, level;
+            if (L <= 6) { baseCount = 1; unitKg = 2; level = '1A / 21B'; }
+            else if (L <= 8) { baseCount = 2; unitKg = 2; level = '1A / 21B'; }
+            else { baseCount = 3; unitKg = 4; level = '2A / 55B'; }
+
+            if (bClass) {
+                baseCount = Math.max(baseCount, 1);
+                unitKg = Math.max(unitKg, 2);
+                level = (unitKg >= 4) ? '2A / 55B' : '1A / 21B';
+            }
+
+            var count = baseCount;
+            if (articulated || doubleDecker) {
+                count = 4;
+                if (unitKg < 4) unitKg = 4;
+                level = '2A / 55B';
+            }
+
+            card.style.display = 'block';
+            statGrid.innerHTML =
+                '<div class="veh-stat"><span class="v">' + count + ' 具</span><span class="l">最少配置数量</span></div>' +
+                '<div class="veh-stat"><span class="v">≥' + unitKg + ' kg</span><span class="l">单具最小充装</span></div>' +
+                '<div class="veh-stat"><span class="v">' + level + '</span><span class="l">灭火级别</span></div>';
+
+            agentType.innerHTML = '<span class="veh-badge">灭火剂</span> ' + agent;
+
+            posText = [];
+            if (doubleDecker) {
+                posText.push('下层：驾驶人座椅附近 1 具 + 后部 1 具');
+                posText.push('上层：前部 1 具 + 后部 1 具');
+            } else if (articulated) {
+                posText.push('驾驶人座椅附近 1 具');
+                posText.push('铰接段连接处附近 1 具');
+                posText.push('后部 1 具（共 4 具）');
+            } else if (L <= 6) {
+                posText.push('驾驶人座椅附近（触手可及或驾驶人座椅右侧 ≤2m 范围）');
+            } else if (L <= 8) {
+                posText.push('驾驶人座椅附近 1 具');
+                posText.push('中部或后部 1 具（中部=客舱前 30%~后 40% 之间；后部=后 40%）');
+            } else {
+                posText.push('驾驶人座椅附近 1 具');
+                posText.push('乘客区中部 1 具（前 30%~后 40% 之间）');
+                posText.push('后部 1 具（后 40%）');
+            }
+            if (bClass && !doubleDecker && !articulated) {
+                posText.push('B 级客车：至少 1 具置于驾驶人座椅附近');
+            }
+
+        } else if (type === 'hazmat') {
+            card.style.display = 'block';
+            statGrid.innerHTML =
+                '<div class="veh-stat"><span class="v">应配备</span><span class="l">车上消防器材</span></div>' +
+                '<div class="veh-stat"><span class="v">干粉</span><span class="l">驾驶室灭火器</span></div>' +
+                '<div class="veh-stat"><span class="v">GB 20300</span><span class="l">专项要求</span></div>';
+            agentType.innerHTML = '<span class="veh-badge">灭火剂</span> 危险货物运输车辆应备有消防器材并具相应安全措施（GB 7258 12.12.1）；危险货物运输货车驾驶室内应配备干粉灭火器（GB 20300）。具体数量/规格建议按运营安全实践配置。';
+            posText = ['置于驾驶室，取用方便、安装牢靠', '随车安全器材整体应满足运输危险货物的防火防爆要求'];
+
+        } else if (type === 'rv') {
+            card.style.display = 'block';
+            statGrid.innerHTML =
+                '<div class="veh-stat"><span class="v">应配备</span><span class="l">2018-01-01 起出厂</span></div>' +
+                '<div class="veh-stat"><span class="v">牢靠</span><span class="l">安装且便于取用</span></div>' +
+                '<div class="veh-stat"><span class="v">GB 7258</span><span class="l">12.15.8</span></div>';
+            agentType.innerHTML = '<span class="veh-badge">灭火剂</span> 2018-01-01 起出厂的旅居车应装备灭火器，安装牢靠并便于取用（GB 7258 12.15.8）。建议按客车相应车长档位配置以满足运营安全。';
+            posText = ['安装牢靠、便于取用，不借助工具可取用', '位置明显易见，不突入通道/乘客门引道/应急门引道'];
+        }
+
+        if (type === 'passenger' && (doubleDecker || articulated)) {
+            posText.push('灭火器顶部距地板高度 ≤1.5m，不突入通道/乘客门引道/应急门引道，不影响应急窗通过性');
+        } else if (type !== 'passenger') {
+            posText.push('灭火器顶部距地板高度 ≤1.5m，取用方便、位置明显易见（通用要求）');
+        } else {
+            posText.push('灭火器顶部距地板高度 ≤1.5m，不突入通道/乘客门引道/应急门引道，不影响应急窗通过性');
+        }
+        posText.push('安装稳固、取用方便（不借助工具可取用）、位置明显易见');
+        posText.push('压力表应能在不移动灭火器的情况下观察到压力状态（GA 801 查验要求）');
+
+        posList.innerHTML = posText.map(function (t) { return '<li><i class="fa-solid fa-location-dot"></i>' + t + '</li>'; }).join('');
+
+        var note = '<strong>⚠️ 查验与配置的区别：</strong>GA 801-2019 在用机动车查验时仅查「是否配备且有效」；' +
+            '型式与数量是否达到 GB 34655 不属查验必检项——但运营安全上应按 GB 34655 配置。';
+        if (type === 'passenger' || type === 'rv') {
+            note += ' 专用校车：驾驶员附近 1 具 + 至少 1 具照管人员附近（均不少于 2kg）。';
+        }
+        if (document.getElementById('isSchool').checked) {
+            noteBox.innerHTML = '<strong>⚠️ 专用校车：</strong>驾驶员附近 1 具 + 至少一个照管人员附近 1 具，均不少于 2kg（GB 24407）。' +
+                ' GA 801 查验仅查是否配备且有效。';
+        } else {
+            noteBox.innerHTML = note;
+        }
+    }
+
+    function onVehTypeChange() {
+        vehCalculate();
+    }
+
+    // 初始渲染
+    vehCalculate();
+    </script>
+
+    <script src="/sheen-toolbox/assets/i18n.js"></script>
+    <script src="/sheen-toolbox/assets/share.js"></script>
+    <!-- SHEEN Toolbox 统一打印预览 -->
+    <script src="/sheen-toolbox/assets/print-preview.js"></script>
+    <script>initPrintPreview();</script>
+    <script>
+    // URL ?tab= 深链（旧 URL 跳转 / AI 助手直达）— 置于全部函数定义后
+    (function () {
+        try {
+            var m = location.search.match(/[?&]tab=(configure|vehicle)/);
+            if (m && m[1] !== 'configure') switchFExtab(m[1], true);
+        } catch (e) {}
+    })();
+    </script>
+</body>
+</html>
