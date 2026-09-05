@@ -18,7 +18,7 @@
   var PAGE_TITLES = {
     'pssr-checklist': { t: 'PSSR Pre-Startup Safety Review Checklist', d: 'Enhanced multi-industry checklist' },
     'eyewash': { t: 'Eyewash Parameters & Checklist', d: 'GB 38144-2025 lookup + on-site inspection' },
-    'fire-extinguisher-calculator': { t: 'Fire Extinguisher Configuration Calculator', d: 'Per GB 50140-2005' },
+    'fire-extinguisher': { t: 'Fire Extinguisher Tools', d: 'Config calc GB 50140 · vehicle GB 7258/34655' },
     'safety-production-cost-calculator': { t: 'Work Safety Investment Calculator', d: 'Per Caiqi [2022] No.136' },
     'safety-days-calculator': { t: 'Accident-Free Days Calculator', d: 'Consecutive incident-free days & milestones' },
     'work-injury-calculator': { t: 'Work Injury Compensation Calculator', d: 'Estimate per Work Injury Insurance Regulation' },
