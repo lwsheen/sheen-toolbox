@@ -3,7 +3,7 @@
 <head data-seo="sheen">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="起重链条安全检查表，依据 GB/T 20946-2007 逐条检查链环直径磨损、5 节距伸长、焊接质量、表面缺陷、连接件与操作禁忌等并综合判定报废处置 — SHEEN Toolbox">
+    <meta name="description" content="起重链条安全检查表，依据 GB/T 20946-2007《起重用短环链 验收总则》逐条检查链环直径磨损、5 节距伸长、焊接质量、表面缺陷、连接件与操作禁忌并综合判定报废处置 — SHEEN Toolbox">
     <title>起重链条安全检查表 — SHEEN Toolbox</title>
     <meta property="og:title" content="起重链条安全检查表 | SHEEN Toolbox">
     <meta property="og:description" content="起重链条安全检查表：9 项 GB/T 20946 检查">
@@ -38,7 +38,7 @@
         }
         .meta-bar .field { display: flex; flex-direction: column; gap: 4px; }
         .meta-bar label { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
-        .meta-bar input[type=text], .meta-bar input[type=date], .meta-bar input[type=number] {
+        .meta-bar input[type=text], .meta-bar input[type=date] {
             border: 1px solid var(--border);
             border-radius: var(--radius-sm);
             padding: 7px 10px;
@@ -50,19 +50,17 @@
         }
         .meta-bar input:focus { border-color: var(--brand-red); }
         .field.full { flex: 1 1 100%; }
-        .accept-box {
-            flex: 1 1 100%;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 14px 22px;
-            align-items: flex-end;
-            background: #F8F9FA;
-            border: 1px dashed var(--border);
-            border-radius: var(--radius-sm);
-            padding: 12px 14px;
+        .use-box { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+        .use-box .use-label { font-size: 12px; color: var(--text-secondary); font-weight: 600; margin-right: 4px; }
+        .use-opt { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; cursor: pointer; user-select: none;
+            border-radius: 8px;
         }
-        .accept-box .accept-label { font-size: 12px; font-weight: 700; color: var(--brand-red); flex: 1 1 100%; }
-        .accept-box .field input { min-width: 130px; }
+        .use-opt input { width: 15px; height: 15px; accent-color: var(--brand-red); }
+        .use-opt .other-input {
+            border: 1px solid var(--border); border-radius: var(--radius-sm);
+            padding: 4px 8px; font-size: 12px; min-width: 120px; outline: none; font-family: var(--font);
+        }
+        .use-opt .other-input:focus { border-color: var(--brand-red); }
 
         /* ===== 工具栏（药丸按钮组） ===== */
         .tool-toolbar {
@@ -151,6 +149,7 @@
         .check-table .col-result { width: 170px; min-width: 140px; }
         .check-table .col-remark { width: 150px; min-width: 120px; }
 
+        /* 检查项目强调 */
         .check-table .col-item .item-name { display: block; font-size: 13px; }
 
         /* 分区标题行 */
@@ -182,7 +181,7 @@
         }
         .remark-input:focus { border-color: var(--brand-red); }
 
-        /* 测量小模块 */
+        /* 直径测量小模块 */
         .measure-block {
             margin-top: 8px;
             padding: 8px 10px;
@@ -288,13 +287,6 @@
             min-height: 64px; resize: vertical; outline: none;
         }
         .verdict-card textarea:focus, .verdict-card .note-input:focus { border-color: var(--brand-red); }
-
-        /* 检查等级表 */
-        .level-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 6px; }
-        .level-table th, .level-table td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; vertical-align: top; }
-        .level-table th { background: #F8F9FA; color: var(--brand-red); font-weight: 700; white-space: nowrap; }
-        .level-table td b { color: var(--brand-red-hover); }
-
         .measure-step {
             background: #F8F9FA; border: 1px solid var(--border); border-radius: var(--radius-sm);
             padding: 12px 14px; font-size: 13px; color: var(--text-primary); line-height: 1.8; margin-bottom: 14px;
@@ -326,7 +318,8 @@
             }
             body { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             .meta-bar { background: #fff !important; }
-            .guide-box, .tool-toolbar, .summary-bar, .alert-bad, .accept-box { display: none !important; }
+            .guide-box, .tool-toolbar, .summary-bar, .alert-bad, .use-box .other-input { display: none !important; }
+            .use-box { font-size: 11px !important; }
             .check-table {
                 table-layout: fixed !important;
                 min-width: 0 !important;
@@ -349,35 +342,34 @@
             .measure-block input { width: 44px !important; font-size: 8px !important; padding: 1px 2px !important; }
             .remark-input { border: none !important; font-size: 8.5px !important; padding: 1px 2px !important; background: transparent !important; min-height: 0 !important; }
             .res-opt { border: 1px solid #999 !important; padding: 1px 4px !important; font-size: 8px !important;
-            border-radius: 8px;
-        }
+                border-radius: 8px;
+            }
             .res-opt.active-ok { background: var(--ok-soft) !important;
-            border-radius: 8px;
-        }
+                border-radius: 8px;
+            }
             .res-opt.active-warn { background: var(--warn-soft-2) !important;
-            border-radius: 8px;
-        }
+                border-radius: 8px;
+            }
             .res-opt.active-bad { background: var(--fail-soft-2) !important;
-            border-radius: 8px;
-        }
+                border-radius: 8px;
+            }
             .section-row td { background: #F03752 !important; color: #fff !important; font-size: 10px !important; padding: 4px 6px !important; }
             .verdict-card { display: block !important; background: #fff !important; margin-top: 12px; page-break-inside: auto;
-            border-radius: 8px;
-        }
+                border-radius: 8px;
+            }
             .verdict-card h3, .verdict-card h4 { font-size: 11px !important;
-            border-radius: 8px;
-        }
+                border-radius: 8px;
+            }
             .verdict-opts { gap: 4px !important; margin-bottom: 6px !important;
-            border-radius: 8px;
-        }
+                border-radius: 8px;
+            }
             .verdict-opt { border: 1px solid #999 !important; padding: 2px 6px !important; font-size: 9px !important;
-            border-radius: 8px;
-        }
+                border-radius: 8px;
+            }
             .verdict-opt.active { background: #F03752 !important;
-            border-radius: 8px;
-        }
+                border-radius: 8px;
+            }
             .verdict-card textarea, .verdict-card .note-input, .measure-step { border: 1px solid #999 !important; font-size: 9px !important; min-height: 40px !important; }
-            .level-table th, .level-table td { font-size: 8.5px !important; padding: 2px 3px !important; }
             .verdict-sign input { border-bottom: 1px solid #333 !important; }
         }
     </style>
@@ -401,149 +393,8 @@
 </head>
 <body>
 
-    <!-- 面包屑 -->
-    <div class="breadcrumb">
-        <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
-        <span> / 起重链条安全检查表</span>
-    </div>
-
-    <main class="app-container container-calc">
-
-        <h1 class="page-title"><i class="fa-solid fa-link" style="color:var(--brand-red)"></i> 起重链条安全检查表</h1>
-        <p class="page-subtitle">依据 GB/T 20946-2007《起重用短环链 验收总则》的尺寸检验与表面质量要求，对 G80 / G100 起重链条、吊链逐条检查链环直径磨损、5 节距伸长、焊接质量、表面缺陷、连接件与操作禁忌，确定检查等级并作出综合判定与报废处置。</p>
-
-        <!-- 头部信息条（打印同步显示） -->
-        <div class="meta-bar">
-            <div class="field">
-                <label>检查日期</label>
-                <input type="date" id="checkDate">
-            </div>
-            <div class="field">
-                <label>检查人员</label>
-                <input type="text" id="checkPerson" placeholder="检查人员">
-            </div>
-            <div class="field">
-                <label>所属设备 / 索具编号</label>
-                <input type="text" id="equipNo" placeholder="所属设备 / 索具编号">
-            </div>
-            <div class="field">
-                <label>链条规格等��</label>
-                <input type="text" id="chainGrade" placeholder="例：G80 级，φ13mm">
-            </div>
-
-            <!-- 原始验收记录（后续判断伸长的唯一基准） -->
-            <div class="accept-box">
-                <span class="accept-label">原始验收记录（参考 GB/T 20946 尺码检验，作为后续判断磨损 / 伸长的唯一基准）</span>
-                <div class="field">
-                    <label>标称链环直径 d (mm)</label>
-                    <input type="number" id="nomDiameter" step="0.1" min="0" placeholder="标称直径 d">
-                </div>
-                <div class="field">
-                    <label>实测 5 节距总长度 P5 (mm)</label>
-                    <input type="number" id="p5Length" step="0.1" min="0" placeholder="原始 P5 总长">
-                </div>
-            </div>
-        </div>
-
-        <!-- 工具栏 -->
-        <div class="tool-toolbar no-print">
-            <button type="button" class="btn btn-sm btn-primary" id="excelBtn"><i class="fa-solid fa-file-excel"></i> 导出 Excel</button>
-            <button type="button" class="btn btn-sm btn-outline" id="wordBtn"><i class="fa-solid fa-file-word"></i> 导出 Word</button>
-            
-            <button type="button" class="btn btn-sm btn-danger" id="resetBtn"><i class="fa-solid fa-rotate-left"></i> 重置</button>
-            <button type="button" class="btn btn-sm btn-outline" id="guideBtn"><i class="fa-solid fa-book-open"></i> 使用说明</button>
-        </div>
-
-        <!-- 实时统计 -->
-        <div class="summary-bar no-print">
-            <div class="stat-card"><div class="num" id="stTotal">9</div><div class="lab">检查项总数</div></div>
-            <div class="stat-card s-ok"><div class="num" id="stOk">0</div><div class="lab">正常</div></div>
-            <div class="stat-card s-warn"><div class="num" id="stWarn">0</div><div class="lab">注意</div></div>
-            <div class="stat-card s-bad"><div class="num" id="stBad">0</div><div class="lab">报废 / 不合格</div></div>
-            <div class="stat-card s-pending"><div class="num" id="stPend">9</div><div class="lab">未检查</div></div>
-        </div>
-
-        <!-- 不符合提示 -->
-        <div class="alert-bad" id="alertBad"><i class="fa-solid fa-triangle-exclamation"></i> <span id="alertText"></span></div>
-
-        <!-- 使用说明 -->
-        <div class="guide-box" id="guideBox">
-            <h3><i class="fa-solid fa-circle-info"></i> 使用说明</h3>
-            <ul>
-                <li>本表适用于 G80 / G100 级起重链条、吊链及配套索具的日常、定期及专项安全检查。</li>
-                <li>检查分三态判定：<b>正常</b>（符合要求）、<b>注意</b>（异常但未达报废，需观察/记录）、<b>报废 / 不合格</b>（达到 GB/T 20946-2007 报废指标，立即停用）。</li>
-                <li>检查等级：日常检查（每次使用前，重点第 1、4、5、9 项）、定期检查（月度/季度，须第 1、2 项卡尺精密测量并对比原始记录）、专项检查（发生过猛烈冲击、过载、坠落后，必做第 2 项伸长测量，建议磁粉探伤 MT）。</li>
-            </ul>
-            <h4>安全要领速记（1、4、6 三点绝对红线）</h4>
-            <ul>
-                <li><b>量长度：</b>5 个环的总长，比原始 P5 拉长了 5%，报废！</li>
-                <li><b>看焊缝：</b>焊口裂了或脱焊了，报废！</li>
-                <li><b>防冲击：</b>链条绝对不能打结、扭曲受力，瞬间冲击极易直接崩断伤人。</li>
-            </ul>
-            <div class="warn">
-                <i class="fa-solid fa-triangle-exclamation"></i>
-                <span><b>安全提示：</b>达到任一项报废指标，须立即停止使用；报废链条必须用切割机切断破坏，严禁剪短当短链在小负荷下使用、严禁流入二手市场；G80 / G100 链条严禁私自电焊修补或气焊烘烤，高温会直接破坏其热处理性能。</span>
-            </div>
-        </div>
-
-        <!-- 检查表 -->
-        <div class="card">
-            <div class="table-scroll">
-                <table class="data-table check-table" id="checkTable">
-                    <thead>
-                        <tr>
-                            <th class="col-seq">序号</th>
-                            <th class="col-item">检查项目</th>
-                            <th class="col-std">GB/T 20946-2007 检查内容与报废判定标准</th>
-                            <th class="col-result">检查结果</th>
-                            <th class="col-remark">备注</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody">
-                        <!-- 动态生成 -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- 综合判定 + 结论 -->
-        <div class="verdict-card">
-            <h3><i class="fa-solid fa-clipboard-list"></i> 检查等级与最终结论（GB/T 20946-2007）</h3>
-
-            <table class="level-table">
-                <thead>
-                    <tr><th style="width:110px;">检查等级</th><th>说明</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td><b>日常检查</b><br>（每次使用前）</td><td>重点看第 1、4、5、9 项：有无断裂、变形、打结。</td></tr>
-                    <tr><td><b>定期检查</b><br>（月度 / 季度）</td><td>必须严格进行第 1、2 项的卡尺精密测量，并对比原始验收记录。</td></tr>
-                    <tr><td><b>专项检查</b><br>（冲击 / 过载 / 坠落事故后）</td><td>无论外观如何，必须进行伸长测量（第 2 项），并强烈建议进行磁粉探伤（MT）检查内部微裂纹。</td></tr>
-                </tbody>
-            </table>
-
-            <div class="verdict-opts" id="verdictOpts" style="margin-top:14px;">
-                <label class="verdict-opt" data-v="合格（可继续使用，请留存本次测量记录）"><input type="radio" name="verdict" value="合格（可继续使用，请留存本次测量记录）"> 合格（可继续使用）</label>
-                <label class="verdict-opt" data-v="不合格（立即停止使用，且必须物理切割销毁，严禁流入二手市场）"><input type="radio" name="verdict" value="不合格（立即停止使用，且必须物理切割销毁，严禁流入二手市场）"> 不合格（立即报废）</label>
-            </div>
-
-            <h4><i class="fa-solid fa-screwdriver-wrench"></i> 处置措施</h4>
-            <div class="measure-step">
-                1. 报废的链条必须用切割机切断破坏，不可将报废长链剪断当成短链在小负荷下使用。<br>
-                2. G80 / G100 级链条严禁私自电焊修补、气焊烘烤，高温会直接破坏其热处理性能。
-            </div>
-
-            <label class="field-label">不合格项描述及处理意见</label>
-            <textarea id="nonconform" placeholder="逐项描述不合格项、拟采取的处理 / 整改 / 停机措施及责任人……"></textarea>
-
-            <h4><i class="fa-solid fa-magnifying-glass-plus"></i> 复查与追加检测</h4>
-            <div class="verdict-sign">
-                <div class="field"><label>复查人</label><input type="text" id="recheckPerson" placeholder="复查人"></div>
-                <div class="field"><label>复查日期</label><input type="date" id="recheckDate"></div>
-                <label class="recheck-opt"><input type="checkbox" id="mtCheck"> 已做磁粉探伤检测（MT）（建议事故后 / 周期长的链条加做）</label>
-            </div>
-        </div>
-
-    </main>
+    <!-- 引擎挂载点（breadcrumb + main 由 checklist-engine 渲染） -->
+    <div id="clRoot"></div>
 
     <!-- 页脚 -->
     <section class="tool-meta" data-toolmeta="sheen">
@@ -551,7 +402,7 @@
 <span class="tm-std-code">GB/T 20946-2007</span>
 <span class="tm-std-name">《起重用短环链 验收总则》</span>
   </div>
-  <div class="tm-line"><span class="tm-dt"><i>发布</i><span class="tm-dt-val">2007-03-21</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>实施</i><span class="tm-dt-val">2007-09-01</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>更新</i><span class="tm-dt-val">2026-08-04</span></span></div>
+  <div class="tm-line"><span class="tm-dt"><i>发布</i><span class="tm-dt-val">2007-03-21</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>实施</i><span class="tm-dt-val">2007-09-01</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>更新</i><span class="tm-dt-val">2026-09-05</span></span></div>
 </section>
 
     <footer class="sheen-footer">
@@ -561,441 +412,15 @@
     <!-- 打印时间戳 -->
     <div class="print-time" id="printTime"></div>
 
+    <!-- 引擎 + 数据 + 挂载 -->
+    <script src="/sheen-toolbox/chain-inspection/data.js"></script>
+    <script src="/sheen-toolbox/checklist-engine/engine.js"></script>
     <script>
     (function () {
-        'use strict';
-
-        // ===== 打印时间戳（UTC+8 北京时间） + 默认日期 =====
-        (function () {
-            var d = new Date();
-            var utc = d.getTime() + d.getTimezoneOffset() * 60000;
-            var cn = new Date(utc + 8 * 3600000);
-            var p = function (n) { return (n < 10 ? '0' : '') + n; };
-            var s = cn.getFullYear() + '-' + p(cn.getMonth() + 1) + '-' + p(cn.getDate()) +
-                    ' ' + p(cn.getHours()) + ':' + p(cn.getMinutes());
-            var el = document.getElementById('printTime');
-            if (el) el.textContent = '打印时间：' + s + '（北京时间）';
-            var cd = document.getElementById('checkDate');
-            if (cd && !cd.value) cd.value = cn.getFullYear() + '-' + p(cn.getMonth() + 1) + '-' + p(cn.getDate());
-        })();
-
-        var tbody = document.getElementById('tableBody');
-
-        // ===== 检查数据（三态：ok 正常 / warn 注意 / bad 报废·不合格）=====
-        var SECTIONS = [
-            {
-                title: '一、尺寸偏差与形位检查（GB/T 20946-2007 尺寸检验要求）',
-                items: [
-                    { seq: '1', name: '链环直径磨损',
-                      std: ['测量链环直线段圆钢直径。',
-                            '安全报废阈值：实际直径磨损减少量达到标称直径的 10% 时，强制报废。',
-                            '（记录：标称直径____mm，实测直径____mm）'],
-                      measure: { nomLabel: '标称直径(mm)', nomPh: '标称', actLabel: '实测直径(mm)', actPh: '实测',
-                                 ratioLabel: '缩减比例', dir: 'down', threshold: 10, badVal: '磨损超 10%' },
-                      results: [
-                          { label: '合格', level: 'ok' },
-                          { label: '磨损超 10%', level: 'bad' } ] },
-                    { seq: '2', name: '节距与长度拉伸',
-                      std: ['核心报废指标：测量 5 个环节的总长度。',
-                            '强制报废标准：当拉伸后的 5 节距总长度，比原始长度增加超过 5% 时，必须立即报废。（注：链条出现 5% 的塑性伸长即意味着材料已严重屈服）',
-                            '（记录：原始 5 节长____mm，实测 5 节长____mm，伸长率____%）'],
-                      measure: { nomLabel: '原始5节长(mm)', nomPh: '原始P5', actLabel: '实测5节长(mm)', actPh: '实测P5',
-                                 ratioLabel: '伸长率', dir: 'up', threshold: 5, badVal: '伸长率超 5%' },
-                      results: [
-                          { label: '合格', level: 'ok' },
-                          { label: '伸长率超 5%', level: 'bad' } ] },
-                    { seq: '3', name: '链环扭曲变形',
-                      std: ['链条不应有明显的扭曲、压扁变形。',
-                            '若受力后链环变成严重椭圆形，或者发生相互缠绕、扭结，需报废。'],
-                      results: [
-                          { label: '正常', level: 'ok' },
-                          { label: '严重变形/扭结(禁止使用)', level: 'bad' } ] }
-                ]
-            },
-            {
-                title: '二、表面与内部缺陷检查（GB/T 20946-2007 表面质量要求）',
-                items: [
-                    { seq: '4', name: '焊接质量',
-                      std: ['强制要求：链环的对焊接头必须平整，不允许有明显夹渣、未熔合、焊偏。',
-                            '目视检查（建议用 5 倍放大镜）若发现微小裂纹或焊缝开裂，立即强制报废。'],
-                      results: [
-                          { label: '无裂纹', level: 'ok' },
-                          { label: '有裂纹/焊缝开裂(必须报废)', level: 'bad' } ] },
-                    { seq: '5', name: '表面划痕 / 缺口',
-                      std: ['链环表面不应有深达 5% 直径的深沟槽、锐利切口、凹痕。',
-                            '若有此类应力集中缺陷，判定不合格。'],
-                      results: [
-                          { label: '正常', level: 'ok' },
-                          { label: '有深缺口(禁止使用)', level: 'bad' } ] },
-                    { seq: '6', name: '表面腐蚀',
-                      std: ['出现深坑点蚀（麻点状锈蚀）或产生锈皮剥落。',
-                            '表面轻微浮锈（可擦除）不影响安全，但点蚀必须报废。'],
-                      results: [
-                          { label: '正常', level: 'ok' },
-                          { label: '严重点蚀(禁止使用)', level: 'bad' } ] },
-                    { seq: '7', name: '高温 / 电击损伤',
-                      std: ['表面出现过火变蓝、发黑，或遭受过电弧高温烧伤、熔结。',
-                            '此类金属组织已变脆，必须报废。'],
-                      results: [
-                          { label: '无', level: 'ok' },
-                          { label: '有高温损伤(必须报废)', level: 'bad' } ] }
-                ]
-            },
-            {
-                title: '三、配套连接件与操作禁忌检查',
-                items: [
-                    { seq: '8', name: '连接环 / 卸扣',
-                      std: ['链条接口处配用的高强度卸扣、马蹄环销轴是否锁紧，开口销是否完好。',
-                            '连接环是否出现严重磨损或裂缝。'],
-                      results: [
-                          { label: '完好可靠', level: 'ok' },
-                          { label: '磨损松动', level: 'warn' } ] },
-                    { seq: '9', name: '作业禁忌',
-                      std: ['检查作业现场是否将链条打死结、弯曲受力、扭结起吊。',
-                            '一旦发现此类违规操作，该链条必须立即停用并检测。'],
-                      results: [
-                          { label: '正常', level: 'ok' },
-                          { label: '有违规受力(禁止使用)', level: 'bad' } ] }
-                ]
-            }
-        ];
-
-        // 索引：seq -> item（含 measure 配置）
-        var ITEM_BY_SEQ = {};
-        for (var s = 0; s < SECTIONS.length; s++) {
-            for (var i = 0; i < SECTIONS[s].items.length; i++) {
-                ITEM_BY_SEQ[SECTIONS[s].items[i].seq] = SECTIONS[s].items[i];
-            }
+        var root = document.getElementById('clRoot');
+        if (root && window.SHEEN_CH_DATA && window.SHEEN_CL) {
+            window.SHEEN_CL.mount(root, window.SHEEN_CH_DATA);
         }
-
-        function esc(s) {
-            return String(s == null ? '' : s)
-                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;');
-        }
-
-        function stdHTML(list) {
-            var h = '<ol class="std-list">';
-            for (var i = 0; i < list.length; i++) h += '<li>' + esc(list[i]) + '</li>';
-            h += '</ol>';
-            return h;
-        }
-
-        function levelCls(level) {
-            return level === 'ok' ? 'active-ok' : (level === 'warn' ? 'active-warn' : 'active-bad');
-        }
-
-        function resGroupHTML(item) {
-            var html = '<div class="res-group">';
-            for (var i = 0; i < item.results.length; i++) {
-                var r = item.results[i];
-                html += '<label class="res-opt" data-cls="' + levelCls(r.level) + '">' +
-                        '<input type="radio" name="res_' + esc(item.seq) + '" value="' + esc(r.label) + '">' +
-                        esc(r.label) + '</label>';
-            }
-            html += '</div>';
-            return html;
-        }
-
-        function itemRowHTML(item) {
-            var measureHTML = '';
-            if (item.measure) {
-                var m = item.measure;
-                measureHTML = '<div class="measure-block">' +
-                    '<label>' + esc(m.nomLabel) + ' <input type="number" class="m-nominal" step="0.1" min="0" placeholder="' + esc(m.nomPh) + '"></label>' +
-                    '<label>' + esc(m.actLabel) + ' <input type="number" class="m-actual" step="0.1" min="0" placeholder="' + esc(m.actPh) + '"></label>' +
-                    '<span>' + esc(m.ratioLabel) + ' <span class="m-ratio">—</span>%</span>' +
-                    '</div>';
-            }
-            return '<tr class="item-row" data-seq="' + esc(item.seq) + '">' +
-                   '<td class="col-seq">' + esc(item.seq) + '</td>' +
-                   '<td class="col-item"><span class="item-name">' + esc(item.name) + '</span></td>' +
-                   '<td class="col-std">' + stdHTML(item.std) + measureHTML + '</td>' +
-                   '<td class="col-result">' + resGroupHTML(item) + '</td>' +
-                   '<td class="col-remark"><textarea class="remark-input" placeholder="备注"></textarea></td>' +
-                   '</tr>';
-        }
-
-        function sectionRowHTML(title) {
-            return '<tr class="section-row"><td colspan="5"><i class="fa-solid fa-list-ol"></i>' + esc(title) + '</td></tr>';
-        }
-
-        function renderAll() {
-            var html = '';
-            for (var s = 0; s < SECTIONS.length; s++) {
-                html += sectionRowHTML(SECTIONS[s].title);
-                for (var i = 0; i < SECTIONS[s].items.length; i++) html += itemRowHTML(SECTIONS[s].items[i]);
-            }
-            tbody.innerHTML = html;
-            bindRows();
-            updateSummary();
-        }
-
-        // 绑定交互
-        function bindRows() {
-            var rows = tbody.querySelectorAll('.item-row');
-            for (var r = 0; r < rows.length; r++) {
-                var tr = rows[r];
-                var opts = tr.querySelectorAll('.res-opt');
-                for (var o = 0; o < opts.length; o++) {
-                    (function (opt, row) {
-                        var input = opt.querySelector('input');
-                        input.addEventListener('change', function () {
-                            var group = opt.parentNode.querySelectorAll('.res-opt');
-                            for (var g = 0; g < group.length; g++) group[g].classList.remove('active-ok', 'active-warn', 'active-bad');
-                            opt.classList.add(opt.getAttribute('data-cls'));
-                            var val = input.value;
-                            if (isOk(val)) {
-                                row.classList.remove('row-bad', 'row-warn');
-                            } else if (isBad(val)) {
-                                row.classList.add('row-bad');
-                                row.classList.remove('row-warn');
-                            } else {
-                                row.classList.add('row-warn');
-                                row.classList.remove('row-bad');
-                            }
-                            updateSummary();
-                        });
-                    })(opts[o], tr);
-                }
-                // 测量联动（第 1、2 项）
-                var nominal = tr.querySelector('.m-nominal');
-                var actual = tr.querySelector('.m-actual');
-                if (nominal && actual) {
-                    (function (row, nom, act) {
-                        function calc() {
-                            var cfg = ITEM_BY_SEQ[row.getAttribute('data-seq')].measure;
-                            var n = parseFloat(nom.value), a = parseFloat(act.value);
-                            var ratioEl = row.querySelector('.m-ratio');
-                            if (n > 0 && !isNaN(a)) {
-                                var raw = (cfg.dir === 'down') ? (n - a) / n * 100 : (a - n) / n * 100;
-                                var ratio = Math.round(raw * 10) / 10;
-                                ratioEl.textContent = ratio.toFixed(1);
-                                if (ratio >= cfg.threshold) {
-                                    ratioEl.classList.add('over');
-                                    var opts2 = row.querySelectorAll('.res-opt');
-                                    for (var k = 0; k < opts2.length; k++) {
-                                        var inp = opts2[k].querySelector('input');
-                                        if (inp.value === cfg.badVal) {
-                                            inp.checked = true;
-                                            inp.dispatchEvent(new Event('change'));
-                                            break;
-                                        }
-                                    }
-                                } else {
-                                    ratioEl.classList.remove('over');
-                                }
-                            } else {
-                                ratioEl.textContent = '—';
-                                ratioEl.classList.remove('over');
-                            }
-                        }
-                        nom.addEventListener('input', calc);
-                        act.addEventListener('input', calc);
-                    })(tr, nominal, actual);
-                }
-            }
-        }
-
-        var OK_VALUES   = ['正常', '无', '合格', '无裂纹', '完好可靠'];
-        var BAD_VALUES  = ['磨损超 10%', '伸长率超 5%', '严重变形/扭结(禁止使用)',
-                           '有裂纹/焊缝开裂(必须报废)', '有深缺口(禁止使用)',
-                           '严重点蚀(禁止使用)', '有高温损伤(必须报废)', '有违规受力(禁止使用)'];
-        function isOk(v)   { return OK_VALUES.indexOf(v) >= 0; }
-        function isBad(v)  { return BAD_VALUES.indexOf(v) >= 0; }
-
-        // 实时统计
-        function updateSummary() {
-            var rows = tbody.querySelectorAll('.item-row');
-            var total = rows.length, ok = 0, warn = 0, bad = 0, pend = 0;
-            for (var r = 0; r < rows.length; r++) {
-                var c = rows[r].querySelector('input[type=radio]:checked');
-                if (!c) { pend++; continue; }
-                if (isOk(c.value)) ok++;
-                else if (isBad(c.value)) bad++;
-                else warn++;
-            }
-            setText('stTotal', total);
-            setText('stOk', ok);
-            setText('stWarn', warn);
-            setText('stBad', bad);
-            setText('stPend', pend);
-            var alert = document.getElementById('alertBad');
-            if (bad > 0) {
-                alert.style.display = 'block';
-                setText('alertText', '发现 ' + bad + ' 项达到报废 / 不合格指标，请立即停用并在备注中说明处理意见，必要时物理切断破坏。');
-            } else {
-                alert.style.display = 'none';
-            }
-        }
-
-        function setText(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; }
-
-        function resetAll() {
-            if (!window.confirm('确定重置全部检查结果、检查结论与备注吗？')) return;
-            var rows = tbody.querySelectorAll('.item-row');
-            for (var r = 0; r < rows.length; r++) {
-                var radios = rows[r].querySelectorAll('input[type=radio]');
-                for (var i = 0; i < radios.length; i++) radios[i].checked = false;
-                var opts = rows[r].querySelectorAll('.res-opt');
-                for (var o = 0; o < opts.length; o++) opts[o].classList.remove('active-ok', 'active-warn', 'active-bad');
-                rows[r].classList.remove('row-bad', 'row-warn');
-                var rm = rows[r].querySelector('.remark-input');
-                if (rm) rm.value = '';
-                var nom = rows[r].querySelector('.m-nominal'); if (nom) nom.value = '';
-                var act = rows[r].querySelector('.m-actual'); if (act) act.value = '';
-                var ratio = rows[r].querySelector('.m-ratio'); if (ratio) { ratio.textContent = '—'; ratio.classList.remove('over'); }
-            }
-            var vRadios = document.querySelectorAll('input[name=verdict]');
-            for (var v = 0; v < vRadios.length; v++) vRadios[v].checked = false;
-            var vOpts = document.querySelectorAll('#verdictOpts .verdict-opt');
-            for (var vo = 0; vo < vOpts.length; vo++) vOpts[vo].classList.remove('active');
-            var nc = document.getElementById('nonconform'); if (nc) nc.value = '';
-            var rp = document.getElementById('recheckPerson'); if (rp) rp.value = '';
-            var rd = document.getElementById('recheckDate'); if (rd) rd.value = '';
-            var mt = document.getElementById('mtCheck'); if (mt) mt.checked = false;
-            updateSummary();
-        }
-
-        function toggleGuide() {
-            var box = document.getElementById('guideBox');
-            box.style.display = (box.style.display === 'block') ? 'none' : 'block';
-        }
-
-        // 综合判定单选
-        (function bindVerdict() {
-            var opts = document.querySelectorAll('#verdictOpts .verdict-opt');
-            for (var i = 0; i < opts.length; i++) {
-                (function (opt) {
-                    var input = opt.querySelector('input');
-                    input.addEventListener('change', function () {
-                        for (var j = 0; j < opts.length; j++) opts[j].classList.remove('active');
-                        opt.classList.add('active');
-                    });
-                })(opts[i]);
-            }
-        })();
-
-        // 原始验收记录 → 自动填入对应测量基准（标称直径 d → 第1项；P5 → 第2项）
-        // 注意：须在 renderAll() 填充表格后调用，否则查不到 .item-row
-        function bindAccept() {
-            var dEl = document.getElementById('nomDiameter');
-            var p5El = document.getElementById('p5Length');
-            function sync(srcEl, seq) {
-                var row = tbody.querySelector('.item-row[data-seq="' + seq + '"]');
-                var nom = row && row.querySelector('.m-nominal');
-                if (srcEl && nom) {
-                    srcEl.addEventListener('input', function () {
-                        nom.value = srcEl.value;
-                        nom.dispatchEvent(new Event('input'));
-                    });
-                }
-            }
-            sync(dEl, '1');
-            sync(p5El, '2');
-        }
-
-        // ===== 导出 Excel / Word =====
-        function exportTable(type) {
-            var meta = '检查日期：' + (document.getElementById('checkDate').value || '____') +
-                       '　　检查人员：' + (document.getElementById('checkPerson').value || '____') +
-                       '　　所属设备/索具编号：' + (document.getElementById('equipNo').value || '____') +
-                       '　　链条规格等级：' + (document.getElementById('chainGrade').value || '____') +
-                       '　　标称链环直径 d：' + (document.getElementById('nomDiameter').value || '____') + ' mm' +
-                       '　　原始 5 节距 P5：' + (document.getElementById('p5Length').value || '____') + ' mm';
-
-            var body = '<table border="1" cellspacing="0" cellpadding="5" style="border-collapse:collapse;width:100%;font-size:12px;">';
-            body += '<thead><tr>' +
-                    '<th style="width:40px;">序号</th><th style="width:110px;">检查项目</th>' +
-                    '<th>GB/T 20946-2007 检查内容与报废判定标准</th><th style="width:130px;">检查结果</th><th style="width:140px;">备注</th>' +
-                    '</tr></thead><tbody>';
-
-            for (var s = 0; s < SECTIONS.length; s++) {
-                body += '<tr><td colspan="5" style="background:#F03752;color:#fff;font-weight:700;">' + esc(SECTIONS[s].title) + '</td></tr>';
-                for (var i = 0; i < SECTIONS[s].items.length; i++) {
-                    var item = SECTIONS[s].items[i];
-                    var seq = item.seq;
-                    var name = item.name;
-                    var stdItems = item.std;
-                    var stdHtml = '<ol>';
-                    for (var k = 0; k < stdItems.length; k++) stdHtml += '<li>' + esc(stdItems[k]) + '</li>';
-                    stdHtml += '</ol>';
-                    var rowEl = tbody.querySelector('.item-row[data-seq="' + seq + '"]');
-                    if (rowEl && item.measure) {
-                        var m = item.measure;
-                        var nom = rowEl.querySelector('.m-nominal');
-                        var act = rowEl.querySelector('.m-actual');
-                        var ratio = rowEl.querySelector('.m-ratio');
-                        stdHtml += '<div>' + esc(m.nomLabel) + '：' + esc(nom ? nom.value : '—') + ' mm　' +
-                                   esc(m.actLabel) + '：' + esc(act ? act.value : '—') + ' mm　' +
-                                   esc(m.ratioLabel) + '：' + (ratio ? esc(ratio.textContent) : '—') + ' %</div>';
-                    }
-                    var c = rowEl ? rowEl.querySelector('input[type=radio]:checked') : null;
-                    var res = c ? c.value : '';
-                    var rm = rowEl ? rowEl.querySelector('.remark-input') : null;
-                    var remark = rm ? rm.value : '';
-                    body += '<tr><td style="text-align:center;">' + esc(seq) + '</td>' +
-                            '<td>' + esc(name) + '</td>' +
-                            '<td>' + stdHtml + '</td>' +
-                            '<td style="text-align:center;">' + esc(res) + '</td>' +
-                            '<td>' + esc(remark) + '</td></tr>';
-                }
-            }
-            body += '</tbody></table>';
-
-            var verdict = '';
-            var v = document.querySelector('input[name=verdict]:checked');
-            if (v) verdict = v.value;
-            var nc = document.getElementById('nonconform').value || '';
-            var rp = document.getElementById('recheckPerson').value || '____';
-            var rd = document.getElementById('recheckDate').value || '____';
-            var mt = document.getElementById('mtCheck').checked ? '已做（建议事故后 / 周期长的链条加做）' : '未做';
-
-            var verdictBlock = '<div style="margin-top:18px;font-size:14px;">' +
-                    '<b>最终结论：</b>' + esc(verdict) + '<br><br>' +
-                    '<b>处置措施：</b><br>1. 报废的链条必须用切割机切断破坏，不可将报废长链剪断当成短链在小负荷下使用。<br>' +
-                    '2. G80 / G100 级链条严禁私自电焊修补、气焊烘烤，高温会直接破坏其热处理性能。<br><br>' +
-                    '<b>不合格项描述及处理意见：</b><br>' + esc(nc).replace(/\n/g, '<br>') + '<br><br>' +
-                    '<b>复查人：</b>' + esc(rp) + '　　<b>复查日期：</b>' + esc(rd) + '　　<b>磁粉探伤（MT）：</b>' + esc(mt) + '</div>';
-
-            var warnBlock = '<div style="margin-top:14px;font-size:12px;color:#9A3412;background:#FFF7ED;border:1px solid #FDBA74;padding:10px 14px;">' +
-                    '<b>安全要领速记（1、4、6 三点绝对红线）：</b><br>' +
-                    '量长度：5 个环的总长，比原始 P5 拉长了 5%，报废！<br>' +
-                    '看焊缝：焊口裂了或脱焊了，报废！<br>' +
-                    '防冲击：链条绝对不能打结、扭曲受力，瞬间冲击极易直接崩断伤人。</div>';
-
-            var doc = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns="http://www.w3.org/TR/REC-html40">' +
-                      '<head><meta charset="UTF-8"></head><body>' +
-                      '<h2 style="text-align:center;">起重链条安全检查表</h2>' +
-                      '<p style="text-align:center;font-size:12px;color:#555;">' + esc(meta) + '</p>' +
-                      body + verdictBlock + warnBlock +
-                      '<script src="/sheen-toolbox/assets/share.js"><\/script>' +
-    '<!-- SHEEN Toolbox 统一打印预览 -->' +
-    '<script src="/sheen-toolbox/assets/print-preview.js"><\/script>' +
-    '<script>initPrintPreview();<\/script>' +
-'</body></html>';
-
-            var mime = (type === 'xls') ? 'application/vnd.ms-excel' : 'application/msword';
-            var blob = new Blob(['﻿' + doc], { type: mime });
-            var url = URL.createObjectURL(blob);
-            var a = document.createElement('a');
-            a.href = url;
-            a.download = '起重链条安全检查表.' + (type === 'xls' ? 'xls' : 'doc');
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
-        }
-
-        // ===== 绑定按钮 =====
-        document.getElementById('excelBtn').addEventListener('click', function () { exportTable('xls'); });
-        document.getElementById('wordBtn').addEventListener('click', function () { exportTable('doc'); });
-        document.getElementById('resetBtn').addEventListener('click', resetAll);
-        document.getElementById('guideBtn').addEventListener('click', toggleGuide);
-
-        // ===== 初始化 =====
-        renderAll();
-        bindAccept();
     })();
     </script>
 
