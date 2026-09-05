@@ -50,12 +50,17 @@
         }
         .meta-bar input:focus { border-color: var(--brand-red); }
         .field.full { flex: 1 1 100%; }
-        .nature-box { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
-        .nature-box .nature-label { font-size: 12px; color: var(--text-secondary); font-weight: 600; margin-right: 4px; }
-        .nature-opt { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; cursor: pointer; user-select: none;
+        .use-box { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+        .use-box .use-label { font-size: 12px; color: var(--text-secondary); font-weight: 600; margin-right: 4px; }
+        .use-opt { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; cursor: pointer; user-select: none;
             border-radius: 8px;
         }
-        .nature-opt input { width: 15px; height: 15px; accent-color: var(--brand-red); }
+        .use-opt input { width: 15px; height: 15px; accent-color: var(--brand-red); }
+        .use-opt .other-input {
+            border: 1px solid var(--border); border-radius: var(--radius-sm);
+            padding: 4px 8px; font-size: 12px; min-width: 120px; outline: none; font-family: var(--font);
+        }
+        .use-opt .other-input:focus { border-color: var(--brand-red); }
 
         /* ===== 工具栏（药丸按钮组） ===== */
         .tool-toolbar {
@@ -141,9 +146,10 @@
         .check-table .col-seq    { width: 40px;  text-align: center; font-weight: 700; color: var(--text-secondary); white-space: nowrap; }
         .check-table .col-item   { width: 120px; font-weight: 700; color: var(--text-primary); text-align: center; min-width: 96px; }
         .check-table .col-std    { text-align: left; font-size: 12px; line-height: 1.55; color: #374151; }
-        .check-table .col-result { width: 190px; min-width: 150px; }
+        .check-table .col-result { width: 170px; min-width: 140px; }
         .check-table .col-remark { width: 150px; min-width: 120px; }
 
+        /* 检查项目强调 */
         .check-table .col-item .item-name { display: block; font-size: 13px; }
 
         /* 分区标题行 */
@@ -174,6 +180,29 @@
             outline: none;
         }
         .remark-input:focus { border-color: var(--brand-red); }
+
+        /* 直径测量小模块 */
+        .measure-block {
+            margin-top: 8px;
+            padding: 8px 10px;
+            background: #F8F9FA;
+            border: 1px dashed var(--border);
+            border-radius: var(--radius-sm);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 14px;
+            align-items: center;
+            font-size: 12px;
+            color: var(--text-primary);
+        }
+        .measure-block label { display: inline-flex; align-items: center; gap: 4px; }
+        .measure-block input {
+            width: 78px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+            padding: 4px 6px; font-size: 12px; outline: none; font-family: var(--font); background: #fff;
+        }
+        .measure-block input:focus { border-color: var(--brand-red); }
+        .measure-block .m-ratio { font-weight: 700; color: var(--text-secondary); }
+        .measure-block .m-ratio.over { color: var(--brand-red); }
 
         /* 结果单选药丸（三态） */
         .res-group { display: flex; gap: 4px; justify-content: center; flex-wrap: wrap; }
@@ -258,7 +287,6 @@
             min-height: 64px; resize: vertical; outline: none;
         }
         .verdict-card textarea:focus, .verdict-card .note-input:focus { border-color: var(--brand-red); }
-
         .measure-step {
             background: #F8F9FA; border: 1px solid var(--border); border-radius: var(--radius-sm);
             padding: 12px 14px; font-size: 13px; color: var(--text-primary); line-height: 1.8; margin-bottom: 14px;
@@ -290,8 +318,8 @@
             }
             body { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             .meta-bar { background: #fff !important; }
-            .guide-box, .tool-toolbar, .summary-bar, .alert-bad, .nature-box .other-input { display: none !important; }
-            .nature-box { font-size: 11px !important; }
+            .guide-box, .tool-toolbar, .summary-bar, .alert-bad, .use-box .other-input { display: none !important; }
+            .use-box { font-size: 11px !important; }
             .check-table {
                 table-layout: fixed !important;
                 min-width: 0 !important;
@@ -301,8 +329,8 @@
             .check-table .col-item   { width: 11% !important; min-width: 0 !important; font-size: 9px !important; word-wrap: break-word; }
             .check-table .col-item .item-name { font-size: 9px !important; }
             .check-table .col-std    { width: 46% !important; font-size: 8.5px !important; line-height: 1.35 !important; }
-            .check-table .col-result { width: 18% !important; min-width: 0 !important; }
-            .check-table .col-remark { width: 21% !important; min-width: 0 !important; }
+            .check-table .col-result { width: 17% !important; min-width: 0 !important; }
+            .check-table .col-remark { width: 22% !important; min-width: 0 !important; }
             .check-table thead th {
                 background: #e5e5e5 !important; color: #000 !important;
                 position: static !important; font-size: 9px !important; padding: 3px 2px !important;
@@ -310,35 +338,37 @@
             .check-table tbody td { font-size: 8.5px !important; padding: 2px 3px !important; }
             .std-list { padding-left: 12px !important; margin: 0 !important; }
             .std-list li { margin-bottom: 1px !important; font-size: 8.5px !important; }
+            .measure-block { background: #fff !important; border: 1px solid #999 !important; font-size: 8px !important; padding: 2px 4px !important; margin-top: 2px !important; }
+            .measure-block input { width: 44px !important; font-size: 8px !important; padding: 1px 2px !important; }
             .remark-input { border: none !important; font-size: 8.5px !important; padding: 1px 2px !important; background: transparent !important; min-height: 0 !important; }
             .res-opt { border: 1px solid #999 !important; padding: 1px 4px !important; font-size: 8px !important;
-            border-radius: 8px;
-        }
+                border-radius: 8px;
+            }
             .res-opt.active-ok { background: var(--ok-soft) !important;
-            border-radius: 8px;
-        }
+                border-radius: 8px;
+            }
             .res-opt.active-warn { background: var(--warn-soft-2) !important;
-            border-radius: 8px;
-        }
+                border-radius: 8px;
+            }
             .res-opt.active-bad { background: var(--fail-soft-2) !important;
-            border-radius: 8px;
-        }
+                border-radius: 8px;
+            }
             .section-row td { background: #F03752 !important; color: #fff !important; font-size: 10px !important; padding: 4px 6px !important; }
             .verdict-card { display: block !important; background: #fff !important; margin-top: 12px; page-break-inside: auto;
-            border-radius: 8px;
-        }
+                border-radius: 8px;
+            }
             .verdict-card h3, .verdict-card h4 { font-size: 11px !important;
-            border-radius: 8px;
-        }
+                border-radius: 8px;
+            }
             .verdict-opts { gap: 4px !important; margin-bottom: 6px !important;
-            border-radius: 8px;
-        }
+                border-radius: 8px;
+            }
             .verdict-opt { border: 1px solid #999 !important; padding: 2px 6px !important; font-size: 9px !important;
-            border-radius: 8px;
-        }
+                border-radius: 8px;
+            }
             .verdict-opt.active { background: #F03752 !important;
-            border-radius: 8px;
-        }
+                border-radius: 8px;
+            }
             .verdict-card textarea, .verdict-card .note-input, .measure-step { border: 1px solid #999 !important; font-size: 9px !important; min-height: 40px !important; }
             .verdict-sign input { border-bottom: 1px solid #333 !important; }
         }
@@ -363,138 +393,8 @@
 </head>
 <body>
 
-    <!-- 面包屑 -->
-    <div class="breadcrumb">
-        <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
-        <span> / 合成纤维吊带安全检查表</span>
-    </div>
-
-    <main class="app-container container-calc">
-
-        <h1 class="page-title"><i class="fa-solid fa-ribbon" style="color:var(--brand-red)"></i> 合成纤维吊带安全检查表</h1>
-        <p class="page-subtitle">依据 JB/T 8521《编织吊带》对扁平吊带、圆形吊带（合成纤维承载构件）逐条检查表面割伤切口、磨损起毛、缝合端部、紫外线老化、化学与高温损伤、载荷标识标签，并作出综合判定与报废处置。</p>
-
-        <!-- 头部信息条（打印同步显示） -->
-        <div class="meta-bar">
-            <div class="field">
-                <label>检查日期</label>
-                <input type="date" id="checkDate">
-            </div>
-            <div class="field">
-                <label>检查人员</label>
-                <input type="text" id="checkPerson" placeholder="检查人员">
-            </div>
-            <div class="field">
-                <label>吊带编号 / 索具号</label>
-                <input type="text" id="slingNo" placeholder="吊带编号 / 索具号">
-            </div>
-            <div class="field">
-                <label>吊带规格与等级</label>
-                <input type="text" id="slingSpec" placeholder="例：5 吨级 扁平吊带 / 圆形吊带">
-            </div>
-            <div class="field">
-                <label>材质颜色</label>
-                <input type="text" id="colorNote" placeholder="例：紫色=5t 蓝色=8t（颜色代等级）">
-            </div>
-            <div class="field full">
-                <div class="nature-box" id="natureBox">
-                    <span class="nature-label">检查性质：</span>
-                    <label class="nature-opt"><input type="checkbox" name="nature" value="日常使用前检查"> 日常使用前检查</label>
-                    <label class="nature-opt"><input type="checkbox" name="nature" value="月度定期检查"> 月度定期检查</label>
-                    <label class="nature-opt"><input type="checkbox" name="nature" value="专项检查(事故/冲击后)"> 专项检查（事故 / 冲击后）</label>
-                </div>
-            </div>
-        </div>
-
-        <!-- 工具栏 -->
-        <div class="tool-toolbar no-print">
-            <button type="button" class="btn btn-sm btn-primary" id="excelBtn"><i class="fa-solid fa-file-excel"></i> 导出 Excel</button>
-            <button type="button" class="btn btn-sm btn-outline" id="wordBtn"><i class="fa-solid fa-file-word"></i> 导出 Word</button>
-            
-            <button type="button" class="btn btn-sm btn-danger" id="resetBtn"><i class="fa-solid fa-rotate-left"></i> 重置</button>
-            <button type="button" class="btn btn-sm btn-outline" id="guideBtn"><i class="fa-solid fa-book-open"></i> 使用说明</button>
-        </div>
-
-        <!-- 实时统计 -->
-        <div class="summary-bar no-print">
-            <div class="stat-card"><div class="num" id="stTotal">6</div><div class="lab">检查项总数</div></div>
-            <div class="stat-card s-ok"><div class="num" id="stOk">0</div><div class="lab">正常</div></div>
-            <div class="stat-card s-warn"><div class="num" id="stWarn">0</div><div class="lab">注意</div></div>
-            <div class="stat-card s-bad"><div class="num" id="stBad">0</div><div class="lab">报废 / 不合格</div></div>
-            <div class="stat-card s-pending"><div class="num" id="stPend">6</div><div class="lab">未检查</div></div>
-        </div>
-
-        <!-- 不符合提示 -->
-        <div class="alert-bad" id="alertBad"><i class="fa-solid fa-triangle-exclamation"></i> <span id="alertText"></span></div>
-
-        <!-- 使用说明 -->
-        <div class="guide-box" id="guideBox">
-            <h3><i class="fa-solid fa-circle-info"></i> 使用说明</h3>
-            <ul>
-                <li>本表适用于 JB/T 8521 扁平吊带、圆形吊带（合成纤维挠性承载构件）及其端部配件的日常、定期及专项安全检查。</li>
-                <li>检查分三态判定：<b>正常</b>（符合要求）、<b>注意</b>（异常但未达报废，需观察/记录）、<b>报废 / 不合格</b>（达到 JB/T 8521 报废指标，立即停用）。</li>
-                <li>检查频率：日常使用前检查（每次吊装前，重点第 1、3、6 项）、月度定期检查（全面目视 + 触检）、专项检查（发生过冲击、超载、坠落、接触化学品/高温后必做）。</li>
-            </ul>
-            <h4>安全要领速记（绝对红线）</h4>
-            <ul>
-                <li><b>看切口：</b>双手弯曲吊带，发现切口穿透封边层露丝、或切口/撕裂面积超承载面积 10%，报废！</li>
-                <li><b>看发白：</b>整体变硬、发脆、发白、失去柔软度（毛刺老化），报废！</li>
-                <li><b>看标签：</b>WLL 标签缺失或无法辨认，一律判不合格、禁止使用！</li>
-            </ul>
-            <div class="warn">
-                <i class="fa-solid fa-triangle-exclamation"></i>
-                <span><b>安全提示：</b>达到任一项报废指标，须立即停止使用；报废吊带必须用剪刀彻底剪断破坏，严禁他人捡拾后用于轻载或捆绑；使用后悬挂于阴凉干燥通风处，严禁暴晒或接触酸碱油污。</span>
-            </div>
-        </div>
-
-        <!-- 检查表 -->
-        <div class="card">
-            <div class="table-scroll">
-                <table class="data-table check-table" id="checkTable">
-                    <thead>
-                        <tr>
-                            <th class="col-seq">序号</th>
-                            <th class="col-item">检查项目</th>
-                            <th class="col-std">JB/T 8521 检查内容与报废判定标准</th>
-                            <th class="col-result">检查结果</th>
-                            <th class="col-remark">备注</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody">
-                        <!-- 动态生成 -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- 综合判定 + 结论 -->
-        <div class="verdict-card">
-            <h3><i class="fa-solid fa-clipboard-list"></i> 检查性质与最终结论（JB/T 8521）</h3>
-
-            <div class="verdict-opts" id="verdictOpts">
-                <label class="verdict-opt" data-v="合格（可继续使用，记录检查状态）"><input type="radio" name="verdict" value="合格（可继续使用，记录检查状态）"> 合格（可继续使用）</label>
-                <label class="verdict-opt" data-v="不合格（立即报废并剪断破坏）"><input type="radio" name="verdict" value="不合格（立即报废并剪断破坏）"> 不合格（立即报废）</label>
-            </div>
-
-            <h4><i class="fa-solid fa-screwdriver-wrench"></i> 处置措施</h4>
-            <div class="measure-step">
-                1. 一旦判定报废，必须使用剪刀将吊带彻底剪断破坏，严禁他人捡拾后用于轻载或捆绑。<br>
-                2. 使用后，应悬挂于阴凉干燥通风处，严禁暴晒或接触酸碱油污。<br>
-                3. 报废吊带禁止修补、打结或降级复用。
-            </div>
-
-            <label class="field-label">不合格项描述及处理意见</label>
-            <textarea id="nonconform" placeholder="逐项描述不合格项、拟采取的处理 / 整改 / 停机措施及责任人……"></textarea>
-
-            <h4><i class="fa-solid fa-magnifying-glass-plus"></i> 复查</h4>
-            <div class="verdict-sign">
-                <div class="field"><label>复查人</label><input type="text" id="recheckPerson" placeholder="复查人"></div>
-                <div class="field"><label>复查日期</label><input type="date" id="recheckDate"></div>
-                <label class="recheck-opt"><input type="checkbox" id="loadTest"> 已做静载验证（建议事故 / 冲击后加做）</label>
-            </div>
-        </div>
-
-    </main>
+    <!-- 引擎挂载点（breadcrumb + main 由 checklist-engine 渲染） -->
+    <div id="clRoot"></div>
 
     <!-- 页脚 -->
     <section class="tool-meta" data-toolmeta="sheen">
@@ -502,7 +402,7 @@
 <span class="tm-std-code">JB/T 8521.1-2007</span>
 <span class="tm-std-name">《编织吊索 一般用合成纤维扁平吊装带》</span>
   </div>
-  <div class="tm-line"><span class="tm-dt"><i>发布</i><span class="tm-dt-val">2007</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>实施</i><span class="tm-dt-val">2007</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>更新</i><span class="tm-dt-val">2026-08-04</span></span></div>
+  <div class="tm-line"><span class="tm-dt"><i>发布</i><span class="tm-dt-val">2007</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>实施</i><span class="tm-dt-val">2007</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>更新</i><span class="tm-dt-val">2026-09-05</span></span></div>
 </section>
 
     <footer class="sheen-footer">
@@ -512,335 +412,15 @@
     <!-- 打印时间戳 -->
     <div class="print-time" id="printTime"></div>
 
+    <!-- 引擎 + 数据 + 挂载 -->
+    <script src="/sheen-toolbox/synthetic-fiber-sling-inspection/data.js"></script>
+    <script src="/sheen-toolbox/checklist-engine/engine.js"></script>
     <script>
     (function () {
-        'use strict';
-
-        // ===== 打印时间戳（UTC+8 北京时间） + 默认日期 =====
-        (function () {
-            var d = new Date();
-            var utc = d.getTime() + d.getTimezoneOffset() * 60000;
-            var cn = new Date(utc + 8 * 3600000);
-            var p = function (n) { return (n < 10 ? '0' : '') + n; };
-            var s = cn.getFullYear() + '-' + p(cn.getMonth() + 1) + '-' + p(cn.getDate()) +
-                    ' ' + p(cn.getHours()) + ':' + p(cn.getMinutes());
-            var el = document.getElementById('printTime');
-            if (el) el.textContent = '打印时间：' + s + '（北京时间）';
-            var cd = document.getElementById('checkDate');
-            if (cd && !cd.value) cd.value = cn.getFullYear() + '-' + p(cn.getMonth() + 1) + '-' + p(cn.getDate());
-        })();
-
-        var tbody = document.getElementById('tableBody');
-
-        // ===== 检查数据（三态：ok 正常 / warn 注意 / bad 报废·不合格）=====
-        var SECTIONS = [
-            {
-                title: '一、表面与机械损伤检查（双手弯曲触检）',
-                items: [
-                    { seq: '1', name: '表面割伤与切口',
-                      std: ['报废红线：用双手弯曲吊带，观察表面。',
-                            '一旦发现纵向或横向的切口穿透了表面封边层，导致内部承载丝线外露；',
-                            '或任何切口、撕裂的面积超过该吊带总承载面积的 10%，必须立即报废。'],
-                      results: [
-                          { label: '完好无伤痕', level: 'ok' },
-                          { label: '有轻微擦痕(未露丝)', level: 'warn' },
-                          { label: '有割伤露丝/面积超10%(禁止使用)', level: 'bad' } ] },
-                    { seq: '2', name: '磨损与起毛',
-                      std: ['吊带边缘及表面因摩擦导致的严重起毛、纱线松散变细。',
-                            '若吊带厚度因磨损超过原厚度的 15% 或一侧边缘已被磨平，必须报废。'],
-                      results: [
-                          { label: '正常', level: 'ok' },
-                          { label: '轻微起毛', level: 'warn' },
-                          { label: '严重磨损/厚度减少超15%(禁止使用)', level: 'bad' } ] },
-                    { seq: '3', name: '缝合部与端部',
-                      std: ['两端缝合部位缝线断裂、抽丝、严重磨损；',
-                            '如果端部配有金属环，环体是否出现明显变形、裂纹或磨出深槽。'],
-                      results: [
-                          { label: '完好', level: 'ok' },
-                          { label: '缝线轻度起毛', level: 'warn' },
-                          { label: '缝合断开/金属环损坏(禁止使用)', level: 'bad' } ] }
-                ]
-            },
-            {
-                title: '二、老化、化学损伤与标识检查',
-                items: [
-                    { seq: '4', name: '紫外线与老化',
-                      std: ['吊带整体变硬、发脆，颜色明显变浅/发白，失去原有的柔软度；',
-                            '表面出现大量刺手的绒毛（俗称“毛刺老化”）。'],
-                      results: [
-                          { label: '正常', level: 'ok' },
-                          { label: '轻度老化', level: 'warn' },
-                          { label: '严重脆化发白(必须报废)', level: 'bad' } ] },
-                    { seq: '5', name: '化学与高温损伤',
-                      std: ['表面出现局部硬结、发黑、熔融、焦痕。',
-                            '通常由强酸、强碱腐蚀，或摩擦/接触高温表面（>100℃）造成，发生此类损伤，报废。'],
-                      results: [
-                          { label: '无', level: 'ok' },
-                          { label: '有焦痕/化学腐蚀结块(必须报废)', level: 'bad' } ] },
-                    { seq: '6', name: '载荷标识标签',
-                      std: ['印有“工作载荷(WLL)”和生产日期的护套标签是否脱落、严重磨损、字迹模糊以致无法辨认。',
-                            '凡无标识的吊带，一律判定不合格。'],
-                      results: [
-                          { label: '清晰完整', level: 'ok' },
-                          { label: '轻微磨损但可看清', level: 'warn' },
-                          { label: '标签缺失或无法辨认(禁止使用)', level: 'bad' } ] }
-                ]
-            }
-        ];
-
-        function esc(s) {
-            return String(s == null ? '' : s)
-                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;');
+        var root = document.getElementById('clRoot');
+        if (root && window.SHEEN_SS_DATA && window.SHEEN_CL) {
+            window.SHEEN_CL.mount(root, window.SHEEN_SS_DATA);
         }
-
-        function stdHTML(list) {
-            var h = '<ol class="std-list">';
-            for (var i = 0; i < list.length; i++) h += '<li>' + esc(list[i]) + '</li>';
-            h += '</ol>';
-            return h;
-        }
-
-        function levelCls(level) {
-            return level === 'ok' ? 'active-ok' : (level === 'warn' ? 'active-warn' : 'active-bad');
-        }
-
-        function resGroupHTML(item) {
-            var html = '<div class="res-group">';
-            for (var i = 0; i < item.results.length; i++) {
-                var r = item.results[i];
-                html += '<label class="res-opt" data-cls="' + levelCls(r.level) + '">' +
-                        '<input type="radio" name="res_' + esc(item.seq) + '" value="' + esc(r.label) + '">' +
-                        esc(r.label) + '</label>';
-            }
-            html += '</div>';
-            return html;
-        }
-
-        function itemRowHTML(item) {
-            return '<tr class="item-row" data-seq="' + esc(item.seq) + '">' +
-                   '<td class="col-seq">' + esc(item.seq) + '</td>' +
-                   '<td class="col-item"><span class="item-name">' + esc(item.name) + '</span></td>' +
-                   '<td class="col-std">' + stdHTML(item.std) + '</td>' +
-                   '<td class="col-result">' + resGroupHTML(item) + '</td>' +
-                   '<td class="col-remark"><textarea class="remark-input" placeholder="备注"></textarea></td>' +
-                   '</tr>';
-        }
-
-        function sectionRowHTML(title) {
-            return '<tr class="section-row"><td colspan="5"><i class="fa-solid fa-list-ol"></i>' + esc(title) + '</td></tr>';
-        }
-
-        function renderAll() {
-            var html = '';
-            for (var s = 0; s < SECTIONS.length; s++) {
-                html += sectionRowHTML(SECTIONS[s].title);
-                for (var i = 0; i < SECTIONS[s].items.length; i++) html += itemRowHTML(SECTIONS[s].items[i]);
-            }
-            tbody.innerHTML = html;
-            bindRows();
-            updateSummary();
-        }
-
-        // 绑定交互
-        function bindRows() {
-            var rows = tbody.querySelectorAll('.item-row');
-            for (var r = 0; r < rows.length; r++) {
-                var tr = rows[r];
-                var opts = tr.querySelectorAll('.res-opt');
-                for (var o = 0; o < opts.length; o++) {
-                    (function (opt, row) {
-                        var input = opt.querySelector('input');
-                        input.addEventListener('change', function () {
-                            var group = opt.parentNode.querySelectorAll('.res-opt');
-                            for (var g = 0; g < group.length; g++) group[g].classList.remove('active-ok', 'active-warn', 'active-bad');
-                            opt.classList.add(opt.getAttribute('data-cls'));
-                            var val = input.value;
-                            if (isOk(val)) {
-                                row.classList.remove('row-bad', 'row-warn');
-                            } else if (isBad(val)) {
-                                row.classList.add('row-bad');
-                                row.classList.remove('row-warn');
-                            } else {
-                                row.classList.add('row-warn');
-                                row.classList.remove('row-bad');
-                            }
-                            updateSummary();
-                        });
-                    })(opts[o], tr);
-                }
-            }
-        }
-
-        var OK_VALUES   = ['完好无伤痕', '正常', '完好', '无', '清晰完整'];
-        var BAD_VALUES  = ['有割伤露丝/面积超10%(禁止使用)', '严重磨损/厚度减少超15%(禁止使用)',
-                           '缝合断开/金属环损坏(禁止使用)', '严重脆化发白(必须报废)',
-                           '有焦痕/化学腐蚀结块(必须报废)', '标签缺失或无法辨认(禁止使用)'];
-        function isOk(v)   { return OK_VALUES.indexOf(v) >= 0; }
-        function isBad(v)  { return BAD_VALUES.indexOf(v) >= 0; }
-
-        // 实时统计
-        function updateSummary() {
-            var rows = tbody.querySelectorAll('.item-row');
-            var total = rows.length, ok = 0, warn = 0, bad = 0, pend = 0;
-            for (var r = 0; r < rows.length; r++) {
-                var c = rows[r].querySelector('input[type=radio]:checked');
-                if (!c) { pend++; continue; }
-                if (isOk(c.value)) ok++;
-                else if (isBad(c.value)) bad++;
-                else warn++;
-            }
-            setText('stTotal', total);
-            setText('stOk', ok);
-            setText('stWarn', warn);
-            setText('stBad', bad);
-            setText('stPend', pend);
-            var alert = document.getElementById('alertBad');
-            if (bad > 0) {
-                alert.style.display = 'block';
-                setText('alertText', '发现 ' + bad + ' 项达到报废 / 不合格指标，请立即停用并在备注中说明处理意见，必要时用剪刀彻底剪断破坏。');
-            } else {
-                alert.style.display = 'none';
-            }
-        }
-
-        function setText(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; }
-
-        function resetAll() {
-            if (!window.confirm('确定重置全部检查结果、检查结论与备注吗？')) return;
-            var rows = tbody.querySelectorAll('.item-row');
-            for (var r = 0; r < rows.length; r++) {
-                var radios = rows[r].querySelectorAll('input[type=radio]');
-                for (var i = 0; i < radios.length; i++) radios[i].checked = false;
-                var opts = rows[r].querySelectorAll('.res-opt');
-                for (var o = 0; o < opts.length; o++) opts[o].classList.remove('active-ok', 'active-warn', 'active-bad');
-                rows[r].classList.remove('row-bad', 'row-warn');
-                var rm = rows[r].querySelector('.remark-input');
-                if (rm) rm.value = '';
-            }
-            var vRadios = document.querySelectorAll('input[name=verdict]');
-            for (var v = 0; v < vRadios.length; v++) vRadios[v].checked = false;
-            var vOpts = document.querySelectorAll('#verdictOpts .verdict-opt');
-            for (var vo = 0; vo < vOpts.length; vo++) vOpts[vo].classList.remove('active');
-            var nc = document.getElementById('nonconform'); if (nc) nc.value = '';
-            var rp = document.getElementById('recheckPerson'); if (rp) rp.value = '';
-            var rd = document.getElementById('recheckDate'); if (rd) rd.value = '';
-            var lt = document.getElementById('loadTest'); if (lt) lt.checked = false;
-            updateSummary();
-        }
-
-        function toggleGuide() {
-            var box = document.getElementById('guideBox');
-            box.style.display = (box.style.display === 'block') ? 'none' : 'block';
-        }
-
-        // 综合判定单选
-        (function bindVerdict() {
-            var opts = document.querySelectorAll('#verdictOpts .verdict-opt');
-            for (var i = 0; i < opts.length; i++) {
-                (function (opt) {
-                    var input = opt.querySelector('input');
-                    input.addEventListener('change', function () {
-                        for (var j = 0; j < opts.length; j++) opts[j].classList.remove('active');
-                        opt.classList.add('active');
-                    });
-                })(opts[i]);
-            }
-        })();
-
-        // ===== 导出 Excel / Word =====
-        function exportTable(type) {
-            var natureArr = [];
-            var natureCbs = document.querySelectorAll('input[name=nature]:checked');
-            for (var u = 0; u < natureCbs.length; u++) natureArr.push(natureCbs[u].value);
-            var meta = '检查日期：' + (document.getElementById('checkDate').value || '____') +
-                       '　　检查人员：' + (document.getElementById('checkPerson').value || '____') +
-                       '　　吊带编号/索具号：' + (document.getElementById('slingNo').value || '____') +
-                       '　　规格与等级：' + (document.getElementById('slingSpec').value || '____') +
-                       '　　材质颜色：' + (document.getElementById('colorNote').value || '____') +
-                       '　　检查性质：' + (natureArr.join('、') || '____');
-
-            var body = '<table border="1" cellspacing="0" cellpadding="5" style="border-collapse:collapse;width:100%;font-size:12px;">';
-            body += '<thead><tr>' +
-                    '<th style="width:40px;">序号</th><th style="width:110px;">检查项目</th>' +
-                    '<th>JB/T 8521 检查内容与报废判定标准</th><th style="width:140px;">检查结果</th><th style="width:140px;">备注</th>' +
-                    '</tr></thead><tbody>';
-
-            for (var s = 0; s < SECTIONS.length; s++) {
-                body += '<tr><td colspan="5" style="background:#F03752;color:#fff;font-weight:700;">' + esc(SECTIONS[s].title) + '</td></tr>';
-                for (var i = 0; i < SECTIONS[s].items.length; i++) {
-                    var item = SECTIONS[s].items[i];
-                    var seq = item.seq;
-                    var name = item.name;
-                    var stdItems = item.std;
-                    var stdHtml = '<ol>';
-                    for (var k = 0; k < stdItems.length; k++) stdHtml += '<li>' + esc(stdItems[k]) + '</li>';
-                    stdHtml += '</ol>';
-                    var rowEl = tbody.querySelector('.item-row[data-seq="' + seq + '"]');
-                    var c = rowEl ? rowEl.querySelector('input[type=radio]:checked') : null;
-                    var res = c ? c.value : '';
-                    var rm = rowEl ? rowEl.querySelector('.remark-input') : null;
-                    var remark = rm ? rm.value : '';
-                    body += '<tr><td style="text-align:center;">' + esc(seq) + '</td>' +
-                            '<td>' + esc(name) + '</td>' +
-                            '<td>' + stdHtml + '</td>' +
-                            '<td style="text-align:center;">' + esc(res) + '</td>' +
-                            '<td>' + esc(remark) + '</td></tr>';
-                }
-            }
-            body += '</tbody></table>';
-
-            var verdict = '';
-            var v = document.querySelector('input[name=verdict]:checked');
-            if (v) verdict = v.value;
-            var nc = document.getElementById('nonconform').value || '';
-            var rp = document.getElementById('recheckPerson').value || '____';
-            var rd = document.getElementById('recheckDate').value || '____';
-            var lt = document.getElementById('loadTest').checked ? '已做（建议事故 / 冲击后加做）' : '未做';
-
-            var verdictBlock = '<div style="margin-top:18px;font-size:14px;">' +
-                    '<b>最终结论：</b>' + esc(verdict) + '<br><br>' +
-                    '<b>处置措施：</b><br>1. 一旦判定报废，必须使用剪刀将吊带彻底剪断破坏，严禁他人捡拾后用于轻载或捆绑。<br>' +
-                    '2. 使用后，应悬挂于阴凉干燥通风处，严禁暴晒或接触酸碱油污。<br>' +
-                    '3. 报废吊带禁止修补、打结或降级复用。<br><br>' +
-                    '<b>不合格项描述及处理意见：</b><br>' + esc(nc).replace(/\n/g, '<br>') + '<br><br>' +
-                    '<b>复查人：</b>' + esc(rp) + '　　<b>复查日期：</b>' + esc(rd) + '　　<b>静载验证：</b>' + esc(lt) + '</div>';
-
-            var warnBlock = '<div style="margin-top:14px;font-size:12px;color:#9A3412;background:#FFF7ED;border:1px solid #FDBA74;padding:10px 14px;">' +
-                    '<b>现场查验口诀：</b><br>' +
-                    '看吊带：有切口、发白脆、标签丢 → 直接报废。</div>';
-
-            var doc = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns="http://www.w3.org/TR/REC-html40">' +
-                      '<head><meta charset="UTF-8"></head><body>' +
-                      '<h2 style="text-align:center;">合成纤维吊带安全检查表</h2>' +
-                      '<p style="text-align:center;font-size:12px;color:#555;">' + esc(meta) + '</p>' +
-                      body + verdictBlock + warnBlock +
-                      '<script src="/sheen-toolbox/assets/share.js"><\/script>' +
-    '<!-- SHEEN Toolbox 统一打印预览 -->' +
-    '<script src="/sheen-toolbox/assets/print-preview.js"><\/script>' +
-    '<script>initPrintPreview();<\/script>' +
-'</body></html>';
-
-            var mime = (type === 'xls') ? 'application/vnd.ms-excel' : 'application/msword';
-            var blob = new Blob(['﻿' + doc], { type: mime });
-            var url = URL.createObjectURL(blob);
-            var a = document.createElement('a');
-            a.href = url;
-            a.download = '合成纤维吊带安全检查表.' + (type === 'xls' ? 'xls' : 'doc');
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
-        }
-
-        // ===== 绑定按钮 =====
-        document.getElementById('excelBtn').addEventListener('click', function () { exportTable('xls'); });
-        document.getElementById('wordBtn').addEventListener('click', function () { exportTable('doc'); });
-        document.getElementById('resetBtn').addEventListener('click', resetAll);
-        document.getElementById('guideBtn').addEventListener('click', toggleGuide);
-
-        // ===== 初始化 =====
-        renderAll();
     })();
     </script>
 
