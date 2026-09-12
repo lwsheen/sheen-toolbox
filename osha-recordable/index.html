@@ -3,16 +3,16 @@
 <head data-seo="sheen">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="OSHA 可记录事故判断助手：按 29 CFR 1904 逐步判断职业伤害/疾病是否需要记入 OSHA 300 日志 —— 工作相关性、新病例、一般记录标准、针刺/听力损失等特殊条款与急救清单例外 — SHEEN Toolbox">
+    <meta name="description" content="OSHA 事故可记录性判断助手：按 29 CFR 1904 逐步判断职业伤害/疾病是否需要记入 OSHA 300 日志，并同步给出 NM / FA / MTI / RWC / LTA / FAT 集团 HSE 口径 —— 工作相关性、新病例、特殊条款、一般记录标准与急救 14 项例外 — SHEEN Toolbox">
     <title>OSHA 可记录事故判断助手 — SHEEN Toolbox</title>
 
     <meta property="og:title" content="OSHA 可记录事故判断助手 | SHEEN Toolbox">
-    <meta property="og:description" content="按 29 CFR 1904 逐步判定 OSHA 可记录事故：工作相关性 · 新病例 · 特殊条款 · 急救清单">
+    <meta property="og:description" content="按 29 CFR 1904 逐步判定 OSHA 可记录事故，并同步映射 NM/FA/MTI/RWC/LTA/FAT 集团口径：工作相关性 · 新病例 · 特殊条款 · 急救 14 项清单">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://lwsheen.pages.dev/sheen-toolbox/osha-recordable/">
     <meta property="og:image" content="https://lwsheen.pages.dev/sheen-toolbox/assets/share/osha-recordable.png">
     <link rel="canonical" href="https://lwsheen.pages.dev/sheen-toolbox/osha-recordable/">
-    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "OSHA 可记录事故判断助手", "url": "https://lwsheen.pages.dev/sheen-toolbox/osha-recordable/", "description": "按 29 CFR 1904 逐步判定 OSHA 可记录事故：工作相关性 · 新病例 · 特殊条款 · 急救清单", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "inLanguage": "zh-CN", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "CNY"}, "publisher": {"@type": "Organization", "name": "SHEEN Toolbox"}}</script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "OSHA 可记录事故判断助手", "url": "https://lwsheen.pages.dev/sheen-toolbox/osha-recordable/", "description": "按 29 CFR 1904 逐步判定 OSHA 可记录事故，并同步映射 NM/FA/MTI/RWC/LTA/FAT 集团 HSE 口径：工作相关性 · 新病例 · 特殊条款 · 急救 14 项清单", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "inLanguage": "zh-CN", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "CNY"}, "publisher": {"@type": "Organization", "name": "SHEEN Toolbox"}}</script>
 
     <!-- Font Awesome 本地路径（禁止 CDN） -->
     <link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
@@ -171,6 +171,38 @@
         /* ===== 例外清单（问题提示内小表格） ===== */
         .exc-list { margin: 0; padding-left: 18px; }
         .exc-list li { font-size: 12px; line-height: 1.75; color: var(--text-secondary, #5C6470); }
+        .exc-list li b { color: var(--text-primary, #1E2126); }
+        .fa-list { margin: 0; padding-left: 0; list-style: none; }
+        .fa-list li { font-size: 12px; line-height: 1.8; color: var(--text-secondary, #5C6470); }
+        .fa-list li b { color: var(--text-primary, #1E2126); display: inline-block; min-width: 18px; }
+
+        /* ===== 集团 HSE 口径金字塔 ===== */
+        .pyramid { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+        .pyr-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px 10px;
+            border: 1px solid var(--border, #E3E6EA);
+            border-radius: 8px;
+            padding: 5px 10px;
+            background: #fff;
+            font-size: 12px;
+            color: var(--text-secondary, #5C6470);
+        }
+        .pyr-row .pyr-name { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
+        .pyr-row .pyr-code { font-weight: 800; min-width: 32px; font-size: 12px; letter-spacing: 0.5px; }
+        .pyr-row .pyr-en { font-size: 11px; margin-left: 6px; opacity: 0.75; }
+        .pyr-row .pyr-cur { margin-left: auto; font-size: 11px; font-weight: 700; }
+        .pyr-row.on {
+            border-color: var(--brand-red, #F03752);
+            background: var(--brand-red-light, #FDEEF1);
+            color: var(--text-primary, #1E2126);
+            font-weight: 700;
+        }
+        .pyr-row.on .pyr-code, .pyr-row.on .pyr-cur { color: var(--brand-red, #F03752); }
+        .pyr-note { font-size: 12px; line-height: 1.75; color: var(--text-secondary, #5C6470); margin-top: 8px; }
+        .pyr-note b { color: var(--text-primary, #1E2126); }
 
         /* 打印：隐藏交互、保留结果与判定链 */
         @media print {
@@ -206,7 +238,7 @@
     <main class="app-container container-wf">
 
         <h1 class="page-title"><i class="fa-solid fa-clipboard-question" style="color:var(--brand-red)"></i> OSHA 可记录事故判断助手</h1>
-        <p class="page-subtitle" style="margin-bottom:20px;">依据美国 OSHA 29 CFR Part 1904《职业伤害与疾病的记录与报告》（现行 eCFR 版），按工作相关性 → 新病例 → 特殊条款 → 一般记录标准 → 急救清单例外的完整判定链，逐步判断一起职业伤害/疾病是否需要记入 OSHA 300 日志（Log of Work-Related Injuries and Illnesses）。</p>
+        <p class="page-subtitle" style="margin-bottom:20px;">依据美国 OSHA 29 CFR Part 1904《职业伤害与疾病的记录与报告》（现行 eCFR 版），按工作相关性 → 新病例 → 特殊条款 → 一般记录标准 → 急救清单例外的完整判定链，逐步判断一起职业伤害/疾病是否需要记入 OSHA 300 日志；并在结论页同步给出 <b>NM / FA / MTI / RWC / LTA / FAT</b> 的集团 HSE 绩效口径。</p>
 
         <!-- 进度条 -->
         <div class="flow-progress no-pr">
@@ -237,6 +269,7 @@
                 <li style="font-size:13px;line-height:1.9;">按顺序回答问题，每一步会标注对应的 29 CFR 1904 条款；到达结论后可打印判定结果与判定链留存。</li>
                 <li style="font-size:13px;line-height:1.9;">OSHA 规则要点：<b>可记录</b> = 与工作相关的新病例，且符合一般记录标准之一（死亡 / 离岗 / 限制工作或调岗 / 超出急救的医疗处理 / 意识丧失 / 医生诊断的重大情形），或命中特殊条款（针刺伤、医学移除、标准听力损失、肺结核）。</li>
                 <li style="font-size:13px;line-height:1.9;">判定为可记录后，须在 <b>7 个日历日内</b> 填写 300 日志及 301 表（或州计划认可的等价表），记录保留 <b>5 年</b>；每年 2/1–4/30 提交 300A 汇总公示。</li>
+                <li style="font-size:13px;line-height:1.9;">结论页同时给出 <b>集团 HSE 口径</b>：FAT 死亡 → LTA 损失工时 → RWC 限工转岗 → MTI 医疗处理伤害 → FA 急救 → NM 险兆。<b>OSHA 300 记录义务与集团口径是两套独立判定，同一份事实必须分别判、分别报</b>——切勿用一套结论直接覆盖另一套。</li>
                 <li style="font-size:13px;line-height:1.9;">本工具基于联邦 OSHA（Federal OSHA）规则；州计划（State Plan，如加州 Cal/OSHA 等）可能有附加或更严格的记录要求，最终判定请以 OSHA 官方文本及企业 EHS 专业人员意见为准。</li>
             </ul>
         </div>
@@ -272,83 +305,124 @@
     // ============================================================
     // 决策树定义（29 CFR 1904）
     // 节点：{ tag: 条款, q: 问题, hint: 说明(html), opts: [{label, sub, next|result, trace}] }
-    // result: { kind: 'record'|'norecord'|'update', title, sub, cols?, blocks: [html] }
+    // result: { kind: 'record'|'norecord'|'update', title, sub, cols?, py?, blocks: [html] }
+    //   cols 决定 OSHA 300 列位；集团口径由 cols 自动推导（见 pyramidOf）
+    //   py 用于不可记录但需明确口径的结论：'FA'（仅急救）、'NM'（险兆）
     // ============================================================
+
+    // 1904.7(b)(5)(ii) 急救 14 项封闭清单（A–N，逐项比对 eCFR 原文）
+    var FIRST_AID_14 = '<ol class="fa-list">' +
+        '<li><b>A</b> 按非处方剂量、非处方用法使用非处方药（医师建议按处方剂量使用时属医疗处理）；</li>' +
+        '<li><b>B</b> 注射破伤风疫苗（乙肝、狂犬等其他疫苗接种属医疗处理）；</li>' +
+        '<li><b>C</b> 清洗、冲洗或浸泡皮肤表面的伤口；</li>' +
+        '<li><b>D</b> 使用创可贴、纱布等伤口敷料，或蝶形胶布 / Steri-Strips（缝合、订书钉等其他闭合方式属医疗处理）；</li>' +
+        '<li><b>E</b> 冷疗或热疗；</li>' +
+        '<li><b>F</b> 使用非刚性支撑（弹力绷带、护腕、非刚性护腰带；带刚性支撑条或制动装置属医疗处理）；</li>' +
+        '<li><b>G</b> 转运伤者途中使用临时固定装置（夹板、吊带、颈托、脊柱板等）；</li>' +
+        '<li><b>H</b> 指甲 / 趾甲钻孔减压，或引流处理水泡；</li>' +
+        '<li><b>I</b> 使用眼罩；</li>' +
+        '<li><b>J</b> 仅用冲洗或棉签取出眼部异物；</li>' +
+        '<li><b>K</b> 用冲洗、镊子、棉签等简单方式取出非眼部异物或木刺；</li>' +
+        '<li><b>L</b> 使用手指护套；</li>' +
+        '<li><b>M</b> 按摩；</li>' +
+        '<li><b>N</b> 饮水缓解热应激。</li>' +
+        '</ol>';
+
+    var MED_LIST = '<ul class="exc-list">' +
+        '<li>缝合、订书钉等伤口闭合（超出 D 项）；</li>' +
+        '<li>处方药，或按处方剂量使用非处方药（超出 A 项）；</li>' +
+        '<li>带刚性支撑条的支具或制动装置（超出 F 项）；</li>' +
+        '<li>物理治疗、整脊治疗（超出 M 项）；</li>' +
+        '<li>外科手术（不在清单内）；</li>' +
+        '<li>非破伤风类疫苗注射，如乙肝、狂犬（超出 B 项）。</li>' +
+        '</ul>';
+
     var TREE = {
         start: {
             tag: '1904.4',
             q: '该事件是否造成了伤害或疾病（injury or illness）？',
-            hint: '「伤害或疾病」包括割伤、骨折、扭伤、 cuts、皮疹、呼吸系统疾病、中毒、听力损失等由事件或暴露导致的健康影响。仅未遂事件（near miss）无任何健康影响时，不属于记录范围。',
+            hint: '「伤害或疾病」包括割伤、骨折、扭伤、皮疹、呼吸系统疾病、中毒、听力损失等由事件或暴露导致的健康影响。仅未遂事件（near miss）无任何健康影响时，不属于记录范围。',
             opts: [
                 { label: '是，造成了伤害或疾病', next: 'workrel', trace: '造成伤害或疾病' },
-                { label: '否，仅未遂/险肇事件，无人受伤',
-                  result: { kind: 'norecord', title: '不可记录', sub: '未造成伤害或疾病的事件不属于 OSHA 记录范围。',
-                    blocks: ['<p>OSHA 300 日志仅记录造成<b>实际伤害或疾病</b>的工作相关事件（29 CFR 1904.4）。险肇事件虽然值得内部调查与整改，但不进入 300 日志，也不填写 301 表。</p>'] },
-                  trace: '未造成伤害或疾病' }
+                { label: '否，仅未遂 / 险肇事件，无人受伤',
+                  result: { kind: 'norecord', py: 'NM', title: '不可记录（险兆事件）', sub: '未造成伤害或疾病的事件不属于 OSHA 记录范围。',
+                    blocks: ['<p>OSHA 300 日志仅记录造成<b>实际伤害或疾病</b>的工作相关事件（29 CFR 1904.4）。险肇事件虽然值得内部调查与整改，但不进入 300 日志，也不填写 301 表。</p>' +
+                             '<p>集团口径中登记为 <b>NM（Near Miss 险兆事件）</b>，走独立台账，与 300 日志物理分离。</p>'] },
+                  trace: '未造成伤害或疾病（NM）' }
             ]
         },
         workrel: {
             tag: '1904.5',
             q: '事件是否发生在工作环境中，或工作环境 / 工作条件显著促成了该伤害或疾病？',
-            hint: '<b>工作相关推定</b>：发生在员工工作场所（employer\'s premises）的伤害/疾病默认与工作相关（1904.5(b)(1)）。<b>出差</b>期间为雇主利益从事工作或活动时发生的同样默认相关（1904.5(b)(3)）。雇主安排的通勤交通工具（如公司班车、商务航班）中发生的伤害也视为工作相关（1904.5(b)(4)）。',
+            hint: '<b>工作相关推定</b>：发生在员工工作场所（employer\'s premises）的伤害/疾病默认与工作相关（1904.5(b)(1)）。<b>出差</b>期间为雇主利益从事工作或活动时发生的同样默认相关（1904.5(b)(3)）。雇主安排的通勤交通工具（如公司班车、商务航班）中发生的伤害也视为工作相关（1904.5(b)(4)）。<b>举证责任在企业</b>——要主张例外，必须由企业拿出证据。',
             opts: [
                 { label: '是（工作场所 / 因公活动 / 雇主安排的交通 / 出差为公期间）', next: 'exception', trace: '工作相关：成立' },
-                { label: '属于例外情形（点击查看清单）',
-                  sub: '通勤与个人事务、自愿活动、个人饮食梳妆、普通公众身份等',
-                  result: { kind: 'norecord', title: '不可记录（例外情形）', sub: '命中 1904.5(b)(2) 例外清单，法定视为与工作无关。',
-                    blocks: ['<h4>1904.5(b)(2) 例外清单（命中任一即不可记录）：</h4><ol class="exc-list">' +
-                        '<li>员工在下班后以普通公众身份出现在工作场所；</li>' +
-                        '<li>通勤途中（上下班），包括在公司停车场 / 人行道发生的、仅与通勤相关的事故（1904.5(b)(2)(ii)）；</li>' +
-                        '<li>员工以普通公众身份出现在场所；</li>' +
-                        '<li>仅出现精神症状而无伤害、暴露或事件；</li>' +
-                        '<li>自愿参加雇主提供的健康 / 娱乐活动（健身、球赛、献血等）；</li>' +
-                        '<li>员工自备食物准备 / 食用；</li>' +
-                        '<li>个人梳妆、自行服药（非处方自用药）等个人行为；</li>' +
-                        '<li>处理个人事务（打电话回家、看私人信息等）。</li></ol>' +
-                        '<p style="margin-top:6px;">注意：在公司停车场发生的事故若与工作任务有关（如搬运材料、为雇主办事），仍属工作相关，需回到上一问选择「是」。</p>'] },
+                { label: '属于例外情形（1904.5(b)(2) 共 9 条）',
+                  sub: '通勤与个人事务、自愿活动、个人饮食梳妆、普通感冒、精神疾病等',
+                  result: { kind: 'norecord', title: '不可记录（非工作相关例外）', sub: '命中 1904.5(b)(2) 例外清单，法定视为与工作无关。',
+                    blocks: ['<h4>1904.5(b)(2) 例外清单（9 条，命中任一即不可记录）：</h4><ol class="exc-list">' +
+                        '<li>伤者当时以<b>公众身份</b>在场，而非以员工身份（1904.5(b)(2)(i)）；</li>' +
+                        '<li>症状虽在工作时出现，但完全由工作场所以外的<b>非工作事件或暴露</b>引起（1904.5(b)(2)(ii)）；</li>' +
+                        '<li>完全因<b>自愿参加</b>健康、健身或娱乐活动（献血、体检、流感疫苗、健身课、球类运动等）（1904.5(b)(2)(iii)）；</li>' +
+                        '<li>完全因员工<b>进食、饮水或为个人消费准备食物饮料</b>（1904.5(b)(2)(iv)）；</li>' +
+                        '<li>完全因员工在非工作时段从事<b>与工作无关的个人事务</b>（1904.5(b)(2)(v)）；</li>' +
+                        '<li>完全因<b>个人梳洗、为非工作原因自行用药，或故意自伤</b>（1904.5(b)(2)(vi)）；</li>' +
+                        '<li><b>上下班通勤</b>途中，在公共街道或公路发生的机动车事故（1904.5(b)(2)(vii)）；</li>' +
+                        '<li><b>普通感冒或流感</b>（结核、布鲁氏菌病、甲肝、鼠疫等若在工作场所感染，仍属工作相关）（1904.5(b)(2)(viii)）；</li>' +
+                        '<li><b>精神疾病</b>，除员工主动提供具备相应资质的医师书面意见证明与工作相关（1904.5(b)(2)(ix)）。</li></ol>' +
+                        '<p style="margin-top:6px;">注意：公司停车场内发生的、与工作任务有关的事故（如搬运材料、为雇主办事）仍属工作相关，请返回上一问选择「是」。</p>' +
+                        '<p style="margin-top:6px;">该情形<b>不进入</b>集团 HSE 金字塔——非工作相关事件不计入任何口径。</p>'] },
                   trace: '命中 1904.5(b)(2) 例外' },
                 { label: '否，纯属个人原因 / 与工作条件无关',
                   result: { kind: 'norecord', title: '不可记录（非工作相关）', sub: '1904.5(a)：与工作环境或工作任务无关的伤害/疾病不记录。',
-                    blocks: ['<p>工作相关性不成立时，即使员工受伤发生在公司场所周边，也不记入 OSHA 300 日志。请在内部台账中留存非工作相关工伤的处理记录。</p>'] },
+                    blocks: ['<p>工作相关性不成立时，即使员工受伤发生在公司场所周边，也不记入 OSHA 300 日志。请在内部台账中留存非工作相关工伤的处理记录。</p>' +
+                             '<p>该情形<b>不进入</b>集团 HSE 金字塔——非工作相关事件不计入任何口径。</p>'] },
                   trace: '工作相关：不成立' }
             ]
         },
         exception: {
             tag: '1904.6',
             q: '这是否是一个「新病例」（new case）？',
-            hint: '满足任一即为新病例：① 该员工的同一伤害/疾病此前<b>从未</b>被公司记录过；② 此前记录过，但员工已<b>完全康复并返回工作</b>，之后同一伤害/疾病<b>复发或再次发生</b>。<b>不是</b>新病例的情形：症状/体征一直持续、从未完全康复，或 PLHCP 建议继续治疗——此时不重复记录，只更新原有 300 日志条目。',
+            hint: '满足任一即为新病例：① 该员工的同一伤害/疾病此前<b>从未</b>被公司记录过；② 此前记录过，但员工已<b>完全康复并返回工作</b>，之后同一伤害/疾病<b>复发或再次发生</b>。<b>不是</b>新病例的情形：症状/体征一直持续、从未完全康复——此时不重复记录，只更新原有 300 日志条目。',
             opts: [
                 { label: '是新病例（从未记录过 / 康复后复发）', next: 'special', trace: '新病例：成立（1904.6）' },
                 { label: '否，同一病例仍在持续，无需重复记录',
                   result: { kind: 'update', title: '不重复记录，更新原记录', sub: '1904.6(b)(4)：同一病例持续期间不得重复记录，应更新原有条目。',
-                    blocks: ['<p>请在原 300 日志条目上<b>更新</b>离岗天数 / 限制工作天数等最新信息（1904.6(b)(4)），并视情更新 301 表。达 180 离岗日上限后可停止计数（1904.7(b)(3)）。</p>'] },
+                    blocks: ['<p>请在原 300 日志条目上<b>更新</b>离岗天数 / 限制工作天数等最新信息（1904.6(b)(4)），并视情更新 301 表。达 180 个日历日上限后可停止计数（1904.7(b)(3)）。</p>' +
+                             '<p>集团口径沿用原案层级，<b>不得新增一条</b>——重复计数会同时虚增 TRIR 与 LTIFR。</p>'] },
                   trace: '非新病例：更新原记录（1904.6(b)(4)）' }
             ]
         },
         special: {
             tag: '1904.8 - 1904.11',
             q: '是否命中以下「特殊判定」任一情形？（任一命中即必须记录）',
-            hint: '<b>① 针刺 / 锐器伤</b>（1904.8）：物体被他人血液或其他潜在感染物质（OPIM）污染并刺穿/划破皮肤；<b>② 医学移除</b>（1904.9）：依 OSHA 医学监护标准（如铅、苯、棉尘等）被要求调离岗位；<b>③ 职业性听力损失</b>（1904.10）：相对基线出现 10dB 标准阈值位移（STS，2000/3000/4000Hz 平均），且总听力损失 ≥25dB；<b>④ 肺结核</b>（1904.11）：暴露后皮试阳转或由 PLHCP 诊断结核感染（医疗、护理等机构适用）。',
+            hint: '<b>① 针刺 / 锐器伤</b>（1904.8）：物体被他人血液或其他潜在感染物质（OPIM）污染并刺穿/划破皮肤；<b>② 医学移除</b>（1904.9）：依 OSHA 医学监护标准（如铅、苯、棉尘等）被要求调离岗位；<b>③ 职业性听力损失</b>（1904.10）：相对基线出现标准阈移 STS ≥10dB（2000/3000/4000Hz 平均），<b>且</b>同频率总听阈 ≥25dB，两者须同时满足；<b>④ 肺结核</b>（1904.11）：暴露后皮试阳转或由 PLHCP 诊断结核感染（医疗、护理等机构适用）。',
             opts: [
                 { label: '针刺 / 锐器伤（血液或 OPIM 污染）',
                   result: { kind: 'record', title: '可记录', sub: '命中 1904.8 针刺伤与锐器伤特殊条款。',
                     cols: { G: false, H: false, I: false, J: true },
-                    blocks: ['<p>针刺 / 锐器伤致血液或 OPIM 暴露<b>无论后果轻重一律记录</b>（1904.8）。记入 300 日志 J 列（其他可记录情形）， injury/illness kind 勾选 "Injury"；7 日内完成 301 表。</p>'] },
+                    blocks: ['<p>针刺 / 锐器伤致血液或 OPIM 暴露<b>无论后果轻重一律记录</b>（1904.8）。记入 300 日志 J 列（其他可记录情形），injury/illness kind 勾选 "Injury"；7 日内完成 301 表。</p>' +
+                             '<p>此类病例属<b>隐私关注病例</b>（privacy concern case），300 日志上<b>不得填写员工姓名</b>，以「Privacy Case」代替（1904.29(b)(6)–(9)）。</p>'] },
                   trace: '命中 1904.8 针刺/锐器伤' },
                 { label: '医学移除（medical removal）',
                   result: { kind: 'record', title: '可记录', sub: '命中 1904.9 医学移除条款。',
                     cols: { G: false, H: false, I: true, J: false },
-                    blocks: ['<p>依 OSHA 标准的医学监护要求被移除岗位（如血铅超标移除）须记录（1904.9）。记入 <b>I 列（工作调离或限制）</b>，illness kind 按对应类别勾选；当天不计入移除天数，自次日起算。</p>'] },
+                    blocks: ['<p>依 OSHA 标准的医学监护要求被移除岗位（如血铅超标移除）须记录（1904.9）。记入 <b>I 列（工作调离或限制）</b>；<b>移除当天不计入</b>，自次日起算。</p>' +
+                             '<p>注意区分：<b>员工自愿</b>要求调离的，不按本条记录。因化学暴露被医学移除的，同时须在 301 表勾选对应的中毒类别。</p>'] },
                   trace: '命中 1904.9 医学移除' },
-                { label: '职业性听力损失（STS + 总损失 ≥25dB）',
+                { label: '职业性听力损失（STS ≥10dB 且总听阈 ≥25dB）',
                   result: { kind: 'record', title: '可记录', sub: '命中 1904.10 听力损失判定标准。',
                     cols: { G: false, H: false, I: true, J: false },
-                    blocks: ['<p>自 2003 年起统一标准：相对基线 audiogram 在 2000/3000/4000Hz 任一频率平均位移 ≥10dB（STS），且同一频率总听力损失 ≥25dB（1904.10(b)）。记入 <b>H 列或 I 列</b>（依是否离岗/限制），illness kind 勾选 "Hearing Loss"。修订基线规则见 1904.10(c)。</p>'] },
+                    blocks: ['<p>自 2003 年起统一标准，两个阈值必须<b>同时满足</b>（1904.10(b)）：</p>' +
+                             '<ul class="exc-list"><li><b>标准阈移（STS）</b>：相对基线听力图，在 2000 / 3000 / 4000 Hz 的平均听阈变化 <b>≥10 dB</b>（单耳或双耳）——此项<b>可</b>做年龄修正；</li>' +
+                             '<li><b>总听阈</b>：同耳 2000 / 3000 / 4000 Hz 平均听阈 <b>≥25 dB</b>（相对听力零级）——此项<b>不</b>做年龄修正。</li></ul>' +
+                             '<p>记入 <b>H 列或 I 列</b>（依是否离岗 / 限制），illness kind 勾选 "Hearing Loss"。30 日内复测未确认的，可暂不记录；复测确认后 7 日内记录（1904.10(b)(3)）。修订基线规则见 1904.10(c)。</p>'] },
                   trace: '命中 1904.10 听力损失' },
                 { label: '肺结核感染（皮试阳转 / PLHCP 诊断）',
                   result: { kind: 'record', title: '可记录', sub: '命中 1904.11 结核特殊条款。',
                     cols: { G: false, H: false, I: false, J: true },
-                    blocks: ['<p>工作场所结核暴露后皮试阳转或被诊断结核感染须记录（1904.11）。主要适用于医疗保健、看守所、收容所等机构。自 2024 年起基本排除规则见 1904.5(b)(2)(xiii)。</p>'] },
+                    blocks: ['<p>工作场所结核暴露后皮试阳转或被诊断结核感染须记录（1904.11）。主要适用于医疗保健、看守所、收容所等机构。</p>' +
+                             '<p>另见 1904.5(b)(2)(ix) 对精神疾病的例外与 1904.5(b)(2)(viii) 对普通感冒/流感的例外——结核不适用这些例外。</p>'] },
                   trace: '命中 1904.11 结核' },
                 { label: '均未命中，进入一般记录标准判断', next: 'criteria', trace: '特殊条款：未命中' }
             ]
@@ -356,55 +430,54 @@
         criteria: {
             tag: '1904.7(a)',
             q: '伤害 / 疾病的后果符合哪一项「一般记录标准」？（1904.7(a)，任一即记录）',
-            hint: '<b>六项标准</b>：① 死亡；② 离岗工作日（days away，发病/受伤当天之后仍有工作日无法出勤）；③ 限制工作或调岗（restricted work / job transfer，当天之后仍受限）；④ 超出急救清单的医疗处理（medical treatment beyond first aid）；⑤ 意识丧失；⑥ PLHCP 诊断的重大情形：骨折/牙齿断裂、鼓膜穿孔、慢性不可逆疾病、癌症等（1904.7(b)(7)）。',
+            hint: '<b>六项标准</b>：① 死亡；② 离岗工作日（days away，发病/受伤当天之后仍有工作日无法出勤）；③ 限制工作或调岗（restricted work / job transfer，当天之后仍受限）；④ 超出急救清单的医疗处理（medical treatment beyond first aid）；⑤ 意识丧失；⑥ PLHCP 诊断的重大情形：骨折 / 牙齿断裂、鼓膜穿孔、慢性不可逆疾病、癌症等（1904.7(b)(7)）。<br><b>300 列位速记</b>：死亡→G、离岗→H、限工/调岗→I、其余可记录→J。若同时离岗又受限，按离岗记 H 列。',
             opts: [
                 { label: '死亡',
                   result: { kind: 'record', title: '可记录（且须立即报告）', sub: '1904.7(a)(1) 死亡 + 1904.39 报告义务。',
                     cols: { G: true, H: false, I: false, J: false },
-                    blocks: ['<p>记入 <b>G 列（死亡）</b>。此外须在 <b>8 小时内</b>致电 OSHA（1-800-321-OSHA）或使用在线 portal 报告死亡（1904.39(b)(1)）。</p>'] },
+                    blocks: ['<p>记入 <b>G 列（死亡）</b>。此外须在 <b>8 小时内</b>致电 OSHA（1-800-321-OSHA）或使用在线 portal 报告死亡（1904.39(b)(1)）。</p>' +
+                             '<p>集团口径为 <b>FAT（Fatality 死亡事故）</b>，是全部 HSE 指标中层级最高、通报链路最长的一级。</p>'] },
                   trace: '命中 1904.7(a)(1) 死亡' },
                 { label: '离岗工作日（days away from work）',
                   result: { kind: 'record', title: '可记录', sub: '1904.7(a)(2) 离岗工作日。',
                     cols: { G: false, H: true, I: false, J: false },
-                    blocks: ['<p>记入 <b>H 列（离岗天数）</b>，受伤/发病当天不计，自次日起算（1904.7(b)(3)(i)）；上限 180 天，达到后按 180 记录并可停止计数。同时 7 日内完成 301 表第 16-17 栏。</p>'] },
+                    blocks: ['<p>记入 <b>H 列（离岗天数）</b>，受伤/发病当天不计，自次日起算（1904.7(b)(3)(i)）；上限 <b>180 个日历日</b>，达到后按 180 记录并可停止计数。同时 7 日内完成 301 表第 16–17 栏。</p>' +
+                             '<p>集团口径为 <b>LTA（Lost Time Accident 损失工时事故）</b>。注意 LTIFR 的工时基数是 <b>100 万</b>小时，而 TRIR / DART 是 <b>20 万</b>小时——对外披露前必须标注基数。</p>'] },
                   trace: '命中 1904.7(a)(2) 离岗' },
                 { label: '限制工作 / 调岗（restricted or transferred）',
                   result: { kind: 'record', title: '可记录', sub: '1904.7(a)(3) 限制工作或调岗。',
                     cols: { G: false, H: false, I: true, J: false },
-                    blocks: ['<p>记入 <b>I 列（工作调离或限制）</b>。限制工作指 PLHCP 建议或雇主要求不得履行其岗位职责的全部或部分常规任务/全天班次（1904.7(b)(4)）；当天不计，自次日起算，上限 180 天。若同时离岗 + 限制，按离岗记 H 列。</p>'] },
+                    blocks: ['<p>记入 <b>I 列（工作调离或限制）</b>。限制工作指 PLHCP 建议或雇主要求不得履行其岗位职责的全部或部分常规任务 / 全天班次（1904.7(b)(4)）；当天不计，自次日起算，上限 180 个日历日。</p>' +
+                             '<p>集团口径为 <b>RWC（Restricted Work Case 限工转岗）</b>。<b>这是最常被漏记的一格</b>——员工照常出勤，不代表事件不可记录。</p>'] },
                   trace: '命中 1904.7(a)(3) 限制/调岗' },
                 { label: '超过急救的医疗处理（medical treatment beyond first aid）',
                   result: { kind: 'record', title: '可记录', sub: '1904.7(a)(4) 医疗处理超出急救清单。',
                     cols: { G: false, H: false, I: false, J: true },
-                    blocks: ['<p>「医疗处理」指 PLHCP 提供超出急救清单（1904.7(b)(5)(ii) 13 项）的处置，如处方药、缝合、手术、石膏固定等。记入 <b>J 列（其他可记录情形）</b>。注意：仅按非处方剂量使用非处方药、破伤风免疫、首次冷热敷、水冲眼、创可贴等均属急救，不构成记录依据。</p>'] },
+                    blocks: ['<p>「医疗处理」指 PLHCP 提供超出急救清单（1904.7(b)(5)(ii) 共 <b>14 项</b>）的处置。记入 <b>J 列（其他可记录情形）</b>。</p>' +
+                             '<h4 style="margin-top:8px;">常见「超出急救」即触发记录的处置</h4>' + MED_LIST +
+                             '<p>施治者的专业身份<b>不影响</b>判定（1904.7(b)(5)(iv)）：急救员做缝合算医疗处理，医师开一盒创可贴仍算急救。</p>' +
+                             '<p>集团口径为 <b>MTI（Medical Treatment Injury 医疗处理伤害）</b>。不要把它与 LTA 混算——两者记录准则不同。</p>'] },
                   trace: '命中 1904.7(a)(4) 超急救医疗处理' },
                 { label: '意识丧失（loss of consciousness）',
                   result: { kind: 'record', title: '可记录', sub: '1904.7(a)(5) 意识丧失。',
                     cols: { G: false, H: false, I: false, J: true },
-                    blocks: ['<p>任何程度的意识丧失均记录（1904.7(a)(5)）。记入 <b>J 列</b>，如伴随其他后果按相应列记录。</p>'] },
+                    blocks: ['<p>任何程度的意识丧失均记录（1904.7(a)(5)）。记入 <b>J 列</b>；如同时伴随离岗或限制，按相应列记录。</p>' +
+                             '<p>集团口径为 <b>MTI</b>（如同时离岗，则升为 LTA）。</p>'] },
                   trace: '命中 1904.7(a)(5) 意识丧失' },
                 { label: 'PLHCP 诊断的重大情形（骨折、鼓膜穿孔、慢性病、癌症等）',
                   result: { kind: 'record', title: '可记录', sub: '1904.7(a)(6) 医生诊断的重大伤害/疾病。',
                     cols: { G: false, H: false, I: false, J: true },
-                    blocks: ['<p>PLHCP（医师、骨科、医师助理、护士 practitioner、急救人员等）诊断的：骨折或牙齿断裂、鼓膜穿孔、慢性不可逆疾病、恶性肿瘤等即记录（1904.7(b)(7)）。记入 <b>J 列</b>，illness kind 按诊断勾选。</p>'] },
+                    blocks: ['<p>PLHCP（医师、骨科医师、医师助理、执业护士等）诊断的：骨折或牙齿断裂、鼓膜穿孔、慢性不可逆疾病、恶性肿瘤等即记录（1904.7(b)(7)）。记入 <b>J 列</b>，illness kind 按诊断勾选。</p>' +
+                             '<p>集团口径为 <b>MTI</b>（如同时离岗或限制，则升为 LTA / RWC）。</p>'] },
                   trace: '命中 1904.7(a)(6) 重大诊断' },
                 { label: '以上均不符合（仅接受了急救清单内的处理）',
-                  result: { kind: 'norecord', title: '不可记录', sub: '未达任何记录标准；急救清单内的处理不构成记录依据。',
-                    blocks: ['<h4>1904.7(b)(5)(ii) 急救清单（仅以下处理 = 急救，不记录）：</h4><ol class="exc-list">' +
-                        '<li>非处方药按非处方剂量、给药方式（含非处方眼药水）；</li>' +
-                        '<li>破伤风免疫；</li>' +
-                        '<li>伤口清洁/冲洗/浸泡（含棉签清理创面）；</li>' +
-                        '<li>弹性绷带、非刚性肩吊带等非刚性支持；</li>' +
-                        '<li>临时固定夹板（splint）；</li>' +
-                        '<li>首次冷疗 / 热疗；</li>' +
-                        '<li>首次使用创可贴（bandage）；</li>' +
-                        '<li>蝶形胶布 / Steri-Strip（非缝合）；</li>' +
-                        '<li>眼部冲洗；</li>' +
-                        '<li>棉签移除眼表异物 / 镊子移除未嵌入异物；</li>' +
-                        '<li>指夹式血氧 / 体温等简单检查；</li>' +
-                        '<li>按摩；</li>' +
-                        '<li>饮用液体缓解高温。</li></ol>' +
-                        '<p style="margin-top:6px;">同时满足：若同一伤害后续升级为处方药、缝合等超急救处理，或出现离岗 / 限制 / 意识丧失 / 重大诊断，须按新信息记录（7 个日历日内补记）。</p>'] },
+                  result: { kind: 'norecord', py: 'FA', title: '不可记录（仅急救）', sub: '未达任何记录标准；急救清单内的处理不构成记录依据。',
+                    blocks: ['<h4>1904.7(b)(5)(ii) 急救清单（封闭清单，共 14 项 A–N）</h4>' +
+                        '<p>只有<b>全部</b>处置都落在这 14 项之内，才属于「急救」；清单之外一律视为医疗处理，必须记录。</p>' +
+                        FIRST_AID_14 +
+                        '<p style="margin-top:6px;">另按 1904.7(b)(5)(i)，下列<b>不</b>构成医疗处理：仅为观察或咨询的就诊、诊断性检查（X 光、血检、仅用于诊断的处方眼药水等）。</p>' +
+                        '<p style="margin-top:6px;">同时满足：若同一伤害后续升级为处方药、缝合等超急救处理，或出现离岗 / 限制 / 意识丧失 / 重大诊断，须按新信息在 <b>7 个日历日内补记</b>。</p>' +
+                        '<p>集团口径为 <b>FA（First Aid 急救案例）</b>，走独立台账。<b>不要把急救案例记进 300 日志</b>——会虚增 TCIR，污染经验修正率（EMR）与客户评分卡，也会给检查留下口实。</p>'] },
                   trace: '未达任何记录标准（仅急救）' }
             ]
         }
@@ -412,7 +485,42 @@
 
     // ===== 运行状态 =====
     var FLOW_ORDER = ['start', 'workrel', 'exception', 'special', 'criteria'];
-    var history = [];   // [{nodeId, optLabel, traceText}]
+    // ⚠️ 变量名禁止用 history —— 全局 var history 无法遮蔽 window.history（浏览器 History API），
+    //    声明会静默失效，history.push / history[i] 全部抛 TypeError，工具点击后毫无反应。
+    //    2026-09-12 实测：Chrome 下 var history=[] → Array.isArray=false, length=2(会话历史)。
+    var steps = [];   // [{nodeId, optLabel, traceText}]
+
+    // ===== 集团 HSE 口径金字塔 =====
+    var PY_ORDER = [
+        { code: 'FAT', label: '死亡事故', en: 'Fatality' },
+        { code: 'LTA', label: '损失工时事故', en: 'Lost Time Accident' },
+        { code: 'RWC', label: '限工转岗', en: 'Restricted Work Case' },
+        { code: 'MTI', label: '医疗处理伤害', en: 'Medical Treatment Injury' },
+        { code: 'FA',  label: '急救案例', en: 'First Aid' },
+        { code: 'NM',  label: '险兆事件', en: 'Near Miss' }
+    ];
+
+    function pyLabel(code) {
+        for (var i = 0; i < PY_ORDER.length; i++) {
+            if (PY_ORDER[i].code === code) return PY_ORDER[i].label;
+        }
+        return '';
+    }
+
+    // 集团口径由判定结果推导：cols 决定 OSHA 列位，列位映射到口径层级
+    function pyramidOf(res) {
+        if (!res) return '';
+        if (res.kind === 'record') {
+            var c = res.cols || {};
+            if (c.G) return 'FAT';
+            if (c.H) return 'LTA';
+            if (c.I) return 'RWC';
+            if (c.J) return 'MTI';
+            return 'MTI';
+        }
+        if (res.kind === 'update') return '';
+        return res.py || '';
+    }
 
     function esc(s) {
         return String(s == null ? '' : s)
@@ -420,13 +528,13 @@
     }
 
     function currentNodeId() {
-        return history.length ? history[history.length - 1].next : 'start';
+        return steps.length ? steps[steps.length - 1].next : 'start';
     }
 
     function renderNode(nodeId) {
         var node = TREE[nodeId];
         var qArea = document.getElementById('qArea');
-        if (!node) { renderResult(history[history.length - 1].result); return; }
+        if (!node) { renderResult(steps[steps.length - 1].result); return; }
         var h = '';
         h += '<div class="q-card">';
         h += '<span class="q-tag">29 CFR ' + esc(node.tag) + '</span>';
@@ -443,30 +551,35 @@
         }
         h += '</div></div>';
         qArea.innerHTML = h;
-        document.getElementById('resultArea') && document.getElementById('resultArea').parentNode.removeChild(document.getElementById('resultArea'));
+        removeResult();
         updateProgress(nodeId);
         updateOps(false);
         renderTrace();
     }
 
+    function removeResult() {
+        var r = document.getElementById('resultArea');
+        if (r && r.parentNode) r.parentNode.removeChild(r);
+    }
+
     function choose(i) {
         var node = TREE[currentNodeId()];
         var opt = node.opts[i];
-        history.push({ nodeId: currentNodeId(), label: opt.label, next: opt.next || null, result: opt.result || null, trace: opt.trace || '' });
+        steps.push({ nodeId: currentNodeId(), label: opt.label, next: opt.next || null, result: opt.result || null, trace: opt.trace || '' });
         if (opt.result) { renderResult(opt.result); }
         else { renderNode(opt.next); }
     }
 
     function goBack() {
-        if (!history.length) return;
-        history.pop();
-        document.getElementById('resultArea') && document.getElementById('resultArea').parentNode.removeChild(document.getElementById('resultArea'));
+        if (!steps.length) return;
+        steps.pop();
+        removeResult();
         renderNode(currentNodeId());
     }
 
     function restart() {
-        history = [];
-        document.getElementById('resultArea') && document.getElementById('resultArea').parentNode.removeChild(document.getElementById('resultArea'));
+        steps = [];
+        removeResult();
         renderNode('start');
     }
 
@@ -479,23 +592,47 @@
     }
 
     function updateOps(isResult) {
-        document.getElementById('backBtn').style.display = history.length ? '' : 'none';
+        document.getElementById('backBtn').style.display = steps.length ? '' : 'none';
         document.getElementById('printBtn').style.display = isResult ? '' : 'none';
     }
 
     function renderTrace() {
         var box = document.getElementById('traceBox');
         var list = document.getElementById('traceList');
-        if (!history.length) { box.style.display = 'none'; return; }
+        if (!steps.length) { box.style.display = 'none'; return; }
         var h = '';
-        for (var i = 0; i < history.length; i++) {
-            var step = history[i];
+        for (var i = 0; i < steps.length; i++) {
+            var step = steps[i];
             var node = TREE[step.nodeId];
             h += '<li>' + esc(node.q) + ' —— <b>' + esc(step.trace || step.label) + '</b>' +
                  ' <span class="tcite">（29 CFR ' + esc(node.tag) + '）</span></li>';
         }
         list.innerHTML = h;
         box.style.display = 'block';
+    }
+
+    // 集团口径区块（含金字塔高亮 + 基数提醒）
+    function pyramidBlock(py) {
+        var h = '<div class="verdict-block"><h4>集团内部口径（HSE 金字塔）</h4>';
+        h += '<p>本次判定在集团绩效口径中登记为 <b style="color:var(--brand-red,#F03752)">' + py + ' ' + pyLabel(py) + '</b>。' +
+             'OSHA 300 记录义务与集团口径是<b>两套独立判定</b>：同一份事实、同一套基础数据，但要分别判、分别报。</p>';
+        h += '<div class="pyramid">';
+        for (var i = 0; i < PY_ORDER.length; i++) {
+            var p = PY_ORDER[i];
+            var on = p.code === py;
+            h += '<div class="pyr-row' + (on ? ' on' : '') + '">' +
+                 '<span class="pyr-code">' + p.code + '</span>' +
+                 '<span class="pyr-name">' + p.label + '<span class="pyr-en">' + p.en + '</span></span>' +
+                 (on ? '<span class="pyr-cur">本次</span>' : '') +
+                 '</div>';
+        }
+        h += '</div>';
+        h += '<p class="pyr-note">口径基数提醒：<b>TRIR / DART</b> 的工时基数为 <b>200,000</b> 小时（约 100 名全职工人一年），<b>LTIFR</b> 为 <b>1,000,000</b> 小时。两者不可直接比较，对外披露必须标注基数。</p>';
+        if (py === 'MTI' || py === 'RWC' || py === 'LTA') {
+            h += '<p class="pyr-note">MTI / RWC / LTA 同属 OSHA 可记录，但在集团口径中分属不同层级——<b>混算会同时污染 TRIR 与 LTIFR</b>，无法定位问题出在工效学、医疗处置还是复工管理。</p>';
+        }
+        h += '</div>';
+        return h;
     }
 
     function renderResult(res) {
@@ -523,12 +660,21 @@
         for (var i = 0; i < (res.blocks || []).length; i++) {
             h += '<div class="verdict-block">' + res.blocks[i] + '</div>';
         }
+        var py = pyramidOf(res);
+        if (py) {
+            h += pyramidBlock(py);
+        } else if (res.kind === 'norecord') {
+            h += '<div class="verdict-block"><h4>集团内部口径（HSE 金字塔）</h4>' +
+                 '<p>本次判定<b>不进入</b> HSE 金字塔——非工作相关事件不计入 NM / FA / MTI / RWC / LTA / FAT 任何一级，也不进入 TRIR、DART、LTIFR 的分子。</p>' +
+                 '<p>但依据 OSHA《职业安全与健康法》§5(a)(1) 一般责任条款，已识别的危害仍需整改；1904.35 禁止因员工上报而歧视或处分。</p></div>';
+        }
         h += '<div class="verdict-block"><h4>记录义务提醒</h4>' +
              '<ul><li>300 日志须在得知可记录情况后 <b>7 个日历日内</b> 完成条目（1904.29(b)(3)）。</li>' +
              '<li>301 表（或保险公司工伤表等等价表）同步完成；信息要素见 1904.29(b)。</li>' +
              '<li>记录自记录年份年末起保留 <b>5 年</b>（1904.33）；员工 / 前员工 / 代表有权查阅（1904.35）。</li>' +
-             '<li>每年 <b>2 月 1 日 – 4 月 30 日</b> 在工作场所公示上一年度 300A 汇总（1904.32）。</li>' +
-             '<li>死亡须 8 小时内、住院 / 截肢 / 眼球丧失须 24 小时内报告 OSHA（1904.39）。</li></ul></div>';
+             '<li>每年 <b>2 月 1 日 – 4 月 30 日</b> 在工作场所公示上一年度 300A 汇总，并由公司高管签署认证（1904.32）。</li>' +
+             '<li>隐私关注病例（针刺伤等）300 日志上不得写姓名（1904.29(b)(6)–(9)）。</li>' +
+             '<li>死亡须 <b>8 小时内</b>、住院 / 截肢 / 眼球丧失须 <b>24 小时内</b>报告 OSHA（1904.39）。该义务独立于记录义务，可能「不记录但必须报告」。</li></ul></div>';
         h += '<p style="font-size:11px;color:var(--text-secondary,#5C6470);margin-top:6px;">判定依据：29 CFR Part 1904（现行 eCFR 版，ecfr.gov/current/title-29/part-1904）。州计划（如 Cal/OSHA）可能有附加要求；本工具仅供专业参考，不构成法律意见。</p>';
         h += '</div>';
         qArea.innerHTML = h;
