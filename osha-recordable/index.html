@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head data-seo="sheen">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="OSHA 可记录事故判断助手：按 29 CFR 1904 逐步判断职业伤害/疾病是否需要记入 OSHA 300 日志 —— 工作相关性、新病例、一般记录标准、针刺/听力损失等特殊条款与急救清单例外 — SHEEN Toolbox">
+    <title>OSHA 可记录事故判断助手 — SHEEN Toolbox</title>
+
+    <meta property="og:title" content="OSHA 可记录事故判断助手 | SHEEN Toolbox">
+    <meta property="og:description" content="按 29 CFR 1904 逐步判定 OSHA 可记录事故：工作相关性 · 新病例 · 特殊条款 · 急救清单">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lwsheen.pages.dev/sheen-toolbox/osha-recordable/">
+    <meta property="og:image" content="https://lwsheen.pages.dev/sheen-toolbox/assets/share/osha-recordable.png">
+    <link rel="canonical" href="https://lwsheen.pages.dev/sheen-toolbox/osha-recordable/">
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "OSHA 可记录事故判断助手", "url": "https://lwsheen.pages.dev/sheen-toolbox/osha-recordable/", "description": "按 29 CFR 1904 逐步判定 OSHA 可记录事故：工作相关性 · 新病例 · 特殊条款 · 急救清单", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "inLanguage": "zh-CN", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "CNY"}, "publisher": {"@type": "Organization", "name": "SHEEN Toolbox"}}</script>
+
+    <!-- Font Awesome 本地路径（禁止 CDN） -->
+    <link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
+    <!-- 公共样式（绝对路径，勿改） -->
+    <link rel="stylesheet" href="/sheen-toolbox/common.css">
+
+    <style>
+        /* ============================================
+           本工具特有样式（决策树问答流）
+           公共类勿重定义：breadcrumb/sheen-footer/btn-*/card/form-card/
+           result-card/badge-*/form-control/page-title/print-time 等
+           ============================================ */
+
+        /* ===== 进度条 ===== */
+        .flow-progress {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .flow-progress .bar {
+            flex: 1;
+            height: 6px;
+            background: var(--border, #E3E6EA);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .flow-progress .bar > i {
+            display: block;
+            height: 100%;
+            width: 0;
+            background: var(--brand-red, #F03752);
+            border-radius: 3px;
+            transition: width 0.25s ease;
+        }
+        .flow-progress .step-label {
+            font-size: 12px;
+            color: var(--text-secondary, #5C6470);
+            white-space: nowrap;
+            font-weight: 600;
+        }
+
+        /* ===== 问题卡 ===== */
+        .q-card {
+            background: #fff;
+            border: 1px solid var(--border, #E3E6EA);
+            border-radius: 20px;
+            padding: 20px 22px;
+            margin-bottom: 14px;
+        }
+        .q-card .q-tag {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--brand-red, #F03752);
+            background: var(--brand-red-light, #FDEEF1);
+            border-radius: 8px;
+            padding: 2px 10px;
+            margin-bottom: 10px;
+        }
+        .q-card .q-text {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary, #1E2126);
+            line-height: 1.6;
+            margin-bottom: 6px;
+        }
+        .q-card .q-hint {
+            font-size: 12px;
+            color: var(--text-secondary, #5C6470);
+            line-height: 1.7;
+            margin-bottom: 14px;
+        }
+        .q-card .q-hint b { color: var(--text-primary, #1E2126); }
+
+        /* ===== 选项按钮 ===== */
+        .opt-list { display: flex; flex-direction: column; gap: 8px; }
+        .opt-btn {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            width: 100%;
+            text-align: left;
+            border: 1px solid var(--border, #E3E6EA);
+            background: #fff;
+            border-radius: 12px;
+            padding: 11px 14px;
+            font-size: 14px;
+            line-height: 1.55;
+            color: var(--text-primary, #1E2126);
+            cursor: pointer;
+            font-family: inherit;
+            transition: border-color 0.15s, background 0.15s;
+        }
+        .opt-btn:hover { border-color: var(--brand-red, #F03752); background: var(--brand-red-light, #FDEEF1); }
+        .opt-btn .opt-mark {
+            flex: none;
+            width: 20px;
+            height: 20px;
+            margin-top: 1px;
+            border-radius: 50%;
+            border: 1.5px solid var(--border, #E3E6EA);
+            color: var(--text-secondary, #5C6470);
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+        .opt-btn:hover .opt-mark { border-color: var(--brand-red, #F03752); color: var(--brand-red, #F03752); }
+        .opt-btn .opt-sub { display: block; font-size: 12px; color: var(--text-secondary, #5C6470); margin-top: 2px; }
+
+        /* ===== 操作行 ===== */
+        .flow-ops { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+
+        /* ===== 已走过的判定链 ===== */
+        .trace-box {
+            background: #fff;
+            border: 1px dashed var(--border, #E3E6EA);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 14px;
+        }
+        .trace-box h4 { font-size: 13px; color: var(--text-secondary, #5C6470); margin-bottom: 8px; font-weight: 700; }
+        .trace-box ol { margin: 0; padding-left: 18px; }
+        .trace-box li { font-size: 12px; color: var(--text-primary, #1E2126); line-height: 1.8; }
+        .trace-box li .tcite { color: var(--text-secondary, #5C6470); font-size: 11px; }
+
+        /* ===== 结果卡内部 ===== */
+        .verdict-title { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+        .verdict-sub { font-size: 13px; color: var(--text-secondary, #5C6470); margin-bottom: 12px; }
+        .verdict-block {
+            background: var(--bg-page, #F8F9FA);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 10px;
+        }
+        .verdict-block h4 { font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--text-primary, #1E2126); }
+        .verdict-block p, .verdict-block li { font-size: 13px; line-height: 1.8; color: var(--text-primary, #1E2126); }
+        .verdict-block ul, .verdict-block ol { margin: 0; padding-left: 18px; }
+        .col-map { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+        .col-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid var(--border, #E3E6EA);
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-size: 12px;
+            color: var(--text-primary, #1E2126);
+            background: #fff;
+        }
+        .col-chip b { color: var(--brand-red, #F03752); font-size: 13px; }
+        .col-chip.active { border-color: var(--brand-red, #F03752); background: var(--brand-red-light, #FDEEF1); }
+
+        /* ===== 例外清单（问题提示内小表格） ===== */
+        .exc-list { margin: 0; padding-left: 18px; }
+        .exc-list li { font-size: 12px; line-height: 1.75; color: var(--text-secondary, #5C6470); }
+
+        /* 打印：隐藏交互、保留结果与判定链 */
+        @media print {
+            .flow-ops, .flow-progress { display: none !important; }
+            .q-card { display: none !important; }
+        }
+    </style>
+    <!-- Baidu Tongji -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9b8c3df212619adec1f70f01695f4160";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+      // github.io 镜像站统计(公众号阅读原文通道)
+      if (location.hostname.indexOf("github.io") >= 0) {
+        var hm2 = document.createElement("script");
+        hm2.src = "https://hm.baidu.com/hm.js?5ceec8bd8bf10bd9d1f4ddceaebdae6f";
+        s.parentNode.insertBefore(hm2, s);
+      }
+    })();
+    </script>
+</head>
+<body>
+
+    <!-- 面包屑导航 -->
+    <div class="breadcrumb">
+        <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+        <span> / OSHA 可记录事故判断助手</span>
+    </div>
+
+    <main class="app-container container-wf">
+
+        <h1 class="page-title"><i class="fa-solid fa-clipboard-question" style="color:var(--brand-red)"></i> OSHA 可记录事故判断助手</h1>
+        <p class="page-subtitle" style="margin-bottom:20px;">依据美国 OSHA 29 CFR Part 1904《职业伤害与疾病的记录与报告》（现行 eCFR 版），按工作相关性 → 新病例 → 特殊条款 → 一般记录标准 → 急救清单例外的完整判定链，逐步判断一起职业伤害/疾病是否需要记入 OSHA 300 日志（Log of Work-Related Injuries and Illnesses）。</p>
+
+        <!-- 进度条 -->
+        <div class="flow-progress no-pr">
+            <span class="step-label" id="stepLabel">第 1 步</span>
+            <div class="bar"><i id="stepBar"></i></div>
+        </div>
+
+        <!-- 判定链（已回答路径，可追溯、随结果打印） -->
+        <div class="trace-box" id="traceBox" style="display:none;">
+            <h4><i class="fa-solid fa-list-check"></i> 判定链</h4>
+            <ol id="traceList"></ol>
+        </div>
+
+        <!-- 问题区（JS 渲染） -->
+        <div id="qArea"></div>
+
+        <!-- 操作按钮 -->
+        <div class="flow-ops no-pr">
+            <button type="button" class="btn btn-sm btn-outline" id="backBtn" onclick="goBack()"><i class="fa-solid fa-arrow-rotate-left"></i> 返回上一步</button>
+            <button type="button" class="btn btn-sm btn-danger" id="restartBtn" onclick="restart()"><i class="fa-solid fa-rotate"></i> 重新开始</button>
+            <button type="button" class="btn btn-sm btn-print" id="printBtn" onclick="window.print()" style="display:none;"><i class="fa-solid fa-print"></i> 打印判定结果</button>
+        </div>
+
+        <!-- 使用说明 -->
+        <div class="card no-pr" style="margin-top:6px;">
+            <h3 style="font-size:15px;font-weight:700;margin-bottom:10px;"><i class="fa-solid fa-circle-info"></i> 使用说明</h3>
+            <ul style="padding-left:18px;">
+                <li style="font-size:13px;line-height:1.9;">按顺序回答问题，每一步会标注对应的 29 CFR 1904 条款；到达结论后可打印判定结果与判定链留存。</li>
+                <li style="font-size:13px;line-height:1.9;">OSHA 规则要点：<b>可记录</b> = 与工作相关的新病例，且符合一般记录标准之一（死亡 / 离岗 / 限制工作或调岗 / 超出急救的医疗处理 / 意识丧失 / 医生诊断的重大情形），或命中特殊条款（针刺伤、医学移除、标准听力损失、肺结核）。</li>
+                <li style="font-size:13px;line-height:1.9;">判定为可记录后，须在 <b>7 个日历日内</b> 填写 300 日志及 301 表（或州计划认可的等价表），记录保留 <b>5 年</b>；每年 2/1–4/30 提交 300A 汇总公示。</li>
+                <li style="font-size:13px;line-height:1.9;">本工具基于联邦 OSHA（Federal OSHA）规则；州计划（State Plan，如加州 Cal/OSHA 等）可能有附加或更严格的记录要求，最终判定请以 OSHA 官方文本及企业 EHS 专业人员意见为准。</li>
+            </ul>
+        </div>
+
+    </main>
+
+    <!-- 页脚（公共样式 .sheen-footer 来自 common.css，勿重新定义） -->
+    <section class="tool-meta no-standard" data-toolmeta="sheen">
+  <p class="tm-disc"><i class="fa-solid fa-circle-info"></i> 免责声明：本工具依据公开国家标准、行业规范及官方文件整理，仅供参考与内部初步筛查之用，不构成任何专业法律、安全或工程意见。实际合规判定请以最新官方发布文本及具备资质的专业机构评估为准。使用者应自行核实相关标准的现行有效性。</p>
+</section>
+
+    <footer class="sheen-footer">
+        <img src="../assets/sheen-logo.png" alt="SHEEN Toolbox" class="sheen-logo-sm"> &nbsp;<strong>SHEEN Toolbox</strong> · OSHA 可记录事故判断助手
+    </footer>
+
+    <!-- 打印时间戳 -->
+    <div class="print-time" id="printTime"></div>
+
+    <script>
+    // ⚠️ 函数必须裸声明（全局作用域），禁止 IIFE 包裹
+
+    // 打印时间（UTC+8 北京时间）
+    (function () {
+        var d = new Date();
+        var utc = d.getTime() + d.getTimezoneOffset() * 60000;
+        var cn = new Date(utc + 8 * 3600000);
+        var p = function (n) { return (n < 10 ? '0' : '') + n; };
+        var el = document.getElementById('printTime');
+        if (el) el.textContent = '打印时间：' + cn.getFullYear() + '-' + p(cn.getMonth() + 1) + '-' + p(cn.getDate()) +
+            ' ' + p(cn.getHours()) + ':' + p(cn.getMinutes()) + '（北京时间）';
+    })();
+
+    // ============================================================
+    // 决策树定义（29 CFR 1904）
+    // 节点：{ tag: 条款, q: 问题, hint: 说明(html), opts: [{label, sub, next|result, trace}] }
+    // result: { kind: 'record'|'norecord'|'update', title, sub, cols?, blocks: [html] }
+    // ============================================================
+    var TREE = {
+        start: {
+            tag: '1904.4',
+            q: '该事件是否造成了伤害或疾病（injury or illness）？',
+            hint: '「伤害或疾病」包括割伤、骨折、扭伤、 cuts、皮疹、呼吸系统疾病、中毒、听力损失等由事件或暴露导致的健康影响。仅未遂事件（near miss）无任何健康影响时，不属于记录范围。',
+            opts: [
+                { label: '是，造成了伤害或疾病', next: 'workrel', trace: '造成伤害或疾病' },
+                { label: '否，仅未遂/险肇事件，无人受伤',
+                  result: { kind: 'norecord', title: '不可记录', sub: '未造成伤害或疾病的事件不属于 OSHA 记录范围。',
+                    blocks: ['<p>OSHA 300 日志仅记录造成<b>实际伤害或疾病</b>的工作相关事件（29 CFR 1904.4）。险肇事件虽然值得内部调查与整改，但不进入 300 日志，也不填写 301 表。</p>'] },
+                  trace: '未造成伤害或疾病' }
+            ]
+        },
+        workrel: {
+            tag: '1904.5',
+            q: '事件是否发生在工作环境中，或工作环境 / 工作条件显著促成了该伤害或疾病？',
+            hint: '<b>工作相关推定</b>：发生在员工工作场所（employer\'s premises）的伤害/疾病默认与工作相关（1904.5(b)(1)）。<b>出差</b>期间为雇主利益从事工作或活动时发生的同样默认相关（1904.5(b)(3)）。雇主安排的通勤交通工具（如公司班车、商务航班）中发生的伤害也视为工作相关（1904.5(b)(4)）。',
+            opts: [
+                { label: '是（工作场所 / 因公活动 / 雇主安排的交通 / 出差为公期间）', next: 'exception', trace: '工作相关：成立' },
+                { label: '属于例外情形（点击查看清单）',
+                  sub: '通勤与个人事务、自愿活动、个人饮食梳妆、普通公众身份等',
+                  result: { kind: 'norecord', title: '不可记录（例外情形）', sub: '命中 1904.5(b)(2) 例外清单，法定视为与工作无关。',
+                    blocks: ['<h4>1904.5(b)(2) 例外清单（命中任一即不可记录）：</h4><ol class="exc-list">' +
+                        '<li>员工在下班后以普通公众身份出现在工作场所；</li>' +
+                        '<li>通勤途中（上下班），包括在公司停车场 / 人行道发生的、仅与通勤相关的事故（1904.5(b)(2)(ii)）；</li>' +
+                        '<li>员工以普通公众身份出现在场所；</li>' +
+                        '<li>仅出现精神症状而无伤害、暴露或事件；</li>' +
+                        '<li>自愿参加雇主提供的健康 / 娱乐活动（健身、球赛、献血等）；</li>' +
+                        '<li>员工自备食物准备 / 食用；</li>' +
+                        '<li>个人梳妆、自行服药（非处方自用药）等个人行为；</li>' +
+                        '<li>处理个人事务（打电话回家、看私人信息等）。</li></ol>' +
+                        '<p style="margin-top:6px;">注意：在公司停车场发生的事故若与工作任务有关（如搬运材料、为雇主办事），仍属工作相关，需回到上一问选择「是」。</p>'] },
+                  trace: '命中 1904.5(b)(2) 例外' },
+                { label: '否，纯属个人原因 / 与工作条件无关',
+                  result: { kind: 'norecord', title: '不可记录（非工作相关）', sub: '1904.5(a)：与工作环境或工作任务无关的伤害/疾病不记录。',
+                    blocks: ['<p>工作相关性不成立时，即使员工受伤发生在公司场所周边，也不记入 OSHA 300 日志。请在内部台账中留存非工作相关工伤的处理记录。</p>'] },
+                  trace: '工作相关：不成立' }
+            ]
+        },
+        exception: {
+            tag: '1904.6',
+            q: '这是否是一个「新病例」（new case）？',
+            hint: '满足任一即为新病例：① 该员工的同一伤害/疾病此前<b>从未</b>被公司记录过；② 此前记录过，但员工已<b>完全康复并返回工作</b>，之后同一伤害/疾病<b>复发或再次发生</b>。<b>不是</b>新病例的情形：症状/体征一直持续、从未完全康复，或 PLHCP 建议继续治疗——此时不重复记录，只更新原有 300 日志条目。',
+            opts: [
+                { label: '是新病例（从未记录过 / 康复后复发）', next: 'special', trace: '新病例：成立（1904.6）' },
+                { label: '否，同一病例仍在持续，无需重复记录',
+                  result: { kind: 'update', title: '不重复记录，更新原记录', sub: '1904.6(b)(4)：同一病例持续期间不得重复记录，应更新原有条目。',
+                    blocks: ['<p>请在原 300 日志条目上<b>更新</b>离岗天数 / 限制工作天数等最新信息（1904.6(b)(4)），并视情更新 301 表。达 180 离岗日上限后可停止计数（1904.7(b)(3)）。</p>'] },
+                  trace: '非新病例：更新原记录（1904.6(b)(4)）' }
+            ]
+        },
+        special: {
+            tag: '1904.8 - 1904.11',
+            q: '是否命中以下「特殊判定」任一情形？（任一命中即必须记录）',
+            hint: '<b>① 针刺 / 锐器伤</b>（1904.8）：物体被他人血液或其他潜在感染物质（OPIM）污染并刺穿/划破皮肤；<b>② 医学移除</b>（1904.9）：依 OSHA 医学监护标准（如铅、苯、棉尘等）被要求调离岗位；<b>③ 职业性听力损失</b>（1904.10）：相对基线出现 10dB 标准阈值位移（STS，2000/3000/4000Hz 平均），且总听力损失 ≥25dB；<b>④ 肺结核</b>（1904.11）：暴露后皮试阳转或由 PLHCP 诊断结核感染（医疗、护理等机构适用）。',
+            opts: [
+                { label: '针刺 / 锐器伤（血液或 OPIM 污染）',
+                  result: { kind: 'record', title: '可记录', sub: '命中 1904.8 针刺伤与锐器伤特殊条款。',
+                    cols: { G: false, H: false, I: false, J: true },
+                    blocks: ['<p>针刺 / 锐器伤致血液或 OPIM 暴露<b>无论后果轻重一律记录</b>（1904.8）。记入 300 日志 J 列（其他可记录情形）， injury/illness kind 勾选 "Injury"；7 日内完成 301 表。</p>'] },
+                  trace: '命中 1904.8 针刺/锐器伤' },
+                { label: '医学移除（medical removal）',
+                  result: { kind: 'record', title: '可记录', sub: '命中 1904.9 医学移除条款。',
+                    cols: { G: false, H: false, I: true, J: false },
+                    blocks: ['<p>依 OSHA 标准的医学监护要求被移除岗位（如血铅超标移除）须记录（1904.9）。记入 <b>I 列（工作调离或限制）</b>，illness kind 按对应类别勾选；当天不计入移除天数，自次日起算。</p>'] },
+                  trace: '命中 1904.9 医学移除' },
+                { label: '职业性听力损失（STS + 总损失 ≥25dB）',
+                  result: { kind: 'record', title: '可记录', sub: '命中 1904.10 听力损失判定标准。',
+                    cols: { G: false, H: false, I: true, J: false },
+                    blocks: ['<p>自 2003 年起统一标准：相对基线 audiogram 在 2000/3000/4000Hz 任一频率平均位移 ≥10dB（STS），且同一频率总听力损失 ≥25dB（1904.10(b)）。记入 <b>H 列或 I 列</b>（依是否离岗/限制），illness kind 勾选 "Hearing Loss"。修订基线规则见 1904.10(c)。</p>'] },
+                  trace: '命中 1904.10 听力损失' },
+                { label: '肺结核感染（皮试阳转 / PLHCP 诊断）',
+                  result: { kind: 'record', title: '可记录', sub: '命中 1904.11 结核特殊条款。',
+                    cols: { G: false, H: false, I: false, J: true },
+                    blocks: ['<p>工作场所结核暴露后皮试阳转或被诊断结核感染须记录（1904.11）。主要适用于医疗保健、看守所、收容所等机构。自 2024 年起基本排除规则见 1904.5(b)(2)(xiii)。</p>'] },
+                  trace: '命中 1904.11 结核' },
+                { label: '均未命中，进入一般记录标准判断', next: 'criteria', trace: '特殊条款：未命中' }
+            ]
+        },
+        criteria: {
+            tag: '1904.7(a)',
+            q: '伤害 / 疾病的后果符合哪一项「一般记录标准」？（1904.7(a)，任一即记录）',
+            hint: '<b>六项标准</b>：① 死亡；② 离岗工作日（days away，发病/受伤当天之后仍有工作日无法出勤）；③ 限制工作或调岗（restricted work / job transfer，当天之后仍受限）；④ 超出急救清单的医疗处理（medical treatment beyond first aid）；⑤ 意识丧失；⑥ PLHCP 诊断的重大情形：骨折/牙齿断裂、鼓膜穿孔、慢性不可逆疾病、癌症等（1904.7(b)(7)）。',
+            opts: [
+                { label: '死亡',
+                  result: { kind: 'record', title: '可记录（且须立即报告）', sub: '1904.7(a)(1) 死亡 + 1904.39 报告义务。',
+                    cols: { G: true, H: false, I: false, J: false },
+                    blocks: ['<p>记入 <b>G 列（死亡）</b>。此外须在 <b>8 小时内</b>致电 OSHA（1-800-321-OSHA）或使用在线 portal 报告死亡（1904.39(b)(1)）。</p>'] },
+                  trace: '命中 1904.7(a)(1) 死亡' },
+                { label: '离岗工作日（days away from work）',
+                  result: { kind: 'record', title: '可记录', sub: '1904.7(a)(2) 离岗工作日。',
+                    cols: { G: false, H: true, I: false, J: false },
+                    blocks: ['<p>记入 <b>H 列（离岗天数）</b>，受伤/发病当天不计，自次日起算（1904.7(b)(3)(i)）；上限 180 天，达到后按 180 记录并可停止计数。同时 7 日内完成 301 表第 16-17 栏。</p>'] },
+                  trace: '命中 1904.7(a)(2) 离岗' },
+                { label: '限制工作 / 调岗（restricted or transferred）',
+                  result: { kind: 'record', title: '可记录', sub: '1904.7(a)(3) 限制工作或调岗。',
+                    cols: { G: false, H: false, I: true, J: false },
+                    blocks: ['<p>记入 <b>I 列（工作调离或限制）</b>。限制工作指 PLHCP 建议或雇主要求不得履行其岗位职责的全部或部分常规任务/全天班次（1904.7(b)(4)）；当天不计，自次日起算，上限 180 天。若同时离岗 + 限制，按离岗记 H 列。</p>'] },
+                  trace: '命中 1904.7(a)(3) 限制/调岗' },
+                { label: '超过急救的医疗处理（medical treatment beyond first aid）',
+                  result: { kind: 'record', title: '可记录', sub: '1904.7(a)(4) 医疗处理超出急救清单。',
+                    cols: { G: false, H: false, I: false, J: true },
+                    blocks: ['<p>「医疗处理」指 PLHCP 提供超出急救清单（1904.7(b)(5)(ii) 13 项）的处置，如处方药、缝合、手术、石膏固定等。记入 <b>J 列（其他可记录情形）</b>。注意：仅按非处方剂量使用非处方药、破伤风免疫、首次冷热敷、水冲眼、创可贴等均属急救，不构成记录依据。</p>'] },
+                  trace: '命中 1904.7(a)(4) 超急救医疗处理' },
+                { label: '意识丧失（loss of consciousness）',
+                  result: { kind: 'record', title: '可记录', sub: '1904.7(a)(5) 意识丧失。',
+                    cols: { G: false, H: false, I: false, J: true },
+                    blocks: ['<p>任何程度的意识丧失均记录（1904.7(a)(5)）。记入 <b>J 列</b>，如伴随其他后果按相应列记录。</p>'] },
+                  trace: '命中 1904.7(a)(5) 意识丧失' },
+                { label: 'PLHCP 诊断的重大情形（骨折、鼓膜穿孔、慢性病、癌症等）',
+                  result: { kind: 'record', title: '可记录', sub: '1904.7(a)(6) 医生诊断的重大伤害/疾病。',
+                    cols: { G: false, H: false, I: false, J: true },
+                    blocks: ['<p>PLHCP（医师、骨科、医师助理、护士 practitioner、急救人员等）诊断的：骨折或牙齿断裂、鼓膜穿孔、慢性不可逆疾病、恶性肿瘤等即记录（1904.7(b)(7)）。记入 <b>J 列</b>，illness kind 按诊断勾选。</p>'] },
+                  trace: '命中 1904.7(a)(6) 重大诊断' },
+                { label: '以上均不符合（仅接受了急救清单内的处理）',
+                  result: { kind: 'norecord', title: '不可记录', sub: '未达任何记录标准；急救清单内的处理不构成记录依据。',
+                    blocks: ['<h4>1904.7(b)(5)(ii) 急救清单（仅以下处理 = 急救，不记录）：</h4><ol class="exc-list">' +
+                        '<li>非处方药按非处方剂量、给药方式（含非处方眼药水）；</li>' +
+                        '<li>破伤风免疫；</li>' +
+                        '<li>伤口清洁/冲洗/浸泡（含棉签清理创面）；</li>' +
+                        '<li>弹性绷带、非刚性肩吊带等非刚性支持；</li>' +
+                        '<li>临时固定夹板（splint）；</li>' +
+                        '<li>首次冷疗 / 热疗；</li>' +
+                        '<li>首次使用创可贴（bandage）；</li>' +
+                        '<li>蝶形胶布 / Steri-Strip（非缝合）；</li>' +
+                        '<li>眼部冲洗；</li>' +
+                        '<li>棉签移除眼表异物 / 镊子移除未嵌入异物；</li>' +
+                        '<li>指夹式血氧 / 体温等简单检查；</li>' +
+                        '<li>按摩；</li>' +
+                        '<li>饮用液体缓解高温。</li></ol>' +
+                        '<p style="margin-top:6px;">同时满足：若同一伤害后续升级为处方药、缝合等超急救处理，或出现离岗 / 限制 / 意识丧失 / 重大诊断，须按新信息记录（7 个日历日内补记）。</p>'] },
+                  trace: '未达任何记录标准（仅急救）' }
+            ]
+        }
+    };
+
+    // ===== 运行状态 =====
+    var FLOW_ORDER = ['start', 'workrel', 'exception', 'special', 'criteria'];
+    var history = [];   // [{nodeId, optLabel, traceText}]
+
+    function esc(s) {
+        return String(s == null ? '' : s)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function currentNodeId() {
+        return history.length ? history[history.length - 1].next : 'start';
+    }
+
+    function renderNode(nodeId) {
+        var node = TREE[nodeId];
+        var qArea = document.getElementById('qArea');
+        if (!node) { renderResult(history[history.length - 1].result); return; }
+        var h = '';
+        h += '<div class="q-card">';
+        h += '<span class="q-tag">29 CFR ' + esc(node.tag) + '</span>';
+        h += '<div class="q-text">' + node.q + '</div>';
+        if (node.hint) h += '<div class="q-hint">' + node.hint + '</div>';
+        h += '<div class="opt-list">';
+        for (var i = 0; i < node.opts.length; i++) {
+            var o = node.opts[i];
+            h += '<button type="button" class="opt-btn" onclick="choose(' + i + ')">' +
+                 '<span class="opt-mark">' + String.fromCharCode(65 + i) + '</span>' +
+                 '<span>' + o.label +
+                 (o.sub ? '<span class="opt-sub">' + esc(o.sub) + '</span>' : '') +
+                 '</span></button>';
+        }
+        h += '</div></div>';
+        qArea.innerHTML = h;
+        document.getElementById('resultArea') && document.getElementById('resultArea').parentNode.removeChild(document.getElementById('resultArea'));
+        updateProgress(nodeId);
+        updateOps(false);
+        renderTrace();
+    }
+
+    function choose(i) {
+        var node = TREE[currentNodeId()];
+        var opt = node.opts[i];
+        history.push({ nodeId: currentNodeId(), label: opt.label, next: opt.next || null, result: opt.result || null, trace: opt.trace || '' });
+        if (opt.result) { renderResult(opt.result); }
+        else { renderNode(opt.next); }
+    }
+
+    function goBack() {
+        if (!history.length) return;
+        history.pop();
+        document.getElementById('resultArea') && document.getElementById('resultArea').parentNode.removeChild(document.getElementById('resultArea'));
+        renderNode(currentNodeId());
+    }
+
+    function restart() {
+        history = [];
+        document.getElementById('resultArea') && document.getElementById('resultArea').parentNode.removeChild(document.getElementById('resultArea'));
+        renderNode('start');
+    }
+
+    function updateProgress(nodeId) {
+        var idx = FLOW_ORDER.indexOf(nodeId);
+        var total = FLOW_ORDER.length;
+        var pct = idx < 0 ? 100 : Math.round((idx + 1) / total * 100);
+        document.getElementById('stepBar').style.width = pct + '%';
+        document.getElementById('stepLabel').textContent = '第 ' + (idx < 0 ? total : (idx + 1)) + ' / ' + total + ' 步';
+    }
+
+    function updateOps(isResult) {
+        document.getElementById('backBtn').style.display = history.length ? '' : 'none';
+        document.getElementById('printBtn').style.display = isResult ? '' : 'none';
+    }
+
+    function renderTrace() {
+        var box = document.getElementById('traceBox');
+        var list = document.getElementById('traceList');
+        if (!history.length) { box.style.display = 'none'; return; }
+        var h = '';
+        for (var i = 0; i < history.length; i++) {
+            var step = history[i];
+            var node = TREE[step.nodeId];
+            h += '<li>' + esc(node.q) + ' —— <b>' + esc(step.trace || step.label) + '</b>' +
+                 ' <span class="tcite">（29 CFR ' + esc(node.tag) + '）</span></li>';
+        }
+        list.innerHTML = h;
+        box.style.display = 'block';
+    }
+
+    function renderResult(res) {
+        var qArea = document.getElementById('qArea');
+        qArea.innerHTML = '';
+        var h = '<div id="resultArea" class="result-card ' +
+                (res.kind === 'record' ? 'danger' : (res.kind === 'update' ? 'warning' : 'safe')) + '">';
+        h += '<h3 class="verdict-title">';
+        h += res.kind === 'record'
+            ? '<i class="fa-solid fa-circle-exclamation"></i> ' + esc(res.title)
+            : (res.kind === 'update'
+                ? '<i class="fa-solid fa-pen-to-square"></i> ' + esc(res.title)
+                : '<i class="fa-solid fa-circle-check"></i> ' + esc(res.title));
+        h += '</h3>';
+        h += '<div class="verdict-sub">' + esc(res.sub) + '</div>';
+        if (res.cols) {
+            h += '<div class="verdict-block"><h4>OSHA 300 日志填写指引</h4>' +
+                 '<p>勾选对应结果列，并在 7 个日历日内完成 301 表（或等价表）：</p><div class="col-map">' +
+                 '<span class="col-chip' + (res.cols.G ? ' active' : '') + '"><b>G</b> 死亡</span>' +
+                 '<span class="col-chip' + (res.cols.H ? ' active' : '') + '"><b>H</b> 离岗天数</span>' +
+                 '<span class="col-chip' + (res.cols.I ? ' active' : '') + '"><b>I</b> 调离或限制</span>' +
+                 '<span class="col-chip' + (res.cols.J ? ' active' : '') + '"><b>J</b> 其他可记录</span>' +
+                 '</div></div>';
+        }
+        for (var i = 0; i < (res.blocks || []).length; i++) {
+            h += '<div class="verdict-block">' + res.blocks[i] + '</div>';
+        }
+        h += '<div class="verdict-block"><h4>记录义务提醒</h4>' +
+             '<ul><li>300 日志须在得知可记录情况后 <b>7 个日历日内</b> 完成条目（1904.29(b)(3)）。</li>' +
+             '<li>301 表（或保险公司工伤表等等价表）同步完成；信息要素见 1904.29(b)。</li>' +
+             '<li>记录自记录年份年末起保留 <b>5 年</b>（1904.33）；员工 / 前员工 / 代表有权查阅（1904.35）。</li>' +
+             '<li>每年 <b>2 月 1 日 – 4 月 30 日</b> 在工作场所公示上一年度 300A 汇总（1904.32）。</li>' +
+             '<li>死亡须 8 小时内、住院 / 截肢 / 眼球丧失须 24 小时内报告 OSHA（1904.39）。</li></ul></div>';
+        h += '<p style="font-size:11px;color:var(--text-secondary,#5C6470);margin-top:6px;">判定依据：29 CFR Part 1904（现行 eCFR 版，ecfr.gov/current/title-29/part-1904）。州计划（如 Cal/OSHA）可能有附加要求；本工具仅供专业参考，不构成法律意见。</p>';
+        h += '</div>';
+        qArea.innerHTML = h;
+        document.getElementById('stepBar').style.width = '100%';
+        document.getElementById('stepLabel').textContent = '判定完成';
+        updateOps(true);
+        renderTrace();
+    }
+
+    // ===== 初始化 =====
+    renderNode('start');
+    </script>
+
+</body>
+</html>
