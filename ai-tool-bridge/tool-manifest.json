@@ -1548,6 +1548,31 @@
    "filterFns": [
     "evaluateHeight"
    ]
+  },
+  {
+   "id": "osha-recordable",
+   "title": "OSHA 可记录事故判断助手",
+   "desc": "依据 OSHA 29 CFR Part 1904 决策树，逐步判断职业伤害/疾病是否需要记入 OSHA 300 日志：工作相关性、新病例、特殊条款（针刺/医学移除/听力损失/结核）、一般记录标准与急救清单例外。",
+   "descShort": "按29 CFR 1904判定OSHA可记录",
+   "category": "其他",
+   "standards": [
+    "29 CFR Part 1904《Recording and Reporting Occupational Injuries and Illnesses》(OSHA, eCFR 现行版)"
+   ],
+   "copyright": "boundary",
+   "trigger": [
+    "OSHA",
+    "可记录",
+    "recordable",
+    "300日志",
+    "300 Log",
+    "301表",
+    "工伤记录",
+    "急救清单",
+    "工作相关性"
+   ],
+   "page": "/sheen-toolbox/osha-recordable/",
+   "queryParam": null,
+   "params": []
   }
  ]
 }
