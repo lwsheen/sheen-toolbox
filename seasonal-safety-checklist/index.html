@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head data-seo="sheen">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="季节性安全检查表：换季通用准备 + 春（防雷/解冻/复工）、夏（防暑降温/防汛防台/有限空间）、秋（防火/防静电/大风）、冬（防冻防凝/防滑/防中毒窒息）四季重点检查项，三态判定，一键导出 Excel/Word — SHEEN Toolbox">
+    <title>季节性安全检查表 — SHEEN Toolbox</title>
+    <meta property="og:title" content="季节性安全检查表 | SHEEN Toolbox">
+    <meta property="og:description" content="四季重点风险一表覆盖：防雷防汛 · 防暑降温 · 防火防静电 · 防冻防凝防滑 · 防中毒窒息">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lwsheen.pages.dev/sheen-toolbox/seasonal-safety-checklist/">
+    <meta property="og:image" content="https://lwsheen.pages.dev/sheen-toolbox/assets/share/seasonal-safety-checklist.png">
+    <link rel="canonical" href="https://lwsheen.pages.dev/sheen-toolbox/seasonal-safety-checklist/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"季节性安全检查表","url":"https://lwsheen.pages.dev/sheen-toolbox/seasonal-safety-checklist/","description":"四季重点风险一表覆盖：防雷防汛 · 防暑降温 · 防火防静电 · 防冻防凝防滑 · 防中毒窒息，依据《防暑降温措施管理办法》安监总安健〔2012〕89号、应急管理部令第13号等","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","inLanguage":"zh-CN","offers":{"@type":"Offer","price":"0","priceCurrency":"CNY"},"publisher":{"@type":"Organization","name":"SHEEN Toolbox"}}</script>
+
+    <!-- 图标库（本地路径，禁止 CDN） -->
+    <link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
+    <!-- 公共样式（绝对路径，勿改） -->
+    <link rel="stylesheet" href="/sheen-toolbox/common.css">
+
+    <style>
+        /* ============================================================
+           本工具特有样式（公共组件由 common.css 提供）
+           品牌色：深红 #F03752 / 微纤灰 #F8F9FA / 圆角卡片 + 药丸按钮
+           ============================================================ */
+
+        /* ===== 头部信息条 ===== */
+        .meta-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px 22px;
+            align-items: flex-end;
+            background: var(--bg-page);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px 18px;
+            margin-bottom: 16px;
+        }
+        .meta-bar .field { display: flex; flex-direction: column; gap: 4px; }
+        .meta-bar label { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
+        .meta-bar input {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 7px 10px;
+            font-size: 13px;
+            font-family: var(--font);
+            background: #fff;
+            min-width: 150px;
+            outline: none;
+        }
+        .meta-bar input:focus { border-color: var(--brand-red); }
+
+        /* ===== 工具栏（药丸按钮组） ===== */
+        .tool-toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+
+        /* ===== 实时统计面板 ===== */
+        .summary-bar { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+        .stat-card {
+            flex: 1 1 100px;
+            min-width: 90px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 12px 14px;
+            text-align: center;
+        }
+        .stat-card .num { font-size: 24px; font-weight: 800; line-height: 1.1; color: var(--text-primary); }
+        .stat-card .lab { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+        .stat-card.s-ok    { border-color: var(--ok-soft-2); }
+        .stat-card.s-ok .num   { color: var(--ok-deep); }
+        .stat-card.s-warn  { border-color: var(--warn-soft); }
+        .stat-card.s-warn .num { color: var(--warn-700); }
+        .stat-card.s-bad   { border-color: var(--fail-soft); background: #FDEEF1; }
+        .stat-card.s-bad .num  { color: var(--brand-red); }
+        .stat-card.s-pending .num { color: var(--warn-700); }
+
+        /* ===== 使用说明折叠 ===== */
+        .guide-box {
+            display: none;
+            background: var(--brand-red-light);
+            border-left: 4px solid var(--brand-red);
+            border-radius: var(--radius-md);
+            padding: 16px 18px;
+            margin-bottom: 18px;
+        }
+        .guide-box h3 {
+            font-size: 15px; font-weight: 700; color: var(--brand-red-hover);
+            margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
+        }
+        .guide-box ul { margin: 0 0 8px; padding-left: 20px; }
+        .guide-box li { font-size: 13px; color: var(--text-primary); line-height: 1.75; margin-bottom: 4px; }
+        .guide-box .warn {
+            background: #FFF7ED;
+            border: 1px solid #FDBA74;
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            margin-top: 6px;
+            font-size: 13px;
+            color: var(--warn-deep);
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .guide-box .warn i { color: var(--warn); margin-top: 2px; }
+
+        /* ===== 检查表 ===== */
+        .check-table {
+            table-layout: fixed;
+            min-width: 800px;          /* 桌面端零横滚：.table-scroll 内容盒 = 850-2*24 = 802 */
+            width: 100%;
+        }
+        .check-table thead th { text-align: center; font-size: 12px; white-space: nowrap; }
+        .check-table tbody td { vertical-align: middle; padding: 6px 8px; }
+        .check-table .col-seq    { width: 44px;  text-align: center; font-weight: 700; color: var(--text-secondary); white-space: nowrap; }
+        .check-table .col-item   { width: 100px; font-weight: 700; color: var(--text-primary); text-align: center; min-width: 88px; }
+        .check-table .col-std    { text-align: left; font-size: 12px; line-height: 1.55; color: #374151; }
+        .check-table .col-result { width: 180px; min-width: 160px; }
+        .check-table .col-remark { width: 140px; min-width: 116px; }
+        .check-table .col-item .item-name { display: block; font-size: 13px; }
+        .check-table .col-item .item-sub  { display: block; font-size: 12px; font-weight: 400; color: var(--text-secondary); margin-top: 2px; }
+
+        .std-list { margin: 0; padding-left: 18px; }
+        .std-list li { margin-bottom: 3px; }
+
+        .remark-input {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 6px 8px;
+            font-size: 12px;
+            font-family: var(--font);
+            background: #fff;
+            min-height: 38px;
+            resize: vertical;
+            outline: none;
+        }
+        .remark-input:focus { border-color: var(--brand-red); }
+
+        /* 结果单选药丸 */
+        .res-group { display: flex; gap: 4px; justify-content: center; flex-wrap: nowrap; }
+        .res-opt {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 3px 5px;
+            font-size: 12px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            background: #fff;
+            user-select: none;
+            white-space: nowrap;
+            transition: all 0.15s;
+        }
+        .res-opt input { display: none; }
+        .res-opt:hover { border-color: #9CA3AF; }
+        .res-opt.active-ok   { background: var(--ok-soft); border-color: #16A34A; color: var(--ok-deep); font-weight: 700; }
+        .res-opt.active-warn { background: var(--warn-soft-2); border-color: #F57C00; color: var(--warn-700); font-weight: 700; }
+        .res-opt.active-bad  { background: var(--fail-soft-2); border-color: var(--brand-red); color: var(--brand-red); font-weight: 700; }
+
+        /* 不合格 / 部分符合行高亮 */
+        tr.row-bad td  { background: #FDEEF1 !important; }
+        tr.row-warn td { background: #FEF3E2 !important; }
+        tr.row-bad .col-item { color: var(--brand-red); }
+
+        /* 提示条 */
+        .alert-bad {
+            display: none;
+            background: #FDEEF1;
+            border: 1px solid var(--fail-soft);
+            color: var(--brand-red);
+            border-radius: var(--radius-md);
+            padding: 10px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        /* ===== 综合判定 + 结论 ===== */
+        .verdict-card {
+            background: var(--bg-page);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 18px 20px;
+            margin-top: 18px;
+        }
+        .verdict-card h3 {
+            font-size: 15px; font-weight: 700; color: var(--text-primary);
+            margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+        }
+        .verdict-opts { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+        .verdict-opt {
+            display: inline-flex; align-items: center; gap: 6px;
+            border: 1px solid var(--border); border-radius: 8px;
+            padding: 8px 16px; font-size: 13px; cursor: pointer; background: #fff; user-select: none;
+            transition: all 0.15s;
+        }
+        .verdict-opt input { display: none; }
+        .verdict-opt.active { background: var(--brand-red); border-color: var(--brand-red); color: #fff; font-weight: 700; }
+        .verdict-card label.field-label { font-size: 12px; color: var(--text-secondary); font-weight: 600; display: block; margin-bottom: 6px; }
+        .verdict-card textarea {
+            width: 100%; border: 1px solid var(--border); border-radius: var(--radius-sm);
+            padding: 10px 12px; font-size: 13px; font-family: var(--font); background: #fff;
+            min-height: 64px; resize: vertical; outline: none;
+        }
+        .verdict-card textarea:focus { border-color: var(--brand-red); }
+        .verdict-sign { display: flex; flex-wrap: wrap; gap: 18px 28px; margin-top: 14px; align-items: flex-end; }
+        .verdict-sign .field { display: flex; flex-direction: column; gap: 4px; }
+        .verdict-sign label { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
+        .verdict-sign input[type=text], .verdict-sign input[type=date] {
+            border: none; border-bottom: 1px solid var(--text-secondary); background: transparent;
+            min-width: 150px; padding: 4px; font-size: 13px; outline: none; font-family: var(--font);
+            color: var(--text-primary);
+        }
+
+        /* ===== 打印补充 ===== */
+        @media print {
+            @page { size: landscape; margin: 10mm 7mm; }
+            body { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            .meta-bar { background: #fff !important; }
+            .guide-box, .tool-toolbar, .summary-bar, .alert-bad { display: none !important; }
+
+            /* 横版 A4 用百分比宽度，确保全部列可容纳 */
+            .check-table { table-layout: fixed !important; min-width: 0 !important; width: 100% !important; }
+            .check-table .col-seq    { width: 4%  !important; min-width: 0 !important; font-size: 9px !important; }
+            .check-table .col-item   { width: 12% !important; min-width: 0 !important; font-size: 9px !important; word-wrap: break-word; }
+            .check-table .col-item .item-name { font-size: 9px !important; }
+            .check-table .col-std    { width: 42% !important; font-size: 8.5px !important; line-height: 1.35 !important; }
+            .check-table .col-result { width: 19% !important; min-width: 0 !important; }
+            .check-table .col-remark { width: 23% !important; min-width: 0 !important; }
+
+            .check-table thead th {
+                background: #e5e5e5 !important; color: #000 !important;
+                position: static !important; font-size: 9px !important; padding: 3px 2px !important;
+            }
+            .check-table tbody td { font-size: 8.5px !important; padding: 2px 3px !important; }
+            .std-list { padding-left: 12px !important; margin: 0 !important; }
+            .std-list li { margin-bottom: 1px !important; font-size: 8.5px !important; }
+            .remark-input { border: none !important; font-size: 8.5px !important; padding: 1px 2px !important; background: transparent !important; min-height: 0 !important; }
+            .res-opt { border: 1px solid #999 !important; padding: 1px 4px !important; font-size: 8px !important; }
+            .res-opt.active-ok   { background: var(--ok-soft) !important; }
+            .res-opt.active-warn { background: var(--warn-soft-2) !important; }
+            .res-opt.active-bad  { background: var(--fail-soft-2) !important; }
+            .verdict-card { display: block !important; background: #fff !important; margin-top: 12px; page-break-inside: auto; }
+            .verdict-card h3 { font-size: 11px !important; }
+            .verdict-opts { gap: 4px !important; margin-bottom: 6px !important; }
+            .verdict-opt { border: 1px solid #999 !important; padding: 2px 6px !important; font-size: 9px !important; }
+            .verdict-opt.active { background: #F03752 !important; }
+            .verdict-card textarea { border: 1px solid #999 !important; font-size: 9px !important; min-height: 40px !important; }
+            .verdict-sign input { border-bottom: 1px solid #333 !important; }
+        }
+    </style>
+    <!-- Baidu Tongji -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9b8c3df212619adec1f70f01695f4160";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+      // github.io 镜像站统计(公众号阅读原文通道)
+      if (location.hostname.indexOf("github.io") >= 0) {
+        var hm2 = document.createElement("script");
+        hm2.src = "https://hm.baidu.com/hm.js?5ceec8bd8bf10bd9d1f4ddceaebdae6f";
+        s.parentNode.insertBefore(hm2, s);
+      }
+    })();
+    </script>
+
+</head>
+<body>
+
+    <!-- 引擎挂载点（breadcrumb + main 由 checklist-engine 渲染） -->
+    <div id="clRoot"></div>
+
+    <!-- 标准信息块（由 add_tool_meta.py 注入） -->
+
+    <!-- 页脚 -->
+    <section class="tool-meta" data-toolmeta="sheen">
+  <div class="tm-head">
+<span class="tm-std-code">安监总安健〔2012〕89号</span>
+<span class="tm-std-name">《防暑降温措施管理办法》</span>
+ <span class="tm-sep">·</span> 
+<span class="tm-std-code">应急管理部令第13号</span>
+<span class="tm-std-name">《工贸企业有限空间作业安全规定》</span>
+ <span class="tm-sep">·</span> 
+<span class="tm-std-code">GB/T 21431-2023</span>
+<span class="tm-std-name">《建筑物雷电防护装置检测技术规范》</span>
+  </div>
+  <div class="tm-line"><span class="tm-dt"><i>发布</i><span class="tm-dt-val">2012-06-29 / 2023-11-29 / 2023-12-28</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>实施</i><span class="tm-dt-val">2012-06-29 / 2024-01-01 / 2024-07-01</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>更新</i><span class="tm-dt-val">2026-09-19</span></span></div>
+</section>
+
+    <footer class="sheen-footer">
+        <img src="../assets/sheen-logo.png" alt="SHEEN Toolbox" class="sheen-logo-sm"> &nbsp;<strong>SHEEN Toolbox</strong> · 季节性安全检查表
+    </footer>
+
+    <!-- 打印时间戳 -->
+    <div class="print-time" id="printTime"></div>
+
+    <!-- 引擎 + 数据 + 挂载 -->
+    <script src="/sheen-toolbox/seasonal-safety-checklist/data.js"></script>
+    <script src="/sheen-toolbox/checklist-engine/engine.js"></script>
+    <script>
+    (function () {
+        var root = document.getElementById('clRoot');
+        if (root && window.SHEEN_SE_DATA && window.SHEEN_CL) {
+            window.SHEEN_CL.mount(root, window.SHEEN_SE_DATA);
+        }
+    })();
+    </script>
+
+    <!-- 访问统计（与 Toolbox 一致） -->
+    <script src="/sheen-toolbox/assets/i18n.js"></script>
+    <script src="/sheen-toolbox/assets/share.js"></script>
+
+</body>
+</html>
