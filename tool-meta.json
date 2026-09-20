@@ -1,0 +1,553 @@
+{
+  "_note": "SHEEN Toolbox 工具页标准信息元数据。standards=标准号+名称；pub=发布日期；eff=实施日期；dataUpdated=数据更新时间(2026-08-04 统一)；hasStandard=false 的工具只显示免责声明。pub/eff 已据公开资料逐项核对（2026-08-04 核验：GB 4053/GB 12142 实为 2027-01-01 实施；GBZ/T 229.3 已更新为 2025 版；特种作业规定更新为应急管理部令第19号；危化品目录仍用 2015 版，无 2025 版）。",
+  "accident-classification": {
+    "hasStandard": true,
+    "standards": [
+      "GB 6441-2025《生产安全事故分类与编码》",
+      "GB 15499-2025《生产安全事故伤害损失工作日判定》"
+    ],
+    "pub": "2025-12-31",
+    "eff": "2026-07-01（GB 15499-2025 实施 2027-01-01）",
+    "dataUpdated": "2026-08-06"
+  },
+  "working-height-classification": {
+    "hasStandard": true,
+    "standards": [
+      "GB 3608-2025《高处作业分级》"
+    ],
+    "pub": "2025-10-05",
+    "eff": "2026-05-01（代替 GB/T 3608-2008）",
+    "dataUpdated": "2026-08-06"
+  },
+  "chain-inspection": {
+    "hasStandard": true,
+    "standards": [
+      "GB/T 20946-2007《起重用短环链 验收总则》"
+    ],
+    "pub": "2007-03-21",
+    "eff": "2007-09-01",
+    "dataUpdated": "2026-09-05"
+  },
+  "dangerous-goods-query": {
+    "hasStandard": true,
+    "standards": [
+      "GB 12268-2025《危险货物品名表》"
+    ],
+    "pub": "2025-03-28",
+    "eff": "2025-10-01",
+    "dataUpdated": "2026-08-04"
+  },
+  "electrical-safety-checklist": {
+    "hasStandard": true,
+    "standards": [
+      "GB/T 13869-2026《用电安全导则》及电气安全检查相关规范"
+    ],
+    "pub": "2026-07-02",
+    "eff": "2027-02-01",
+    "dataUpdated": "2026-08-18"
+  },
+  "environmental-tax-calculator": {
+    "hasStandard": true,
+    "standards": [
+      "《中华人民共和国环境保护税法》(主席令第61号)"
+    ],
+    "pub": "2016-12-25",
+    "eff": "2018-01-01",
+    "dataUpdated": "2026-08-04"
+  },
+  "explosion-venting-calculator": {
+    "hasStandard": true,
+    "standards": [
+      "GB 50016-2014《建筑设计防火规范》",
+      "EN 14491:2012《Dust explosion venting protective systems》"
+    ],
+    "pub": "2014-08-27",
+    "eff": "2015-05-01",
+    "dataUpdated": "2026-08-04"
+  },
+  "safety-signs": {
+    "hasStandard": true,
+    "standards": [
+      "GB 2894-2025《安全色和安全标志》（代替 GB 2893-2008 / GB 2894-2008 / GB 7231-2003）"
+    ],
+    "pub": "2025-05-30",
+    "eff": "2026-03-01",
+    "dataUpdated": "2026-08-09"
+  },
+  "eyewash": {
+    "hasStandard": true,
+    "standards": [
+      "GB 38144-2025《眼面部防护 应急喷淋和洗眼设备》"
+    ],
+    "pub": "2025-08-29",
+    "eff": "2026-09-01",
+    "dataUpdated": "2026-08-04"
+  },
+  "fire-separation-distance": {
+    "hasStandard": true,
+    "standards": [
+      "GB 50016-2014《建筑设计防火规范》"
+    ],
+    "pub": "2014-08-27",
+    "eff": "2015-05-01",
+    "dataUpdated": "2026-08-04"
+  },
+  "five-why-analysis": {
+    "hasStandard": false,
+    "standards": [],
+    "pub": "",
+    "eff": "",
+    "dataUpdated": "2026-08-04"
+  },
+  "fixed-ladder-params": {
+    "hasStandard": true,
+    "standards": [
+      "GB 4053.1~3-2025《固定式金属梯及平台 第1~3部分》"
+    ],
+    "pub": "2025-12-31",
+    "eff": "2027-01-01",
+    "dataUpdated": "2026-08-04"
+  },
+  "grinder-inspection": {
+    "hasStandard": true,
+    "standards": [
+      "GB 4674-2009《磨削机械安全规程》"
+    ],
+    "pub": "2009-03-31",
+    "eff": "2009-12-01",
+    "dataUpdated": "2026-09-06"
+  },
+  "harness-inspection": {
+    "hasStandard": true,
+    "standards": [
+      "GB 6095-2021《坠落防护 安全带》"
+    ],
+    "pub": "2021-08-10",
+    "eff": "2022-09-01",
+    "dataUpdated": "2026-09-06"
+  },
+  "hazardous-chemicals-query": {
+    "hasStandard": true,
+    "standards": [
+      "《危险化学品目录（2015版）》（安监总局等10部门公告2015年第5号）",
+      "含后续调整公告（如柴油，2022年第8号公告纳入）"
+    ],
+    "pub": "2015-02-27",
+    "eff": "2015-05-01",
+    "dataUpdated": "2026-08-04"
+  },
+  "hazardous-waste-query": {
+    "hasStandard": true,
+    "standards": [
+      "《国家危险废物名录（2025年版）》"
+    ],
+    "pub": "2024-11-26",
+    "eff": "2025-01-01",
+    "dataUpdated": "2026-08-04"
+  },
+  "heat-index": {
+    "hasStandard": true,
+    "standards": [
+      "NOAA 高温指数(Heat Index) / WBGT 湿球黑球温度指数（国际通用算法，非单一国标）"
+    ],
+    "pub": "",
+    "eff": "",
+    "dataUpdated": "2026-08-04"
+  },
+  "heat-stress-classification": {
+    "hasStandard": true,
+    "standards": [
+      "GBZ/T 229.3-2025《职业病危害作业分级标准 第3部分：高温作业》"
+    ],
+    "pub": "2025-08-20",
+    "eff": "2026-02-01",
+    "dataUpdated": "2026-08-04"
+  },
+  "hook-shackle-inspection": {
+    "hasStandard": true,
+    "standards": [
+      "GB/T 10051.1-2010《起重吊钩 第1部分：力学性能、起重量、应力及材料》",
+      "JB/T 8112《起重吊钩 工作级》"
+    ],
+    "pub": "2011-01-10",
+    "eff": "2011-09-01",
+    "dataUpdated": "2026-09-05"
+  },
+  "illuminance-standard": {
+    "hasStandard": true,
+    "standards": [
+      "GB/T 50034-2024《建筑照明设计标准》"
+    ],
+    "pub": "2024",
+    "eff": "2025-01-01",
+    "dataUpdated": "2026-08-04"
+  },
+  "industry-classification": {
+    "hasStandard": true,
+    "standards": [
+      "GB/T 4754-2017《国民经济行业分类》"
+    ],
+    "pub": "2017-06-30",
+    "eff": "2017-10-01",
+    "dataUpdated": "2026-08-04"
+  },
+  "iso14001-environmental-factors": {
+    "hasStandard": true,
+    "standards": [
+      "ISO 14001:2015《环境管理体系 要求及使用指南》"
+    ],
+    "pub": "2015-09-15",
+    "eff": "2015-09-15",
+    "dataUpdated": "2026-08-04"
+  },
+  "jsa-lec": {
+    "hasStandard": false,
+    "standards": [],
+    "pub": "",
+    "eff": "",
+    "dataUpdated": "2026-08-04"
+  },
+  "lifting-calculator": {
+    "hasStandard": true,
+    "standards": [
+      "GB/T 5972-2023《起重机 钢丝绳 保养、维护、检验和报废》"
+    ],
+    "pub": "2023-05-23",
+    "eff": "2023-12-01",
+    "dataUpdated": "2026-09-05"
+  },
+  "major-hazard-identification": {
+    "hasStandard": true,
+    "standards": [
+      "GB 18218-2018《危险化学品重大危险源辨识》"
+    ],
+    "pub": "2018-11-19",
+    "eff": "2019-03-01",
+    "dataUpdated": "2026-08-04"
+  },
+  "niosh-lifting-calculator": {
+    "hasStandard": false,
+    "standards": [],
+    "pub": "",
+    "eff": "",
+    "dataUpdated": "2026-08-04"
+  },
+  "noise-calculator": {
+    "hasStandard": true,
+    "standards": [
+      "GBZ/T 229.4-2012《工作场所职业病危害作业分级 第4部分：噪声》"
+    ],
+    "pub": "2012",
+    "eff": "2012",
+    "dataUpdated": "2026-08-04"
+  },
+  "occupational-disease-query": {
+    "hasStandard": true,
+    "standards": [
+      "《职业病分类和目录》国卫职健发〔2024〕39号"
+    ],
+    "pub": "2024",
+    "eff": "2025-01-01",
+    "dataUpdated": "2026-08-04"
+  },
+  "oel-query": {
+    "hasStandard": true,
+    "standards": [
+      "GBZ 2.1-2019《工作场所有害因素职业接触限值 第1部分：化学有害因素》及第1号修改单"
+    ],
+    "pub": "2019-08-27",
+    "eff": "2020-04-01",
+    "dataUpdated": "2026-08-04"
+  },
+  "portable-ladder-inspection": {
+    "hasStandard": true,
+    "standards": [
+      "GB 12142-2025《便携式金属梯安全要求》"
+    ],
+    "pub": "2025-12-31",
+    "eff": "2027-01-01",
+    "dataUpdated": "2026-08-04"
+  },
+  "portable-ladder-params": {
+    "hasStandard": true,
+    "standards": [
+      "GB 12142-2025《便携式金属梯安全要求》"
+    ],
+    "pub": "2025-12-31",
+    "eff": "2027-01-01",
+    "dataUpdated": "2026-08-04"
+  },
+  "power-tool-inspection": {
+    "hasStandard": true,
+    "standards": [
+      "GB/T 3787-2017《手持式电动工具的管理、使用、检查和维修安全技术规程》"
+    ],
+    "pub": "2017-07-12",
+    "eff": "2018-02-01",
+    "dataUpdated": "2026-08-04"
+  },
+  "pssr-checklist": {
+    "hasStandard": false,
+    "standards": [],
+    "pub": "",
+    "eff": "",
+    "dataUpdated": "2026-08-04"
+  },
+  "rope-chain-selector": {
+    "hasStandard": true,
+    "standards": [
+      "GB/T 20118-2017《一般用途钢丝绳》",
+      "GB/T 5972-2023《起重机 钢丝绳 保养、维护、检验和报废》"
+    ],
+    "pub": "2017-09-07",
+    "eff": "2018-04-01",
+    "dataUpdated": "2026-09-05"
+  },
+  "safety-days-calculator": {
+    "hasStandard": false,
+    "standards": [],
+    "pub": "",
+    "eff": "",
+    "dataUpdated": "2026-08-04"
+  },
+  "safety-light-curtain": {
+    "hasStandard": true,
+    "standards": [
+      "ISO 13855:2010《机械安全 接近人体部件的保护装置间安全距离》"
+    ],
+    "pub": "2010",
+    "eff": "2010",
+    "dataUpdated": "2026-08-04"
+  },
+  "safety-production-cost-calculator": {
+    "hasStandard": true,
+    "standards": [
+      "财企〔2022〕136号《企业安全生产费用提取和使用管理办法》"
+    ],
+    "pub": "2022-11-21",
+    "eff": "2022-12-13",
+    "dataUpdated": "2026-08-04"
+  },
+  "special-equipment-query": {
+    "hasStandard": true,
+    "standards": [
+      "《中华人民共和国特种设备安全法》(主席令第4号)",
+      "TSG 08-2017《特种设备使用管理规则》等配套安全技术监察规程"
+    ],
+    "pub": "2013-06-29",
+    "eff": "2014-01-01",
+    "dataUpdated": "2026-08-04"
+  },
+  "special-work-query": {
+    "hasStandard": true,
+    "standards": [
+      "《特种作业人员安全技术培训考核管理规定》（应急管理部令第19号）",
+      "《特种作业目录》（同令附件，2026-06-01实施，2010版同时废止）"
+    ],
+    "pub": "2025-12-17",
+    "eff": "2026-06-01",
+    "dataUpdated": "2026-08-04"
+  },
+  "synthetic-fiber-sling-inspection": {
+    "hasStandard": true,
+    "standards": [
+      "JB/T 8521.1-2007《编织吊索 一般用合成纤维扁平吊装带》"
+    ],
+    "pub": "2007",
+    "eff": "2007",
+    "dataUpdated": "2026-09-05"
+  },
+  "wire-rope-inspection": {
+    "hasStandard": true,
+    "standards": [
+      "GB/T 5972-2023《起重机 钢丝绳 保养、维护、检验和报废》"
+    ],
+    "pub": "2023-05-23",
+    "eff": "2023-12-01",
+    "dataUpdated": "2026-09-05"
+  },
+  "work-injury-calculator": {
+    "hasStandard": true,
+    "standards": [
+      "《工伤保险条例》(国务院令第586号 2010年修订)"
+    ],
+    "pub": "2010-12-20",
+    "eff": "2011-01-01",
+    "dataUpdated": "2026-08-04"
+  },
+  "heat-stroke-first-aid": {
+    "hasStandard": false,
+    "standards": [],
+    "pub": "",
+    "eff": "",
+    "dataUpdated": "2026-08-08"
+  },
+  "chemical-burn-lookup": {
+    "hasStandard": true,
+    "standards": [
+      "GBZ 51-2002《职业性化学性皮肤灼伤诊断标准》"
+    ],
+    "appendix": "附录 D",
+    "pub": "2002-04-08",
+    "eff": "2002-06-01",
+    "dataUpdated": "2026-08-08"
+  },
+  "sign-mount-calculator": {
+    "hasStandard": true,
+    "standards": [
+      "GB 50009-2012《建筑结构荷载规范》"
+    ],
+    "pub": "2012-05-28",
+    "eff": "2012-10-01",
+    "dataUpdated": "2026-08-09"
+  },
+  "regulation-standards": {
+    "hasStandard": false,
+    "dataUpdated": "2026-08-15",
+    "merged": "compliance-evaluation"
+  },
+  "temporary-power-checklist": {
+    "hasStandard": true,
+    "standards": [
+      "JGJ/T 46-2024 建筑与市政工程施工现场临时用电安全技术标准"
+    ],
+    "pub": "2024-09-09",
+    "eff": "2025-01-01",
+    "dataUpdated": "2026-08-16"
+  },
+  "loto-decision": {
+    "hasStandard": true,
+    "standards": [
+      "GB/T 33579-2017《机械安全 危险能量控制方法 上锁/挂牌》"
+    ],
+    "pub": "2017-05-12",
+    "eff": "2017-12-01",
+    "dataUpdated": "2026-08-18"
+  },
+  "three-simultaneous-classification": {
+    "hasStandard": true,
+    "standards": [
+      "《建设项目职业病危害风险分类管理目录》国卫办职健发〔2021〕5号",
+      "《建设项目环境影响评价分类管理名录（2021年版）》生态环境部令第16号",
+      "《建设项目安全设施\"三同时\"监督管理办法》安监总局令第36号(2015修正)"
+    ],
+    "pub": "2021",
+    "eff": "2021",
+    "dataUpdated": "2026-08-21"
+  },
+  "three-in-one-checklist": {
+    "hasStandard": true,
+    "standards": [
+      "GB 50016《建筑设计防火规范》",
+      "GB 50140《建筑灭火器配置设计规范》",
+      "GB 50116《火灾自动报警系统设计规范》"
+    ],
+    "pub": "2014-05-31",
+    "eff": "2015-05-01",
+    "dataUpdated": "2026-08-21"
+  },
+  "carbon-footprint-calculator": {
+    "hasStandard": true,
+    "standards": [
+      "GB/T 24067-2024《温室气体 产品碳足迹 量化要求和指南》"
+    ],
+    "pub": "2024-08-23",
+    "eff": "2024-10-01",
+    "dataUpdated": "2026-08-22",
+    "released": "2026-08-22"
+  },
+  "major-hazard-query": {
+    "hasStandard": true,
+    "standards": [
+      "应急管理部令第21号《化工和危险化学品生产经营单位重大生产安全事故隐患判定标准》",
+      "AQ 3067-2026《化工和危险化学品生产经营单位重大生产安全事故隐患判定标准》",
+      "应急管理部令第10号《工贸企业重大事故隐患判定标准》",
+      "GB 35181-2025《重大火灾隐患判定规则》",
+      "GB 45067-2024《特种设备重大事故隐患判定准则》",
+      "安监总管三〔2017〕121号《烟花爆竹生产经营单位重大生产安全事故隐患判定标准（试行）》"
+    ],
+    "pub": "2026-05-24",
+    "eff": "2026-07-01",
+    "dataUpdated": "2026-08-23",
+    "released": "2026-08-23"
+  },
+  "enterprise-size-classification": {
+    "hasStandard": true,
+    "standards": [
+      "国家统计局《统计上大中小微型企业划分办法》（国统字〔2017〕213号）",
+      "GB/T 4754-2017《国民经济行业分类》"
+    ],
+    "pub": "2017-12-28",
+    "eff": "2018-01-01",
+    "dataUpdated": "2026-08-24",
+    "released": "2026-08-24"
+  },
+  "change-management": {
+    "hasStandard": true,
+    "standards": [
+      "GB/T 33000-2025《大中型企业安全生产标准化管理体系要求》",
+      "GB/T 45001-2020《职业健康安全管理体系 要求及使用指南》",
+      "AQ/T 3034-2022《化工过程安全管理导则》"
+    ],
+    "pub": "2025 / 2020-03-06 / 2022-10-10",
+    "eff": "2025-10-31 / 2020-03-06 / 2023-04-01",
+    "dataUpdated": "2026-08-29",
+    "released": "2026-08-29"
+  },
+  "risk-assessment": {
+    "hasStandard": false,
+    "dataUpdated": "2026-08-29",
+    "released": "2026-08-29"
+  },
+  "safety-terms": {
+    "hasStandard": true,
+    "standards": [
+      "GB/T 15236《安全生产术语》（征求意见稿，代替 GB/T 15236-2008《职业安全卫生术语》）"
+    ],
+    "pub": "征求意见稿（尚未正式发布）",
+    "eff": "—",
+    "dataUpdated": "2026-08-30"
+  },
+  "fire-extinguisher": {
+    "hasStandard": true,
+    "standards": [
+      "GB 50140-2005《建筑灭火器配置设计规范》",
+      "GB 7258-2017《机动车运行安全技术条件》",
+      "GB 34655-2017《客车灭火器配置要求》"
+    ],
+    "pub": "2005-07-15 / 2017-09-29",
+    "eff": "2005-10-01 / 2018-01-01 / 2018-04-01",
+    "dataUpdated": "2026-08-23",
+    "released": "2026-09-04",
+    "merged": "fire-extinguisher-calculator+vehicle-fire-extinguisher"
+  },
+  "osha-recordable": {
+    "hasStandard": false,
+    "dataUpdated": "2026-09-12",
+    "released": "2026-09-12"
+  },
+  "seasonal-safety-checklist": {
+    "hasStandard": true,
+    "standards": [
+      "安监总安健〔2012〕89号《防暑降温措施管理办法》",
+      "应急管理部令第13号《工贸企业有限空间作业安全规定》",
+      "GB/T 21431-2023《建筑物雷电防护装置检测技术规范》"
+    ],
+    "pub": "2012-06-29 / 2023-11-29 / 2023-12-28",
+    "eff": "2012-06-29 / 2024-01-01 / 2024-07-01",
+    "dataUpdated": "2026-09-19",
+    "released": "2026-09-19"
+  },
+  "holiday-safety-checklist": {
+    "hasStandard": true,
+    "standards": [
+      "《中华人民共和国安全生产法》（2021年修正）",
+      "GB 30871-2022《危险化学品企业特殊作业安全规范》",
+      "GB/T 33579-2017《机械安全 危险能量控制方法 上锁/挂牌》"
+    ],
+    "pub": "2021-06-10 / 2022-03-15 / 2017-05-12",
+    "eff": "2021-09-01 / 2022-10-01 / 2017-12-01",
+    "dataUpdated": "2026-09-19",
+    "released": "2026-09-19"
+  }
+}
