@@ -1,0 +1,53 @@
+{
+  "routes": [
+    {
+      "routePath": "/sheen-toolbox/api/ima-search-v2",
+      "mountPath": "/sheen-toolbox/api",
+      "method": "GET",
+      "module": [
+        "sheen-toolbox/api/ima-search-v2.js:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/sheen-toolbox/api/llm-answer-v2",
+      "mountPath": "/sheen-toolbox/api",
+      "method": "POST",
+      "module": [
+        "sheen-toolbox/api/llm-answer-v2.js:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/sheen-toolbox/api/llm-intent-v2",
+      "mountPath": "/sheen-toolbox/api",
+      "method": "POST",
+      "module": [
+        "sheen-toolbox/api/llm-intent-v2.js:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/sheen-toolbox/api/route-event",
+      "mountPath": "/sheen-toolbox/api",
+      "method": "POST",
+      "module": [
+        "sheen-toolbox/api/route-event.js:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/sheen-toolbox/api/route-stats",
+      "mountPath": "/sheen-toolbox/api",
+      "method": "GET",
+      "module": [
+        "sheen-toolbox/api/route-stats.js:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/sheen-toolbox/api/wechat-draft-v2",
+      "mountPath": "/sheen-toolbox/api",
+      "method": "POST",
+      "module": [
+        "sheen-toolbox/api/wechat-draft-v2.js:onRequestPost"
+      ]
+    }
+  ],
+  "baseURL": "/"
+}
