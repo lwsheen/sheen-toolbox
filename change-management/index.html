@@ -254,7 +254,7 @@
     <script>
     // ⚠️ 业务函数全局裸声明（inline onclick 依赖），禁止 IIFE 包裹
     document.getElementById('printTime').textContent =
-        new Date().toISOString().replace('T', ' ').slice(0, 16);
+        new Date(Date.now() + 8 * 3600000).toISOString().replace('T', ' ').slice(0, 16);
 
     var STORE_KEY = 'sheen_moc_v1';
 
@@ -432,7 +432,7 @@
         var d = document.getElementById('mocDesc').value;
         document.getElementById('appDesc').value = d;
         if (!document.getElementById('appDate').value) {
-            document.getElementById('appDate').value = new Date().toISOString().slice(0, 10);
+            document.getElementById('appDate').value = new Date(Date.now() + 8 * 3600000).toISOString().slice(0, 10);
         }
         document.getElementById('mocAppCard').style.display = '';
     }
