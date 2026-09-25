@@ -298,7 +298,7 @@
     <script>
     // 打印时间
     document.getElementById('printTime').textContent =
-        new Date().toISOString().replace('T', ' ').slice(0, 16);
+        new Date(Date.now() + 8 * 3600000).toISOString().replace('T', ' ').slice(0, 16);
 
     // ===== Tab 切换（全局函数，供 inline onclick 调用） =====
     function switchTab(tabId) {
