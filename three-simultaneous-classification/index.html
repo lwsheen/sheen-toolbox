@@ -201,7 +201,7 @@
     <div class="print-time" id="printTime"></div>
     <script>
     document.getElementById('printTime').textContent =
-        new Date().toISOString().replace('T', ' ').slice(0, 16);
+        new Date(Date.now() + 8 * 3600000).toISOString().replace('T', ' ').slice(0, 16);
 
     function showTab(name) {
         document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
