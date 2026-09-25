@@ -234,7 +234,7 @@
 'use strict';
 
 document.getElementById('printTime').textContent =
-  new Date().toISOString().replace('T', ' ').slice(0, 16);
+  new Date(Date.now() + 8 * 3600000).toISOString().replace('T', ' ').slice(0, 16);
 
 // 标准尺寸库（最终输出必须往上靠到这些规格）
 var wireSizes  = [6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 40, 44, 48];
