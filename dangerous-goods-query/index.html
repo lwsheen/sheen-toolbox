@@ -773,7 +773,7 @@
 
       document.getElementById('printTime').textContent =
 
-        chinaTime().toISOString().replace('T',' ').slice(0,16);
+        new Date(Date.now() + 8 * 3600000).toISOString().replace('T',' ').slice(0,16);
 
       // Init with loading indicator
 
