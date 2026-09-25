@@ -539,7 +539,7 @@
 
 <script>
 
-document.getElementById('printTime').textContent = new Date().toISOString().replace('T',' ').slice(0,16);
+document.getElementById('printTime').textContent = new Date(Date.now() + 8 * 3600000).toISOString().replace('T',' ').slice(0,16);
 
         let chemicalData = [];
 
