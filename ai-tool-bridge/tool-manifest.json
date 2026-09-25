@@ -1,7 +1,7 @@
 {
  "version": "3.0",
- "updated": "2026-09-19",
- "note": "全量 60 工具清单，AI 可路由+关联所有工具；查询类工具支持 ?q= 预填深链。",
+ "updated": "2026-09-25",
+ "note": "全量 61 工具清单，AI 可路由+关联所有工具；查询类工具支持 ?q= 预填深链。",
  "fallback": {
   "noTool": "未匹配到专用工具。可换更具体的表述（如工具名/标准号），或前往「SHEEN环境健康安全」IMA 知识库检索法规原文。",
   "paramMissing": "需要补充信息才能使用该工具，请补充后重试，或前往工具页手动操作。",
@@ -1634,6 +1634,40 @@
     "开工第一课"
    ],
    "page": "/sheen-toolbox/holiday-safety-checklist/",
+   "queryParam": null,
+   "params": []
+  },
+  {
+   "id": "lopa-analysis",
+   "title": "保护层分析（LOPA）工具",
+   "desc": "依据 GB/T 32857-2025《保护层分析（LOPA）应用导则》的场景化 LOPA 计算：后果分级与可容忍风险（表A.4~A.6、A.10~A.12）、初始事件频率（表A.13）、使能条件与条件修正因子、独立保护层 PFD（表A.8）、单一/复合场景后果频率（公式2/3）、高要求模式（附录E）、RRF（公式5/6）与 SIL 建议、风险矩阵行动要求（表A.9）与标准合规自检，可导出 Excel/Word。",
+   "descShort": "GB/T 32857-2025 LOPA：后果频率·RRF·SIL建议",
+   "category": "其他",
+   "standards": [
+    "GB/T 32857-2025《保护层分析（LOPA）应用导则》"
+   ],
+   "copyright": "boundary",
+   "trigger": [
+    "LOPA",
+    "保护层分析",
+    "独立保护层",
+    "IPL",
+    "SIL定级",
+    "SIL等级",
+    "风险削减因子",
+    "RRF",
+    "可容忍风险",
+    "后果频率",
+    "使能条件",
+    "条件修正因子",
+    "PFD",
+    "安全仪表功能",
+    "SIF",
+    "LOPA分析",
+    "保护层分析工具",
+    "GB/T 32857"
+   ],
+   "page": "/sheen-toolbox/lopa-analysis/",
    "queryParam": null,
    "params": []
   }
