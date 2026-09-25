@@ -29,12 +29,16 @@
       '</button>';
     main.insertBefore(btnWrap, main.firstChild);
 
-    // 注入 print-time
-    if (!document.getElementById('printTime')) {
-      var pt = document.createElement('div');
+    // 注入/补填 print-time
+    //   ① 没有该元素 → 创建并插到 .sheen-footer 之后；
+    //   ② 有元素但内容为空 → 补填兜底值。
+    //   只有「空」才补写，因此永远不会覆盖页面自己生成的时间戳；
+    //   safety-signs 等"声明了 div 却没写填值代码"的页面靠这条兜底。
+    var pt = document.getElementById('printTime');
+    if (!pt) {
+      pt = document.createElement('div');
       pt.id = 'printTime';
       pt.className = 'print-time';
-      pt.textContent = formatPrintTime();
       var footer = document.querySelector('.sheen-footer');
       if (footer) {
         footer.parentNode.insertBefore(pt, footer.nextSibling);
@@ -42,17 +46,23 @@
         document.body.appendChild(pt);
       }
     }
-    PRINT_TIME_EL = document.getElementById('printTime');
+    if (!pt.textContent.trim()) pt.textContent = formatPrintTime();
+    PRINT_TIME_EL = pt;
   };
 
   function formatPrintTime() {
-    var d = new Date();
+    // 统一按中国时区 (UTC+8) 输出：绝对 +8h 偏移后交给 toISOString 渲染，
+    // 任何本机时区下都等于北京时间。
+    // ⚠️ 不要写成 `new Date(Date.now() + (480 + getTimezoneOffset()) * 60000)`
+    //    再由 toISOString/UTC 分量读取 —— 本机已在 UTC+8 时偏移量正好抵消，
+    //    得到的是 UTC，会比北京时间慢 8 小时。
+    var d = new Date(Date.now() + 8 * 3600000);
     var pad = function (n) { return n < 10 ? '0' + n : n; };
-    return d.getFullYear() + '-' +
-      pad(d.getMonth() + 1) + '-' +
-      pad(d.getDate()) + ' ' +
-      pad(d.getHours()) + ':' +
-      pad(d.getMinutes()) + ':' +
-      pad(d.getSeconds()) + ' (UTC+8)';
+    return '打印时间：' + d.getUTCFullYear() + '-' +
+      pad(d.getUTCMonth() + 1) + '-' +
+      pad(d.getUTCDate()) + ' ' +
+      pad(d.getUTCHours()) + ':' +
+      pad(d.getUTCMinutes()) + ':' +
+      pad(d.getUTCSeconds()) + '（北京时间）';
   }
 })();
