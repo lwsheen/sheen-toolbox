@@ -307,7 +307,7 @@
 
     // 打印时间
     document.getElementById('printTime').textContent =
-        new Date().toISOString().replace('T', ' ').slice(0, 16);
+        new Date(Date.now() + 8 * 3600000).toISOString().replace('T', ' ').slice(0, 16);
 
     // ===== 业务逻辑 =====
     function isEn() { try { return localStorage.getItem('sheen_lang') === 'en'; } catch (e) { return false; } }
