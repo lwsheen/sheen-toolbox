@@ -238,7 +238,7 @@
 
         // 打印时间
         document.getElementById('printTime').textContent =
-            new Date().toISOString().replace('T', ' ').slice(0, 16);
+            new Date(Date.now() + 8 * 3600000).toISOString().replace('T', ' ').slice(0, 16);
 
         // ===== 1. 标准数据（表1 基本事故类型，GB 6441-2025） =====
         const basicAccidents = [
