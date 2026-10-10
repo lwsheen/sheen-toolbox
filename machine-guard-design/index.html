@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head data-seo="sheen">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="机械防护罩设计安全数据查询 — GB/T 23821-2022 开口安全距离·防越过距离、GB/T 12265-2021 挤压最小间距、GB/T 8196-2018 防护装置设计要求">
+
+<link rel="icon" type="image/png" sizes="192x192" href="/sheen-toolbox/assets/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/sheen-toolbox/assets/icon-512.png">
+
+<title>机械防护罩设计安全数据查询 — SHEEN Toolbox</title>
+<meta property="og:title" content="机械防护罩设计安全数据查询 | SHEEN Toolbox">
+<meta property="og:description" content="GB/T 23821-2022 开口安全距离 · 防越过距离 · GB/T 12265-2021 挤压最小间距 · GB/T 8196-2018 设计要求">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lwsheen.pages.dev/sheen-toolbox/machine-guard-design/">
+<meta property="og:image" content="https://lwsheen.pages.dev/sheen-toolbox/assets/share/machine-guard-design.png">
+<link rel="canonical" href="https://lwsheen.pages.dev/sheen-toolbox/machine-guard-design/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "机械防护罩设计安全数据查询", "url": "https://lwsheen.pages.dev/sheen-toolbox/machine-guard-design/", "description": "GB/T 23821-2022 开口安全距离 · 防越过距离 · GB/T 12265-2021 挤压最小间距 · GB/T 8196-2018 设计要求", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "inLanguage": "zh-CN", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "CNY"}, "publisher": {"@type": "Organization", "name": "SHEEN Toolbox"}}</script>
+
+<link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
+<link rel="stylesheet" href="/sheen-toolbox/common.css">
+<style>:root {
+  /* 品牌色一律引用 common.css 令牌，页面不自定义色值（common.css 是唯一来源） */
+  --mg-red: var(--brand-red);
+  --mg-red-hover: var(--brand-red-hover);
+  --mg-red-light: var(--brand-red-light);
+  --mg-amber: var(--warn-orange);
+  --mg-amber-light: var(--warn-orange-soft);
+  --mg-amber-deep: var(--warn-deep);
+  --mg-green: var(--ok-deep);
+  --mg-green-light: var(--ok-soft);
+  --mg-blue: var(--tech-blue);
+  --mg-blue-light: var(--tech-blue-soft);
+}
+
+.tab-nav { display: flex; gap: 0; margin-bottom: 0; border-bottom: 2px solid var(--border); border-radius: 8px; }
+.tab-btn {
+  flex: 1; padding: 13px 10px; font-size: 13px; font-weight: 600; font-family: var(--font);
+  background: var(--bg-page); color: var(--text-secondary); border: none; cursor: pointer;
+  transition: all 0.2s; border-bottom: 3px solid transparent; margin-bottom: -2px;
+  display: flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap;
+  border-radius: 8px;
+}
+.tab-btn i { font-size: 15px; }
+.tab-btn:hover { color: var(--brand-red); background: var(--brand-red-light); }
+.tab-btn.active { color: var(--brand-red); background: var(--bg-card); border-bottom-color: var(--brand-red); }
+.tab-panel { display: none; background: var(--bg-card); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: 22px; }
+.tab-panel.active { display: block; }
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-row label { display: block; font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+.form-control { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; font-family: var(--font); background: var(--bg-card); color: var(--text-primary); }
+.hint { font-size: 11px; color: var(--text-secondary); margin-top: 4px; line-height: 1.6; }
+
+.result-block { background: var(--mg-red-light); border: 2px solid var(--mg-red); border-radius: 16px; padding: 22px; margin-top: 22px; }
+.result-block .main-value { font-size: 40px; font-weight: 800; color: var(--mg-red); line-height: 1.1; }
+.result-block .main-unit { font-size: 18px; color: var(--text-secondary); margin-left: 4px; font-weight: 600; }
+.result-block .result-label { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+.result-note { font-size: 12px; color: var(--text-secondary); margin-top: 12px; line-height: 1.7; }
+
+.warn-bar { padding: 10px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; display: flex; align-items: flex-start; gap: 8px; margin-top: 12px; line-height: 1.7; }
+.warn-bar.danger { background: var(--mg-red-light); color: var(--mg-red); border: 1px solid var(--mg-red); }
+.warn-bar.warning { background: var(--mg-amber-light); color: var(--mg-amber-deep); border: 1px solid var(--mg-amber); }
+.warn-bar.info { background: var(--mg-blue-light); color: var(--mg-blue); border: 1px solid var(--mg-blue); }
+.warn-bar.ok { background: var(--mg-green-light); color: var(--mg-green); border: 1px solid var(--mg-green); }
+
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 14px; }
+.data-table th { background: var(--brand-red); color: #fff; padding: 8px 9px; text-align: center; font-weight: 600; font-size: 11px; }
+.data-table th:first-child { text-align: left; }
+.data-table td { padding: 7px 9px; border-bottom: 1px solid var(--border-light); text-align: center; font-variant-numeric: tabular-nums; }
+.data-table td:first-child { text-align: left; }
+.data-table tr:nth-child(even) { background: var(--bg-page); }
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.data-table caption { caption-side: top; font-size: 12px; color: var(--text-secondary); text-align: left; padding: 10px 0 4px; font-weight: 600; }
+
+.req-group { margin-bottom: 18px; }
+.req-group h4 { font-size: 14px; font-weight: 600; margin: 0 0 8px; display: flex; align-items: center; gap: 8px; }
+.req-group h4 i { color: var(--brand-red); }
+.req-item { display: flex; gap: 10px; padding: 9px 12px; background: var(--bg-page); border: 1px solid var(--border-light); border-radius: 10px; margin-bottom: 8px; font-size: 13px; line-height: 1.7; }
+.req-item .ri-tag { flex-shrink: 0; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 60px; height: fit-content; margin-top: 2px; }
+.req-item .ri-tag.fixed { background: var(--tech-blue-soft); color: var(--tech-blue-hover); }
+.req-item .ri-tag.movable { background: var(--warn-orange-soft); color: var(--warn-deep); }
+.req-item .ri-tag.interlock { background: var(--brand-red-light); color: var(--brand-red); }
+.req-item .ri-tag.adjust { background: var(--ok-soft); color: var(--ok-deep); }
+.req-item .ri-tag.view { background: var(--warn-soft); color: var(--warn-deep); }
+
+.std-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 60px; background: var(--bg-page); border: 1px solid var(--border); color: var(--text-secondary); }
+
+.disclaimer { margin-top: 24px; padding: 14px 18px; background: var(--mg-amber-light); border: 1px solid var(--mg-amber); border-radius: 12px; font-size: 12px; color: var(--text-secondary); line-height: 1.8; }
+.disclaimer strong { color: var(--mg-amber); }
+
+@media (max-width: 768px) {
+  .tab-btn { padding: 10px 6px; font-size: 12px; gap: 3px; }
+  .tab-btn i { display: none; }
+  .tab-panel { padding: 15px; }
+  .form-grid { grid-template-columns: 1fr; gap: 12px; }
+  .result-block .main-value { font-size: 30px; }
+  .data-table { font-size: 11px; }
+  .data-table th, .data-table td { padding: 6px 5px; }
+}
+</style>
+<style>
+@media print {
+  @page { size: A4; margin: 16mm 12mm 18mm 12mm; }
+  body { background: #fff !important; padding: 0 !important; font-size: 11pt; color: #000 !important; }
+  .breadcrumb, .btn-primary, .btn-print, .sheen-footer, .no-print, .form-grid { display: none !important; }
+  .tab-panel { display: block !important; border: none !important; padding: 0 0 12pt 0 !important; page-break-inside: avoid; }
+  .app-container { box-shadow: none !important; border: none !important; max-width: 100% !important; padding: 0 !important; }
+}
+</style>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?9b8c3df212619adec1f70f01695f4160";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  if (location.hostname.indexOf("github.io") >= 0) {
+    var hm2 = document.createElement("script");
+    hm2.src = "https://hm.baidu.com/hm.js?5ceec8bd8bf10bd9d1f4ddceaebdae6f";
+    s.parentNode.insertBefore(hm2, s);
+  }
+})();
+</script>
+</head>
+<body>
+
+<div class="breadcrumb">
+  <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+  <span> / 机械防护罩设计安全数据查询</span>
+</div>
+
+<main class="app-container container-query">
+
+  <h1 class="page-title"><i class="fa-solid fa-shield-halved" style="color:var(--brand-red)"></i> 机械防护罩设计安全数据查询</h1>
+  <p class="page-subtitle" style="margin-bottom:16px;">防护罩（保护结构）设计必需的安全距离与最小间距数据 — 全部取自现行国家标准原文表格，适用于 14 岁及以上人员</p>
+
+  <div class="warn-bar info no-pr" style="margin-top:0;margin-bottom:14px;">
+    <i class="fa-solid fa-circle-info"></i>
+    <span><strong>四本现行标准：</strong>
+      <span class="std-badge">GB/T 23821-2022</span> 开口·防越过安全距离（代替 GB/T 23821-2009，IDT ISO 13857:2019）·
+      <span class="std-badge">GB/T 12265-2021</span> 防止人体部位挤压的最小间距（IDT ISO 13854:2017）·
+      <span class="std-badge">GB/T 8196-2018</span> 防护装置设计与制造要求（IDT ISO 14120:2015）·
+      <span class="std-badge">GB/T 18831-2017</span> 与防护装置相关的联锁装置（IDT ISO 14119:2013）
+    </span>
+  </div>
+
+  <div class="tab-nav no-pr" role="tablist">
+    <button class="tab-btn active" onclick="mgSwitch(0)" data-tab="0"><i class="fa-solid fa-table-cells"></i> 开口安全距离</button>
+    <button class="tab-btn" onclick="mgSwitch(1)" data-tab="1"><i class="fa-solid fa-arrows-up-to-line"></i> 防越过距离</button>
+    <button class="tab-btn" onclick="mgSwitch(2)" data-tab="2"><i class="fa-solid fa-shoe-prints"></i> 下肢开口</button>
+    <button class="tab-btn" onclick="mgSwitch(3)" data-tab="3"><i class="fa-solid fa-hand"></i> 挤压最小间距</button>
+    <button class="tab-btn" onclick="mgSwitch(4)" data-tab="4"><i class="fa-solid fa-list-check"></i> 设计要求</button>
+  </div>
+
+  <!-- ============ TAB 0：开口安全距离（GB/T 23821-2022 表 4） ============ -->
+  <div class="tab-panel active" id="panel0">
+    <h3 style="font-size:15px;font-weight:600;margin-bottom:4px;"><i class="fa-solid fa-table-cells"></i> 通过规则开口触及 — 最小安全距离 S<sub>r</sub></h3>
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;">GB/T 23821-2022 表 4（14 岁及以上人群）。开口尺寸 e 指方形开口边长、圆形开口直径、槽形开口最窄处尺寸。</p>
+
+    <div class="form-grid">
+      <div class="form-row">
+        <label>开口形状</label>
+        <select class="form-control" id="gShape" onchange="calcOpening()">
+          <option value="slot" selected>槽形（长条缝，最窄处 e）</option>
+          <option value="square">方形（边长 e）</option>
+          <option value="round">圆形（直径 e）</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>开口尺寸 e (mm) <span style="color:var(--brand-red)">*</span></label>
+        <input type="number" class="form-control" id="gOpen" value="20" min="1" max="300" step="1" oninput="calcOpening()">
+        <div class="hint">例：护罩网孔 20×20 → e=20；圆孔 φ12 → e=12；长缝 8×40 → e=8（最窄处）</div>
+      </div>
+      <div class="form-row">
+        <label>槽形开口长度 (mm)</label>
+        <input type="number" class="form-control" id="gLen" value="40" min="0" max="400" step="1" oninput="calcOpening()">
+        <div class="hint">仅槽形有效：长度 ≤65 mm 时拇指被阻挡，850 mm 可减小到 200 mm</div>
+      </div>
+    </div>
+
+    <div class="result-block" id="gRes" style="display:none;">
+      <div class="result-label">最小安全距离 S<sub>r</sub>（护罩至危险区）</div>
+      <div><span class="main-value" id="gSr">—</span><span class="main-unit">mm</span></div>
+      <div class="result-note" id="gNote"></div>
+    </div>
+
+    <div class="warn-bar warning" id="gWarn" style="display:none;"><i class="fa-solid fa-triangle-exclamation"></i><span id="gWarnText"></span></div>
+
+    <div class="table-scroll">
+      <table class="data-table" id="gTable">
+        <caption>GB/T 23821-2022 表 4　通过规则开口触及 — 14 岁及以上人员（单位：mm）</caption>
+        <thead><tr><th>身体部位</th><th>开口尺寸 e</th><th>槽形</th><th>方形</th><th>圆形</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="warn-bar info"><i class="fa-solid fa-circle-info"></i><span>表内粗实线划分了开口尺寸限制的人体部分；e&gt;120 mm 应改用「防越过距离」（表 2）确定。查表只取表中偏大的那一档，不做插值。</span></div>
+  </div>
+
+  <!-- ============ TAB 1：防越过距离（GB/T 23821-2022 表 2 / 表 1） ============ -->
+  <div class="tab-panel" id="panel1">
+    <h3 style="font-size:15px;font-weight:600;margin-bottom:4px;"><i class="fa-solid fa-arrows-up-to-line"></i> 越过防护结构触及 — 水平安全距离 S<sub>h</sub></h3>
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;">GB/T 23821-2022 表 2（通用）。A<sub>h</sub> = 危险区中离上肢触及区域最近点的高度；A<sub>p</sub> = 防护结构高度。</p>
+
+    <div class="form-grid">
+      <div class="form-row">
+        <label>危险区最近点高度 A<sub>h</sub> (mm) <span style="color:var(--brand-red)">*</span></label>
+        <input type="number" class="form-control" id="rAh" value="1500" min="0" max="3000" step="10" oninput="calcReach()">
+        <div class="hint">如：传动辊面离地 1500 mm</div>
+      </div>
+      <div class="form-row">
+        <label>防护结构高度 A<sub>p</sub> (mm) <span style="color:var(--brand-red)">*</span></label>
+        <input type="number" class="form-control" id="rAp" value="1000" min="0" max="3000" step="10" oninput="calcReach()">
+        <div class="hint">网格护罩上沿离地高度（应低于危险点）</div>
+      </div>
+      <div class="form-row">
+        <label>选用表格</label>
+        <select class="form-control" id="rTable" onchange="calcReach()">
+          <option value="t2" selected>表 2（通用，必须优先采用）</option>
+          <option value="t1">表 1（仅伤害轻微 + 发生概率低）</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>现有水平距离 S<sub>h</sub> (mm)</label>
+        <input type="number" class="form-control" id="rSh" value="0" min="0" max="3000" step="10" oninput="calcReach()">
+        <div class="hint">填入实测值可自动判定是否达标；留 0 表示只查所需值</div>
+      </div>
+    </div>
+
+    <div class="result-block" id="rRes" style="display:none;">
+      <div class="result-label">所需水平安全距离 S<sub>h</sub></div>
+      <div><span class="main-value" id="rShReq">—</span><span class="main-unit">mm</span></div>
+      <div class="result-note" id="rNote"></div>
+    </div>
+
+    <div class="warn-bar danger" id="rWarn" style="display:none;"><i class="fa-solid fa-triangle-exclamation"></i><span id="rWarnText"></span></div>
+    <div class="warn-bar ok" id="rOk" style="display:none;"><i class="fa-solid fa-circle-check"></i><span id="rOkText"></span></div>
+
+    <div class="warn-bar info"><i class="fa-solid fa-circle-info"></i><span><strong>上伸触及（无需距离即可安全）：</strong>危险区高度 ≥ <strong>2700 mm</strong> 即不可触及；若伤害严重程度与发生概率均低，≥ <strong>2500 mm</strong> 即不可触及（GB/T 23821-2022 4.2.1.2）。</span></div>
+    <div class="warn-bar info"><i class="fa-solid fa-circle-info"></i><span><strong>不插值原则：</strong>A<sub>h</sub> 或 A<sub>p</sub> 落在两数之间时，应选<strong>更大的安全距离</strong>或更高的防护结构，不得插值。A<sub>p</sub> &lt; 1000 mm 不能有效限制身体运动（表中未予考虑）；A<sub>p</sub> &lt; 1400 mm 若无附加防护措施不宜采用。</span></div>
+
+    <h4 style="font-size:14px;font-weight:600;margin:22px 0 4px;"><i class="fa-solid fa-hand-holding"></i> 运动受限制的弧形触及（表 3）</h4>
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">当开口靠近身体、肢体运动被护罩结构或工件限制时，按支承位置取径向安全距离。</p>
+    <div class="req-item"><span class="ri-tag fixed">850 mm</span><span>仅肩部与腋窝限制运动（上肢运动范围不受限）</span></div>
+    <div class="req-item"><span class="ri-tag movable">550 mm</span><span>手臂被支承至肘部</span></div>
+    <div class="req-item"><span class="ri-tag adjust">230 mm</span><span>手臂被支承至手腕</span></div>
+    <div class="req-item"><span class="ri-tag view">130 mm</span><span>手臂和手被支承至指关节</span></div>
+    <div class="warn-bar info" style="margin-top:8px;"><i class="fa-solid fa-circle-info"></i><span>限制运动的障碍物长度不小于 300 mm 时，可选用小于 850 mm 的安全距离。</span></div>
+
+    <div class="table-scroll">
+      <table class="data-table" id="rTableView">
+        <caption>GB/T 23821-2022 表 2　越过防护结构触及（单位：mm）— 行为危险区高度 A<sub>h</sub>，列为防护结构高度 A<sub>p</sub></caption>
+        <thead></thead><tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ TAB 2：下肢开口（GB/T 23821-2022 表 7） ============ -->
+  <div class="tab-panel" id="panel2">
+    <h3 style="font-size:15px;font-weight:600;margin-bottom:4px;"><i class="fa-solid fa-shoe-prints"></i> 下肢通过规则开口触及 — 安全距离</h3>
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;">GB/T 23821-2022 表 7。仅在风险评估已确认<strong>上肢不会进入同一开口</strong>时才可单独使用（4.3）。数值与是否穿戴鞋袜、衣物无关。</p>
+
+    <div class="form-grid">
+      <div class="form-row">
+        <label>开口尺寸 e (mm) <span style="color:var(--brand-red)">*</span></label>
+        <input type="number" class="form-control" id="lOpen" value="40" min="1" max="300" step="1" oninput="calcLower()">
+        <div class="hint">常见：格栅踏板 30 mm、机坪花纹钢板 40 mm、围栏网 50 mm</div>
+      </div>
+      <div class="form-row">
+        <label>开口形状</label>
+        <select class="form-control" id="lShape" onchange="calcLower()">
+          <option value="sqrd" selected>方形或圆形（边长/直径 e）</option>
+          <option value="slot">槽形（最窄处 e）</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>槽形开口长度 (mm)</label>
+        <input type="number" class="form-control" id="lLen" value="100" min="0" max="400" step="1" oninput="calcLower()">
+        <div class="hint">仅槽形有效：长度 ≤75 mm 时该距离可减小到不小于 50 mm</div>
+      </div>
+    </div>
+
+    <div class="result-block" id="lRes" style="display:none;">
+      <div class="result-label">距危险区的安全距离</div>
+      <div><span class="main-value" id="lSr">—</span><span class="main-unit">mm</span></div>
+      <div class="result-note" id="lNote"></div>
+    </div>
+
+    <div class="warn-bar danger" id="lWarn" style="display:none;"><i class="fa-solid fa-triangle-exclamation"></i><span id="lWarnText"></span></div>
+
+    <div class="table-scroll">
+      <table class="data-table" id="lTable">
+        <caption>GB/T 23821-2022 表 7　下肢通过规则形状开口触及（14 岁及以上，单位：mm）</caption>
+        <thead><tr><th>开口尺寸 e</th><th>方形或圆形</th><th>槽形</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="warn-bar warning"><i class="fa-solid fa-triangle-exclamation"></i><span>槽形开口窄边 &gt;180 mm、方形边长或圆形直径 &gt;240 mm 时，<strong>人员可全身进入</strong>，必须改为全封闭防护，不能仅靠安全距离。</span></div>
+  </div>
+
+  <!-- ============ TAB 3：挤压最小间距（GB/T 12265-2021 表 1） ============ -->
+  <div class="tab-panel" id="panel3">
+    <h3 style="font-size:15px;font-weight:600;margin-bottom:4px;"><i class="fa-solid fa-hand"></i> 防止人体部位挤压的最小间距</h3>
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;">GB/T 12265-2021 表 1（IDT ISO 13854:2017）。用于剪裁、压溃、卷入等挤压危险的间隙设计（如压板、辊压、剪板机、输送辊间隙）。</p>
+
+    <div class="form-grid">
+      <div class="form-row">
+        <label>人体部位 <span style="color:var(--brand-red)">*</span></label>
+        <select class="form-control" id="cPart" onchange="calcCrush()">
+          <option value="body" selected>全身（最不利部位）</option>
+          <option value="head">头部（最不利位置）</option>
+          <option value="leg">腿</option>
+          <option value="foot">脚</option>
+          <option value="toe">脚趾</option>
+          <option value="arm">手臂</option>
+          <option value="wrist">手腕 / 拳</option>
+          <option value="finger">手指</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>设计间隙 (mm)</label>
+        <input type="number" class="form-control" id="cGap" value="0" min="0" max="600" step="1" oninput="calcCrush()">
+        <div class="hint">留 0 表示只查所需最小值；填入实测值可自动判定</div>
+      </div>
+    </div>
+
+    <div class="result-block" id="cRes" style="display:none;">
+      <div class="result-label">避免挤压的最小间距 a</div>
+      <div><span class="main-value" id="cSr">—</span><span class="main-unit">mm</span></div>
+      <div class="result-note" id="cNote"></div>
+    </div>
+
+    <div class="warn-bar danger" id="cWarn" style="display:none;"><i class="fa-solid fa-triangle-exclamation"></i><span id="cWarnText"></span></div>
+    <div class="warn-bar ok" id="cOk" style="display:none;"><i class="fa-solid fa-circle-check"></i><span id="cOkText"></span></div>
+
+    <div class="warn-bar info"><i class="fa-solid fa-circle-info"></i><span>本文件仅适用于<strong>挤压</strong>危险，不适用于冲击、剪切、卷入等其他危险；选值方法见标准 4.1。</span></div>
+
+    <div class="table-scroll">
+      <table class="data-table" id="cTable">
+        <caption>GB/T 12265-2021 表 1　最小间距（单位：mm）</caption>
+        <thead><tr><th>人体部位</th><th>最小间距 a</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ TAB 4：设计要求（GB/T 8196-2018 + GB/T 18831-2017） ============ -->
+  <div class="tab-panel" id="panel4">
+    <h3 style="font-size:15px;font-weight:600;margin-bottom:14px;"><i class="fa-solid fa-list-check"></i> 防护装置设计与选型要求（GB/T 8196-2018）</h3>
+
+    <div class="req-group">
+      <h4><i class="fa-solid fa-lock"></i> 固定式防护装置</h4>
+      <div class="req-item"><span class="ri-tag fixed">要求</span><span>应采用<strong>永久固定</strong>或借助紧固件（螺钉、螺栓等）固定；<strong>不使用工具或专用工具不可能拆除或打开</strong>。</span></div>
+      <div class="req-item"><span class="ri-tag fixed">位置</span><span>应设置在进入危险区的<strong>唯一通道</strong>上，防护结构体不应出现漏保护区，并满足安全距离要求。</span></div>
+    </div>
+
+    <div class="req-group">
+      <h4><i class="fa-solid fa-rotate"></i> 活动式防护装置</h4>
+      <div class="req-item"><span class="ri-tag movable">要求</span><span>打开时尽可能与被防护的机械借助<strong>铰链或导链保持连接</strong>，防止挪开后丢失或难以复原。</span></div>
+    </div>
+
+    <div class="req-group">
+      <h4><i class="fa-solid fa-power-off"></i> 联锁式防护装置</h4>
+      <div class="req-item"><span class="ri-tag interlock">失效安全</span><span>出现丧失安全功能的故障时，应使被其"抑制"的<strong>危险机器功能不可能执行或停止执行</strong>；装置失效<strong>不得导致意外启动</strong>。</span></div>
+      <div class="req-item"><span class="ri-tag interlock">防弃用</span><span>应通过设计尽可能防止以合理可预见的方式<strong>弃用（旁路）联锁装置</strong>（GB/T 18831-2017 第 7 章）。</span></div>
+    </div>
+
+    <div class="req-group">
+      <h4><i class="fa-solid fa-sliders"></i> 可调式防护装置</h4>
+      <div class="req-item"><span class="ri-tag adjust">要求</span><span>可调或活动部分的调整件，在<strong>特定操作期间应保持固定或自锁</strong>。</span></div>
+    </div>
+
+    <div class="req-group">
+      <h4><i class="fa-solid fa-window-maximize"></i> 观察窗 / 防护栅栏</h4>
+      <div class="req-item"><span class="ri-tag view">要求</span><span>在要求通过防护装置观察机器运行的场合，<strong>宜提供大小合适开口的观察孔或观察窗</strong>；其开口尺寸须满足第 1 页签的安全距离要求。</span></div>
+      <div class="req-item"><span class="ri-tag view">防攀爬</span><span>2018 版新增 <strong>5.18 条：应消除可攀爬的水平结构件</strong>。GB/T 23821-2022 明确<strong>不提供</strong>防止攀爬触及的措施，须由 GB/T 8196-2018 5.18 覆盖。</span></div>
+      <div class="req-item"><span class="ri-tag view">动力驱动</span><span>动力驱动的防护装置（如电动卷帘门）应校核<strong>关闭力与动能限值</strong>（GB/T 8196-2018 新增）。</span></div>
+    </div>
+
+    <h3 style="font-size:15px;font-weight:600;margin:24px 0 4px;"><i class="fa-solid fa-link"></i> 联锁装置型式与选型（GB/T 18831-2017）</h3>
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">与防护装置配套的联锁按驱动方式与操动件编码分四型。需防止防护装置被打开时机器仍可运转的场合，应采用<strong>带防护锁定</strong>的装置。</p>
+    <div class="table-scroll">
+      <table class="data-table">
+        <thead><tr><th>型式</th><th>驱动方式</th><th>操动件</th><th>典型用途</th></tr></thead>
+        <tbody>
+          <tr><td>1 型</td><td>机械驱动</td><td>不编码</td><td>普通翻盖式、重型门（无防误开需求）</td></tr>
+          <tr><td>2 型</td><td>机械驱动</td><td>编码</td><td>可带防护锁定，故障可诊断</td></tr>
+          <tr><td>3 型</td><td>非接触式</td><td>不编码</td><td>卫生要求高、开闭频繁场合</td></tr>
+          <tr><td>4 型</td><td>非接触式</td><td>编码</td><td>高防护等级 + 故障诊断 + 防护锁定</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="warn-bar info"><i class="fa-solid fa-circle-info"></i><span>联锁装置发出停机信号后的处理见 GB/T 16855.1 或 IEC 62061；截留钥匙（钥匙盒）系统的具体要求不在 GB/T 18831-2017 规定范围内。带防护锁定的联锁装置另有 GB/T 41108.2-2021 专项要求。</span></div>
+
+    <div class="disclaimer no-pr">
+      <strong>免责与版权说明：</strong>本站为标准数据检索工具，仅摘录并结构化呈现公开标准中的<strong>数值表格与要求条目</strong>，不存储、不展示任何标准的全文内容。数值以正式出版的标准文本为准；用于设计、验收、审核前请核对现行版标准原文。本工具适用于 14 岁及以上人员（不含儿童专用数据，3 岁以上人群另见表 5）。
+    </div>
+  </div>
+
+</main>
+
+<section class="tool-meta" data-toolmeta="sheen">
+  <div class="tm-head">
+    <span class="tm-std-code">GB/T 23821-2022</span>
+    <span class="tm-std-name">《机械安全 防止上下肢触及危险区的安全距离》</span>
+  </div>
+  <div class="tm-line">
+    <span class="tm-dt"><i>发布</i><span class="tm-dt-val">2022-11-08</span></span><span class="tm-sep">·</span>
+    <span class="tm-dt"><i>实施</i><span class="tm-dt-val">2022-11-08</span></span><span class="tm-sep">·</span>
+    <span class="tm-dt"><i>更新</i><span class="tm-dt-val">2026-10-10</span></span>
+  </div>
+</section>
+
+<footer class="sheen-footer">
+  <img src="../assets/sheen-logo.png" alt="SHEEN Toolbox" class="sheen-logo-sm"> &nbsp;<strong>SHEEN Toolbox</strong> · 机械防护罩设计安全数据查询
+</footer>
+
+<div class="print-time" id="printTime"></div>
+
+<script>
+(function() {
+'use strict';
+
+document.getElementById('printTime').textContent =
+  new Date(Date.now() + 8 * 3600000).toISOString().replace('T',' ').slice(0,16);
+
+// ===== 数据：GB/T 23821-2022 表 4（14 岁及以上，规则开口）=====
+var OPENING = [
+  { part: '指尖',       eMax: 4,  slot: 2,   square: 2,   round: 2   },
+  { part: '指尖',       eMax: 6,  slot: 10,  square: 5,   round: 5   },
+  { part: '指至指关节', eMax: 8,  slot: 20,  square: 15,  round: 5   },
+  { part: '指至指关节', eMax: 10, slot: 80,  square: 25,  round: 20  },
+  { part: '手',         eMax: 12, slot: 100, square: 80,  round: 80  },
+  { part: '手',         eMax: 20, slot: 120, square: 120, round: 120 },
+  { part: '手',         eMax: 30, slot: 850, square: 120, round: 120 },
+  { part: '臂至肩关节', eMax: 40, slot: 850, square: 200, round: 120 },
+  { part: '臂至肩关节', eMax: 120,slot: 850, square: 850, round: 850 }
+];
+
+// ===== 数据：GB/T 23821-2022 表 2（越过防护结构触及，通用）=====
+var REACH_COLS = [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2500, 2700];
+var REACH_T2 = {
+  2700: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  2600: [900, 800, 700, 600, 600, 500, 400, 300, 100, 0],
+  2400: [1100, 1000, 900, 800, 700, 600, 400, 300, 100, 0],
+  2200: [1300, 1200, 1000, 900, 800, 600, 400, 300, 0, 0],
+  2000: [1400, 1300, 1100, 900, 800, 600, 400, 0, 0, 0],
+  1800: [1500, 1400, 1100, 900, 800, 600, 0, 0, 0, 0],
+  1600: [1500, 1400, 1100, 900, 800, 500, 0, 0, 0, 0],
+  1400: [1500, 1400, 1100, 900, 800, 0, 0, 0, 0, 0],
+  1200: [1500, 1400, 1100, 900, 700, 0, 0, 0, 0, 0],
+  1000: [1500, 1400, 1000, 800, 0, 0, 0, 0, 0, 0],
+  800:  [1500, 1300, 900, 600, 0, 0, 0, 0, 0, 0],
+  600:  [1400, 1300, 800, 0, 0, 0, 0, 0, 0, 0],
+  400:  [1400, 1200, 400, 0, 0, 0, 0, 0, 0, 0],
+  200:  [1200, 900, 0, 0, 0, 0, 0, 0, 0, 0]
+};
+
+// ===== 数据：GB/T 23821-2022 表 1（仅伤害轻微 + 发生概率低）=====
+var REACH_T1_COLS = [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2500];
+var REACH_T1 = {
+  2500: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  2400: [100, 100, 100, 100, 100, 100, 100, 100, 0],
+  2200: [600, 600, 500, 500, 400, 350, 250, 0, 0],
+  2000: [1100, 900, 700, 600, 500, 350, 0, 0, 0],
+  1800: [1100, 1000, 900, 900, 600, 0, 0, 0, 0],
+  1600: [1300, 1000, 900, 900, 500, 0, 0, 0, 0],
+  1400: [1300, 1000, 900, 800, 100, 0, 0, 0, 0],
+  1200: [1400, 1000, 900, 500, 0, 0, 0, 0, 0],
+  1000: [1400, 1000, 900, 300, 0, 0, 0, 0, 0],
+  800:  [1300, 900, 600, 0, 0, 0, 0, 0, 0],
+  600:  [1200, 500, 0, 0, 0, 0, 0, 0, 0],
+  400:  [1200, 300, 0, 0, 0, 0, 0, 0, 0],
+  200:  [1100, 200, 0, 0, 0, 0, 0, 0, 0]
+};
+
+// ===== 数据：GB/T 23821-2022 表 7（下肢，14 岁及以上）=====
+var LOWER = [
+  { eMax: 5,   sqrd: 0,    slot: 0,    note: '' },
+  { eMax: 15,  sqrd: 10,   slot: 0,    note: '' },
+  { eMax: 35,  sqrd: 80,   slot: 25,   note: '' },
+  { eMax: 60,  sqrd: 180,  slot: 80,   note: '方形/圆形 180 mm 对应腿（脚尖至膝部）' },
+  { eMax: 80,  sqrd: 650,  slot: 180,  note: '650 mm 对应腿（脚尖至胯部）' },
+  { eMax: 95,  sqrd: 1100, slot: 650,  note: '' },
+  { eMax: 180, sqrd: 1100, slot: 1100, note: '' },
+  { eMax: 240, sqrd: -1,   slot: 1100, note: '方形/圆形 >180 mm 后人员可全身进入，须改全封闭' },
+  { eMax: 9999,sqrd: -1,   slot: -1,   note: '槽形窄边 >180 mm、方形/圆形 >240 mm 均可全身进入，须改全封闭' }
+];
+
+// ===== 数据：GB/T 12265-2021 表 1（挤压最小间距）=====
+var CRUSH = [
+  { key: 'body',   part: '全身（最不利部位）', gap: 500 },
+  { key: 'head',   part: '头部（最不利位置）', gap: 300 },
+  { key: 'leg',    part: '腿',                 gap: 180 },
+  { key: 'foot',   part: '脚',                 gap: 120 },
+  { key: 'toe',    part: '脚趾',               gap: 50  },
+  { key: 'arm',    part: '手臂',               gap: 120 },
+  { key: 'wrist',  part: '手腕 / 拳',          gap: 100 },
+  { key: 'finger', part: '手指',               gap: 25  }
+];
+
+var SHAPE_LABEL = { slot: '槽形', square: '方形', round: '圆形' };
+
+function $(id) { return document.getElementById(id); }
+function show(el, on) { el.style.display = on ? '' : 'none'; }
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+
+// ===== 选项卡 =====
+window.mgSwitch = function (idx) {
+  var btns = document.querySelectorAll('.tab-btn');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.toggle('active', i === idx);
+  for (var j = 0; j <= 4; j++) $('panel' + j).classList.toggle('active', j === idx);
+};
+
+// ===== 表格渲染 =====
+function renderOpeningTable() {
+  var html = '';
+  for (var i = 0; i < OPENING.length; i++) {
+    var r = OPENING[i];
+    var lo = i === 0 ? 'e ≤ ' + r.eMax : (OPENING[i - 1].eMax + ' < e ≤ ') + r.eMax;
+    var star = (r.slot === 850) ? ' *' : '';
+    html += '<tr><td>' + esc(r.part) + star + '</td><td>' + lo + '</td><td>' + r.slot +
+            '</td><td>' + r.square + '</td><td>' + r.round + '</td></tr>';
+  }
+  $('gTable').getElementsByTagName('tbody')[0].innerHTML = html;
+}
+
+function renderReachTable() {
+  var thead = $('rTableView').getElementsByTagName('thead')[0];
+  var tbody = $('rTableView').getElementsByTagName('tbody')[0];
+  var h = '<tr><th>危险区高度 A<sub>h</sub> \\ 防护结构高度 A<sub>p</sub></th>';
+  for (var c = 0; c < REACH_COLS.length; c++) h += '<th>' + REACH_COLS[c] + '</th>';
+  h += '</tr>';
+  thead.innerHTML = h;
+  var keys = Object.keys(REACH_T2).map(Number).sort(function (a, b) { return a - b; });
+  var rows = '';
+  for (var k = 0; k < keys.length; k++) {
+    var ah = keys[k];
+    rows += '<tr><td>' + ah + '</td>';
+    for (var i = 0; i < REACH_T2[ah].length; i++) {
+      var v = REACH_T2[ah][i];
+      rows += '<td' + (v === 0 ? ' style="color:var(--text-tertiary)"' : '') + '>' +
+              (v === 0 ? '—' : v) + '</td>';
+    }
+    rows += '</tr>';
+  }
+  tbody.innerHTML = rows;
+}
+
+function renderLowerTable() {
+  var html = '';
+  for (var i = 0; i < LOWER.length; i++) {
+    var r = LOWER[i];
+    var lo = i === 0 ? 'e ≤ ' + r.eMax :
+             (r.eMax === 9999 ? 'e > 240' : (LOWER[i - 1].eMax + ' < e ≤ ') + r.eMax);
+    html += '<tr><td>' + lo + '</td><td>' + (r.sqrd < 0 ? '不准许' : r.sqrd) +
+            '</td><td>' + (r.slot < 0 ? '不准许' : r.slot) + '</td></tr>';
+  }
+  $('lTable').getElementsByTagName('tbody')[0].innerHTML = html;
+}
+
+function renderCrushTable() {
+  var html = '';
+  for (var i = 0; i < CRUSH.length; i++) {
+    html += '<tr><td>' + esc(CRUSH[i].part) + '</td><td>' + CRUSH[i].gap + '</td></tr>';
+  }
+  $('cTable').getElementsByTagName('tbody')[0].innerHTML = html;
+}
+
+// ===== Tab 0：开口安全距离 =====
+window.calcOpening = function () {
+  var shape = $('gShape').value;
+  var e = parseFloat($('gOpen').value);
+  var len = parseFloat($('gLen').value);
+  var res = $('gRes'), warn = $('gWarn');
+  if (!e || e <= 0) { show(res, false); show(warn, false); return; }
+
+  if (e > 120) {
+    show(res, false);
+    show(warn, true);
+    $('gWarnText').innerHTML = '开口尺寸 <strong>' + e + ' mm &gt; 120 mm</strong>，超出表 4 适用范围（表 4 明确 e&gt;120 mm 应使用 4.2.2 规定的安全距离）。请切到第 2 个页签「防越过距离」按危险区高度与防护结构高度查取，或改用全封闭防护。';
+    return;
+  }
+  show(warn, false);
+
+  var row = null;
+  for (var i = 0; i < OPENING.length; i++) {
+    if (e <= OPENING[i].eMax) { row = OPENING[i]; break; }
+  }
+  if (!row) {
+    show(res, false);
+    show(warn, true);
+    $('gWarnText').innerHTML = '开口尺寸超出表 4 范围，请核对输入。';
+    return;
+  }
+
+  var sr = row[shape];
+  var notes = [];
+  notes.push('该开口尺寸（' + SHAPE_LABEL[shape] + '，e=' + e + ' mm）最多允许 <strong>' + esc(row.part) + '</strong> 伸入，安全距离按此部位取值。');
+
+  var applied = sr;
+  if (shape === 'slot' && sr === 850 && len > 0 && len <= 65) {
+    applied = 200;
+    notes.push('槽形开口长度 ' + len + ' mm ≤ 65 mm，拇指将受到阻挡，安全距离可减小到 <strong>不小于 200 mm</strong>（现取 200 mm）。');
+  }
+  if (shape === 'slot' && len > 65 && sr === 850) {
+    notes.push('槽形开口长度 ' + len + ' mm &gt; 65 mm，<strong>不能</strong>按拇指阻挡条款减至 200 mm。');
+  }
+  if (sr === 850 && shape !== 'slot') {
+    notes.push('该尺寸下 850 mm 是上限值，护罩至危险区须保持此距离或改用更小开口。');
+  }
+  notes.push('安全距离自<strong>限制身体运动的表面</strong>开始测量（GB/T 23821-2022 4.1.1）。');
+
+  $('gSr').textContent = applied;
+  $('gNote').innerHTML = notes.join('<br>');
+  show(res, true);
+};
+
+// ===== Tab 1：防越过距离 =====
+function pickRow(table, ah) {
+  // 不插值：A_h 落在两数之间时取更大安全距离 → 取下一个更低的行
+  var keys = Object.keys(table).map(Number).sort(function (a, b) { return a - b; });
+  var best = null;
+  for (var i = 0; i < keys.length; i++) {
+    if (ah >= keys[i]) best = keys[i];
+  }
+  return best;
+}
+function pickCol(cols, ap) {
+  var best = null;
+  for (var i = 0; i < cols.length; i++) {
+    if (ap >= cols[i]) best = cols[i];
+  }
+  return best;
+}
+
+window.calcReach = function () {
+  var ah = parseFloat($('rAh').value);
+  var ap = parseFloat($('rAp').value);
+  var sh = parseFloat($('rSh').value) || 0;
+  var useT1 = $('rTable').value === 't1';
+  var table = useT1 ? REACH_T1 : REACH_T2;
+  var cols = useT1 ? REACH_T1_COLS : REACH_COLS;
+  var tableNo = useT1 ? '表 1' : '表 2';
+  var res = $('rRes'), warn = $('rWarn'), ok = $('rOk');
+  show(ok, false);
+
+  if (!ah && ah !== 0 || !ap && ap !== 0) { show(res, false); show(warn, false); return; }
+
+  // 上伸触及判定
+  if (ah >= 2700) {
+    show(res, false); show(warn, false); show(ok, true);
+    $('rOkText').innerHTML = '危险区高度 <strong>' + ah + ' mm ≥ 2700 mm</strong>，按 GB/T 23821-2022 4.2.1.2 属<strong>上伸不可触及</strong>，无需设置水平安全距离（防护结构主要用于隔离其他危险）。';
+    return;
+  }
+  if (useT1 && ah >= 2500) {
+    show(res, false); show(warn, false); show(ok, true);
+    $('rOkText').innerHTML = '危险区高度 <strong>' + ah + ' mm ≥ 2500 mm</strong>，在伤害严重程度与发生概率均低的前提下属上伸不可触及（4.2.1.2 较小值）。';
+    return;
+  }
+
+  if (ap < 1000) {
+    show(res, false);
+    show(warn, true);
+    $('rWarnText').innerHTML = '防护结构高度 <strong>' + ap + ' mm &lt; 1000 mm</strong>，标准明确此高度<strong>不能有效限制身体运动</strong>，表 1/表 2 未予考虑。请加高防护结构至 ≥1000 mm，或改用能限制运动的栅栏间距（表 4 开口距离）+ 足够的高度。';
+    return;
+  }
+
+  var rowKey = pickRow(table, ah);
+  var colKey = pickCol(cols, ap);
+
+  if (rowKey === null || colKey === null) {
+    show(res, false);
+    show(warn, true);
+    $('rWarnText').innerHTML = '输入值超出 ' + tableNo + ' 的取值范围（危险区高度 ' + (tableNo === '表 1' ? '200~2500' : '200~2700') + ' mm，防护结构高度 ' + cols[0] + '~' + cols[cols.length - 1] + ' mm）。请核对输入。';
+    return;
+  }
+
+  var req = table[rowKey][cols.indexOf(colKey)];
+  var notes = [];
+  notes.push('按 <strong>' + tableNo + '</strong> 查取：A<sub>h</sub> 取 ' + rowKey + ' mm 行、A<sub>p</sub> 取 ' + colKey + ' mm 列 → 所需水平安全距离 <strong>' + req + ' mm</strong>。');
+
+  if (ah !== rowKey) notes.push('输入 A<sub>h</sub>=' + ah + ' mm 介于表内数值之间，按<strong>不插值原则</strong>取偏低行（' + rowKey + ' mm，安全距离更大）。');
+  if (ap !== colKey) notes.push('输入 A<sub>p</sub>=' + ap + ' mm 介于表内数值之间，按<strong>不插值原则</strong>取偏低列（' + colKey + ' mm，安全距离更大）。');
+  if (ap < 1400) notes.push('防护结构高度 &lt; 1400 mm，若无附加防护措施<strong>不宜采用</strong>该组合，应加高护罩或增设横向阻挡。');
+  if (req === 0) notes.push('所需距离为 0：该组合下上肢无法触及危险区。');
+  notes.push('同一进入方式若确定多个安全距离，应<strong>采用最大的一个</strong>（4.1.2.1）。');
+
+  $('rShReq').textContent = req;
+  $('rNote').innerHTML = notes.join('<br>');
+  show(res, true);
+
+  if (sh > 0) {
+    if (sh >= req) {
+      show(warn, false); show(ok, true);
+      $('rOkText').innerHTML = '实测水平距离 <strong>' + sh + ' mm ≥ 所需 ' + req + ' mm</strong>，此组合满足 ' + tableNo + ' 的水平安全距离要求。';
+    } else {
+      show(ok, false); show(warn, true);
+      $('rWarnText').innerHTML = '实测水平距离 <strong>' + sh + ' mm &lt; 所需 ' + req + ' mm</strong>，<strong>不满足</strong>要求。可行方向：加高防护结构（减小 A<sub>p</sub>）、换更小网孔、把护罩整体后移，或改为全封闭。';
+    }
+  } else {
+    show(warn, false);
+  }
+};
+
+// ===== Tab 2：下肢开口 =====
+window.calcLower = function () {
+  var e = parseFloat($('lOpen').value);
+  var shape = $('lShape').value;
+  var len = parseFloat($('lLen').value);
+  var res = $('lRes'), warn = $('lWarn');
+  if (!e || e <= 0) { show(res, false); show(warn, false); return; }
+
+  var row = null;
+  for (var i = 0; i < LOWER.length; i++) {
+    if (e <= LOWER[i].eMax) { row = LOWER[i]; break; }
+  }
+  if (!row) { show(res, false); show(warn, false); return; }
+
+  var v = shape === 'slot' ? row.slot : row.sqrd;
+
+  if (v < 0) {
+    show(res, false);
+    show(warn, true);
+    warn.className = 'warn-bar danger';
+    $('rWarnText').textContent = '';
+    $('lWarnText').innerHTML = (shape === 'slot'
+      ? '槽形开口最窄边 <strong>' + e + ' mm &gt; 180 mm</strong>'
+      : '方形/圆形开口 <strong>' + e + ' mm</strong>') +
+      '，人员可<strong>全身进入</strong>危险区 — 表 7 不再允许仅用安全距离，必须改为<strong>全封闭防护</strong>（或把开口缩到 ' + (shape === 'slot' ? '≤180 mm' : '≤120 mm') + ' 以下并按 ' + (shape === 'slot' ? '1100 mm' : '1100 mm') + ' 复核）。';
+    return;
+  }
+  if (shape === 'slot' && e > 180) {
+    show(warn, true);
+    warn.className = 'warn-bar warning';
+    $('lWarnText').innerHTML = '槽形开口最窄边 <strong>' + e + ' mm &gt; 180 mm</strong>，人员可<strong>全身进入</strong>危险区。表 7 对该档仍给出 ' + v + ' mm 距离，但应<strong>优先改为全封闭防护</strong>，不要仅依赖安全距离。';
+  } else {
+    show(warn, false);
+  }
+  var applied = v;
+  var notes = [];
+  notes.push(shape === 'slot'
+    ? '槽形开口最窄处 e=' + e + ' mm → 距危险区的安全距离 <strong>' + v + ' mm</strong>。'
+    : (shape === 'sqrd' ? '方形/圆形' : '') + '开口 e=' + e + ' mm → 距危险区的安全距离 <strong>' + v + ' mm</strong>。');
+  if (row.note) notes.push(row.note + '。');
+  if (shape === 'slot' && len > 0 && len <= 75 && v > 50) {
+    applied = 50;
+    notes.push('槽形开口长度 ' + len + ' mm ≤ 75 mm，该距离可减小到<strong>不小于 50 mm</strong>（现取 50 mm）。');
+  }
+  notes.push('本表仅适用于风险评估已确认<strong>上肢不会进入同一开口</strong>的场合；否则须同时满足表 4 的上肢要求。');
+
+  $('lSr').textContent = applied;
+  $('lNote').innerHTML = notes.join('<br>');
+  show(res, true);
+};
+
+// ===== Tab 3：挤压最小间距 =====
+window.calcCrush = function () {
+  var key = $('cPart').value;
+  var gap = parseFloat($('cGap').value) || 0;
+  var item = null;
+  for (var i = 0; i < CRUSH.length; i++) { if (CRUSH[i].key === key) item = CRUSH[i]; }
+  if (!item) return;
+
+  var res = $('cRes'), warn = $('cWarn'), ok = $('cOk');
+  $('cSr').textContent = item.gap;
+  $('cNote').innerHTML = '「' + esc(item.part) + '」避免挤压的最小间距 <strong>' + item.gap +
+    ' mm</strong>（GB/T 12265-2021 表 1）。设计时该部位的间隙<strong>不得小于</strong>此值。';
+  show(res, true);
+
+  if (gap > 0) {
+    if (gap >= item.gap) {
+      show(warn, false); show(ok, true);
+      $('cOkText').innerHTML = '设计间隙 ' + gap + ' mm ≥ 最小间距 ' + item.gap + ' mm，满足要求。';
+    } else {
+      show(ok, false); show(warn, true);
+      $('cWarnText').innerHTML = '设计间隙 <strong>' + gap + ' mm &lt; 最小间距 ' + item.gap +
+        ' mm</strong>，存在挤压风险。可行方向：减小间隙、改用非挤压结构（如圆角/自锁）、或设置阻挡防止人员进入该区域。';
+    }
+  } else {
+    show(warn, false); show(ok, false);
+  }
+};
+
+// ===== 初始化 =====
+renderOpeningTable();
+renderReachTable();
+renderLowerTable();
+renderCrushTable();
+calcOpening();
+calcReach();
+calcLower();
+calcCrush();
+})();
+</script>
+<script src="/sheen-toolbox/assets/i18n.js"></script>
+<script src="/sheen-toolbox/assets/share.js"></script>
+</body>
+</html>
