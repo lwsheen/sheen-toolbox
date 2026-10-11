@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head data-seo="sheen">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="泄放量计算与安全阀爆破片选型 — GB/T 12243-2021 额定排量、GB/T 567.2-2012 泄放量公式、GB/T 150.1-2024 泄放能力、TSG 21 设定压力">
+
+<link rel="icon" type="image/png" sizes="192x192" href="/sheen-toolbox/assets/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/sheen-toolbox/assets/icon-512.png">
+
+<title>泄放量计算与安全阀爆破片选型 — SHEEN Toolbox</title>
+<meta property="og:title" content="泄放量计算与安全阀爆破片选型 | SHEEN Toolbox">
+<meta property="og:description" content="GB/T 567.2-2012 泄放量公式 · GB/T 12243-2021 额定排量 · GB/T 150.1-2024 泄放能力 · TSG 21 设定压力">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lwsheen.pages.dev/sheen-toolbox/relief-device-sizing/">
+<meta property="og:image" content="https://lwsheen.pages.dev/sheen-toolbox/assets/share/relief-device-sizing.png">
+<link rel="canonical" href="https://lwsheen.pages.dev/sheen-toolbox/relief-device-sizing/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "泄放量计算与安全阀爆破片选型", "url": "https://lwsheen.pages.dev/sheen-toolbox/relief-device-sizing/", "description": "GB/T 567.2-2012 泄放量公式 · GB/T 12243-2021 额定排量 · GB/T 150.1-2024 泄放能力 · TSG 21 设定压力", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "inLanguage": "zh-CN", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "CNY"}, "publisher": {"@type": "Organization", "name": "SHEEN Toolbox"}}</script>
+
+<link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
+<link rel="stylesheet" href="/sheen-toolbox/common.css">
+<style>:root {
+  /* 品牌色一律引用 common.css 令牌，页面不自定义色值 */
+  --rv-red: var(--brand-red);
+  --rv-red-light: var(--brand-red-light);
+  --rv-amber: var(--warn-orange);
+  --rv-amber-light: var(--warn-orange-soft);
+  --rv-amber-deep: var(--warn-deep);
+  --rv-green: var(--ok-deep);
+  --rv-green-light: var(--ok-soft);
+  --rv-blue: var(--tech-blue);
+  --rv-blue-light: var(--tech-blue-soft);
+}
+
+.guide { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 12px 16px; background: var(--bg-page); border: 1px solid var(--border-light); border-radius: 12px; margin-bottom: 14px; }
+.guide-step { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); }
+.guide-step .gs-no { width: 20px; height: 20px; border-radius: 50%; background: var(--brand-red); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.guide-step b { color: var(--text-primary); font-weight: 600; }
+.guide-arrow { color: var(--text-tertiary); font-size: 11px; }
+
+.scene-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 6px; }
+.scene-card { text-align: left; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; cursor: pointer; font-family: var(--font); transition: all 0.18s; }
+.scene-card:hover { border-color: var(--brand-red); background: var(--brand-red-light); }
+.scene-card i { font-size: 16px; color: var(--brand-red); }
+.scene-card b { display: block; font-size: 13px; color: var(--text-primary); margin: 6px 0 3px; line-height: 1.4; }
+.scene-card span { display: block; font-size: 11px; color: var(--text-secondary); line-height: 1.5; }
+
+.ex-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border); }
+.ex-label { font-size: 11px; color: var(--text-secondary); display: flex; align-items: center; gap: 5px; }
+.ex-chip { font-size: 11.5px; font-weight: 600; padding: 5px 12px; border-radius: 60px; background: var(--tech-blue-soft); color: var(--tech-blue); border: none; cursor: pointer; font-family: var(--font); }
+.ex-chip:hover { background: var(--brand-red); color: #fff; }
+
+.term-hint { display: none; margin-top: 6px; font-size: 11.5px; color: var(--text-secondary); background: var(--tech-blue-soft); border-radius: 8px; padding: 10px 12px; line-height: 1.7; }
+.term-hint.on { display: block; }
+
+.tab-nav { display: flex; gap: 0; margin-bottom: 0; border-bottom: 2px solid var(--border); border-radius: 8px; }
+.tab-btn { flex: 1; padding: 13px 8px; font-size: 13px; font-weight: 600; font-family: var(--font); background: var(--bg-page); color: var(--text-secondary); border: none; cursor: pointer; transition: all 0.2s; border-bottom: 3px solid transparent; margin-bottom: -2px; display: flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; border-radius: 8px; }
+.tab-btn i { font-size: 15px; }
+.tab-btn:hover { color: var(--brand-red); background: var(--brand-red-light); }
+.tab-btn.active { color: var(--brand-red); background: var(--bg-card); border-bottom-color: var(--brand-red); }
+.tab-panel { display: none; background: var(--bg-card); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: 22px; }
+.tab-panel.active { display: block; }
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-row label { display: block; font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+.form-control { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; font-family: var(--font); background: var(--bg-card); color: var(--text-primary); }
+.hint { font-size: 11px; color: var(--text-secondary); margin-top: 4px; line-height: 1.6; }
+
+.result-block { background: var(--rv-red-light); border: 2px solid var(--rv-red); border-radius: 16px; padding: 20px; margin-top: 20px; }
+.result-block .main-value { font-size: 36px; font-weight: 800; color: var(--rv-red); line-height: 1.1; }
+.result-block .main-unit { font-size: 17px; color: var(--text-secondary); margin-left: 4px; font-weight: 600; }
+.result-block .result-label { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+.result-sub { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-light); }
+.result-sub .rs-item .rs-l { font-size: 11px; color: var(--text-secondary); }
+.result-sub .rs-item .rs-v { font-size: 17px; font-weight: 700; color: var(--text-primary); }
+.result-note { font-size: 12px; color: var(--text-secondary); margin-top: 12px; line-height: 1.7; }
+
+.warn-bar { padding: 10px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; display: flex; align-items: flex-start; gap: 8px; margin-top: 12px; line-height: 1.7; }
+.warn-bar.danger { background: var(--rv-red-light); color: var(--rv-red); border: 1px solid var(--rv-red); }
+.warn-bar.warning { background: var(--rv-amber-light); color: var(--rv-amber-deep); border: 1px solid var(--rv-amber); }
+.warn-bar.info { background: var(--rv-blue-light); color: var(--rv-blue); border: 1px solid var(--rv-blue); }
+.warn-bar.ok { background: var(--rv-green-light); color: var(--rv-green); border: 1px solid var(--rv-green); }
+.warn-bar span { font-weight: 400; }
+.warn-bar strong { font-weight: 700; }
+
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 14px; }
+.data-table th { background: var(--brand-red); color: #fff; padding: 8px 9px; text-align: center; font-weight: 600; font-size: 11px; }
+.data-table th:first-child { text-align: left; }
+.data-table td { padding: 7px 9px; border-bottom: 1px solid var(--border-light); text-align: center; font-variant-numeric: tabular-nums; }
+.data-table td:first-child { text-align: left; }
+.data-table tr:nth-child(even) { background: var(--bg-page); }
+.data-table tr.hl { background: var(--rv-green-light); }
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.data-table caption { caption-side: top; font-size: 12px; color: var(--text-secondary); text-align: left; padding: 10px 0 4px; font-weight: 600; }
+.sel-table th { background: var(--tech-blue); }
+.pick { font-weight: 700; color: var(--rv-red); }
+
+.std-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 60px; background: var(--bg-page); border: 1px solid var(--border); color: var(--text-secondary); }
+.tag-good { background: var(--ok-soft); color: var(--ok-deep); }
+.tag-warn { background: var(--warn-orange-soft); color: var(--warn-deep); }
+.tag-bad { background: var(--brand-red-light); color: var(--brand-red); }
+
+.disclaimer { margin-top: 24px; padding: 14px 18px; background: var(--rv-amber-light); border: 1px solid var(--rv-amber); border-radius: 12px; font-size: 12px; color: var(--text-secondary); line-height: 1.8; }
+.disclaimer strong { color: var(--rv-amber); }
+
+@media (max-width: 900px) { .scene-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 768px) {
+  .tab-btn { padding: 10px 4px; font-size: 11.5px; gap: 3px; }
+  .tab-btn i { display: none; }
+  .tab-panel { padding: 15px; }
+  .form-grid { grid-template-columns: 1fr; gap: 12px; }
+  .result-block .main-value { font-size: 28px; }
+  .data-table { font-size: 11px; }
+  .data-table th, .data-table td { padding: 6px 5px; }
+}
+</style>
+<style>
+@media print {
+  @page { size: A4; margin: 16mm 12mm 18mm 12mm; }
+  body { background: #fff !important; padding: 0 !important; font-size: 11pt; color: #000 !important; }
+  .breadcrumb, .btn-primary, .btn-print, .sheen-footer, .no-print, .no-pr, .form-grid, .scene-grid, .guide { display: none !important; }
+  .tab-panel { display: block !important; border: none !important; padding: 0 0 12pt 0 !important; page-break-inside: avoid; }
+  .app-container { box-shadow: none !important; border: none !important; max-width: 100% !important; padding: 0 !important; }
+}
+</style>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?9b8c3df212619adec1f70f01695f4160";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  if (location.hostname.indexOf("github.io") >= 0) {
+    var hm2 = document.createElement("script");
+    hm2.src = "https://hm.baidu.com/hm.js?5ceec8bd8bf10bd9d1f4ddceaebdae6f";
+    s.parentNode.insertBefore(hm2, s);
+  }
+})();
+</script>
+</head>
+<body>
+
+<div class="breadcrumb">
+  <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+  <span> / 泄放量计算与安全阀爆破片选型</span>
+</div>
+
+<main class="app-container container-query">
+
+  <h1 class="page-title"><i class="fa-solid fa-valve" style="color:var(--brand-red)"></i> 泄放量计算与安全阀爆破片选型</h1>
+  <p class="page-subtitle" style="margin-bottom:16px;">按现行标准公式算所需泄放量与泄放面积，再反查安全阀流道直径 / 爆破片公称口径与整定压力 — 适用于压力容器与工业管道</p>
+
+  <div class="warn-bar info no-pr" style="margin-top:0;margin-bottom:14px;">
+    <i class="fa-solid fa-circle-info"></i>
+    <span><strong>本工具依据的现行版标准（2026-10 实证核查）：</strong>
+      <span class="std-badge">GB/T 567.2-2012</span> 爆破片安全装置 应用、选择与安装（附录C 泄放量计算公式 · 附录B 表B.1 最小爆破压力倍数 · 表A.1 选型指南）·
+      <span class="std-badge">GB/T 567.1-2012</span> 基本要求（爆破压力允差）·
+      <span class="std-badge">GB/T 12243-2021</span> 弹簧直接载荷式安全阀（附录B 额定排量计算）·
+      <span class="std-badge">GB/T 150.1-2024</span> 通用要求 附录B 超压泄放 ·
+      <span class="std-badge">TSG 21-2016</span> 固定式压力容器安全技术监察规程（整定压力）·
+      <span class="std-badge">GB/T 20801.6-2020</span> 工业管道 第6部分 安全防护
+    </span>
+  </div>
+
+  <div class="warn-bar warning no-pr">
+    <i class="fa-solid fa-triangle-exclamation"></i>
+    <span><strong>关于「泄放量数据表」的重要说明：</strong>现行国标<strong>不提供</strong>「公称通径 × 整定压力 → 额定泄放量」的成品数据表（GB/T 567.2 附录B 是空白选型登记表，GB/T 12243 只给公式不给数字表）。因此本工具采用<strong>标准公式正算 + 厂商样本额定排量表反查</strong>的双向结构，厂商样本数值已在页面显著标注。正式选型必须以制造厂出具的<strong>型式试验报告排量数据</strong>为准。</span>
+  </div>
+
+  <div class="guide no-pr">
+    <div class="guide-step"><span class="gs-no">1</span><span>点下面的<b>场景卡</b>，自动跳到对应页签并填好一组真实工况参数</span></div>
+    <span class="guide-arrow"><i class="fa-solid fa-chevron-right"></i></span>
+    <div class="guide-step"><span class="gs-no">2</span><span>第 1 页签算出<b>所需泄放面积 A</b>（这是整台工具的核心输出）</span></div>
+    <span class="guide-arrow"><i class="fa-solid fa-chevron-right"></i></span>
+    <div class="guide-step"><span class="gs-no">3</span><span>拿 A 去第 2/3 页签<b>反查安全阀流道 / 爆破片口径</b>，第 4 页签定压力</span></div>
+  </div>
+
+  <div class="scene-grid no-pr" id="sceneGrid"></div>
+
+  <div class="no-pr" style="margin-bottom:14px;">
+    <button class="ex-chip" onclick="rvGloss()" id="glossBtn" style="background:var(--bg-page);color:var(--text-secondary);border:1px solid var(--border);"><i class="fa-solid fa-book-open"></i> 看不懂术语？点这里看白话解释</button>
+    <div class="term-hint" id="glossBox">
+      <b>泄放量（W）</b>：出事故时这个装置每秒（每小时）必须放掉的介质量，单位 kg/h。它由热源大小决定，不是你选的，是「必须满足的底线」。<br>
+      <b>泄放面积（A）</b>：算出泄放量后，按标准公式反推出的通流口要开多大，单位 mm²。<b>安全阀和爆破片都是按面积卖，不是按口径卖</b>，口径只是面积的离散代表。<br>
+      <b>流道直径（do）</b>：安全阀真正开孔的直径，比法兰公称通径 DN 小。查样本看的是 do 列，不是 DN 列。<br>
+      <b>整定压力（SET）</b>：安全阀自己决定「什么时候跳」的预设压力。<b>爆破压力（p_b）</b>：爆破片决定「什么时候炸」的预设压力。两者都是被保护设备的保护门槛。<br>
+      <b>设定压力 ≤ 设计压力</b>：压力容器上安全阀的整定压力一般<strong>不大于</strong>容器设计压力（不是「1.1 倍设计压力」——那是锅炉和移动式容器的规则）。<br>
+      <b>最小爆破压力</b>：爆破片能标定的最低压力。反拱型要求 ≥ 工作压力 × 1.1，正拱普通型要 ≥ ×1.43，平板型要 ×2.0。选错型式这块就卡住。<br>
+      <b>操作压力比</b>：设备工作压力 ÷ 爆破片最小爆破压力。数值越大越耐用但动作越迟。反拱带槽型 0.9 最优。<br>
+      <b>泄放系数 K</b>：接管形状对实际放流量的打折系数。插入式 0.68 最亏，平齐式 0.73，带过渡圆角 0.80 最划算，拿不准按 0.62 保守取值。<br>
+      <b>组合装置 × 0.9</b>：爆破片串在安全阀前面后，组合泄放量只能按「单个安全阀额定泄放量 × 0.9」计（GB/T 567.2-2012 4.3.2.3），所以选型要放大一档。
+    </div>
+  </div>
+
+  <div class="tab-nav no-pr" role="tablist">
+    <button class="tab-btn active" onclick="rvSwitch(0)" data-tab="0"><i class="fa-solid fa-calculator"></i> 泄放量计算</button>
+    <button class="tab-btn" onclick="rvSwitch(1)" data-tab="1"><i class="fa-solid fa-fan"></i> 安全阀选型</button>
+    <button class="tab-btn" onclick="rvSwitch(2)" data-tab="2"><i class="fa-solid fa-burst"></i> 爆破片选型</button>
+    <button class="tab-btn" onclick="rvSwitch(3)" data-tab="3"><i class="fa-solid fa-gauge-high"></i> 压力设定</button>
+    <button class="tab-btn" onclick="rvSwitch(4)" data-tab="4"><i class="fa-solid fa-scale-balanced"></i> 选型对比</button>
+  </div>
+
+  <!-- ============ TAB 0：泄放量计算 ============ -->
+  <div class="tab-panel active" id="panel0">
+    <h3 style="font-size:15px;font-weight:600;margin-bottom:4px;"><i class="fa-solid fa-calculator"></i> 泄放能力计算 — 反推所需泄放面积 A</h3>
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;">三种介质分别按各自的标准公式正算泄放量、再反算所需面积。若你<strong>只知道泄放量</strong>（如按 GB/T 150.1-2024 附录B 算出的 W_s），把介质参数填上、公式会给出所需面积。</p>
+
+    <div class="form-grid">
+      <div class="form-row">
+        <label>介质相态</label>
+        <select class="form-control" id="fPhase" onchange="rvPhase()">
+          <option value="gas" selected>气体 / 蒸气（临界流）</option>
+          <option value="steam">水蒸气（饱和 / 过热）</option>
+          <option value="liquid">液体（无闪蒸）</option>
+        </select>
+        <div class="hint">⚠️ 气液两相流需按 GB/T 20801.6-2020 附录B 另算，本工具不覆盖</div>
+      </div>
+      <div class="form-row">
+        <label>已知泄放量 W (kg/h) <span style="color:var(--brand-red)">*</span></label>
+        <input type="number" class="form-control" id="fW" value="1000" min="0" step="1" oninput="rvCalc()">
+        <div class="hint">来源：GB/T 150.1-2024 附录B、或你的工艺热量衡算结果</div>
+      </div>
+      <div class="form-row" id="rowPf">
+        <label>泄放压力 p_f (MPa, <span id="lblPf">绝压</span>) <span style="color:var(--brand-red)">*</span></label>
+        <input type="number" class="form-control" id="fPf" value="0.6" min="0.001" step="0.01" oninput="rvCalc()">
+        <div class="hint" id="hintPf">气体按绝压代入公式；一般取整定压力 × 1.03~1.10（未超压的用绝压）</div>
+      </div>
+      <div class="form-row" id="rowP0" style="display:none;">
+        <label>背压 p₀ (MPa, 绝压)</label>
+        <input type="number" class="form-control" id="fP0" value="0.1013" min="0" step="0.001" oninput="rvCalc()">
+        <div class="hint">大气排放取 0.1013；排入火炬/封闭管取实际背压</div>
+      </div>
+      <div class="form-row" id="rowM" style="display:none;">
+        <label>介质摩尔质量 M (kg/kmol) <span style="color:var(--brand-red)">*</span></label>
+        <input type="number" class="form-control" id="fM" value="28.97" min="0.1" step="0.01" oninput="rvCalc()">
+        <div class="hint">或从下方气体性质表选介质自动填入</div>
+      </div>
+      <div class="form-row" id="rowK" style="display:none;">
+        <label>绝热指数 k</label>
+        <input type="number" class="form-control" id="fK" value="1.40" min="1" max="2.2" step="0.01" oninput="rvCalc()">
+        <div class="hint">不明时 GB/T 567.2 表C.4 规定取 k=1.0（保守）；k=1 时 C″≈23.96</div>
+      </div>
+      <div class="form-row" id="rowT" style="display:none;">
+        <label>泄放温度 T_f (K) <span style="color:var(--brand-red)">*</span></label>
+        <input type="number" class="form-control" id="fT" value="293" min="100" max="1500" step="1" oninput="rvCalc()">
+        <div class="hint">常温 20 ℃ = 293 K；取介质实际温度的绝对值</div>
+      </div>
+      <div class="form-row" id="rowZ" style="display:none;">
+        <label>压缩因子 Z</label>
+        <input type="number" class="form-control" id="fZ" value="1.0" min="0.05" step="0.01" oninput="rvCalc()">
+        <div class="hint">低压气体近似 1.0；中高压查状态方程</div>
+      </div>
+      <div class="form-row" id="rowSup" style="display:none;">
+        <label>过热温度 (℃)</label>
+        <input type="number" class="form-control" id="fSup" value="200" min="0" max="600" step="10" oninput="rvCalc()">
+        <div class="hint">仅过热蒸汽需要；饱和蒸汽填任意值即可</div>
+      </div>
+      <div class="form-row" id="rowRho" style="display:none;">
+        <label>液体密度 ρ (kg/m³) <span style="color:var(--brand-red)">*</span></label>
+        <input type="number" class="form-control" id="fRho" value="1000" min="1" step="1" oninput="rvCalc()">
+        <div class="hint">取泄放温度下的密度；水 20 ℃ ≈ 998，盐水更高</div>
+      </div>
+      <div class="form-row">
+        <label>泄放系数 K</label>
+        <select class="form-control" id="fKd" onchange="rvCalc()">
+          <option value="0.68">插入式接管 K=0.68</option>
+          <option value="0.73" selected>平齐式接管 K=0.73</option>
+          <option value="0.80">带过渡圆角接管 K=0.80</option>
+          <option value="0.62">形状不明按 0.62</option>
+        </select>
+        <div class="hint">GB/T 567.2-2012 表C.3；爆破片后接安全阀组合时 K_c=0.9</div>
+      </div>
+      <div class="form-row" id="rowDp" style="display:none;">
+        <label>有效压差 Δp (MPa) <span style="color:var(--brand-red)">*</span></label>
+        <input type="number" class="form-control" id="fDp" value="0.5" min="0.001" step="0.01" oninput="rvCalc()">
+        <div class="hint">= 泄放压力 − 背压（绝压之差）</div>
+      </div>
+      <div class="form-row">
+        <label>串联爆破片修正 K_c</label>
+        <select class="form-control" id="fKc" onchange="rvCalc()">
+          <option value="1.0" selected>不串联（K_c=1.0）</option>
+          <option value="0.9">安全阀入口侧串联爆破片（K_c=0.9）</option>
+        </select>
+        <div class="hint">GB/T 150.1-2024 附录B B.8.3；串联时所需面积放大 1/0.9</div>
+      </div>
+    </div>
+
+    <div class="ex-row no-pr">
+      <span class="ex-label"><i class="fa-solid fa-wand-magic-sparkles"></i> 示例：</span>
+      <button class="ex-chip" onclick="rvEx0(0)">储气罐超压 空气 1000 kg/h</button>
+      <button class="ex-chip" onclick="rvEx0(1)">液氨储罐 NH₃ 2000 kg/h</button>
+      <button class="ex-chip" onclick="rvEx0(2)">0.6 MPa 饱和蒸汽 3000 kg/h</button>
+      <button class="ex-chip" onclick="rvEx0(3)">液压站油缸 间隙 需 800 kg/h</button>
+      <button class="ex-chip" onclick="rvEx0(4)">亚临界（背压偏高）气体</button>
+    </div>
+
+    <div class="result-block" id="cRes" style="display:none;">
+      <div class="result-label">所需泄放面积 A</div>
+      <div><span class="main-value" id="cArea">—</span><span class="main-unit">mm²</span></div>
+      <div class="result-sub">
+        <div class="rs-item"><div class="rs-l">等效通流直径</div><div class="rs-v" id="cDo">—</div></div>
+        <div class="rs-item"><div class="rs-l">校核泄放量</div><div class="rs-v" id="cWchk">—</div></div>
+        <div class="rs-item"><div class="rs-l">临界压力比</div><div class="rs-v" id="cRatio">—</div></div>
+        <div class="rs-item"><div class="rs-l">公式编号</div><div class="rs-v" id="cForm">—</div></div>
+      </div>
+      <div class="result-note" id="cNote"></div>
+    </div>
+
+    <div class="warn-bar danger" id="cWarn" style="display:none;"><i class="fa-solid fa-triangle-exclamation"></i><span id="cWarnText"></span></div>
+    <div class="warn-bar info"><i class="fa-solid fa-circle-info"></i><span><strong>公式出处：</strong>气体临界流 W = 0.076·C″·K·A·p_f·√(M/(Z·T_f))（GB/T 567.2-2012 附录C 式C.3 对应 GB/T 150.1-2024 附录B）；蒸汽 W = 5.25·K·C′·A·√p_f（式C.5）；液体 W = 5.1·ζ·A·K′·√(ρ·Δp)（式C.6）。C″ = 39.48·√[k·(2/(k+1))^((k+1)/(k−1))]，k 未知取 23.96。</span></div>
+
+    <h4 style="font-size:14px;font-weight:600;margin:22px 0 4px;"><i class="fa-solid fa-flask"></i> 常用气体性质（GB/T 567.2-2012 表C.4）</h4>
+    <div class="table-scroll">
+      <table class="data-table" id="gasTable">
+        <caption>点击任意一行即可把该介质填入上方输入框（摩尔质量 M / 绝热指数 k / 临界压力 / 临界温度）</caption>
+        <thead><tr><th>介质</th><th>M (kg/kmol)</th><th>k</th><th>临界压力 (MPa)</th><th>临界温度 (K)</th><th>C″</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="warn-bar warning"><i class="fa-solid fa-triangle-exclamation"></i><span>介质的<strong>临界温度低于泄放温度</strong>时，排放过程会闪蒸，属两相流，公式不适用 —— 必须按 GB/T 20801.6-2020 附录B B.3.4 另算或改用全封闭方案。</span></div>
+  </div>
+
+  <!-- ============ TAB 1：安全阀选型 ============ -->
+  <div class="tab-panel" id="panel1">
+    <h3 style="font-size:15px;font-weight:600;margin-bottom:4px;"><i class="fa-solid fa-fan"></i> 安全阀选型 — 由所需面积反查流道直径与公称通径</h3>
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;">安全阀按<strong>流道直径 do</strong> 标注排量，不是按法兰公称通径 DN。本页把第 1 页签算出的面积换算成 do，再对照厂商额定排量表核对。</p>
+
+    <div class="form-grid">
+      <div class="form-row">
+        <label>所需泄放面积 A (mm²)</label>
+        <input type="number" class="form-control" id="sArea" value="200" min="0" step="1" oninput="rvValve()">
+        <div class="hint">可从第 1 页签结果直接带入</div>
+      </div>
+      <div class="form-row">
+        <label>需要额定泄放量 W (kg/h)</label>
+        <input type="number" class="form-control" id="sW" value="1500" min="0" step="1" oninput="rvValve()">
+        <div class="hint">用于在额定排量表中核对是否够量</div>
+      </div>
+      <div class="form-row">
+        <label>结构型式</label>
+        <select class="form-control" id="sType" onchange="rvValve()">
+          <option value="full" selected>全启式（排放系数高、密闭好）</option>
+          <option value="micro">微启式（需持续泄压的场合）</option>
+        </select>
+        <div class="hint">全启式 K_dr≈0.777；微启式约 0.7 量级</div>
+      </div>
+      <div class="form-row">
+        <label>介质（查表用）</label>
+        <select class="form-control" id="sMedia" onchange="rvValve()">
+          <option value="steam" selected>饱和水蒸气</option>
+          <option value="air">空气 / 氮气</option>
+        </select>
+        <div class="hint">⚠️ 氨、水、液化气无中国标准原表，须向制造厂索取型式试验报告</div>
+      </div>
+      <div class="form-row">
+        <label>整定压力 (MPa)</label>
+        <select class="form-control" id="sSet" onchange="rvValve()"></select>
+        <div class="hint">决定排量表中取哪一行（超压 3%）</div>
+      </div>
+    </div>
+
+    <div class="ex-row no-pr">
+      <span class="ex-label"><i class="fa-solid fa-wand-magic-sparkles"></i> 示例：</span>
+      <button class="ex-chip" onclick="rvEx1(0)">带第1页签结果联动</button>
+      <button class="ex-chip" onclick="rvEx1(1)">DN50 全启式 1.0 MPa 蒸汽</button>
+      <button class="ex-chip" onclick="rvEx1(2)">DN80 全启式 1.6 MPa 蒸汽</button>
+      <button class="ex-chip" onclick="rvEx1(3)">DN50 微启式 0.6 MPa 蒸汽</button>
+    </div>
+
+    <div class="result-block" id="sRes" style="display:none;">
+      <div class="result-label">建议流道直径 do</div>
+      <div><span class="main-value" id="sDo">—</span><span class="main-unit">mm</span></div>
+      <div class="result-sub">
+        <div class="rs-item"><div class="rs-l">对应公称通径</div><div class="rs-v" id="sDn">—</div></div>
+        <div class="rs-item"><div class="rs-l">该口径实际流量面积</div><div class="rs-v" id="sRealA">—</div></div>
+        <div class="rs-item"><div class="rs-l">面积余量</div><div class="rs-v" id="sMargin">—</div></div>
+        <div class="rs-item"><div class="rs-l">典型型号</div><div class="rs-v" id="sModel">—</div></div>
+      </div>
+      <div class="result-note" id="sNote"></div>
+    </div>
+
+    <div class="warn-bar danger" id="sWarn" style="display:none;"><i class="fa-solid fa-triangle-exclamation"></i><span id="sWarnText"></span></div>
+
+    <div class="table-scroll">
+      <table class="data-table sel-table" id="svTable">
+        <caption>安全阀额定排量对照（<strong>厂商样本值，非 GB/T 12243-2021 标准原表</strong>；介质：饱和水蒸气，超压 3%，横轴为流道直径 do）</caption>
+        <thead></thead><tbody></tbody>
+      </table>
+    </div>
+    <div class="warn-bar info"><i class="fa-solid fa-circle-info"></i><span><strong>do 与 DN 不是一回事：</strong>微启式 A41H 系列经验关系 do ≈ DN − 5，全启式 do ≈ 0.625×DN（二级来源经验值，非标准原表）。样本标注多为 do 口径，订货时要按制造商样本换算成法兰 DN 并核对结构长度（JB/T 2203、法兰 GB/T 9113）。</span></div>
+  </div>
+
+  <!-- ============ TAB 2：爆破片选型 ============ -->
+  <div class="tab-panel" id="panel2">
+    <h3 style="font-size:15px;font-weight:600;margin-bottom:4px;"><i class="fa-solid fa-burst"></i> 爆破片选型 — 口径、型式与爆破压力</h3>
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;">爆破片是<strong>一次性</strong>元件，动作后必须更换且容器被迫停运。选型 = 口径够流量 + 型式满足操作压力比 + 爆破压力落在可标定区间。</p>
+
+    <div class="form-grid">
+      <div class="form-row">
+        <label>所需泄放面积 A (mm²)</label>
+        <input type="number" class="form-control" id="dArea" value="200" min="0" step="1" oninput="rvDisc()">
+        <div class="hint">可从第 1 页签结果直接带入</div>
+      </div>
+      <div class="form-row">
+        <label>设备工作压力 p_w (MPa) <span style="color:var(--brand-red)">*</span></label>
+        <input type="number" class="form-control" id="dPw" value="1.0" min="0" step="0.01" oninput="rvDisc()">
+        <div class="hint">用于反算最小爆破压力下限</div>
+      </div>
+      <div class="form-row">
+        <label>爆破片型式</label>
+        <select class="form-control" id="dType" onchange="rvDisc()">
+          <option value="reverse" selected>反拱型（带槽 / 带刀）</option>
+          <option value="forward_slot">正拱开缝（带槽）型</option>
+          <option value="forward">正拱普通型</option>
+          <option value="forward_pulse">正拱型（脉冲载荷）</option>
+          <option value="flat">平板型</option>
+          <option value="graphite">石墨爆破片</option>
+        </select>
+        <div class="hint">型式决定最小爆破压力倍数与操作压力比</div>
+      </div>
+      <div class="form-row">
+        <label>载荷性质</label>
+        <select class="form-control" id="dLoad" onchange="rvDisc()">
+          <option value="static" selected>静载荷</option>
+          <option value="pulse">脉冲载荷（压力脉动）</option>
+        </select>
+        <div class="hint">脉冲载荷只对正拱型有专门倍数（1.7）</div>
+      </div>
+      <div class="form-row">
+        <label>容器设计压力 (MPa)</label>
+        <input type="number" class="form-control" id="dPd" value="1.6" min="0" step="0.01" oninput="rvDisc()">
+        <div class="hint">TSG 21-2016：设计爆破压力一般不大于设计压力</div>
+      </div>
+      <div class="form-row">
+        <label>设计爆破压力 p_b (MPa)</label>
+        <input type="number" class="form-control" id="dPb" value="0" min="0" step="0.01" oninput="rvDisc()">
+        <div class="hint">填 0 则按工作压力 × 该型式倍数自动取下限</div>
+      </div>
+    </div>
+
+    <div class="ex-row no-pr">
+      <span class="ex-label"><i class="fa-solid fa-wand-magic-sparkles"></i> 示例：</span>
+      <button class="ex-chip" onclick="rvEx2(0)">带第1页签结果联动</button>
+      <button class="ex-chip" onclick="rvEx2(1)">反拱带槽型（推荐）</button>
+      <button class="ex-chip" onclick="rvEx2(2)">正拱开缝型（高疲劳）</button>
+      <button class="ex-chip" onclick="rvEx2(3)">工作压力偏高被卡住</button>
+    </div>
+
+    <div class="result-block" id="dRes" style="display:none;">
+      <div class="result-label">建议公称口径（泄放口径）</div>
+      <div><span class="main-value" id="dDn">—</span><span class="main-unit">mm</span></div>
+      <div class="result-sub">
+        <div class="rs-item"><div class="rs-l">最小爆破压力下限</div><div class="rs-v" id="dPmin">—</div></div>
+        <div class="rs-item"><div class="rs-l">操作压力比</div><div class="rs-v" id="dOpR">—</div></div>
+        <div class="rs-item"><div class="rs-l">爆破压力允差</div><div class="rs-v" id="dTol">—</div></div>
+        <div class="rs-item"><div class="rs-l">可标定区间</div><div class="rs-v" id="dRange">—</div></div>
+      </div>
+      <div class="result-note" id="dNote"></div>
+    </div>
+
+    <div class="warn-bar danger" id="dWarn" style="display:none;"><i class="fa-solid fa-triangle-exclamation"></i><span id="dWarnText"></span></div>
+    <div class="warn-bar ok" id="dOk" style="display:none;"><i class="fa-solid fa-circle-check"></i><span id="dOkText"></span></div>
+
+    <h4 style="font-size:14px;font-weight:600;margin:22px 0 4px;"><i class="fa-solid fa-list"></i> 各型式规格与可标定压力区间（<strong>厂商样本值，非标准原表</strong>）</h4>
+    <div class="table-scroll">
+      <table class="data-table" id="discTable">
+        <thead><tr><th>泄放口径 DN (mm)</th><th>爆破压力下限 (MPa)</th><th>爆破压力上限 (MPa)</th><th>适用说明</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="warn-bar warning"><i class="fa-solid fa-triangle-exclamation"></i><span>口径越大，可标定的爆破压力上限越低 —— 高压小口径、低压大口径是爆破片的固有规律。大口径（≥DN400）基本只能在 0.4 MPa 以下标定，若你的压力高又需要大泄放量，只能改用<strong>并联多片</strong>或改走安全阀方案。</span></div>
+  </div>
+
+  <!-- ============ TAB 3：压力设定 ============ -->
+  <div class="tab-panel" id="panel3">
+    <h3 style="font-size:15px;font-weight:600;margin-bottom:14px;"><i class="fa-solid fa-gauge-high"></i> 整定压力与爆破压力设定规则</h3>
+    <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;">这是最容易被搞错的一页。市面上流传的「整定压力 = 设计压力 × 1.1」<strong>只对锅炉和移动式容器成立</strong>，压力容器恰恰相反 —— 是不大于设计压力。</p>
+
+    <div class="form-grid">
+      <div class="form-row">
+        <label>设备 / 管道类型</label>
+        <select class="form-control" id="pKind" onchange="rvPress()">
+          <option value="vessel" selected>固定式压力容器</option>
+          <option value="tank">移动式压力容器（罐车）</option>
+          <option value="pipe_nf">工业管道 — 非火灾</option>
+          <option value="pipe_fire">工业管道 — 火灾工况</option>
+          <option value="pipe_gc">GC2/GC3 级单纯管道（液体热膨胀）</option>
+          <option value="boiler">蒸汽动力锅炉（省煤器/再热器）</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>设计压力 / MAWP (MPa) <span style="color:var(--brand-red)">*</span></label>
+        <input type="number" class="form-control" id="pPd" value="1.6" min="0" step="0.01" oninput="rvPress()">
+      </div>
+      <div class="form-row">
+        <label>工作压力 p_w (MPa)</label>
+        <input type="number" class="form-control" id="pPw" value="1.4" min="0" step="0.01" oninput="rvPress()">
+        <div class="hint">移动式容器与锅炉按工作压力倍数；固定式容器按设计压力封顶</div>
+      </div>
+    </div>
+
+    <div class="ex-row no-pr">
+      <span class="ex-label"><i class="fa-solid fa-wand-magic-sparkles"></i> 示例：</span>
+      <button class="ex-chip" onclick="rvEx3(0)">1.6 MPa 反应釜（固定式）</button>
+      <button class="ex-chip" onclick="rvEx3(1)">液氨罐车（移动式）</button>
+      <button class="ex-chip" onclick="rvEx3(2)">1.0 MPa 工业管道 非火灾</button>
+      <button class="ex-chip" onclick="rvEx3(3)">GC2 管道 热膨胀</button>
+      <button class="ex-chip" onclick="rvEx3(4)">2.5 MPa 省煤器（锅炉）</button>
+    </div>
+
+    <div class="result-block" id="pRes" style="display:none;">
+      <div class="result-label">允许的设定压力上限</div>
+      <div><span class="main-value" id="pSet">—</span><span class="main-unit">MPa</span></div>
+      <div class="result-sub">
+        <div class="rs-item"><div class="rs-l">对应关系</div><div class="rs-v" id="pRel">—</div></div>
+        <div class="rs-item"><div class="rs-l">最大泄放压力上限</div><div class="rs-v" id="pMax">—</div></div>
+        <div class="rs-item"><div class="rs-l">整定压力允差</div><div class="rs-v" id="pTol">—</div></div>
+      </div>
+      <div class="result-note" id="pNote"></div>
+    </div>
+
+    <div class="warn-bar danger" id="pWarn" style="display:none;"><i class="fa-solid fa-triangle-exclamation"></i><span id="pWarnText"></span></div>
+
+    <h4 style="font-size:14px;font-weight:600;margin:22px 0 4px;"><i class="fa-solid fa-ruler-vertical"></i> 各设备类型设定压力规定（现行条文）</h4>
+    <div class="table-scroll">
+      <table class="data-table">
+        <thead><tr><th>设备 / 管道</th><th>规定</th><th>标准出处</th></tr></thead>
+        <tbody>
+          <tr><td>固定式压力容器（单个安全阀）</td><td>整定压力<strong>一般不大于</strong>容器设计压力</td><td>TSG 21-2016 9.1.4.2</td></tr>
+          <tr><td>固定式压力容器（多个安全阀）</td><td>其中一个 ≤ 设计压力，其余可适当提高但<strong>不超过设计压力的 1.05 倍</strong></td><td>TSG 21-2016 9.1.4.2</td></tr>
+          <tr><td>压力容器爆破片</td><td>设计爆破压力一般不大于设计压力；<strong>最小爆破压力不得小于容器工作压力</strong></td><td>TSG 21-2016 9.1.4.3</td></tr>
+          <tr><td>移动式压力容器</td><td>整定压力 = 设计压力的 <strong>1.05~1.10 倍</strong>；额定排放压力 ≤ 1.20 倍；回座 ≥ 0.90 倍整定压力</td><td>TSG R0005-2011 9.4.2</td></tr>
+          <tr><td>蒸汽动力锅炉（省煤器/再热器/直流锅炉启动分离器）</td><td>整定压力 = <strong>装设地点工作压力的 1.10 倍</strong></td><td>TSG 11-2020 5.1.8</td></tr>
+          <tr><td>锅炉（锅筒及过热器）</td><td>P≤0.8：工作压力+0.03/+0.05；0.8&lt;P≤5.9：1.04/1.06 倍；P&gt;5.9：1.05/1.08 倍</td><td>TSG 11-2020 表5-3</td></tr>
+          <tr><td>工业管道 — 非火灾，单个装置</td><td>设定压力 ≤ <strong>100%</strong> 设计压力 / MAWP</td><td>GB/T 20801.6-2020 4.1.5 a)1)</td></tr>
+          <tr><td>工业管道 — 非火灾，附加装置</td><td>设定压力 ≤ <strong>105%</strong> 设计压力 / MAWP</td><td>GB/T 20801.6-2020 4.1.5 a)2) 表1</td></tr>
+          <tr><td>工业管道 — 火灾，辅助装置</td><td>设定压力 ≤ <strong>110%</strong> 设计压力 / MAWP</td><td>GB/T 20801.6-2020 4.1.5 a)2) 表1</td></tr>
+          <tr><td>GC2/GC3 级单纯管道（液体热膨胀）</td><td>SET 允许超过设计压力，但 ≤ <strong>设计压力的 120%</strong> 与系统试验压力的较小者</td><td>GB/T 20801.6-2020 4.1.5 c)1)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 style="font-size:14px;font-weight:600;margin:22px 0 4px;"><i class="fa-solid fa-crosshairs"></i> 安全阀整定压力允差（GB/T 12243-2021 5.1）</h4>
+    <div class="table-scroll">
+      <table class="data-table">
+        <thead><tr><th>用途 / 整定压力范围</th><th>允差</th></tr></thead>
+        <tbody>
+          <tr><td>压力容器和管道用 · SET ≤ 0.5 MPa</td><td>± 0.015 MPa</td></tr>
+          <tr><td>压力容器和管道用 · SET &gt; 0.5 MPa</td><td>± 3% SET</td></tr>
+          <tr><td>蒸汽动力锅炉用 · SET ≤ 0.5 MPa</td><td>± 0.015 MPa</td></tr>
+          <tr><td>蒸汽动力锅炉用 · 0.5 ~ 2.3 MPa</td><td>± 3% SET</td></tr>
+          <tr><td>蒸汽动力锅炉用 · 2.3 ~ 7.0 MPa</td><td>± 0.07 MPa</td></tr>
+          <tr><td>蒸汽动力锅炉用 · SET &gt; 7.0 MPa</td><td>± 1% SET</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ TAB 4：选型对比 ============ -->
+  <div class="tab-panel" id="panel4">
+    <h3 style="font-size:15px;font-weight:600;margin-bottom:14px;"><i class="fa-solid fa-scale-balanced"></i> 安全阀 vs 爆破片 — 选哪个、怎么组合</h3>
+
+    <div class="form-grid" style="margin-bottom:16px;">
+      <div class="form-row">
+        <label>介质是否含颗粒 / 易聚合 / 黏稠</label>
+        <select class="form-control" id="xMedia" onchange="rvCompare()">
+          <option value="clean" selected>清洁不洁净均可（空气、蒸汽、水）</option>
+          <option value="dirty">含固体颗粒 / 易聚合 / 黏稠（浆料、聚合物）</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>是否允许微量泄漏</label>
+        <select class="form-control" id="xLeak" onchange="rvCompare()">
+          <option value="yes" selected>不允许任何泄漏（有毒、昂贵工艺介质）</option>
+          <option value="no">允许（一般工业介质）</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>超压发生速度</label>
+        <select class="form-control" id="xSpeed" onchange="rvCompare()">
+          <option value="fast" selected>极快（爆炸、反应失控）</option>
+          <option value="slow">缓慢（热膨胀、缓慢充压）</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>是否经常超压 / 压力波动大</label>
+        <select class="form-control" id="xFreq" onchange="rvCompare()">
+          <option value="no" selected>否</option>
+          <option value="yes">是</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="warn-bar" id="xRes" style="margin-top:0;"><i class="fa-solid fa-lightbulb"></i><span id="xResText"></span></div>
+
+    <h4 style="font-size:14px;font-weight:600;margin:22px 0 4px;"><i class="fa-solid fa-th"></i> 两者根本差异</h4>
+    <div class="table-scroll">
+      <table class="data-table">
+        <thead><tr><th>对比项</th><th>安全阀</th><th>爆破片</th></tr></thead>
+        <tbody>
+          <tr><td>动作方式</td><td><span class="tag-good">可重闭</span> 动作后自动复位，可反复使用</td><td><span class="tag-bad">非重闭</span> 一次性，动作后必须更换且容器停运</td></tr>
+          <tr><td>动作速度</td><td>约 0.01 s</td><td>约 0.001 s（更快）</td></tr>
+          <tr><td>密闭性</td><td>正常工况有微量泄漏</td><td>全行程零泄漏</td></tr>
+          <tr><td>抗污能力</td><td>差，介质含颗粒会卡死</td><td>好，不受介质影响</td></tr>
+          <tr><td>抗疲劳</td><td>受压力脉动影响小</td><td>正拱开缝/带槽型好，平板型差</td></tr>
+          <tr><td>碎片</td><td>无</td><td>正拱形有少量碎片；带槽型无碎片无火花</td></tr>
+          <tr><td>压力控制精度</td><td>可精确整定</td><td>只能定「最小爆破压力 + 允差」，精度差得多</td></tr>
+          <tr><td>成本 / 维护</td><td>一次性投入高，需定期校验</td><td>单片便宜，但每次动作都要换</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 style="font-size:14px;font-weight:600;margin:22px 0 4px;"><i class="fa-solid fa-shuffle"></i> 组合使用三种形式（GB/T 567.2-2012 4.3）</h4>
+    <div class="req-item" style="display:flex;gap:10px;padding:10px 12px;background:var(--bg-page);border:1px solid var(--border-light);border-radius:10px;margin-bottom:8px;font-size:13px;line-height:1.7;">
+      <span class="tag-good" style="flex-shrink:0;height:fit-content;font-size:11px;font-weight:700;padding:2px 8px;border-radius:60px;">入口侧串联</span>
+      <span>最常见。适用于：避免爆破损失大量工艺物料、安全阀不能直接用于该介质（强腐蚀）、移动式容器装毒性/强腐蚀介质。要求：组合泄放量 ≥ 设备安全泄放量；爆破片公称直径 ≥ 安全阀入口管径且设在距安全阀入口 5 倍管径内；<strong>入口管线压力损失不超过安全阀设定压力的 3%</strong>；两者之间腔体设压力指示 + 排气口 + 报警器。<strong>组合泄放量 = 单个安全阀额定泄放量 × 0.9</strong>。</span>
+    </div>
+    <div class="req-item" style="display:flex;gap:10px;padding:10px 12px;background:var(--bg-page);border:1px solid var(--border-light);border-radius:10px;margin-bottom:8px;font-size:13px;line-height:1.7;">
+      <span class="tag-warn" style="flex-shrink:0;height:fit-content;font-size:11px;font-weight:700;padding:2px 8px;border-radius:60px;">出口侧串联</span>
+      <span>要求其间累积压力时安全阀仍在整定压力开启。爆破片设计爆破压力与泄放管内压力之和<strong>不得超过</strong>：安全阀整定压力 / 两者间管路设计压力 / 被保护设备设计压力（三者中任一）。<strong>移动式压力容器的爆破片不应设在出口侧。</strong></span>
+    </div>
+    <div class="req-item" style="display:flex;gap:10px;padding:10px 12px;background:var(--bg-page);border:1px solid var(--border-light);border-radius:10px;margin-bottom:8px;font-size:13px;line-height:1.7;">
+      <span class="tag-bad" style="flex-shrink:0;height:fit-content;font-size:11px;font-weight:700;padding:2px 8px;border-radius:60px;">并联</span>
+      <span>两者各自泄放量均应 ≥ 设备安全泄放量，且<strong>爆破片的设计爆破压力必须大于安全阀的整定压力</strong>（让安全阀先动作、爆破片做最后兜底）。用于火灾工况的附加/辅助装置。</span>
+    </div>
+
+    <div class="warn-bar info"><i class="fa-solid fa-circle-info"></i><span><strong>组合装置另有专门标准：</strong>GB/T 38599-2020《安全阀与爆破片安全装置的组合》（2020-10-01 实施，修改采用 ISO 4126-3:2006），适用于爆破片出口侧到安全阀入口侧距离 ≤ 5 倍管径的串联结构，规定应用与设计、安装、排量修正系数的测定与应用。安全阀侧的上位一般要求见 GB/T 12241-2021。</span></div>
+
+    <h4 style="font-size:14px;font-weight:600;margin:22px 0 4px;"><i class="fa-solid fa-table-list"></i> 爆破片型式选型指南（GB/T 567.2-2012 表A.1）</h4>
+    <div class="table-scroll">
+      <table class="data-table" id="guideTable">
+        <thead><tr><th>类别</th><th>型式</th><th>操作压力比</th><th>抗疲劳</th><th>碎片</th><th>撞击火花</th><th>工作相</th><th>与安全阀串联</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="warn-bar info"><i class="fa-solid fa-circle-info"></i><span><strong>操作压力比</strong> = 设备工作压力 ÷ 爆破片最小爆破压力。表中值适合爆破温度 15~30 ℃；实际取值还与爆破片材料、压力脉动有关，应由制造和使用单位协商确定。反拱带槽型：操作压力比 0.9、无碎片无火花、抗疲劳优、<strong>是唯一明确「可以」与安全阀串联的通用型</strong>。</span></div>
+
+    <h4 style="font-size:14px;font-weight:600;margin:22px 0 4px;"><i class="fa-solid fa-draft-compass"></i> 爆破压力允差（GB/T 567.1-2012）</h4>
+    <div class="table-scroll">
+      <table class="data-table">
+        <thead><tr><th>标定爆破压力 (MPa)</th><th>平板形 / 正拱形 / 反拱形</th><th>石墨型</th></tr></thead>
+        <tbody>
+          <tr><td>0.001 ~ &lt;0.01</td><td>± 50%</td><td rowspan="4">见标准原文</td></tr>
+          <tr><td>0.01 ~ &lt;0.1</td><td>± 25%</td></tr>
+          <tr><td>0.1 ~ &lt;0.3</td><td>⚠️ 来源冲突，保守按 ± 15% 取</td></tr>
+          <tr><td>0.3 ~ &lt;100</td><td>± 5%</td></tr>
+          <tr><td>100 ~ 500</td><td>± 4%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 style="font-size:14px;font-weight:600;margin:22px 0 4px;"><i class="fa-solid fa-shield-halved"></i> 最小爆破压力下限（GB/T 567.1-2012 附录B 表B.1）</h4>
+    <div class="table-scroll">
+      <table class="data-table">
+        <thead><tr><th>爆破片型式</th><th>载荷性质</th><th>最小爆破压力 p_bmin</th></tr></thead>
+        <tbody>
+          <tr><td>正拱普通型</td><td>静载荷</td><td>≥ 1.43 p_w</td></tr>
+          <tr><td>正拱开缝（带槽）型</td><td>静载荷</td><td>≥ 1.25 p_w</td></tr>
+          <tr><td>正拱型</td><td><strong>脉冲载荷</strong></td><td>≥ 1.7 p_w</td></tr>
+          <tr><td><strong>反拱型</strong></td><td>静载荷、脉冲载荷</td><td><strong>≥ 1.1 p_w</strong>（唯一覆盖脉冲载荷）</td></tr>
+          <tr><td>平板型</td><td>静载荷</td><td>≥ 2.0 p_w</td></tr>
+          <tr><td>石墨</td><td>静载荷</td><td>≥ 1.25 p_w</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="warn-bar warning"><i class="fa-solid fa-triangle-exclamation"></i><span><strong>常见错误纠正：</strong>「爆破压力不得超过设计压力的 1.1 倍」<strong>在标准原文中找不到依据</strong>。TSG 21-2016 9.1.4.3 的原文是「设计爆破压力一般<strong>不大于</strong>容器设计压力」。1.1 这个数字真正属于<strong>反拱型最小爆破压力 vs 工作压力</strong>的下限系数，两者别混。</span></div>
+
+    <div class="disclaimer no-pr">
+      <strong>免责与数据来源说明：</strong>本页公式与系数表取自 <strong>GB/T 567.2-2012 规范性附录C</strong>、<strong>GB/T 12243-2021 资料性附录B</strong>、<strong>GB/T 150.1-2024 规范性附录B</strong>，压力设定规则取自 <strong>TSG 21-2016</strong>、<strong>TSG R0005-2011</strong>、<strong>TSG 11-2020</strong>、<strong>GB/T 20801.6-2020</strong>，均已核查为现行版。<strong>标注为「厂商样本值」的排量表与口径压力区间不是国家标准原表</strong>，仅供选型初筛。标准本身只提供计算公式，不提供成品泄放量数据表；<strong>正式选型与验收必须以制造厂按中国标准出具的型式试验报告为准</strong>。爆破片装置的制造许可、铭牌标志与定期检验另有 TSG ZF003 规定。本工具不存储标准全文，仅摘录数值表与计算式。
+    </div>
+  </div>
+
+</main>
+
+<section class="tool-meta" data-toolmeta="sheen">
+  <div class="tm-head">
+    <span class="tm-std-code">GB/T 567.2-2012</span>
+    <span class="tm-std-name">《爆破片安全装置 第2部分：应用、选择与安装》</span>
+  </div>
+  <div class="tm-line">
+    <span class="tm-dt"><i>发布</i><span class="tm-dt-val">2012-05-11</span></span><span class="tm-sep">·</span>
+    <span class="tm-dt"><i>实施</i><span class="tm-dt-val">2013-03-01</span></span><span class="tm-sep">·</span>
+    <span class="tm-dt"><i>更新</i><span class="tm-dt-val">2026-10-11</span></span>
+  </div>
+</section>
+
+<footer class="sheen-footer">
+  <img src="../assets/sheen-logo.png" alt="SHEEN Toolbox" class="sheen-logo-sm"> &nbsp;<strong>SHEEN Toolbox</strong> · 泄放量计算与安全阀爆破片选型
+</footer>
+
+<div class="print-time" id="printTime"></div>
+
+<script>
+(function() {
+'use strict';
+
+document.getElementById('printTime').textContent =
+  new Date(Date.now() + 8 * 3600000).toISOString().replace('T',' ').slice(0,16);
+
+// ===== GB/T 567.2-2012 表C.4 气体性质 + C1 气体特性系数 =====
+// C1 = 520*sqrt(k*(2/(k+1))^((k+1)/(k-1)))，单位 kg/(kmol·K)
+var GASES = [
+  { n:'空气',     M:28.97, k:1.40, pc:3.769, tc:132.45 },
+  { n:'氮气 N₂',   M:28.01, k:1.40, pc:3.394, tc:126.05 },
+  { n:'氧气 O₂',   M:32.00, k:1.40, pc:5.036, tc:154.35 },
+  { n:'氢气 H₂',   M:2.02,  k:1.41, pc:1.297, tc:33.25  },
+  { n:'一氧化碳 CO',M:28.01, k:1.40, pc:3.546, tc:134.15 },
+  { n:'二氧化碳 CO₂', M:44.01, k:1.30, pc:7.397, tc:304.25 },
+  { n:'氨 NH₃',    M:17.03, k:1.31, pc:11.298,tc:405.55 },
+  { n:'氯化氢 HCl',M:36.46, k:1.41, pc:8.268, tc:324.55 },
+  { n:'硫化氢 H₂S',M:34.08, k:1.32, pc:9.008, tc:373.55 },
+  { n:'氧化亚氮 N₂O',M:44.01,k:1.30, pc:7.265, tc:309.65 },
+  { n:'二氧化硫 SO₂',M:64.06,k:1.29, pc:7.873, tc:430.35 },
+  { n:'甲烷 CH₄',  M:16.04, k:1.31, pc:4.641, tc:190.65 },
+  { n:'乙炔 C₂H₂', M:26.02, k:1.26, pc:6.282, tc:309.15 },
+  { n:'乙烯 C₂H₄', M:28.05, k:1.25, pc:5.157, tc:282.85 },
+  { n:'乙烷 C₂H₆', M:30.05, k:1.22, pc:4.945, tc:305.25 },
+  { n:'丙烯 C₃H₆', M:42.08, k:1.15, pc:4.560, tc:365.45 },
+  { n:'丙烷 C₃H₈', M:44.10, k:1.13, pc:4.357, tc:368.75 },
+  { n:'正丁烷 C₄H₁₀', M:58.12, k:1.11, pc:3.648, tc:426.15 },
+  { n:'异丁烷 C₄H₁₀', M:58.12, k:1.11, pc:3.749, tc:407.15 }
+];
+
+// ===== GB/T 567.2-2012 表C.2 水蒸汽特性系数 C′（行=绝压MPa，列=过热温度℃）=====
+// ⚠️ 压力键一律用字符串字面量：JS 中 (1.0).toString() === '1'，用数字键会取不到值
+var STEAM_P = ['0.01', '0.10', '0.20', '1.0', '3.0', '6.0', '10', '14', '20', '32'];
+var STEAM_PN = [0.01, 0.10, 0.20, 1.0, 3.0, 6.0, 10, 14, 20, 32];
+var STEAM_T = [50, 100, 150, 200, 250, 300, 350, 400];
+var STEAM_C = {
+  '0.01': [1.006, 1.005, 1.004, 1.003, 1.002, 1.001, 1.000, 0.999],
+  '0.10': [1.002, 0.988, 0.977, 0.968, 0.961, 0.955, 0.949, 0.944],
+  '0.20': [1.028, 0.993, 0.976, 0.962, 0.952, 0.944, 0.937, 0.931],
+  '1.0':  [null,  0.984, 0.966, 0.950, 0.936, 0.926, 0.917, 0.909],
+  '3.0':  [0.957, 0.924, 0.885, 0.851, 0.822, 0.795, 0.774, 0.742],
+  '6.0':  [0.953, 0.911, 0.872, 0.838, 0.808, 0.781, 0.747, 0.729],
+  '10':   [0.961, 0.909, 0.863, 0.827, 0.796, 0.757, 0.735, 0.703],
+  '14':   [1.002, 0.956, 0.893, 0.846, 0.811, 0.768, 0.743, 0.711],
+  '20':   [1.028, 0.953, 0.885, 0.835, 0.786, 0.757, 0.720, 0.700],
+  '32':   [1.009, 0.908, 0.824, 0.787, 0.742, 0.714, null, null]
+};
+var STEAM_SAT = { '0.01':1.006, '0.10':1.016, '0.20':1.094, '1.0':null, '3.0':0.967,
+                  '6.0':0.968, '10':0.986, '14':1.016, '20':1.094, '32':1.169 };
+
+// ===== 厂商样本：安全阀额定排量（饱和蒸汽，超压3%，Kg=0.75），横轴 do =====
+// ⚠️ 厂商样本值，非 GB/T 12243-2021 标准原表
+// rows 用字符串，避免 (1.0).toString()==='1' 与 '1.00' 键取不到
+var SV_FULL = {
+  rows: ['0.06','0.10','0.20','0.30','0.40','0.50','0.60','0.80','1.00','1.20','1.40','1.60','2.00','2.50'],
+  cols: [20,25,32,40,50,65,80,100,125],
+  v: {
+    '0.06':[196,307,503,786,1227,2070,3140,4910,7670],
+    '0.10':[246,385,630,985,1540,2600,3940,6150,9610],
+    '0.20':[371,580,950,1484,2320,3920,5940,9270,14490],
+    '0.30':[496,775,1270,1984,3100,5240,7930,12400,16370],
+    '0.40':[620,970,1589,2480,3880,6550,9930,15520,24200],
+    '0.50':[745,1165,1908,2980,4660,7870,11930,18640,29100],
+    '0.60':[867,1355,2220,3470,5420,9150,13870,21700,33900],
+    '0.80':[1105,1728,2830,4420,6910,11670,17690,27600,43200],
+    '1.00':[1349,2110,3450,5400,8430,14250,21600,33700,52700],
+    '1.20':[1595,2490,4080,6380,9970,16840,25500,39900,62300],
+    '1.40':[1824,2850,4670,7300,11400,19290,29200,45600,71300],
+    '1.60':[2070,3230,5290,8270,12920,21810,33100,51700,80700],
+    '2.00':[2540,3970,6500,10150,15880,26800,40700,63500,99200],
+    '2.50':[3130,4900,8020,12540,19580,33100,50100,78400,122500]
+  }
+};
+var SV_MICRO = {
+  rows: ['0.06','0.10','0.20','0.30','0.40','0.50','0.60','0.80','1.00','1.20','1.40','1.60','2.00','2.50'],
+  cols: [40,50,65,80,100],
+  v: {
+    '0.06':[167,262,442,670,1048],
+    '0.10':[210,328,554,840,1312],
+    '0.20':[317,494,836,1264,1976],
+    '0.30':[423,661,1120,1688,2650],
+    '0.40':[530,827,1400,2120,3310],
+    '0.50':[636,992,1680,2540,3980],
+    '0.60':[739,1152,1952,2960,4620],
+    '0.80':[944,1472,2490,3780,5900],
+    '1.00':[1152,1800,3040,4610,7200],
+    '1.20':[1360,2130,3590,5450,8510],
+    '1.40':[1560,2430,4110,6230,9730],
+    '1.60':[1760,2750,4660,7060,11020],
+    '2.00':[2170,3380,5730,8670,13550],
+    '2.50':[2670,4180,7060,10700,16720]
+  }
+};
+
+// 微启式 A41H 系列 do = DN - 5（行业经验关系，二级来源）
+var DO_LIST = [15,20,25,32,40,50,65,80,100,125,150,200,250];
+// 厂商样本在产口径（泄放口径 DN mm）→ 可标定爆破压力区间（⚠️ 厂商样本值，非标准原表）
+var DISC_RANGE = [
+  { dn:25,  pmin:0.10, pmax:8.00, note:'高压小口径段' },
+  { dn:32,  pmin:0.08, pmax:6.50, note:'—' },
+  { dn:40,  pmin:0.06, pmax:5.00, note:'—' },
+  { dn:50,  pmin:0.05, pmax:5.00, note:'常用段' },
+  { dn:65,  pmin:0.04, pmax:3.50, note:'—' },
+  { dn:80,  pmin:0.03, pmax:2.50, note:'—' },
+  { dn:100, pmin:0.03, pmax:2.50, note:'常用段' },
+  { dn:125, pmin:0.025,pmax:2.00, note:'—' },
+  { dn:150, pmin:0.02, pmax:1.50, note:'—' },
+  { dn:200, pmin:0.015,pmax:1.50, note:'常用段' },
+  { dn:250, pmin:0.015,pmax:1.00, note:'—' },
+  { dn:300, pmin:0.012,pmax:0.80, note:'—' },
+  { dn:400, pmin:0.015,pmax:0.40, note:'低压段' },
+  { dn:500, pmin:0.010,pmax:0.25, note:'低压段' },
+  { dn:600, pmin:0.008,pmax:0.20, note:'仅低压可用' },
+  { dn:1000,pmin:0.006,pmax:0.10, note:'仅极低压' }
+];
+
+// GB/T 567.1-2012 附录B 表B.1 最小爆破压力倍数
+var DISC_TYPE = {
+  reverse:        { name:'反拱型（带槽/带刀）', factor:1.10, coverPulse:true,  ratio:0.9, frag:'无（带槽）', spark:'否', phase:'气相（带槽型经特殊设计亦可用于液相）', series:'可' },
+  forward_slot:   { name:'正拱开缝（带槽）型',  factor:1.25, coverPulse:false, ratio:0.8, frag:'无',         spark:'否', phase:'气、液两相',                series:'可' },
+  forward:        { name:'正拱普通型',          factor:1.43, coverPulse:false, ratio:0.7, frag:'有（少量）', spark:'可能', phase:'气、液两相',             series:'不推荐' },
+  forward_pulse:  { name:'正拱型（脉冲载荷）',  factor:1.70, coverPulse:true,  ratio:0.8, frag:'有（少量）', spark:'可能', phase:'气、液两相',             series:'不推荐' },
+  flat:           { name:'平板型',              factor:2.00, coverPulse:false, ratio:0.5, frag:'有（少量）', spark:'可能性小', phase:'气、液两相',           series:'不推荐' },
+  graphite:       { name:'石墨爆破片',          factor:1.25, coverPulse:false, ratio:0.8, frag:'有大量碎片', spark:'否', phase:'气、液两相',             series:'不推荐' }
+};
+
+// GB/T 567.2-2012 表A.1
+var GUIDE = [
+  ['正拱形','正拱普通型','0.7','一般','有(少量)','可能','气、液两相','不推荐'],
+  ['正拱形','正拱开缝型','0.8','好','有(少量)','可能性小','气、液两相','不推荐'],
+  ['正拱形','正拱带槽型','0.8','好','无','否','气、液两相','可以'],
+  ['反拱形','反拱带刀型','0.9','优','无','可能','气相','可以'],
+  ['反拱形','反拱带槽型','0.9','优','无','否','气相','可以'],
+  ['平板形','平板开缝型','0.5','较差','有(少量)','可能性小','气、液两相','不推荐'],
+  ['平板形','平板普通型','0.5','较差','有(少量)','可能性小','气、液两相','不推荐'],
+  ['石墨','石墨爆破片','0.8','较差','有大量碎片','否','气、液两相','不推荐']
+];
+
+function $(id) { return document.getElementById(id); }
+function show(el, on) { el.style.display = on ? '' : 'none'; }
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+    return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+  });
+}
+function num(id) { var v = parseFloat($(id).value); return isNaN(v) ? null : v; }
+function fmt(v, d) { if (v === null || !isFinite(v)) return '—'; d = (d === undefined) ? 0 : d; return v.toFixed(d).replace(/\.0+$/, d > 0 ? '' : ''); }
+
+// 气体特性系数 C″ = 0.03948*sqrt(k*(2/(k+1))^((k+1)/(k-1)))  （k=1 时 ≈ 0.02396）
+function cGas(k) {
+  if (!k || k <= 1.0001) return 23.96;   // GB/T 12243-2021 附录B：k 未知取 23.96
+  return 39.48 * Math.sqrt(k * Math.pow(2 / (k + 1), (k + 1) / (k - 1)));
+}
+// 临界压力比 (2/(k+1))^(k/(k−1))：k=1.4(空气)≈0.528，k=1.3(CO₂)≈0.546，k=1.667≈0.487
+// 注意指数是 k/(k−1)，与 cGas 里的 (k+1)/(k−1) 不同，勿混
+function critRatio(k) {
+  if (!k || k <= 1.0001) return 0.5;
+  return Math.pow(2 / (k + 1), k / (k - 1));
+}
+
+// C′ 水蒸汽特性系数：按压力取最近行，过热温度内插；空缺值按同列相邻压力行线性插值
+function cPrime(pMPa, supC) {
+  function satAt(i) { return STEAM_SAT[STEAM_P[i]]; }
+  // 从下标 i 起向外找最近的非空饱和值
+  function satNear(i) {
+    for (var s = 0; s < STEAM_P.length; s++) {
+      if (i - s >= 0 && STEAM_SAT[STEAM_P[i - s]] !== null) return STEAM_SAT[STEAM_P[i - s]];
+      if (i + s < STEAM_P.length && STEAM_SAT[STEAM_P[i + s]] !== null) return STEAM_SAT[STEAM_P[i + s]];
+    }
+    return 1.0;
+  }
+  if (supC <= 0) {
+    // 饱和蒸汽：取紧邻 pMPa 的上下两个「有效」表行做线性插值（表内空缺行自动跳过）
+    var last = STEAM_P.length - 1;
+    if (pMPa <= STEAM_PN[0]) return satNear(0);
+    if (pMPa >= STEAM_PN[last]) return satNear(last);
+    var hiIdx = 1;
+    while (hiIdx < last && pMPa > STEAM_PN[hiIdx]) hiIdx++;
+    var loIdx = hiIdx - 1;
+    // 端点若为空缺，向该方向外扩找最近的非空值
+    while (STEAM_SAT[STEAM_P[loIdx]] === null && loIdx > 0) loIdx--;
+    while (STEAM_SAT[STEAM_P[hiIdx]] === null && hiIdx < last) hiIdx++;
+    var a = STEAM_SAT[STEAM_P[loIdx]], b = STEAM_SAT[STEAM_P[hiIdx]];
+    if (a === null || b === null) return a !== null ? a : (b !== null ? b : 1.0);
+    if (loIdx === hiIdx) return a;
+    return a + (b - a) * (pMPa - STEAM_PN[loIdx]) / (STEAM_PN[hiIdx] - STEAM_PN[loIdx]);
+  }
+  // 过热：先在温度方向内插，再在压力方向内插
+  var lastT = STEAM_T.length - 1;
+  var col, tLo, tHi;
+  if (supC <= STEAM_T[0]) { col = 0; tLo = STEAM_T[0] - 50; tHi = STEAM_T[0]; }
+  else if (supC >= STEAM_T[lastT]) { col = lastT - 1; tLo = STEAM_T[lastT]; tHi = STEAM_T[lastT] + 50; }
+  else { var j = 0; while (supC > STEAM_T[j]) j++; col = j - 1; tLo = STEAM_T[col]; tHi = STEAM_T[col + 1]; }
+
+  function tempInterp(rowIdx) {
+    var row = STEAM_C[STEAM_P[rowIdx]];
+    var a = row[col], b = row[col + 1];
+    if (a === null && b === null) return null;
+    if (a === null) return b;
+    if (b === null) return a;
+    return a + (b - a) * (supC - tLo) / (tHi - tLo);
+  }
+  var lastP = STEAM_P.length - 1;
+  var idx;
+  if (pMPa <= STEAM_PN[0]) idx = 0;
+  else if (pMPa >= STEAM_PN[lastP]) idx = lastP;
+  else { var m = 0; while (pMPa > STEAM_PN[m + 1]) m++; idx = m; }
+  if (idx === 0) { var v0 = tempInterp(0); if (v0 !== null) return v0; }
+  if (idx === lastP) { var vN = tempInterp(idx); if (vN !== null) return vN; }
+  // 两端空缺时向更远处找有效行
+  var ia = idx, ib = idx + 1;
+  if (va === null) { for (var s = idx - 1; s >= 0; s--) { va = tempInterp(s); if (va !== null) { ia = s; break; } } }
+  if (vb === null) { for (var t = idx + 2; t <= lastP; t++) { vb = tempInterp(t); if (vb !== null) { ib = t; break; } } }
+  if (va === null || vb === null) return va !== null ? va : (vb !== null ? vb : 1.0);
+  return va + (vb - va) * (pMPa - STEAM_PN[ia]) / (STEAM_PN[ib] - STEAM_PN[ia]);
+}
+
+// ===== 选项卡 =====
+window.rvSwitch = function (idx) {
+  var btns = document.querySelectorAll('.tab-btn');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.toggle('active', i === idx);
+  for (var j = 0; j <= 4; j++) $('panel' + j).classList.toggle('active', j === idx);
+};
+
+// ===== TAB 0：泄放量计算 =====
+window.rvPhase = function () {
+  var p = $('fPhase').value;
+  show($('rowM'), p === 'gas');
+  show($('rowK'), p === 'gas');
+  show($('rowT'), p === 'gas' || p === 'steam');
+  show($('rowZ'), p === 'gas');
+  show($('rowSup'), p === 'steam');
+  show($('rowRho'), p === 'liquid');
+  show($('rowDp'), p === 'liquid');
+  show($('rowP0'), p === 'liquid');
+  show($('rowPf'), p !== 'liquid');
+  $('lblPf').textContent = (p === 'gas') ? '绝压' : '绝压';
+  $('hintPf').innerHTML = (p === 'gas')
+    ? '气体按绝压代入公式；一般取整定压力 × 1.03~1.10'
+    : '饱和/过热蒸汽均按<strong>绝对压力</strong>代入式(C.5)';
+  rvCalc();
+};
+
+window.rvCalc = function () {
+  var phase = $('fPhase').value;
+  var W = num('fW');
+  var K = parseFloat($('fKd').value);
+  var Kc = parseFloat($('fKc').value);
+  var res = $('cRes'), warn = $('cWarn');
+  if (W === null || W <= 0) { show(res, false); show(warn, false); return; }
+
+  var A = null, kBack = K * Kc, notes = [], formNo = '', ratio = null, wChk = null;
+
+  if (phase === 'gas') {
+    var pf = num('fPf'), M = num('fM'), k = num('fK'), T = num('fT'), Z = num('fZ');
+    if (!pf || !M || !T || !Z) { show(res, false); show(warn, false); return; }
+    var c = cGas(k);
+    formNo = 'GB/T 567.2-2012 式(C.3)';
+    // W = 0.076 * C″ * K * A * p_f * sqrt(M/(Z*T))   [kg/h, mm², MPa]
+    var denom = 0.076 * c * kBack * pf * Math.sqrt(M / (Z * T));
+    A = W / denom;
+    wChk = denom * A;
+    ratio = num('fP0') !== null && num('fP0') > 0 ? (num('fP0') / pf) : null;
+    notes.push('气体特性系数 C″ = <strong>' + c.toFixed(1) + '</strong>（k=' + (k || '未知') + '，k 未知时取 23.96）→ 气体特性系数表 C.1 对应值。');
+    notes.push('式中 K 已乘串联修正 K_c = ' + Kc + '，有效泄放系数 <strong>' + kBack.toFixed(3) + '</strong>。');
+    if (Z === 1.0) notes.push('压缩因子取 1.0（低压气体近似）；中高压应按实际状态方程取值，Z 偏大将使所需面积偏小。');
+  } else if (phase === 'steam') {
+    var pfs = num('fPf'), sup = num('fSup') || 0;
+    if (!pfs) { show(res, false); show(warn, false); return; }
+    var cp = cPrime(pfs, sup);
+    formNo = 'GB/T 567.2-2012 式(C.5)';
+    // W = 5.25 * K * C′ * A * sqrt(p_f)
+    var den = 5.25 * kBack * cp * Math.sqrt(pfs);
+    A = W / den;
+    wChk = den * A;
+    notes.push('水蒸汽特性系数 C′ = <strong>' + cp.toFixed(3) + '</strong>（' + (sup > 0 ? '过热 ' + sup + ' ℃' : '饱和蒸汽') + '，查表 C.2）。压力小于 11 MPa 的饱和蒸汽 C′≈1。');
+  } else {
+    var dp = num('fDp'), rho = num('fRho');
+    if (!dp || !rho) { show(res, false); show(warn, false); return; }
+    formNo = 'GB/T 567.2-2012 式(C.6)';
+    var kp = 0.62;   // 液体泄放系数 K′，GB/T 567.2 附录C §C.2（已含流道损失，不再乘接管系数 K）
+    // W = 5.1 * ζ * A * K′ * Kc * sqrt(rho * dp)
+    var den2 = 5.1 * 1.0 * kp * Kc * Math.sqrt(rho * dp);
+    A = W / den2;
+    wChk = den2 * A;
+    notes.push('液体泄放系数 K′ = <strong>0.62</strong>（GB/T 567.2 附录C §C.2）；动力黏度校正系数 ζ = 1.0（黏度不大于 20 ℃ 水时）。');
+    notes.push('有效压差 Δp = ' + dp + ' MPa，密度 ρ = ' + rho + ' kg/m³。');
+    notes.push('⚠️ 液体工况的前提是<strong>排放时不发生闪蒸</strong>（GB/T 150.1-2024 附录B A.1.3）；若介质临界温度接近或低于泄放压力下饱和气体温度，应按两相流另算（GB/T 20801.6-2020 附录B B.3.4）。');
+  }
+
+  if (Kc === 0.9) notes.push('已串联爆破片：所需面积按 1/0.9 放大，等效于组合装置泄放量按单阀额定的 0.9 计（GB/T 567.2-2012 4.3.2.3）。');
+
+  var doEq = Math.sqrt(4 * A / Math.PI);
+
+  $('cArea').textContent = A.toFixed(0);
+  $('cDo').textContent = doEq.toFixed(1) + ' mm';
+  $('cWchk').textContent = wChk.toFixed(0) + ' kg/h';
+  $('cRatio').textContent = ratio === null ? '—' : ratio.toFixed(3);
+  $('cForm').textContent = formNo;
+  $('cNote').innerHTML = notes.join('<br>');
+  show(res, true);
+
+  // 临界流校核
+  show(warn, false);
+  if (phase === 'gas' && ratio !== null) {
+    var kk = num('fK');
+    var rc = critRatio(kk || 1.0);
+    if (ratio > rc) {
+      show(warn, true);
+      $('cWarnText').innerHTML = '背压比 p₀/p_f = <strong>' + ratio.toFixed(3) + ' &gt; ' + rc.toFixed(3) +
+        '</strong>（临界压力比），<strong>不属于临界流</strong>，气体式(C.3)不适用。应按 GB/T 567.2-2012 式(C.4) 亚临界流公式或流体阻力系数法（§5.5.3）重算，此时实际泄放量会明显低于计算值。';
+    }
+  }
+  if (phase === 'gas' && num('fT') && num('fM')) {
+    var gas = null;
+    for (var i = 0; i < GASES.length; i++) if (Math.abs(GASES[i].M - num('fM')) < 0.05) gas = GASES[i];
+    // 仅当介质在常规温度下以液态储存（常温气体 Tc 极低）时才判闪蒸；
+    // 空气/氮气等 T>Tc 是常态（本来就是气态储存），不报警
+    if (gas && gas.tc > 200 && num('fT') > gas.tc) {
+      show(warn, true);
+      $('cWarnText').innerHTML = '泄放温度 <strong>' + num('fT') + ' K</strong> 超过 ' + esc(gas.n) +
+        ' 的临界温度 <strong>' + gas.tc + ' K</strong>，若该介质以<strong>液态储存</strong>（如液氨、液化气），排放会闪蒸，属<strong>两相流</strong>，公式不适用。请改按 GB/T 20801.6-2020 附录B B.3.4 计算，或改为全封闭防护。';
+    }
+  }
+};
+
+// ===== TAB 1：安全阀选型 =====
+window.renderSvTable = function () {
+  var tbl = $('sType').value === 'full' ? SV_FULL : SV_MICRO;
+  var th = '<tr><th>整定压力 (MPa)</th>';
+  for (var c = 0; c < tbl.cols.length; c++) th += '<th>do ' + tbl.cols[c] + '</th>';
+  th += '</tr>';
+  $('svTable').getElementsByTagName('thead')[0].innerHTML = th;
+  var rows = '';
+  for (var i = 0; i < tbl.rows.length; i++) {
+    var key = tbl.rows[i];
+    rows += '<tr><td>' + key + '</td>';
+    var arr = tbl.v[key] || [];
+    for (var j = 0; j < tbl.cols.length; j++) rows += '<td>' + (arr[j] === undefined ? '—' : arr[j]) + '</td>';
+    rows += '</tr>';
+  }
+  $('svTable').getElementsByTagName('tbody')[0].innerHTML = rows;
+}
+window.fillSetOptions = function () {
+  var tbl = $('sType').value === 'full' ? SV_FULL : SV_MICRO;
+  $('sSet').innerHTML = tbl.rows.map(function (r) {
+    return '<option value="' + r + '">' + r + ' MPa</option>';
+  }).join('');
+}
+
+window.rvValve = function () {
+  var A = num('sArea');
+  var warn = $('sWarn'), res = $('sRes');
+  if (!A || A <= 0) { show(res, false); show(warn, false); return; }
+
+  // 取 do 序列中面积不小于 A 的最小值（微启式 A41H 经验 do = DN-5，DO_LIST 即 do 序列）
+  var pick = null;
+  for (var i = 0; i < DO_LIST.length; i++) {
+    var a = Math.PI / 4 * DO_LIST[i] * DO_LIST[i];
+    if (a >= A) { pick = { do: DO_LIST[i], a: a }; break; }
+  }
+  if (!pick) {
+    show(res, false); show(warn, true);
+    $('sWarnText').innerHTML = '所需面积 <strong>' + A.toFixed(0) + ' mm²</strong> 超出单阀最大流道 do125（面积 ' +
+      (Math.PI / 4 * 125 * 125).toFixed(0) + ' mm²）。应改用<strong>并联多个安全阀</strong>、先导式安全阀（GB/T 28778-2023）或改用其他泄放形式。';
+    return;
+  }
+  show(warn, false);
+
+  var dn = pick.do + 5;  // 微启式 A41H 经验 do = DN - 5
+  var margin = (pick.a / A - 1) * 100;
+  var type = $('sType').value;
+  var notes = [];
+  notes.push('通流面积 A = π/4·do² = π/4·' + pick.do + '² = <strong>' + pick.a.toFixed(0) + ' mm²</strong>，满足所需 ' + A.toFixed(0) + ' mm²，余量 ' + margin.toFixed(0) + '%。');
+  notes.push('按微启式 A41H 系列经验关系 do = DN − 5，对应公称通径约 <strong>DN' + dn + '</strong>（订货须以制造商样本换算并核对结构长度 JB/T 2203、法兰 GB/T 9113）。');
+  notes.push('全启式 K_dr ≈ 0.777 需同时满足三个条件：阀座密封面内径 d_s ≥ 1.15·d_t；π·d_s·L ≥ 1.05·A；进口与管道支承通道 ≥ 1.7·A。');
+  if (type === 'micro') notes.push('微启式排放系数低于全启式，选型时排量余量宜放大，必要时降一档流道复核。');
+
+  // 额定排量核对
+  var tbl = type === 'full' ? SV_FULL : SV_MICRO;
+  var W = num('sW') || 0;
+  var colIdx = tbl.cols.indexOf(pick.do);
+    if (colIdx >= 0) {
+    var setP = $('sSet').value;
+    var rowIdx = tbl.rows.indexOf(setP);
+    var rated = rowIdx >= 0 ? (tbl.v[setP] || [])[colIdx] : undefined;
+    $('sModel').textContent = 'A4' + (type === 'full' ? '2' : '1') + 'H-16C DN' + dn;
+    notes.push('厂商样本额定排量：do' + pick.do + ' @ ' + setP + ' MPa 饱和蒸汽 = <strong>' + rated + ' kg/h</strong>（厂商样本值，非标准原表）。');
+    if (W > 0) {
+      if (rated >= W) {
+        notes.push('对照你填写的需求 ' + W + ' kg/h：<strong>满足</strong>（余量 ' + ((rated / W - 1) * 100).toFixed(0) + '%）。');
+      } else {
+        show(warn, true);
+        $('sWarnText').innerHTML = '样本额定排量 <strong>' + rated + ' kg/h &lt; 需求 ' + W + ' kg/h</strong>，此口径<strong>不满足</strong>。请升一档流道直径，或改用全启式 / 降低整定压力，或并联两只。';
+        notes.push('⚠️ 当前口径按需求 ' + W + ' kg/h 校核<strong>不足</strong>，见上方提示。');
+      }
+    }
+  } else {
+    $('sModel').textContent = 'A4' + (type === 'full' ? '2' : '1') + 'H-16C DN' + dn + '（近似）';
+    notes.push('⚠️ 该流道直径不在本厂商样本排量表范围内（样本仅覆盖 do20~do125），无法做排量核对，须向制造厂索取型式试验数据。');
+  }
+
+  $('sDo').textContent = pick.do;
+  $('sDn').textContent = 'DN' + dn;
+  $('sRealA').textContent = pick.a.toFixed(0) + ' mm²';
+  $('sMargin').textContent = margin.toFixed(0) + '%';
+  $('sNote').innerHTML = notes.join('<br>');
+  show(res, true);
+};
+
+// ===== TAB 2：爆破片选型 =====
+function renderDiscTable() {
+  var html = '';
+  for (var i = 0; i < DISC_RANGE.length; i++) {
+    var r = DISC_RANGE[i];
+    html += '<tr><td>DN' + r.dn + '</td><td>' + r.pmin + '</td><td>' + r.pmax + '</td><td>' + r.note + '</td></tr>';
+  }
+  $('discTable').getElementsByTagName('tbody')[0].innerHTML = html;
+}
+function renderGuideTable() {
+  var html = '';
+  for (var i = 0; i < GUIDE.length; i++) {
+    html += '<tr>' + GUIDE[i].map(function (c, j) {
+      return '<td' + (j === 0 ? '' : '') + '>' + c + '</td>';
+    }).join('') + '</tr>';
+  }
+  $('guideTable').getElementsByTagName('tbody')[0].innerHTML = html;
+}
+
+function discTol(pb) {
+  if (pb < 0.01) return '±50%';
+  if (pb < 0.1) return '±25%';
+  if (pb < 0.3) return '⚠ 保守取 ±15%（来源冲突）';
+  if (pb < 100) return '±5%';
+  return '±4%';
+}
+
+window.rvDisc = function () {
+  var A = num('dArea');
+  var pw = num('dPw'), pd = num('dPd');
+  var tk = $('dType').value, load = $('dLoad').value;
+  var t = DISC_TYPE[tk];
+  var res = $('dRes'), warn = $('dWarn'), ok = $('dOk');
+  if (!A || A <= 0 || !pw) { show(res, false); show(warn, false); show(ok, false); return; }
+
+  // 口径反查：取泄放口径不小于等效通流直径的第一档
+  var doEq = Math.sqrt(4 * A / Math.PI);
+  var pick = null;
+  for (var i = 0; i < DISC_RANGE.length; i++) {
+    if (DISC_RANGE[i].dn >= doEq) { pick = DISC_RANGE[i]; break; }
+  }
+
+  var factor = t.factor;
+  if (tk === 'forward' && load === 'pulse') factor = 1.70;
+  if (tk === 'reverse' && load === 'pulse') factor = 1.10;   // 反拱型同时覆盖脉冲
+  var pbmin = factor * pw;
+
+  var pb = num('dPb') || 0;
+  var pbeff = pb > 0 ? pb : pbmin;
+  var notes = [];
+  notes.push('等效通流直径 √(4A/π) = <strong>' + doEq.toFixed(1) + ' mm</strong>，' +
+    (pick ? '选用泄放口径 <strong>DN' + pick.dn + '</strong>。' : '已超出单片常用口径范围。'));
+  notes.push(t.name + '在' + (load === 'pulse' ? '脉冲' : '静') + '载荷下：最小爆破压力 p_bmin = ' + factor + ' × p_w = ' + factor + ' × ' + pw + ' = <strong>' + pbmin.toFixed(3) + ' MPa</strong>（GB/T 567.1-2012 附录B 表B.1）。');
+
+  var problems = [];
+  if (!t.coverPulse && load === 'pulse') {
+    problems.push(t.name + '<strong>不适用于脉冲载荷</strong>，压力脉动会使其疲劳失效。脉冲载荷只有正拱型和反拱型有专门倍数。');
+  }
+  if (pb > 0 && pb < pbmin) {
+    problems.push('你填入的设计爆破压力 <strong>' + pb + ' MPa &lt; 下限 ' + pbmin.toFixed(3) + ' MPa</strong>，标准不允许标定在该区间。请提高 p_b、降低工作压力，或改用下限更低的型式（如由平板型 2.0 改为反拱型 1.1）。');
+  }
+  if (pd > 0 && pbeff > pd) {
+    problems.push('设计爆破压力 <strong>' + pbeff.toFixed(3) + ' MPa &gt; 容器设计压力 ' + pd + ' MPa</strong>。TSG 21-2016 9.1.4.3 要求设计爆破压力一般不大于设计压力。');
+  }
+  if (pick && pbeff > pick.pmax) {
+    problems.push('DN' + pick.dn + ' 在厂商样本中可标定上限为 <strong>' + pick.pmax + ' MPa</strong>，低于所需的 ' + pbeff.toFixed(3) + ' MPa。高压 + 大泄放量的组合无法用单片爆破片实现，请考虑：降低爆破压力（改反拱型）、并联多片、或改用安全阀方案。');
+  }
+
+  $('dDn').textContent = pick ? ('DN' + pick.dn) : '超范围';
+  $('dPmin').textContent = pbmin.toFixed(3) + ' MPa';
+  $('dOpR').textContent = (pw / pbeff).toFixed(3) + '（表A.1 建议 ' + t.ratio + '）';
+  $('dTol').textContent = discTol(pbeff);
+  $('dRange').textContent = pick ? (pick.pmin + ' ~ ' + pick.pmax + ' MPa') : '—';
+
+  if (problems.length) {
+    show(res, true); show(ok, false); show(warn, true);
+    notes.push('⚠️ 本组合存在 ' + problems.length + ' 项冲突，见上方提示。');
+    $('dWarnText').innerHTML = problems.join('<br>');
+  } else {
+    show(res, true); show(warn, false); show(ok, true);
+    $('dOkText').innerHTML = '口径、型式、爆破压力三者<strong>相互匹配</strong>：DN' + (pick ? pick.dn : '—') +
+      ' 满足 ' + A.toFixed(0) + ' mm² 泄放面积，p_b = ' + pbeff.toFixed(3) + ' MPa 落在该口径可标定区间内，且不超容器设计压力。';
+    notes.push('操作压力比 = p_w / p_b = ' + pw + ' / ' + pbeff.toFixed(3) + ' = <strong>' + (pw / pbeff).toFixed(3) +
+      '</strong>。反拱型表A.1 建议 0.9，数值接近 0.9 表示接近设计上限、抗疲劳最好。');
+    if (tk === 'reverse' || tk === 'forward_slot') {
+      notes.push('该型式' + (tk === 'reverse' ? '（反拱带槽）' : '（正拱带槽）') + '无碎片、无撞击火花，且表A.1 标注<strong>可以</strong>与安全阀串联，是组合方案的优选。');
+    } else {
+      notes.push('⚠️ 该型式表A.1 标注<strong>不推荐</strong>与安全阀串联（会产碎片/火花，且安全阀可能被碎片损伤）。');
+    }
+  }
+  $('dNote').innerHTML = notes.join('<br>');
+};
+
+// ===== TAB 3：压力设定 =====
+window.rvPress = function () {
+  var kind = $('pKind').value;
+  var pd = num('pPd'), pw = num('pPw');
+  var res = $('pRes'), warn = $('pWarn');
+  if (pd === null) { show(res, false); show(warn, false); return; }
+
+  var setMax = null, rel = '', maxP = '', tol = '', notes = [], src = '';
+
+  if (kind === 'vessel') {
+    setMax = pd; rel = '≤ 设计压力'; maxP = '设备最大允许积聚压力按 GB/T 150.1-2024 B.3.3 校核'; src = 'TSG 21-2016 9.1.4.2';
+    notes.push('固定式压力容器的安全阀整定压力是<strong>封顶</strong>关系（不大于设计压力），<strong>不是</strong>「设计压力 × 1.1」。装多个安全阀时，其中一个 ≤ 设计压力，其余可不超过设计压力的 1.05 倍。');
+    notes.push('若整定压力定得低于设计压力过多，会导致设备长期在接近设计压力下运行、泄放频繁；实践中常把整定压力取在设计压力附近，再按 GB/T 150.1-2024 校核最大允许积聚压力。');
+  } else if (kind === 'tank') {
+    setMax = 1.10 * pd; rel = '= 设计压力 × 1.05~1.10'; maxP = '≤ 设计压力 × 1.20'; src = 'TSG R0005-2011 9.4.2';
+    notes.push('移动式压力容器（罐车）取设计压力的 <strong>1.05~1.10 倍</strong>，额定排放压力不超过设计压力的 1.20 倍，回座压力不低于整定压力的 0.90 倍。');
+    notes.push('罐车的爆破片<strong>不应</strong>设在安全阀出口侧。');
+  } else if (kind === 'pipe_nf') {
+    setMax = pd; rel = '≤ 100% 设计压力/MAWP'; maxP = '≤ 116% 设计压力与（+30 kPa）中的较大者'; src = 'GB/T 20801.6-2020 4.1.5 a)1)';
+    notes.push('工业管道非火灾工况，单个装置设定压力 ≤ 100% 设计压力或 MAWP；最大泄放压力 ≤ 116% 与（设计压力 + 30 kPa）中的<strong>较大者</strong>。');
+    notes.push('若装附加装置（第二套），设定压力可放宽到 ≤ 105%。');
+  } else if (kind === 'pipe_fire') {
+    setMax = 1.10 * pd; rel = '≤ 110% 设计压力/MAWP'; maxP = '≤ 121% 设计压力/MAWP'; src = 'GB/T 20801.6-2020 4.1.5 a)2) 表1';
+    notes.push('火灾工况的辅助泄放装置设定压力 ≤ 110% 设计压力/MAWP，最大泄放压力 ≤ 121%。火灾工况必须按 GB/T 20801.6-2020 附录B B.3/B.4 计算外部油池火灾的泄放量。');
+  } else if (kind === 'pipe_gc') {
+    setMax = 1.20 * pd; rel = '≤ 设计压力 × 120%'; maxP = '每次 ≤ 10 h、每年累计 ≤ 100 h，≤ 设计压力 133%'; src = 'GB/T 20801.6-2020 4.1.5 c)1)';
+    notes.push('GC2/GC3 级单纯管道防止液体热膨胀超压时，设定压力<strong>允许超过</strong>设计压力，但 ≤ 设计压力的 120% 与系统试验压力中的<strong>较小者</strong>。');
+    notes.push('泄放导致的压力变动另有约束：每次不超过 10 小时、每年累计不超过 100 小时，最大泄放压力不超过设计压力的 133%（GB/T 20801.6-2020 4.2.3.4）。');
+  } else if (kind === 'boiler') {
+    var base = pw !== null ? pw : pd;
+    setMax = 1.10 * base; rel = '= 工作压力 × 1.10'; maxP = '按 TSG 11-2020 表5-3 分档'; src = 'TSG 11-2020 5.1.8';
+    notes.push('省煤器、再热器、直流锅炉启动分离器：整定压力 = <strong>装设地点工作压力的 1.10 倍</strong>。这就是「1.1 倍」这个数字真正的出处。');
+    notes.push('锅筒及过热器另按 TSG 11-2020 表5-3 分档：P≤0.8 MPa 时工作压力 +0.03/+0.05；0.8&lt;P≤5.9 时 ×1.04/×1.06；P&gt;5.9 时 ×1.05/×1.08。');
+  }
+
+  // 整定压力允差（GB/T 12243-2021 5.1，压力容器和管道用）
+  if (setMax <= 0.5) tol = '± 0.015 MPa';
+  else tol = '± 3% SET';
+  if (kind === 'boiler' || kind === 'tank') {
+    if (setMax > 7.0) tol = '± 1% SET';
+    else if (setMax > 2.3) tol = '± 0.07 MPa';
+    else tol = '± 3% SET';
+  }
+  notes.push('按 GB/T 12243-2021 5.1，本场合整定压力允差为 <strong>' + tol + '</strong>。允差直接决定设备能达到的最大积聚压力，核算最大允许积聚压力时必须用 SET + 允差再算。');
+
+  $('pSet').textContent = setMax.toFixed(2);
+  $('pRel').textContent = rel;
+  $('pMax').textContent = maxP;
+  $('pTol').textContent = tol;
+  $('pNote').innerHTML = notes.join('<br>');
+  show(res, true);
+  show(warn, false);
+  if (kind === 'vessel' && pw !== null && pw > pd) {
+    show(warn, true);
+    $('pWarnText').innerHTML = '你填入的<strong>工作压力 ' + pw + ' MPa 高于设计压力 ' + pd + ' MPa</strong>，数据自相矛盾，请核对。';
+  }
+};
+
+// ===== TAB 4：选型对比 =====
+window.rvCompare = function () {
+  var dirty = $('xMedia').value === 'dirty';
+  var noLeak = $('xLeak').value === 'yes';
+  var fast = $('xSpeed').value === 'fast';
+  var freq = $('xFreq').value === 'yes';
+  var rec = [], reasons = [];
+
+  // GB/T 567.2-2012 4.2.1：应单独使用爆破片的五种情形
+  if (fast) { rec.push('爆破片'); reasons.push('容器内压力迅速增加，安全阀来不及反应（4.2.1 a）'); }
+  if (noLeak) { rec.push('爆破片'); reasons.push('设计上不允许容器内介质有任何微量泄漏（4.2.1 b）'); }
+  if (dirty) { rec.push('爆破片'); reasons.push('介质含沉淀物或粘着胶状物，可能导致安全阀失效（4.2.1 c）'); }
+  if (rec.length === 0) { rec.push('安全阀'); reasons.push('介质清洁、可重闭、压力波动不大 —— 常规工况首选安全阀'); }
+  if (freq) {
+    rec = ['安全阀'];
+    reasons = ['经常超压或温度波动较大的场合<strong>不应单独使用爆破片</strong>（GB/T 567.2-2012 4.2.3），爆破片会因反复载荷疲劳失效，应改用安全阀或爆破针阀'];
+  }
+
+  var combo = rec.length > 1;
+  var txt = '<strong>推荐：</strong><span class="tag-' + (combo ? 'good' : (rec[0] === '安全阀' ? 'good' : 'warn')) +
+    '">' + rec.join(' + ') + '</span>　依据：' + reasons.join('；') + '。';
+  if (combo || (dirty && noLeak)) {
+    txt += '<br><strong>本工况建议组合使用</strong>：爆破片串在安全阀<strong>入口侧</strong>，注意组合泄放量 = 单个安全阀额定泄放量 × <strong>0.9</strong>（选型要放大一档），两者间腔体须设压力指示 + 排气口 + 报警器，入口管线压力损失不超过设定压力的 3%。';
+  }
+  if (freq && rec[0] === '安全阀') {
+    txt += '<br>压力波动大的场合还可考虑<strong>爆破针阀</strong>（GB/T 20801.6-2020 附录C C.3.3），它能在背压波动时保持动作精度。';
+  }
+  $('xRes').className = 'warn-bar ' + (rec[0] === '安全阀' && !combo ? 'ok' : 'info');
+  $('xResText').innerHTML = txt;
+};
+
+// ===== 易用性：术语白话解释 =====
+window.rvGloss = function () {
+  var box = $('glossBox'), btn = $('glossBtn');
+  var on = box.classList.toggle('on');
+  btn.innerHTML = on
+    ? '<i class="fa-solid fa-chevron-up"></i> 收起解释'
+    : '<i class="fa-solid fa-book-open"></i> 看不懂术语？点这里看白话解释';
+};
+
+// ===== 易用性：场景卡 =====
+var SCENES = [
+  { icon:'fa-solid fa-tower-broadcast', title:'储气罐 / 空压机超压', desc:'压缩空气、氮气', tab:0, ex:0 },
+  { icon:'fa-solid fa-bolt', title:'液氨 / 制冷剂储罐', desc:'有毒冷媒、临界流', tab:0, ex:1 },
+  { icon:'fa-solid fa-temperature-high', title:'锅炉 / 蒸汽系统', desc:'饱和蒸汽泄放量', tab:0, ex:2 },
+  { icon:'fa-solid fa-oil-well', title:'液压站 / 油压机', desc:'液体间隙泄放', tab:0, ex:3 }
+];
+function renderScenes() {
+  $('sceneGrid').innerHTML = SCENES.map(function (s, i) {
+    return '<button class="scene-card" onclick="rvScene(' + i + ')">' +
+      '<i class="' + s.icon + '"></i><b>' + s.title + '</b><span>' + s.desc + '</span></button>';
+  }).join('');
+}
+window.rvScene = function (i) {
+  var s = SCENES[i]; if (!s) return;
+  rvSwitch(s.tab); rvEx0(s.ex);
+  $('panel' + s.tab).scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+function setV(id, v) { $(id).value = v; }
+
+// ===== 易用性：TAB0 示例 =====
+window.rvEx0 = function (i) {
+  var P = [
+    { phase:'gas',   W:1000, pf:0.6, p0:0.1013, M:28.97, k:1.40, T:293, Z:1.0, sup:0, rho:1000, dp:0.5,
+      note:'储气罐超压：空气 1000 kg/h @ 0.6 MPa(绝)' },
+    { phase:'gas',   W:2000, pf:1.2, p0:0.1013, M:17.03, k:1.31, T:313, Z:0.95, sup:0, rho:1000, dp:0.5,
+      note:'液氨储罐：NH₃ 2000 kg/h @ 1.2 MPa，40 ℃ 排放' },
+    { phase:'steam', W:3000, pf:0.6, p0:0.1013, M:0,    k:1.40, T:373, Z:1.0, sup:0,  rho:1000, dp:0.5,
+      note:'0.6 MPa 饱和蒸汽 3000 kg/h' },
+    { phase:'liquid',W:800,  pf:0.6, p0:0.1013, M:0,    k:1.40, T:293, Z:1.0, sup:0,  rho:880,  dp:0.5,
+      note:'液压油 800 kg/h，ρ=880，有效压差 0.5 MPa' },
+    { phase:'gas',   W:1500, pf:1.0, p0:0.5,    M:28.97, k:1.40, T:293, Z:1.0, sup:0, rho:1000, dp:0.5,
+      note:'背压 0.5 MPa 偏高 → 会触发亚临界提示' }
+  ][i];
+  $('fPhase').value = P.phase;
+  rvPhase();
+  setV('fW', P.W); setV('fPf', P.pf); setV('fP0', P.p0);
+  setV('fM', P.M || 28.97); setV('fK', P.k); setV('fT', P.T); setV('fZ', P.Z);
+  setV('fSup', P.sup); setV('fRho', P.rho); setV('fDp', P.dp);
+  rvCalc();
+  rvExNote('cNote', '示例：' + P.note);
+};
+
+// ===== 易用性：TAB1 示例 =====
+window.rvEx1 = function (i) {
+  var P = [
+    null,
+    { do:40, set:'1.00', w:1500, type:'full',  note:'DN50 全启式，do40，1.0 MPa 饱和蒸汽需 1500 kg/h' },
+    { do:65, set:'1.60', w:4000, type:'full',  note:'DN80 全启式，do65，1.6 MPa 饱和蒸汽需 4000 kg/h' },
+    { do:40, set:'0.60', w:2000, type:'micro', note:'DN50 微启式，do40，0.6 MPa 饱和蒸汽需 2000 kg/h' }
+  ][i];
+  if (P === null) {
+    var a = $('cArea').textContent;
+    setV('sArea', a === '—' ? 200 : a);
+    var w = $('fW').value;
+    setV('sW', w || 1000);
+    rvValve();
+    rvExNote('sNote', '示例：已带入第 1 页签算出的面积 ' + sareaTxt() + ' mm²');
+    return;
+  }
+  $('sType').value = P.type; fillSetOptions(); renderSvTable();
+  // 向下取整，避免 π/4·do² 的小数被四舍五入后反而要求升一档
+  setV('sArea', Math.floor(Math.PI / 4 * P.do * P.do));
+  setV('sW', P.w);
+  $('sSet').value = P.set;
+  rvValve();
+  rvExNote('sNote', '示例：' + P.note);
+};
+function sareaTxt() { return $('sArea').value; }
+
+// ===== 易用性：TAB2 示例 =====
+window.rvEx2 = function (i) {
+  var P = [
+    null,
+    { area:500, pw:1.0, pd:1.6, type:'reverse',      load:'static', note:'反拱带槽型（表A.1 推荐，操作压力比 0.9，无碎片，可串联安全阀）' },
+    { area:500, pw:1.0, pd:1.6, type:'forward_slot', load:'static', note:'正拱开缝型：抗疲劳好，但操作压力比 0.8，下限 ×1.25' },
+    { area:500, pw:1.0, pd:1.6, type:'flat',         load:'static', note:'平板型下限 ×2.0，通常会被容器设计压力卡住' }
+  ][i];
+  if (P === null) {
+    var a = $('cArea').textContent;
+    setV('dArea', a === '—' ? 200 : a);
+    rvDisc();
+    rvExNote('dNote', '示例：已带入第 1 页签算出的面积 ' + $('dArea').value + ' mm²');
+    return;
+  }
+  setV('dArea', P.area); setV('dPw', P.pw); setV('dPd', P.pd);
+  $('dType').value = P.type; $('dLoad').value = P.load;
+  setV('dPb', 0);
+  rvDisc();
+  rvExNote('dNote', '示例：' + P.note);
+};
+
+// ===== 易用性：TAB3 示例 =====
+window.rvEx3 = function (i) {
+  var P = [
+    { kind:'vessel',   pd:1.6, pw:1.4, note:'1.6 MPa 反应釜：整定压力不大于设计压力，即 ≤ 1.60 MPa' },
+    { kind:'tank',     pd:1.6, pw:1.4, note:'液氨罐车：整定压力 = 设计压力 × 1.05~1.10，即 1.68~1.76 MPa' },
+    { kind:'pipe_nf',  pd:1.0, pw:0.8, note:'1.0 MPa 工业管道非火灾：单个装置设定压力 ≤ 1.00 MPa' },
+    { kind:'pipe_gc',  pd:1.0, pw:0.9, note:'GC2 单纯管道热膨胀：SET 允许超设计压力，≤ 1.20 MPa 与试验压力的较小者' },
+    { kind:'boiler',   pd:2.5, pw:2.5, note:'省煤器：整定压力 = 装设地点工作压力 × 1.10' }
+  ][i];
+  $('pKind').value = P.kind;
+  setV('pPd', P.pd); setV('pPw', P.pw);
+  rvPress();
+  rvExNote('pNote', '示例：' + P.note);
+};
+
+// 在结果说明末尾追加一行「这是示例」提示
+function rvExNote(noteId, text) {
+  var el = $(noteId); if (!el) return;
+  if (el.innerHTML.indexOf('fa-wand-magic-sparkles') >= 0) return;
+  el.innerHTML += '<br><span style="color:var(--tech-blue);font-weight:600;"><i class="fa-solid fa-wand-magic-sparkles"></i> ' + text + '</span>';
+}
+
+// ===== 渲染 =====
+function renderGasTable() {
+  var html = '';
+  for (var i = 0; i < GASES.length; i++) {
+    var g = GASES[i];
+    html += '<tr style="cursor:pointer;" onclick="rvPickGas(' + i + ')"><td>' + esc(g.n) + '</td><td>' + g.M +
+            '</td><td>' + g.k.toFixed(2) + '</td><td>' + g.pc + '</td><td>' + g.tc.toFixed(2) +
+            '</td><td>' + cGas(g.k).toFixed(0) + '</td></tr>';
+  }
+  $('gasTable').getElementsByTagName('tbody')[0].innerHTML = html;
+}
+window.rvPickGas = function (i) {
+  var g = GASES[i]; if (!g) return;
+  if ($('fPhase').value !== 'gas') { $('fPhase').value = 'gas'; rvPhase(); }
+  setV('fM', g.M); setV('fK', g.k.toFixed(2));
+  rvCalc();
+  rvExNote('cNote', '示例：已按介质「' + g.n + '」填入 M 与 k（临界温度 ' + g.tc.toFixed(2) + ' K）');
+};
+
+renderScenes();
+renderGasTable();
+renderDiscTable();
+renderGuideTable();
+fillSetOptions();
+renderSvTable();
+rvPhase();
+rvValve();
+rvDisc();
+rvPress();
+rvCompare();
+})();
+</script>
+<script src="/sheen-toolbox/assets/i18n.js"></script>
+<script src="/sheen-toolbox/assets/share.js"></script>
+</body>
+</html>
