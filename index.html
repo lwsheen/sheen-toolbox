@@ -20,16 +20,16 @@
     <link rel="icon" type="image/png" sizes="512x512" href="/sheen-toolbox/assets/icon-512.png">
 
     <title>SHEEN Toolbox · 环境健康安全专业工具箱</title>
-    <meta name="description" content="EHS  专业计算、查询与分析工具集 · 62 款免费在线工具">
+    <meta name="description" content="EHS  专业计算、查询与分析工具集 · 63 款免费在线工具">
     <meta property="og:title" content="SHEEN Toolbox · 环境健康安全专业工具箱">
-    <meta property="og:description" content="EHS 专业计算、查询与分析工具集 · 62 款免费在线工具">
+    <meta property="og:description" content="EHS 专业计算、查询与分析工具集 · 63 款免费在线工具">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="zh_CN">
     <meta property="og:locale:alternate" content="en_US">
     <meta property="og:url" content="https://lwsheen.pages.dev/sheen-toolbox/">
     <meta property="og:image" content="https://lwsheen.pages.dev/sheen-toolbox/assets/share/home.png">
     <link rel="canonical" href="https://lwsheen.pages.dev/sheen-toolbox/">
-    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "SHEEN Toolbox · 环境健康安全专业工具箱", "url": "https://lwsheen.pages.dev/sheen-toolbox/", "description": "EHS 专业计算、查询与分析工具集 · 62 款免费在线工具", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "inLanguage": "zh-CN", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "CNY"}, "publisher": {"@type": "Organization", "name": "SHEEN Toolbox"}}</script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "SHEEN Toolbox · 环境健康安全专业工具箱", "url": "https://lwsheen.pages.dev/sheen-toolbox/", "description": "EHS 专业计算、查询与分析工具集 · 63 款免费在线工具", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "inLanguage": "zh-CN", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "CNY"}, "publisher": {"@type": "Organization", "name": "SHEEN Toolbox"}}</script>
 
     <link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css" />
 <link rel="stylesheet" href="/sheen-toolbox/common.css">
@@ -1418,6 +1418,14 @@
             <p class="desc">开口安全距离·防越过·挤压最小间距·设计要求</p></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
+        <a href="/sheen-toolbox/relief-device-sizing/" class="tool-card is-new" draggable="true" data-cat="计算" data-zh-title="泄放量计算与安全阀爆破片选型" data-zh-desc="泄放面积·通流口径·安全阀公称通径·爆破片口径·最小爆破压力·操作压力比·整定压力规则" data-slug="relief-device-sizing">
+            <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
+            <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
+            <div class="tool-icon"><i class="fa-solid fa-burst"></i></div>
+            <div class="card-text"><h3 title="泄放量计算与安全阀爆破片选型">泄放量计算与安全阀爆破片选型</h3>
+            <p class="desc">泄放面积·通流口径·安全阀公称通径·爆破片口径·最小爆破压力·操作压力比·整定压力规则</p></div>
+            <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
         <div class="tool-card placeholder">
             <div class="tool-icon"><i class="fa-solid fa-diagram-project"></i></div>
             <div class="card-text"><h3>更多工具推出中</h3>
@@ -1534,8 +1542,10 @@
     (function() {
         var NEW_WINDOW_DAYS = 30;
         function markNew(card, slug) {
-            if (card.classList.contains('is-new')) return; // 已静态标记则保留
-            card.classList.add('is-new');
+            // 注意：静态标了 is-new 的卡片也必须补 new-badge 角标。
+            // 早期版本在这里直接 return，导致静态标记的工具（machine-guard-design /
+            // relief-device-sizing 等）永远没有 NEW 角标，dataUpdated 自动标记也对其失效。
+            if (!card.classList.contains('is-new')) card.classList.add('is-new');
             if (!card.querySelector('.new-badge')) {
                 var b = document.createElement('span');
                 b.className = 'new-badge';
@@ -1569,6 +1579,18 @@
             };
             xhr.send();
         } catch (e) {}
+
+        // 静态标了 is-new 的卡片不经过 applyNew（无 released 字段或已超 30 天窗），
+        // 必须单独补 NEW 角标，否则只红不标。
+        function backfillStaticBadges() {
+            document.querySelectorAll('.tool-card.is-new[data-slug]').forEach(function(card) {
+                if (!card.querySelector('.new-badge')) markNew(card, card.getAttribute('data-slug'));
+            });
+        }
+        backfillStaticBadges();
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', backfillStaticBadges);
+        }
 
         // ===== 描述软截断（统一观感，保留 title 完整） =====
         var DESC_MAX = 22;
@@ -2265,7 +2287,7 @@
             // 文档标题 & description
             document.title = en ? 'SHEEN Toolbox · Professional EHS Toolbox' : ORIG_TITLE;
             var metaDesc = document.querySelector('meta[name="description"]');
-            if (metaDesc) metaDesc.content = en ? 'EHS calculation, query and analysis tools · 62 free online tools' : 'EHS 专业计算、查询与分析工具集 · 62 款免费在线工具';
+            if (metaDesc) metaDesc.content = en ? 'EHS calculation, query and analysis tools · 63 free online tools' : 'EHS 专业计算、查询与分析工具集 · 63 款免费在线工具';
             // 通用 data-i18n 文本
             document.querySelectorAll('[data-i18n]').forEach(function(el) {
                 var key = el.getAttribute('data-i18n');
