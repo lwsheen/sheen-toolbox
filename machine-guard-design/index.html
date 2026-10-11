@@ -98,6 +98,34 @@
   .data-table { font-size: 11px; }
   .data-table th, .data-table td { padding: 6px 5px; }
 }
+
+/* ===== 易用性增强：场景引导 / 示例 / 术语 ===== */
+.guide { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 12px 16px; background: var(--bg-page); border: 1px solid var(--border-light); border-radius: 12px; margin-bottom: 14px; }
+.guide-step { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); }
+.guide-step .gs-no { width: 20px; height: 20px; border-radius: 50%; background: var(--brand-red); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.guide-step b { color: var(--text-primary); font-weight: 600; }
+.guide-arrow { color: var(--text-tertiary); font-size: 11px; }
+
+.scene-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 6px; }
+.scene-card { text-align: left; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; cursor: pointer; font-family: var(--font); transition: all 0.18s; }
+.scene-card:hover { border-color: var(--brand-red); background: var(--brand-red-light); }
+.scene-card i { font-size: 16px; color: var(--brand-red); }
+.scene-card b { display: block; font-size: 13px; color: var(--text-primary); margin: 6px 0 3px; line-height: 1.4; }
+.scene-card span { display: block; font-size: 11px; color: var(--text-secondary); line-height: 1.5; }
+
+.ex-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border); }
+.ex-label { font-size: 11px; color: var(--text-secondary); display: flex; align-items: center; gap: 5px; }
+.ex-chip { font-size: 11.5px; font-weight: 600; padding: 5px 12px; border-radius: 60px; background: var(--tech-blue-soft); color: var(--tech-blue); border: none; cursor: pointer; font-family: var(--font); }
+.ex-chip:hover { background: var(--brand-red); color: #fff; }
+
+.term { border-bottom: 1px dashed var(--tech-blue); cursor: help; }
+.term-hint { display: none; margin-top: 6px; font-size: 11.5px; color: var(--text-secondary); background: var(--tech-blue-soft); border-radius: 8px; padding: 8px 10px; line-height: 1.6; }
+.term-hint.on { display: block; }
+
+@media (max-width: 900px) { .scene-grid { grid-template-columns: repeat(2, 1fr); } }
+@media print {
+  .scene-grid, .ex-row, .guide { display: none !important; }
+}
 </style>
 <style>
 @media print {
@@ -145,6 +173,30 @@ var _hmt = _hmt || [];
     </span>
   </div>
 
+  <div class="guide no-pr">
+    <div class="guide-step"><span class="gs-no">1</span><span>先按<b>现场工况</b>点下面的场景卡（自动跳页签并填好数据）</span></div>
+    <span class="guide-arrow"><i class="fa-solid fa-chevron-right"></i></span>
+    <div class="guide-step"><span class="gs-no">2</span><span>把结果里的 <b>mm 数值</b>换成你现场实测值，自动判定达标</span></div>
+    <span class="guide-arrow"><i class="fa-solid fa-chevron-right"></i></span>
+    <div class="guide-step"><span class="gs-no">3</span><span>想自己填，直接用各页签底部的<b>示例</b>按钮</span></div>
+  </div>
+
+  <div class="scene-grid no-pr" id="sceneGrid"></div>
+
+  <div class="no-pr" style="margin-bottom:14px;">
+    <button class="ex-chip" onclick="mgGloss()" id="glossBtn" style="background:var(--bg-page);color:var(--text-secondary);border:1px solid var(--border);"><i class="fa-solid fa-book-open"></i> 看不懂术语？点这里看白话解释</button>
+    <div class="term-hint" id="glossBox">
+      <b>槽形 / 方形 / 圆形</b>：说的是开口长什么样。孔是圆的量直径，是方的量边长，像门缝一样细长的叫槽形，量最窄那一处。<br>
+      <b>安全距离</b>：护罩（或人站的位置）离危险点至少要留多远，人伸不进、碰不到。<br>
+      <b>危险区高度 A<sub>h</sub></b>：你要防的那个危险点（比如转动的辊面）离地多高。<br>
+      <b>防护结构高度 A<sub>p</sub></b>：护罩上沿离地多高。护罩越高，手越够不着危险点，要求的安全距离就越小。<br>
+      <b>防越过</b>：护罩挡不住整个身体，但能挡住手伸过去 —— 用高度和距离配合来防。<br>
+      <b>挤压最小间距</b>：两个会夹人的部件之间，缝隙最小得留多少，夹不住手、脚、头。<br>
+      <b>上伸不可触及</b>：危险点高到人踮脚也够不着（≥2700 mm），那就干脆不需要留安全距离。<br>
+      <b>不插值</b>：表上没有的尺寸一律往「更安全」的一边取，不许自己算中间值。
+    </div>
+  </div>
+
   <div class="tab-nav no-pr" role="tablist">
     <button class="tab-btn active" onclick="mgSwitch(0)" data-tab="0"><i class="fa-solid fa-table-cells"></i> 开口安全距离</button>
     <button class="tab-btn" onclick="mgSwitch(1)" data-tab="1"><i class="fa-solid fa-arrows-up-to-line"></i> 防越过距离</button>
@@ -177,6 +229,14 @@ var _hmt = _hmt || [];
         <input type="number" class="form-control" id="gLen" value="40" min="0" max="400" step="1" oninput="calcOpening()">
         <div class="hint">仅槽形有效：长度 ≤65 mm 时拇指被阻挡，850 mm 可减小到 200 mm</div>
       </div>
+    </div>
+
+    <div class="ex-row no-pr">
+      <span class="ex-label"><i class="fa-solid fa-wand-magic-sparkles"></i> 示例：</span>
+      <button class="ex-chip" onclick="mgEx0(0)">护罩网孔 20×20</button>
+      <button class="ex-chip" onclick="mgEx0(1)">散热圆孔 φ12</button>
+      <button class="ex-chip" onclick="mgEx0(2)">长缝 40×40（可减距）</button>
+      <button class="ex-chip" onclick="mgEx0(3)">长缝 40×200（不可减）</button>
     </div>
 
     <div class="result-block" id="gRes" style="display:none;">
@@ -225,6 +285,14 @@ var _hmt = _hmt || [];
         <input type="number" class="form-control" id="rSh" value="0" min="0" max="3000" step="10" oninput="calcReach()">
         <div class="hint">填入实测值可自动判定是否达标；留 0 表示只查所需值</div>
       </div>
+    </div>
+
+    <div class="ex-row no-pr">
+      <span class="ex-label"><i class="fa-solid fa-wand-magic-sparkles"></i> 示例：</span>
+      <button class="ex-chip" onclick="mgEx1(0)">辊面 1500 + 护罩 1000</button>
+      <button class="ex-chip" onclick="mgEx1(1)">辊面 1000 + 护罩 2000</button>
+      <button class="ex-chip" onclick="mgEx1(2)">同一辊面 + 已有 800（判达标）</button>
+      <button class="ex-chip" onclick="mgEx1(3)">高处 2800（免距离）</button>
     </div>
 
     <div class="result-block" id="rRes" style="display:none;">
@@ -280,6 +348,14 @@ var _hmt = _hmt || [];
       </div>
     </div>
 
+    <div class="ex-row no-pr">
+      <span class="ex-label"><i class="fa-solid fa-wand-magic-sparkles"></i> 示例：</span>
+      <button class="ex-chip" onclick="mgEx2(0)">格栅踏板 30 mm</button>
+      <button class="ex-chip" onclick="mgEx2(1)">花纹钢板 40 mm</button>
+      <button class="ex-chip" onclick="mgEx2(2)">长条缝 60×75（可减距）</button>
+      <button class="ex-chip" onclick="mgEx2(3)">大孔 300（须全封闭）</button>
+    </div>
+
     <div class="result-block" id="lRes" style="display:none;">
       <div class="result-label">距危险区的安全距离</div>
       <div><span class="main-value" id="lSr">—</span><span class="main-unit">mm</span></div>
@@ -322,6 +398,14 @@ var _hmt = _hmt || [];
         <input type="number" class="form-control" id="cGap" value="0" min="0" max="600" step="1" oninput="calcCrush()">
         <div class="hint">留 0 表示只查所需最小值；填入实测值可自动判定</div>
       </div>
+    </div>
+
+    <div class="ex-row no-pr">
+      <span class="ex-label"><i class="fa-solid fa-wand-magic-sparkles"></i> 示例：</span>
+      <button class="ex-chip" onclick="mgEx3(0)">压板夹手 现有 150 mm</button>
+      <button class="ex-chip" onclick="mgEx3(1)">压板夹手 现有 80 mm（不合格）</button>
+      <button class="ex-chip" onclick="mgEx3(2)">辊压机 腿部 现有 200 mm</button>
+      <button class="ex-chip" onclick="mgEx3(3)">剪板机 手指 现有 30 mm</button>
     </div>
 
     <div class="result-block" id="cRes" style="display:none;">
@@ -795,6 +879,96 @@ calcOpening();
 calcReach();
 calcLower();
 calcCrush();
+
+// ===== 易用性：术语白话解释 =====
+window.mgGloss = function () {
+  var box = $('glossBox'), btn = $('glossBtn');
+  var on = box.classList.toggle('on');
+  btn.innerHTML = on
+    ? '<i class="fa-solid fa-chevron-up"></i> 收起解释'
+    : '<i class="fa-solid fa-book-open"></i> 看不懂术语？点这里看白话解释';
+};
+
+// ===== 易用性：场景卡（一键跳页签 + 填数据 + 出结论）=====
+var SCENES = [
+  { icon: 'fa-solid fa-gears',title: '齿轮/皮带传动点加网罩',desc: '网格孔多大才安全',tab: 0, ex: 0 },
+  { icon: 'fa-solid fa-arrows-up-to-line', title: '高处辊面 + 半高护罩',desc: '手够不着要留多远',tab: 1, ex: 0 },
+  { icon: 'fa-solid fa-shoe-prints', title: '格栅平台 / 花纹钢板',desc: '脚能穿过的孔要留多少',tab: 2, ex: 1 },
+  { icon: 'fa-solid fa-hand', title: '压板 / 辊压机夹人',desc: '缝隙多大才夹不住',tab: 3, ex: 1 }
+];
+function renderScenes() {
+  $('sceneGrid').innerHTML = SCENES.map(function (s, i) {
+    return '<button class="scene-card" onclick="mgScene(' + i + ')">' +
+      '<i class="' + s.icon + '"></i><b>' + s.title + '</b><span>' + s.desc + '</span></button>';
+  }).join('');
+}
+window.mgScene = function (i) {
+  var s = SCENES[i];
+  if (!s) return;
+  mgSwitch(s.tab);
+  if (s.tab === 0) mgEx0(s.ex);
+  else if (s.tab === 1) mgEx1(s.ex);
+  else if (s.tab === 2) mgEx2(s.ex);
+  else if (s.tab === 3) mgEx3(s.ex);
+  $('panel' + s.tab).scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+function setV(id, v) { $(id).value = v; }
+
+// ===== 易用性：各页签示例（数值取自常见真实工况）=====
+window.mgEx0 = function (i) {
+  var P = [
+    { shape: 'square', e: 20, len: 40,  note: '钢板冲孔网 20×20 是最常见的护罩网孔' },
+    { shape: 'round',  e: 12, len: 0,   note: '电机散热圆孔 φ12' },
+    { shape: 'slot',   e: 40, len: 40,  note: '长缝 40 mm（缝宽），长度 40 mm ≤65 → 拇指被挡住，850 可减到 200' },
+    { shape: 'slot',   e: 40, len: 200, note: '同样 40 mm 宽但缝长 200 mm，长度超 65 mm，不能减距，仍需 850' }
+  ][i];
+  setV('gShape', P.shape); setV('gOpen', P.e); setV('gLen', P.len);
+  calcOpening();
+  mgExNote('gNote', '示例：' + P.note);
+};
+window.mgEx1 = function (i) {
+  var P = [
+    { ah: 1500, ap: 1000, sh: 0,   t: 't2', note: '传动辊面离地 1500，网格护罩上沿 1000' },
+    { ah: 1000, ap: 2000, sh: 0,   t: 't2', note: '辊面很低但护罩很高，手够不着' },
+    { ah: 1500, ap: 1000, sh: 800, t: 't2', note: '同工况，实测只有 800 → 自动判是否达标' },
+    { ah: 2800, ap: 1000, sh: 0,   t: 't2', note: '危险点高达 2800，属上伸不可触及' }
+  ][i];
+  setV('rAh', P.ah); setV('rAp', P.ap); setV('rSh', P.sh); setV('rTable', P.t);
+  calcReach();
+  mgExNote('rNote', '示例：' + P.note);
+};
+window.mgEx2 = function (i) {
+  var P = [
+    { shape: 'sqrd', e: 30, len: 0,  note: '钢格栅常见孔30 mm' },
+    { shape: 'sqrd', e: 40, len: 0,  note: '花纹钢板 / 机坪常见 40 mm' },
+    { shape: 'slot', e: 60, len: 75, note: '长条缝 60×75 mm，长度≤75 可减到不小于 50' },
+    { shape: 'sqrd', e: 300, len: 0, note: '大开口 300 mm → 人员可全身进入' }
+  ][i];
+  setV('lShape', P.shape); setV('lOpen', P.e); setV('lLen', P.len);
+  calcLower();
+  mgExNote('lNote', '示例：' + P.note);
+};
+window.mgEx3 = function (i) {
+  var P = [
+    { part: 'wrist', gap: 150, note: '压板夹手（手腕/拳最不利），现有间隙 150 mm' },
+    { part: 'wrist', gap: 80,  note: '同一压板但实测只有 80 mm → 会判不合格' },
+    { part: 'leg',  gap: 200, note: '辊压机腿部，现有 200 mm' },
+    { part: 'finger', gap: 30, note: '剪板机刀口手指位，现有 30 mm' }
+  ][i];
+  setV('cPart', P.part); setV('cGap', P.gap);
+  calcCrush();
+  mgExNote('cNote', '示例：' + P.note);
+};
+// 在结果说明末尾追加一行「这是示例」提示
+function mgExNote(noteId, text) {
+  var el = $(noteId);
+  if (!el) return;
+  var tag = '<br><span style="color:var(--tech-blue);font-weight:600;"><i class="fa-solid fa-wand-magic-sparkles"></i> ' + text + '</span>';
+  if (el.innerHTML.indexOf('fa-wand-magic-sparkles') < 0) el.innerHTML += tag;
+}
+
+renderScenes();
 })();
 </script>
 <script src="/sheen-toolbox/assets/i18n.js"></script>
