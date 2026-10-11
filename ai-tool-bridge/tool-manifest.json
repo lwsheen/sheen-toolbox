@@ -1,6 +1,6 @@
 {
   "version": "3.0",
-  "updated": "2026-10-10",
+  "updated": "2026-10-11",
   "note": "全量 61 个登记工具 + 3 条兼容路由（未登记但线上可用的 environmental-impact-classification、occupational-risk-classification，以及合并页别名 vehicle-fire-extinguisher），AI 可路由+关联所有工具；查询类工具支持 ?q= 预填深链。待定：2 个未登记工具的去留。",
   "fallback": {
     "noTool": "未匹配到专用工具。可换更具体的表述（如工具名/标准号），或前往「SHEEN环境健康安全」IMA 知识库检索法规原文。",
@@ -1344,6 +1344,48 @@
         "防护置设计要求"
       ],
       "page": "/sheen-toolbox/machine-guard-design/",
+      "queryParam": null,
+      "params": []
+    },
+    {
+      "id": "relief-device-sizing",
+      "title": "泄放量计算与安全阀爆破片选型",
+      "desc": "压力容器与工业管道泄放量计算与安全阀/爆破片选型：GB/T 567.2-2012 附录C 气体/蒸汽/液体泄放量公式、GB/T 12243-2021 弹簧直接载荷式安全阀额定排量、GB/T 150.1-2024 附录B 泄放面积、GB/T 567.1-2012 最小爆破压力与操作压力比、TSG 21 整定压力规则",
+      "descShort": "泄放量反算通径·安全阀/爆破片选型",
+      "category": "计算",
+      "standards": [
+        "GB/T 567.2-2012《压力容器 安全泄放装置 第2部分：安全阀》",
+        "GB/T 12243-2021《弹簧直接载荷式安全阀》",
+        "GB/T 150.1-2024《压力容器 第1部分：总则》",
+        "GB/T 567.1-2012《压力容器 安全泄放装置 第1部分：爆破片》"
+      ],
+      "copyright": "boundary",
+      "trigger": [
+        "泄放量计算",
+        "泄放量",
+        "排放量",
+        "泄放面积",
+        "泄放能力",
+        "安全阀选型",
+        "安全阀排量",
+        "安全阀通径",
+        "整定压力",
+        "整定压力比",
+        "爆破片选型",
+        "爆破片",
+        "爆破片口径",
+        "最小爆破压力",
+        "操作压力比",
+        "安全阀",
+        "泄压装置",
+        "超压泄放",
+        "排放口径",
+        "额定泄放量",
+        "relief valve",
+        "rupture disc",
+        "pressure relief"
+      ],
+      "page": "/sheen-toolbox/relief-device-sizing/",
       "queryParam": null,
       "params": []
     },
