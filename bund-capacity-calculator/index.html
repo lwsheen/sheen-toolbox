@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head data-seo="sheen">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="围堰有效容积计算 — GB 50351-2014 V=A·Hj−(V1+V2+V3+V4)、GB 50160-2008 防火堤及隔堤容积、GB 50074-2014 油罐组堤高堤距、应急事故池消防水与雨水量核算">
+
+<link rel="icon" type="image/png" sizes="192x192" href="/sheen-toolbox/assets/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/sheen-toolbox/assets/icon-512.png">
+
+<title>围堰有效容积计算 — SHEEN Toolbox</title>
+<meta property="og:title" content="围堰有效容积计算 | SHEEN Toolbox">
+<meta property="og:description" content="GB 50351-2014 有效容积公式 · GB 50160-2008 防火堤与隔堤容积 · GB 50074-2014 堤高堤距 · 应急事故池消防水与雨水量">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lwsheen.pages.dev/sheen-toolbox/bund-capacity-calculator/">
+<meta property="og:image" content="https://lwsheen.pages.dev/sheen-toolbox/assets/share/bund-capacity-calculator.png">
+<link rel="canonical" href="https://lwsheen.pages.dev/sheen-toolbox/bund-capacity-calculator/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "围堰有效容积计算", "url": "https://lwsheen.pages.dev/sheen-toolbox/bund-capacity-calculator/", "description": "GB 50351-2014 有效容积公式 V=A·Hj−(V1+V2+V3+V4) · GB 50160-2008 防火堤及隔堤有效容积 · GB 50074-2014 堤高与堤距 · 应急事故池消防水量与雨水量核算", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "inLanguage": "zh-CN", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "CNY"}, "publisher": {"@type": "Organization", "name": "SHEEN Toolbox"}}</script>
+
+<link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
+<link rel="stylesheet" href="/sheen-toolbox/common.css">
+<style>:root {
+  /* 品牌色一律引用 common.css 令牌，页面不自定义色值 */
+  --bd-red: var(--brand-red);
+  --bd-red-light: var(--brand-red-light);
+  --bd-amber: var(--warn-orange);
+  --bd-amber-light: var(--warn-orange-soft);
+  --bd-amber-deep: var(--warn-deep);
+  --bd-green: var(--ok-deep);
+  --bd-green-light: var(--ok-soft);
+  --bd-blue: var(--tech-blue);
+  --bd-blue-light: var(--tech-blue-soft);
+}
+
+.guide { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 12px 16px; background: var(--bg-page); border: 1px solid var(--border-light); border-radius: 12px; margin-bottom: 14px; }
+.guide-step { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); }
+.guide-step .gs-no { width: 20px; height: 20px; border-radius: 50%; background: var(--brand-red); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.guide-step b { color: var(--text-primary); font-weight: 600; }
+.guide-arrow { color: var(--text-tertiary); font-size: 11px; }
+
+.scene-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 6px; }
+.scene-card { text-align: left; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; cursor: pointer; font-family: var(--font); transition: all 0.18s; }
+.scene-card:hover { border-color: var(--brand-red); background: var(--brand-red-light); }
+.scene-card i { font-size: 16px; color: var(--brand-red); }
+.scene-card b { display: block; font-size: 13px; color: var(--text-primary); margin: 6px 0 3px; line-height: 1.4; }
+.scene-card span { display: block; font-size: 11px; color: var(--text-secondary); line-height: 1.5; }
+
+.ex-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border); }
+.ex-label { font-size: 11px; color: var(--text-secondary); display: flex; align-items: center; gap: 5px; }
+.ex-chip { font-size: 11.5px; font-weight: 600; padding: 5px 12px; border-radius: 60px; background: var(--tech-blue-soft); color: var(--tech-blue); border: none; cursor: pointer; font-family: var(--font); }
+.ex-chip:hover { background: var(--brand-red); color: #fff; }
+.aux-btn { display: inline-flex; align-items: center; gap: 5px; margin-top: 6px; padding: 5px 11px; font-size: 11.5px; font-weight: 600; border-radius: 8px; background: var(--bg-page); color: var(--tech-blue); border: 1px dashed var(--tech-blue); cursor: pointer; font-family: var(--font); }
+.aux-btn:hover { background: var(--tech-blue); color: #fff; }
+
+.term-hint { display: none; margin-top: 6px; font-size: 11.5px; color: var(--text-secondary); background: var(--tech-blue-soft); border-radius: 8px; padding: 10px 12px; line-height: 1.7; }
+.term-hint.on { display: block; }
+
+.tab-nav { display: flex; gap: 0; margin-bottom: 0; border-bottom: 2px solid var(--border); border-radius: 8px; }
+.tab-btn { flex: 1; padding: 13px 8px; font-size: 13px; font-weight: 600; font-family: var(--font); background: var(--bg-page); color: var(--text-secondary); border: none; cursor: pointer; transition: all 0.2s; border-bottom: 3px solid transparent; margin-bottom: -2px; display: flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; border-radius: 8px; }
+.tab-btn i { font-size: 15px; }
+.tab-btn:hover { color: var(--brand-red); background: var(--brand-red-light); }
+.tab-btn.active { color: var(--brand-red); background: var(--bg-card); border-bottom-color: var(--brand-red); }
+.tab-panel { display: none; background: var(--bg-card); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: 22px; }
+.tab-panel.active { display: block; }
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-row label { display: block; font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+.form-control { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; font-family: var(--font); background: var(--bg-card); color: var(--text-primary); }
+.hint { font-size: 11px; color: var(--text-secondary); margin-top: 4px; line-height: 1.6; }
+
+.result-block { background: var(--bd-red-light); border: 2px solid var(--bd-red); border-radius: 16px; padding: 20px; margin-top: 20px; }
+.result-block .main-value { font-size: 36px; font-weight: 800; color: var(--bd-red); line-height: 1.1; }
+.result-block .unit { font-size: 16px; font-weight: 600; color: var(--bd-red); }
+
+.kv-list { margin-top: 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
+.kv { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 10px; padding: 10px 12px; }
+.kv .k { font-size: 11px; color: var(--text-secondary); }
+.kv .v { font-size: 15px; font-weight: 700; color: var(--text-primary); margin-top: 3px; }
+
+.verdict { margin-top: 14px; padding: 12px 14px; border-radius: 10px; font-size: 12.5px; line-height: 1.75; display: none; }
+.verdict.on { display: block; }
+.verdict.ok { background: var(--bd-green-light); border: 1px solid var(--bd-green); color: var(--bd-green); }
+.verdict.warn { background: var(--bd-amber-light); border: 1px solid var(--bd-amber); color: var(--bd-amber-deep); }
+.verdict.bad { background: var(--bd-red-light); border: 1px solid var(--bd-red); color: var(--bd-red); }
+.verdict.info { background: var(--bd-blue-light); border: 1px solid var(--bd-blue); color: var(--bd-blue); }
+
+.data-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 12px; }
+.data-table th { background: var(--bg-page); color: var(--text-primary); font-weight: 600; padding: 9px 10px; border: 1px solid var(--border); text-align: left; }
+.data-table td { padding: 9px 10px; border: 1px solid var(--border); color: var(--text-secondary); line-height: 1.6; }
+.data-table tr.clickable { cursor: pointer; }
+.data-table tr.clickable:hover td { background: var(--bd-blue-light); }
+.data-table td.num { text-align: right; font-variant-numeric: tabular-nums; color: var(--text-primary); font-weight: 600; }
+
+.sec-title { font-size: 14px; font-weight: 700; color: var(--text-primary); margin: 20px 0 8px; padding-left: 9px; border-left: 3px solid var(--bd-red); }
+.sec-title:first-child { margin-top: 0; }
+
+.formula { font-family: var(--font-mono, monospace); background: var(--bg-page); border: 1px solid var(--border-light); border-radius: 8px; padding: 10px 12px; font-size: 12px; color: var(--text-primary); margin: 8px 0; line-height: 1.8; overflow-x: auto; }
+.src-note { font-size: 11px; color: var(--text-tertiary); margin-top: 6px; line-height: 1.7; }
+.src-note b { color: var(--bd-blue); }
+
+.btn-primary { display: inline-flex; align-items: center; gap: 7px; padding: 10px 20px; background: var(--brand-red); color: #fff; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 600; cursor: pointer; font-family: var(--font); }
+.btn-primary:hover { background: var(--brand-red-deep); }
+.btn-primary i { font-size: 14px; }
+
+.wl-chip { display: inline-block; font-size: 11px; padding: 3px 9px; border-radius: 60px; background: var(--bd-blue-light); color: var(--bd-blue); margin: 2px 4px 2px 0; font-weight: 600; }
+
+.warn-bar { display: flex; gap: 10px; padding: 12px 14px; border-radius: 10px; font-size: 12px; line-height: 1.8; margin-bottom: 12px; align-items: flex-start; }
+.warn-bar i { margin-top: 3px; flex-shrink: 0; }
+.warn-bar.info { background: var(--bd-blue-light); border: 1px solid var(--bd-blue); color: var(--bd-blue); }
+.warn-bar.warning { background: var(--bd-amber-light); border: 1px solid var(--bd-amber); color: var(--bd-amber-deep); }
+.warn-bar strong { font-weight: 700; }
+.std-badge { display: inline-block; font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 5px; background: var(--bg-card); border: 1px solid var(--bd-blue); color: var(--bd-blue); margin: 0 2px; }
+
+@media (max-width: 768px) {
+  .scene-grid { grid-template-columns: repeat(2, 1fr); }
+  .tab-nav { overflow-x: auto; }
+  .tab-btn { flex: 0 0 auto; padding: 11px 12px; font-size: 12px; }
+  .tab-panel { padding: 15px; }
+  .form-grid { grid-template-columns: 1fr; gap: 12px; }
+  .result-block .main-value { font-size: 28px; }
+  .data-table { font-size: 11px; }
+  .data-table th, .data-table td { padding: 6px 5px; }
+}
+</style>
+<style>
+@media print {
+  @page { size: A4; margin: 16mm 12mm 18mm 12mm; }
+  body { background: #fff !important; padding: 0 !important; font-size: 11pt; color: #000 !important; }
+  .breadcrumb, .btn-primary, .btn-print, .sheen-footer, .no-print, .no-pr, .form-grid, .scene-grid, .guide { display: none !important; }
+  .tab-panel { display: block !important; border: none !important; padding: 0 0 12pt 0 !important; page-break-inside: avoid; }
+  .app-container { box-shadow: none !important; border: none !important; max-width: 100% !important; padding: 0 !important; }
+}
+</style>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?9b8c3df212619adec1f70f01695f4160";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  if (location.hostname.indexOf("github.io") >= 0) {
+    var hm2 = document.createElement("script");
+    hm2.src = "https://hm.baidu.com/hm.js?5ceec8bd8bf10bd9d1f4ddceaebdae6f";
+    s.parentNode.insertBefore(hm2, s);
+  }
+})();
+</script>
+</head>
+
+<body>
+
+<div class="breadcrumb">
+  <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+  <span> / 围堰有效容积计算</span>
+</div>
+
+<main class="app-container container-query">
+
+  <h1 class="page-title"><i class="fa-solid fa-water" style="color:var(--brand-red)"></i> 围堰有效容积计算</h1>
+  <p class="page-subtitle" style="margin-bottom:16px;">算防火堤/围堰的<strong>有效容积</strong>并与规范下限比对，同时核算应急事故池所需的消防水、泄漏物与雨水容积 — 适用于罐区、装置区、污水处理区</p>
+
+  <div class="warn-bar info no-pr" style="margin-top:0;margin-bottom:14px;">
+    <i class="fa-solid fa-circle-info"></i>
+    <span><strong>本工具依据的现行版标准（2026-10 实证核查）：</strong>
+      <span class="std-badge">GB 50351-2014</span> 储罐区防火堤设计规范（3.2.4 有效容积下限 · 3.2.6 有效容积计算公式 · 3.2.5 堤高；2014-12-01 实施，代替 2005 版）·
+      <span class="std-badge">GB 50160-2008（2018年版）</span> 石油化工企业设计防火标准（6.2.12 防火堤及隔堤有效容积 · 6.2.15 隔堤分隔罐数 · 6.2.17 堤高）·
+      <span class="std-badge">GB 50074-2014</span> 石油库设计规范（6.5.1~6.5.8 防火堤有效容积、堤高、堤距、隔堤）·
+      <span class="std-badge">GB 51283-2020</span> 精细化工企业工程设计防火标准（6.2.9~6.2.11）·
+      <span class="std-badge">GB 50014-2021</span> 室外排水设计标准（4.1.7 雨水量公式 · 表4.1.8-1 径流系数）·
+      <span class="std-badge">GB 50483-2009</span> 石油化工污水处理设计规范（事故池容积）
+    </span>
+  </div>
+
+  <div class="warn-bar warning no-pr">
+    <i class="fa-solid fa-triangle-exclamation"></i>
+    <span><strong>两个最常见的算错点，先看这里：</strong>
+      ① <strong>有效容积 ≠ 堤内几何容积</strong>。公式 <code>V = A·H<sub>j</sub> − (V<sub>1</sub>+V<sub>2</sub>+V<sub>3</sub>+V<sub>4</sub>)</code> 里要扣掉<strong>最大罐基础体积、其他罐的液体与基础体积、堤体与内培土体积、隔堤配管设备构筑物体积</strong>——少扣这一项算出来的容积是虚高的。
+      ② <strong>规范下限分场景</strong>：固定顶罐取<strong>1 个最大罐</strong>，浮顶/内浮顶罐组可取 <strong>1/2</strong>（但全厂浮顶罐组要设事故存液池接住差额）。GB 50074 对地上罐组一律要求 1 个最大罐。
+    </span>
+  </div>
+
+  <div class="guide no-pr">
+    <div class="guide-step"><span class="gs-no">1</span><span>点下面的<b>场景卡</b>，自动跳到对应页签并填好一组真实工况参数</span></div>
+    <span class="guide-arrow"><i class="fa-solid fa-chevron-right"></i></span>
+    <div class="guide-step"><span class="gs-no">2</span><span>第 1 页签算<b>有效容积</b>并反推所需堤高，或直接校核现有堤够不够</span></div>
+    <span class="guide-arrow"><i class="fa-solid fa-chevron-right"></i></span>
+    <div class="guide-step"><span class="gs-no">3</span><span>第 2 页签查<b>规范下限</b>，第 3 页签算<b>事故池</b>，第 4 页签校核堤高与堤距</span></div>
+  </div>
+
+  <div class="scene-grid no-pr" id="sceneGrid"></div>
+
+  <div class="no-pr" style="margin-bottom:14px;">
+    <button class="ex-chip" onclick="bdGloss()" id="glossBtn" style="background:var(--bg-page);color:var(--text-secondary);border:1px solid var(--border);"><i class="fa-solid fa-book-open"></i> 看不懂术语？点这里看白话解释</button>
+    <div class="term-hint" id="glossBox">
+      <b>围堰 / 防火堤</b>：围着储罐或设备砌一圈的不渗漏矮墙，用来在破罐、跑冒滴漏时把液体兜在原地，不让它流到外面或窜进雨水沟。罐区叫「防火堤」，装置/污水/装卸区更多叫「围堰」，作用一样。
+      <br><br>
+      <b>有效容积（V）</b>：堤内<strong>真正能装液体的空间</strong>。不是拿堤长×堤宽×堤高那么一乘就完了——罐体本身占的地方、堤墙本身占的地方都得扣掉，剩下的才算。这个数才是消防验收和环评看的数。
+      <br><br>
+      <b>A·H<sub>j</sub>（毛容积）</b>：由防火堤中心线围成的水平投影面积 × 设计液面高度。这是「算出来的」，不是「有效容积」。
+      <br><br>
+      <b>V<sub>1</sub></b>：堤内<strong>一个最大储罐</strong>在设计液面高度内的基础（露出地面部分）体积。
+      <br><br>
+      <b>V<sub>2</sub></b>：除那一个最大罐以外，<strong>其他所有罐</strong>在设计液面高度内的液体体积 + 基础体积之和。
+      <br><br>
+      <b>V<sub>3</sub></b>：防火堤中心线以内、设计液面高度内的<strong>堤墙体本身 + 内培土</strong>的体积。
+      <br><br>
+      <b>V<sub>4</sub></b>：堤内<strong>隔堤、配管、设备及其他构筑物</strong>在设计液面高度内的体积。
+      <br><br>
+      <b>H<sub>j</sub>（设计液面高度）</b>：堤内允许到的最高液面。注意立式罐组堤顶要比它再高 0.2 m 才是堤顶实际高度。
+      <br><br>
+      <b>隔堤</b>：大堤里再砌的小墙，把不同品种/性质的液体分开装（如甲B类与丙类、水溶性与非水溶性、强氧化剂与可燃液体），防止混装反应。隔堤内有效容积只需 ≥ 该隔堤内最大储罐容积的 <strong>10%</strong>，比主堤宽松得多。
+      <br><br>
+      <b>固定顶罐 / 浮顶（内浮顶）罐</b>：固定顶罐罐顶就是一块固定钢板；浮顶罐罐顶是能随液面升降的浮盘，浮盘坏了等同固定顶。<strong>规范给浮顶罐的容积下限减半</strong>，就是基于浮盘能压住油气、泄漏量小这个物理事实。
+      <br><br>
+      <b>事故存液池 / 应急事故水池</b>：浮顶罐组如果做不到「1 个最大罐」，省下的那部分得有个池子接着，这就是事故存液池。应急事故水池则是全厂级别，接消防水、泄漏物、事故雨水。
+      <br><br>
+      <b>供给强度（L/min·m²）</b>：单位罐表面积每分钟喷多少水。消防冷却水量 = 供给强度 × 冷却面积 × 延续时间 ÷ 1000。
+      <br><br>
+      <b>径流系数（ψ）</b>：下同样大的雨，有多少比例真的流走——剩下的被地面吸收/滞留。混凝土路面 ψ≈0.85~0.95，草地只有 0.10~0.20。
+    </div>
+  </div>
+
+  <div class="tab-nav no-pr">
+    <button class="tab-btn active" onclick="bdSwitch(0)" data-tab="0"><i class="fa-solid fa-calculator"></i> 有效容积计算</button>
+    <button class="tab-btn" onclick="bdSwitch(1)" data-tab="1"><i class="fa-solid fa-scale-balanced"></i> 规范下限校核</button>
+    <button class="tab-btn" onclick="bdSwitch(2)" data-tab="2"><i class="fa-solid fa-trowel-bricks"></i> 事故池容积</button>
+    <button class="tab-btn" onclick="bdSwitch(3)" data-tab="3"><i class="fa-solid fa-ruler-combined"></i> 布置与构造</button>
+    <button class="tab-btn" onclick="bdSwitch(4)" data-tab="4"><i class="fa-solid fa-book"></i> 规范速查</button>
+  </div>
+
+  <!-- ============ 页签 0：有效容积计算 ============ -->
+  <section class="tab-panel active" id="panel0">
+    <div class="sec-title">1. 有效容积计算与反算<span class="wl-chip">GB 50351-2014 3.2.6</span></div>
+
+    <div class="formula">V = A · H<sub>j</sub> − ( V<sub>1</sub> + V<sub>2</sub> + V<sub>3</sub> + V<sub>4</sub> )</div>
+    <div class="src-note">V 有效容积(m³) · A 防火堤中心线围成的水平投影面积(m²) · H<sub>j</sub> 设计液面高度(m) · V<sub>1</sub> 一个最大罐的基础体积 · V<sub>2</sub> 其他罐液体与基础体积之和 · V<sub>3</sub> 堤体与内培土体积 · V<sub>4</sub> 隔堤配管设备构筑物体积</div>
+
+    <div class="form-grid no-pr" style="margin-top:16px;">
+      <div class="form-row">
+        <label>防火堤平面尺寸（由中心线围成的矩形，长 × 宽）</label>
+        <div style="display:flex;gap:8px;">
+          <input type="number" class="form-control" id="fLen" value="60" step="0.1" min="0">
+          <span style="align-self:center;color:var(--text-tertiary);">×</span>
+          <input type="number" class="form-control" id="fWid" value="40" step="0.1" min="0">
+          <span style="align-self:center;color:var(--text-tertiary);">m</span>
+        </div>
+        <div class="hint">按中心线围成的净矩形计算，即堤身中线之间的尺寸。</div>
+      </div>
+      <div class="form-row">
+        <label>设计液面高度 H<sub>j</sub></label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" class="form-control" id="fHj" value="1.8" step="0.05" min="0">
+          <span style="color:var(--text-tertiary);font-size:12px;">m</span>
+        </div>
+        <div class="hint">堤内允许达到的最高液面。堤顶实高应比它再高 0.2 m。</div>
+      </div>
+      <div class="form-row">
+        <label>V<sub>1</sub> 一个最大罐的基础体积（露出地面部分）</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" class="form-control" id="fV1" value="0" step="0.1" min="0">
+          <span style="color:var(--text-tertiary);font-size:12px;">m³</span>
+        </div>
+        <div class="hint">筏基/环形基础的露出部分。筏基础一般取罐径对应的基础体积。</div>
+      </div>
+      <div class="form-row">
+        <label>V<sub>2</sub> 其他罐液体 + 基础体积之和</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" class="form-control" id="fV2" value="0" step="0.1" min="0">
+          <span style="color:var(--text-tertiary);font-size:12px;">m³</span>
+        </div>
+        <div class="hint">除 V<sub>1</sub> 那个最大罐以外的所有罐。罐数多时这项很关键。</div>
+      </div>
+      <div class="form-row">
+        <label>V<sub>3</sub> 堤体 + 内培土体积</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" class="form-control" id="fV3" value="0" step="0.1" min="0">
+          <span style="color:var(--text-tertiary);font-size:12px;">m³</span>
+        </div>
+        <div class="hint">点下方按钮按堤长×堤厚×H<sub>j</sub>×2 自动估算。</div>
+        <button type="button" class="aux-btn" onclick="bdAutoV3()"><i class="fa-solid fa-wand-magic-sparkles"></i> 按堤身估算 V₃</button>
+      </div>
+      <div class="form-row">
+        <label>V<sub>4</sub> 隔堤、配管、设备及构筑物体积</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" class="form-control" id="fV4" value="0" step="0.1" min="0">
+          <span style="color:var(--text-tertiary);font-size:12px;">m³</span>
+        </div>
+        <div class="hint">包括隔堤墙、管廊、泵坑、平台基础等。</div>
+      </div>
+    </div>
+
+    <div class="no-pr" style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn-primary" onclick="bdCalc()"><i class="fa-solid fa-calculator"></i> 计算有效容积</button>
+      <button class="btn-primary" style="background:var(--tech-blue);" onclick="bdSolveH()"><i class="fa-solid fa-arrows-up-down"></i> 反算所需 H<sub>j</sub></button>
+    </div>
+
+    <div id="out0"></div>
+
+    <div class="ex-row no-pr">
+      <span class="ex-label"><i class="fa-solid fa-wand-magic-sparkles"></i> 示例：</span>
+      <button class="ex-chip" onclick="bdEx0(0)">固定顶罐组 60×40×1.8m · 3 座 2000m³</button>
+      <button class="ex-chip" onclick="bdEx0(1)">浮顶罐组 80×50×1.5m · 4 座 5000m³</button>
+      <button class="ex-chip" onclick="bdEx0(2)">把堤加高到 2.2m 能装多少</button>
+      <button class="ex-chip" onclick="bdEx0(3)">扣减项齐全的隔堤罐组</button>
+    </div>
+  </section>
+
+  <!-- ============ 页签 1：规范下限校核 ============ -->
+  <section class="tab-panel" id="panel1">
+    <div class="sec-title">2. 规范下限校核：现有容积够不够<span class="wl-chip">GB 50351-2014 3.2.4 / GB 50160-2008 6.2.12 / GB 50074-2014 6.5.1</span></div>
+
+    <div class="form-grid no-pr">
+      <div class="form-row">
+        <label>适用场景</label>
+        <select class="form-control" id="fScene">
+          <option value="oil-above">地上油罐组（GB 50074-2014 6.5.1 / GB 50351-2014 3.2.4）</option>
+          <option value="fixed">固定顶油罐（GB 50351-2014 3.2.4 1款）</option>
+          <option value="floating">浮顶 / 内浮顶油罐（GB 50351-2014 3.2.4 2款）</option>
+          <option value="mixed">固定顶与浮顶同组（GB 50351-2014 3.2.4 3款 取大值）</option>
+          <option value="petro">石油化工罐组（GB 50160-2008 6.2.12）</option>
+          <option value="fine">精细化工可燃液体（GB 51283-2020 6.2.9）</option>
+          <option value="toxic">毒性液体（GB 50483-2009 5.3.3 围堰）</option>
+        </select>
+        <div class="hint" id="sceneSrc">GB 50074-2014 6.5.1：防火堤内的有效容量，不应小于罐组内一个最大储罐的容量。</div>
+      </div>
+      <div class="form-row">
+        <label>罐组内最大储罐容量 V<sub>max</sub></label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" class="form-control" id="fVmax" value="5000" step="1" min="0">
+          <span style="color:var(--text-tertiary);font-size:12px;">m³</span>
+        </div>
+        <div class="hint">取罐组内公称容量最大的那一座，不是总容量。</div>
+      </div>
+      <div class="form-row" id="rowSecond">
+        <label>次大储罐容量（混组场景用）</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" class="form-control" id="fVsecond" value="3000" step="1" min="0">
+          <span style="color:var(--text-tertiary);font-size:12px;">m³</span>
+        </div>
+        <div class="hint">固定顶与浮顶同组时，分别按两档算再取大值。</div>
+      </div>
+      <div class="form-row">
+        <label>实际有效容积（填第 1 页签算出的值）</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" class="form-control" id="fVreal" value="0" step="0.1" min="0">
+          <span style="color:var(--text-tertiary);font-size:12px;">m³</span>
+        </div>
+        <div class="hint">留 0 则只输出规范下限，不做达标判定。</div>
+      </div>
+    </div>
+
+    <div class="no-pr" style="margin-top:16px;">
+      <button class="btn-primary" onclick="bdCheck()"><i class="fa-solid fa-scale-balanced"></i> 校核规范下限</button>
+    </div>
+
+    <div id="out1"></div>
+
+    <div class="ex-row no-pr">
+      <span class="ex-label"><i class="fa-solid fa-wand-magic-sparkles"></i> 示例：</span>
+      <button class="ex-chip" onclick="bdEx1(0)">GB 50351 固定顶 · 不达标</button>
+      <button class="ex-chip" onclick="bdEx1(1)">GB 50351 浮顶 · 达标（减半）</button>
+      <button class="ex-chip" onclick="bdEx1(2)">固定顶与浮顶混组取大值</button>
+      <button class="ex-chip" onclick="bdEx1(3)">GB 50160 浮顶 + 事故存液池</button>
+    </div>
+  </section>
+
+  <!-- ============ 页签 2：事故池容积 ============ -->
+  <section class="tab-panel" id="panel2">
+    <div class="sec-title">3. 应急事故池 / 事故存液池容积核算<span class="wl-chip">GB 50483-2009 · GB 50160-2008 8.4 · GB 50014-2021 4.1.7</span></div>
+
+    <div class="formula">V<sub>池</sub> = V<sub>泄漏</sub> + V<sub>消防水</sub> + V<sub>雨水</sub> + V<sub>其他</sub> − V<sub>可利用</sub></div>
+    <div class="src-note">「可利用」指罐区防火堤内容积、排水管道在自流进水最高液位以下的容积、现有储存事故排水设施的容积。<b>装置区与罐区事故不作同时发生考虑，取其中的最大值</b>（GB 50483-2009）。</div>
+
+    <div class="sec-title">① 消防冷却水量</div>
+    <div class="formula">V<sub>消防水</sub> = q × A<sub>冷却</sub> × t ÷ 1000　（q L/min·m²，A m²，t h）</div>
+
+    <div class="form-grid no-pr" style="margin-top:12px;">
+      <div class="form-row">
+        <label>冷却对象</label>
+        <select class="form-control" id="fCoolType">
+          <option value="lh">全压力式液化烃储罐（9 L/min·m² · 6 h）</option>
+          <option value="fixed">固定顶罐 着火罐（2.5 L/min·m²）</option>
+          <option value="adj-float">浮顶/内浮顶罐 邻罐（2.0 L/min·m²）</option>
+          <option value="adj-fixed">固定顶罐 邻罐（2.0 L/min·m²）</option>
+          <option value="horiz">卧式罐 着火罐（6 L/min·m² · 按表面积）</option>
+          <option value="horiz-adj">卧式罐 邻罐（3 L/min·m² · 按表面积）</option>
+        </select>
+        <div class="hint" id="coolSrc">GB 50160-2008 8.4.4 / 8.4.5 / 8.4.6 / 8.4.7</div>
+      </div>
+      <div class="form-row">
+        <label>储罐直径 D</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" class="form-control" id="fD" value="20" step="0.1" min="0">
+          <span style="color:var(--text-tertiary);font-size:12px;">m</span>
+        </div>
+        <div class="hint">卧式罐请填长度并在下方把冷却面积改为表面积模式。</div>
+      </div>
+      <div class="form-row">
+        <label>储罐高度 H</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" class="form-control" id="fTankH" value="12" step="0.1" min="0">
+          <span style="color:var(--text-tertiary);font-size:12px;">m</span>
+        </div>
+        <div class="hint">立式罐罐壁高度，用于算罐壁表面积。</div>
+      </div>
+      <div class="form-row">
+        <label>火灾延续时间 t</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" class="form-control" id="fTime" value="4" step="0.5" min="0">
+          <span style="color:var(--text-tertiary);font-size:12px;">h</span>
+        </div>
+        <div class="hint">直径 &gt; 20 m 的固定顶罐与易熔材料内浮顶罐按 6 h；其他可取 4 h。</div>
+      </div>
+      <div class="form-row">
+        <label>参与冷却的罐数 n（着火罐 + 邻罐）</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" class="form-control" id="fTankN" value="1" step="1" min="1">
+          <span style="color:var(--text-tertiary);font-size:12px;">座</span>
+        </div>
+        <div class="hint">按实际参与冷却的罐数计，邻罐一般按最近 3 座控制。</div>
+      </div>
+      <div class="form-row">
+        <label>冷却面积取值方式</label>
+        <select class="form-control" id="fAreaMode">
+          <option value="half">不小于罐壁表面积的 1/2</option>
+          <option value="full">按实际冷却面积（全表面积）</option>
+          <option value="shell">按罐壁全部表面积（液化烃全压力罐、卧式罐）</option>
+        </select>
+        <div class="hint">GB 50160-2008 8.4.3 2款：按实际冷却面积计算，但不得小于罐壁表面积的 1/2。全压力式液化烃罐与卧式罐按 8.4.4 / 8.4.6 直接取罐表面积。</div>
+      </div>
+    </div>
+
+    <div class="sec-title">② 泄漏物 + 雨水 + 扣减</div>
+    <div class="form-grid no-pr">
+      <div class="form-row">
+        <label>事故泄漏物料量</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" class="form-control" id="fLeak" value="5000" step="1" min="0">
+          <span style="color:var(--text-tertiary);font-size:12px;">m³</span>
+        </div>
+        <div class="hint">储罐区按最大一台储罐容积计（保守）；装置区按管道+容器+中间罐的容积或物料衡算。</div>
+      </div>
+      <div class="form-row">
+        <label>设计暴雨强度 q</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" class="form-control" id="fRain" value="215.7" step="0.1" min="0">
+          <span style="color:var(--text-tertiary);font-size:12px;">L/(s·hm²)</span>
+        </div>
+        <div class="hint">用当地暴雨强度公式算：q = A·(1+C·lgP)/(t+b)<sup>n</sup>，P 为设计重现期（年），t 为集水历时（min）。</div>
+      </div>
+      <div class="form-row">
+        <label>汇水面积 F</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" class="form-control" id="fF" value="0.5" step="0.01" min="0">
+          <span style="color:var(--text-tertiary);font-size:12px;">hm²</span>
+        </div>
+        <div class="hint">1 hm² = 10000 m²。事故时只计能进入事故水收集系统的面积。</div>
+      </div>
+      <div class="form-row">
+        <label>综合径流系数 ψ</label>
+        <select class="form-control" id="fPsi">
+          <option value="0.90">0.90 混凝土/沥青罐区</option>
+          <option value="0.70">0.70 厂区综合（生产区+道路）</option>
+          <option value="0.60">0.60 罐区综合</option>
+          <option value="0.45">0.45 装置区综合</option>
+          <option value="0.30">0.30 半硬化地面</option>
+        </select>
+        <div class="hint">GB 50014-2021 表4.1.8-1：混凝土/沥青路面 0.85~0.95；碎石 0.40~0.65；绿地 0.10~0.20。</div>
+      </div>
+      <div class="form-row">
+        <label>雨水设计历时 t<sub>雨</sub></label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" class="form-control" id="fRainT" value="120" step="5" min="0">
+          <span style="color:var(--text-tertiary);font-size:12px;">min</span>
+        </div>
+        <div class="hint"><strong>事故雨</strong>按事故消防时间取（参照 GB 50160 一般 6 h、Q/SY 1190 取 6~10 h），不是初期雨水的 15 min。</div>
+      </div>
+      <div class="form-row">
+        <label>可利用容积（堤内容积 + 现有设施）</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" class="form-control" id="fAvail" value="0" step="1" min="0">
+          <span style="color:var(--text-tertiary);font-size:12px;">m³</span>
+        </div>
+        <div class="hint">可填第 1 页签算出的堤内有效容积。</div>
+      </div>
+    </div>
+
+    <div class="no-pr" style="margin-top:16px;">
+      <button class="btn-primary" onclick="bdPool()"><i class="fa-solid fa-trowel-bricks"></i> 核算事故池容积</button>
+    </div>
+
+    <div id="out2"></div>
+
+    <div class="ex-row no-pr">
+      <span class="ex-label"><i class="fa-solid fa-wand-magic-sparkles"></i> 示例：</span>
+      <button class="ex-chip" onclick="bdEx2(0)">D=22m 固定顶罐 着火罐 6h</button>
+      <button class="ex-chip" onclick="bdEx2(1)">液化烃全压力罐 9 L/min·m²</button>
+      <button class="ex-chip" onclick="bdEx2(2)">装置区（不叠加罐区）+ 事故雨</button>
+      <button class="ex-chip" onclick="bdEx2(3)">卧式罐按表面积冷却</button>
+    </div>
+  </section>
+
+  <!-- ============ 页签 3：布置与构造 ============ -->
+  <section class="tab-panel" id="panel3">
+    <div class="sec-title">4. 堤高、堤距与隔堤校核<span class="wl-chip">GB 50351-2014 3.2.5 / GB 50160-2008 6.2.13·6.2.17 / GB 50074-2014 6.5.2·6.5.3</span></div>
+
+    <div class="form-grid no-pr">
+      <div class="form-row">
+        <label>储罐型式</label>
+        <select class="form-control" id="fTankForm">
+          <option value="vert">立式储罐</option>
+          <option value="horiz">卧式储罐</option>
+          <option value="high">高架立式储罐（环梁顶面到场内地面 &gt;1.5 m）</option>
+        </select>
+        <div class="hint">影响堤距要求与堤高下限。</div>
+      </div>
+      <div class="form-row">
+        <label>计算所需堤高 H<sub>需</sub></label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" class="form-control" id="fNeedH" value="2.0" step="0.05" min="0">
+          <span style="color:var(--text-tertiary);font-size:12px;">m</span>
+        </div>
+        <div class="hint">满足容积要求所需的堤内高度。第 1 页签反算 H<sub>j</sub> 后再加 0.2 m。</div>
+      </div>
+      <div class="form-row">
+        <label>罐壁高度</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" class="form-control" id="fWallH" value="12" step="0.1" min="0">
+          <span style="color:var(--text-tertiary);font-size:12px;">m</span>
+        </div>
+        <div class="hint">立式罐的罐壁高度，用于算堤距下限。</div>
+      </div>
+      <div class="form-row">
+        <label>堤高上限适用口径</label>
+        <select class="form-control" id="fHeightStd">
+          <option value="50160">GB 50160 / GB 51283：堤高 ≤ 2.2 m（堤外 3 m 范围设计地坪起算）</option>
+          <option value="50074">GB 50074：高于堤外地坪或消防车道路面 ≤ 3.2 m</option>
+        </select>
+        <div class="hint">两本标准上限不同，<strong>须按项目适用标准选定，不可取宽</strong>。石化/精细化工项目走 GB 50160 或 GB 51283（2.2 m），石油库走 GB 50074（3.2 m）。</div>
+      </div>
+      <div class="form-row">
+        <label>堤外 3 m 范围内设计地坪标高差</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" class="form-control" id="fOutDrop" value="0" step="0.05" min="0">
+          <span style="color:var(--text-tertiary);font-size:12px;">m</span>
+        </div>
+        <div class="hint">堤内设计地坪高于堤外的高度。堤内地面宜低于堤外。</div>
+      </div>
+      <div class="form-row">
+        <label>实际罐壁至堤内堤脚线距离</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" class="form-control" id="fGap" value="6" step="0.1" min="0">
+          <span style="color:var(--text-tertiary);font-size:12px;">m</span>
+        </div>
+        <div class="hint">按罐壁最近处量测。</div>
+      </div>
+      <div class="form-row">
+        <label>单罐容量（判隔堤罐数）</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" class="form-control" id="fSingle" value="3000" step="1" min="0">
+          <span style="color:var(--text-tertiary);font-size:12px;">m³</span>
+        </div>
+        <div class="hint">用于套 GB 50160-2008 6.2.15 隔堤分隔罐数。</div>
+      </div>
+    </div>
+
+    <div class="no-pr" style="margin-top:16px;">
+      <button class="btn-primary" onclick="bdLayout()"><i class="fa-solid fa-ruler-combined"></i> 校核布置与构造</button>
+    </div>
+
+    <div id="out3"></div>
+
+    <div class="sec-title">隔堤分隔罐数要求<span class="wl-chip">GB 50160-2008 6.2.15</span></div>
+    <table class="data-table" id="tblSub">
+      <thead><tr><th>单罐容积</th><th>一个隔堤内最多储罐数</th><th>依据</th></tr></thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="ex-row no-pr">
+      <span class="ex-label"><i class="fa-solid fa-wand-magic-sparkles"></i> 示例：</span>
+      <button class="ex-chip" onclick="bdEx3(0)">立式罐 堤高 2.0m 全部合规</button>
+      <button class="ex-chip" onclick="bdEx3(1)">堤高超上限（外侧 &gt;3.2m）</button>
+      <button class="ex-chip" onclick="bdEx3(2)">堤距不足（小于罐壁高一半）</button>
+      <button class="ex-chip" onclick="bdEx3(3)">卧式罐 堤高 0.4m 不达标</button>
+    </div>
+  </section>
+
+  <!-- ============ 页签 4：规范速查 ============ -->
+  <section class="tab-panel" id="panel4">
+    <div class="sec-title">5. 有效容积下限速查表</div>
+    <table class="data-table" id="tblLimit">
+      <thead><tr><th>场景</th><th>有效容积下限</th><th>标准依据</th></tr></thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="sec-title">6. 堤高与堤距速查表</div>
+    <table class="data-table" id="tblHeight">
+      <thead><tr><th>项目</th><th>要求</th><th>标准依据</th></tr></thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="sec-title">7. 两种口径的区别（GB 50351 与 GB 50160）</div>
+    <div class="warn-bar info no-pr" style="margin-top:4px;">
+      <i class="fa-solid fa-circle-info"></i>
+      <span><strong>这是最容易搞混的一处：</strong><br>
+      · <strong>GB 50351-2014 3.2.4</strong>（储罐区防火堤设计规范）：<strong>固定顶罐取 1 个最大罐；浮顶/内浮顶罐取 1/2</strong>；混组取两者较大值。<br>
+      · <strong>GB 50160-2008 6.2.12</strong>（石油化工企业）：<strong>防火堤内有效容积不应小于 1 个最大储罐容积</strong>；<strong>浮顶、内浮顶罐组不能满足时</strong>，应设<strong>事故存液池</strong>存剩余部分，但<strong>罐组防火堤内有效容积仍不应小于最大储罐容积的一半</strong>。<br>
+      · <strong>GB 50074-2014 6.5.1</strong>（石油库）：<strong>一律不应小于罐组内一个最大储罐的容量</strong>，未对浮顶罐减半。<br>
+      → <strong>三本标准对同一座浮顶罐可能给出三个不同下限</strong>。本工具按你选的场景取对应条款，不混用。<br>
+      · <strong>隔堤</strong>三条标准一致：隔堤内有效容积 <strong>≥ 该隔堤内 1 个最大储罐容积的 10%</strong>。
+    </span>
+    </div>
+
+    <div class="sec-title">8. 常见错误纠正</div>
+    <table class="data-table" id="tblTrap">
+      <thead><tr><th>✖ 常见错误说法</th><th>✔ 规范实际要求</th><th>依据</th></tr></thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="sec-title">9. 免责与数据来源</div>
+    <div class="warn-bar warning no-pr">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <span>本页公式与数值均取自上述<strong>现行版</strong>国家标准条文与条文说明，未收录标准全文（受版权保护）。本页输出为<strong>设计阶段校核工具</strong>，不替代正式设计文件：堤体结构强度、稳定性验算（土压力、地震作用、基底摩擦系数，见 GB 50351-2014 第5章与附录A/B）、防渗做法、排水切换阀与雨水截油设施，均须由有资质的设计单位完成并出具计算书。标准修订后请以最新版本为准。</span>
+    </div>
+  </section>
+
+</main>
+
+<footer class="sheen-footer">
+  <img src="../assets/sheen-logo.png" alt="SHEEN Toolbox" class="sheen-logo-sm"> &nbsp;<strong>SHEEN Toolbox</strong> · 围堰有效容积计算
+</footer>
+
+<div class="print-time" id="printTime"></div>
+
+<script>
+(function() {
+'use strict';
+
+document.getElementById('printTime').textContent =
+  new Date(Date.now() + 8 * 3600000).toISOString().replace('T',' ').slice(0,16);
+
+// ===== 场景定义（规范下限校核）=====
+// factor = 相对最大储罐容积的倍数；src 为条文出处原文摘要
+var SCENES_LIM = {
+  'oil-above':  { f: 1.00, src: 'GB 50074-2014 6.5.1：防火堤内的有效容量，不应小于罐组内一个最大储罐的容量。GB 50351-2014 3.2.4 同要求。' },
+  'fixed':      { f: 1.00, src: 'GB 50351-2014 3.2.4 第1款：固定顶油罐，不应小于油罐组内一个最大油罐的容量。' },
+  'floating':   { f: 0.50, src: 'GB 50351-2014 3.2.4 第2款：浮顶油罐或内浮顶油罐，不应小于油罐组内一个最大油罐容量的一半。' },
+  'mixed':      { f: null,  src: 'GB 50351-2014 3.2.4 第3款：固定顶油罐与浮顶油罐或内浮顶油罐同组布置时，应取分别按第1、2款规定的计算值中的较大值。' },
+  'petro':      { f: 1.00, src: 'GB 50160-2008 6.2.12 第1款：防火堤内的有效容积不应小于罐组内1个最大储罐的容积；浮顶、内浮顶罐组不能满足此要求时应设置事故存液池储存剩余部分，但罐组防火堤内的有效容积不应小于罐组内1个最大储罐容积的一半。' },
+  'fine':       { f: 1.00, src: 'GB 51283-2020 6.2.9：可燃液体储罐（组）应设防火堤。防火堤内有效容积不应小于其中最大储罐的容积。' },
+  'toxic':      { f: 1.00, src: 'GB 50483-2009 5.3.3：毒性液体储罐周围应设围堰，围堰内的有效容积不应小于罐组内1个最大储罐的容积；当浮顶、内浮顶罐组不能满足此要求时，应设置事故集液池储存剩余部分，但罐组围堰内的有效容积不应小于罐组内1个最大储罐容积的一半。' }
+};
+
+// ===== 消防冷却水（GB 50160-2008 8.4）=====
+// q: L/min·m²；defTime: 默认延续时间 h；areaMode: 'half'|'full'|'shell'
+var COOL = {
+  'lh':        { q: 9.0, defTime: 6,   areaMode: 'shell', src: 'GB 50160-2008 8.4.4：全压力式液化烃储罐消防冷却水供给强度不应小于 9 L/(min·m²)，按罐壁表面积计算；延续时间 6 h。' },
+  'fixed':     { q: 2.5, defTime: 4,   areaMode: 'half', src: 'GB 50160-2008 8.4.3：固定顶储罐消防冷却水供给强度不应小于 2.5 L/(min·m²)，冷却面积按实际冷却面积计算但不得小于罐壁表面积的 1/2。' },
+  'adj-float': { q: 2.0, defTime: 4,   areaMode: 'half', src: 'GB 50160-2008 8.4.3：浮顶储罐和内浮顶储罐邻罐消防冷却水供给强度不应小于 2.0 L/(min·m²)。' },
+  'adj-fixed': { q: 2.0, defTime: 4,   areaMode: 'half', src: 'GB 50160-2008 8.4.3：邻近罐消防冷却水供给强度不应小于 2.0 L/(min·m²)（相邻罐）。' },
+  'horiz':     { q: 6.0, defTime: 4,   areaMode: 'shell', src: 'GB 50160-2008 8.4.6：可燃液体地上卧式罐宜采用移动式水枪冷却，冷却面积应按罐表面积计算，着火罐供水强度不应小于 6 L/(min·m²)。' },
+  'horiz-adj': { q: 3.0, defTime: 4,   areaMode: 'shell', src: 'GB 50160-2008 8.4.6：卧式罐邻近罐供水强度不应小于 3 L/(min·m²)。' }
+};
+
+// 立式罐壁表面积：侧面积 + 顶面积（GB 50160 8.4.3 按罐壁表面积）
+function shellArea(D, H) {
+  return Math.PI * D * H + Math.PI * D * D / 4;
+}
+
+// ===== 隔堤分隔罐数（GB 50160-2008 6.2.15）=====
+var SUB_RULES = [
+  { max: 5000,   n: '储罐容积之和 ≤ 20000 m³', key: 'sum', src: 'GB 50160-2008 6.2.15 第1款：单罐容积小于或等于 5000 m³ 时，隔堤所分隔的储罐容积之和不应大于 20000 m³。' },
+  { max: 20000,  n: '不应超过 4 个',          src: 'GB 50160-2008 6.2.15 第2款：单罐容积大于 5000 m³ 至 20000 m³ 时，隔堤内的储罐不应超过 4 个。' },
+  { max: 50000,  n: '不应超过 2 个',          src: 'GB 50160-2008 6.2.15 第3款：单罐容积大于 20000 m³ 至 50000 m³ 时，隔堤内的储罐不应超过 2 个。' },
+  { max: 1e12,   n: '每 1 个一隔',            src: 'GB 50160-2008 6.2.15 第4款：单罐容积大于 50000 m³ 时，应每 1 个一隔。' }
+];
+
+// ===== 规范速查表数据 =====
+var LIMIT_ROWS = [
+  ['地上油罐组（GB 50074 / GB 50351）', '≥ 1 个最大储罐容量', 'GB 50074-2014 6.5.1；GB 50351-2014 3.2.4'],
+  ['固定顶油罐组', '≥ 1 个最大油罐容量', 'GB 50351-2014 3.2.4 第1款'],
+  ['浮顶 / 内浮顶油罐组', '≥ 1 个最大油罐容量的 1/2', 'GB 50351-2014 3.2.4 第2款'],
+  ['固定顶与浮顶同组', '取两档计算值中的较大值', 'GB 50351-2014 3.2.4 第3款'],
+  ['覆土油罐', '同固定顶/浮顶口径，但罐容量按高出地面部分计', 'GB 50351-2014 3.2.4 第4款'],
+  ['石油化工罐组', '≥ 1 个最大储罐容积；浮顶/内浮顶不足时设事故存液池，堤内仍 ≥ 1/2', 'GB 50160-2008 6.2.12 第1款'],
+  ['精细化工可燃液体', '≥ 其中最大储罐的容积', 'GB 51283-2020 6.2.9'],
+  ['毒性液体围堰', '≥ 罐组内 1 个最大储罐容积；浮顶罐组不足时 ≥ 1/2 并设事故集液池', 'GB 50483-2009 5.3.3'],
+  ['隔堤内', '≥ 该隔堤内 1 个最大储罐容积的 10%', 'GB 50160-2008 6.2.12 第2款；GB 50074-2014 6.5.8；GB 51283-2020 6.2.10'],
+  ['沸溢性液体隔堤内', '储罐数量不应多于 2 座', 'GB 50074-2014 6.5.8 第3款；GB 51283-2020 6.2.10 第6项']
+];
+
+var HEIGHT_ROWS = [
+  ['立式储罐组堤顶高出计算液面', '≥ 0.2 m', 'GB 50351-2014 3.2.5；GB 50074-2014 6.5.3'],
+  ['立式储罐堤高（堤内设计地坪起算）', '≥ 1.0 m', 'GB 50351-2014 3.2.5；GB 50074-2014 6.5.3；GB 51283-2020 6.2.11'],
+  ['立式储罐堤高（堤外地坪/消防道路路面起算）', '≤ 2.2 m（GB 50160/GB 51283）；GB 50074 以不高于 3.2 m 控制', 'GB 50160-2008 6.2.17；GB 50074-2014 6.5.3'],
+  ['卧式储罐堤高', '≥ 0.5 m', 'GB 50351-2014 3.2.5；GB 50074-2014 6.5.3；GB 51283-2020 6.2.11'],
+  ['立式储罐组内隔堤高度', '≥ 0.5 m（宜 0.5~0.8 m）', 'GB 50160-2008 6.2.17 第3款；GB 51283-2020 6.2.11 第3项'],
+  ['卧式储罐组内隔堤高度', '≥ 0.3 m', 'GB 50160-2008 6.2.17 第3款；GB 51283-2020 6.2.11 第3项'],
+  ['立式储罐罐壁至堤内堤脚线距离', '≥ 罐壁高度的 1/2', 'GB 50351-2014 3.2.3；GB 50074-2014 6.5.2；GB 50160-2008 6.2.13'],
+  ['卧式储罐罐壁至堤内堤脚线距离', '≥ 3 m', 'GB 50351-2014 3.2.3；GB 50074-2014 6.5.2；GB 50160-2008 6.2.13'],
+  ['依山储罐利用山体兼作防火堤', '罐壁至山体距离最小可为 1.5 m', 'GB 50074-2014 6.5.2'],
+  ['土筑防火堤堤顶宽度', '≥ 0.5 m', 'GB 50074-2014 6.5.4'],
+  ['防火堤耐火极限', '≥ 5.5 h', 'GB 50074-2014 6.5.5'],
+  ['人行台阶/坡道间距', '不宜大于 60 m', 'GB 50074-2014 6.5.7；GB 51283-2020 6.2.11 第6项'],
+  ['相邻罐组防火堤外堤脚线之间', '≥ 7 m 消防空地', 'GB 50160-2008 6.2.14；GB 51283-2020 6.2.13'],
+  ['堤内地面坡度', '宜 0.5%（坡向排水沟）', 'GB 50351-2014 3.2.8；GB 50074-2014 6.5.7']
+];
+
+var TRAP_ROWS = [
+  ['「有效容积 = 堤长×堤宽×堤高」', '有效容积须扣掉 V₁~V₄ 四项（最大罐基础、其他罐、堤体与培土、隔堤配管设备构筑物）', 'GB 50351-2014 3.2.6'],
+  ['「浮顶罐也能按 1 个最大罐算，三本标准都一样」', 'GB 50351 给浮顶罐减半、GB 50160/GB 50074 未减半，须按项目适用标准选定，不可套用', 'GB 50351-2014 3.2.4；GB 50160-2008 6.2.12；GB 50074-2014 6.5.1'],
+  ['「隔堤内也要装下一个最大罐」', '隔堤内仅需 ≥ 该隔堤内最大储罐容积的 10%，与主堤要求差 10 倍', 'GB 50160-2008 6.2.12 第2款'],
+  ['「堤高可以做到 5 m 以内方便收容更多液体」', 'GB 50160/GB 51283 立式罐堤高 ≤ 2.2 m（堤外 3 m 范围地坪起算）；GB 50074 控制为高于堤外地坪或消防道路路面不大于 3.2 m', 'GB 50160-2008 6.2.17；GB 50074-2014 6.5.3'],
+  ['「事故雨水按初期雨水 15 min 算」', '事故时降水量按事故消防时间（参照 GB 50160 一般 6 h）确定，与初期雨水（15 min）是两个不同概念', 'GB 50483-2009；HJ 77 事故水收集要求'],
+  ['「装置区和罐区的水量要加起来」', '计算事故废水量时，装置区或贮罐区事故不作同时发生考虑，取其中的最大值', 'GB 50483-2009'],
+  ['「浅盘/易熔材料内浮顶罐可以按浮顶算」', '浮盘用易熔材料制作的内浮顶罐着火时浮盘易被破坏，应按固定顶储罐考虑', 'GB 50160-2008 8.4.7；GB 50351-2014 3.2.1 注']
+];
+
+// ===== 渲染静态表 =====
+function renderTables() {
+  var t1 = document.querySelector('#tblLimit tbody');
+  t1.innerHTML = LIMIT_ROWS.map(function(r) {
+    return '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td><td style="font-size:11px;">' + r[2] + '</td></tr>';
+  }).join('');
+
+  var t2 = document.querySelector('#tblHeight tbody');
+  t2.innerHTML = HEIGHT_ROWS.map(function(r) {
+    return '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td><td style="font-size:11px;">' + r[2] + '</td></tr>';
+  }).join('');
+
+  var t3 = document.querySelector('#tblTrap tbody');
+  t3.innerHTML = TRAP_ROWS.map(function(r) {
+    return '<tr><td style="color:var(--brand-red);">' + r[0] + '</td><td>' + r[1] + '</td><td style="font-size:11px;">' + r[2] + '</td></tr>';
+  }).join('');
+
+  var t4 = document.querySelector('#tblSub tbody');
+  t4.innerHTML = SUB_RULES.slice(0, 4).map(function(r) {
+    var label = r.max >= 1e12 ? '＞ 50000 m³' : (r.max === 5000 ? '≤ 5000 m³' : (r.max === 20000 ? '5000 ~ 20000 m³' : '20000 ~ 50000 m³'));
+    return '<tr><td>' + label + '</td><td>' + r.n + '</td><td style="font-size:11px;">' + r.src + '</td></tr>';
+  }).join('') + '<tr><td>沸溢性液体</td><td>不应多于 2 座</td><td style="font-size:11px;">GB 50160-2008 6.2.15 第5款</td></tr>';
+}
+
+// ===== 场景卡 =====
+var SCENES = [
+  { icon:'fa-solid fa-oil-well', title:'固定顶罐组围堰够不够', desc:'按 GB 50351 扣减项算有效容积', tab:0, ex:0 },
+  { icon:'fa-solid fa-ship',     title:'浮顶罐组 / 事故存液池', desc:'减半口径 + 差额池容', tab:1, ex:1 },
+  { icon:'fa-solid fa-fire-extinguisher', title:'应急事故池要多大', desc:'消防水+泄漏+事故雨', tab:2, ex:0 },
+  { icon:'fa-solid fa-trowel-bricks', title:'堤高与堤距是否合规', desc:'0.2m 超高 / 罐壁高一半', tab:3, ex:0 }
+];
+
+function renderScenes() {
+  document.getElementById('sceneGrid').innerHTML = SCENES.map(function(s, i) {
+    return '<button class="scene-card" onclick="bdScene(' + i + ')"><i class="fa-solid ' + s.icon + '"></i><b>' + s.title + '</b><span>' + s.desc + '</span></button>';
+  }).join('');
+}
+
+window.bdScene = function(i) {
+  var s = SCENES[i];
+  bdSwitch(s.tab);
+  var run = { 0: bdEx0, 1: bdEx1, 2: bdEx2, 3: bdEx3 };
+  // 等面板切换完成（active class 生效）再跑示例，否则结果区写进隐藏面板
+  setTimeout(function() { if (run[s.tab]) run[s.tab](s.ex); }, 80);
+  document.getElementById('panel' + s.tab).scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+window.bdGloss = function() {
+  document.getElementById('glossBox').classList.toggle('on');
+};
+
+function $(id) { return document.getElementById(id); }
+function num(id) { var v = parseFloat($(id).value); return isNaN(v) ? 0 : v; }
+function setV(id, v) { $(id).value = v; }
+function fmt(v, d) { return (isFinite(v) ? v.toFixed(d === undefined ? 1 : d) : '—'); }
+
+window.bdSwitch = function(n) {
+  document.querySelectorAll('.tab-btn').forEach(function(b, i) { b.classList.toggle('active', i === n); });
+  document.querySelectorAll('.tab-panel').forEach(function(p, i) { p.classList.toggle('active', i === n); });
+};
+
+// ============ 页签 0 ============
+window.bdAutoV3 = function() {
+  var L = num('fLen'), W = num('fWid'), Hj = num('fHj');
+  var t = 0.4; // 取 400mm 常见钢筋混凝土/浆砌堤厚估算
+  var v3 = (L + W) * 2 * t * Hj + 0;
+  setV('fV3', Math.round(v3 * 10) / 10);
+  bdNote0('已按堤厚 400 mm 估算 V₃ ≈ ' + fmt(v3, 1) + ' m³（堤长 ' + L + ' m × 堤宽 ' + W + ' m）。实际堤体厚度须按结构设计取值，本估算仅用于快速估算。');
+};
+
+function bdNote0(text) {
+  var el = $('note0');
+  if (!el) return;
+  if (el.innerHTML.indexOf('fa-wand-magic-sparkles') >= 0) return;
+  el.innerHTML += '<br><span style="color:var(--tech-blue);font-weight:600;"><i class="fa-solid fa-wand-magic-sparkles"></i> ' + text + '</span>';
+}
+
+window.bdCalc = function() {
+  var L = num('fLen'), W = num('fWid'), Hj = num('fHj');
+  var V1 = num('fV1'), V2 = num('fV2'), V3 = num('fV3'), V4 = num('fV4');
+  var A = L * W;
+  var gross = A * Hj;
+  var deduct = V1 + V2 + V3 + V4;
+  var net = gross - deduct;
+
+  var h = '';
+  h += '<div class="result-block no-pr">';
+  h += '<div style="font-size:12px;color:var(--text-secondary);">有效容积（扣减后）</div>';
+  h += '<div class="main-value">' + fmt(net, 1) + ' <span class="unit">m³</span></div>';
+  h += '<div class="kv-list">';
+  h += '<div class="kv"><div class="k">毛容积 A·H<sub>j</sub></div><div class="v">' + fmt(gross, 1) + ' m³</div></div>';
+  h += '<div class="kv"><div class="k">扣减量 Σ(V₁+V₂+V₃+V₄)</div><div class="v">' + fmt(deduct, 1) + ' m³</div></div>';
+  h += '<div class="kv"><div class="k">中心线投影面积 A</div><div class="v">' + fmt(A, 1) + ' m²</div></div>';
+  h += '<div class="kv"><div class="k">有效容积占毛容积比</div><div class="v">' + fmt(gross > 0 ? net / gross * 100 : 0, 1) + ' %</div></div>';
+  h += '</div>';
+  h += '<div class="src-note">公式出处：<b>GB 50351-2014 3.2.6</b>　V = A·H<sub>j</sub> − (V₁ + V₂ + V₃ + V₄)</div>';
+  h += '</div>';
+
+  if (net <= 0) {
+    h += '<div class="verdict bad on"><i class="fa-solid fa-circle-xmark"></i> <b>有效容积 ≤ 0</b>：扣减项之和已超过或等于毛容积，说明这个平面上塞不下这么多罐／构筑物，或堤体太厚。请检查 V₂（其他罐液体+基础）与 V₃（堤体与培土）是否填得过大。</div>';
+  } else if (deduct > gross * 0.45) {
+    h += '<div class="verdict warn on"><i class="fa-solid fa-triangle-exclamation"></i> <b>扣减量偏大</b>（占毛容积 ' + fmt(deduct / gross * 100, 0) + '%）：常见于罐多、罐位密或堤体过厚。若要达到同等有效容积，要么放大平面，要么加高堤——但加高受 GB 50160/GB 50074 堤高上限约束（立式罐 ≤ 2.2 m / ≤ 3.2 m），不能无限制加。</div>';
+  } else {
+    h += '<div class="verdict ok on"><i class="fa-solid fa-circle-check"></i> <b>几何容积自洽</b>：扣减后仍有正余量。把这个数拿到第 2 页签与规范下限比对，才能得出是否达标的结论。</div>';
+  }
+
+  h += '<div id="note0" class="src-note"></div>';
+  $('out0').innerHTML = h;
+};
+
+window.bdSolveH = function() {
+  var L = num('fLen'), W = num('fWid');
+  var V1 = num('fV1'), V2 = num('fV2'), V3 = num('fV3'), V4 = num('fV4');
+  var A = L * W;
+  if (A <= 0) { $('out0').innerHTML = '<div class="verdict bad on"><i class="fa-solid fa-circle-xmark"></i> 平面面积必须大于 0。</div>'; return; }
+  var deduct = V1 + V2 + V3 + V4;
+  var Hj = deduct / A;
+  var wall = Hj + 0.2;
+
+  var h = '';
+  h += '<div class="result-block no-pr">';
+  h += '<div style="font-size:12px;color:var(--text-secondary);">达到上述有效容积所需的设计液面高度</div>';
+  h += '<div class="main-value">' + fmt(Hj, 3) + ' <span class="unit">m</span></div>';
+  h += '<div class="kv-list">';
+  h += '<div class="kv"><div class="k">堤顶实高（= H<sub>j</sub> + 0.2 m）</div><div class="v">' + fmt(wall, 3) + ' m</div></div>';
+  h += '<div class="kv"><div class="k">扣减量 Σ(V₁~V₄)</div><div class="v">' + fmt(deduct, 1) + ' m³</div></div>';
+  h += '<div class="kv"><div class="k">当前填入的 H<sub>j</sub></div><div class="v">' + fmt(num('fHj'), 3) + ' m</div></div>';
+  h += '</div>';
+  h += '<div class="src-note">反算原理：令 V = 0 → H<sub>j</sub> = (V₁+V₂+V₃+V₄) ÷ A。堤顶实高另加 0.2 m 超高，依据 <b>GB 50351-2014 3.2.5</b>。</div>';
+  h += '</div>';
+
+  var tooHigh = wall > 2.2;
+  if (tooHigh) {
+    h += '<div class="verdict bad on"><i class="fa-solid fa-circle-xmark"></i> <b>所需堤顶实高 ' + fmt(wall, 2) + ' m 已超过 2.2 m 上限</b>（GB 50160-2008 6.2.17 / GB 51283-2020 6.2.11 以堤外 3 m 范围设计地坪起算；GB 50074-2014 6.5.3 控制为高于堤外地坪或消防车道路面不大于 3.2 m）。<b>不能靠加高解决</b>，只能：① 放大防火堤平面尺寸；② 减少同堤罐数或把大罐拆到另一个罐组；③ 核对 V₂/V₃ 是否填得过大（是否漏扣或重复扣）。</div>';
+  } else if (wall < 1.0) {
+    h += '<div class="verdict warn on"><i class="fa-solid fa-triangle-exclamation"></i> <b>所需堤顶实高 ' + fmt(wall, 2) + ' m 虽在 2.2 m 上限内，但低于 1.0 m 下限</b>（GB 50351-2014 3.2.5 立式罐堤高 ≥1.0 m）。规范是<strong>下限与上限同时约束</strong>：堤高不能为了多装液体无限加高，低于 1.0 m 也挡不住泡沫喷溅，实际按 1.0~2.2 m 取值。</div>';
+  } else {
+    h += '<div class="verdict ok on"><i class="fa-solid fa-circle-check"></i> <b>所需堤顶实高 ' + fmt(wall, 2) + ' m 落在 1.0 ~ 2.2 m 区间内</b>，满足立式储罐防火堤高度要求。把这个 H<sub>j</sub> 填回上方输入框，再到第 3 页签校核堤距与隔堤。</div>';
+  }
+
+  h += '<div id="note0" class="src-note"></div>';
+  $('out0').innerHTML = h;
+};
+
+// ============ 页签 1 ============
+$('fScene') && $('fScene').addEventListener('change', function() {
+  var sc = SCENES_LIM[this.value];
+  $('sceneSrc').innerHTML = sc ? sc.src : '';
+  $('rowSecond').style.display = (this.value === 'mixed') ? '' : 'none';
+});
+
+window.bdCheck = function() {
+  var key = $('fScene').value;
+  var sc = SCENES_LIM[key];
+  if (!sc) return;
+  $('sceneSrc').innerHTML = sc.src;
+  var Vmax = num('fVmax'), Vsecond = num('fVsecond'), Vreal = num('fVreal');
+
+  var need, basis;
+  if (sc.f === null) {
+    need = Math.max(Vmax, Vsecond * 0.5);
+    basis = '固定顶按 1×' + fmt(Vmax, 0) + ' m³，浮顶/内浮顶按 0.5×' + fmt(Vsecond, 0) + ' m³，取较大值';
+  } else {
+    need = Vmax * sc.f;
+    basis = (sc.f === 0.5 ? '0.5' : (sc.f === 1 ? '1' : fmt(sc.f, 2))) + ' × 最大储罐容积 ' + fmt(Vmax, 0) + ' m³';
+  }
+  var gap = need - Vreal;
+
+  var h = '';
+  h += '<div class="result-block no-pr">';
+  h += '<div style="font-size:12px;color:var(--text-secondary);">规范要求的有效容积下限</div>';
+  h += '<div class="main-value">' + fmt(need, 1) + ' <span class="unit">m³</span></div>';
+  if (sc.f === 0.5) {
+    h += '<div class="verdict info on" style="margin-top:12px;"><i class="fa-solid fa-circle-info"></i> 浮顶/内浮顶罐组适用<strong>减半口径</strong>。GB 50160-2008 6.2.12 要求此时<strong>必须设置事故存液池</strong>存放剩余部分（即 1 − 0.5 = 0.5 倍最大储罐容积），全厂的浮顶罐、内浮顶罐组可共用一个事故存液池。</div>';
+  }
+  if (sc.f === 1 && (key === 'petro' || key === 'toxic')) {
+    h += '<div class="verdict info on" style="margin-top:12px;"><i class="fa-solid fa-circle-info"></i> 该条为<strong>未给浮顶罐减半</strong>的口径。若本罐组为浮顶/内浮顶且确实做不到 1 个最大罐，规范路径是<strong>设事故存液池 + 堤内保留 ≥ 1/2</strong>，而不是直接判为不可行。</div>';
+  }
+  h += '<div class="kv-list">';
+  h += '<div class="kv"><div class="k">计算依据</div><div class="v" style="font-size:12px;font-weight:600;">' + basis + '</div></div>';
+  h += '<div class="kv"><div class="k">实际有效容积</div><div class="v">' + (Vreal > 0 ? fmt(Vreal, 1) + ' m³' : '未填') + '</div></div>';
+  h += '<div class="kv"><div class="k">差额（下限 − 实际）</div><div class="v">' + (Vreal > 0 ? fmt(gap, 1) + ' m³' : '—') + '</div></div>';
+  h += '</div>';
+  h += '<div class="src-note">条文出处：' + sc.src + '</div>';
+  h += '</div>';
+
+  if (Vreal <= 0) {
+    h += '<div class="verdict info on"><i class="fa-solid fa-circle-info"></i> 只输出了下限。填入实际有效容积后才能给出达标判定。</div>';
+  } else if (gap <= 0) {
+    h += '<div class="verdict ok on"><i class="fa-solid fa-circle-check"></i> <b>达标</b>：实际有效容积 ' + fmt(Vreal, 1) + ' m³ ≥ 下限 ' + fmt(need, 1) + ' m³，富余 ' + fmt(-gap, 1) + ' m³。</div>';
+  } else if (need * 0.8 <= Vreal) {
+    h += '<div class="verdict warn on"><i class="fa-solid fa-triangle-exclamation"></i> <b>不达标</b>：缺 ' + fmt(gap, 1) + ' m³（缺口 ' + fmt(gap / need * 100, 1) + '%）。已接近下限，工程上通常仍要处理。路径：① 放大堤内平面；② 在 ≤2.2 m 堤高上限内加高（加高前先看第 4 页签）；③ 浮顶罐组设事故存液池承接；④ 拆分为两个罐组。</div>';
+  } else {
+    h += '<div class="verdict bad on"><i class="fa-solid fa-circle-xmark"></i> <b>严重不足</b>：缺 ' + fmt(gap, 1) + ' m³，实际仅达到下限的 ' + fmt(Vreal / need * 100, 0) + '%。单纯加高堤身受 2.2 m 上限约束，大概率需要放大平面尺寸或拆分罐组。</div>';
+  }
+
+  $('out1').innerHTML = h;
+};
+
+// ============ 页签 2 ============
+$('fCoolType') && $('fCoolType').addEventListener('change', function() {
+  var c = COOL[this.value];
+  if (c) {
+    $('coolSrc').innerHTML = c.src;
+    setV('fTime', c.defTime);
+    setV('fAreaMode', c.areaMode);
+  }
+});
+
+window.bdPool = function() {
+  var c = COOL[$('fCoolType').value];
+  if (!c) return;
+  $('coolSrc').innerHTML = c.src;
+
+  var D = num('fD'), H = num('fTankH'), t = num('fTime'), n = num('fTankN');
+  var A_shell = shellArea(D, H);
+  var mode = $('fAreaMode').value;
+  // half: 不小于罐壁表面积 1/2（GB 50160-2008 8.4.3 2款下限）
+  // full/shell: 按全部罐壁表面积
+  var A_cool = (mode === 'half') ? A_shell * 0.5 : A_shell;
+  var Vfire = c.q * A_cool * t / 1000 * n;
+
+  var Vleak = num('fLeak');
+  var q = num('fRain'), F = num('fF'), psi = parseFloat($('fPsi').value), rt = num('fRainT');
+  // GB 50014-2021 4.1.7：Qs = q·ψ·F (L/s)；历时 t 分钟内的累计雨量 = Qs·60·t (L) → m³
+  var Qs = q * psi * F;              // L/s
+  var Vrain = Qs * 60 * rt / 1000;   // m³
+
+  var Vavail = num('fAvail');
+  var Vneed = Vleak + Vfire + Vrain;
+  var Vpool = Math.max(0, Vneed - Vavail);
+
+  var h = '';
+  h += '<div class="result-block no-pr">';
+  h += '<div style="font-size:12px;color:var(--text-secondary);">所需应急事故池有效容积（已扣除可利用容积）</div>';
+  h += '<div class="main-value">' + fmt(Vpool, 1) + ' <span class="unit">m³</span></div>';
+  h += '<div class="kv-list">';
+  h += '<div class="kv"><div class="k">① 事故泄漏物料量</div><div class="v">' + fmt(Vleak, 1) + ' m³</div></div>';
+  h += '<div class="kv"><div class="k">② 消防冷却水量</div><div class="v">' + fmt(Vfire, 1) + ' m³</div></div>';
+  h += '<div class="kv"><div class="k">③ 事故时雨水量</div><div class="v">' + fmt(Vrain, 1) + ' m³</div></div>';
+  h += '<div class="kv"><div class="k">小计（未扣减）</div><div class="v">' + fmt(Vneed, 1) + ' m³</div></div>';
+  h += '<div class="kv"><div class="k">④ 可利用容积</div><div class="v">−' + fmt(Vavail, 1) + ' m³</div></div>';
+  h += '</div>';
+  h += '<div class="src-note">消防水：' + c.q + ' L/(min·m²) × ' + fmt(A_cool, 1) + ' m² × ' + fmt(t, 1) + ' h × ' + n + ' 罐 ÷ 1000，依据 <b>' + c.src.replace(/^[^（]*：/, '') + '</b><br>雨水量：Q<sub>s</sub> = q·ψ·F = ' + fmt(q, 1) + '×' + fmt(psi, 2) + '×' + fmt(F, 3) + ' = ' + fmt(Qs, 1) + ' L/s；累计 ' + rt + ' min → ' + fmt(Vrain, 1) + ' m³，依据 <b>GB 50014-2021 4.1.7</b></div>';
+  h += '</div>';
+
+  if (Vpool <= 0) {
+    h += '<div class="verdict ok on"><i class="fa-solid fa-circle-check"></i> <b>现有可利用容积已足够</b>（' + fmt(Vavail, 1) + ' m³ ≥ 需求 ' + fmt(Vneed, 1) + ' m³）。但仍须确认：① 可利用容积在事故状态下<strong>确实能自流入池</strong>（要校核排水管在自流进水最高液位以下的容积，管道未充满段不算）；② 池体日常保持空余、切换阀可靠。</div>';
+  } else {
+    var ratio = Vpool / Vneed * 100;
+    var cls = ratio > 60 ? 'bad' : (ratio > 25 ? 'warn' : 'ok');
+    var mark = cls === 'bad' ? 'circle-xmark' : (cls === 'warn' ? 'triangle-exclamation' : 'circle-check');
+    h += '<div class="verdict ' + cls + ' on"><i class="fa-solid fa-' + mark + '"></i> <b>需新建/扩容 ' + fmt(Vpool, 1) + ' m³</b>，占未扣减需求的 ' + fmt(ratio, 0) + '%。' + (cls === 'bad' ? '缺口很大，建议核实消防延续时间是否可优化（如邻罐冷却面积按实际控制）、泄漏量是否可按实际而非最大罐计。' : '仍应复核消防延续时间与汇水面积取值是否符合当地消防审查意见。') + '</div>';
+  }
+
+  if (mode === 'half') {
+    h += '<div class="verdict info on"><i class="fa-solid fa-circle-info"></i> 冷却面积按<strong>罐壁表面积的 1/2</strong> 计（GB 50160-2008 8.4.3 2款下限）。若实际冷却范围更大（罐间距小、邻近罐多），应改按实际面积选「全表面积」。罐壁表面积 = π·D·H + π·D²/4 = ' + fmt(A_shell, 1) + ' m²。</div>';
+  } else {
+    h += '<div class="verdict info on"><i class="fa-solid fa-circle-info"></i> 冷却面积取<strong>全部罐壁表面积</strong> ' + fmt(A_shell, 1) + ' m²（π·D·H + π·D²/4）。全压力式液化烃储罐按 8.4.4、卧式罐按 8.4.6 直接取罐表面积，不适用 1/2 下限。</div>';
+  }
+
+  h += '<div class="verdict info on"><i class="fa-solid fa-circle-info"></i> <strong>不要把装置区和罐区的水量相加</strong>：计算事故废水量时，装置区或贮罐区事故不作同时发生考虑，取其中的最大值（GB 50483-2009）。本页按单一场景计算，若要取大值请分别算两次。</div>';
+
+  $('out2').innerHTML = h;
+};
+
+// ============ 页签 3 ============
+window.bdLayout = function() {
+  var form = $('fTankForm').value;
+  var Hneed = num('fNeedH');
+  var wallH = num('fWallH');
+  var drop = num('fOutDrop');
+  var gap = num('fGap');
+  var single = num('fSingle');
+  var hTop = Hneed + 0.2;
+
+  // 外侧高度 = 堤内设计地坪起算高度 − 堤内高于堤外的差值
+  var outer = hTop - drop;
+
+  var needDist = (form === 'horiz') ? 3 : wallH / 2;
+  var distLabel = (form === 'horiz') ? '卧式储罐罐壁至堤内堤脚线 ≥ 3 m' : '立式储罐罐壁至堤内堤脚线 ≥ 罐壁高度的 1/2 = ' + fmt(needDist, 2) + ' m';
+
+  var subRule = SUB_RULES.find(function(r) { return single <= r.max; }) || SUB_RULES[SUB_RULES.length - 1];
+
+  var h = '';
+  h += '<div class="kv-list no-pr" style="margin-top:4px;">';
+  h += '<div class="kv"><div class="k">堤顶实高（H<sub>需</sub> + 0.2 m）</div><div class="v">' + fmt(hTop, 2) + ' m</div></div>';
+  h += '<div class="kv"><div class="k">堤外侧有效高度（扣地坪差）</div><div class="v">' + fmt(outer, 2) + ' m</div></div>';
+  h += '<div class="kv"><div class="k">堤距要求</div><div class="v" style="font-size:12px;">≥ ' + fmt(needDist, 2) + ' m</div></div>';
+  h += '<div class="kv"><div class="k">实际堤距</div><div class="v">' + fmt(gap, 2) + ' m</div></div>';
+  h += '</div>';
+
+  h += '<div class="sec-title no-pr" style="margin-top:18px;">逐项校核</div>';
+
+  function row(ok, title, detail) {
+    return '<div class="verdict ' + (ok ? 'ok' : 'bad') + ' on"><i class="fa-solid fa-' + (ok ? 'circle-check' : 'circle-xmark') + '"></i> <b>' + title + '</b>　' + detail + '</div>';
+  }
+
+  var minH = (form === 'horiz') ? 0.5 : 1.0;
+  var minName = (form === 'horiz') ? '卧式储罐堤高 ≥ 0.5 m' : '立式储罐堤高 ≥ 1.0 m';
+  h += row(hTop >= minH, '堤高下限', minName + '，当前堤顶实高 ' + fmt(hTop, 2) + ' m' + (hTop >= minH ? '，满足' : '，不满足'));
+
+  // 上限按适用标准取值，不取宽：
+  // GB 50160-2008 6.2.17 / GB 51283-2020 6.2.11 → 堤高 ≤ 2.2 m（堤外 3 m 范围地坪起算）
+  // GB 50074-2014 6.5.3 → 高于堤外地坪或消防车道路面 ≤ 3.2 m
+  var stdKey = $('fHeightStd').value;
+  var H_MAX = (stdKey === '50074') ? 3.2 : 2.2;
+  var H_MAX_SRC = (stdKey === '50074')
+    ? 'GB 50074-2014 6.5.3：高于堤外设计地坪或消防车道路面（按较低者计）不应大于 3.2 m'
+    : 'GB 50160-2008 6.2.17 / GB 51283-2020 6.2.11：不宜高于 2.2 m（以堤外 3 m 范围内设计地坪标高为准）';
+  var maxOK = outer <= H_MAX;
+  var maxTxt = '外侧有效高度 ' + fmt(outer, 2) + ' m；上限口径 <b>' + H_MAX + ' m</b>（' + H_MAX_SRC + '）';
+  h += row(maxOK, '堤高上限', maxTxt);
+
+  h += row(gap >= needDist, '堤距', distLabel + '，实际 ' + fmt(gap, 2) + ' m' + (gap >= needDist ? '，满足' : '，差 ' + fmt(needDist - gap, 2) + ' m'));
+
+  // 口径提醒：只有当选了 2.2 m 口径且超限、而 3.2 m 口径恰好可通过时才提示
+  if (stdKey !== '50074' && outer > 2.2 && outer <= 3.2) {
+    h += '<div class="verdict warn on"><i class="fa-solid fa-triangle-exclamation"></i> <b>口径差异提醒</b>：按 GB 50160 / GB 51283 的 2.2 m 上限，本堤高' + fmt(outer, 2) + ' m <b>不满足</b>；若项目适用标准为 GB 50074-2014（上限 3.2 m）则满足。<strong>这不是可以「换标准」解决的问题</strong>——须先确定项目归口标准（石化企业走 GB 50160，石油库走 GB 50074），再据此复核消防审查意见。</div>';
+  }
+
+  h += '<div class="verdict info on"><i class="fa-solid fa-circle-info"></i> <b>本罐组隔堤要求</b>：单罐 ' + fmt(single, 0) + ' m³ → ' + subRule.n + '。依据：' + subRule.src + '<br>若储存沸溢性液体，隔堤内储罐不应多于 2 座（GB 50160-2008 6.2.15 第5款）。</div>';
+
+  h += '<div class="verdict info on"><i class="fa-solid fa-circle-info"></i> <b>尚未覆盖的校核项</b>（本页不计算，须按标准另行设计）：堤体结构强度与稳定性验算（土压力、地震作用、基底摩擦系数，GB 50351-2014 第5章及附录A/B）；管道穿堤不燃烧材料严密封堵；雨水沟穿堤处的防外流措施；人行台阶间距 ≤60 m；堤内地面坡度 0.5% 与集水设施、雨水截油措施。</div>';
+
+  $('out3').innerHTML = h;
+};
+
+// ============ 示例 ============
+window.bdEx0 = function(i) {
+  if (i === 0) { // 固定顶罐组 60×40×1.8m · 3 座 2000m³
+    setV('fLen', 60); setV('fWid', 40); setV('fHj', 1.8);
+    setV('fV1', 45); setV('fV2', 190); setV('fV3', 120); setV('fV4', 35);
+  } else if (i === 1) { // 浮顶罐组 80×50×1.5m · 4 座 5000m³
+    setV('fLen', 80); setV('fWid', 50); setV('fHj', 1.5);
+    setV('fV1', 95); setV('fV2', 480); setV('fV3', 156); setV('fV4', 60);
+  } else if (i === 2) { // 加高到 2.2m
+    setV('fLen', 80); setV('fWid', 50); setV('fHj', 2.0);
+    setV('fV1', 95); setV('fV2', 480); setV('fV3', 208); setV('fV4', 60);
+  } else { // 扣减项齐全的隔堤罐组
+    setV('fLen', 45); setV('fWid', 30); setV('fHj', 2.0);
+    setV('fV1', 60); setV('fV2', 260); setV('fV3', 180); setV('fV4', 90);
+  }
+  bdCalc();
+  bdNote0('示例：' + ['3 座 2000 m³ 固定顶罐，堤 60×40 m、设计液面 1.8 m，已扣最大罐基础 45 m³、其他罐 190 m³、堤体培土 120 m³、隔堤配管 35 m³',
+             '4 座 5000 m³ 浮顶罐，堤 80×50 m、设计液面 1.5 m，扣减后有效容积看是否够「半个最大罐」= 2500 m³',
+             '同样平面加高到 2.0 m，注意堤顶实高 2.2 m 已到 GB 50160 / GB 51283 上限，不能再加',
+             '45×30 m 小罐组，隔堤与配管设备多，V₄ 占到 90 m³，扣减项不能漏'][i]);
+};
+
+window.bdEx1 = function(i) {
+  if (i === 0) { setV('fScene', 'fixed'); setV('fVmax', 5000); setV('fVsecond', 3000); setV('fVreal', 3800); }
+  else if (i === 1) { setV('fScene', 'floating'); setV('fVmax', 5000); setV('fVsecond', 3000); setV('fVreal', 2600); }
+  else if (i === 2) { setV('fScene', 'mixed'); setV('fVmax', 3000); setV('fVsecond', 5000); setV('fVreal', 2400); }
+  else { setV('fScene', 'petro'); setV('fVmax', 5000); setV('fVsecond', 3000); setV('fVreal', 2600); }
+  $('fScene').dispatchEvent(new Event('change'));
+  bdCheck();
+};
+
+window.bdEx2 = function(i) {
+  if (i === 0) { setV('fCoolType', 'fixed'); setV('fD', 22); setV('fTankH', 14); setV('fTime', 6); setV('fTankN', 1); setV('fAreaMode', 'half'); setV('fLeak', 5000); setV('fRain', 215.7); setV('fF', 0.5); setV('fPsi', '0.70'); setV('fRainT', 360); setV('fAvail', 1800); }
+  else if (i === 1) { setV('fCoolType', 'lh'); setV('fD', 12); setV('fTankH', 16); setV('fTime', 6); setV('fTankN', 1); setV('fAreaMode', 'shell'); setV('fLeak', 800); setV('fRain', 215.7); setV('fF', 0.2); setV('fPsi', '0.60'); setV('fRainT', 360); setV('fAvail', 0); }
+  else if (i === 2) { setV('fCoolType', 'fixed'); setV('fD', 10); setV('fTankH', 8); setV('fTime', 4); setV('fTankN', 4); setV('fAreaMode', 'half'); setV('fLeak', 60); setV('fRain', 215.7); setV('fF', 0.3); setV('fPsi', '0.45'); setV('fRainT', 360); setV('fAvail', 0); }
+  else { setV('fCoolType', 'horiz'); setV('fD', 12); setV('fTankH', 4.5); setV('fTime', 4); setV('fTankN', 2); setV('fAreaMode', 'shell'); setV('fLeak', 120); setV('fRain', 215.7); setV('fF', 0.15); setV('fPsi', '0.90'); setV('fRainT', 360); setV('fAvail', 50); }
+  $('fCoolType').dispatchEvent(new Event('change'));
+  bdPool();
+};
+
+window.bdEx3 = function(i) {
+  if (i === 0) { setV('fTankForm', 'vert'); setV('fHeightStd', '50160'); setV('fNeedH', 1.8); setV('fWallH', 12); setV('fOutDrop', 0.2); setV('fGap', 6.5); setV('fSingle', 3000); }
+  else if (i === 1) { setV('fTankForm', 'vert'); setV('fHeightStd', '50160'); setV('fNeedH', 3.0); setV('fWallH', 15); setV('fOutDrop', 0.3); setV('fGap', 8); setV('fSingle', 20000); }
+  else if (i === 2) { setV('fTankForm', 'vert'); setV('fHeightStd', '50160'); setV('fNeedH', 1.5); setV('fWallH', 14); setV('fOutDrop', 0.1); setV('fGap', 5); setV('fSingle', 5000); }
+  else { setV('fTankForm', 'horiz'); setV('fHeightStd', '50160'); setV('fNeedH', 0.4); setV('fWallH', 4.5); setV('fOutDrop', 0.1); setV('fGap', 3.5); setV('fSingle', 50); }
+  bdLayout();
+};
+
+renderTables();
+renderScenes();
+$('fScene').dispatchEvent(new Event('change'));
+$('fCoolType').dispatchEvent(new Event('change'));
+
+})();
+</script>
+</body>
+</html>
