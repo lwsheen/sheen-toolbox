@@ -192,11 +192,11 @@
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 10px;
-            padding: 12px 14px;
+            padding: 9px 12px;
             text-decoration: none;
             transition: all 0.2s ease;
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             gap: 10px;
             position: relative;
         }
@@ -208,17 +208,16 @@
         .tool-card:active { transform: scale(0.98); }
 
         .tool-card .tool-icon {
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 15px;
+            font-size: 14px;
             background: var(--brand-red);
             color: #fff;
             flex-shrink: 0;
-            margin-top: 1px;
             transition: all 0.2s ease;
         }
         .tool-card:hover .tool-icon {
@@ -228,8 +227,8 @@
         .tool-card .card-text {
             display: flex;
             flex-direction: column;
+            justify-content: center;
             min-width: 0;
-            gap: 3px;
         }
         .tool-card h3 {
             font-size: 13px;
@@ -241,14 +240,6 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
             word-break: break-word;
-        }
-        .tool-card .desc {
-            font-size: 12px;
-            color: var(--text-secondary);
-            line-height: 1.3;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
         .tool-card .arrow { display: none; }
         .tool-card .tag-row { display: none; }
@@ -300,7 +291,7 @@
         }
         .tool-card:hover .drag-handle { color: var(--brand-red); opacity: 1; }
         .tool-grid.filtering .tool-card .drag-handle { display: none; }
-        .tool-card .core-badge{position:absolute;top:11px;right:12px;color:var(--brand-red,#F03752);font-size:12px;font-weight:600;letter-spacing:1px;z-index:2}
+        .tool-card .core-badge{position:absolute;top:50%;right:12px;transform:translateY(-50%);color:var(--brand-red,#F03752);font-size:12px;font-weight:600;letter-spacing:1px;z-index:2}
         .tool-card .coming-badge { display: none; }
         /* 新品角标（30 天内上线） */
         .tool-card .new-badge {
@@ -825,10 +816,9 @@
             .sheen-header { padding: 8px 16px; }
             .sheen-header-brand { font-size: 14px; }
             .sheen-header-info { font-size: 12px; gap: 10px; }
-            .tool-card { padding: 10px 12px; }
+            .tool-card { padding: 8px 11px; }
             .tool-card .tool-icon { width: 28px; height: 28px; font-size: 13px; border-radius: 7px; }
             .tool-card h3 { font-size: 12px; }
-            .tool-card .desc { font-size: 12px; }
         }
 
         @media (max-width: 480px) {
@@ -921,523 +911,457 @@
     </div>
 
     <div class="tool-grid" id="toolGrid">
-        <a href="/sheen-toolbox/safety-terms/" class="tool-card is-new" draggable="true" data-cat="查询" data-slug="safety-terms">
+        <a href="/sheen-toolbox/safety-terms/" class="tool-card" draggable="true" data-cat="查询" data-zh-desc="GB/T 15236 征求意见稿 · 163 条 · 新增/修改标注" data-slug="safety-terms">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-book-open"></i></div>
-            <div class="card-text"><h3 title="安全生产术语查询">安全生产术语查询</h3>
-            <p class="desc">GB/T 15236 征求意见稿 · 163 条 · 新增/修改标注</p></div>
+            <div class="card-text"><h3 title="安全生产术语查询">安全生产术语查询</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/pssr-checklist/" class="tool-card" draggable="true" data-cat="检查" data-slug="pssr-checklist">
+        <a href="/sheen-toolbox/pssr-checklist/" class="tool-card" draggable="true" data-cat="检查" data-zh-desc="多行业增强版检查表" data-slug="pssr-checklist">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-clipboard-check"></i></div>
-            <div class="card-text"><h3 title="PSSR 开车前安全检查表">PSSR 开车前安全检查表</h3>
-            <p class="desc">多行业增强版检查表</p></div>
+            <div class="card-text"><h3 title="PSSR 开车前安全检查表">PSSR 开车前安全检查表</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/change-management/" class="tool-card is-new" draggable="true" data-cat="分析" data-slug="change-management">
+        <a href="/sheen-toolbox/change-management/" class="tool-card" draggable="true" data-cat="分析" data-zh-desc="MOC · 变更分级 · 审查要素清单" data-slug="change-management">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-arrows-rotate"></i></div>
-            <div class="card-text"><h3 title="变更管理评估工具">变更管理评估工具</h3>
-            <p class="desc">MOC · 变更分级 · 审查要素清单</p></div>
+            <div class="card-text"><h3 title="变更管理评估工具">变更管理评估工具</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/risk-assessment/" class="tool-card is-new" draggable="true" data-cat="分析" data-slug="risk-assessment">
+        <a href="/sheen-toolbox/risk-assessment/" class="tool-card" draggable="true" data-cat="分析" data-zh-desc="HAZOP · FMEA · FTA · LOPA 等九法速查" data-slug="risk-assessment">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-shield-halved"></i></div>
-            <div class="card-text"><h3 title="风险评估工具">风险评估工具</h3>
-            <p class="desc">HAZOP · FMEA · FTA · LOPA 等九法速查</p></div>
+            <div class="card-text"><h3 title="风险评估工具">风险评估工具</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/lopa-analysis/" class="tool-card" draggable="true" data-cat="分析" data-slug="lopa-analysis">
+        <a href="/sheen-toolbox/lopa-analysis/" class="tool-card" draggable="true" data-cat="分析" data-zh-desc="GB/T 32857-2025 · 后果频率 · RRF · SIL 建议" data-slug="lopa-analysis">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-layer-group"></i></div>
-            <div class="card-text"><h3 title="保护层分析（LOPA）工具">保护层分析（LOPA）工具</h3>
-            <p class="desc">GB/T 32857-2025 · 后果频率 · RRF · SIL 建议</p></div>
+            <div class="card-text"><h3 title="保护层分析（LOPA）工具">保护层分析（LOPA）工具</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/safety-signs/" class="tool-card" draggable="true" data-cat="查询" data-slug="safety-signs">
+        <a href="/sheen-toolbox/safety-signs/" class="tool-card" draggable="true" data-cat="查询" data-zh-desc="GB 2894-2025 · 139 个图形标志 1:1 切图" data-slug="safety-signs">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-signs-post"></i></div>
-            <div class="card-text"><h3 title="安全色和安全标志查询">安全色和安全标志查询</h3>
-            <p class="desc">GB 2894-2025 · 139 个图形标志 1:1 切图</p></div>
+            <div class="card-text"><h3 title="安全色和安全标志查询">安全色和安全标志查询</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/eyewash/" class="tool-card" draggable="true" data-cat="查询" data-slug="eyewash">
+        <a href="/sheen-toolbox/eyewash/" class="tool-card" draggable="true" data-cat="查询" data-zh-desc="GB 38144-2025 现场检查表" data-slug="eyewash">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-eye"></i></div>
-            <div class="card-text"><h3 title="洗眼器安全技术检查表">洗眼器安全技术检查表</h3>
-            <p class="desc">GB 38144-2025 现场检查表</p></div>
+            <div class="card-text"><h3 title="洗眼器安全技术检查表">洗眼器安全技术检查表</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/three-in-one-checklist/" class="tool-card" draggable="true" data-cat="检查" data-slug="three-in-one-checklist">
+        <a href="/sheen-toolbox/three-in-one-checklist/" class="tool-card" draggable="true" data-cat="检查" data-zh-desc="住宿+生产/储存/经营混合场所 39 项排查" data-slug="three-in-one-checklist">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
-            <div class="card-text"><h3 title="三合一场所火灾隐患排查表">三合一场所火灾隐患排查表</h3>
-            <p class="desc">住宿+生产/储存/经营混合场所 39 项排查</p></div>
+            <div class="card-text"><h3 title="三合一场所火灾隐患排查表">三合一场所火灾隐患排查表</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/regulation-standards/" class="tool-card tool-core" draggable="true" data-cat="查询" data-slug="regulation-standards">
+        <a href="/sheen-toolbox/regulation-standards/" class="tool-card tool-core" draggable="true" data-cat="查询" data-zh-desc="法规标准速查 · 47 工具对照 · 合规评价" data-slug="regulation-standards">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <span class="core-badge">核心</span>
             <div class="tool-icon"><i class="fa-solid fa-scale-balanced"></i></div>
-            <div class="card-text"><h3 title="EHS 法规标准清单">EHS 法规标准清单</h3>
-            <p class="desc">法规标准速查 · 47 工具对照 · 合规评价</p></div>
+            <div class="card-text"><h3 title="EHS 法规标准清单">EHS 法规标准清单</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/fire-extinguisher/" class="tool-card" draggable="true" data-cat="计算" data-zh-title="灭火器配置工具" data-zh-desc="GB 50140 配置计算 · GB 7258/34655 车载要求" data-slug="fire-extinguisher">
+        <a href="/sheen-toolbox/fire-extinguisher/" class="tool-card" draggable="true" data-cat="计算" data-zh-title="灭火器配置工具" data-zh-desc="配置计算 · 车载要求 · GB 50140/7258/34655 GB 50140 配置计算 · GB 7258/34655 车载要求" data-slug="fire-extinguisher">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-fire-extinguisher"></i></div>
-            <div class="card-text"><h3 title="灭火器配置工具">灭火器配置工具</h3>
-            <p class="desc">配置计算 · 车载要求 · GB 50140/7258/34655</p></div>
+            <div class="card-text"><h3 title="灭火器配置工具">灭火器配置工具</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/safety-production-cost-calculator/" class="tool-card" draggable="true" data-cat="计算" data-slug="safety-production-cost-calculator">
+        <a href="/sheen-toolbox/safety-production-cost-calculator/" class="tool-card" draggable="true" data-cat="计算" data-zh-desc="依据财企〔2022〕136号" data-slug="safety-production-cost-calculator">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-calculator"></i></div>
-            <div class="card-text"><h3 title="安全生产费用计算器">安全生产费用计算器</h3>
-            <p class="desc">依据财企〔2022〕136号</p></div>
+            <div class="card-text"><h3 title="安全生产费用计算器">安全生产费用计算器</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/safety-days-calculator/" class="tool-card" draggable="true" data-cat="计算" data-slug="safety-days-calculator">
+        <a href="/sheen-toolbox/safety-days-calculator/" class="tool-card" draggable="true" data-cat="计算" data-zh-desc="连续无事故天数与里程碑" data-slug="safety-days-calculator">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-calendar-check"></i></div>
-            <div class="card-text"><h3 title="安全生产天数计算器">安全生产天数计算器</h3>
-            <p class="desc">连续无事故天数与里程碑</p></div>
+            <div class="card-text"><h3 title="安全生产天数计算器">安全生产天数计算器</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/work-injury-calculator/" class="tool-card" draggable="true" data-cat="计算" data-slug="work-injury-calculator">
+        <a href="/sheen-toolbox/work-injury-calculator/" class="tool-card" draggable="true" data-cat="计算" data-zh-desc="依据《工伤保险条例》估算赔偿" data-slug="work-injury-calculator">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-user-injured"></i></div>
-            <div class="card-text"><h3 title="工伤理赔计算器">工伤理赔计算器</h3>
-            <p class="desc">依据《工伤保险条例》估算赔偿</p></div>
+            <div class="card-text"><h3 title="工伤理赔计算器">工伤理赔计算器</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/jsa-lec/" class="tool-card" draggable="true" data-cat="分析" data-slug="jsa-lec">
+        <a href="/sheen-toolbox/jsa-lec/" class="tool-card" draggable="true" data-cat="分析" data-zh-desc="工作安全分析 + 风险评价" data-slug="jsa-lec">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
-            <div class="card-text"><h3 title="JSA + LEC 风险分析">JSA + LEC 风险分析</h3>
-            <p class="desc">工作安全分析 + 风险评价</p></div>
+            <div class="card-text"><h3 title="JSA + LEC 风险分析">JSA + LEC 风险分析</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/industry-classification/" class="tool-card" draggable="true" data-cat="查询" data-slug="industry-classification">
+        <a href="/sheen-toolbox/industry-classification/" class="tool-card" draggable="true" data-cat="查询" data-zh-desc="国民经济行业分类" data-slug="industry-classification">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-sitemap"></i></div>
-            <div class="card-text"><h3 title="行业分类查询">行业分类查询</h3>
-            <p class="desc">国民经济行业分类</p></div>
+            <div class="card-text"><h3 title="行业分类查询">行业分类查询</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/accident-classification/" class="tool-card" draggable="true" data-cat="查询" data-slug="accident-classification">
+        <a href="/sheen-toolbox/accident-classification/" class="tool-card" draggable="true" data-cat="查询" data-zh-desc="GB 6441-2025 事故类型与编码" data-slug="accident-classification">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
-            <div class="card-text"><h3 title="生产安全事故分类查询">生产安全事故分类查询</h3>
-            <p class="desc">GB 6441-2025 事故类型与编码</p></div>
+            <div class="card-text"><h3 title="生产安全事故分类查询">生产安全事故分类查询</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/working-height-classification/" class="tool-card" draggable="true" data-cat="查询" data-slug="working-height-classification">
+        <a href="/sheen-toolbox/working-height-classification/" class="tool-card" draggable="true" data-cat="查询" data-zh-desc="GB 3608-2025 分级与判定" data-slug="working-height-classification">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-stairs"></i></div>
-            <div class="card-text"><h3 title="高处作业分级查询">高处作业分级查询</h3>
-            <p class="desc">GB 3608-2025 分级与判定</p></div>
+            <div class="card-text"><h3 title="高处作业分级查询">高处作业分级查询</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/dangerous-goods-query/" class="tool-card" draggable="true" data-cat="查询" data-slug="dangerous-goods-query">
+        <a href="/sheen-toolbox/dangerous-goods-query/" class="tool-card" draggable="true" data-cat="查询" data-zh-desc="767 项危险货物查询" data-slug="dangerous-goods-query">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-skull-crossbones"></i></div>
-            <div class="card-text"><h3 title="危险货物查询">危险货物查询</h3>
-            <p class="desc">767 项危险货物查询</p></div>
+            <div class="card-text"><h3 title="危险货物查询">危险货物查询</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/hazardous-chemicals-query/" class="tool-card" draggable="true" data-cat="查询" data-slug="hazardous-chemicals-query">
+        <a href="/sheen-toolbox/hazardous-chemicals-query/" class="tool-card" draggable="true" data-cat="查询" data-zh-desc="2830 项危化品查询" data-slug="hazardous-chemicals-query">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-flask"></i></div>
-            <div class="card-text"><h3 title="危险化学品查询">危险化学品查询</h3>
-            <p class="desc">2830 项危化品查询</p></div>
+            <div class="card-text"><h3 title="危险化学品查询">危险化学品查询</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/special-work-query/" class="tool-card" draggable="true" data-cat="查询" data-slug="special-work-query">
+        <a href="/sheen-toolbox/special-work-query/" class="tool-card" draggable="true" data-cat="查询" data-zh-desc="三类特种作业目录 + 官方证书核验" data-slug="special-work-query">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-id-card-clip"></i></div>
-            <div class="card-text"><h3 title="特种作业目录查询与证书验证">特种作业目录查询与证书验证</h3>
-            <p class="desc">三类特种作业目录 + 官方证书核验</p></div>
+            <div class="card-text"><h3 title="特种作业目录查询与证书验证">特种作业目录查询与证书验证</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/special-equipment-query/" class="tool-card" draggable="true" data-cat="查询" data-slug="special-equipment-query">
+        <a href="/sheen-toolbox/special-equipment-query/" class="tool-card" draggable="true" data-cat="查询" data-zh-desc="八大类详解 · 叉车属性判定 · 误区纠正" data-slug="special-equipment-query">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-shield"></i></div>
-            <div class="card-text"><h3 title="特种设备查询与判定">特种设备查询与判定</h3>
-            <p class="desc">八大类详解 · 叉车属性判定 · 误区纠正</p></div>
+            <div class="card-text"><h3 title="特种设备查询与判定">特种设备查询与判定</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/hazardous-waste-query/" class="tool-card" draggable="true" data-cat="查询" data-slug="hazardous-waste-query">
+        <a href="/sheen-toolbox/hazardous-waste-query/" class="tool-card" draggable="true" data-cat="查询" data-zh-desc="470 项危废查询" data-slug="hazardous-waste-query">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-recycle"></i></div>
-            <div class="card-text"><h3 title="危险废物查询">危险废物查询</h3>
-            <p class="desc">470 项危废查询</p></div>
+            <div class="card-text"><h3 title="危险废物查询">危险废物查询</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/illuminance-standard/" class="tool-card" draggable="true" data-cat="查询" data-slug="illuminance-standard">
+        <a href="/sheen-toolbox/illuminance-standard/" class="tool-card" draggable="true" data-cat="查询" data-zh-desc="422 条 GB/T 50034-2024 照度标准值" data-slug="illuminance-standard">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-lightbulb"></i></div>
-            <div class="card-text"><h3 title="建筑照度标准查询">建筑照度标准查询</h3>
-            <p class="desc">422 条 GB/T 50034-2024 照度标准值</p></div>
+            <div class="card-text"><h3 title="建筑照度标准查询">建筑照度标准查询</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/five-why-analysis/" class="tool-card" draggable="true" data-cat="分析" data-slug="five-why-analysis">
+        <a href="/sheen-toolbox/five-why-analysis/" class="tool-card" draggable="true" data-cat="分析" data-zh-desc="AI 引导根因分析" data-slug="five-why-analysis">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-circle-question"></i></div>
-            <div class="card-text"><h3 title="5Why + 5M1E 根因分析">5Why + 5M1E 根因分析</h3>
-            <p class="desc">AI 引导根因分析</p></div>
+            <div class="card-text"><h3 title="5Why + 5M1E 根因分析">5Why + 5M1E 根因分析</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/loto-decision/" class="tool-card" draggable="true" data-cat="分析" data-slug="loto-decision">
+        <a href="/sheen-toolbox/loto-decision/" class="tool-card" draggable="true" data-cat="分析" data-zh-desc="GB/T 33579-2017 · 5 步决策 · 概念参考" data-slug="loto-decision">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-lock"></i></div>
-            <div class="card-text"><h3 title="挂牌上锁（LOTO）决策工具">挂牌上锁（LOTO）决策工具</h3>
-            <p class="desc">GB/T 33579-2017 · 5 步决策 · 概念参考</p></div>
+            <div class="card-text"><h3 title="挂牌上锁（LOTO）决策工具">挂牌上锁（LOTO）决策工具</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/iso14001-environmental-factors/" class="tool-card" draggable="true" data-cat="分析" data-slug="iso14001-environmental-factors">
+        <a href="/sheen-toolbox/iso14001-environmental-factors/" class="tool-card" draggable="true" data-cat="分析" data-zh-desc="ISO 14001 环境管理体系" data-slug="iso14001-environmental-factors">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-leaf"></i></div>
-            <div class="card-text"><h3 title="ISO 14001 环境因素识别">ISO 14001 环境因素识别</h3>
-            <p class="desc">ISO 14001 环境管理体系</p></div>
+            <div class="card-text"><h3 title="ISO 14001 环境因素识别">ISO 14001 环境因素识别</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/heat-stress-classification/" class="tool-card" draggable="true" data-cat="计算" data-slug="heat-stress-classification">
+        <a href="/sheen-toolbox/heat-stress-classification/" class="tool-card" draggable="true" data-cat="计算" data-zh-desc="GBZ/T 229.3-2025" data-slug="heat-stress-classification">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-temperature-high"></i></div>
-            <div class="card-text"><h3 title="高温作业分级计算器">高温作业分级计算器</h3>
-            <p class="desc">GBZ/T 229.3-2025</p></div>
+            <div class="card-text"><h3 title="高温作业分级计算器">高温作业分级计算器</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/niosh-lifting-calculator/" class="tool-card" draggable="true" data-cat="计算" data-slug="niosh-lifting-calculator">
+        <a href="/sheen-toolbox/niosh-lifting-calculator/" class="tool-card" draggable="true" data-cat="计算" data-zh-desc="RWL + LI 风险评估" data-slug="niosh-lifting-calculator">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-weight-hanging"></i></div>
-            <div class="card-text"><h3 title="NIOSH 举升方程计算器">NIOSH 举升方程计算器</h3>
-            <p class="desc">RWL + LI 风险评估</p></div>
+            <div class="card-text"><h3 title="NIOSH 举升方程计算器">NIOSH 举升方程计算器</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/explosion-venting-calculator/" class="tool-card" draggable="true" data-cat="计算" data-slug="explosion-venting-calculator">
+        <a href="/sheen-toolbox/explosion-venting-calculator/" class="tool-card" draggable="true" data-cat="计算" data-zh-desc="GB 50016 + EN 14491" data-slug="explosion-venting-calculator">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-burst"></i></div>
-            <div class="card-text"><h3 title="泄爆面积计算器">泄爆面积计算器</h3>
-            <p class="desc">GB 50016 + EN 14491</p></div>
+            <div class="card-text"><h3 title="泄爆面积计算器">泄爆面积计算器</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/environmental-tax-calculator/" class="tool-card" draggable="true" data-cat="计算" data-slug="environmental-tax-calculator">
+        <a href="/sheen-toolbox/environmental-tax-calculator/" class="tool-card" draggable="true" data-cat="计算" data-zh-desc="四大类污染物" data-slug="environmental-tax-calculator">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-coins"></i></div>
-            <div class="card-text"><h3>环保税计算器</h3>
-            <p class="desc">四大类污染物</p></div>
+            <div class="card-text"><h3>环保税计算器</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/noise-calculator/" class="tool-card" draggable="true" data-cat="计算" data-slug="noise-calculator">
+        <a href="/sheen-toolbox/noise-calculator/" class="tool-card" draggable="true" data-cat="计算" data-zh-desc="GBZ/T 229.4" data-slug="noise-calculator">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-ear-listen"></i></div>
-            <div class="card-text"><h3>噪声计算器</h3>
-            <p class="desc">GBZ/T 229.4</p></div>
+            <div class="card-text"><h3>噪声计算器</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/major-hazard-identification/" class="tool-card" draggable="true" data-cat="计算" data-slug="major-hazard-identification">
+        <a href="/sheen-toolbox/major-hazard-identification/" class="tool-card" draggable="true" data-cat="计算" data-zh-desc="GB 18218-2018" data-slug="major-hazard-identification">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
-            <div class="card-text"><h3 title="重大危险源辨识">重大危险源辨识</h3>
-            <p class="desc">GB 18218-2018</p></div>
+            <div class="card-text"><h3 title="重大危险源辨识">重大危险源辨识</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/major-hazard-query/" class="tool-card" draggable="true" data-cat="查询" data-slug="major-hazard-query">
+        <a href="/sheen-toolbox/major-hazard-query/" class="tool-card" draggable="true" data-cat="查询" data-zh-desc="应急管理部令第21号 · AQ 3067-2026" data-slug="major-hazard-query">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-circle-exclamation"></i></div>
-            <div class="card-text"><h3 title="重大事故隐患判定查询">重大事故隐患判定查询</h3>
-            <p class="desc">应急管理部令第21号 · AQ 3067-2026</p></div>
+            <div class="card-text"><h3 title="重大事故隐患判定查询">重大事故隐患判定查询</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/fire-separation-distance/" class="tool-card" draggable="true" data-cat="查询" data-slug="fire-separation-distance">
+        <a href="/sheen-toolbox/fire-separation-distance/" class="tool-card" draggable="true" data-cat="查询" data-zh-desc="GB 50016-2014" data-slug="fire-separation-distance">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-ruler-combined"></i></div>
-            <div class="card-text"><h3 title="建筑防火间距查询">建筑防火间距查询</h3>
-            <p class="desc">GB 50016-2014</p></div>
+            <div class="card-text"><h3 title="建筑防火间距查询">建筑防火间距查询</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/safety-light-curtain/" class="tool-card" draggable="true" data-cat="计算" data-slug="safety-light-curtain">
+        <a href="/sheen-toolbox/safety-light-curtain/" class="tool-card" draggable="true" data-cat="计算" data-zh-desc="ISO 13855 安全距离" data-slug="safety-light-curtain">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-wave-square"></i></div>
-            <div class="card-text"><h3 title="安全光幕选型计算器">安全光幕选型计算器</h3>
-            <p class="desc">ISO 13855 安全距离</p></div>
+            <div class="card-text"><h3 title="安全光幕选型计算器">安全光幕选型计算器</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/lifting-calculator/" class="tool-card" draggable="true" data-cat="计算" data-slug="lifting-calculator">
+        <a href="/sheen-toolbox/lifting-calculator/" class="tool-card" draggable="true" data-cat="计算" data-zh-desc="载荷/索具/臂长" data-slug="lifting-calculator">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-weight-hanging"></i></div>
-            <div class="card-text"><h3 title="吊装作业计算器">吊装作业计算器</h3>
-            <p class="desc">载荷/索具/臂长</p></div>
+            <div class="card-text"><h3 title="吊装作业计算器">吊装作业计算器</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/rope-chain-selector/" class="tool-card" draggable="true" data-cat="计算" data-slug="rope-chain-selector">
+        <a href="/sheen-toolbox/rope-chain-selector/" class="tool-card" draggable="true" data-cat="计算" data-zh-desc="工况选型/直径推荐" data-slug="rope-chain-selector">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-rotate"></i></div>
-            <div class="card-text"><h3 title="钢丝绳 & 起重链条 选型计算器">钢丝绳 &amp; 起重链条 选型计算器</h3>
-            <p class="desc">工况选型/直径推荐</p></div>
+            <div class="card-text"><h3 title="钢丝绳 & 起重链条 选型计算器">钢丝绳 &amp; 起重链条 选型计算器</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/carbon-footprint-calculator/" class="tool-card is-new" draggable="true" data-cat="计算" data-slug="carbon-footprint-calculator">
+        <a href="/sheen-toolbox/carbon-footprint-calculator/" class="tool-card" draggable="true" data-cat="计算" data-zh-desc="个人生活碳足迹 · 产品全生命周期核算（GB/T 24067-2024）" data-slug="carbon-footprint-calculator">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
-            <span class="new-badge">NEW</span>
             <div class="tool-icon"><i class="fa-solid fa-cloud"></i></div>
-            <div class="card-text"><h3 title="碳足迹计算器">碳足迹计算器</h3>
-            <p class="desc">个人生活碳足迹 · 产品全生命周期核算（GB/T 24067-2024）</p></div>
+            <div class="card-text"><h3 title="碳足迹计算器">碳足迹计算器</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/power-tool-inspection/" class="tool-card" draggable="true" data-cat="检查" data-slug="power-tool-inspection">
+        <a href="/sheen-toolbox/power-tool-inspection/" class="tool-card" draggable="true" data-cat="检查" data-zh-desc="GB/T 3787 绝缘标准" data-slug="power-tool-inspection">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
-            <div class="card-text"><h3 title="手持式电动工具检查记录表">手持式电动工具检查记录表</h3>
-            <p class="desc">GB/T 3787 绝缘标准</p></div>
+            <div class="card-text"><h3 title="手持式电动工具检查记录表">手持式电动工具检查记录表</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/temporary-power-checklist/" class="tool-card" draggable="true" data-cat="检查" data-slug="temporary-power-checklist">
+        <a href="/sheen-toolbox/temporary-power-checklist/" class="tool-card" draggable="true" data-cat="检查" data-zh-desc="JGJ/T 46-2024 十项检查" data-slug="temporary-power-checklist">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-plug-circle-bolt"></i></div>
-            <div class="card-text"><h3 title="施工现场临时用电检查表">施工现场临时用电检查表</h3>
-            <p class="desc">JGJ/T 46-2024 十项检查</p></div>
+            <div class="card-text"><h3 title="施工现场临时用电检查表">施工现场临时用电检查表</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/electrical-safety-checklist/" class="tool-card" draggable="true" data-cat="检查" data-slug="electrical-safety-checklist">
+        <a href="/sheen-toolbox/electrical-safety-checklist/" class="tool-card" draggable="true" data-cat="检查" data-zh-desc="九大类电气安全检查" data-slug="electrical-safety-checklist">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-bolt"></i></div>
-            <div class="card-text"><h3 title="用电安全检查表">用电安全检查表</h3>
-            <p class="desc">九大类电气安全检查</p></div>
+            <div class="card-text"><h3 title="用电安全检查表">用电安全检查表</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/harness-inspection/" class="tool-card" draggable="true" data-cat="检查" data-slug="harness-inspection">
+        <a href="/sheen-toolbox/harness-inspection/" class="tool-card" draggable="true" data-cat="检查" data-zh-desc="六部件 GB 6095 检查" data-slug="harness-inspection">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-person-falling"></i></div>
-            <div class="card-text"><h3 title="安全带（坠落防护）检查表">安全带（坠落防护）检查表</h3>
-            <p class="desc">六部件 GB 6095 检查</p></div>
+            <div class="card-text"><h3 title="安全带（坠落防护）检查表">安全带（坠落防护）检查表</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/grinder-inspection/" class="tool-card" draggable="true" data-cat="检查" data-slug="grinder-inspection">
+        <a href="/sheen-toolbox/grinder-inspection/" class="tool-card" draggable="true" data-cat="检查" data-zh-desc="八项 GB 4674 检查" data-slug="grinder-inspection">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-gear"></i></div>
-            <div class="card-text"><h3 title="砂轮机安全检查表">砂轮机安全检查表</h3>
-            <p class="desc">八项 GB 4674 检查</p></div>
+            <div class="card-text"><h3 title="砂轮机安全检查表">砂轮机安全检查表</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/wire-rope-inspection/" class="tool-card" draggable="true" data-cat="检查" data-slug="wire-rope-inspection">
+        <a href="/sheen-toolbox/wire-rope-inspection/" class="tool-card" draggable="true" data-cat="检查" data-zh-desc="11 项 GB/T 5972 检查" data-slug="wire-rope-inspection">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-grip-lines"></i></div>
-            <div class="card-text"><h3 title="钢丝绳安全检查表">钢丝绳安全检查表</h3>
-            <p class="desc">11 项 GB/T 5972 检查</p></div>
+            <div class="card-text"><h3 title="钢丝绳安全检查表">钢丝绳安全检查表</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/chain-inspection/" class="tool-card" draggable="true" data-cat="检查" data-slug="chain-inspection">
+        <a href="/sheen-toolbox/chain-inspection/" class="tool-card" draggable="true" data-cat="检查" data-zh-desc="9 项 GB/T 20946 检查" data-slug="chain-inspection">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-link"></i></div>
-            <div class="card-text"><h3 title="起重链条安全检查表">起重链条安全检查表</h3>
-            <p class="desc">9 项 GB/T 20946 检查</p></div>
+            <div class="card-text"><h3 title="起重链条安全检查表">起重链条安全检查表</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/synthetic-fiber-sling-inspection/" class="tool-card" draggable="true" data-cat="检查" data-slug="synthetic-fiber-sling-inspection">
+        <a href="/sheen-toolbox/synthetic-fiber-sling-inspection/" class="tool-card" draggable="true" data-cat="检查" data-zh-desc="6 项 JB/T 8521 检查" data-slug="synthetic-fiber-sling-inspection">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-ribbon"></i></div>
-            <div class="card-text"><h3 title="合成纤维吊带安全检查表">合成纤维吊带安全检查表</h3>
-            <p class="desc">6 项 JB/T 8521 检查</p></div>
+            <div class="card-text"><h3 title="合成纤维吊带安全检查表">合成纤维吊带安全检查表</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/hook-shackle-inspection/" class="tool-card" draggable="true" data-cat="检查" data-slug="hook-shackle-inspection">
+        <a href="/sheen-toolbox/hook-shackle-inspection/" class="tool-card" draggable="true" data-cat="检查" data-zh-desc="6 项 GB/T 10051·JB/T 8112 检查" data-slug="hook-shackle-inspection">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-anchor"></i></div>
-            <div class="card-text"><h3 title="吊钩与卸扣安全检查表">吊钩与卸扣安全检查表</h3>
-            <p class="desc">6 项 GB/T 10051·JB/T 8112 检查</p></div>
+            <div class="card-text"><h3 title="吊钩与卸扣安全检查表">吊钩与卸扣安全检查表</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/portable-ladder-inspection/" class="tool-card" draggable="true" data-cat="检查" data-slug="portable-ladder-inspection">
+        <a href="/sheen-toolbox/portable-ladder-inspection/" class="tool-card" draggable="true" data-cat="检查" data-zh-desc="GB 12142-2025 全环节逐条检查" data-slug="portable-ladder-inspection">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-clipboard-check"></i></div>
-            <div class="card-text"><h3 title="便携式金属梯安全检查表">便携式金属梯安全检查表</h3>
-            <p class="desc">GB 12142-2025 全环节逐条检查</p></div>
+            <div class="card-text"><h3 title="便携式金属梯安全检查表">便携式金属梯安全检查表</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/portable-ladder-params/" class="tool-card" draggable="true" data-cat="查询" data-slug="portable-ladder-params">
+        <a href="/sheen-toolbox/portable-ladder-params/" class="tool-card" draggable="true" data-cat="查询" data-zh-desc="GB 12142-2025 七类梯型参数" data-slug="portable-ladder-params">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-layer-group"></i></div>
-            <div class="card-text"><h3 title="便携式金属梯设计参数检索">便携式金属梯设计参数检索</h3>
-            <p class="desc">GB 12142-2025 七类梯型参数</p></div>
+            <div class="card-text"><h3 title="便携式金属梯设计参数检索">便携式金属梯设计参数检索</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/fixed-ladder-params/" class="tool-card" draggable="true" data-cat="查询" data-slug="fixed-ladder-params">
+        <a href="/sheen-toolbox/fixed-ladder-params/" class="tool-card" draggable="true" data-cat="查询" data-zh-desc="GB 4053.1/2/3-2025 直梯/斜梯/栏杆平台" data-slug="fixed-ladder-params">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-stairs"></i></div>
-            <div class="card-text"><h3 title="固定式金属梯及平台设计参数检索">固定式金属梯及平台设计参数检索</h3>
-            <p class="desc">GB 4053.1/2/3-2025 直梯/斜梯/栏杆平台</p></div>
+            <div class="card-text"><h3 title="固定式金属梯及平台设计参数检索">固定式金属梯及平台设计参数检索</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/oel-query/" class="tool-card" draggable="true" data-cat="查询" data-slug="oel-query">
+        <a href="/sheen-toolbox/oel-query/" class="tool-card" draggable="true" data-cat="查询" data-zh-desc="GBZ 2.1-2019+修改单 358化学·49粉尘·29生物监测" data-slug="oel-query">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-flask-vial"></i></div>
-            <div class="card-text"><h3 title="工作场所有害因素职业接触限值查询">工作场所有害因素职业接触限值查询</h3>
-            <p class="desc">GBZ 2.1-2019+修改单 358化学·49粉尘·29生物监测</p></div>
+            <div class="card-text"><h3 title="工作场所有害因素职业接触限值查询">工作场所有害因素职业接触限值查询</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/occupational-disease-query/" class="tool-card" draggable="true" data-cat="查询" data-slug="occupational-disease-query">
+        <a href="/sheen-toolbox/occupational-disease-query/" class="tool-card" draggable="true" data-cat="查询" data-zh-desc="12大类·135种 按名称/关键词检索" data-slug="occupational-disease-query">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-notes-medical"></i></div>
-            <div class="card-text"><h3 title="职业病分类和目录查询">职业病分类和目录查询</h3>
-            <p class="desc">12大类·135种 按名称/关键词检索</p></div>
+            <div class="card-text"><h3 title="职业病分类和目录查询">职业病分类和目录查询</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/three-simultaneous-classification/" class="tool-card" draggable="true" data-cat="查询" data-slug="three-simultaneous-classification">
+        <a href="/sheen-toolbox/three-simultaneous-classification/" class="tool-card" draggable="true" data-cat="查询" data-zh-desc="职业病风险+环评分类+安全设施三同时" data-slug="three-simultaneous-classification">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-clipboard-check"></i></div>
-            <div class="card-text"><h3 title="建设项目三同时分类管理查询">建设项目"三同时"分类管理查询</h3>
-            <p class="desc">职业病风险+环评分类+安全设施三同时</p></div>
+            <div class="card-text"><h3 title="建设项目三同时分类管理查询">建设项目"三同时"分类管理查询</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
-        </a>        <a href="/sheen-toolbox/heat-index/" class="tool-card" draggable="true" data-cat="查询" data-slug="heat-index">
+        </a>        <a href="/sheen-toolbox/heat-index/" class="tool-card" draggable="true" data-cat="查询" data-zh-desc="气温+湿度→体感温度" data-slug="heat-index">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-temperature-high"></i></div>
-            <div class="card-text"><h3 title="NWS热指数（体感温度）查询">NWS 热指数（体感温度）查询</h3>
-            <p class="desc">气温+湿度→体感温度</p></div>
+            <div class="card-text"><h3 title="NWS热指数（体感温度）查询">NWS 热指数（体感温度）查询</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/heat-stroke-first-aid/" class="tool-card" draggable="true" data-cat="查询" data-slug="heat-stroke-first-aid">
+        <a href="/sheen-toolbox/heat-stroke-first-aid/" class="tool-card" draggable="true" data-cat="查询" data-zh-desc="症状分级 · 急救指引 · 120" data-slug="heat-stroke-first-aid">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-kit-medical"></i></div>
-            <div class="card-text"><h3 title="中暑应急处置">中暑应急处置</h3>
-            <p class="desc">症状分级 · 急救指引 · 120</p></div>
+            <div class="card-text"><h3 title="中暑应急处置">中暑应急处置</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
         <a href="/sheen-toolbox/chemical-burn-lookup/" class="tool-card" draggable="true" data-cat="查询" data-zh-title="常见化学品灼伤急救查询" data-zh-desc="28 种化学品 · 清洗剂 · 治疗方案" data-slug="chemical-burn-lookup">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-vials"></i></div>
-            <div class="card-text"><h3 title="常见化学品灼伤急救查询">常见化学品灼伤急救查询</h3>
-            <p class="desc">28 种化学品 · 清洗剂 · 治疗方案</p></div>
+            <div class="card-text"><h3 title="常见化学品灼伤急救查询">常见化学品灼伤急救查询</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
         <a href="/sheen-toolbox/enterprise-size-classification/" class="tool-card" draggable="true" data-cat="查询" data-zh-title="企业规模划分查询" data-zh-desc="大中小微划分 · GB/T 4754 · 行业指标" data-slug="enterprise-size-classification">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-building-columns"></i></div>
-            <div class="card-text"><h3 title="企业规模划分查询">企业规模划分查询</h3>
-            <p class="desc">大中小微划分 · GB/T 4754 · 行业指标</p></div>
+            <div class="card-text"><h3 title="企业规模划分查询">企业规模划分查询</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/sign-mount-calculator/" class="tool-card" draggable="true"  data-cat="计算" data-zh-title="安全指示灯牌固定件选型计算器" data-zh-desc="丝杆抗拉抗弯 · 锚固螺栓校核 · GB 50009" data-slug="sign-mount-calculator">
+        <a href="/sheen-toolbox/sign-mount-calculator/" class="tool-card" draggable="true"  data-cat="计算" data-zh-title="安全指示灯牌固定件选型计算器" data-zh-desc="丝杆抗拉/抗弯 · 锚固螺栓校核 · GB 50009 丝杆抗拉抗弯 · 锚固螺栓校核 · GB 50009" data-slug="sign-mount-calculator">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
-            <div class="card-text"><h3 title="安全指示灯牌固定件选型计算器">安全指示灯牌固定件选型</h3>
-            <p class="desc">丝杆抗拉/抗弯 · 锚固螺栓校核 · GB 50009</p></div>
+            <div class="card-text"><h3 title="安全指示灯牌固定件选型计算器">安全指示灯牌固定件选型</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/osha-recordable/" class="tool-card is-new" draggable="true" data-cat="查询" data-slug="osha-recordable">
+        <a href="/sheen-toolbox/osha-recordable/" class="tool-card" draggable="true" data-cat="查询" data-zh-desc="29 CFR 1904 · NM/FA/MTI/LTA 口径 · 5 步判定" data-slug="osha-recordable">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-clipboard-question"></i></div>
-            <div class="card-text"><h3 title="OSHA 可记录事故判断助手">OSHA 可记录事故判断助手</h3>
-            <p class="desc">29 CFR 1904 · NM/FA/MTI/LTA 口径 · 5 步判定</p></div>
+            <div class="card-text"><h3 title="OSHA 可记录事故判断助手">OSHA 可记录事故判断助手</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/seasonal-safety-checklist/" class="tool-card" draggable="true" data-cat="检查" data-zh-title="季节性安全检查表" data-zh-desc="春夏秋冬四季重点 · 防雷防汛 / 防暑降温 / 防火防静电 / 防冻防凝防滑" data-slug="seasonal-safety-checklist">
+        <a href="/sheen-toolbox/seasonal-safety-checklist/" class="tool-card" draggable="true" data-cat="检查" data-zh-title="季节性安全检查表" data-zh-desc="四季重点风险 · 防雷防汛/防暑降温/防冻防凝 春夏秋冬四季重点 · 防雷防汛 / 防暑降温 / 防火防静电 / 防冻防凝防滑" data-slug="seasonal-safety-checklist">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-cloud-sun-rain"></i></div>
-            <div class="card-text"><h3 title="季节性安全检查表">季节性安全检查表</h3>
-            <p class="desc">四季重点风险 · 防雷防汛/防暑降温/防冻防凝</p></div>
+            <div class="card-text"><h3 title="季节性安全检查表">季节性安全检查表</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/holiday-safety-checklist/" class="tool-card" draggable="true" data-cat="检查" data-zh-title="节假日安全检查表" data-zh-desc="节前停工 / 节中值守 / 节后复工 · 能量隔离 · 危化品 · 治安防盗 · 应急值守" data-slug="holiday-safety-checklist">
+        <a href="/sheen-toolbox/holiday-safety-checklist/" class="tool-card" draggable="true" data-cat="检查" data-zh-title="节假日安全检查表" data-zh-desc="节前停工 · 节中值守 · 节后复工 37 项 节前停工 / 节中值守 / 节后复工 · 能量隔离 · 危化品 · 治安防盗 · 应急值守" data-slug="holiday-safety-checklist">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-calendar-check"></i></div>
-            <div class="card-text"><h3 title="节假日安全检查表">节假日安全检查表</h3>
-            <p class="desc">节前停工 · 节中值守 · 节后复工 37 项</p></div>
+            <div class="card-text"><h3 title="节假日安全检查表">节假日安全检查表</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/machine-guard-design/" class="tool-card is-new" draggable="true" data-cat="查询" data-zh-title="机械防护罩设计安全数据查询" data-zh-desc="开口安全距离·防越过·挤压最小间距·设计要求" data-slug="machine-guard-design">
+        <a href="/sheen-toolbox/machine-guard-design/" class="tool-card" draggable="true" data-cat="查询" data-zh-title="机械防护罩设计安全数据查询" data-zh-desc="开口安全距离·防越过·挤压最小间距·设计要求" data-slug="machine-guard-design">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-shield-halved"></i></div>
-            <div class="card-text"><h3 title="机械防护罩设计安全数据查询">机械防护罩设计安全数据查询</h3>
-            <p class="desc">开口安全距离·防越过·挤压最小间距·设计要求</p></div>
+            <div class="card-text"><h3 title="机械防护罩设计安全数据查询">机械防护罩设计安全数据查询</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/bund-capacity-calculator/" class="tool-card is-new" draggable="true" data-cat="计算" data-zh-title="围堰有效容积计算" data-zh-desc="有效容积扣减·防火堤堤高堤距·隔堤10%·应急事故池消防水与雨水量" data-slug="bund-capacity-calculator">
+        <a href="/sheen-toolbox/bund-capacity-calculator/" class="tool-card" draggable="true" data-cat="计算" data-zh-title="围堰有效容积计算" data-zh-desc="有效容积扣减·防火堤堤高堤距·隔堤10%·应急事故池消防水与雨水量" data-slug="bund-capacity-calculator">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-water"></i></div>
-            <div class="card-text"><h3 title="围堰有效容积计算">围堰有效容积计算</h3>
-            <p class="desc">有效容积扣减·防火堤堤高堤距·隔堤10%·应急事故池消防水与雨水量</p></div>
+            <div class="card-text"><h3 title="围堰有效容积计算">围堰有效容积计算</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
-        <a href="/sheen-toolbox/relief-device-sizing/" class="tool-card is-new" draggable="true" data-cat="计算" data-zh-title="泄放量计算与安全阀爆破片选型" data-zh-desc="泄放面积·通流口径·安全阀公称通径·爆破片口径·最小爆破压力·操作压力比·整定压力规则" data-slug="relief-device-sizing">
+        <a href="/sheen-toolbox/relief-device-sizing/" class="tool-card" draggable="true" data-cat="计算" data-zh-title="泄放量计算与安全阀爆破片选型" data-zh-desc="泄放面积·通流口径·安全阀公称通径·爆破片口径·最小爆破压力·操作压力比·整定压力规则" data-slug="relief-device-sizing">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-burst"></i></div>
-            <div class="card-text"><h3 title="泄放量计算与安全阀爆破片选型">泄放量计算与安全阀爆破片选型</h3>
-            <p class="desc">泄放面积·通流口径·安全阀公称通径·爆破片口径·最小爆破压力·操作压力比·整定压力规则</p></div>
+            <div class="card-text"><h3 title="泄放量计算与安全阀爆破片选型">泄放量计算与安全阀爆破片选型</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
         <div class="tool-card placeholder">
             <div class="tool-icon"><i class="fa-solid fa-diagram-project"></i></div>
-            <div class="card-text"><h3>更多工具推出中</h3>
-            <p class="desc"></p></div>
+            <div class="card-text"><h3>更多工具推出中</h3></div>
             <span class="coming-badge"></span>
         </div>
     </div>
@@ -1546,13 +1470,18 @@
     </script>
 
     <script>
-    // ===== 新品自动标记（基于 tool-meta.json 的 dataUpdated，30 天内） =====
+    // ===== 新品自动标记（数据驱动：以 tool-meta.json 的 released 判定，30 天窗进 / 过期自动撤） =====
+    // 单一数据源是 tool-meta.json 的 released（首次发布日期）。
+    // dataUpdated 只是数据刷新日期，一律不参与判定（曾按 dataUpdated 写过，是错的）。
+    // 首页 tool-card 不再静态写 is-new（历史遗留：静态标记无任何移除逻辑，导致 NEW 永驻）。
+    // 新增工具时只需在 tool-meta.json 对应条目加 "released": "YYYY-MM-DD"，首页零维护。
     (function() {
         var NEW_WINDOW_DAYS = 30;
-        function markNew(card, slug) {
-            // 注意：静态标了 is-new 的卡片也必须补 new-badge 角标。
-            // 早期版本在这里直接 return，导致静态标记的工具（machine-guard-design /
-            // relief-device-sizing 等）永远没有 NEW 角标，dataUpdated 自动标记也对其失效。
+        // tool-meta.json 拉取失败时的兜底：此处仅列最近 30 天内上线的工具，
+        // 与 released 判定是同一批；拉取成功则完全由 applyNew 裁决（含过期撤标）。
+        var FALLBACK_NEW_SLUGS = ['machine-guard-design', 'relief-device-sizing', 'bund-capacity-calculator'];
+
+        function markNew(card) {
             if (!card.classList.contains('is-new')) card.classList.add('is-new');
             if (!card.querySelector('.new-badge')) {
                 var b = document.createElement('span');
@@ -1561,11 +1490,15 @@
                 card.insertBefore(b, card.firstChild);
             }
         }
+        function unmarkNew(card) {
+            card.classList.remove('is-new');
+            var b = card.querySelector('.new-badge');
+            if (b && b.parentNode) b.parentNode.removeChild(b);
+        }
         function applyNew(meta) {
             if (!meta) return;
             var now = Date.now();
-            var cards = document.querySelectorAll('.tool-card[data-slug]');
-            cards.forEach(function(card) {
+            document.querySelectorAll('.tool-card[data-slug]').forEach(function(card) {
                 var slug = card.getAttribute('data-slug');
                 var entry = meta[slug];
                 // 以 released（首次发布日期）判定新品，dataUpdated 仅为数据刷新日期不用于此
@@ -1574,41 +1507,36 @@
                 var d = new Date(rel.replace(/-/g, '/'));
                 if (isNaN(d.getTime())) return;
                 var days = (now - d.getTime()) / 86400000;
-                if (days >= 0 && days <= NEW_WINDOW_DAYS) markNew(card, slug);
+                if (days >= 0 && days <= NEW_WINDOW_DAYS) markNew(card);
+                else if (days > NEW_WINDOW_DAYS) unmarkNew(card);
+                // days < 0（发布日期在未来）不处理
             });
         }
-        try {
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', '/sheen-toolbox/tool-meta.json', true);
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    try { applyNew(JSON.parse(xhr.responseText)); } catch (e) {}
-                }
-            };
-            xhr.send();
-        } catch (e) {}
-
-        // 静态标了 is-new 的卡片不经过 applyNew（无 released 字段或已超 30 天窗），
-        // 必须单独补 NEW 角标，否则只红不标。
-        function backfillStaticBadges() {
-            document.querySelectorAll('.tool-card.is-new[data-slug]').forEach(function(card) {
-                if (!card.querySelector('.new-badge')) markNew(card, card.getAttribute('data-slug'));
+        function fallbackMark() {
+            FALLBACK_NEW_SLUGS.forEach(function(slug) {
+                var card = document.querySelector('.tool-card[data-slug="' + slug + '"]');
+                if (card) markNew(card);
             });
         }
-        backfillStaticBadges();
+        function loadMeta() {
+            try {
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', '/sheen-toolbox/tool-meta.json', true);
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        try { applyNew(JSON.parse(xhr.responseText)); return; } catch (e) {}
+                    }
+                    fallbackMark();
+                };
+                xhr.onerror = fallbackMark;
+                xhr.send();
+            } catch (e) { fallbackMark(); }
+        }
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', backfillStaticBadges);
+            document.addEventListener('DOMContentLoaded', loadMeta);
+        } else {
+            loadMeta();
         }
-
-        // ===== 描述软截断（统一观感，保留 title 完整） =====
-        var DESC_MAX = 22;
-        document.querySelectorAll('.tool-card .desc').forEach(function(el) {
-            var txt = el.textContent.trim();
-            if (txt.length > DESC_MAX) {
-                if (!el.getAttribute('title')) el.setAttribute('title', txt);
-                el.textContent = txt.slice(0, DESC_MAX) + '…';
-            }
-        });
     })();
     </script>
 
