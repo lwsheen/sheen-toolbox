@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head data-seo="sheen">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="蝴蝶结（Bowtie）模型分析 — GB/T 27921-2023 风险评估技术 · 威胁→预防屏障→顶上事件→减缓屏障→后果 · 屏障有效/失效标注 · PNG 导出 · JSON 导入导出 · 本机自动保存">
+
+<link rel="icon" type="image/png" sizes="192x192" href="/sheen-toolbox/assets/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/sheen-toolbox/assets/icon-512.png">
+
+<title>蝴蝶结（Bowtie）模型分析 — SHEEN Toolbox</title>
+<meta property="og:title" content="蝴蝶结（Bowtie）模型分析 | SHEEN Toolbox">
+<meta property="og:description" content="GB/T 27921-2023 · 威胁→预防屏障→顶上事件→减缓屏障→后果 · 屏障失效标注 · PNG 导出 · JSON 导入导出">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lwsheen.pages.dev/sheen-toolbox/bowtie-analysis/">
+<meta property="og:image" content="https://lwsheen.pages.dev/sheen-toolbox/assets/share/bowtie-analysis.png">
+<link rel="canonical" href="https://lwsheen.pages.dev/sheen-toolbox/bowtie-analysis/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "蝴蝶结（Bowtie）模型分析", "url": "https://lwsheen.pages.dev/sheen-toolbox/bowtie-analysis/", "description": "GB/T 27921-2023 风险评估技术：威胁→预防屏障→顶上事件→减缓屏障→后果五列绘制，屏障有效/失效标注，PNG/JSON/文本导出，本机自动保存", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "inLanguage": "zh-CN", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "CNY"}, "publisher": {"@type": "Organization", "name": "SHEEN Toolbox"}}</script>
+
+<link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
+<link rel="stylesheet" href="/sheen-toolbox/common.css">
+<style>:root {
+  /* 品牌色一律引用 common.css 令牌，页面不自定义色值 */
+  --bt-th-bg: var(--warn-soft);
+  --bt-th-bd: var(--warn-700);
+  --bt-th-tx: var(--warn-deep);
+  --bt-pv-bg: var(--tech-blue-soft);
+  --bt-pv-bd: var(--tech-blue);
+  --bt-pv-tx: var(--tech-blue);
+  --bt-top-bg: var(--space-gray);
+  --bt-top-tx: #FFFFFF;
+  --bt-mt-bg: var(--warn-orange-soft);
+  --bt-mt-bd: var(--warn-orange);
+  --bt-mt-tx: var(--warn-deep);
+  --bt-cs-bg: var(--brand-red-light);
+  --bt-cs-bd: var(--brand-red);
+  --bt-cs-tx: var(--brand-red);
+  --bt-fl-bg: var(--fail-soft);
+  --bt-fl-bd: var(--fail);
+  --bt-fl-tx: var(--fail-deep);
+}
+
+/* ============ 蝴蝶结画布 ============ */
+.bt-toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
+.bt-tbtn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 13px; font-size: 12.5px; font-weight: 600; font-family: var(--font); border-radius: 8px; background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border); cursor: pointer; transition: all 0.18s; }
+.bt-tbtn:hover { border-color: var(--tech-blue); color: var(--tech-blue); background: var(--tech-blue-soft); }
+.bt-tbtn.primary { background: var(--brand-red); border-color: var(--brand-red); color: #fff; }
+.bt-tbtn.primary:hover { background: var(--brand-red-hover); border-color: var(--brand-red-hover); color: #fff; }
+.bt-tbtn i { font-size: 12px; }
+.bt-sep { width: 1px; height: 20px; background: var(--border); margin: 0 2px; }
+.bt-hint { font-size: 11px; color: var(--text-secondary); margin-bottom: 10px; line-height: 1.7; }
+.bt-hint b { color: var(--text-primary); }
+
+.bt-legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 11px; color: var(--text-secondary); margin-bottom: 12px; }
+.bt-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.bt-legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+
+.bt-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: var(--bg-card); }
+.bt-canvas { position: relative; }
+.bt-canvas.bt-empty { min-height: 150px; }
+.bt-colhead { position: absolute; top: 0; height: 34px; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.5px; border-radius: 8px; border: 1px solid; z-index: 3; }
+.bt-colhead em { font-style: normal; font-weight: 600; font-size: 9.5px; opacity: 0.75; letter-spacing: 0.3px; }
+.bt-ch-th { background: var(--bt-th-bg); border-color: var(--bt-th-bd); color: var(--bt-th-tx); }
+.bt-ch-pv { background: var(--bt-pv-bg); border-color: var(--bt-pv-bd); color: var(--bt-pv-tx); }
+.bt-ch-top { background: var(--bt-top-bg); border-color: var(--bt-top-bg); color: var(--bt-top-tx); }
+.bt-ch-mt { background: var(--bt-mt-bg); border-color: var(--bt-mt-bd); color: var(--bt-mt-tx); }
+.bt-ch-cs { background: var(--bt-cs-bg); border-color: var(--bt-cs-bd); color: var(--bt-cs-tx); }
+
+.bt-svg { position: absolute; left: 0; top: 0; z-index: 1; pointer-events: none; }
+.bt-box { position: absolute; z-index: 2; border: 2px solid; border-radius: 12px; box-sizing: border-box; }
+.bt-box .bt-lines { position: absolute; left: 10px; right: 10px; top: 8px; line-height: 18px; text-align: center; font-size: 13px; font-weight: 600; overflow-wrap: break-word; }
+.bt-threat { background: var(--bt-th-bg); border-color: var(--bt-th-bd); color: var(--bt-th-tx); }
+.bt-prev { background: var(--bt-pv-bg); border-color: var(--bt-pv-bd); color: var(--bt-pv-tx); }
+.bt-prev .bt-lines { top: 7px; bottom: 26px; left: 8px; right: 8px; }
+.bt-top { background: var(--bt-top-bg); border-color: var(--bt-top-bg); color: var(--bt-top-tx); }
+.bt-top .bt-lines { font-size: 14px; font-weight: 700; line-height: 20px; top: 10px; }
+.bt-mit { background: var(--bt-mt-bg); border-color: var(--bt-mt-bd); color: var(--bt-mt-tx); }
+.bt-mit .bt-lines { top: 7px; bottom: 26px; left: 8px; right: 8px; }
+.bt-cons { background: var(--bt-cs-bg); border-color: var(--bt-cs-bd); color: var(--bt-cs-tx); }
+.bt-box.fail { background: var(--bt-fl-bg); border-color: var(--bt-fl-bd); border-style: dashed; color: var(--bt-fl-tx); }
+.bt-ctrls { position: absolute; top: 3px; right: 3px; display: flex; gap: 2px; z-index: 4; }
+.bt-bar-ctrls { position: absolute; left: 0; right: 0; bottom: 4px; display: flex; justify-content: center; gap: 4px; z-index: 4; }
+.bt-mini { width: 19px; height: 19px; padding: 0; border: none; border-radius: 6px; font-size: 10px; line-height: 1; cursor: pointer; font-family: var(--font); background: rgba(255,255,255,0.75); color: var(--text-secondary); display: inline-flex; align-items: center; justify-content: center; }
+.bt-mini:hover { background: var(--space-gray); color: #fff; }
+.bt-mini.st-ok { color: var(--ok-deep); font-weight: 700; }
+.bt-mini.st-fail { background: var(--fail); color: #fff; font-weight: 700; }
+.bt-addbar { position: absolute; z-index: 2; height: 20px; padding: 0 8px; font-size: 11px; font-weight: 600; font-family: var(--font); border-radius: 60px; border: 1px dashed var(--border); background: var(--bg-page); color: var(--text-secondary); cursor: pointer; }
+.bt-addbar:hover { border-color: var(--tech-blue); color: var(--tech-blue); background: var(--tech-blue-soft); }
+.bt-empty-tip { position: absolute; left: 50%; top: 60%; transform: translate(-50%, -50%); font-size: 13px; color: var(--text-secondary); text-align: center; line-height: 2; z-index: 2; }
+.bt-ta { position: absolute; z-index: 9; border: 2px solid var(--tech-blue); border-radius: 12px; padding: 8px 10px; font-size: 13px; font-weight: 600; font-family: var(--font); line-height: 18px; text-align: center; resize: none; background: var(--bg-card); color: var(--text-primary); box-sizing: border-box; outline: none; }
+.bt-msg { display: none; margin-top: 10px; font-size: 12px; padding: 9px 12px; border-radius: 8px; }
+.bt-msg.on { display: block; }
+.bt-msg.ok { background: var(--ok-soft); border: 1px solid var(--ok-deep); color: var(--ok-deep); }
+.bt-msg.bad { background: var(--bt-fl-bg); border: 1px solid var(--fail); color: var(--bt-fl-tx); }
+
+@media (hover: hover) {
+  .bt-ctrls { opacity: 0; transition: opacity 0.15s; }
+  .bt-box:hover .bt-ctrls { opacity: 1; }
+}
+@media (max-width: 768px) {
+  .bt-toolbar { gap: 6px; }
+  .bt-tbtn { padding: 7px 10px; font-size: 12px; }
+  .bt-hint { font-size: 10.5px; }
+}
+
+/* ============ 页签与表格（沿用全站组件类） ============ */
+.tab-nav { display: flex; gap: 0; margin-bottom: 0; border-bottom: 2px solid var(--border); }
+.tab-btn { flex: 1; padding: 13px 8px; font-size: 13px; font-weight: 600; font-family: var(--font); background: var(--bg-page); color: var(--text-secondary); border: none; cursor: pointer; transition: all 0.2s; border-bottom: 3px solid transparent; margin-bottom: -2px; display: flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; border-radius: 8px; }
+.tab-btn i { font-size: 15px; }
+.tab-btn:hover { color: var(--brand-red); background: var(--brand-red-light); }
+.tab-btn.active { color: var(--brand-red); background: var(--bg-card); border-bottom-color: var(--brand-red); }
+.tab-panel { display: none; background: var(--bg-card); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: 22px; }
+.tab-panel.active { display: block; }
+
+.scene-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.scene-card { text-align: left; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; cursor: pointer; font-family: var(--font); transition: all 0.18s; }
+.scene-card:hover { border-color: var(--brand-red); background: var(--brand-red-light); }
+.scene-card .sc-no { display: inline-flex; width: 22px; height: 22px; border-radius: 50%; background: var(--brand-red); color: #fff; font-size: 11px; font-weight: 700; align-items: center; justify-content: center; }
+.scene-card b { display: block; font-size: 13.5px; color: var(--text-primary); margin: 8px 0 5px; line-height: 1.4; }
+.scene-card span { display: block; font-size: 11.5px; color: var(--text-secondary); line-height: 1.7; }
+.scene-card .sc-go { display: inline-block; margin-top: 9px; font-size: 11.5px; font-weight: 600; color: var(--brand-red); }
+
+.sec-title { font-size: 14px; font-weight: 700; color: var(--text-primary); margin: 20px 0 8px; padding-left: 9px; border-left: 3px solid var(--brand-red); }
+.sec-title:first-child { margin-top: 0; }
+.data-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 12px; }
+.data-table th { background: var(--bg-page); color: var(--text-primary); font-weight: 600; padding: 9px 10px; border: 1px solid var(--border); text-align: left; }
+.data-table td { padding: 9px 10px; border: 1px solid var(--border); color: var(--text-secondary); line-height: 1.7; }
+.data-table td b { color: var(--text-primary); }
+.wl-chip { display: inline-block; font-size: 10.5px; font-weight: 600; padding: 2px 8px; border-radius: 60px; background: var(--tech-blue-soft); color: var(--tech-blue); margin-left: 6px; }
+.warn-bar { display: flex; gap: 10px; padding: 12px 14px; border-radius: 10px; font-size: 12px; line-height: 1.9; margin-bottom: 12px; align-items: flex-start; }
+.warn-bar i { margin-top: 3px; flex-shrink: 0; }
+.warn-bar.info { background: var(--tech-blue-soft); border: 1px solid var(--tech-blue); color: var(--tech-blue); }
+.warn-bar.warning { background: var(--warn-orange-soft); border: 1px solid var(--warn-orange); color: var(--warn-deep); }
+.warn-bar strong { font-weight: 700; }
+.std-badge { display: inline-block; font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 5px; background: var(--bg-card); border: 1px solid var(--tech-blue); color: var(--tech-blue); margin: 0 2px; }
+.step-list { margin: 10px 0 0; padding: 0; list-style: none; counter-reset: st; }
+.step-list li { counter-increment: st; position: relative; padding: 0 0 0 34px; margin-bottom: 12px; font-size: 12.5px; color: var(--text-secondary); line-height: 1.9; }
+.step-list li::before { content: counter(st); position: absolute; left: 0; top: 1px; width: 22px; height: 22px; border-radius: 50%; background: var(--brand-red); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.step-list li b { color: var(--text-primary); }
+
+@media (max-width: 768px) {
+  .scene-grid { grid-template-columns: 1fr; }
+  .tab-nav { overflow-x: auto; }
+  .tab-btn { flex: 0 0 auto; padding: 11px 12px; font-size: 12px; }
+  .tab-panel { padding: 15px; }
+  .data-table { font-size: 11px; }
+  .data-table th, .data-table td { padding: 6px 5px; }
+}
+</style>
+<style>
+@media print {
+  @page { size: A4 landscape; margin: 10mm; }
+  body { background: #fff !important; padding: 0 !important; font-size: 11pt; color: #000 !important; }
+  .breadcrumb, .btn-primary, .btn-print, .sheen-footer, .no-print, .no-pr, .tab-nav, .bt-toolbar, .bt-hint { display: none !important; }
+  .tab-panel { display: none !important; border: none !important; padding: 0 !important; }
+  .tab-panel.active { display: block !important; }
+  .app-container { box-shadow: none !important; border: none !important; max-width: 100% !important; padding: 0 !important; }
+  .bt-scroll { overflow: visible !important; border: none !important; }
+  .bt-canvas { transform: scale(0.92); transform-origin: top left; }
+}
+</style>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?9b8c3df212619adec1f70f01695f4160";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  if (location.hostname.indexOf("github.io") >= 0) {
+    var hm2 = document.createElement("script");
+    hm2.src = "https://hm.baidu.com/hm.js?5ceec8bd8bf10bd9d1f4ddceaebdae6f";
+    s.parentNode.insertBefore(hm2, s);
+  }
+})();
+</script>
+</head>
+
+<body>
+
+<div class="breadcrumb">
+  <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+  <span> / 蝴蝶结（Bowtie）模型分析</span>
+</div>
+
+<main class="app-container">
+
+  <h1 class="page-title"><i class="fa-solid fa-diagram-project" style="color:var(--brand-red)"></i> 蝴蝶结（Bowtie）模型分析</h1>
+  <p class="page-subtitle" style="margin-bottom:16px;">以<strong>顶上事件</strong>为中心：向左画<strong>威胁 → 预防屏障</strong>，向右画<strong>减缓/恢复屏障 → 后果</strong>；屏障可标注<strong>有效 / 失效</strong>，支持 PNG / JSON / 文本导出，数据自动保存在本机浏览器 — 适用于 JSA/HAZOP 之后的场景化风险沟通、隐患排查、应急预案与培训</p>
+
+  <div class="warn-bar info no-pr" style="margin-top:0;margin-bottom:14px;">
+    <i class="fa-solid fa-circle-info"></i>
+    <span><strong>本工具依据的现行版标准（2026-10-19 实证核查）：</strong>
+      <span class="std-badge">GB/T 27921-2023</span> 风险管理 风险评估技术 —— 蝴蝶结分析法方法来源（2023-08-06 发布并实施，等同采用 IEC 31010:2019，代替 GB/T 27921-2011）·
+      <span class="std-badge">GB/T 24353-2022</span> 风险管理 指南（2022-10-12，等同 ISO 31000:2018）·
+      <span class="std-badge">GB/T 23694-2024</span> 风险管理 术语（2024-12-31 发布，代替 2013 版，修改采用 ISO 31073:2022）·
+      <span class="std-badge">AQ/T 3034-2022</span> 化工过程安全管理导则（2022-10-01 发布 / 2023-04-01 实施，代替 2010 版；4.6 风险管理 · 4.11 安全仪表管理 · 4.16 应急准备与响应 · 4.17 事故事件管理）·
+      <span class="std-badge">GB 30871-2022</span> 危险化学品企业特殊作业安全规范（2022-03-15 发布 / 2022-10-01 实施，代替 2014 版，全文强制 —— 屏障设计依据）·
+      <span class="std-badge">GB/T 45001-2020</span> 职业健康安全管理体系 要求及使用指南（等同 ISO 45001:2018）
+    </span>
+  </div>
+
+  <div class="warn-bar warning no-pr">
+    <i class="fa-solid fa-triangle-exclamation"></i>
+    <span><strong>两个最容易画错的地方，先看这里：</strong>
+      ① <strong>预防屏障与减缓屏障不能混放</strong>：预防屏障在顶上事件<strong>左侧</strong>，作用是<strong>阻止顶上事件发生</strong>（如作业前气体检测）；减缓屏障在<strong>右侧</strong>，作用是<strong>顶上事件已经发生后减轻后果</strong>（如灭火系统、应急预案）。把「应急器材」画到左边是最常见的错误。
+      ② <strong>屏障必须可验证</strong>：写「加强管理」「提高意识」不算屏障 —— 每一条屏障都应能回答「谁在做、多久做一次、怎么做记录、失效了什么现象」，并在图上把失效的屏障标为<span style="color:var(--fail);font-weight:700;">失效</span>。
+    </span>
+  </div>
+
+  <div class="tab-nav no-pr">
+    <button class="tab-btn active" onclick="btSwitch(0)" data-tab="0"><i class="fa-solid fa-diagram-project"></i> 蝴蝶结图编辑器</button>
+    <button class="tab-btn" onclick="btSwitch(1)" data-tab="1"><i class="fa-solid fa-book-open"></i> 分析指引</button>
+    <button class="tab-btn" onclick="btSwitch(2)" data-tab="2"><i class="fa-solid fa-flask"></i> 场景示例</button>
+    <button class="tab-btn" onclick="btSwitch(3)" data-tab="3"><i class="fa-solid fa-book"></i> 规范速查</button>
+  </div>
+
+  <!-- ============ 页签 0：编辑器 ============ -->
+  <section class="tab-panel active" id="panel0">
+    <div class="bt-toolbar no-pr">
+      <button class="bt-tbtn primary" onclick="btAddThreat()"><i class="fa-solid fa-plus"></i> 添加威胁</button>
+      <button class="bt-tbtn primary" onclick="btAddCons()"><i class="fa-solid fa-plus"></i> 添加后果</button>
+      <span class="bt-sep"></span>
+      <button class="bt-tbtn" onclick="btReset()"><i class="fa-solid fa-rotate-left"></i> 恢复示例</button>
+      <button class="bt-tbtn" onclick="btClear()"><i class="fa-solid fa-eraser"></i> 清空</button>
+      <span class="bt-sep"></span>
+      <button class="bt-tbtn" onclick="btImport()"><i class="fa-solid fa-file-import"></i> 导入 JSON</button>
+      <button class="bt-tbtn" onclick="btExportJson()"><i class="fa-solid fa-file-export"></i> 导出 JSON</button>
+      <button class="bt-tbtn" onclick="btExportPng()"><i class="fa-solid fa-image"></i> 导出 PNG</button>
+      <button class="bt-tbtn" onclick="btExportText()"><i class="fa-solid fa-align-left"></i> 导出文本</button>
+      <button class="bt-tbtn" onclick="window.print()"><i class="fa-solid fa-print"></i> 打印</button>
+    </div>
+    <div class="bt-hint no-pr"><b>操作：</b>双击图形框编辑文字 · 悬停图形框显示 <b>✎ 编辑 / ✕ 删除</b> · 屏障条底部 <b>✓/✕ 切换有效/失效</b> · 每行下方 <b>＋屏障</b> 追加屏障 · 所有修改自动保存在本机浏览器（localStorage），刷新不丢失</div>
+    <div class="bt-legend no-pr">
+      <span><i style="background:var(--bt-th-bg);border:1.5px solid var(--bt-th-bd);"></i>威胁</span>
+      <span><i style="background:var(--bt-pv-bg);border:1.5px solid var(--bt-pv-bd);"></i>预防屏障</span>
+      <span><i style="background:var(--bt-top-bg);"></i>顶上事件</span>
+      <span><i style="background:var(--bt-mt-bg);border:1.5px solid var(--bt-mt-bd);"></i>减缓/恢复屏障</span>
+      <span><i style="background:var(--bt-cs-bg);border:1.5px solid var(--bt-cs-bd);"></i>后果</span>
+      <span><i style="background:var(--bt-fl-bg);border:1.5px dashed var(--bt-fl-bd);"></i>失效屏障（红虚线）</span>
+    </div>
+    <div class="bt-scroll">
+      <div class="bt-canvas" id="btCanvas" style="width:1120px;"></div>
+    </div>
+    <div class="bt-msg" id="btMsg"></div>
+    <input type="file" id="btFile" accept=".json,application/json" style="display:none;">
+  </section>
+
+  <!-- ============ 页签 1：分析指引 ============ -->
+  <section class="tab-panel" id="panel1">
+    <div class="sec-title">1. 什么是蝴蝶结模型</div>
+    <p style="font-size:12.5px;color:var(--text-secondary);line-height:2;margin:6px 0 0;">
+      蝴蝶结（Bowtie）模型把一次<strong style="color:var(--text-primary);">「顶上事件」</strong>（Top Event，风险从「尚未失控」滑向「已经失控」的那个转折点，如「甲醇泄漏」「人员高处坠落」）放在中间：
+      向<strong style="color:var(--text-primary);">左</strong>追是<strong style="color:var(--text-primary);">什么原因可能导致它</strong>（威胁）和<strong style="color:var(--text-primary);">靠什么拦住它</strong>（预防屏障）；
+      向<strong style="color:var(--text-primary);">右</strong>追是<strong style="color:var(--text-primary);">发生后最坏怎样</strong>（后果）和<strong style="color:var(--text-primary);">靠什么把伤害压到最小</strong>（减缓/恢复屏障）。
+      整张图形似领结，故名蝴蝶结。它是 GB/T 27921-2023《风险管理 风险评估技术》收录的风险评估技术之一，最大价值是<strong style="color:var(--text-primary);">一张图把「事前防」和「事后救」同时讲清楚</strong>，适合跨部门沟通与培训。
+    </p>
+
+    <div class="sec-title">2. 五列含义与常见画错</div>
+    <table class="data-table">
+      <thead><tr><th style="width:110px;">要素</th><th style="width:210px;">画什么</th><th>常见画错 / 纠正</th></tr></thead>
+      <tbody>
+        <tr><td><b>威胁</b>（左列·黄）</td><td>可能直接引发顶上事件的原因、失效模式或触发条件</td><td>写「管理不到位」这类泛泛原因 → 应写成可观察的具体场景，如「鹤管接口未试漏即卸车」</td></tr>
+        <tr><td><b>预防屏障</b>（左二·蓝）</td><td>位于威胁与顶上事件之间、<b>阻止顶上事件发生</b>的硬件/软件/管理措施</td><td>把应急救援措施画到左边 → 应急属于减缓屏障；预防屏障必须「挡在事件前」</td></tr>
+        <tr><td><b>顶上事件</b>（中心·深灰）</td><td>分析对象的转折点事件，一句话、可判定</td><td>写成事故本身（「爆炸死人」）或写成原因（「违章作业」）→ 顶上事件应是「泄漏」「坠落」这类中间事件</td></tr>
+        <tr><td><b>减缓/恢复屏障</b>（右二·橙）</td><td>顶上事件发生后<b>减轻后果或帮助恢复</b>的措施</td><td>只画灭火器不画「报警—疏散—救援—恢复」整条链 → 减缓屏障通常多层，应逐层列出</td></tr>
+        <tr><td><b>后果</b>（右列·红）</td><td>该威胁路径下最坏会导致的伤害、损失、环境影响</td><td>只写「事故」不写伤害对象 → 后果应写「人员中毒/火灾爆炸/水体污染」等可评估对象</td></tr>
+      </tbody>
+    </table>
+
+    <div class="sec-title">3. 四步画法</div>
+    <ol class="step-list">
+      <li><b>定顶上事件：</b>用一句「主语 + 动作 + 判据」描述，如「受限空间内可燃气浓度达到爆炸下限」。顶上事件选得太大（「装置着火」）会画不出屏障，选得太小（「1 号阀门微漏」）会失去分析意义。</li>
+      <li><b>向左列威胁 → 配预防屏障：</b>先穷举威胁（建议从人的行为、物的状态、环境条件、管理接口四类头脑风暴），再为每条威胁配预防屏障；<b>一条威胁可配多条屏障</b>，多层屏障才是「保护层」思路。</li>
+      <li><b>向右列后果 → 配减缓屏障：</b>按最严重到可接受排列后果；每条后果下配减缓/恢复屏障（检测报警、联锁切断、应急设施、预案、救援、恢复）。</li>
+      <li><b>标失效、排优先级：</b>逐条核对屏障当前是否真实有效（有检测记录吗？联锁投用了吗？），失效的标为「失效」；失效屏障集中的那条路径，就是接下来整改与管控的优先项。</li>
+    </ol>
+
+    <div class="sec-title">4. 屏障状态怎么标</div>
+    <div class="warn-bar info" style="margin-top:6px;">
+      <i class="fa-solid fa-circle-info"></i>
+      <span>点屏障条底部的 <b>✓ / ✕</b> 可在两种状态间切换：<b>✓ 有效</b>（蓝/橙底实线框）= 该屏障当前真实投用且可验证；<b>✕ 失效</b>（红虚线框）= 缺失、超期未检、被旁路或形同虚设。<b>一张「全是 ✓」的蝴蝶结图没有分析价值</b>——失效标注才是蝴蝶结图用于隐患排查与审核的看点：失效屏障即整改项。</span>
+    </div>
+
+    <div class="sec-title">5. 适用与局限</div>
+    <div class="warn-bar warning" style="margin-top:6px;">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <span><strong>蝴蝶结是「单场景」定性工具：</strong>一张图只覆盖一个顶上事件。系统性偏差排查用 HAZOP、保护层与频率量化用 LOPA（本站另有 LOPA 工具）、全要素风险梳理用 GB/T 24353-2022 风险管理流程。蝴蝶结图<strong>不输出风险等级数值</strong>，不能替代定量风险评价；图上屏障的充分性最终须经评审确认。屏障是否「独立有效」（是否共用同一失效原因）是进阶判读点，建议在评审时逐条讨论。</span>
+    </div>
+  </section>
+
+  <!-- ============ 页签 2：场景示例 ============ -->
+  <section class="tab-panel" id="panel2">
+    <div class="sec-title">点卡片载入示例到编辑器</div>
+    <p style="font-size:12.5px;color:var(--text-secondary);line-height:2;margin:6px 0 14px;">三组示例覆盖「易燃易爆受限空间」「装卸车泄漏」「高处坠落」三类高频场景，屏障条目均可直接改写复用。载入后可继续增删，示例数据同时存本机，互不覆盖前一次的修改（载入即替换当前图）。</p>
+    <div class="scene-grid" id="sceneGrid"></div>
+
+    <div class="sec-title">三组示例的分析看点</div>
+    <table class="data-table">
+      <thead><tr><th style="width:150px;">示例</th><th style="width:330px;">顶上事件</th><th>分析看点</th></tr></thead>
+      <tbody>
+        <tr><td><b>受限空间作业</b></td><td>受限空间内可燃/有毒有害气体积聚，人员中毒或火灾爆炸</td><td>预防侧强调「检测—隔离—通风—监护」四层屏障缺一不可（GB 30871-2022 特殊作业要求）；减缓侧重点是<b>盲目施防伤亡扩大</b>——救援本身必须作为后果单列</td></tr>
+        <tr><td><b>甲醇卸车泄漏</b></td><td>甲醇卸车过程液相泄漏</td><td>预防侧典型四层：接口防脱、泵阀泄压、静电跨接、液位联锁；减缓侧必须接<strong>环境后果</strong>（围堰、收集沟、雨排切换）而不只接消防</td></tr>
+        <tr><td><b>高处坠落</b></td><td>人员从 2 m 以上高处坠落</td><td>预防侧覆盖「洞口/挂点/平台/行为/天气」五类威胁；减缓侧注意安全带「高挂低用」与坠落缓冲、应急救生是最后一道屏障</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ 页签 3：规范速查 ============ -->
+  <section class="tab-panel" id="panel3">
+    <div class="sec-title">1. 引用标准一览<span class="wl-chip">2026-10-19 实证核查</span></div>
+    <table class="data-table">
+      <thead><tr><th style="width:220px;">标准</th><th style="width:190px;">发布 / 实施</th><th>在本工具中的用途</th></tr></thead>
+      <tbody>
+        <tr><td><b>GB/T 27921-2023</b> 风险管理 风险评估技术</td><td>2023-08-06 发布并实施，代替 GB/T 27921-2011；等同采用 IEC 31010:2019</td><td>蝴蝶结分析法的<strong>方法来源</strong>，本工具五列结构与屏障定义的基本依据</td></tr>
+        <tr><td><b>GB/T 24353-2022</b> 风险管理 指南</td><td>2022-10-12 发布，等同采用 ISO 31000:2018</td><td>风险管理过程框架：蝴蝶结属于「风险评估」环节的输出形式</td></tr>
+        <tr><td><b>GB/T 23694-2024</b> 风险管理 术语</td><td>2024-12-31 发布，代替 2013 版；修改采用 ISO 31073:2022</td><td>威胁、顶上事件、后果、屏障等术语口径</td></tr>
+        <tr><td><b>AQ/T 3034-2022</b> 化工过程安全管理导则</td><td>2022-10-01 发布 / 2023-04-01 实施，代替 2010 版（20 要素）</td><td>4.6 风险管理 · 4.11 安全仪表管理 · 4.16 应急准备与响应 · 4.17 事故事件管理 —— 屏障分层与应急侧列的设计依据</td></tr>
+        <tr><td><b>GB 30871-2022</b> 危险化学品企业特殊作业安全规范</td><td>2022-03-15 发布 / 2022-10-01 实施，代替 2014 版；全文强制</td><td>动火、受限空间、盲板抽堵等作业的预防屏障条目依据</td></tr>
+        <tr><td><b>GB/T 45001-2020</b> 职业健康安全管理体系 要求及使用指南</td><td>等同采用 ISO 45001:2018</td><td>组织层面危险源辨识、风险评价与运行控制的衔接</td></tr>
+      </tbody>
+    </table>
+
+    <div class="sec-title">2. 术语口径（GB/T 23694-2024 框架·白话转写）</div>
+    <table class="data-table">
+      <thead><tr><th style="width:130px;">术语</th><th>本工具口径</th></tr></thead>
+      <tbody>
+        <tr><td><b>威胁</b></td><td>可能直接导致顶上事件发生的原因、触发条件或失效模式</td></tr>
+        <tr><td><b>顶上事件</b></td><td>分析对象的中心事件：危险失去控制的转折点，向左是「防发生」、向右是「减后果」的分界</td></tr>
+        <tr><td><b>预防屏障</b></td><td>位于顶上事件左侧、用于阻止顶上事件发生的措施（工程控制、检测、行政控制等）</td></tr>
+        <tr><td><b>减缓/恢复屏障</b></td><td>位于顶上事件右侧、用于减轻后果严重度或支持恢复的措施（报警联锁、应急、救援、恢复）</td></tr>
+        <tr><td><b>屏障失效</b></td><td>屏障缺失、超期未校验、被旁路/切除、响应不及时等导致其按要求起作用的概率显著上升的状态</td></tr>
+        <tr><td><b>后果</b></td><td>顶上事件发生后对人员、资产、环境、声誉造成的可评估影响</td></tr>
+      </tbody>
+    </table>
+
+    <div class="sec-title">3. 常见错误纠正</div>
+    <table class="data-table">
+      <thead><tr><th style="width:44%;">✖ 常见错误说法 / 画法</th><th>✔ 规范方法下的纠正</th></tr></thead>
+      <tbody>
+        <tr><td>蝴蝶结是「鱼骨图加箭头」，想到哪画到哪</td><td>它是成方法的风险评估技术（GB/T 27921-2023 收录）：以顶上事件为唯一中心，两侧各按「威胁/后果 → 屏障」结构化展开</td></tr>
+        <tr><td>预防屏障里写「加强管理」「提高意识」</td><td>屏障须可验证：写明对象、措施、频次与记录；无法验证的口号不是屏障</td></tr>
+        <tr><td>把应急救援、灭火器材画在左边当预防屏障</td><td>应急与救援在顶上事件右侧，属减缓/恢复屏障；左边只放「阻止事件发生」的措施</td></tr>
+        <tr><td>整张图全是「有效」屏障，没有失效标注</td><td>失效标注是蝴蝶结图的核心输出：逐条核对屏障现状，失效项即整改清单</td></tr>
+        <tr><td>顶上事件写成最终事故（「爆炸伤亡」）</td><td>顶上事件是转折点（「泄漏」「坠落」），最终伤亡放右列后果；写成事故会让右侧无屏障可画</td></tr>
+        <tr><td>一张图想把全厂所有风险讲完</td><td>蝴蝶结是单场景工具：一个顶上事件一张图；多事件用多张图，或用 HAZOP/LOPA 衔接</td></tr>
+      </tbody>
+    </table>
+
+    <div class="sec-title">4. 免责与数据来源</div>
+    <div class="warn-bar warning">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <span>本页仅为蝴蝶结方法的<strong>绘制与沟通工具</strong>：标准信息为公开出版信息摘要，未收录任何标准全文（受版权保护）；本工具<strong>不输出风险等级数值、不替代正式风险评价报告</strong>。图上屏障的选取与充分性、顶上事件的界定，须由企业组织评审确认；涉及特殊作业与重大危险源的场景，还应同时满足 GB 30871-2022 等强制性标准及属地监管要求。标准修订后请以最新版本为准。页面数据仅保存于本机浏览器，不上传服务器。</span>
+    </div>
+  </section>
+
+</main>
+
+<footer class="sheen-footer">
+  <img src="../assets/sheen-logo.png" alt="SHEEN Toolbox" class="sheen-logo-sm"> &nbsp;<strong>SHEEN Toolbox</strong> · 蝴蝶结（Bowtie）模型分析
+</footer>
+
+<div class="print-time" id="printTime"></div>
+
+<script>
+(function() {
+'use strict';
+
+document.getElementById('printTime').textContent =
+  new Date(Date.now() + 8 * 3600000).toISOString().replace('T',' ').slice(0,16);
+
+// ============ 页签切换 ============
+window.btSwitch = function(i) {
+  var btns = document.querySelectorAll('.tab-btn');
+  var pans = document.querySelectorAll('.tab-panel');
+  for (var b = 0; b < btns.length; b++) btns[b].classList.toggle('active', b === i);
+  for (var p = 0; p < pans.length; p++) pans[p].classList.toggle('active', p === i);
+};
+
+// ============ 令牌读取（Canvas/SVG 无法直接用 CSS 变量，运行时读令牌保持单一来源） ============
+var TOKEN_LIST = ['--warn-soft','--warn-700','--warn-deep','--tech-blue','--tech-blue-soft','--tech-blue-hover','--space-gray','--brand-red','--brand-red-light','--brand-red-hover','--warn-orange','--warn-orange-soft','--fail','--fail-soft','--fail-deep','--ok-deep','--text-secondary','--font'];
+var TOKEN_FALLBACK = {
+  '--warn-soft':'#FDE68A','--warn-700':'#B45309','--warn-deep':'#9A3412','--tech-blue':'#2D7EE7','--tech-blue-soft':'#EAF2FD','--tech-blue-hover':'#1B6FD4','--space-gray':'#1E2126','--brand-red':'#F03752','--brand-red-light':'#FDEEF1','--brand-red-hover':'#D12E47','--warn-orange':'#F57C00','--warn-orange-soft':'#FEF3E2','--fail':'#DC2626','--fail-soft':'#FECACA','--fail-deep':'#991B1B','--ok-deep':'#166534','--text-secondary':'#5C6470','--font':"'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+};
+var TK = {};
+(function() {
+  var cs = getComputedStyle(document.documentElement);
+  for (var i = 0; i < TOKEN_LIST.length; i++) {
+    var k = TOKEN_LIST[i];
+    var v = cs.getPropertyValue(k);
+    TK[k.replace(/^--/, '')] = (v && v.trim()) ? v.trim().replace(/\s+/g, ' ') : TOKEN_FALLBACK[k];
+  }
+})();
+var FONT = TK['font'];
+
+// ============ 几何常量 ============
+var CW = 1120;                    // 画布宽
+var MARGIN = 116;                 // 两侧留白（内容宽 888 居中）
+var TW = 150, BW = 118, TOPW = 176;
+var GAP_TB = 46, GAP_BT = 42;
+var HEADER_H = 34, DY = 14;       // 列头高度与列头-内容间距
+var ROWGAP = 20, BARGAP = 8;
+var LH13 = 18;                    // 13px 文本行高
+var LH14 = 20;                    // 顶上事件 14px 行高
+// 列 x（左→右）：威胁 | 预防屏障 | 顶上事件 | 减缓屏障 | 后果
+var X_TH = MARGIN;
+var X_PV = X_TH + TW + GAP_TB;
+var X_TP = X_PV + BW + GAP_BT;
+var X_MT = X_TP + TOPW + GAP_BT;
+var X_CS = X_MT + BW + GAP_TB;
+// （X_CS + TW = 1004，右侧余 116，左右对称）
+
+// ============ 文本测量（DOM 与 Canvas 共用，保证导出一致） ============
+var mctx = document.createElement('canvas').getContext('2d');
+function fontOf(px, w) { return w + ' ' + px + 'px ' + FONT; }
+var F13 = fontOf(13, '600'), F14B = fontOf(14, '700');
+function tokenize(s) {
+  var out = [], buf = '';
+  for (var i = 0; i < s.length; i++) {
+    var ch = s.charAt(i);
+    if (/[\u4e00-\u9fff\u3000-\u303f\uff00-\uffef]/.test(ch)) {
+      if (buf) { out.push(buf); buf = ''; }
+      out.push(ch);
+    } else if (ch === ' ') {
+      if (buf) { out.push(buf); buf = ''; }
+      out.push(' ');
+    } else { buf += ch; }
+  }
+  if (buf) out.push(buf);
+  return out;
+}
+function wrapLines(text, font, maxW) {
+  mctx.font = font;
+  var toks = tokenize(String(text || ''));
+  var lines = [], cur = '';
+  for (var i = 0; i < toks.length; i++) {
+    var t = toks[i];
+    if (t === ' ' && !cur) continue;
+    var test = cur + t;
+    if (cur && mctx.measureText(test).width > maxW) {
+      lines.push(cur.replace(/\s+$/, ''));
+      cur = (t === ' ') ? '' : t;
+    } else { cur = test; }
+  }
+  if (cur.replace(/\s+$/, '')) lines.push(cur.replace(/\s+$/, ''));
+  return lines.length ? lines : [''];
+}
+function boxH(text, w, padX, font, lh, padY, extra, minH) {
+  var n = wrapLines(text, font, w - padX * 2).length;
+  var h = n * lh + padY * 2 + extra;
+  return Math.max(minH || 0, h);
+}
+
+// ============ 数据模型 ============
+var LS_KEY = 'sheen_bowtie_v1';
+var uidN = 0;
+function nid() { return 'b' + Date.now().toString(36) + (uidN++) + Math.random().toString(36).slice(2, 6); }
+
+function mkThreat(text, bars) {
+  return { id: nid(), text: text, bars: (bars || []).map(function(b) { return { id: nid(), text: b, state: 'ok' }; }) };
+}
+function mkCons(text, bars) { return mkThreat(text, bars); }
+
+var SCENES = [
+  {
+    name: '受限空间作业',
+    top: '受限空间内可燃/有毒有害气体积聚，人员中毒或火灾爆炸',
+    left: [
+      mkThreat('未通风置换，残留可燃气体', ['作业前检测 O₂/可燃气/有毒气', '强制通风并验证风量', '作业审批＋专人全程监护']),
+      mkThreat('作业过程继续产生有毒气', ['作业期间定时复测气体', '呼吸防护（长管/SCBA）']),
+      mkThreat('相邻物料经阀门管道串入', ['盲板断开＋阀门上锁挂牌', '能量隔离与验证'])
+    ],
+    right: [
+      mkCons('人员中毒或窒息', ['应急逃生与救援预案', '三脚架/苏生器应急器材']),
+      mkCons('火灾爆炸', ['可燃气体报警与联锁', '干粉/抗溶泡沫灭火系统']),
+      mkCons('盲目施救伤亡扩大', ['救援人员培训与演练', '警戒疏散与报警联动'])
+    ]
+  },
+  {
+    name: '甲醇卸车泄漏',
+    top: '甲醇卸车过程液相泄漏至地面/水体',
+    left: [
+      mkThreat('鹤管软管接口脱落破裂', ['接口试漏＋防脱拉断阀', '鹤管定期检验']),
+      mkThreat('卸车泵阀门故障超压', ['泵出口安全阀泄压', '压力/液位监控']),
+      mkThreat('静电积聚放电引燃', ['静电接地与跨接', '限速卸车（初速≤1m/s）']),
+      mkThreat('超装溢罐', ['液位计与满车联锁', '定量装车系统'])
+    ],
+    right: [
+      mkCons('蒸气云火灾爆炸', ['可燃/有毒气体报警', '干粉/抗溶泡沫系统', '事故紧急切断联锁']),
+      mkCons('人员甲醇中毒', ['防护用品与洗消设施', '医疗应急与救治']),
+      mkCons('雨水系统水体污染', ['卸车区围堰收集沟', '雨排切换阀与应急池'])
+    ]
+  },
+  {
+    name: '高处坠落',
+    top: '人员从 2 m 以上高处坠落',
+    left: [
+      mkThreat('临边洞口无防护', ['防护栏杆与固定盖板', '洞口水平安全网']),
+      mkThreat('安全带未挂或挂点不可靠', ['100% 系挂高挂低用', '锚点承载力校核']),
+      mkThreat('脚手架/操作平台不合格', ['验收合格挂牌使用', '剪刀撑/脚手板满铺']),
+      mkThreat('违章作业（攀爬探身）', ['作业许可与技术交底', '反违章监控与处罚']),
+      mkThreat('大风暴雨恶劣天气', ['6 级风以上停止作业', '天气预警与停工令'])
+    ],
+    right: [
+      mkCons('坠落死亡或重伤', ['坠落悬挂安全带缓冲', '应急救生绳/缓降器']),
+      mkCons('终身残疾与医疗负担', ['现场急救与快速送医', '工伤保险与善后']),
+      mkCons('停产整顿与责任追究', ['事故报告与调查处理', '整改闭环四不放过'])
+    ]
+  }
+];
+
+function normalize(m) {
+  if (!m || typeof m !== 'object') return null;
+  if (typeof m.top !== 'object' || !m.top || typeof m.top.text !== 'string') return null;
+  if (!Array.isArray(m.left) || !Array.isArray(m.right)) return null;
+  function normSide(arr) {
+    return arr.map(function(row) {
+      if (!row || typeof row.text !== 'string') return null;
+      return {
+        id: (typeof row.id === 'string' && row.id) ? row.id : nid(),
+        text: row.text,
+        bars: (Array.isArray(row.bars) ? row.bars : []).map(function(b) {
+          if (!b || typeof b.text !== 'string') return null;
+          return { id: (typeof b.id === 'string' && b.id) ? b.id : nid(), text: b.text, state: b.state === 'fail' ? 'fail' : 'ok' };
+        }).filter(Boolean)
+      };
+    }).filter(Boolean);
+  }
+  return { top: { id: nid(), text: m.top.text }, left: normSide(m.left), right: normSide(m.right) };
+}
+
+function cloneScene(i) {
+  var s = SCENES[i];
+  return normalize(JSON.parse(JSON.stringify({ top: { text: s.top }, left: s.left, right: s.right })));
+}
+
+var model = null;
+function load() {
+  try {
+    var s = localStorage.getItem(LS_KEY);
+    if (s) { var m = normalize(JSON.parse(s)); if (m) return m; }
+  } catch (e) {}
+  return cloneScene(0);
+}
+function save() {
+  try { localStorage.setItem(LS_KEY, JSON.stringify(model)); } catch (e) {}
+}
+model = load();
+
+// ============ 布局计算 ============
+function stackBoxes(bars) {
+  var items = [], total = 0;
+  for (var i = 0; i < bars.length; i++) {
+    var h = boxH(bars[i].text, BW, 8, F13, LH13, 7, 20);
+    items.push({ bar: bars[i], h: h, y: total });
+    total += h + BARGAP;
+  }
+  if (items.length) total -= BARGAP;
+  return { items: items, total: total };
+}
+function computeLayout() {
+  var rows = [];
+  var n = Math.max(model.left.length, model.right.length);
+  var y = 0;
+  for (var i = 0; i < n; i++) {
+    var th = model.left[i] || null, co = model.right[i] || null;
+    var thH = th ? boxH(th.text, TW, 10, F13, LH13, 8, 0) : 0;
+    var coH = co ? boxH(co.text, TW, 10, F13, LH13, 8, 0) : 0;
+    var ps = th ? stackBoxes(th.bars) : { items: [], total: 0 };
+    var ms = co ? stackBoxes(co.bars) : { items: [], total: 0 };
+    var rowH = Math.max(46, thH, coH, ps.total + 28, ms.total + 28);
+    rows.push({ th: th, co: co, thH: thH, coH: coH, ps: ps, ms: ms, y: y, h: rowH });
+    y += rowH + ROWGAP;
+  }
+  var totalH = n ? y - ROWGAP : 0;
+  var topH = boxH(model.top.text, TOPW, 12, F14B, LH14, 10, 0, 92);
+  return { rows: rows, totalH: Math.max(totalH, topH), topH: topH };
+}
+
+// ============ 渲染 ============
+var cv = document.getElementById('btCanvas');
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, function(c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+function linesHTML(text, font, w, padX) {
+  return wrapLines(text, font, w - padX * 2).map(esc).join('<br>');
+}
+function arrowSeg(x1, y1, x2, y2, color, dash) {
+  return '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="' + color + '" stroke-width="2" stroke-dasharray="' + (dash || '7 5') + '" marker-end="url(#' + markerId(color) + ')" />';
+}
+function markerId(color) { return 'ah-' + color.replace(/[^a-zA-Z0-9]/g, ''); }
+function markerDefs() {
+  var colors = [TK['warn-700'], TK['tech-blue'], TK['warn-orange'], TK['brand-red']];
+  var seen = {}, defs = '';
+  for (var i = 0; i < colors.length; i++) {
+    var c = colors[i];
+    if (seen[c]) continue;
+    seen[c] = 1;
+    defs += '<marker id="' + markerId(c) + '" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="' + c + '" /></marker>';
+  }
+  return '<defs>' + defs + '</defs>';
+}
+
+function render() {
+  var L = computeLayout();
+  var H = HEADER_H + DY + L.totalH + 8;
+  cv.style.height = H + 'px';
+  cv.classList.toggle('bt-empty', L.rows.length === 0);
+
+  var h = '';
+  var svgH = HEADER_H + DY + L.totalH + 8;
+  h += '<svg class="bt-svg" width="' + CW + '" height="' + svgH + '" viewBox="0 0 ' + CW + ' ' + svgH + '">' + markerDefs() + '</svg>';
+
+  // 列头
+  function head(x, w, cls, label, en) {
+    return '<div class="bt-colhead ' + cls + '" style="left:' + x + 'px;width:' + w + 'px;">' + label + ' <em>' + en + '</em></div>';
+  }
+  h += head(X_TH, TW, 'bt-ch-th', '威胁', 'THREAT');
+  h += head(X_PV, BW, 'bt-ch-pv', '预防屏障', 'PREVENTION');
+  h += head(X_TP, TOPW, 'bt-ch-top', '顶上事件', 'TOP EVENT');
+  h += head(X_MT, BW, 'bt-ch-mt', '减缓/恢复屏障', 'MITIGATION');
+  h += head(X_CS, TW, 'bt-ch-cs', '后果', 'CONSEQUENCE');
+
+  var arrows = '';
+  var topY = HEADER_H + DY + (L.totalH - L.topH) / 2;
+  var topCy = topY + L.topH / 2;
+
+  if (L.rows.length === 0) {
+    h += '<div class="bt-empty-tip">当前为空图。<br>点上方「添加威胁 / 添加后果」开始绘制，或到「场景示例」页签载入一组完整示例。</div>';
+  }
+
+  for (var i = 0; i < L.rows.length; i++) {
+    var r = L.rows[i];
+    var rowTop = HEADER_H + DY + r.y;
+
+    // 威胁框
+    if (r.th) {
+      var ty = rowTop + (r.h - r.thH) / 2;
+      h += '<div class="bt-box bt-threat" data-kind="threat" data-id="' + r.th.id + '" style="left:' + X_TH + 'px;top:' + ty + 'px;width:' + TW + 'px;height:' + r.thH + 'px;">'
+        + '<div class="bt-lines">' + linesHTML(r.th.text, F13, TW, 10) + '</div>'
+        + '<span class="bt-ctrls"><button class="bt-mini" data-act="edit" title="编辑">✎</button><button class="bt-mini" data-act="del" title="删除">✕</button></span>'
+        + '</div>';
+    }
+    // 后果框
+    if (r.co) {
+      var cy2 = rowTop + (r.h - r.coH) / 2;
+      h += '<div class="bt-box bt-cons" data-kind="cons" data-id="' + r.co.id + '" style="left:' + X_CS + 'px;top:' + cy2 + 'px;width:' + TW + 'px;height:' + r.coH + 'px;">'
+        + '<div class="bt-lines">' + linesHTML(r.co.text, F13, TW, 10) + '</div>'
+        + '<span class="bt-ctrls"><button class="bt-mini" data-act="edit" title="编辑">✎</button><button class="bt-mini" data-act="del" title="删除">✕</button></span>'
+        + '</div>';
+    }
+    // 预防屏障栈
+    var psTop = rowTop + (r.h - 28 - r.ps.total) / 2;
+    for (var p = 0; p < r.ps.items.length; p++) {
+      var it = r.ps.items[p];
+      var by = psTop + it.y;
+      var fail = it.bar.state === 'fail';
+      h += '<div class="bt-box bt-prev' + (fail ? ' fail' : '') + '" data-kind="bar" data-id="' + it.bar.id + '" style="left:' + X_PV + 'px;top:' + by + 'px;width:' + BW + 'px;height:' + it.h + 'px;">'
+        + '<div class="bt-lines">' + linesHTML(it.bar.text, F13, BW, 8) + '</div>'
+        + '<span class="bt-bar-ctrls">'
+        + '<button class="bt-mini ' + (fail ? 'st-fail' : 'st-ok') + '" data-act="state" title="切换有效/失效">' + (fail ? '✕' : '✓') + '</button>'
+        + '<button class="bt-mini" data-act="edit" title="编辑">✎</button>'
+        + '<button class="bt-mini" data-act="del" title="删除">✕</button>'
+        + '</span></div>';
+    }
+    if (r.th) {
+      h += '<button class="bt-addbar" data-act="addbar" data-side="left" data-row="' + i + '" style="left:' + (X_PV + (BW - 62) / 2) + 'px;top:' + (rowTop + r.h - 24) + 'px;">＋屏障</button>';
+    }
+    // 减缓屏障栈
+    var msTop = rowTop + (r.h - 28 - r.ms.total) / 2;
+    for (var q = 0; q < r.ms.items.length; q++) {
+      var it2 = r.ms.items[q];
+      var my = msTop + it2.y;
+      var fail2 = it2.bar.state === 'fail';
+      h += '<div class="bt-box bt-mit' + (fail2 ? ' fail' : '') + '" data-kind="bar" data-id="' + it2.bar.id + '" style="left:' + X_MT + 'px;top:' + my + 'px;width:' + BW + 'px;height:' + it2.h + 'px;">'
+        + '<div class="bt-lines">' + linesHTML(it2.bar.text, F13, BW, 8) + '</div>'
+        + '<span class="bt-bar-ctrls">'
+        + '<button class="bt-mini ' + (fail2 ? 'st-fail' : 'st-ok') + '" data-act="state" title="切换有效/失效">' + (fail2 ? '✕' : '✓') + '</button>'
+        + '<button class="bt-mini" data-act="edit" title="编辑">✎</button>'
+        + '<button class="bt-mini" data-act="del" title="删除">✕</button>'
+        + '</span></div>';
+    }
+    if (r.co) {
+      h += '<button class="bt-addbar" data-act="addbar" data-side="right" data-row="' + i + '" style="left:' + (X_MT + (BW - 62) / 2) + 'px;top:' + (rowTop + r.h - 24) + 'px;">＋屏障</button>';
+    }
+    // ---- 箭头（全部指向右：威胁→屏障→顶上事件；顶上事件→屏障→后果）----
+    var thCy = r.th ? ty + r.thH / 2 : 0;
+    var coCy = r.co ? cy2 + r.coH / 2 : 0;
+    var topClampLo = topY + 10, topClampHi = topY + L.topH - 10;
+    for (var a = 0; a < r.ps.items.length; a++) {
+      var bcy = psTop + r.ps.items[a].y + r.ps.items[a].h / 2;
+      if (r.th) arrows += arrowSeg(X_TH + TW + 6, thCy, X_PV - 6, bcy, TK['warn-700']);
+      var ey = Math.min(Math.max(bcy, topClampLo), topClampHi);
+      arrows += arrowSeg(X_PV + BW + 6, bcy, X_TP - 6, ey, TK['tech-blue']);
+    }
+    for (var b2 = 0; b2 < r.ms.items.length; b2++) {
+      var mcy = msTop + r.ms.items[b2].y + r.ms.items[b2].h / 2;
+      var sy = Math.min(Math.max(mcy, topClampLo), topClampHi);
+      arrows += arrowSeg(X_TP + TOPW + 6, sy, X_MT - 6, mcy, TK['warn-orange']);
+      if (r.co) arrows += arrowSeg(X_MT + BW + 6, mcy, X_CS - 6, coCy, TK['brand-red']);
+    }
+  }
+  // 顶上事件框（只渲染一次，置于行循环外）
+  h += '<div class="bt-box bt-top" data-kind="top" style="left:' + X_TP + 'px;top:' + topY + 'px;width:' + TOPW + 'px;height:' + L.topH + 'px;">'
+    + '<div class="bt-lines">' + linesHTML(model.top.text, F14B, TOPW, 12) + '</div>'
+    + '<span class="bt-ctrls"><button class="bt-mini" data-act="edit" title="编辑">✎</button></span>'
+    + '</div>';
+  cv.innerHTML = h;
+  var svg = cv.querySelector('.bt-svg');
+  if (svg) svg.innerHTML = markerDefs() + arrows;
+}
+
+// ============ 交互 ============
+function findSide(row) {
+  var sides = ['left', 'right'];
+  for (var s = 0; s < 2; s++) {
+    var arr = model[sides[s]];
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i].id === row) return { side: sides[s], idx: i };
+    }
+  }
+  return null;
+}
+function findBar(id) {
+  var sides = ['left', 'right'];
+  for (var s = 0; s < 2; s++) {
+    var arr = model[sides[s]];
+    for (var i = 0; i < arr.length; i++) {
+      var bars = arr[i].bars;
+      for (var j = 0; j < bars.length; j++) {
+        if (bars[j].id === id) return { bar: bars[j], arr: bars, idx: j };
+      }
+    }
+  }
+  return null;
+}
+function showMsg(text, ok) {
+  var m = document.getElementById('btMsg');
+  m.textContent = text;
+  m.className = 'bt-msg on ' + (ok ? 'ok' : 'bad');
+  clearTimeout(showMsg._t);
+  showMsg._t = setTimeout(function() { m.className = 'bt-msg'; }, 4000);
+}
+
+cv.addEventListener('click', function(e) {
+  var btn = e.target.closest ? e.target.closest('[data-act]') : null;
+  if (!btn) return;
+  var act = btn.getAttribute('data-act');
+  if (act === 'addbar') {
+    var side = btn.getAttribute('data-side');
+    var row = parseInt(btn.getAttribute('data-row'), 10);
+    var arr = model[side];
+    if (arr[row]) { arr[row].bars.push({ id: nid(), text: '新屏障', state: 'ok' }); save(); render(); }
+    return;
+  }
+  var box = btn.closest('.bt-box');
+  if (!box) return;
+  var kind = box.getAttribute('data-kind');
+  var id = box.getAttribute('data-id');
+  if (act === 'del') {
+    if (kind === 'threat' || kind === 'cons') {
+      var f = findSide(id);
+      if (f) { model[f.side].splice(f.idx, 1); save(); render(); }
+    } else if (kind === 'bar') {
+      var fb = findBar(id);
+      if (fb) { fb.arr.splice(fb.idx, 1); save(); render(); }
+    }
+  } else if (act === 'state') {
+    var fb2 = findBar(id);
+    if (fb2) { fb2.bar.state = fb2.bar.state === 'fail' ? 'ok' : 'fail'; save(); render(); }
+  } else if (act === 'edit') {
+    openEditor(box);
+  }
+});
+
+cv.addEventListener('dblclick', function(e) {
+  if (e.target.closest && e.target.closest('.bt-ctrls, .bt-bar-ctrls')) return;
+  var box = e.target.closest ? e.target.closest('.bt-box') : null;
+  if (box) openEditor(box);
+});
+
+var editorTA = null;
+var committing = false;
+function openEditor(box) {
+  closeEditor();
+  var kind = box.getAttribute('data-kind');
+  var id = box.getAttribute('data-id');
+  var text = '';
+  if (kind === 'top') text = model.top.text;
+  else if (kind === 'bar') { var fb = findBar(id); if (fb) text = fb.bar.text; }
+  else { var f = findSide(id); if (f) text = model[f.side][f.idx].text; }
+  var isTop = kind === 'top';
+  var ta = document.createElement('textarea');
+  ta.className = 'bt-ta';
+  ta.value = text || '';
+  ta.style.left = (parseFloat(box.style.left) - 1) + 'px';
+  ta.style.top = (parseFloat(box.style.top) - 1) + 'px';
+  ta.style.width = (parseFloat(box.style.width) + 2) + 'px';
+  ta.style.height = (parseFloat(box.style.height) + 2) + 'px';
+  ta.style.fontSize = isTop ? '14px' : '13px';
+  ta.style.fontWeight = isTop ? '700' : '600';
+  ta.style.lineHeight = isTop ? LH14 + 'px' : LH13 + 'px';
+  cv.appendChild(ta);
+  editorTA = ta;
+  ta.focus();
+  ta.select();
+  function commit(saveIt) {
+    if (!editorTA || editorTA !== ta || committing) return; // 防 blur 重入 / 防旧编辑器误提交
+    committing = true;
+    try {
+      var v = ta.value.trim();
+      if (saveIt && v) {
+        if (kind === 'top') model.top.text = v;
+        else if (kind === 'bar') { var fb2 = findBar(id); if (fb2) fb2.bar.text = v; }
+        else { var f2 = findSide(id); if (f2) model[f2.side][f2.idx].text = v; }
+        save();
+      }
+    } finally {
+      committing = false;
+      closeEditor();
+      render();
+    }
+  }
+  ta.addEventListener('keydown', function(ev) {
+    if (ev.key === 'Enter' && !ev.shiftKey) { ev.preventDefault(); commit(true); }
+    else if (ev.key === 'Escape') { ev.preventDefault(); commit(false); }
+  });
+  ta.addEventListener('blur', function() { commit(true); });
+}
+function closeEditor() {
+  var ta = editorTA;
+  editorTA = null;
+  if (ta && ta.parentNode) ta.parentNode.removeChild(ta);
+}
+
+// ============ 增删与重置 ============
+window.btAddThreat = function() {
+  var bars = [{ id: nid(), text: '新屏障', state: 'ok' }];
+  model.left.push({ id: nid(), text: '新威胁', bars: bars });
+  save(); render();
+};
+window.btAddCons = function() {
+  var bars = [{ id: nid(), text: '新屏障', state: 'ok' }];
+  model.right.push({ id: nid(), text: '新后果', bars: bars });
+  save(); render();
+};
+window.btReset = function() {
+  model = cloneScene(0);
+  save(); render();
+  showMsg('已恢复「受限空间作业」示例图。', true);
+};
+window.btClear = function() {
+  model = { top: { id: nid(), text: '顶上事件（双击编辑）' }, left: [], right: [] };
+  save(); render();
+  showMsg('已清空。当前仅保留顶上事件。', true);
+};
+window.btLoadScene = function(i) {
+  model = cloneScene(i);
+  save(); render();
+  btSwitch(0);
+  showMsg('已载入示例「' + SCENES[i].name + '」，可直接增删改写。', true);
+  window.scrollTo(0, 0);
+};
+
+// ============ 导入导出 ============
+window.btImport = function() { document.getElementById('btFile').click(); };
+document.getElementById('btFile').addEventListener('change', function(e) {
+  var f = e.target.files && e.target.files[0];
+  if (!f) return;
+  var rd = new FileReader();
+  rd.onload = function() {
+    try {
+      var m = normalize(JSON.parse(rd.result));
+      if (!m) throw new Error('结构不符');
+      model = m; save(); render();
+      showMsg('导入成功：' + m.left.length + ' 条威胁 / ' + m.right.length + ' 条后果。', true);
+    } catch (err) {
+      showMsg('导入失败：不是有效的蝴蝶结 JSON（需要 top/left/right 结构）。', false);
+    }
+    e.target.value = '';
+  };
+  rd.readAsText(f, 'utf-8');
+});
+window.btExportJson = function() {
+  download(new Blob([JSON.stringify(model, null, 2)], { type: 'application/json' }), 'bowtie-model.json');
+  showMsg('JSON 已导出。', true);
+};
+window.btExportText = function() {
+  var L = [];
+  L.push('蝴蝶结模型分析 · SHEEN Toolbox');
+  L.push('生成时间：' + new Date(Date.now() + 8 * 3600000).toISOString().replace('T', ' ').slice(0, 16));
+  L.push('');
+  L.push('【顶上事件】' + model.top.text);
+  L.push('');
+  L.push('【威胁 → 预防屏障】');
+  var maxL = Math.max(model.left.length, model.right.length);
+  function sideLines(rows) {
+    var out = [];
+    for (var i = 0; i < rows.length; i++) {
+      out.push('  ' + (i + 1) + '. ' + rows[i].text);
+      for (var j = 0; j < rows[i].bars.length; j++) {
+        out.push('     - [' + (rows[i].bars[j].state === 'fail' ? '失效' : '有效') + '] ' + rows[i].bars[j].text);
+      }
+    }
+    if (!out.length) out.push('  （无）');
+    return out;
+  }
+  L = L.concat(sideLines(model.left));
+  L.push('');
+  L.push('【减缓/恢复屏障 ← 后果】');
+  L = L.concat(sideLines(model.right));
+  download(new Blob(['\ufeff' + L.join('\r\n')], { type: 'text/plain' }), 'bowtie-outline.txt');
+  showMsg('文本大纲已导出。', true);
+};
+function download(blob, name) {
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function() { URL.revokeObjectURL(a.href); a.remove(); }, 800);
+}
+
+// ============ PNG 导出（与 DOM 同一套几何与令牌） ============
+function rr(c, x, y, w, h, r) {
+  c.beginPath();
+  c.moveTo(x + r, y);
+  c.arcTo(x + w, y, x + w, y + h, r);
+  c.arcTo(x + w, y + h, x, y + h, r);
+  c.arcTo(x, y + h, x, y, r);
+  c.arcTo(x, y, x + w, y, r);
+  c.closePath();
+}
+window.btExportPng = function() {
+  var L = computeLayout();
+  var scale = 2, pad = 22;
+  var H = HEADER_H + DY + L.totalH + 40;
+  var cvs = document.createElement('canvas');
+  cvs.width = (CW + pad * 2) * scale;
+  cvs.height = (H + pad) * scale;
+  var c = cvs.getContext('2d');
+  c.scale(scale, scale);
+  c.fillStyle = '#FFFFFF';
+  c.fillRect(0, 0, CW + pad * 2, H + pad);
+  c.translate(pad, pad / 2);
+
+  var C = {
+    th: { bg: TK['warn-soft'], bd: TK['warn-700'], tx: TK['warn-deep'] },
+    pv: { bg: TK['tech-blue-soft'], bd: TK['tech-blue'], tx: TK['tech-blue'] },
+    mt: { bg: TK['warn-orange-soft'], bd: TK['warn-orange'], tx: TK['warn-deep'] },
+    cs: { bg: TK['brand-red-light'], bd: TK['brand-red'], tx: TK['brand-red'] },
+    fl: { bg: TK['fail-soft'], bd: TK['fail'], tx: TK['fail-deep'] },
+    top: { bg: TK['space-gray'], tx: '#FFFFFF' }
+  };
+  function arrow(x1, y1, x2, y2, color) {
+    c.strokeStyle = color; c.fillStyle = color; c.lineWidth = 2;
+    c.setLineDash([7, 5]);
+    c.beginPath(); c.moveTo(x1, y1); c.lineTo(x2 - 6, y2); c.stroke();
+    c.setLineDash([]);
+    var ang = Math.atan2(y2 - y1, (x2 - 6) - x1);
+    c.save(); c.translate(x2, y2); c.rotate(ang);
+    c.beginPath(); c.moveTo(0, 0); c.lineTo(-9, -4.5); c.lineTo(-9, 4.5); c.closePath(); c.fill();
+    c.restore();
+  }
+  function box(x, y, w, h, lines, st, radius, lh, padX, padY, font) {
+    c.fillStyle = st.bg; c.strokeStyle = st.bd; c.lineWidth = 2;
+    if (st.dash) c.setLineDash([6, 4]);
+    rr(c, x, y, w, h, radius); c.fill(); c.stroke();
+    c.setLineDash([]);
+    c.fillStyle = st.tx; c.font = font;
+    c.textAlign = 'center'; c.textBaseline = 'middle';
+    for (var i = 0; i < lines.length; i++) {
+      c.fillText(lines[i], x + w / 2, y + padY + i * lh + lh / 2, w - padX * 2);
+    }
+  }
+  // 列头
+  function head(x, w, st, label, en) {
+    c.fillStyle = st.bg; c.strokeStyle = st.bd; c.lineWidth = 1;
+    if (st === C.top) { c.fillStyle = st.bg; }
+    rr(c, x, 0, w, HEADER_H, 8); c.fill();
+    if (st !== C.top) { c.strokeStyle = st.bd; c.stroke(); }
+    else { c.strokeStyle = st.bg; c.stroke(); }
+    c.fillStyle = st.tx; c.font = '700 11.5px ' + FONT;
+    c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.fillText(label + '  ' + en, x + w / 2, HEADER_H / 2);
+  }
+  head(X_TH, TW, C.th, '威胁', 'THREAT');
+  head(X_PV, BW, C.pv, '预防屏障', 'PREVENTION');
+  head(X_TP, TOPW, C.top, '顶上事件', 'TOP EVENT');
+  head(X_MT, BW, C.mt, '减缓/恢复屏障', 'MITIGATION');
+  head(X_CS, TW, C.cs, '后果', 'CONSEQUENCE');
+
+  var topY = HEADER_H + DY + (L.totalH - L.topH) / 2;
+  var topClampLo = topY + 10, topClampHi = topY + L.topH - 10;
+
+  for (var i = 0; i < L.rows.length; i++) {
+    var r = L.rows[i];
+    var rowTop = HEADER_H + DY + r.y;
+    var ty = r.th ? rowTop + (r.h - r.thH) / 2 : 0;
+    var cy = r.co ? rowTop + (r.h - r.coH) / 2 : 0;
+    if (r.th) box(X_TH, ty, TW, r.thH, wrapLines(r.th.text, F13, TW - 20), C.th, 12, LH13, 10, 8, F13);
+    if (r.co) box(X_CS, cy, TW, r.coH, wrapLines(r.co.text, F13, TW - 20), C.cs, 12, LH13, 10, 8, F13);
+    var psTop = rowTop + (r.h - 28 - r.ps.total) / 2;
+    for (var p = 0; p < r.ps.items.length; p++) {
+      var it = r.ps.items[p];
+      var by = psTop + it.y;
+      var st = it.bar.state === 'fail' ? { bg: C.fl.bg, bd: C.fl.bd, tx: C.fl.tx, dash: true } : C.pv;
+      box(X_PV, by, BW, it.h, wrapLines(it.bar.text, F13, BW - 16), st, 12, LH13, 8, 7, F13);
+    }
+    var msTop = rowTop + (r.h - 28 - r.ms.total) / 2;
+    for (var q = 0; q < r.ms.items.length; q++) {
+      var it2 = r.ms.items[q];
+      var my = msTop + it2.y;
+      var st2 = it2.bar.state === 'fail' ? { bg: C.fl.bg, bd: C.fl.bd, tx: C.fl.tx, dash: true } : C.mt;
+      box(X_MT, my, BW, it2.h, wrapLines(it2.bar.text, F13, BW - 16), st2, 12, LH13, 8, 7, F13);
+    }
+    var thCy = r.th ? ty + r.thH / 2 : 0;
+    var coCy = r.co ? cy + r.coH / 2 : 0;
+    for (var a = 0; a < r.ps.items.length; a++) {
+      var bcy = psTop + r.ps.items[a].y + r.ps.items[a].h / 2;
+      if (r.th) arrow(X_TH + TW + 6, thCy, X_PV - 6, bcy, TK['warn-700']);
+      var ey = Math.min(Math.max(bcy, topClampLo), topClampHi);
+      arrow(X_PV + BW + 6, bcy, X_TP - 6, ey, TK['tech-blue']);
+    }
+    for (var b2 = 0; b2 < r.ms.items.length; b2++) {
+      var mcy = msTop + r.ms.items[b2].y + r.ms.items[b2].h / 2;
+      var sy = Math.min(Math.max(mcy, topClampLo), topClampHi);
+      arrow(X_TP + TOPW + 6, sy, X_MT - 6, mcy, TK['warn-orange']);
+      if (r.co) arrow(X_MT + BW + 6, mcy, X_CS - 6, coCy, TK['brand-red']);
+    }
+  }
+  // 顶上事件框（行循环外只画一次）
+  box(X_TP, topY, TOPW, L.topH, wrapLines(model.top.text, F14B, TOPW - 24), C.top, 12, LH14, 12, 10, F14B);
+  c.fillStyle = TK['text-secondary'];
+  c.font = '400 11px ' + FONT;
+  c.textAlign = 'left'; c.textBaseline = 'alphabetic';
+  c.fillText('SHEEN Toolbox · 蝴蝶结（Bowtie）模型分析 · ' + new Date(Date.now() + 8 * 3600000).toISOString().replace('T', ' ').slice(0, 16), 0, HEADER_H + DY + L.totalH + 22);
+  cvs.toBlob(function(blob) {
+    download(blob, 'bowtie.png');
+    showMsg('PNG 已导出（2× 高清）。', true);
+  }, 'image/png');
+};
+
+// ============ 场景卡片（页签 2） ============
+(function renderScenes() {
+  var notes = [
+    '预防侧「检测—隔离—通风—监护」四层屏障，减缓侧把「盲目施救伤亡扩大」单列为后果。',
+    '预防侧四层：接口防脱、泵阀泄压、静电跨接、液位联锁；减缓侧必须接环境后果。',
+    '预防侧覆盖「洞口/挂点/平台/行为/天气」五类威胁，减缓侧到急救与整改闭环。'
+  ];
+  var grid = document.getElementById('sceneGrid');
+  var h = '';
+  for (var i = 0; i < SCENES.length; i++) {
+    h += '<div class="scene-card" onclick="btLoadScene(' + i + ')">'
+      + '<span class="sc-no">' + (i + 1) + '</span>'
+      + '<b>' + esc(SCENES[i].name) + '</b>'
+      + '<span>顶上事件：' + esc(SCENES[i].top) + '<br>' + esc(notes[i]) + '</span>'
+      + '<span class="sc-go">载入到编辑器 →</span>'
+      + '</div>';
+  }
+  grid.innerHTML = h;
+})();
+
+render();
+})();
+</script>
+</body>
+</html>
