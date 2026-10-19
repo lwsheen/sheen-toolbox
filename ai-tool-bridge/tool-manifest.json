@@ -1,7 +1,7 @@
 {
   "version": "3.0",
-  "updated": "2026-10-16",
-  "note": "全量 61 个登记工具 + 3 条兼容路由（未登记但线上可用的 environmental-impact-classification、occupational-risk-classification，以及合并页别名 vehicle-fire-extinguisher），AI 可路由+关联所有工具；查询类工具支持 ?q= 预填深链。待定：2 个未登记工具的去留。",
+  "updated": "2026-10-19",
+  "note": "全量 65 个登记工具 + 3 条兼容路由（未登记但线上可用的 environmental-impact-classification、occupational-risk-classification，以及合并页别名 vehicle-fire-extinguisher），AI 可路由+关联所有工具；查询类工具支持 ?q= 预填深链。待定：2 个未登记工具的去留。",
   "fallback": {
     "noTool": "未匹配到专用工具。可换更具体的表述（如工具名/标准号），或前往「SHEEN环境健康安全」IMA 知识库检索法规原文。",
     "paramMissing": "需要补充信息才能使用该工具，请补充后重试，或前往工具页手动操作。",
@@ -868,6 +868,44 @@
         "GB/T 32857"
       ],
       "page": "/sheen-toolbox/lopa-analysis/",
+      "queryParam": null,
+      "params": []
+    },
+    {
+      "id": "bowtie-analysis",
+      "title": "蝴蝶结（Bowtie）模型分析工具",
+      "desc": "依据 GB/T 27921-2023《风险管理 风险评估技术》的蝴蝶结模型绘制与分析：以顶上事件为中心，向左威胁→预防屏障、向右减缓/恢复屏障→后果，屏障可标注有效/失效，内置 3 组场景示例（受限空间作业/甲醇卸车泄漏/高处坠落），支持 PNG/JSON/文本大纲导出与本机自动保存，附分析指引与规范速查（GB/T 24353-2022、GB/T 23694-2024、AQ/T 3034-2022、GB 30871-2022、GB/T 45001-2020）。",
+      "descShort": "GB/T 27921-2023 蝴蝶结：威胁→预防屏障→顶上事件→减缓屏障→后果",
+      "category": "其他",
+      "standards": [
+        "GB/T 27921-2023《风险管理 风险评估技术》",
+        "GB/T 24353-2022《风险管理 指南》",
+        "GB/T 23694-2024《风险管理 术语》",
+        "AQ/T 3034-2022《化工过程安全管理导则》",
+        "GB 30871-2022《危险化学品企业特殊作业安全规范》",
+        "GB/T 45001-2020《职业健康安全管理体系 要求及使用指南》"
+      ],
+      "copyright": "boundary",
+      "trigger": [
+        "蝴蝶结",
+        "Bowtie",
+        "bowtie",
+        "蝴蝶结模型",
+        "蝴蝶结分析法",
+        "蝴蝶结图",
+        "画蝴蝶结",
+        "顶上事件",
+        "预防屏障",
+        "减缓屏障",
+        "恢复屏障",
+        "屏障失效",
+        "风险屏障",
+        "风险评估技术",
+        "GB/T 27921",
+        "top event",
+        "threat barrier"
+      ],
+      "page": "/sheen-toolbox/bowtie-analysis/",
       "queryParam": null,
       "params": []
     },
