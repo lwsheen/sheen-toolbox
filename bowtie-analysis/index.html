@@ -3,19 +3,19 @@
 <head data-seo="sheen">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="蝴蝶结（Bowtie）模型分析 — GB/T 27921-2023 风险评估技术 · 威胁→预防屏障→顶上事件→减缓屏障→后果 · 屏障有效/失效标注 · PNG 导出 · JSON 导入导出 · 本机自动保存">
+<meta name="description" content="蝴蝶结（Bowtie）模型分析 — GB/T 27921-2023 风险评估技术 · 威胁→预防屏障→顶事件→减缓屏障→后果 · 屏障有效/失效标注 · PNG 导出 · JSON 导入导出 · 本机自动保存">
 
 <link rel="icon" type="image/png" sizes="192x192" href="/sheen-toolbox/assets/icon-192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="/sheen-toolbox/assets/icon-512.png">
 
 <title>蝴蝶结（Bowtie）模型分析 — SHEEN Toolbox</title>
 <meta property="og:title" content="蝴蝶结（Bowtie）模型分析 | SHEEN Toolbox">
-<meta property="og:description" content="GB/T 27921-2023 · 威胁→预防屏障→顶上事件→减缓屏障→后果 · 屏障失效标注 · PNG 导出 · JSON 导入导出">
+<meta property="og:description" content="GB/T 27921-2023 · 威胁→预防屏障→顶事件→减缓屏障→后果 · 屏障失效标注 · PNG 导出 · JSON 导入导出">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://lwsheen.pages.dev/sheen-toolbox/bowtie-analysis/">
 <meta property="og:image" content="https://lwsheen.pages.dev/sheen-toolbox/assets/share/bowtie-analysis.png">
 <link rel="canonical" href="https://lwsheen.pages.dev/sheen-toolbox/bowtie-analysis/">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "蝴蝶结（Bowtie）模型分析", "url": "https://lwsheen.pages.dev/sheen-toolbox/bowtie-analysis/", "description": "GB/T 27921-2023 风险评估技术：威胁→预防屏障→顶上事件→减缓屏障→后果五列绘制，屏障有效/失效标注，PNG/JSON/文本导出，本机自动保存", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "inLanguage": "zh-CN", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "CNY"}, "publisher": {"@type": "Organization", "name": "SHEEN Toolbox"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "蝴蝶结（Bowtie）模型分析", "url": "https://lwsheen.pages.dev/sheen-toolbox/bowtie-analysis/", "description": "GB/T 27921-2023 风险评估技术：威胁→预防屏障→顶事件→减缓屏障→后果五列绘制，屏障有效/失效标注，PNG/JSON/文本导出，本机自动保存", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "inLanguage": "zh-CN", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "CNY"}, "publisher": {"@type": "Organization", "name": "SHEEN Toolbox"}}</script>
 
 <link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
 <link rel="stylesheet" href="/sheen-toolbox/common.css">
@@ -26,7 +26,7 @@
   --bt-th-tx: var(--warn-deep);
   --bt-pv-bg: var(--tech-blue-soft);
   --bt-pv-bd: var(--tech-blue);
-  --bt-pv-tx: var(--tech-blue);
+  --bt-pv-tx: var(--tech-blue-hover);
   --bt-top-bg: var(--space-gray);
   --bt-top-tx: #FFFFFF;
   --bt-mt-bg: var(--warn-orange-soft);
@@ -34,7 +34,7 @@
   --bt-mt-tx: var(--warn-deep);
   --bt-cs-bg: var(--brand-red-light);
   --bt-cs-bd: var(--brand-red);
-  --bt-cs-tx: var(--brand-red);
+  --bt-cs-tx: var(--brand-red-hover);
   --bt-fl-bg: var(--fail-soft);
   --bt-fl-bd: var(--fail);
   --bt-fl-tx: var(--fail-deep);
@@ -72,12 +72,13 @@
 .bt-threat { background: var(--bt-th-bg); border-color: var(--bt-th-bd); color: var(--bt-th-tx); }
 .bt-prev { background: var(--bt-pv-bg); border-color: var(--bt-pv-bd); color: var(--bt-pv-tx); }
 .bt-prev .bt-lines { top: 7px; bottom: 26px; left: 8px; right: 8px; }
-.bt-top { background: var(--bt-top-bg); border-color: var(--bt-top-bg); color: var(--bt-top-tx); }
+.bt-top { background: var(--bt-top-bg); border-color: var(--bt-top-bg); color: var(--bt-top-tx); border-radius: 16px; box-shadow: inset 0 0 0 2px rgba(255,255,255,0.92), 0 6px 18px rgba(30,33,38,0.18); }
 .bt-top .bt-lines { font-size: 14px; font-weight: 700; line-height: 20px; top: 10px; }
 .bt-mit { background: var(--bt-mt-bg); border-color: var(--bt-mt-bd); color: var(--bt-mt-tx); }
 .bt-mit .bt-lines { top: 7px; bottom: 26px; left: 8px; right: 8px; }
 .bt-cons { background: var(--bt-cs-bg); border-color: var(--bt-cs-bd); color: var(--bt-cs-tx); }
 .bt-box.fail { background: var(--bt-fl-bg); border-color: var(--bt-fl-bd); border-style: dashed; color: var(--bt-fl-tx); }
+.bt-failtag { position: absolute; top: -8px; right: -6px; z-index: 5; background: var(--fail); color: #fff; font-size: 9.5px; font-weight: 700; padding: 1px 6px 0; border-radius: 60px; letter-spacing: 1px; line-height: 1.5; box-shadow: 0 1px 4px rgba(220,38,38,0.35); }
 .bt-ctrls { position: absolute; top: 3px; right: 3px; display: flex; gap: 2px; z-index: 4; }
 .bt-bar-ctrls { position: absolute; left: 0; right: 0; bottom: 4px; display: flex; justify-content: center; gap: 4px; z-index: 4; }
 .bt-mini { width: 19px; height: 19px; padding: 0; border: none; border-radius: 6px; font-size: 10px; line-height: 1; cursor: pointer; font-family: var(--font); background: rgba(255,255,255,0.75); color: var(--text-secondary); display: inline-flex; align-items: center; justify-content: center; }
@@ -94,6 +95,8 @@
 .bt-msg.bad { background: var(--bt-fl-bg); border: 1px solid var(--fail); color: var(--bt-fl-tx); }
 
 @media (hover: hover) {
+  .bt-box { transition: box-shadow 0.18s ease, transform 0.18s ease; }
+  .bt-box:hover { box-shadow: 0 4px 14px rgba(30,33,38,0.14); transform: translateY(-1px); }
   .bt-ctrls { opacity: 0; transition: opacity 0.15s; }
   .bt-box:hover .bt-ctrls { opacity: 1; }
 }
@@ -155,8 +158,9 @@
   .tab-panel { display: none !important; border: none !important; padding: 0 !important; }
   .tab-panel.active { display: block !important; }
   .app-container { box-shadow: none !important; border: none !important; max-width: 100% !important; padding: 0 !important; }
-  .bt-scroll { overflow: visible !important; border: none !important; }
-  .bt-canvas { transform: scale(0.92); transform-origin: top left; }
+  .bt-scroll { overflow: visible !important; border: none !important; display: flex !important; justify-content: center; }
+  .bt-ctrls, .bt-bar-ctrls, .bt-addbar, .bt-empty-tip, .page-subtitle { display: none !important; }
+  .bt-canvas { zoom: var(--bt-ps, 0.92); }
 }
 </style>
 <script>
@@ -185,7 +189,7 @@ var _hmt = _hmt || [];
 <main class="app-container">
 
   <h1 class="page-title"><i class="fa-solid fa-diagram-project" style="color:var(--brand-red)"></i> 蝴蝶结（Bowtie）模型分析</h1>
-  <p class="page-subtitle" style="margin-bottom:16px;">以<strong>顶上事件</strong>为中心：向左画<strong>威胁 → 预防屏障</strong>，向右画<strong>减缓/恢复屏障 → 后果</strong>；屏障可标注<strong>有效 / 失效</strong>，支持 PNG / JSON / 文本导出，数据自动保存在本机浏览器 — 适用于 JSA/HAZOP 之后的场景化风险沟通、隐患排查、应急预案与培训</p>
+  <p class="page-subtitle" style="margin-bottom:16px;">以<strong>顶事件</strong>为中心：向左画<strong>威胁 → 预防屏障</strong>，向右画<strong>减缓/恢复屏障 → 后果</strong>；屏障可标注<strong>有效 / 失效</strong>，支持 PNG / JSON / 文本导出，数据自动保存在本机浏览器 — 适用于 JSA/HAZOP 之后的场景化风险沟通、隐患排查、应急预案与培训</p>
 
   <div class="warn-bar info no-pr" style="margin-top:0;margin-bottom:14px;">
     <i class="fa-solid fa-circle-info"></i>
@@ -202,7 +206,7 @@ var _hmt = _hmt || [];
   <div class="warn-bar warning no-pr">
     <i class="fa-solid fa-triangle-exclamation"></i>
     <span><strong>两个最容易画错的地方，先看这里：</strong>
-      ① <strong>预防屏障与减缓屏障不能混放</strong>：预防屏障在顶上事件<strong>左侧</strong>，作用是<strong>阻止顶上事件发生</strong>（如作业前气体检测）；减缓屏障在<strong>右侧</strong>，作用是<strong>顶上事件已经发生后减轻后果</strong>（如灭火系统、应急预案）。把「应急器材」画到左边是最常见的错误。
+      ① <strong>预防屏障与减缓屏障不能混放</strong>：预防屏障在顶事件<strong>左侧</strong>，作用是<strong>阻止顶事件发生</strong>（如作业前气体检测）；减缓屏障在<strong>右侧</strong>，作用是<strong>顶事件已经发生后减轻后果</strong>（如灭火系统、应急预案）。把「应急器材」画到左边是最常见的错误。
       ② <strong>屏障必须可验证</strong>：写「加强管理」「提高意识」不算屏障 —— 每一条屏障都应能回答「谁在做、多久做一次、怎么做记录、失效了什么现象」，并在图上把失效的屏障标为<span style="color:var(--fail);font-weight:700;">失效</span>。
     </span>
   </div>
@@ -233,7 +237,7 @@ var _hmt = _hmt || [];
     <div class="bt-legend no-pr">
       <span><i style="background:var(--bt-th-bg);border:1.5px solid var(--bt-th-bd);"></i>威胁</span>
       <span><i style="background:var(--bt-pv-bg);border:1.5px solid var(--bt-pv-bd);"></i>预防屏障</span>
-      <span><i style="background:var(--bt-top-bg);"></i>顶上事件</span>
+      <span><i style="background:var(--bt-top-bg);"></i>顶事件</span>
       <span><i style="background:var(--bt-mt-bg);border:1.5px solid var(--bt-mt-bd);"></i>减缓/恢复屏障</span>
       <span><i style="background:var(--bt-cs-bg);border:1.5px solid var(--bt-cs-bd);"></i>后果</span>
       <span><i style="background:var(--bt-fl-bg);border:1.5px dashed var(--bt-fl-bd);"></i>失效屏障（红虚线）</span>
@@ -249,7 +253,7 @@ var _hmt = _hmt || [];
   <section class="tab-panel" id="panel1">
     <div class="sec-title">1. 什么是蝴蝶结模型</div>
     <p style="font-size:12.5px;color:var(--text-secondary);line-height:2;margin:6px 0 0;">
-      蝴蝶结（Bowtie）模型把一次<strong style="color:var(--text-primary);">「顶上事件」</strong>（Top Event，风险从「尚未失控」滑向「已经失控」的那个转折点，如「甲醇泄漏」「人员高处坠落」）放在中间：
+      蝴蝶结（Bowtie）模型把一次<strong style="color:var(--text-primary);">「顶事件」</strong>（Top Event，风险从「尚未失控」滑向「已经失控」的那个转折点，如「甲醇泄漏」「人员高处坠落」）放在中间：
       向<strong style="color:var(--text-primary);">左</strong>追是<strong style="color:var(--text-primary);">什么原因可能导致它</strong>（威胁）和<strong style="color:var(--text-primary);">靠什么拦住它</strong>（预防屏障）；
       向<strong style="color:var(--text-primary);">右</strong>追是<strong style="color:var(--text-primary);">发生后最坏怎样</strong>（后果）和<strong style="color:var(--text-primary);">靠什么把伤害压到最小</strong>（减缓/恢复屏障）。
       整张图形似领结，故名蝴蝶结。它是 GB/T 27921-2023《风险管理 风险评估技术》收录的风险评估技术之一，最大价值是<strong style="color:var(--text-primary);">一张图把「事前防」和「事后救」同时讲清楚</strong>，适合跨部门沟通与培训。
@@ -259,17 +263,17 @@ var _hmt = _hmt || [];
     <table class="data-table">
       <thead><tr><th style="width:110px;">要素</th><th style="width:210px;">画什么</th><th>常见画错 / 纠正</th></tr></thead>
       <tbody>
-        <tr><td><b>威胁</b>（左列·黄）</td><td>可能直接引发顶上事件的原因、失效模式或触发条件</td><td>写「管理不到位」这类泛泛原因 → 应写成可观察的具体场景，如「鹤管接口未试漏即卸车」</td></tr>
-        <tr><td><b>预防屏障</b>（左二·蓝）</td><td>位于威胁与顶上事件之间、<b>阻止顶上事件发生</b>的硬件/软件/管理措施</td><td>把应急救援措施画到左边 → 应急属于减缓屏障；预防屏障必须「挡在事件前」</td></tr>
-        <tr><td><b>顶上事件</b>（中心·深灰）</td><td>分析对象的转折点事件，一句话、可判定</td><td>写成事故本身（「爆炸死人」）或写成原因（「违章作业」）→ 顶上事件应是「泄漏」「坠落」这类中间事件</td></tr>
-        <tr><td><b>减缓/恢复屏障</b>（右二·橙）</td><td>顶上事件发生后<b>减轻后果或帮助恢复</b>的措施</td><td>只画灭火器不画「报警—疏散—救援—恢复」整条链 → 减缓屏障通常多层，应逐层列出</td></tr>
+        <tr><td><b>威胁</b>（左列·黄）</td><td>可能直接引发顶事件的原因、失效模式或触发条件</td><td>写「管理不到位」这类泛泛原因 → 应写成可观察的具体场景，如「鹤管接口未试漏即卸车」</td></tr>
+        <tr><td><b>预防屏障</b>（左二·蓝）</td><td>位于威胁与顶事件之间、<b>阻止顶事件发生</b>的硬件/软件/管理措施</td><td>把应急救援措施画到左边 → 应急属于减缓屏障；预防屏障必须「挡在事件前」</td></tr>
+        <tr><td><b>顶事件</b>（中心·深灰）</td><td>分析对象的转折点事件，一句话、可判定</td><td>写成事故本身（「爆炸死人」）或写成原因（「违章作业」）→ 顶事件应是「泄漏」「坠落」这类中间事件</td></tr>
+        <tr><td><b>减缓/恢复屏障</b>（右二·橙）</td><td>顶事件发生后<b>减轻后果或帮助恢复</b>的措施</td><td>只画灭火器不画「报警—疏散—救援—恢复」整条链 → 减缓屏障通常多层，应逐层列出</td></tr>
         <tr><td><b>后果</b>（右列·红）</td><td>该威胁路径下最坏会导致的伤害、损失、环境影响</td><td>只写「事故」不写伤害对象 → 后果应写「人员中毒/火灾爆炸/水体污染」等可评估对象</td></tr>
       </tbody>
     </table>
 
     <div class="sec-title">3. 四步画法</div>
     <ol class="step-list">
-      <li><b>定顶上事件：</b>用一句「主语 + 动作 + 判据」描述，如「受限空间内可燃气浓度达到爆炸下限」。顶上事件选得太大（「装置着火」）会画不出屏障，选得太小（「1 号阀门微漏」）会失去分析意义。</li>
+      <li><b>定顶事件：</b>用一句「主语 + 动作 + 判据」描述，如「受限空间内可燃气浓度达到爆炸下限」。顶事件选得太大（「装置着火」）会画不出屏障，选得太小（「1 号阀门微漏」）会失去分析意义。</li>
       <li><b>向左列威胁 → 配预防屏障：</b>先穷举威胁（建议从人的行为、物的状态、环境条件、管理接口四类头脑风暴），再为每条威胁配预防屏障；<b>一条威胁可配多条屏障</b>，多层屏障才是「保护层」思路。</li>
       <li><b>向右列后果 → 配减缓屏障：</b>按最严重到可接受排列后果；每条后果下配减缓/恢复屏障（检测报警、联锁切断、应急设施、预案、救援、恢复）。</li>
       <li><b>标失效、排优先级：</b>逐条核对屏障当前是否真实有效（有检测记录吗？联锁投用了吗？），失效的标为「失效」；失效屏障集中的那条路径，就是接下来整改与管控的优先项。</li>
@@ -284,7 +288,7 @@ var _hmt = _hmt || [];
     <div class="sec-title">5. 适用与局限</div>
     <div class="warn-bar warning" style="margin-top:6px;">
       <i class="fa-solid fa-triangle-exclamation"></i>
-      <span><strong>蝴蝶结是「单场景」定性工具：</strong>一张图只覆盖一个顶上事件。系统性偏差排查用 HAZOP、保护层与频率量化用 LOPA（本站另有 LOPA 工具）、全要素风险梳理用 GB/T 24353-2022 风险管理流程。蝴蝶结图<strong>不输出风险等级数值</strong>，不能替代定量风险评价；图上屏障的充分性最终须经评审确认。屏障是否「独立有效」（是否共用同一失效原因）是进阶判读点，建议在评审时逐条讨论。</span>
+      <span><strong>蝴蝶结是「单场景」定性工具：</strong>一张图只覆盖一个顶事件。系统性偏差排查用 HAZOP、保护层与频率量化用 LOPA（本站另有 LOPA 工具）、全要素风险梳理用 GB/T 24353-2022 风险管理流程。蝴蝶结图<strong>不输出风险等级数值</strong>，不能替代定量风险评价；图上屏障的充分性最终须经评审确认。屏障是否「独立有效」（是否共用同一失效原因）是进阶判读点，建议在评审时逐条讨论。</span>
     </div>
   </section>
 
@@ -296,7 +300,7 @@ var _hmt = _hmt || [];
 
     <div class="sec-title">三组示例的分析看点</div>
     <table class="data-table">
-      <thead><tr><th style="width:150px;">示例</th><th style="width:330px;">顶上事件</th><th>分析看点</th></tr></thead>
+      <thead><tr><th style="width:150px;">示例</th><th style="width:330px;">顶事件</th><th>分析看点</th></tr></thead>
       <tbody>
         <tr><td><b>受限空间作业</b></td><td>受限空间内可燃/有毒有害气体积聚，人员中毒或火灾爆炸</td><td>预防侧强调「检测—隔离—通风—监护」四层屏障缺一不可（GB 30871-2022 特殊作业要求）；减缓侧重点是<b>盲目施防伤亡扩大</b>——救援本身必须作为后果单列</td></tr>
         <tr><td><b>甲醇卸车泄漏</b></td><td>甲醇卸车过程液相泄漏</td><td>预防侧典型四层：接口防脱、泵阀泄压、静电跨接、液位联锁；减缓侧必须接<strong>环境后果</strong>（围堰、收集沟、雨排切换）而不只接消防</td></tr>
@@ -313,7 +317,7 @@ var _hmt = _hmt || [];
       <tbody>
         <tr><td><b>GB/T 27921-2023</b> 风险管理 风险评估技术</td><td>2023-08-06 发布并实施，代替 GB/T 27921-2011；等同采用 IEC 31010:2019</td><td>蝴蝶结分析法的<strong>方法来源</strong>，本工具五列结构与屏障定义的基本依据</td></tr>
         <tr><td><b>GB/T 24353-2022</b> 风险管理 指南</td><td>2022-10-12 发布，等同采用 ISO 31000:2018</td><td>风险管理过程框架：蝴蝶结属于「风险评估」环节的输出形式</td></tr>
-        <tr><td><b>GB/T 23694-2024</b> 风险管理 术语</td><td>2024-12-31 发布，代替 2013 版；修改采用 ISO 31073:2022</td><td>威胁、顶上事件、后果、屏障等术语口径</td></tr>
+        <tr><td><b>GB/T 23694-2024</b> 风险管理 术语</td><td>2024-12-31 发布，代替 2013 版；修改采用 ISO 31073:2022</td><td>威胁、顶事件、后果、屏障等术语口径</td></tr>
         <tr><td><b>AQ/T 3034-2022</b> 化工过程安全管理导则</td><td>2022-10-01 发布 / 2023-04-01 实施，代替 2010 版（20 要素）</td><td>4.6 风险管理 · 4.11 安全仪表管理 · 4.16 应急准备与响应 · 4.17 事故事件管理 —— 屏障分层与应急侧列的设计依据</td></tr>
         <tr><td><b>GB 30871-2022</b> 危险化学品企业特殊作业安全规范</td><td>2022-03-15 发布 / 2022-10-01 实施，代替 2014 版；全文强制</td><td>动火、受限空间、盲板抽堵等作业的预防屏障条目依据</td></tr>
         <tr><td><b>GB/T 45001-2020</b> 职业健康安全管理体系 要求及使用指南</td><td>等同采用 ISO 45001:2018</td><td>组织层面危险源辨识、风险评价与运行控制的衔接</td></tr>
@@ -324,12 +328,12 @@ var _hmt = _hmt || [];
     <table class="data-table">
       <thead><tr><th style="width:130px;">术语</th><th>本工具口径</th></tr></thead>
       <tbody>
-        <tr><td><b>威胁</b></td><td>可能直接导致顶上事件发生的原因、触发条件或失效模式</td></tr>
-        <tr><td><b>顶上事件</b></td><td>分析对象的中心事件：危险失去控制的转折点，向左是「防发生」、向右是「减后果」的分界</td></tr>
-        <tr><td><b>预防屏障</b></td><td>位于顶上事件左侧、用于阻止顶上事件发生的措施（工程控制、检测、行政控制等）</td></tr>
-        <tr><td><b>减缓/恢复屏障</b></td><td>位于顶上事件右侧、用于减轻后果严重度或支持恢复的措施（报警联锁、应急、救援、恢复）</td></tr>
+        <tr><td><b>威胁</b></td><td>可能直接导致顶事件发生的原因、触发条件或失效模式</td></tr>
+        <tr><td><b>顶事件</b></td><td>分析对象的中心事件：危险失去控制的转折点，向左是「防发生」、向右是「减后果」的分界</td></tr>
+        <tr><td><b>预防屏障</b></td><td>位于顶事件左侧、用于阻止顶事件发生的措施（工程控制、检测、行政控制等）</td></tr>
+        <tr><td><b>减缓/恢复屏障</b></td><td>位于顶事件右侧、用于减轻后果严重度或支持恢复的措施（报警联锁、应急、救援、恢复）</td></tr>
         <tr><td><b>屏障失效</b></td><td>屏障缺失、超期未校验、被旁路/切除、响应不及时等导致其按要求起作用的概率显著上升的状态</td></tr>
-        <tr><td><b>后果</b></td><td>顶上事件发生后对人员、资产、环境、声誉造成的可评估影响</td></tr>
+        <tr><td><b>后果</b></td><td>顶事件发生后对人员、资产、环境、声誉造成的可评估影响</td></tr>
       </tbody>
     </table>
 
@@ -337,19 +341,19 @@ var _hmt = _hmt || [];
     <table class="data-table">
       <thead><tr><th style="width:44%;">✖ 常见错误说法 / 画法</th><th>✔ 规范方法下的纠正</th></tr></thead>
       <tbody>
-        <tr><td>蝴蝶结是「鱼骨图加箭头」，想到哪画到哪</td><td>它是成方法的风险评估技术（GB/T 27921-2023 收录）：以顶上事件为唯一中心，两侧各按「威胁/后果 → 屏障」结构化展开</td></tr>
+        <tr><td>蝴蝶结是「鱼骨图加箭头」，想到哪画到哪</td><td>它是成方法的风险评估技术（GB/T 27921-2023 收录）：以顶事件为唯一中心，两侧各按「威胁/后果 → 屏障」结构化展开</td></tr>
         <tr><td>预防屏障里写「加强管理」「提高意识」</td><td>屏障须可验证：写明对象、措施、频次与记录；无法验证的口号不是屏障</td></tr>
-        <tr><td>把应急救援、灭火器材画在左边当预防屏障</td><td>应急与救援在顶上事件右侧，属减缓/恢复屏障；左边只放「阻止事件发生」的措施</td></tr>
+        <tr><td>把应急救援、灭火器材画在左边当预防屏障</td><td>应急与救援在顶事件右侧，属减缓/恢复屏障；左边只放「阻止事件发生」的措施</td></tr>
         <tr><td>整张图全是「有效」屏障，没有失效标注</td><td>失效标注是蝴蝶结图的核心输出：逐条核对屏障现状，失效项即整改清单</td></tr>
-        <tr><td>顶上事件写成最终事故（「爆炸伤亡」）</td><td>顶上事件是转折点（「泄漏」「坠落」），最终伤亡放右列后果；写成事故会让右侧无屏障可画</td></tr>
-        <tr><td>一张图想把全厂所有风险讲完</td><td>蝴蝶结是单场景工具：一个顶上事件一张图；多事件用多张图，或用 HAZOP/LOPA 衔接</td></tr>
+        <tr><td>顶事件写成最终事故（「爆炸伤亡」）</td><td>顶事件是转折点（「泄漏」「坠落」），最终伤亡放右列后果；写成事故会让右侧无屏障可画</td></tr>
+        <tr><td>一张图想把全厂所有风险讲完</td><td>蝴蝶结是单场景工具：一个顶事件一张图；多事件用多张图，或用 HAZOP/LOPA 衔接</td></tr>
       </tbody>
     </table>
 
     <div class="sec-title">4. 免责与数据来源</div>
     <div class="warn-bar warning">
       <i class="fa-solid fa-triangle-exclamation"></i>
-      <span>本页仅为蝴蝶结方法的<strong>绘制与沟通工具</strong>：标准信息为公开出版信息摘要，未收录任何标准全文（受版权保护）；本工具<strong>不输出风险等级数值、不替代正式风险评价报告</strong>。图上屏障的选取与充分性、顶上事件的界定，须由企业组织评审确认；涉及特殊作业与重大危险源的场景，还应同时满足 GB 30871-2022 等强制性标准及属地监管要求。标准修订后请以最新版本为准。页面数据仅保存于本机浏览器，不上传服务器。</span>
+      <span>本页仅为蝴蝶结方法的<strong>绘制与沟通工具</strong>：标准信息为公开出版信息摘要，未收录任何标准全文（受版权保护）；本工具<strong>不输出风险等级数值、不替代正式风险评价报告</strong>。图上屏障的选取与充分性、顶事件的界定，须由企业组织评审确认；涉及特殊作业与重大危险源的场景，还应同时满足 GB 30871-2022 等强制性标准及属地监管要求。标准修订后请以最新版本为准。页面数据仅保存于本机浏览器，不上传服务器。</span>
     </div>
   </section>
 
@@ -400,8 +404,8 @@ var GAP_TB = 46, GAP_BT = 42;
 var HEADER_H = 34, DY = 14;       // 列头高度与列头-内容间距
 var ROWGAP = 20, BARGAP = 8;
 var LH13 = 18;                    // 13px 文本行高
-var LH14 = 20;                    // 顶上事件 14px 行高
-// 列 x（左→右）：威胁 | 预防屏障 | 顶上事件 | 减缓屏障 | 后果
+var LH14 = 20;                    // 顶事件 14px 行高
+// 列 x（左→右）：威胁 | 预防屏障 | 顶事件 | 减缓屏障 | 后果
 var X_TH = MARGIN;
 var X_PV = X_TH + TW + GAP_TB;
 var X_TP = X_PV + BW + GAP_BT;
@@ -413,7 +417,8 @@ var X_CS = X_MT + BW + GAP_TB;
 var mctx = document.createElement('canvas').getContext('2d');
 function fontOf(px, w) { return w + ' ' + px + 'px ' + FONT; }
 var F13 = fontOf(13, '600'), F14B = fontOf(14, '700');
-function tokenize(s) {
+// 老浏览器兜底：逐字切分
+function tokenizeChars(s) {
   var out = [], buf = '';
   for (var i = 0; i < s.length; i++) {
     var ch = s.charAt(i);
@@ -428,24 +433,98 @@ function tokenize(s) {
   if (buf) out.push(buf);
   return out;
 }
+// 行禁则：P_HEAD 字符不能出现在行首（并入前词）；P_TAIL 字符不能出现在行尾（并入后词）
+var P_HEAD = /^[，。、；：？！…—·）》」』】”’,.!?;:]/;
+var P_TAIL = /^[（(「《【〔“‘]/;
+// 词级分词（Intl.Segmenter + ICU 中文词典），避免逐字折行把「可燃气体」拦腰拆散
+var SEG = (typeof Intl !== 'undefined' && Intl.Segmenter) ? new Intl.Segmenter('zh', { granularity: 'word' }) : null;
+function tokenize(s) {
+  var raw = SEG ? Array.from(SEG.segment(s), function(x) { return x.segment; }) : tokenizeChars(s);
+  var out = [];
+  for (var i = 0; i < raw.length; i++) {
+    var t = raw[i];
+    if (!t) continue;
+    if (/^\s+$/.test(t)) { if (out.length && out[out.length - 1] !== ' ') out.push(' '); continue; }
+    if (P_HEAD.test(t) && out.length && out[out.length - 1] !== ' ') { out[out.length - 1] += t; continue; }
+    if (P_TAIL.test(t)) {
+      var j = i + 1;
+      while (j < raw.length && /^\s*$/.test(raw[j])) j++;
+      if (j < raw.length) { raw[j] = t + raw[j]; continue; }
+    }
+    // 上下标不拆（O₂ 的 ₂）
+    if (/^[₀-₉²³ⁿ⁰-⁹]+$/.test(t) && out.length && out[out.length - 1] !== ' ') { out[out.length - 1] += t; continue; }
+    out.push(t);
+  }
+  return mergeWords(out);
+}
+// EHS 常用复合词合并表：ICU 中文词典对部分常用词仍会拆成单字（复测→复|测、灭火→灭|火、停工→停|工），
+// 折行断在词中间即「文字断行不连续」；按词表把被拆开的相邻 token 并回原词（词内已被 ICU 完整给出时为无操作）
+var MERGE_WORDS = ['四不放过','技术交底','防脱拉断阀','操作平台','工伤保险','不可靠','恶劣天气','停产整顿','责任追究','事故报告','调查处理','拉断阀','安全网','安全带','承载力','救生绳','应急池','切换阀','蒸气云','停工令','脚手架','剪刀撑','脚手板','锚点','校核','满铺','违章','攀爬','探身','许可','预警','坠落','悬挂','缓冲','缓降','急救','送医','善后','收集','复测','灭火','可靠','试漏','围堰','接地','跨接','限速','卸车','超装','溢罐','液位','定量','装车','医疗','设施','交底','处罚','临边','洞口','水平','固定','紧急','切断','水体','污染','有毒','有害','可燃','易燃','窒息','爆炸','火灾','泄漏','粉尘','烟雾','中毒','触电','高处','受限','空间','作业','通风','置换','阀门','管道','能量','隔离','培训','演练','报警','联锁','应急','救援','预案','气体','体积','监控','泄压','洗消','救治','防护','栏杆','盖板','验收','挂牌','整改','闭环','隐患','排查','复查','疏散','警戒','巡检','巡查','伤员','包扎','复苏','逃生'];
+var MERGE_RES = MERGE_WORDS.map(function(w) { return { w: w, re: new RegExp(w.split('').join('\\u0001*'), 'g') }; });
+function mergeWords(toks) {
+  var s = toks.join('\u0001');
+  for (var i = 0; i < MERGE_RES.length; i++) s = s.replace(MERGE_RES[i].re, MERGE_RES[i].w);
+  return s.split('\u0001');
+}
+function hardSplit(tok, font, maxW) {
+  mctx.font = font;
+  var parts = [], cur = '';
+  for (var i = 0; i < tok.length; i++) {
+    var ch = tok.charAt(i);
+    if (cur && mctx.measureText(cur + ch).width > maxW) { parts.push(cur); cur = ch; }
+    else cur += ch;
+  }
+  if (cur) parts.push(cur);
+  return parts;
+}
+// DOM 行可用宽：.bt-box 为 border-box（2px 边框吃掉 4px 内容宽），再留 1px 安全边
+// （canvas measureText 与 DOM 布局有 ≤0.01px 级差异，行宽恰好等于上限时会触发 DOM 二次折行，导致断点与导出图错位）
+var BRD = 2, SAFE_PX = 1;
+function lineAvail(w, padX) { return w - (padX + BRD) * 2 - SAFE_PX; }
 function wrapLines(text, font, maxW) {
   mctx.font = font;
   var toks = tokenize(String(text || ''));
-  var lines = [], cur = '';
+  var oneW = mctx.measureText('词').width || 13;
+  var lines = [], lineToks = [], cur = '', curToks = [];
+  function flush() {
+    var t = cur.replace(/\s+$/, '');
+    if (t) { lines.push(t); lineToks.push(curToks); }
+    cur = ''; curToks = [];
+  }
   for (var i = 0; i < toks.length; i++) {
     var t = toks[i];
     if (t === ' ' && !cur) continue;
+    if (mctx.measureText(t).width > maxW) {  // 单词超宽（长拉丁串）：硬拆，保证行宽守恒、DOM/Canvas 行数一致
+      var ps = hardSplit(t, font, maxW);
+      for (var k = 0; k < ps.length - 1; k++) { lines.push(ps[k]); lineToks.push([ps[k]]); }
+      cur = ps[ps.length - 1]; curToks = [cur];
+      continue;
+    }
     var test = cur + t;
     if (cur && mctx.measureText(test).width > maxW) {
-      lines.push(cur.replace(/\s+$/, ''));
+      flush();
       cur = (t === ' ') ? '' : t;
-    } else { cur = test; }
+      curToks = (t === ' ') ? [] : [t];
+    } else { cur = test; curToks.push(t); }
   }
-  if (cur.replace(/\s+$/, '')) lines.push(cur.replace(/\s+$/, ''));
+  flush();
+  // 避孤字：末行仅 1 字时，从上一行尾挪「整个词」下来（不拆词；超宽则保持孤字）
+  if (lines.length >= 2) {
+    var li = lines.length - 1, last = lines[li], pt = lineToks[li - 1].slice();
+    while (pt.length && /^\s*$/.test(pt[pt.length - 1])) pt.pop();
+    if (mctx.measureText(last).width <= oneW * 1.2 && pt.length) {
+      var mvTok = pt[pt.length - 1];
+      var prevRest = pt.slice(0, -1).join('').replace(/\s+$/, '');
+      if (prevRest && !P_HEAD.test(mvTok.charAt(0)) && mctx.measureText(mvTok + last).width <= maxW) {
+        lines[li - 1] = prevRest; lineToks[li - 1] = pt.slice(0, -1);
+        lines[li] = mvTok + last; lineToks[li] = [mvTok + last];
+      }
+    }
+  }
   return lines.length ? lines : [''];
 }
 function boxH(text, w, padX, font, lh, padY, extra, minH) {
-  var n = wrapLines(text, font, w - padX * 2).length;
+  var n = wrapLines(text, font, lineAvail(w, padX)).length;
   var h = n * lh + padY * 2 + extra;
   return Math.max(minH || 0, h);
 }
@@ -584,10 +663,10 @@ function esc(s) {
   });
 }
 function linesHTML(text, font, w, padX) {
-  return wrapLines(text, font, w - padX * 2).map(esc).join('<br>');
+  return wrapLines(text, font, lineAvail(w, padX)).map(esc).join('<br>');
 }
-function arrowSeg(x1, y1, x2, y2, color, dash) {
-  return '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="' + color + '" stroke-width="2" stroke-dasharray="' + (dash || '7 5') + '" marker-end="url(#' + markerId(color) + ')" />';
+function arrowSeg(x1, y1, x2, y2, color) {
+  return '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="' + color + '" stroke-width="2" marker-end="url(#' + markerId(color) + ')" />';
 }
 function markerId(color) { return 'ah-' + color.replace(/[^a-zA-Z0-9]/g, ''); }
 function markerDefs() {
@@ -607,6 +686,9 @@ function render() {
   var H = HEADER_H + DY + L.totalH + 8;
   cv.style.height = H + 'px';
   cv.classList.toggle('bt-empty', L.rows.length === 0);
+  // 打印自适应缩放（zoom 缩放布局盒本身， Chromium 分页按布局盒计算，故可收一页）：A4 横版可用高约 718px（@96dpi），扣除标题区约 110px 后按 560px 预算收敛
+  var ps = Math.min(0.92, 560 / Math.max(1, H));
+  cv.style.setProperty('--bt-ps', ps.toFixed(3));
 
   var h = '';
   var svgH = HEADER_H + DY + L.totalH + 8;
@@ -618,7 +700,7 @@ function render() {
   }
   h += head(X_TH, TW, 'bt-ch-th', '威胁', 'THREAT');
   h += head(X_PV, BW, 'bt-ch-pv', '预防屏障', 'PREVENTION');
-  h += head(X_TP, TOPW, 'bt-ch-top', '顶上事件', 'TOP EVENT');
+  h += head(X_TP, TOPW, 'bt-ch-top', '顶事件', 'TOP EVENT');
   h += head(X_MT, BW, 'bt-ch-mt', '减缓/恢复屏障', 'MITIGATION');
   h += head(X_CS, TW, 'bt-ch-cs', '后果', 'CONSEQUENCE');
 
@@ -658,6 +740,7 @@ function render() {
       var fail = it.bar.state === 'fail';
       h += '<div class="bt-box bt-prev' + (fail ? ' fail' : '') + '" data-kind="bar" data-id="' + it.bar.id + '" style="left:' + X_PV + 'px;top:' + by + 'px;width:' + BW + 'px;height:' + it.h + 'px;">'
         + '<div class="bt-lines">' + linesHTML(it.bar.text, F13, BW, 8) + '</div>'
+        + (fail ? '<span class="bt-failtag">失效</span>' : '')
         + '<span class="bt-bar-ctrls">'
         + '<button class="bt-mini ' + (fail ? 'st-fail' : 'st-ok') + '" data-act="state" title="切换有效/失效">' + (fail ? '✕' : '✓') + '</button>'
         + '<button class="bt-mini" data-act="edit" title="编辑">✎</button>'
@@ -675,6 +758,7 @@ function render() {
       var fail2 = it2.bar.state === 'fail';
       h += '<div class="bt-box bt-mit' + (fail2 ? ' fail' : '') + '" data-kind="bar" data-id="' + it2.bar.id + '" style="left:' + X_MT + 'px;top:' + my + 'px;width:' + BW + 'px;height:' + it2.h + 'px;">'
         + '<div class="bt-lines">' + linesHTML(it2.bar.text, F13, BW, 8) + '</div>'
+        + (fail2 ? '<span class="bt-failtag">失效</span>' : '')
         + '<span class="bt-bar-ctrls">'
         + '<button class="bt-mini ' + (fail2 ? 'st-fail' : 'st-ok') + '" data-act="state" title="切换有效/失效">' + (fail2 ? '✕' : '✓') + '</button>'
         + '<button class="bt-mini" data-act="edit" title="编辑">✎</button>'
@@ -684,7 +768,7 @@ function render() {
     if (r.co) {
       h += '<button class="bt-addbar" data-act="addbar" data-side="right" data-row="' + i + '" style="left:' + (X_MT + (BW - 62) / 2) + 'px;top:' + (rowTop + r.h - 24) + 'px;">＋屏障</button>';
     }
-    // ---- 箭头（全部指向右：威胁→屏障→顶上事件；顶上事件→屏障→后果）----
+    // ---- 箭头（全部指向右：威胁→屏障→顶事件；顶事件→屏障→后果）----
     var thCy = r.th ? ty + r.thH / 2 : 0;
     var coCy = r.co ? cy2 + r.coH / 2 : 0;
     var topClampLo = topY + 10, topClampHi = topY + L.topH - 10;
@@ -701,7 +785,7 @@ function render() {
       if (r.co) arrows += arrowSeg(X_MT + BW + 6, mcy, X_CS - 6, coCy, TK['brand-red']);
     }
   }
-  // 顶上事件框（只渲染一次，置于行循环外）
+  // 顶事件框（只渲染一次，置于行循环外）
   h += '<div class="bt-box bt-top" data-kind="top" style="left:' + X_TP + 'px;top:' + topY + 'px;width:' + TOPW + 'px;height:' + L.topH + 'px;">'
     + '<div class="bt-lines">' + linesHTML(model.top.text, F14B, TOPW, 12) + '</div>'
     + '<span class="bt-ctrls"><button class="bt-mini" data-act="edit" title="编辑">✎</button></span>'
@@ -851,9 +935,9 @@ window.btReset = function() {
   showMsg('已恢复「受限空间作业」示例图。', true);
 };
 window.btClear = function() {
-  model = { top: { id: nid(), text: '顶上事件（双击编辑）' }, left: [], right: [] };
+  model = { top: { id: nid(), text: '顶事件（双击编辑）' }, left: [], right: [] };
   save(); render();
-  showMsg('已清空。当前仅保留顶上事件。', true);
+  showMsg('已清空。当前仅保留顶事件。', true);
 };
 window.btLoadScene = function(i) {
   model = cloneScene(i);
@@ -891,7 +975,7 @@ window.btExportText = function() {
   L.push('蝴蝶结模型分析 · SHEEN Toolbox');
   L.push('生成时间：' + new Date(Date.now() + 8 * 3600000).toISOString().replace('T', ' ').slice(0, 16));
   L.push('');
-  L.push('【顶上事件】' + model.top.text);
+  L.push('【顶事件】' + model.top.text);
   L.push('');
   L.push('【威胁 → 预防屏障】');
   var maxL = Math.max(model.left.length, model.right.length);
@@ -947,27 +1031,45 @@ window.btExportPng = function() {
 
   var C = {
     th: { bg: TK['warn-soft'], bd: TK['warn-700'], tx: TK['warn-deep'] },
-    pv: { bg: TK['tech-blue-soft'], bd: TK['tech-blue'], tx: TK['tech-blue'] },
+    pv: { bg: TK['tech-blue-soft'], bd: TK['tech-blue'], tx: TK['tech-blue-hover'] },
     mt: { bg: TK['warn-orange-soft'], bd: TK['warn-orange'], tx: TK['warn-deep'] },
-    cs: { bg: TK['brand-red-light'], bd: TK['brand-red'], tx: TK['brand-red'] },
+    cs: { bg: TK['brand-red-light'], bd: TK['brand-red'], tx: TK['brand-red-hover'] },
     fl: { bg: TK['fail-soft'], bd: TK['fail'], tx: TK['fail-deep'] },
     top: { bg: TK['space-gray'], tx: '#FFFFFF' }
   };
   function arrow(x1, y1, x2, y2, color) {
     c.strokeStyle = color; c.fillStyle = color; c.lineWidth = 2;
-    c.setLineDash([7, 5]);
     c.beginPath(); c.moveTo(x1, y1); c.lineTo(x2 - 6, y2); c.stroke();
-    c.setLineDash([]);
     var ang = Math.atan2(y2 - y1, (x2 - 6) - x1);
     c.save(); c.translate(x2, y2); c.rotate(ang);
     c.beginPath(); c.moveTo(0, 0); c.lineTo(-9, -4.5); c.lineTo(-9, 4.5); c.closePath(); c.fill();
     c.restore();
   }
-  function box(x, y, w, h, lines, st, radius, lh, padX, padY, font) {
+  function failTag(x, y, w) {
+    var tw = 34, th = 15;
+    c.fillStyle = C.fl.bd;
+    rr(c, x + w + 6 - tw, y - 8, tw, th, 7.5); c.fill();
+    c.fillStyle = '#FFFFFF'; c.font = '700 9.5px ' + FONT;
+    c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.fillText('失效', x + w + 6 - tw / 2, y - 8 + th / 2 + 0.5);
+  }
+  function topBox(x, y, w, h, lines) {
+    rr(c, x, y, w, h, 16); c.fillStyle = C.top.bg; c.fill();
+    c.save(); c.clip();
+    rr(c, x + 3, y + 3, w - 6, h - 6, 13); c.strokeStyle = '#FFFFFF'; c.lineWidth = 2; c.stroke();
+    c.restore();
+    c.fillStyle = C.top.tx; c.font = F14B;
+    c.textAlign = 'center'; c.textBaseline = 'middle';
+    for (var i = 0; i < lines.length; i++) {
+      c.fillText(lines[i], x + w / 2, y + 10 + i * LH14 + LH14 / 2, w - 24);
+    }
+  }
+  function box(x, y, w, h, lines, st, radius, lh, padX, padY, font, fail) {
     c.fillStyle = st.bg; c.strokeStyle = st.bd; c.lineWidth = 2;
     if (st.dash) c.setLineDash([6, 4]);
     rr(c, x, y, w, h, radius); c.fill(); c.stroke();
     c.setLineDash([]);
+    if (fail) failTag(x, y, w);
     c.fillStyle = st.tx; c.font = font;
     c.textAlign = 'center'; c.textBaseline = 'middle';
     for (var i = 0; i < lines.length; i++) {
@@ -987,7 +1089,7 @@ window.btExportPng = function() {
   }
   head(X_TH, TW, C.th, '威胁', 'THREAT');
   head(X_PV, BW, C.pv, '预防屏障', 'PREVENTION');
-  head(X_TP, TOPW, C.top, '顶上事件', 'TOP EVENT');
+  head(X_TP, TOPW, C.top, '顶事件', 'TOP EVENT');
   head(X_MT, BW, C.mt, '减缓/恢复屏障', 'MITIGATION');
   head(X_CS, TW, C.cs, '后果', 'CONSEQUENCE');
 
@@ -999,21 +1101,21 @@ window.btExportPng = function() {
     var rowTop = HEADER_H + DY + r.y;
     var ty = r.th ? rowTop + (r.h - r.thH) / 2 : 0;
     var cy = r.co ? rowTop + (r.h - r.coH) / 2 : 0;
-    if (r.th) box(X_TH, ty, TW, r.thH, wrapLines(r.th.text, F13, TW - 20), C.th, 12, LH13, 10, 8, F13);
-    if (r.co) box(X_CS, cy, TW, r.coH, wrapLines(r.co.text, F13, TW - 20), C.cs, 12, LH13, 10, 8, F13);
+    if (r.th) box(X_TH, ty, TW, r.thH, wrapLines(r.th.text, F13, lineAvail(TW, 10)), C.th, 12, LH13, 10, 8, F13);
+    if (r.co) box(X_CS, cy, TW, r.coH, wrapLines(r.co.text, F13, lineAvail(TW, 10)), C.cs, 12, LH13, 10, 8, F13);
     var psTop = rowTop + (r.h - 28 - r.ps.total) / 2;
     for (var p = 0; p < r.ps.items.length; p++) {
       var it = r.ps.items[p];
       var by = psTop + it.y;
       var st = it.bar.state === 'fail' ? { bg: C.fl.bg, bd: C.fl.bd, tx: C.fl.tx, dash: true } : C.pv;
-      box(X_PV, by, BW, it.h, wrapLines(it.bar.text, F13, BW - 16), st, 12, LH13, 8, 7, F13);
+      box(X_PV, by, BW, it.h, wrapLines(it.bar.text, F13, lineAvail(BW, 8)), st, 12, LH13, 8, 7, F13, it.bar.state === 'fail');
     }
     var msTop = rowTop + (r.h - 28 - r.ms.total) / 2;
     for (var q = 0; q < r.ms.items.length; q++) {
       var it2 = r.ms.items[q];
       var my = msTop + it2.y;
       var st2 = it2.bar.state === 'fail' ? { bg: C.fl.bg, bd: C.fl.bd, tx: C.fl.tx, dash: true } : C.mt;
-      box(X_MT, my, BW, it2.h, wrapLines(it2.bar.text, F13, BW - 16), st2, 12, LH13, 8, 7, F13);
+      box(X_MT, my, BW, it2.h, wrapLines(it2.bar.text, F13, lineAvail(BW, 8)), st2, 12, LH13, 8, 7, F13, it2.bar.state === 'fail');
     }
     var thCy = r.th ? ty + r.thH / 2 : 0;
     var coCy = r.co ? cy + r.coH / 2 : 0;
@@ -1030,8 +1132,8 @@ window.btExportPng = function() {
       if (r.co) arrow(X_MT + BW + 6, mcy, X_CS - 6, coCy, TK['brand-red']);
     }
   }
-  // 顶上事件框（行循环外只画一次）
-  box(X_TP, topY, TOPW, L.topH, wrapLines(model.top.text, F14B, TOPW - 24), C.top, 12, LH14, 12, 10, F14B);
+  // 顶事件框（行循环外只画一次，双框铭牌式）
+  topBox(X_TP, topY, TOPW, L.topH, wrapLines(model.top.text, F14B, lineAvail(TOPW, 12)));
   c.fillStyle = TK['text-secondary'];
   c.font = '400 11px ' + FONT;
   c.textAlign = 'left'; c.textBaseline = 'alphabetic';
@@ -1055,7 +1157,7 @@ window.btExportPng = function() {
     h += '<div class="scene-card" onclick="btLoadScene(' + i + ')">'
       + '<span class="sc-no">' + (i + 1) + '</span>'
       + '<b>' + esc(SCENES[i].name) + '</b>'
-      + '<span>顶上事件：' + esc(SCENES[i].top) + '<br>' + esc(notes[i]) + '</span>'
+      + '<span>顶事件：' + esc(SCENES[i].top) + '<br>' + esc(notes[i]) + '</span>'
       + '<span class="sc-go">载入到编辑器 →</span>'
       + '</div>';
   }
