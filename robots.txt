@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lwsheen.pages.dev/sheen-toolbox/sitemap.xml
