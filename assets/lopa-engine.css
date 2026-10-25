@@ -1,0 +1,500 @@
+/* ============================================================
+ * lopa-engine.css — 保护层分析（LOPA）引擎样式（共享资源）
+ *
+ * 归属：PHA 过程危害分析工作台 → 模块三「风险量化 · 防线审查」内嵌工作区。
+ * 原独立页 lopa-analysis/ 已转为 noindex stub 跳转 PHA，本文件为 LOPA 样式唯一来源。
+ *
+ * ⚠️ 作用域约定（PHA 与 LOPA 同页共存的关键）：
+ *   ① 常规样式全部 lp- 前缀，与 PHA / common.css 零交集；
+ *   ② @media print 内所有全局选择器统一加 `.pha-lopa-host ` 前缀，
+ *      避免污染 PHA 自身打印样式（body 字号 / details / .card / .table-scroll）；
+ *   ③ @page 已移除 —— 一个 HTML 文档只有一份生效的 @page 方向，
+ *      由宿主页面 PHA 的 `@page { size: A4 landscape }` 统一承担（两者同向）。
+ *
+ * ⚠️ 本文件位于 assets/：build_minify.py 会整体拷贝 assets/ → build/，
+ *    既随 github.io 镜像发布，又**不经过 terser**（mangle 会重命名顶层 lp* 函数，
+ *    破坏 inline onclick 依赖）。
+ * ============================================================ */
+        /* ============================================================
+           LOPA 工具特有样式（前缀 lp-）
+           公共组件（卡片/按钮/表单/表格/页脚/打印）由 common.css 提供
+           ============================================================ */
+
+        /* ===== 标准提示条 ===== */
+        .lp-banner {
+            background: var(--tech-blue-soft);
+            border: 1px solid #C7DDF8;
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
+            font-size: var(--fs-sm);
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        .lp-banner b { color: var(--text-primary); }
+        .lp-banner code {
+            font-family: var(--font-mono);
+            background: #fff;
+            border: 1px solid #D6E4F7;
+            border-radius: 4px;
+            padding: 1px 5px;
+            color: var(--tech-blue);
+        }
+
+        /* ===== 步骤卡片 ===== */
+        .lp-step { margin-bottom: 18px; }
+        .lp-step-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .lp-step-no {
+            flex: 0 0 auto;
+            width: 24px; height: 24px;
+            border-radius: 50%;
+            background: var(--brand-red);
+            color: #fff;
+            font-size: var(--fs-sm);
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+        .lp-step-head h3 {
+            font-size: var(--fs-md);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+        }
+        .lp-step-head .lp-step-hint {
+            font-size: var(--fs-sm);
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        /* ===== 通用字段网格 ===== */
+        .lp-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px 16px;
+        }
+        .lp-grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+        .lp-field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+        .lp-field > label {
+            font-size: var(--fs-sm);
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        .lp-field > label .lp-req { color: var(--brand-red); margin-left: 2px; }
+        .lp-field .lp-tip {
+            font-size: var(--fs-xs);
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        .lp-field input, .lp-field select, .lp-field textarea { width: 100%; }
+        .lp-field textarea.form-control { min-height: 62px; resize: vertical; font-family: inherit; }
+        .lp-full { grid-column: 1 / -1; }
+
+        /* ===== 单选/复选行 ===== */
+        .lp-radio-row { display: flex; flex-wrap: wrap; gap: 8px; }
+        .lp-radio-row label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: var(--fs-sm);
+            border: 1px solid var(--border);
+            border-radius: 60px;
+            padding: 5px 14px;
+            background: var(--bg-card);
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-secondary);
+        }
+        .lp-radio-row label:hover { border-color: var(--tech-blue); color: var(--text-primary); }
+        .lp-radio-row input { accent-color: var(--brand-red); }
+        .lp-radio-row label.on {
+            border-color: var(--brand-red);
+            background: var(--brand-red-light);
+            color: var(--brand-red);
+            font-weight: 600;
+        }
+
+        /* ===== 场景卡片 ===== */
+        .lp-sc {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            background: var(--bg-card);
+            margin-bottom: 14px;
+            overflow: hidden;
+        }
+        .lp-sc-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-page);
+            border-bottom: 1px solid var(--border);
+            padding: 9px 14px;
+        }
+        .lp-sc-no {
+            flex: 0 0 auto;
+            font-size: var(--fs-sm);
+            font-weight: 700;
+            color: #fff;
+            background: var(--space-gray);
+            border-radius: 4px;
+            padding: 2px 9px;
+            font-family: var(--font-mono);
+        }
+        .lp-sc-head input.lp-sc-name { flex: 1; min-width: 120px; }
+        .lp-sc-body { padding: 14px; }
+
+        /* ===== 保护层子表 ===== */
+        .lp-sub-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: var(--fs-sm);
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin: 14px 0 8px;
+        }
+        .lp-sub-title::before {
+            content: '';
+            width: 3px; height: 13px;
+            border-radius: 2px;
+            background: var(--tech-blue);
+        }
+        .lp-ipl-table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); min-width: 420px; }
+        .lp-ipl-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .lp-ipl-scroll::-webkit-scrollbar { height: 6px; }
+        .lp-ipl-scroll::-webkit-scrollbar-track { background: var(--border-light); border-radius: 3px; }
+        .lp-ipl-scroll::-webkit-scrollbar-thumb { background: #C4C9D1; border-radius: 3px; }
+        .lp-ipl-table th {
+            background: var(--bg-page);
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-align: left;
+            padding: 6px 8px;
+            border: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        .lp-ipl-table td { padding: 5px 8px; border: 1px solid var(--border); vertical-align: middle; }
+        .lp-ipl-table input, .lp-ipl-table select { width: 100%; font-size: var(--fs-sm); padding: 4px 7px; }
+        .lp-ipl-table .lp-c-type { min-width: 180px; }
+        .lp-ipl-table .lp-c-pfd { min-width: 92px; }
+        .lp-ipl-table .lp-c-op { width: 40px; text-align: center; }
+        .lp-del-btn {
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 15px;
+            line-height: 1;
+            padding: 4px;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+        .lp-del-btn:hover { color: var(--fail); background: var(--fail-soft-2); }
+        .lp-add-btn {
+            margin-top: 8px;
+            border: 1px dashed var(--border);
+            background: var(--bg-page);
+            color: var(--text-secondary);
+            border-radius: var(--radius-sm);
+            padding: 6px 14px;
+            font-size: var(--fs-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+        }
+        .lp-add-btn:hover { border-color: var(--tech-blue); color: var(--tech-blue); background: var(--tech-blue-soft); }
+
+        /* ===== 场景小计 ===== */
+        .lp-subtotal {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: 6px 14px;
+            margin-top: 12px;
+            padding: 9px 12px;
+            background: var(--bg-page);
+            border-radius: var(--radius-sm);
+            font-size: var(--fs-sm);
+            color: var(--text-secondary);
+        }
+        .lp-subtotal b { font-family: var(--font-mono); font-size: var(--fs-md); color: var(--text-primary); }
+        .lp-subtotal .lp-formula { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-secondary); }
+
+        /* ===== 结果区 ===== */
+        .lp-verdict {
+            border-radius: var(--radius-md);
+            border: 1.5px solid var(--border);
+            padding: 16px 18px;
+            margin-bottom: 16px;
+        }
+        .lp-verdict.pass { border-color: #86EFAC; background: var(--ok-soft); }
+        .lp-verdict.fail { border-color: #FCA5A5; background: var(--fail-soft-2); }
+        .lp-verdict-top {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: var(--fs-md);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .lp-verdict.pass .lp-verdict-top { color: var(--ok-deep); }
+        .lp-verdict.fail .lp-verdict-top { color: var(--fail-deep); }
+        .lp-kv {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 10px 18px;
+        }
+        .lp-kv .lp-kv-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+        .lp-kv .lp-kv-k { font-size: var(--fs-xs); color: var(--text-secondary); }
+        .lp-kv .lp-kv-v {
+            font-size: var(--fs-lg);
+            font-weight: 700;
+            font-family: var(--font-mono);
+            color: var(--text-primary);
+            word-break: break-all;
+        }
+        .lp-kv .lp-kv-v.sm { font-size: var(--fs-md); }
+        .lp-verdict .lp-verdict-note {
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px dashed rgba(0,0,0,.12);
+            font-size: var(--fs-sm);
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* ===== 场景汇总表 ===== */
+        .lp-summary-table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
+        .lp-summary-table th, .lp-summary-table td {
+            border: 1px solid var(--border);
+            padding: 7px 9px;
+            text-align: left;
+        }
+        .lp-summary-table th { background: var(--bg-page); font-weight: 600; color: var(--text-secondary); white-space: nowrap; }
+        .lp-summary-table td.num { font-family: var(--font-mono); text-align: right; white-space: nowrap; }
+        .lp-summary-table tr.row-governing td { background: var(--brand-red-light); font-weight: 600; }
+        .lp-summary-table tr.row-fail td.num { color: var(--fail); }
+
+        /* ===== 风险矩阵 ===== */
+        .lp-matrix-wrap { overflow-x: auto; }
+        .lp-matrix { border-collapse: separate; border-spacing: 3px; font-size: var(--fs-sm); min-width: 620px; }
+        .lp-matrix th {
+            background: var(--bg-page);
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 6px 8px;
+            text-align: center;
+            white-space: nowrap;
+            border-radius: 4px;
+        }
+        .lp-matrix th.lp-mx-corner { text-align: left; font-size: var(--fs-xs); }
+        .lp-matrix td {
+            text-align: center;
+            padding: 7px 6px;
+            border-radius: 4px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            font-size: var(--fs-xs);
+            line-height: 1.4;
+        }
+        .lp-matrix td.lp-mx-freq {
+            background: var(--bg-page);
+            font-family: var(--font-mono);
+            color: var(--text-primary);
+            font-weight: 600;
+            text-align: right;
+            white-space: nowrap;
+        }
+        .lp-mx-none { background: #F1F3F5; }
+        .lp-mx-opt  { background: var(--ok-soft); color: var(--ok-deep); }
+        .lp-mx-act  { background: var(--warn-soft-2); color: var(--warn-700); }
+        .lp-mx-now  { background: var(--fail-soft-2); color: var(--fail-deep); }
+        .lp-matrix td.lp-mx-hit {
+            outline: 3px solid var(--brand-red);
+            outline-offset: -3px;
+            font-weight: 700;
+            color: var(--brand-red);
+        }
+        .lp-mx-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+            margin-top: 12px;
+            font-size: var(--fs-sm);
+            color: var(--text-secondary);
+        }
+        .lp-mx-legend span { display: inline-flex; align-items: center; gap: 6px; }
+        .lp-mx-legend i {
+            width: 13px; height: 13px;
+            border-radius: 3px;
+            border: 1px solid var(--border);
+            display: inline-block;
+        }
+        .lp-action-box {
+            margin-top: 14px;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            font-size: var(--fs-md);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .lp-action-box.none { background: #F1F3F5; color: var(--text-secondary); }
+        .lp-action-box.opt  { background: var(--ok-soft); color: var(--ok-deep); }
+        .lp-action-box.act  { background: var(--warn-soft-2); color: var(--warn-700); }
+        .lp-action-box.now  { background: var(--fail-soft-2); color: var(--fail-deep); }
+
+        /* ===== 合规校验 ===== */
+        .lp-check-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .lp-check-list li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: var(--fs-sm);
+            line-height: 1.6;
+            padding: 9px 12px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+        }
+        .lp-check-list li i { flex: 0 0 auto; margin-top: 3px; }
+        .lp-check-list li .lp-ck-body { min-width: 0; flex: 1; }
+        .lp-check-list li .lp-ck-ref {
+            display: block;
+            font-size: var(--fs-xs);
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+            margin-top: 2px;
+        }
+        .lp-ck-ok   { border-color: #86EFAC; background: var(--ok-soft); }
+        .lp-ck-ok i { color: var(--ok-deep); }
+        .lp-ck-warn { border-color: #FCD34D; background: var(--warn-soft-2); }
+        .lp-ck-warn i { color: var(--warn-700); }
+        .lp-ck-bad  { border-color: #FCA5A5; background: var(--fail-soft-2); }
+        .lp-ck-bad i { color: var(--fail-deep); }
+
+        /* ===== 记录表 ===== */
+        .lp-rec { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
+        .lp-rec th, .lp-rec td { border: 1px solid var(--border); padding: 7px 10px; vertical-align: top; text-align: left; }
+        .lp-rec th { background: var(--bg-page); color: var(--text-secondary); font-weight: 600; }
+        .lp-rec td.lp-rec-k { width: 130px; background: #FCFCFD; color: var(--text-secondary); font-weight: 600; white-space: nowrap; }
+        .lp-rec td.lp-rec-k small { display: block; font-weight: 400; font-family: var(--font-mono); font-size: var(--fs-xs); color: #9AA1AC; }
+        .lp-rec tr.lp-rec-sec td {
+            background: var(--space-gray);
+            color: #fff;
+            font-weight: 700;
+            font-size: var(--fs-sm);
+        }
+        .lp-placeholder { color: #9AA1AC; }
+
+        /* ===== 附录速查 Tab ===== */
+        .lp-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+        .lp-tab {
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            border-radius: 60px;
+            padding: 5px 14px;
+            font-size: var(--fs-sm);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .lp-tab:hover { border-color: var(--tech-blue); color: var(--tech-blue); }
+        .lp-tab.on { background: var(--brand-red); border-color: var(--brand-red); color: #fff; font-weight: 600; }
+        .lp-panel { display: none; }
+        .lp-panel.on { display: block; }
+        .lp-ref-table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
+        .lp-ref-table th, .lp-ref-table td { border: 1px solid var(--border); padding: 6px 9px; text-align: left; vertical-align: top; }
+        .lp-ref-table th { background: var(--bg-page); color: var(--text-secondary); font-weight: 600; }
+        .lp-ref-table td.mono { font-family: var(--font-mono); white-space: nowrap; }
+        .lp-ref-note { font-size: var(--fs-sm); color: var(--text-secondary); margin-top: 10px; line-height: 1.7; }
+
+        /* ===== 工具栏 ===== */
+        .lp-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            margin: 22px 0 8px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border);
+        }
+        .lp-toolbar .lp-spacer { flex: 1; }
+        /* 自动保存提示位（localStorage） */
+        .lp-save-hint {
+            font-size: var(--fs-xs);
+            color: var(--text-secondary);
+            white-space: nowrap;
+            min-width: 84px;
+            text-align: right;
+        }
+
+        /* ===== 移动端 ===== */
+        @media (max-width: 600px) {
+            .lp-step-head { flex-wrap: wrap; }
+            .lp-step-head .lp-step-hint { margin-left: 0; text-align: left; width: 100%; }
+            .lp-sc-head { flex-wrap: wrap; }
+            .lp-kv .lp-kv-v { font-size: var(--fs-md); }
+            .lp-matrix { min-width: 520px; }
+        }
+
+        /* ===== 打印样式 ===== */
+        
+
+@media print {
+.pha-lopa-host { background: #fff !important; padding: 0 !important; font-size: 10pt; color: #000 !important; }
+            .pha-lopa-host .lp-toolbar, .pha-lopa-host .no-print, .pha-lopa-host .no-pr,
+            .pha-lopa-host .lp-add-btn, .pha-lopa-host .lp-del-btn,
+            .pha-lopa-host .lp-banner, .pha-lopa-host .lp-tabs { display: none !important; }
+            .pha-lopa-host .lp-step { break-inside: avoid; }
+            .pha-lopa-host details { break-inside: avoid; }
+            .pha-lopa-host details > summary { display: none; }
+            .pha-lopa-host details[open] > *:not(summary) { display: revert; }
+            .pha-lopa-host .form-card, .pha-lopa-host .card, .pha-lopa-host .result-card,
+            .pha-lopa-host .lp-verdict, .pha-lopa-host .lp-sc {
+                box-shadow: none !important; border-radius: 0 !important;
+                border: 1px solid #555 !important;
+            }
+            .pha-lopa-host .lp-banner { display: none !important; }
+            .pha-lopa-host .table-scroll { overflow: visible !important; margin: 0 !important; padding: 0 !important; }
+            .lp-ipl-scroll, .lp-matrix-wrap { overflow: visible !important; }
+            .lp-ipl-table { min-width: 0 !important; }
+            .lp-ref-table, .lp-rec, .lp-summary-table, .lp-ipl-table { font-size: 8pt !important; }
+            .lp-ref-table th, .lp-ref-table td, .lp-rec th, .lp-rec td,
+            .lp-summary-table th, .lp-summary-table td, .lp-ipl-table th, .lp-ipl-table td {
+                padding: 2px 4px !important;
+                word-wrap: break-word !important;
+                word-break: break-word !important;
+                border-color: #999 !important;
+            }
+            .lp-ipl-table input, .lp-ipl-table select,
+            .lp-field input, .lp-field select, .lp-field textarea {
+                border: none !important;
+                background: transparent !important;
+                padding: 0 !important;
+                font-size: 8pt !important;
+                box-shadow: none !important;
+                -webkit-appearance: none;
+                appearance: none;
+            }
+            .lp-matrix td.lp-mx-hit { outline: 2px solid #000; }
+            .pha-lopa-host .tool-meta { break-inside: avoid; }
+        }
+    
