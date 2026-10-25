@@ -1,6 +1,6 @@
 {
   "version": "3.0",
-  "updated": "2026-10-20",
+  "updated": "2026-10-25",
   "note": "全量 65 个登记工具 + 3 条兼容路由（未登记但线上可用的 environmental-impact-classification、occupational-risk-classification，以及合并页别名 vehicle-fire-extinguisher），AI 可路由+关联所有工具；查询类工具支持 ?q= 预填深链。待定：2 个未登记工具的去留。",
   "fallback": {
     "noTool": "未匹配到专用工具。可换更具体的表述（如工具名/标准号），或前往「SHEEN环境健康安全」IMA 知识库检索法规原文。",
@@ -410,8 +410,8 @@
     {
       "id": "five-why-analysis",
       "title": "5Why + 5M1E 根因分析",
-      "desc": "5Why + 5M1E 根因分析",
-      "descShort": "5Why+5M1E根因分析模板",
+      "desc": "AI 引导的事故根因分析：5Why 深度追问 + 5M1E 六维拆解",
+      "descShort": "AI 事故根因分析",
       "category": "其他",
       "standards": [],
       "copyright": "none",
@@ -421,11 +421,15 @@
         "根因分析",
         "为什么分析",
         "因果分析",
-        "鱼骨"
+        "鱼骨",
+        "事故调查",
+        "事故分析",
+        "根因"
       ],
       "page": "/sheen-toolbox/five-why-analysis/",
       "queryParam": null,
-      "params": []
+      "params": [],
+      "updated": "2026-10-25"
     },
     {
       "id": "fixed-ladder-params",
