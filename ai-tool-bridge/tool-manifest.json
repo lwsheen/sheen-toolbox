@@ -1920,6 +1920,111 @@
       "filterFns": [
         "evaluateHeight"
       ]
+    },
+    {
+      "id": "pha-analysis",
+      "title": "PHA 过程危害分析工作台",
+      "desc": "按设计阶段整合九类 PHA 方法：早期设计找隐患（Checklist/HAZID/What-If）、详细设计查细节（HAZOP 引导词偏差/FMEA 的 S·O·D 评分与 RPN）、风险量化与防线审查（链接 LOPA 工具，评估独立保护层与 SIS/SIL 定级）、模型构建与事故推演（链接 FTA/ETA/Bow-Tie 工具）。HAZID/What-If/HAZOP/FMEA 四张页内工作表支持增删行、偏差自动组合、RPN 自动计算（S≥9 特判必须处理）、自动保存、导出自包含 HTML 报告与 Excel、A4 横版打印。依据 AQ/T 3033-2022 表 1 方法矩阵与 AQ/T 3034-2022。",
+      "descShort": "PHA 九法按设计阶段整合：HAZID/What-If/HAZOP/FMEA 工作表",
+      "category": "其他",
+      "standards": [
+        "AQ/T 3033-2022《化工建设项目安全设计管理导则》",
+        "AQ/T 3034-2022《化工过程安全管理导则》",
+        "GB/T 35320-2017《危险与可操作性分析(HAZOP分析) 应用指南》",
+        "GB/T 7826-2012《系统可靠性分析技术 失效模式和影响分析(FMEA)程序》"
+      ],
+      "copyright": "boundary",
+      "trigger": [
+        "PHA",
+        "过程危害分析",
+        "工艺危害分析",
+        "pha分析",
+        "HAZID",
+        "危险源识别",
+        "What-If",
+        "假设分析",
+        "如果会怎样",
+        "HAZOP",
+        "危险与可操作性分析",
+        "引导词",
+        "偏差分析",
+        "FMEA",
+        "失效模式与影响分析",
+        "失效模式",
+        "RPN",
+        "严重度",
+        "安全检查表",
+        "检查表法",
+        "AQ/T 3033",
+        "AQ/T 3034"
+      ],
+      "page": "/sheen-toolbox/pha-analysis/",
+      "queryParam": null,
+      "params": []
+    },
+    {
+      "id": "fault-tree-analysis",
+      "title": "故障树分析（FTA）工具",
+      "desc": "图形化故障树分析：以顶事件为根，用与门/或门/禁门逐层向下演绎基本原因组合；自动求解最小割集（按阶数分组，阶数越低越危险）、顶事件概率（OR 门 P=1−∏(1−Pᵢ)，AND/INHIBIT 门 P=∏Pᵢ）与概率重要度（整改资源优先投给谁）。七类符号按 GB/T 4888-2009/IEC 61025:2006，内置两组示例、场景卡片一键载入、PNG 高清导出、建树四步与常见错误纠正速查。",
+      "descShort": "FTA 故障树：图形化建树·最小割集·概率重要度",
+      "category": "其他",
+      "standards": [
+        "GB/T 4888-2009《故障树名词术语和符号》",
+        "GB/T 7829-1987《故障树分析程序》",
+        "GB/T 37080-2018《可信性分析技术 事件树分析（ETA）》"
+      ],
+      "copyright": "boundary",
+      "trigger": [
+        "FTA",
+        "故障树",
+        "故障树分析",
+        "事故树",
+        "顶事件",
+        "逻辑门",
+        "与门",
+        "或门",
+        "最小割集",
+        "割集",
+        "概率重要度",
+        "失效分析",
+        "事故因果",
+        "演绎分析",
+        "GB/T 4888",
+        "IEC 61025"
+      ],
+      "page": "/sheen-toolbox/fault-tree-analysis/",
+      "queryParam": null,
+      "params": []
+    },
+    {
+      "id": "event-tree-analysis",
+      "title": "事件树分析（ETA）工具",
+      "desc": "图形化事件树分析：从初始事件（泄漏、跳车、设备失效）出发，沿时间顺序展开各安全屏障/安全功能的成败分支，推导后果序列及其概率与严重度，得到后果分布。支持分支概率编辑、后果序列定量计算、场景示例载入与 PNG 导出；与 FTA（关键事件失败概率求取）、LOPA（后果频率接入保护层判定）衔接。依据 GB/T 37080-2018（对应 IEC 62502:2010）。",
+      "descShort": "ETA 事件树：初始事件·屏障成败分支·后果序列概率",
+      "category": "其他",
+      "standards": [
+        "GB/T 37080-2018《可信性分析技术 事件树分析（ETA）》",
+        "GB/T 4888-2009《故障树名词术语和符号》",
+        "GB/T 32857-2025《保护层分析（LOPA）应用导则》"
+      ],
+      "copyright": "boundary",
+      "trigger": [
+        "ETA",
+        "事件树",
+        "事件树分析",
+        "初始事件",
+        "初因事件",
+        "屏障",
+        "安全功能",
+        "后果序列",
+        "归纳分析",
+        "应急预案",
+        "GB/T 37080",
+        "IEC 62502"
+      ],
+      "page": "/sheen-toolbox/event-tree-analysis/",
+      "queryParam": null,
+      "params": []
     }
   ]
 }
