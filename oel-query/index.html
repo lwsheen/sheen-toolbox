@@ -80,12 +80,27 @@
   .nb-g2a { background: #FFE; color: #A60; font-weight: 700; }
   .nb-g2b { background: #FFF8E1; color: #B80; font-weight: 600; }
   .nb-sens { background: var(--brand-blue-light, #E3F2FD); color: var(--brand-blue); }
-  /* 桌面端：表格已 table-layout:fixed 且所有列均在容器内，关闭横向滚动条（纵向滚动条占位引起的伪横向滚动条）。移动端保留 overflow:auto 以便宽表横向滚动查看 */
-  @media (min-width: 901px) { .table-scroll { overflow-x: hidden; } }
+  /* 桌面端：容器放宽到 1200px 后 9 列（合计 948px）可完整容纳，正常情况下不会出现横向滚动条。
+     但窗口宽度在 901~1050px 时内容区仍可能窄于 948px —— 此时必须允许横滚，
+     否则右侧列被静默裁掉（原先是 overflow-x:hidden，那正是本页 174px 列不可见的根因）。 */
+  @media (min-width: 901px) { .table-scroll { overflow-x: auto; } }
   .result-count { font-size: 12px; color: var(--text-secondary); padding: 8px 0; }
   .result-count strong { color: var(--brand-red); font-weight: 700; }
   .empty-state { padding: 60px 20px; text-align: center; color: var(--text-secondary); }
   .empty-state i { font-size: 36px; color: var(--border); display: block; margin-bottom: 12px; }
+  /* 渐进加载条：默认渲染 60 行，点一次再放 60 行。
+     原先 358 行一次性写进 tbody → 文档高 28,470px（桌面 31.6 屏 / 移动 15.7 屏），
+     滚动没有终点感，低端机首屏要一次性布局 358×9 个单元格。 */
+  .oel-more { padding: 14px 0 2px; text-align: center; }
+  .oel-more-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 20px; border: 1.5px solid var(--border); background: var(--bg-card);
+    border-radius: 999px; font-size: 13px; font-weight: 700; color: var(--tech-blue);
+    cursor: pointer; font-family: inherit; transition: all .18s;
+  }
+  .oel-more-btn:hover { border-color: var(--tech-blue); background: var(--tech-blue-soft, #EAF2FD); }
+  .oel-more-btn:active { transform: translateY(1px); }
+  .oel-more-hint { font-size: 11px; font-weight: 400; color: var(--text-secondary); }
   .amend-flag { display: inline-block; font-size: 10px; padding: 1px 5px; background: var(--brand-orange); color: #fff; border-radius: 3px; margin-left: 4px; vertical-align: middle; }
   /* Detail panel */
   .detail-overlay { display: none; position: fixed; inset: 0; background: rgba(30,33,38,.5); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
@@ -132,7 +147,25 @@
     .page-title .print-btn { float: none; margin-left: auto;
             border-radius: 8px;
         }
-    .info-card { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px 16px; }
+    /* 移动端首屏此前几乎被「统计卡 235px + 筛选胶囊 179px」占满，
+       首行数据落在 y≈771，390×844 屏只看得到 2 行。
+       统计卡里的 5 个数字与标签页 count 完全重复，改为单行横滑条：
+       保留表1/表2 溯源与"已含修改单"提示，高度从 235px 降到约 56px。 */
+    .info-card {
+      display: flex; flex-wrap: nowrap; gap: 18px; padding: 10px 14px;
+      overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    }
+    .info-card::-webkit-scrollbar { display: none; }
+    .info-card .stat { flex: 0 0 auto; }
+    .info-card .stat-value { font-size: 15px; }
+    .info-card .stat-sub { font-size: 10px; }
+    /* 8 个快捷筛选在 390px 下折成 3 行（约 111px），改单行横滑再省两行 */
+    .quick-filters {
+      flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; padding-bottom: 2px;
+    }
+    .quick-filters::-webkit-scrollbar { display: none; }
+    .quick-filter { flex: 0 0 auto; white-space: nowrap; }
     .tabs { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; }
     .tab-btn { flex: 0 0 auto; white-space: nowrap;
             border-radius: 8px;
@@ -170,7 +203,11 @@
   <i class="fa-solid fa-chevron-right"></i>
   <span class="cur">工作场所有害因素职业接触限值查询</span>
 </div>
-<main class="app-container container-calc">
+<!-- 2026-10-27：本页是查询类（9 列数据表，列宽合计 948px），误用了计算器容器
+     container-calc（max-width 800px）→ 内容区仅 752px，表格右侧 174px 被裁，
+     「临界不良健康效应」整列看不到且 desktop 下 overflow-x:hidden 无法横滚。
+     已改用查询类容器 container-query（1200px）。 -->
+<main class="app-container container-query">
   <div class="page-title">
     <i class="fa-solid fa-flask-vial"></i>
     <h1 class="page-title">工作场所有害因素职业接触限值查询</h1>
@@ -215,6 +252,8 @@
     </div>
   </div>
 
+  <div class="oel-more no-print" id="oelMore"></div>
+
   <div id="physArea" style="display:none;"></div>
   <div id="ctlArea" style="display:none;"></div>
 
@@ -242,6 +281,11 @@ window.__DATA__ = {"table1_chemicals":[{"no":"1","cn":"安妥","en":"ANTU","cas"
   var currentFilter = '';
   var currentSort = { col: -1, asc: true };
   var searchTerm = '';
+  /* 渐进渲染：一次只铺 PAGE_SIZE 行，lastRows 保存"当前过滤+排序后的完整结果"，
+     行点击靠它取数据（tbody 里只存在已渲染的那部分行）。 */
+  var PAGE_SIZE = 60;
+  var shownCount = PAGE_SIZE;
+  var lastRows = [];
 
   function escapeHtml(s){ if(s==null)return ''; return String(s).replace(/[&<>"']/g, function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
 
@@ -363,8 +407,14 @@ window.__DATA__ = {"table1_chemicals":[{"no":"1","cn":"安妥","en":"ANTU","cas"
     });
     document.getElementById('physArea').style.display = t==='phys'?'block':'none';
     document.getElementById('ctlArea').style.display = t==='ctl'?'block':'none';
-    document.getElementById('tableArea').style.display = (t==='phys')?'none':'';
-    document.getElementById('rc').style.display = (t==='phys')?'none':'';
+    /* 「物理因素」「接触等级」是独立面板，不在主表里渲染。
+       原先只判断了 phys，切到 ctl 时 tableArea 仍可见 —— 用户点「接触等级控制」
+       看到的是上一个标签页残留的化学因素表（还顶着 358 条的计数），真正的内容被压在下面。
+       加载更多条 oelMore 在 tableArea 之外，同样必须一起收起来，否则按钮会孤零零留在面板下方。 */
+    var isPanelTab = (t==='phys' || t==='ctl');
+    document.getElementById('tableArea').style.display = isPanelTab?'none':'';
+    document.getElementById('rc').style.display = isPanelTab?'none':'';
+    document.getElementById('oelMore').style.display = isPanelTab?'none':'';
     if(t==='phys') renderPhys(); else if(t==='ctl') renderCtl(); else renderTable();
     renderFilters();
   }
@@ -403,7 +453,8 @@ window.__DATA__ = {"table1_chemicals":[{"no":"1","cn":"安妥","en":"ANTU","cas"
     });
   }
 
-  function renderTable(){
+  function renderTable(reset){
+    if(reset !== false) shownCount = PAGE_SIZE;
     var sch = SCHEMAS[currentTab];
     // header
     var thead = document.getElementById('theadRow');
@@ -435,32 +486,51 @@ window.__DATA__ = {"table1_chemicals":[{"no":"1","cn":"安妥","en":"ANTU","cas"
       });
     }
     var tb = document.getElementById('tbody');
+    lastRows = rows;
+    var n = Math.min(shownCount, rows.length);
     if(!rows.length){
       tb.innerHTML = '<tr><td colspan="'+sch.cols.length+'" class="empty-state"><i class="fa-solid fa-inbox"></i>无匹配结果</td></tr>';
     } else {
-      tb.innerHTML = rows.map(function(r, idx){
-        var amendCls = r.amend ? ' class="amend"' : '';
-        var amendFlag = r.amend ? ' <span class="amend-flag" title="'+escapeHtml(r.amend)+'">修</span>' : '';
-        var tds = sch.cols.map(function(c){
-          var v = r[c.key];
-          var disp;
-          if(c.fmt==='oel') disp = oelCell(v);
-          else if(c.fmt==='badge') disp = parseBadges(v);
-          else if(c.key==='no') disp = escapeHtml(v);
-          else disp = escapeHtml(v);
-          return '<td class="'+c.key+'">'+disp+'</td>';
-        }).join('');
-        return '<tr'+amendCls+' data-idx="'+idx+'">'+tds+'</tr>';
-      }).join('');
-      // bind row click
-      tb.querySelectorAll('tr[data-idx]').forEach(function(tr){
-        tr.addEventListener('click', function(){
-          var idx = parseInt(tr.dataset.idx, 10);
-          openDetail(rows[idx]);
-        });
-      });
+      tb.innerHTML = rows.slice(0, n).map(rowHtml).join('');
     }
     document.getElementById('rc').innerHTML = '共 <strong>'+rows.length+'</strong> / '+DATA[currentTab].length+' 条';
+    renderMoreBar(n, rows.length);
+  }
+
+  /* 单行 HTML 生成（抽出来给首屏与"加载更多"共用） */
+  function rowHtml(r, idx){
+    var sch = SCHEMAS[currentTab];
+    var amendCls = r.amend ? ' class="amend"' : '';
+    var amendFlag = r.amend ? ' <span class="amend-flag" title="'+escapeHtml(r.amend)+'">修</span>' : '';
+    var tds = sch.cols.map(function(c){
+      var v = r[c.key];
+      var disp;
+      if(c.fmt==='oel') disp = oelCell(v);
+      else if(c.fmt==='badge') disp = parseBadges(v);
+      else disp = escapeHtml(v);
+      return '<td class="'+c.key+'">'+disp+'</td>';
+    }).join('');
+    return '<tr'+amendCls+' data-idx="'+idx+'">'+tds+'</tr>';
+  }
+
+  /* 加载更多条：只增大 shownCount 再重渲染，并把新出现的首行滚进视野
+     （否则内容长在页面下方，用户会以为"点了没反应"） */
+  function renderMoreBar(n, total){
+    var bar = document.getElementById('oelMore');
+    if(!bar) return;
+    if(n >= total){ bar.innerHTML = ''; bar.style.display = 'none'; return; }
+    bar.style.display = '';
+    var step = Math.min(PAGE_SIZE, total - n);
+    bar.innerHTML = '<button type="button" class="oel-more-btn" id="oelMoreBtn">'
+      + '<i class="fa-solid fa-chevron-down"></i> 再显示 ' + step + ' 条'
+      + '<span class="oel-more-hint">还有 ' + (total - n) + ' 条未显示</span></button>';
+    document.getElementById('oelMoreBtn').addEventListener('click', function(){
+      var firstNew = n;
+      shownCount += PAGE_SIZE;
+      renderTable(false);
+      var trs = document.getElementById('tbody').querySelectorAll('tr');
+      if(trs[firstNew]) trs[firstNew].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
   }
 
   function openDetail(r){
@@ -615,6 +685,14 @@ window.__DATA__ = {"table1_chemicals":[{"no":"1","cn":"安妥","en":"ANTU","cas"
   }
 
   // ----- Init -----
+  /* 行点击用事件委托：tbody 的 innerHTML 每次渲染都会被重写、也会追加新行，
+     逐行 addEventListener 会随节点一起被丢弃（第 2 次点就失效）。 */
+  document.getElementById('tbody').addEventListener('click', function(e){
+    var tr = e.target && e.target.closest ? e.target.closest('tr[data-idx]') : null;
+    if(!tr) return;
+    var idx = parseInt(tr.dataset.idx, 10);
+    if(lastRows[idx]) openDetail(lastRows[idx]);
+  });
   document.querySelectorAll('.tab-btn').forEach(function(b){
     b.addEventListener('click', function(){ switchTab(b.dataset.tab); });
   });
