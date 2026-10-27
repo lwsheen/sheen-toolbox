@@ -114,6 +114,26 @@
 
     .table-wrap { background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border); overflow: hidden; }
 
+    /* 渐进加载条：默认 20 条，点一次再放 20 条 */
+    .dg-more { padding: 12px 0 2px; text-align: center; }
+
+    .dg-more-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 20px; border: 1.5px solid var(--border); background: var(--bg-card);
+      border-radius: 999px; font-size: 13px; font-weight: 700; color: var(--tech-blue);
+      cursor: pointer; font-family: inherit; transition: all .18s;
+    }
+
+    .dg-more-btn:hover { border-color: var(--tech-blue); background: var(--tech-blue-soft); }
+
+    .dg-more-btn:active { transform: translateY(1px); }
+
+    .dg-more-hint { font-size: 11px; font-weight: 400; color: var(--text-secondary); }
+
+    .dg-more-all { font-size: 11px; color: var(--text-secondary); margin-left: 10px; }
+
+    .dg-more-all:hover { color: var(--brand-red); }
+
     .dg-table { width: 100%; border-collapse: collapse; }
 
     .dg-table th { background: var(--bg-page); padding: 10px 12px; font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; text-align: left; border-bottom: 2px solid var(--border-light); white-space: nowrap; }
@@ -193,7 +213,7 @@
       @media print {
       body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
 
-      .breadcrumb, .sheen-footer, .btn-primary, .btn-print, .sidebar, .table-wrap, .class-info, .result-header, .detail-actions { display: none !important; }
+      .breadcrumb, .sheen-footer, .btn-primary, .btn-print, .sidebar, .table-wrap, .class-info, .result-header, .detail-actions, .dg-more { display: none !important; }
 
       .detail-panel { box-shadow: none !important; border-radius: 0 !important; border: 1.5px solid #333 !important; display: block !important; }
 
@@ -334,6 +354,10 @@
 
         </div>
 
+        <!-- 渐进加载（2026-10-27）：767 条默认只渲染前 20 条。
+             改造前全量渲染 = 32612px 页高 / 6835 个 DOM 节点，手机端滚动明显吃力。 -->
+        <div class="dg-more" id="dgMore"></div>
+
         <!-- Detail Panel -->
 
         <div class="detail-panel" id="detailPanel">
@@ -402,6 +426,11 @@
       var currentSearch = '';
 
       var selectedItem = null;
+
+      /* 渐进加载：767 条默认只渲染前 PAGE_SIZE 条（2026-10-27） */
+      var PAGE_SIZE = 20;
+
+      var shownCount = PAGE_SIZE;
 
       function getClassId(cls) {
 
@@ -521,15 +550,26 @@
 
       }
 
-      function renderTable() {
+      function renderTable(reset) {
+
+        // reset=true：搜索 / 切换分类 / 初始化 → 回到前 PAGE_SIZE 条
+        // reset 省略：showDetail 刷新选中高亮 → 保持用户已展开的条数
+        //            （若这里也重置，用户点开第 80 行的详情，列表会缩回 20 条、那一行直接消失）
+        if (reset) shownCount = PAGE_SIZE;
 
         var filtered = filterItems();
+
+        var total = filtered.length;
+
+        if (shownCount > total) shownCount = total;
+
+        var n = Math.min(total, shownCount);
 
         var tbody = document.getElementById('tableBody');
 
         var html = '';
 
-        for (var i = 0; i < filtered.length; i++) {
+        for (var i = 0; i < n; i++) {
 
           var item = filtered[i];
 
@@ -555,7 +595,51 @@
 
         tbody.innerHTML = html;
 
-        document.getElementById('resultCount').innerHTML = '显示 <strong>' + filtered.length + '</strong> 条结果';
+        var cnt = document.getElementById('resultCount');
+
+        if (total === 0) cnt.innerHTML = '没有匹配的条目';
+
+        else if (n < total) cnt.innerHTML = '显示 <strong>' + n + '</strong> / ' + total + ' 条';
+
+        else cnt.innerHTML = '显示 <strong>' + total + '</strong> 条结果';
+
+        renderMoreBar(n, total);
+
+      }
+
+      /* 加载更多条：只增大 shownCount 再重渲染，并把新出现的首行滚进视野
+         （否则内容长在页面下方，用户会以为"点了没反应"） */
+      function renderMoreBar(n, total) {
+
+        var bar = document.getElementById('dgMore');
+
+        if (!bar) return;
+
+        if (n >= total) { bar.innerHTML = ''; bar.style.display = 'none'; return; }
+
+        bar.style.display = '';
+
+        var step = Math.min(PAGE_SIZE, total - n);
+
+        bar.innerHTML = '<button type="button" class="dg-more-btn" id="dgMoreBtn">'
+
+          + '<i class="fa-solid fa-chevron-down"></i> 再显示 ' + step + ' 条'
+
+          + '<span class="dg-more-hint">还有 ' + (total - n) + ' 条未显示</span></button>';
+
+        document.getElementById('dgMoreBtn').addEventListener('click', function () {
+
+          var firstNew = n;
+
+          shownCount += PAGE_SIZE;
+
+          renderTable(false);
+
+          var rows = document.getElementById('tableBody').querySelectorAll('tr');
+
+          if (rows[firstNew]) rows[firstNew].scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        });
 
       }
 
@@ -691,7 +775,7 @@
 
         currentSearch = this.value.trim();
 
-        renderTable();
+        renderTable(true);
 
       });
 
@@ -723,7 +807,7 @@
 
           document.getElementById('detailContent').style.display = 'none';
 
-          renderTable();
+          renderTable(true);
 
         }
 
@@ -747,7 +831,7 @@
 
           document.getElementById('detailContent').style.display = 'none';
 
-          renderTable();
+          renderTable(true);
 
         }
 
@@ -783,7 +867,7 @@
 
         buildClassChips();
 
-        renderTable();
+        renderTable(true);
 
       } catch(e) {
 
