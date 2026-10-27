@@ -269,6 +269,10 @@
         }
             .verdict-card textarea, .verdict-card .note-input { border: 1px solid #999 !important; font-size: 9px !important; min-height: 40px !important; }
             .verdict-sign input { border-bottom: 1px solid #333 !important; }
+            /* 渐进展示（2026-10-27）：屏幕默认只铺 30 项，但打印必须出全表 ——
+               检查表是签字留档的合规记录，少打一行就是数据缺失。
+               行隐藏用的是内联 display:none，只有 !important 能压过内联样式。 */
+            #checkTable tbody tr { display: table-row !important; }
         }
     </style>
     <!-- Baidu Tongji -->
@@ -297,7 +301,10 @@
         <span> / 便携式金属梯安全检查表</span>
     </div>
 
-    <main class="app-container container-calc">
+    <!-- 2026-10-27：本页 5 列检查表 min-width:920px，却套了计算器容器 container-calc（800px）
+         → 内容区 752px，「检查结果」列被裁 194px，"不适用"选项默认看不见（需先发现可横滚）。
+         判定选项属于必须能点到的控件，不是装饰，已改用查询类容器 container-query（1200px）。 -->
+    <main class="app-container container-query">
 
         <h1 class="page-title"><i class="fa-solid fa-clipboard-check" style="color:var(--brand-red)"></i> 便携式金属梯安全检查表</h1>
         <p class="page-subtitle">依据 <strong>GB 12142-2025《便携式金属梯安全要求》</strong>（替代 GB 12142-2007）编制。覆盖标志、结构尺寸、使用前、使用过程、定期与维护存放全环节，含实测值自动判定与梯型适用性联动，自动汇总不合格项并支持导出 / 打印。</p>
@@ -399,6 +406,9 @@
             </div>
         </div>
 
+        <!-- 渐进展示条：103 项一次铺开 → 文档高 8,360px（9.3 屏） -->
+        <div class="ladder-more no-print" id="ladderMore" style="text-align:center;margin:12px 0;"></div>
+
         <!-- 检查结论 -->
         <div class="verdict-card">
             <h3><i class="fa-solid fa-clipboard-list"></i> 检查结论（GB 12142-2025）</h3>
@@ -457,6 +467,57 @@
         })();
 
         var tbody = document.getElementById('tableBody');
+
+        /* ===== 渐进展示（2026-10-27）=====
+           103 个检查项一次铺开 → 文档高 8,360px（9.3 屏），进场先看到一屏空白表格，
+           真正要填的第一批项目要滚很久。改成默认只显示前 30 项 + 「再显示」。
+           ⚠️ 只用 display 隐藏、绝不移除 DOM：本页没有状态对象，选项/实测值/备注全在
+           DOM 里，移除即丢数据；导出走 BLOCKS + tbody.querySelector 取值，也依赖行存在。
+           打印走 @media print 里的 !important 强制还原，保证合规记录一条不少。 */
+        var PAGE_SIZE = 20;
+        var shownItems = PAGE_SIZE;
+
+        function applyWindow() {
+            var rows = tbody.children;
+            var i, j, idx = 0;
+            for (i = 0; i < rows.length; i++) {
+                if (rows[i].classList.contains('item-row')) {
+                    idx++;
+                    rows[i].style.display = (idx > shownItems) ? 'none' : '';
+                }
+            }
+            // 标题行（章节/小节）只有在它后面的第一条检查项可见时才显示，避免留下孤立标题
+            for (i = 0; i < rows.length; i++) {
+                if (rows[i].classList.contains('item-row')) continue;
+                var nextVisible = false;
+                for (j = i + 1; j < rows.length; j++) {
+                    if (rows[j].classList.contains('item-row')) {
+                        nextVisible = (rows[j].style.display !== 'none');
+                        break;
+                    }
+                }
+                rows[i].style.display = nextVisible ? '' : 'none';
+            }
+            renderMoreBar(idx);
+        }
+
+        function renderMoreBar(total) {
+            var bar = document.getElementById('ladderMore');
+            if (!bar) return;
+            if (total <= shownItems) { bar.innerHTML = ''; bar.style.display = 'none'; return; }
+            bar.style.display = '';
+            var rest = total - shownItems;
+            var step = Math.min(PAGE_SIZE, rest);
+            bar.innerHTML = '<button type="button" class="btn btn-outline" id="ladderMoreBtn">'
+                + '<i class="fa-solid fa-chevron-down"></i> 再显示 ' + step + ' 项（还有 ' + rest + ' 项）</button>';
+            document.getElementById('ladderMoreBtn').addEventListener('click', function () {
+                var firstNew = shownItems;
+                shownItems += PAGE_SIZE;
+                applyWindow();
+                var items = tbody.querySelectorAll('.item-row');
+                if (items[firstNew]) items[firstNew].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+        }
 
         // ===== 选项定义 =====
         var OK  = { label: '合格', level: 'ok' };
@@ -674,6 +735,7 @@
             }
             tbody.innerHTML = html;
             bindRows();
+            applyWindow();
             updateSummary();
         }
 
