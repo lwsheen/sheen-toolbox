@@ -50,6 +50,17 @@
   .rs-cat{margin:20px 0 8px;font-size:14px;font-weight:500;color:var(--text-main,#1E2126);display:flex;align-items:center;gap:8px}
   .rs-cat::before{content:"";width:4px;height:14px;background:var(--brand-red,#F03752);border-radius:2px}
   .rs-count{font-size:12px;color:var(--text-tertiary,#9AA3AF);font-weight:400}
+  /* 分类折叠（2026-10-27）：298 条 · 22 类全铺开时文档高 13,423px（14.9 屏）。
+     默认只列分类标题（一屏看完 22 类），点开才铺明细；用分类胶囊或搜索时结果本来就少，
+     直接平铺不再折叠，避免"点了筛选还要再点一次展开"的两步操作。 */
+  .rs-cat-group{margin:10px 0}
+  .rs-cat-group > summary.rs-cat{margin:0;padding:6px 0;cursor:pointer;list-style:none}
+  .rs-cat-group > summary.rs-cat::-webkit-details-marker{display:none}
+  .rs-cat-group > summary.rs-cat::after{content:"▸";font-size:11px;color:var(--text-tertiary,#9AA3AF);margin-left:2px;transition:transform .15s}
+  .rs-cat-group[open] > summary.rs-cat::after{content:"▾"}
+  .rs-cat-group > .rs-table{margin-top:8px}
+  .rs-expand{margin:0 0 4px;background:none;border:1px solid var(--border-light,#E3E6EA);border-radius:999px;padding:5px 14px;font-size:12px;color:var(--text-secondary,#5C6470);cursor:pointer;font-family:inherit;transition:var(--transition,none)}
+  .rs-expand:hover{border-color:var(--brand-red,#F03752);color:var(--brand-red,#F03752)}
   .rs-table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:inset 0 0 0 1px var(--border-light,#E3E6EA);font-size:13.5px}
   .rs-table th{background:var(--bg-secondary,#F1F2F4);color:var(--text-secondary,#5C6470);font-weight:500;text-align:left;padding:9px 12px;font-size:12.5px;border-bottom:1px solid var(--border-light,#E3E6EA)}
   .rs-table td{padding:9px 12px;border-bottom:1px solid var(--border-light,#E3E6EA);vertical-align:middle}
@@ -184,6 +195,8 @@ var _hmt = _hmt || [];
       <div class="rs-search"><i class="fa-solid fa-magnifying-glass"></i><input id="rsQ" type="text" placeholder="搜索法规/标准名称或标准号…"></div>
       <div class="rs-chips" id="rsChips"></div>
     </div>
+
+    <button type="button" class="rs-expand" id="rsExpand" style="display:none"></button>
 
     <div id="rsList"></div>
 
@@ -380,20 +393,48 @@ document.getElementById('printTime').textContent = new Date(Date.now() + 8 * 360
     });
     var byCat = {};
     rows.forEach(function(r){ (byCat[r.c] = byCat[r.c] || []).push(r); });
+    // 筛选或搜索时结果集小，平铺即可；只有"看全部 298 条"才折叠
+    var folding = !curCat && !curQ;
     var html = '';
     Object.keys(byCat).sort().forEach(function(c){
-      html += '<div class="rs-cat">' + esc(shortCat(c)) + ' <span class="rs-count">' + byCat[c].length + ' 条</span></div>';
-      html += '<table class="rs-table"><thead><tr><th style="width:52%">法规/标准</th><th style="width:18%">标准号</th><th>对应工具</th></tr></thead><tbody>';
-      byCat[c].forEach(function(r){
-        html += '<tr><td>' + esc(r.n) + '</td><td class="rs-stdno">' + (r.s ? esc(r.s) : '—') + '</td><td>';
+      var g = byCat[c];
+      var head = esc(shortCat(c)) + ' <span class="rs-count">' + g.length + ' 条</span>';
+      var table = '<table class="rs-table"><thead><tr><th style="width:52%">法规/标准</th><th style="width:18%">标准号</th><th>对应工具</th></tr></thead><tbody>';
+      g.forEach(function(r){
+        table += '<tr><td>' + esc(r.n) + '</td><td class="rs-stdno">' + (r.s ? esc(r.s) : '—') + '</td><td>';
         if(r.t.length){
-          r.t.forEach(function(t){ html += '<a class="rs-tool" href="/sheen-toolbox/' + t + '/">' + t + '</a>'; });
-        } else { html += '<span style="color:var(--text-tertiary,#9AA3AF);font-size:12px">—</span>'; }
-        html += '</td></tr>';
+          r.t.forEach(function(t){ table += '<a class="rs-tool" href="/sheen-toolbox/' + t + '/">' + t + '</a>'; });
+        } else { table += '<span style="color:var(--text-tertiary,#9AA3AF);font-size:12px">—</span>'; }
+        table += '</td></tr>';
       });
-      html += '</tbody></table>';
+      table += '</tbody></table>';
+      if(folding){
+        html += '<details class="rs-cat-group"' + (allExpanded ? ' open' : '') + '>'
+              + '<summary class="rs-cat">' + head + '</summary>' + table + '</details>';
+      } else {
+        html += '<div class="rs-cat">' + head + '</div>' + table;
+      }
     });
     document.getElementById('rsList').innerHTML = html || '<div class="rs-empty"><i class="fa-solid fa-magnifying-glass"></i> 无匹配结果</div>';
+    updateRsExpand(folding);
+  }
+
+  var allExpanded = false;
+  var rsExpandBtn = document.getElementById('rsExpand');
+  var rsTotalN = DATA.length;   // 不写死条数：数据每月由知识库同步刷新
+  if(rsExpandBtn){
+    rsExpandBtn.addEventListener('click', function(){
+      allExpanded = !allExpanded;
+      document.querySelectorAll('#rsList .rs-cat-group').forEach(function(d){ d.open = allExpanded; });
+      rsExpandBtn.textContent = allExpanded ? '全部收起' : '全部展开（' + rsTotalN + ' 条）';
+    });
+  }
+  function updateRsExpand(folding){
+    if(!rsExpandBtn) return;
+    var n = document.querySelectorAll('#rsList .rs-cat-group').length;
+    if(!folding || !n){ rsExpandBtn.style.display = 'none'; return; }
+    rsExpandBtn.style.display = '';
+    rsExpandBtn.textContent = allExpanded ? '全部收起' : '全部展开（' + rsTotalN + ' 条）';
   }
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   render();
