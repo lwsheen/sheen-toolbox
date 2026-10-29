@@ -78,7 +78,7 @@
         .todo-row { display:flex; align-items:flex-start; gap:10px; padding:7px 0; border-bottom:1px dashed var(--border); font-size:var(--fs-sm); }
         .todo-row:last-child { border-bottom:none; }
         .todo-step { flex-shrink:0; width:22px; height:22px; border-radius:50%; background:var(--brand-red); color:#fff; font-size:11px; font-weight:700; display:inline-flex; align-items:center; justify-content:center; margin-top:1px; }
-        .todo-step.green { background:var(--success-green, #16A34A); }
+        .todo-step.green { background:var(--brand-green); }
         .todo-step.blue { background:var(--tech-blue); }
         .todo-step.amber { background:var(--amber); }
         .todo-text { flex:1; color:var(--text-primary); line-height:1.6; }
@@ -821,7 +821,7 @@
                 var isSevere = riskLevel === '严重';
                 var levelBadge = isSevere
                     ? '<span style="display:inline-flex;align-items:center;padding:3px 12px;border-radius:12px;background:#FDEEF1;color:var(--brand-red);font-size:var(--fs-xs);font-weight:700;">严重</span>'
-                    : '<span style="display:inline-flex;align-items:center;padding:3px 12px;border-radius:12px;background:#ECFDF5;color:var(--success-green,#16A34A);font-size:var(--fs-xs);font-weight:700;">一般</span>';
+                    : '<span style="display:inline-flex;align-items:center;padding:3px 12px;border-radius:12px;background:#ECFDF5;color:var(--brand-green);font-size:var(--fs-xs);font-weight:700;">一般</span>';
                 var codeClean = occ.code;
                 var nameClean = occ.name.replace('*','');
                 html += '<div class="todo-card">' +
