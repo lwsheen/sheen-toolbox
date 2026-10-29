@@ -304,8 +304,13 @@
     <script>
     (function () {
         var root = document.getElementById('clRoot');
-        if (root && window.SHEEN_HD_DATA && window.SHEEN_CL) {
-            window.SHEEN_CL.mount(root, window.SHEEN_HD_DATA);
+        var cfg = window.SHEEN_HD_DATA;
+        if (root && cfg && window.SHEEN_CL) {
+            /* 分节折叠（2026-10-29）：7 个分节 37 项全铺开是 5045px（5.6 屏）。
+               节前/节中/节后三阶段本来就该分开做，开启折叠后按阶段展开即可；
+               打印自动全展开，保证留档记录不缺项。 */
+            cfg.collapse = true;
+            window.SHEEN_CL.mount(root, cfg);
         }
     })();
     </script>
