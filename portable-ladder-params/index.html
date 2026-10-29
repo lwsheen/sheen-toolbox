@@ -36,7 +36,7 @@
         .lp-search i { color: var(--brand-red, #F03752); font-size: 16px; }
         .lp-search input {
             border: none; outline: none; flex: 1; font-size: 15px;
-            background: transparent; color: var(--ink, #1E2126);
+            background: transparent; color: var(--text-primary);
         }
         .lp-search .clear-btn {
             border: none; background: transparent; color: #9ca3af;
@@ -54,7 +54,7 @@
             display: inline-flex; align-items: center; gap: 5px;
             padding: 6px 16px; border-radius: 8px; font-size: 13px;
             font-weight: 600; cursor: pointer; user-select: none;
-            background: var(--bg-soft, #F8F9FA); color: var(--muted, #5C6470);
+            background: var(--bg-page); color: var(--text-secondary);
             border: 1px solid var(--border, #E3E6EA);
             transition: all .18s;
         }
@@ -91,8 +91,8 @@
             color: #fff; display: flex; align-items: center; justify-content: center;
             font-size: 20px; flex-shrink: 0;
         }
-        .ladder-card .lc-title { font-size: 16px; font-weight: 700; color: var(--ink, #1E2126); }
-        .ladder-card .lc-sub { font-size: 12px; color: var(--muted, #5C6470); margin-top: 2px; }
+        .ladder-card .lc-title { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+        .ladder-card .lc-sub { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
         .ladder-card .lc-arrow {
             margin-left: auto; color: #9ca3af; font-size: 13px;
             transition: transform .25s;
@@ -102,7 +102,7 @@
         /* 参数详情面板 */
         .lc-body {
             display: none; border-top: 1px solid var(--border, #E3E6EA);
-            background: var(--bg-soft, #F8F9FA);
+            background: var(--bg-page);
         }
         .lc-body.show { display: block; }
 
@@ -113,7 +113,7 @@
         }
         .param-tab {
             padding: 10px 14px; font-size: 12.5px; font-weight: 600;
-            color: var(--muted, #5C6470); cursor: pointer;
+            color: var(--text-secondary); cursor: pointer;
             white-space: nowrap; border-bottom: 2px solid transparent;
             transition: all .15s; user-select: none;
             border-radius: 8px;
@@ -145,7 +145,7 @@
             flex: none; width: 6px; height: 6px; border-radius: 50%;
             background: var(--brand-red, #F03752); margin-top: 8px;
         }
-        .param-item .pi-text { flex: 1; color: var(--ink, #1E2126); }
+        .param-item .pi-text { flex: 1; color: var(--text-primary); }
         .param-item .pi-val {
             color: var(--brand-red, #F03752); font-weight: 700;
             font-family: "SF Mono", Consolas, monospace;
@@ -154,7 +154,7 @@
             color: var(--warn-orange, #F57C00); font-weight: 600;
         }
         .param-item .pi-note {
-            font-size: 12px; color: var(--muted, #5C6470);
+            font-size: 12px; color: var(--text-secondary);
             margin-top: 3px; padding-left: 16px;
         }
 
@@ -163,16 +163,16 @@
             background: #fff; border: 1px solid var(--border, #E3E6EA);
             border-radius: 8px; padding: 12px 15px; margin: 8px 0;
             font-family: "SF Mono", Consolas, monospace; font-size: 13px;
-            line-height: 1.7; color: var(--ink, #1E2126);
+            line-height: 1.7; color: var(--text-primary);
         }
         .formula-block .fb-label {
-            font-size: 11px; color: var(--muted, #5C6470);
+            font-size: 11px; color: var(--text-secondary);
             font-family: inherit; margin-bottom: 4px;
         }
 
         /* 安全提示条 */
         .safety-tip {
-            background: var(--brand-red-soft, #FDEEF1);
+            background: var(--brand-red-light);
             border-left: 3px solid var(--brand-red, #F03752);
             border-radius: 0 8px 8px 0; padding: 10px 14px;
             margin: 10px 0; font-size: 13px; line-height: 1.6;
@@ -182,7 +182,7 @@
 
         /* 标准来源标注 */
         .std-ref {
-            text-align: right; font-size: 11.5px; color: var(--muted, #5C6470);
+            text-align: right; font-size: 11.5px; color: var(--text-secondary);
             padding: 8px 18px 0; margin-top: 4px;
         }
         .std-ref a { color: var(--tech-blue, #2D7EE7); text-decoration: none; }
@@ -200,11 +200,11 @@
         }
         .card-diagram svg { width: 100%; max-width: 520px; height: auto; display: block; margin: 0 auto; pointer-events: none; }
         .card-diagram .cd-caption {
-            font-size: 12px; font-weight: 700; color: var(--ink, #1E2126);
+            font-size: 12px; font-weight: 700; color: var(--text-primary);
             margin-bottom: 10px;
         }
         .card-diagram .cd-note {
-            font-size: 11.5px; color: var(--muted, #5C6470);
+            font-size: 11.5px; color: var(--text-secondary);
             margin-top: 10px; line-height: 1.55; text-align: left;
         }
         .card-diagram .cd-hint {
@@ -229,7 +229,7 @@
         }
         .diag-lightbox-inner svg { width: 680px; max-width: 90vw; height: auto; }
         .diag-lb-title {
-            font-size: 14px; font-weight: 700; color: var(--ink, #1E2126);
+            font-size: 14px; font-weight: 700; color: var(--text-primary);
             margin-bottom: 12px;
         }
         .diag-lb-close {
@@ -251,7 +251,7 @@
             display: inline-flex; align-items: center; gap: 6px;
             padding: 8px 18px; border-radius: 8px; font-size: 13px;
             font-weight: 600; cursor: pointer; border: 1px solid var(--border, #E3E6EA);
-            background: #fff; color: var(--ink, #1E2126);
+            background: #fff; color: var(--text-primary);
             transition: all .15s;
         }
         .lp-actions button:hover {
@@ -260,7 +260,7 @@
 
         /* 无结果提示 */
         .no-result {
-            text-align: center; color: var(--muted, #5C6470);
+            text-align: center; color: var(--text-secondary);
             padding: 40px 20px; font-size: 14px; display: none;
         }
         .no-result i { font-size: 36px; margin-bottom: 10px; display: block; opacity: .3; }
