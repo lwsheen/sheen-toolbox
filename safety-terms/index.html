@@ -18,33 +18,58 @@
     <style>
         /* 本页专属样式统一 st- 前缀，避免与 common.css 冲突 */
         .st-search { position: static; min-width: 0; }
-        .st-input { width: 100%; padding: 12px 14px; border: 1px solid var(--border-light); border-radius: 10px; font-size: 15px; font-family: inherit; box-sizing: border-box; background: #fff; }
-        .st-input:focus { outline: none; border-color: var(--brand-red); box-shadow: 0 0 0 3px var(--brand-red-tint, #FDEEF1); }
+        .st-input { width: 100%; padding: 12px 14px; border: 1px solid var(--border-light); border-radius: 10px; font-size: 15px; font-family: inherit; box-sizing: border-box; background: var(--bg-card); }
+        .st-input:focus { outline: none; border-color: var(--brand-red); box-shadow: 0 0 0 3px var(--brand-red-light); }
         .st-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-        .st-chip { padding: 6px 14px; border: 1.5px solid var(--border-light); background: #fff; border-radius: 60px; font-size: 13px; color: var(--text-secondary); cursor: pointer; transition: .15s; white-space: nowrap; }
+        .st-chip { padding: 6px 14px; border: 1.5px solid var(--border); background: var(--bg-card); border-radius: 60px; font-size: 13px; color: var(--text-secondary); cursor: pointer; transition: .15s; white-space: nowrap; }
         .st-chip:hover { border-color: var(--brand-red); color: var(--brand-red); }
         .st-chip.active { background: var(--brand-red); border-color: var(--brand-red); color: #fff; }
         .st-chip .st-n { font-size: 11px; opacity: .75; margin-left: 4px; }
         .st-count { font-size: 12px; color: var(--text-secondary); margin: 14px 0 10px; }
+        /* 分章折叠（2026-10-29）：163 条平铺 4959px（6.2 屏）→ 按 GB/T 15236 的章分组，
+           默认只列 3 个章标题 + 条数。details 用 grid-column 通栏，组内再开两列网格。 */
+        .st-count-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 14px 0 10px; }
+        .st-count-row .st-count { margin: 0; }
+        .st-expand {
+            flex: 0 0 auto; font-family: inherit; font-size: 12px; cursor: pointer;
+            padding: 5px 14px; border: 1px solid var(--border); border-radius: 60px;
+            background: var(--bg-card); color: var(--text-secondary); transition: .15s;
+        }
+        .st-expand:hover { border-color: var(--brand-red); color: var(--brand-red); }
+        .st-group { grid-column: 1 / -1; margin: 0 0 10px; }
+        .st-group > summary.st-cat {
+            display: flex; align-items: center; gap: 8px; list-style: none; cursor: pointer;
+            padding: 9px 14px; border-radius: var(--radius-md);
+            background: var(--brand-red); color: #fff; font-weight: 700; font-size: 14px;
+        }
+        .st-group > summary.st-cat::-webkit-details-marker { display: none; }
+        .st-group > summary.st-cat::before { content: "▸"; font-size: 11px; opacity: .9; }
+        .st-group[open] > summary.st-cat::before { content: "▾"; }
+        .st-group > summary.st-cat .st-cat-n { margin-left: auto; font-weight: 400; font-size: 12px; opacity: .92; }
+        .st-group > .st-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 10px; }
         .st-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-        .st-item { border: 1px solid var(--border-light); border-radius: 12px; background: #fff; overflow: hidden; min-width: 0; }
+        .st-item { border: 1px solid var(--border-light); border-radius: var(--radius-md); background: var(--bg-card); overflow: hidden; min-width: 0; }
         .st-head { display: flex; align-items: baseline; gap: 8px; padding: 12px 14px; cursor: pointer; transition: .15s; min-width: 0; }
-        .st-head:hover { background: var(--brand-red-tint, #FDEEF1); }
+        .st-head:hover { background: var(--brand-red-light); }
         .st-id { flex: 0 0 auto; font-size: 11px; font-weight: 700; color: #fff; background: var(--brand-red); border-radius: 4px; padding: 2px 6px; }
         .st-name { display: block; width: 100%; min-width: 0; }
-        .st-term { font-size: 15px; font-weight: 700; color: var(--text-main); }
+        .st-term { font-size: 15px; font-weight: 700; color: var(--text-primary); }
         .st-en { font-size: 12px; color: var(--text-secondary); margin-left: 6px; font-weight: 400; }
-        .st-mark { flex: 0 0 auto; font-size: 10px; padding: 2px 7px; border-radius: 20px; font-weight: 700; }
-        .st-mark-new { background: var(--brand-red-tint, #FDEEF1); color: var(--brand-red); }
-        .st-mark-rev { background: #FFF4E5; color: var(--warn, #F57C00); }
+        .st-mark { flex: 0 0 auto; font-size: 10px; padding: 2px 7px; border-radius: 60px; font-weight: 700; }
+        /* 10px 小角标必须压深色：--brand-red on --brand-red-light 只有 3.5:1，缩到 10px 更糊；
+           deep 档 5.78:1，肉眼仍是海棠红，与「修改」角标的橙色系形成红/橙区分。 */
+        .st-mark-new { background: var(--brand-red-light); color: var(--brand-red-deep); }
+        .st-mark-rev { background: var(--warn-orange-soft); color: var(--warn-deep); }
         .st-body { display: none; padding: 0 14px 14px; border-top: 1px dashed var(--border-light); }
         .st-item.open .st-body { display: block; }
-        .st-def { font-size: 14px; line-height: 1.85; color: var(--text-main); margin: 12px 0 0; }
+        .st-def { font-size: 14px; line-height: 1.85; color: var(--text-primary); margin: 12px 0 0; }
         .st-alias { font-size: 12px; color: var(--text-secondary); margin-top: 8px; }
-        .st-note { font-size: 13px; line-height: 1.8; color: var(--text-secondary); background: #fafbfc; border-left: 3px solid var(--border-light); padding: 8px 12px; margin-top: 10px; border-radius: 0 6px 6px 0; }
+        .st-note { font-size: 13px; line-height: 1.8; color: var(--text-secondary); background: var(--bg-page); border-left: 3px solid var(--border); padding: 8px 12px; margin-top: 10px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
         .st-empty { text-align: center; color: var(--text-secondary); padding: 40px 0; font-size: 14px; }
-        @media (max-width: 768px) { .st-list { grid-template-columns: 1fr; } }
-        @media print { .st-body { display: block !important; } .st-chips, .st-search, .st-count { display: none !important; } }
+        @media (max-width: 768px) { .st-list { grid-template-columns: 1fr; } .st-group > .st-grid { grid-template-columns: 1fr; } }
+        /* 打印：只藏检索控件，绝不能藏 .st-search —— 它是包住搜索框+分类胶囊+术语列表的
+           外层 section，隐藏它等于整页术语打不出来（2026-10-29 实测：打印组盒高全为 0）。 */
+        @media print { .st-body { display: block !important; } .st-input, .st-chips, .st-count-row { display: none !important; } }
     </style>
     <script>
     var _hmt = _hmt || [];
@@ -81,7 +106,10 @@
                 <button type="button" class="st-chip" data-mark="修改">本次修改<span class="st-n">24</span></button>
                 <button type="button" class="st-chip" data-mark="沿用">沿用<span class="st-n">15</span></button>
             </div>
-            <div id="stCount" class="st-count"></div>
+            <div id="stCountRow" class="st-count-row">
+                <div id="stCount" class="st-count"></div>
+                <button type="button" class="st-expand" id="stExpand" style="display:none;"></button>
+            </div>
             <div id="stList" class="st-list"></div>
         </section>
 
@@ -127,6 +155,7 @@
         var catEl = document.getElementById("stChipsCat");
         var markEl = document.getElementById("stChipsMark");
         var state = { cat: "all", mark: "all", q: "" };
+        var allExpanded = false;   // 分章折叠是否已「全部展开」（render 重建 DOM 后据此还原）
 
         function esc(s) {
             return (s || "").replace(/[&<>"']/g, function (c) {
@@ -150,44 +179,99 @@
             });
         }
 
+        /* 术语卡片构造（抽出来供"分章折叠"与"平铺"两种排布复用）*/
+        function makeCard(t, autoOpen) {
+            var card = document.createElement("div");
+            card.className = "st-item" + (autoOpen ? " open" : "");
+            var mk = t.mark || "沿用";
+            var badge = mk === "新增" ? '<span class="st-mark st-mark-new">新增</span>'
+                      : mk === "修改" ? '<span class="st-mark st-mark-rev">修改</span>' : "";
+            card.innerHTML =
+                '<div class="st-head" tabindex="0" role="button" aria-expanded="' + (autoOpen ? "true" : "false") + '">' +
+                    '<span class="st-id">' + esc(t.id) + "</span>" +
+                    '<span class="st-name"><span class="st-term">' + esc(t.term) + "</span>" +
+                    '<span class="st-en">' + esc(t.en) + "</span></span>" + badge +
+                "</div>" +
+                '<div class="st-body">' +
+                    '<p class="st-def">' + esc(t.def) + "</p>" +
+                    ((t.aliases && t.aliases.length) ? '<div class="st-alias">又称：' + esc(t.aliases.join("、")) + "</div>" : "") +
+                    (t.note ? '<div class="st-note">' + esc(t.note) + "</div>" : "") +
+                "</div>";
+            var head = card.querySelector(".st-head");
+            head.addEventListener("click", function () {
+                var open = card.classList.toggle("open");
+                head.setAttribute("aria-expanded", open ? "true" : "false");
+            });
+            head.addEventListener("keydown", function (e) {
+                if (e.key === "Enter" || e.key === " ") { e.preventDefault(); head.click(); }
+            });
+            return card;
+        }
+
         function render() {
             var items = filtered();
             var q = state.q.trim();
+            /* 分章折叠（2026-10-29）：163 条术语一次平铺是 4959px（6.2 屏）。
+               只在「看全部」时按 GB/T 15236 的章折叠（3 章 + 条数一目了然，点开才铺明细）；
+               搜索或切分类时结果本来就少，直接平铺 —— 避免"筛完还要再点一次展开"。 */
+            var folding = !q && state.cat === "all";
             countEl.textContent = "共 " + items.length + " / " + DATA.length + " 条术语" + (q ? "（匹配 “" + q + "”）" : "");
             listEl.innerHTML = "";
             if (!items.length) {
                 listEl.innerHTML = '<div class="st-empty" style="grid-column:1/-1;">未找到匹配术语，换个关键词或切换分类试试。</div>';
+                updateExpandBtn(false);
                 return;
             }
             var autoOpen = items.length <= 8 && !!q;
+            if (!folding) {
+                items.forEach(function (t) { listEl.appendChild(makeCard(t, autoOpen)); });
+                updateExpandBtn(false);
+                return;
+            }
+            var groups = {}, order = [];
             items.forEach(function (t) {
-                var card = document.createElement("div");
-                card.className = "st-item" + (autoOpen ? " open" : "");
-                var mk = t.mark || "沿用";
-                var badge = mk === "新增" ? '<span class="st-mark st-mark-new">新增</span>'
-                          : mk === "修改" ? '<span class="st-mark st-mark-rev">修改</span>' : "";
-                card.innerHTML =
-                    '<div class="st-head" tabindex="0" role="button" aria-expanded="' + (autoOpen ? "true" : "false") + '">' +
-                        '<span class="st-id">' + esc(t.id) + "</span>" +
-                        '<span class="st-name"><span class="st-term">' + esc(t.term) + "</span>" +
-                        '<span class="st-en">' + esc(t.en) + "</span></span>" + badge +
-                    "</div>" +
-                    '<div class="st-body">' +
-                        '<p class="st-def">' + esc(t.def) + "</p>" +
-                        ((t.aliases && t.aliases.length) ? '<div class="st-alias">又称：' + esc(t.aliases.join("、")) + "</div>" : "") +
-                        (t.note ? '<div class="st-note">' + esc(t.note) + "</div>" : "") +
-                    "</div>";
-                var head = card.querySelector(".st-head");
-                head.addEventListener("click", function () {
-                    var open = card.classList.toggle("open");
-                    head.setAttribute("aria-expanded", open ? "true" : "false");
-                });
-                head.addEventListener("keydown", function (e) {
-                    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); head.click(); }
-                });
-                listEl.appendChild(card);
+                var ch = t.chapter || "其他";
+                if (!groups[ch]) { groups[ch] = []; order.push(ch); }
+                groups[ch].push(t);
             });
+            order.forEach(function (ch) {
+                var g = groups[ch];
+                var d = document.createElement("details");
+                d.className = "st-group";
+                if (allExpanded) d.open = true;
+                d.innerHTML = '<summary class="st-cat"><span class="st-cat-name">' + esc(ch) +
+                              '</span><span class="st-cat-n">' + g.length + " 条</span></summary>";
+                var grid = document.createElement("div");
+                grid.className = "st-grid";
+                g.forEach(function (t) { grid.appendChild(makeCard(t, false)); });
+                d.appendChild(grid);
+                listEl.appendChild(d);
+            });
+            updateExpandBtn(true);
         }
+
+        /* 展开/收起全部：只在「看全部且确实分成组」时出现；条数从 DATA 取，不写死
+           （data.js 随标准修订刷新，硬编码数字迟早过期）。 */
+        function updateExpandBtn(show) {
+            var btn = document.getElementById("stExpand");
+            if (!btn) return;
+            var groups = listEl.querySelectorAll(".st-group").length;
+            if (!show || !groups) { btn.style.display = "none"; return; }
+            btn.style.display = "";
+            btn.textContent = allExpanded ? "全部收起" : "全部展开（" + DATA.length + " 条）";
+        }
+
+        (function bindExpand() {
+            var btn = document.getElementById("stExpand");
+            if (!btn) return;
+            btn.addEventListener("click", function () {
+                allExpanded = !allExpanded;
+                Array.prototype.forEach.call(listEl.querySelectorAll(".st-group"), function (d) {
+                    d.open = allExpanded;
+                });
+                updateExpandBtn(true);
+            });
+        })();
 
         function bindChips(el, key) {
             el.addEventListener("click", function (e) {
