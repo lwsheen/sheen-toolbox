@@ -150,18 +150,6 @@ var _hmt = _hmt || [];
   <h1 class="page-title"><i class="fa-solid fa-valve" style="color:var(--brand-red)"></i> 泄放量计算与安全阀爆破片选型</h1>
   <p class="page-subtitle" style="margin-bottom:16px;">按现行标准公式算所需泄放量与泄放面积，再反查安全阀流道直径 / 爆破片公称口径与整定压力 — 适用于压力容器与工业管道</p>
 
-  <div class="warn-bar info no-pr" style="margin-top:0;margin-bottom:14px;">
-    <i class="fa-solid fa-circle-info"></i>
-    <span><strong>本工具依据的现行版标准（2026-10 实证核查）：</strong>
-      <span class="std-badge">GB/T 567.2-2012</span> 爆破片安全装置 应用、选择与安装（附录C 泄放量计算公式 · 附录B 表B.1 最小爆破压力倍数 · 表A.1 选型指南）·
-      <span class="std-badge">GB/T 567.1-2012</span> 基本要求（爆破压力允差）·
-      <span class="std-badge">GB/T 12243-2021</span> 弹簧直接载荷式安全阀（附录B 额定排量计算）·
-      <span class="std-badge">GB/T 150.1-2024</span> 通用要求 附录B 超压泄放 ·
-      <span class="std-badge">TSG 21-2016</span> 固定式压力容器安全技术监察规程（整定压力）·
-      <span class="std-badge">GB/T 20801.6-2020</span> 工业管道 第6部分 安全防护
-    </span>
-  </div>
-
   <div class="warn-bar warning no-pr">
     <i class="fa-solid fa-triangle-exclamation"></i>
     <span><strong>关于「泄放量数据表」的重要说明：</strong>现行国标<strong>不提供</strong>「公称通径 × 整定压力 → 额定泄放量」的成品数据表（GB/T 567.2 附录B 是空白选型登记表，GB/T 12243 只给公式不给数字表）。因此本工具采用<strong>标准公式正算 + 厂商样本额定排量表反查</strong>的双向结构，厂商样本数值已在页面显著标注。正式选型必须以制造厂出具的<strong>型式试验报告排量数据</strong>为准。</span>
@@ -676,12 +664,44 @@ var _hmt = _hmt || [];
   <div class="tm-head">
     <span class="tm-std-code">GB/T 567.2-2012</span>
     <span class="tm-std-name">《爆破片安全装置 第2部分：应用、选择与安装》</span>
+    <span class="tm-sep">·</span>
+    <span class="tm-std-code">GB/T 567.1-2012</span>
+    <span class="tm-std-name">《爆破片安全装置 第1部分：基本要求》</span>
+    <span class="tm-sep">·</span>
+    <span class="tm-std-code">GB/T 12243-2021</span>
+    <span class="tm-std-name">《弹簧直接载荷式安全阀》</span>
+    <span class="tm-sep">·</span>
+    <span class="tm-std-code">GB/T 150.1-2024</span>
+    <span class="tm-std-name">《压力容器 第1部分：通用要求》</span>
+    <span class="tm-sep">·</span>
+    <span class="tm-std-code">TSG 21-2016</span>
+    <span class="tm-std-name">《固定式压力容器安全技术监察规程》</span>
+    <span class="tm-sep">·</span>
+    <span class="tm-std-code">GB/T 20801.1-2025</span>
+    <span class="tm-std-name">《压力管道规范 第1部分：工业管道》</span>
+    <span class="tm-apx">代替 20801.6-2020</span>
   </div>
   <div class="tm-line">
     <span class="tm-dt"><i>发布</i><span class="tm-dt-val">2012-05-11</span></span><span class="tm-sep">·</span>
     <span class="tm-dt"><i>实施</i><span class="tm-dt-val">2013-03-01</span></span><span class="tm-sep">·</span>
     <span class="tm-dt"><i>更新</i><span class="tm-dt-val">2026-10-11</span></span>
   </div>
+  <details class="tm-fold">
+    <summary>标准依据与条款级说明</summary>
+    <div class="tm-src">
+      <span><strong>本工具依据的现行版标准（2026-10 实证核查）：</strong>
+      <span class="std-badge">GB/T 567.2-2012</span> 爆破片安全装置 应用、选择与安装（附录C 泄放量计算公式 · 附录B 表B.1 最小爆破压力倍数 · 表A.1 选型指南）·
+      <span class="std-badge">GB/T 567.1-2012</span> 基本要求（爆破压力允差）·
+      <span class="std-badge">GB/T 12243-2021</span> 弹簧直接载荷式安全阀（附录B 额定排量计算）·
+      <span class="std-badge">GB/T 150.1-2024</span> 通用要求 附录B 超压泄放 ·
+      <span class="std-badge">TSG 21-2016</span> 固定式压力容器安全技术监察规程（整定压力）·
+      <span class="std-badge">GB/T 20801.6-2020</span> 工业管道 第6部分 安全防护
+      </span>
+      <p style="margin-top:8px;">注：GB/T 20801.6-2020 已于 <strong>2026-05-01 废止</strong>，由
+        GB/T 20801.1-2025《压力管道规范 第1部分：工业管道》全部代替。本页涉及该标准的条款号
+        （4.1.5 整定压力上限、附录 B 两相流泄放）仍按 2020 版标注，条款与新版的对应对照待复核后更新。</p>
+    </div>
+  </details>
 </section>
 
 <footer class="sheen-footer">
