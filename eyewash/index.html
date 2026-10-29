@@ -64,6 +64,10 @@
 
         .section.open .section-body { display:block; }
 
+        /* 折叠态箭头朝右、展开态朝下，否则收起的分节还挂着向下箭头会误读成"已展开" */
+        .section-head .toggle-i { transition: transform .16s ease; }
+        .section:not(.open) .section-head .toggle-i { transform: rotate(-90deg); }
+
         .item { display:flex; flex-wrap:wrap; align-items:flex-start; gap:10px; padding:11px 0; border-top:1px dashed var(--border-light); }
 
         .item:first-child { border-top:none; }
@@ -341,6 +345,15 @@
 
 
 
+        /* 分节展开状态（2026-10-29）：本页 8 个分节 51 项原先被强制全开（renderSection 里
+           写死 'section open'），一次铺开 5000px（5.6 屏），做检查得先滚过一大片还没轮到的项。
+           改为默认全部收起，首屏即「8 个分节 + 已检查 n/m」的进度总览，做到哪节展开哪节。
+           状态必须存在 openSecs 里而不是只写 class —— render() 每次判定都会重建全部 DOM，
+           不留状态的话点一次「合格」所有分节就会重新铺开。 */
+        var openSecs = {};
+
+
+
         function setStatus(id, st){
 
             if(!state[id]) state[id] = {status:'', note:''};
@@ -377,7 +390,7 @@
 
 
 
-        function renderSection(sec){
+        function renderSection(sec, secIdx){
 
             var done = 0;
 
@@ -385,17 +398,35 @@
 
             var wrap = document.createElement('div');
 
-            wrap.className = 'section open';
+            wrap.className = 'section' + (openSecs[secIdx] ? ' open' : '');
+
+            wrap.setAttribute('data-sec', secIdx);
 
             var head = document.createElement('div');
 
             head.className = 'section-head';
 
+            head.setAttribute('role', 'button');
+
+            head.setAttribute('tabindex', '0');
+
+            head.setAttribute('aria-expanded', openSecs[secIdx] ? 'true' : 'false');
+
             head.innerHTML = '<h3>'+esc(sec.title)+'</h3>'+
 
                 '<span class="sec-stat">'+done+'/'+sec.items.length+' 项已检查 <i class="fa-solid fa-chevron-down toggle-i"></i></span>';
 
-            head.onclick = function(){ wrap.classList.toggle('open'); };
+            function toggleSec(){
+                openSecs[secIdx] = !openSecs[secIdx];
+                wrap.classList.toggle('open');
+                head.setAttribute('aria-expanded', openSecs[secIdx] ? 'true' : 'false');
+            }
+
+            head.onclick = toggleSec;
+
+            head.addEventListener('keydown', function(e){
+                if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggleSec(); }
+            });
 
             var body = document.createElement('div');
 
@@ -473,7 +504,7 @@
 
             box.innerHTML = '';
 
-            SECTIONS.forEach(function(sec){ box.appendChild(renderSection(sec)); });
+            SECTIONS.forEach(function(sec, i){ box.appendChild(renderSection(sec, i)); });
 
             // 更新打印状态标签
 
@@ -615,9 +646,24 @@
 
         window.setStatus = setStatus;
 
-        window.expandAll = function(){ document.querySelectorAll('.section').forEach(function(s){ s.classList.add('open'); }); };
+        /* 展开/收起全部必须同时写 openSecs —— 只改 class 的话，下一次 setStatus→render()
+           重建 DOM 后会退回默认收起状态，用户刚展开的全部白展开。 */
+        function applyOpenSecs(all){
 
-        window.collapseAll = function(){ document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('open'); }); };
+            openSecs = {};
+
+            SECTIONS.forEach(function(sec, i){ if(all) openSecs[i] = true; });
+
+            document.querySelectorAll('.section').forEach(function(s){
+                s.classList.toggle('open', !!all);
+                var h = s.querySelector('.section-head');
+                if(h) h.setAttribute('aria-expanded', all ? 'true' : 'false');
+            });
+        }
+
+        window.expandAll = function(){ applyOpenSecs(true); };
+
+        window.collapseAll = function(){ applyOpenSecs(false); };
 
         window.markAllYes = function(){
 
