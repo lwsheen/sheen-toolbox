@@ -75,11 +75,16 @@
   .data-table td.effect { color: var(--text-secondary); font-size: 12px; line-height: 1.5; max-width: 280px; }
   .data-table td.note { white-space: nowrap; }
   .note-badge { display: inline-block; font-size: 11px; padding: 1px 6px; border-radius: 3px; margin-right: 3px; font-weight: 500; vertical-align: middle; }
-  .nb-skin { background: var(--brand-orange-light, #FFF3E0); color: var(--brand-orange); }
-  .nb-g1 { background: #FEE; color: #C00; font-weight: 700; }
-  .nb-g2a { background: #FFE; color: #A60; font-weight: 700; }
-  .nb-g2b { background: #FFF8E1; color: #B80; font-weight: 600; }
-  .nb-sens { background: var(--brand-blue-light, #E3F2FD); color: var(--brand-blue); }
+  /* 备注角标 5 档（2026-10-29 配色收口）：原先 nb-g1/g2a/g2b 用 #FEE/#C00、#FFE/#A60、
+     #FFF8E1/#B80 三组硬编码色 —— 完全不在品牌色板内，且 #B80 on #FFF8E1 只有 2.98:1
+     （11px 小字根本读不清）。nb-skin / nb-sens 则是同色系浅底配同色系文字（2.46 / 3.55:1）。
+     现统一走品牌 token，并给"浅底上的同色字"改用 deep 档，五档对比度分别 4.57~7.19:1；
+     底色仍保持 橙(皮) / 蓝(敏) / 红(G1) / 浅橙(G2A) / 浅黄(G2B) 的原有语义，不改变辨识逻辑。 */
+  .nb-skin { background: var(--warn-orange-soft); color: var(--warn-700); }
+  .nb-g1 { background: var(--brand-red-light); color: var(--brand-red-deep); font-weight: 700; }
+  .nb-g2a { background: var(--warn-orange-soft); color: var(--warn-deep); font-weight: 700; }
+  .nb-g2b { background: var(--warn-soft); color: var(--warn-deep); font-weight: 600; }
+  .nb-sens { background: var(--tech-blue-soft); color: var(--tech-blue-deep); }
   /* 桌面端：容器放宽到 1200px 后 9 列（合计 948px）可完整容纳，正常情况下不会出现横向滚动条。
      但窗口宽度在 901~1050px 时内容区仍可能窄于 948px —— 此时必须允许横滚，
      否则右侧列被静默裁掉（原先是 overflow-x:hidden，那正是本页 174px 列不可见的根因）。 */
@@ -95,13 +100,15 @@
   .oel-more-btn {
     display: inline-flex; align-items: center; gap: 8px;
     padding: 9px 20px; border: 1.5px solid var(--border); background: var(--bg-card);
-    border-radius: 999px; font-size: 13px; font-weight: 700; color: var(--tech-blue);
+    border-radius: 60px; font-size: 13px; font-weight: 700; color: var(--tech-blue-hover);
     cursor: pointer; font-family: inherit; transition: all .18s;
   }
-  .oel-more-btn:hover { border-color: var(--tech-blue); background: var(--tech-blue-soft, #EAF2FD); }
+  /* 字色用 hover 档（4.92:1）而不是主色 --tech-blue —— 主色 on 白只有 4.00:1，
+     13px 粗体够不到 AA 的大字门槛（需 ≥18.66px），要么放大字号要么压深一档。 */
+  .oel-more-btn:hover { border-color: var(--tech-blue); background: var(--tech-blue-soft); }
   .oel-more-btn:active { transform: translateY(1px); }
   .oel-more-hint { font-size: 11px; font-weight: 400; color: var(--text-secondary); }
-  .amend-flag { display: inline-block; font-size: 10px; padding: 1px 5px; background: var(--brand-orange); color: #fff; border-radius: 3px; margin-left: 4px; vertical-align: middle; }
+  .amend-flag { display: inline-block; font-size: 10px; padding: 1px 5px; background: var(--warn-orange); color: #fff; border-radius: 3px; margin-left: 4px; vertical-align: middle; }
   /* Detail panel */
   .detail-overlay { display: none; position: fixed; inset: 0; background: rgba(30,33,38,.5); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
   .detail-overlay.show { display: flex; }
@@ -129,7 +136,7 @@
   .phys-card table td { padding: 3px 6px; }
   .phys-card table td:first-child { color: var(--text-secondary); }
   .phys-card table td:last-child { font-weight: 600; color: var(--brand-red); text-align: right; font-family: var(--font-mono); }
-  .phys-note { padding: 12px 18px; background: #FFF8E1; border-left: 3px solid var(--brand-orange); border-radius: var(--radius-sm); margin-bottom: 12px; font-size: 12px; color: var(--text-secondary); }
+  .phys-note { padding: 12px 18px; background: var(--warn-orange-soft); border-left: 3px solid var(--warn-orange); border-radius: var(--radius-sm); margin-bottom: 12px; font-size: 12px; color: var(--text-secondary); }
   .print-btn { padding: 7px 14px; border: 1px solid var(--border); background: var(--bg-card); border-radius: 8px; cursor: pointer; font-size: 12px; color: var(--text-secondary); font-family: inherit; transition: var(--transition); }
   .print-btn:hover { border-color: var(--brand-red); color: var(--brand-red); }
   .print-btn i { margin-right: 4px;
@@ -221,7 +228,7 @@
     <div class="stat"><span class="stat-label">生物因素</span><span class="stat-value">3</span><span class="stat-sub">表3</span></div>
     <div class="stat"><span class="stat-label">生物接触限值</span><span class="stat-value">29</span><span class="stat-sub">表4（含第1号修改单）</span></div>
     <div class="stat"><span class="stat-label">接触等级</span><span class="stat-value">5</span><span class="stat-sub">表5（控制分级）</span></div>
-    <div class="stat"><span class="stat-label">已含修改单</span><span class="stat-value" style="color:var(--brand-orange);">苯·三甲基氯化锡</span><span class="stat-sub">2024年发布</span></div>
+    <div class="stat"><span class="stat-label">已含修改单</span><span class="stat-value" style="color:var(--warn-orange);">苯·三甲基氯化锡</span><span class="stat-sub">2024年发布</span></div>
   </div>
 
   <div class="tabs no-print" id="tabs">
@@ -300,7 +307,7 @@ window.__DATA__ = {"table1_chemicals":[{"no":"1","cn":"安妥","en":"ANTU","cas"
       else if(p==='G1') html += '<span class="note-badge nb-g1">G1</span>';
       else if(p==='G2A') html += '<span class="note-badge nb-g2a">G2A</span>';
       else if(p==='G2B') html += '<span class="note-badge nb-g2b">G2B</span>';
-      else if(p) html += '<span class="note-badge" style="background:#f0f0f0;color:#666;">'+escapeHtml(p)+'</span>';
+      else if(p) html += '<span class="note-badge" style="background:var(--border-light);color:var(--text-secondary);">'+escapeHtml(p)+'</span>';
     }
     return html;
   }
@@ -543,7 +550,7 @@ window.__DATA__ = {"table1_chemicals":[{"no":"1","cn":"安妥","en":"ANTU","cas"
       body += '<dt>英文名</dt><dd>'+escapeHtml(r.en)+'</dd>';
       body += '<dt>CAS号</dt><dd>'+escapeHtml(r.cas||'—')+'</dd>';
       body += '<dt>临界不良健康效应</dt><dd style="white-space:normal">'+escapeHtml(r.effect||'—')+'</dd>';
-      body += '<dt>备注</dt><dd>'+parseBadges(r.note)+(r.amend?' <span style="color:var(--brand-orange);font-size:11px;margin-left:6px">'+escapeHtml(r.amend)+'</span>':'')+'</dd>';
+      body += '<dt>备注</dt><dd>'+parseBadges(r.note)+(r.amend?' <span style="color:var(--warn-orange);font-size:11px;margin-left:6px">'+escapeHtml(r.amend)+'</span>':'')+'</dd>';
       body += '</dl>';
       // OEL cells
       if(currentTab==='chem'){
@@ -572,7 +579,7 @@ window.__DATA__ = {"table1_chemicals":[{"no":"1","cn":"安妥","en":"ANTU","cas"
       body += '<dt>Indicator (EN)</dt><dd style="font-style:italic">'+escapeHtml(r.indicator_en)+'</dd>';
       body += '<dt>职业接触生物限值</dt><dd style="color:var(--brand-red);font-weight:700">'+escapeHtml(r.limit)+'</dd>';
       body += '<dt>采样时间</dt><dd>'+escapeHtml(r.sample_time)+'</dd>';
-      if(r.amend) body += '<dt>修改单</dt><dd style="color:var(--brand-orange);font-size:12px">'+escapeHtml(r.amend)+'</dd>';
+      if(r.amend) body += '<dt>修改单</dt><dd style="color:var(--warn-orange);font-size:12px">'+escapeHtml(r.amend)+'</dd>';
       body += '</dl>';
     } else if(currentTab==='ctl'){
       body += '<dl class="detail-grid">';
@@ -661,7 +668,7 @@ window.__DATA__ = {"table1_chemicals":[{"no":"1","cn":"安妥","en":"ANTU","cas"
   ];
 
   function renderPhys(){
-    var html = '<div class="phys-note"><i class="fa-solid fa-circle-info"></i> <strong>物理因素数据来源说明：</strong>用户提供的 GBZ 2.2—2007 为扫描件，本环境无法对扫描件做 OCR（OCR 引擎下载受网络限制）。下表数值依据<strong>国家卫健委官方发布的同一标准全文</strong>（与所提供文件为同一版本，2007年发布、至今有效）逐条核对整理，并已补全关键限值（超高频/高频分列、微波连续波/脉冲波、紫外中波/短波/电焊弧光、高温 WBGT 按接触时间率与劳动强度分级等）。<strong style="color:var(--brand-orange)">正式引用仍以原纸质标准或官方发布文本为准</strong>。</div>';
+    var html = '<div class="phys-note"><i class="fa-solid fa-circle-info"></i> <strong>物理因素数据来源说明：</strong>用户提供的 GBZ 2.2—2007 为扫描件，本环境无法对扫描件做 OCR（OCR 引擎下载受网络限制）。下表数值依据<strong>国家卫健委官方发布的同一标准全文</strong>（与所提供文件为同一版本，2007年发布、至今有效）逐条核对整理，并已补全关键限值（超高频/高频分列、微波连续波/脉冲波、紫外中波/短波/电焊弧光、高温 WBGT 按接触时间率与劳动强度分级等）。<strong style="color:var(--warn-orange)">正式引用仍以原纸质标准或官方发布文本为准</strong>。</div>';
     html += '<div class="phys-grid">';
     PHYS_DATA.forEach(function(p){
       html += '<div class="phys-card"><h4>'+escapeHtml(p.name)+'</h4><div class="sub">'+escapeHtml(p.en)+' · '+escapeHtml(p.cat)+'</div><table>';
