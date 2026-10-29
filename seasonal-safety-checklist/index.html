@@ -304,8 +304,13 @@
     <script>
     (function () {
         var root = document.getElementById('clRoot');
-        if (root && window.SHEEN_SE_DATA && window.SHEEN_CL) {
-            window.SHEEN_CL.mount(root, window.SHEEN_SE_DATA);
+        var cfg = window.SHEEN_SE_DATA;
+        if (root && cfg && window.SHEEN_CL) {
+            /* 分节折叠（2026-10-29）：5 个分节 38 项全铺开是 6228px（6.9 屏），
+               做当季检查得先滚过整年四个季度还没轮到的条目。开启后默认只列
+               5 个分节标题 + 「已处理 n/m 项」，做到哪节展开哪节；打印自动全展开。 */
+            cfg.collapse = true;
+            window.SHEEN_CL.mount(root, cfg);
         }
     })();
     </script>
