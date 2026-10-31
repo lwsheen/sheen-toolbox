@@ -44,16 +44,16 @@
   display: flex; align-items: center; gap: 8px; background: var(--bg-page);
   border-bottom: 1px solid var(--border);
 }
-.sel-result.rope .sel-head i { color: var(--brand-red); }
+.sel-result.rope .sel-head i { color: var(--brand-red-deep); }
 .sel-result.chain .sel-head i { color: var(--amber); }
 .sel-body { padding: 16px; }
 .sel-label { font-size: 12px; color: var(--text-secondary); }
 .sel-number { font-size: 44px; font-weight: 800; line-height: 1.1; margin: 4px 0 8px; }
-.sel-result.rope .sel-number { color: var(--brand-red); }
+.sel-result.rope .sel-number { color: var(--brand-red-deep); }
 .sel-result.chain .sel-number { color: var(--warn-700); }
 .sel-unit { font-size: 18px; font-weight: 600; color: var(--text-secondary); margin-left: 2px; }
 .sel-meta { font-size: 13px; color: var(--text-primary); margin-bottom: 6px; }
-.sel-meta b { color: var(--brand-red); }
+.sel-meta b { color: var(--brand-red-deep); }
 .sel-result.chain .sel-meta b { color: var(--warn-700); }
 .sel-formula {
   font-size: 11px; color: var(--text-secondary); background: var(--bg-page);
@@ -77,7 +77,7 @@
   margin-top: 22px; padding: 14px 18px; background: var(--bg-page);
   border: 1px dashed var(--border); border-radius: var(--radius-md); font-size: 13px; color: var(--text-secondary);
 }
-.related-box a { color: var(--brand-red); font-weight: 600; text-decoration: none; }
+.related-box a { color: var(--brand-red-deep); font-weight: 600; text-decoration: none; }
 .related-box a:hover { text-decoration: underline; }
 
 .disclaimer {
@@ -98,13 +98,13 @@
         <style>
             @media print {
                 @page { size: A4; margin: 18mm 15mm 20mm 15mm; }
-                body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
+                body { background: var(--white) !important; padding: 0 !important; font-size: 12pt; color: var(--black) !important; }
                 .app-wrapper { box-shadow: none !important; border-radius: 0 !important; max-width: 100% !important; border: none !important; }
                 .breadcrumb, .side-nav, .btn-primary, .btn-print, .form-card, .sheen-footer, .footnote, .disclaimer, .no-print { display: none !important; }
                 .main-body { flex-direction: column; }
                 .content-area { padding: 0 !important; }
                 @page { size: A4; margin: 18mm 15mm 20mm 15mm;
-                    @bottom-center { content: "SHEEN Toolbox · 钢丝绳 & 起重链条 选型计算器"; font-size: 8pt; color: #666; }
+                    @bottom-center { content: "SHEEN Toolbox · 钢丝绳 & 起重链条 选型计算器"; font-size: 8pt; color: var(--text-secondary); }
                 }
             }
         </style>
@@ -135,7 +135,7 @@
 
 <main class="app-container container-calc">
 
-  <h1 class="page-title"><i class="fa-solid fa-rotate" style="color:var(--brand-red)"></i> 钢丝绳 &amp; 起重链条 选型计算器</h1>
+  <h1 class="page-title"><i class="fa-solid fa-rotate" style="color: var(--brand-red-deep)"></i> 钢丝绳 &amp; 起重链条 选型计算器</h1>
   <p class="page-subtitle" style="margin-bottom:20px;">给定吊重、工况与吊索配置，依据国标经验公式与工况安全系数，直接推荐钢丝绳（6×19S+IWR, 1770MPa）与起重链条（G80）的最小规格直径</p>
 
   <!-- 参数输入 -->
@@ -143,7 +143,7 @@
     <h3>参数输入</h3>
     <div class="sel-inputs">
       <div class="form-row">
-        <label>吊装 / 牵引重量 (吨) <span style="color:var(--brand-red)">*</span></label>
+        <label>吊装 / 牵引重量 (吨) <span style="color: var(--brand-red-deep)">*</span></label>
         <input type="number" id="weight" class="form-control" value="3.0" min="0.1" step="0.1" oninput="calculate(false)">
       </div>
       <div class="form-row">
@@ -332,8 +332,8 @@ window.exportResult = function() {
   var html = '<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">' +
     '<title>钢丝绳&起重链条选型 — SHEEN Toolbox</title>' +
     '<style>body{font-family:system-ui,sans-serif;padding:24px;color:#1E2126;line-height:1.6;max-width:800px;margin:0 auto}' +
-    'h1{color:#F03752;font-size:20px}.box{border:1px solid #E3E6EA;border-radius:12px;padding:16px;margin:12px 0}' +
-    '.num{font-size:34px;font-weight:800;color:#F03752}.cnum{color:var(--warn-700)}.meta{font-size:13px;color:#374151}' +
+    'h1{color: #B3243B;font-size:20px}.box{border:1px solid #E3E6EA;border-radius:12px;padding:16px;margin:12px 0}' +
+    '.num{font-size:34px;font-weight:800;color: #B3243B}.cnum{color:var(--warn-700)}.meta{font-size:13px;color:#374151}' +
     '.formula{font-size:11px;color:#5C6470;background:#F8F9FA;padding:8px;border-radius:6px;font-family:monospace}' +
     '</style></head><body>' +
     '<h1 class="page-title">📋 钢丝绳 &amp; 起重链条 选型结果</h1>' +
