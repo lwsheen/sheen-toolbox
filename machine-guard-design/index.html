@@ -46,7 +46,7 @@
 
 
 .data-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 14px; }
-.data-table th { background: var(--brand-red-surface); color: #fff; padding: 8px 9px; text-align: center; font-weight: 600; font-size: 11px; }
+.data-table th { background: var(--brand-red-surface); color: var(--white); padding: 8px 9px; text-align: center; font-weight: 600; font-size: 11px; }
 .data-table th:first-child { text-align: left; }
 .data-table td { padding: 7px 9px; border-bottom: 1px solid var(--border-light); text-align: center; font-variant-numeric: tabular-nums; }
 .data-table td:first-child { text-align: left; }
@@ -56,7 +56,7 @@
 
 .req-group { margin-bottom: 18px; }
 .req-group h4 { font-size: 14px; font-weight: 600; margin: 0 0 8px; display: flex; align-items: center; gap: 8px; }
-.req-group h4 i { color: var(--brand-red); }
+.req-group h4 i { color: var(--brand-red-deep); }
 .req-item { display: flex; gap: 10px; padding: 9px 12px; background: var(--bg-page); border: 1px solid var(--border-light); border-radius: 10px; margin-bottom: 8px; font-size: 13px; line-height: 1.7; }
 .req-item .ri-tag { flex-shrink: 0; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 60px; height: fit-content; margin-top: 2px; }
 .req-item .ri-tag.fixed { background: var(--tech-blue-soft); color: var(--tech-blue-hover); }
@@ -85,14 +85,14 @@
 .scene-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 6px; }
 .scene-card { text-align: left; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; cursor: pointer; font-family: var(--font); transition: all 0.18s; }
 .scene-card:hover { border-color: var(--brand-red); background: var(--brand-red-light); }
-.scene-card i { font-size: 16px; color: var(--brand-red); }
+.scene-card i { font-size: 16px; color: var(--brand-red-deep); }
 .scene-card b { display: block; font-size: 13px; color: var(--text-primary); margin: 6px 0 3px; line-height: 1.4; }
 .scene-card span { display: block; font-size: 11px; color: var(--text-secondary); line-height: 1.5; }
 
 .ex-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border); }
 .ex-label { font-size: 11px; color: var(--text-secondary); display: flex; align-items: center; gap: 5px; }
 .ex-chip { font-size: 11.5px; font-weight: 600; padding: 5px 12px; border-radius: 60px; background: var(--tech-blue-soft); color: var(--tech-blue-deep); border: none; cursor: pointer; font-family: var(--font); }
-.ex-chip:hover { background: var(--brand-red-surface); color: #fff; }
+.ex-chip:hover { background: var(--brand-red-surface); color: var(--white); }
 
 .term { border-bottom: 1px dashed var(--tech-blue); cursor: help; }
 
@@ -104,7 +104,7 @@
 <style>
 @media print {
   @page { size: A4; margin: 16mm 12mm 18mm 12mm; }
-  body { background: #fff !important; padding: 0 !important; font-size: 11pt; color: #000 !important; }
+  body { background: var(--white) !important; padding: 0 !important; font-size: 11pt; color: var(--black) !important; }
   .breadcrumb, .btn-primary, .btn-print, .sheen-footer, .no-print, .form-grid { display: none !important; }
   .tab-panel { display: block !important; border: none !important; padding: 0 0 12pt 0 !important; page-break-inside: avoid; }
   .app-container { box-shadow: none !important; border: none !important; max-width: 100% !important; padding: 0 !important; }
@@ -134,7 +134,7 @@ var _hmt = _hmt || [];
 
 <main class="app-container container-query">
 
-  <h1 class="page-title"><i class="fa-solid fa-shield-halved" style="color:var(--brand-red)"></i> 机械防护罩设计安全数据查询</h1>
+  <h1 class="page-title"><i class="fa-solid fa-shield-halved" style="color: var(--brand-red-deep)"></i> 机械防护罩设计安全数据查询</h1>
   <p class="page-subtitle" style="margin-bottom:16px;">防护罩（保护结构）设计必需的安全距离与最小间距数据 — 全部取自现行国家标准原文表格，适用于 14 岁及以上人员</p>
 
   <p class="scene-cap"><i class="fa-solid fa-hand-pointer"></i> 点场景卡自动填好一组真实工况并跳到对应页签；也可以直接用各页签底部的示例按钮</p>
@@ -163,7 +163,7 @@ var _hmt = _hmt || [];
         </select>
       </div>
       <div class="form-row">
-        <label>开口尺寸 e (mm) <span style="color:var(--brand-red)">*</span></label>
+        <label>开口尺寸 e (mm) <span style="color: var(--brand-red-deep)">*</span></label>
         <input type="number" class="form-control" id="gOpen" value="20" min="1" max="300" step="1" oninput="calcOpening()">
         <div class="hint">例：护罩网孔 20×20 → e=20；圆孔 φ12 → e=12；长缝 8×40 → e=8（最窄处）</div>
       </div>
@@ -207,12 +207,12 @@ var _hmt = _hmt || [];
 
     <div class="form-grid">
       <div class="form-row">
-        <label>危险区最近点高度 A<sub>h</sub> (mm) <span style="color:var(--brand-red)">*</span></label>
+        <label>危险区最近点高度 A<sub>h</sub> (mm) <span style="color: var(--brand-red-deep)">*</span></label>
         <input type="number" class="form-control" id="rAh" value="1500" min="0" max="3000" step="10" oninput="calcReach()">
         <div class="hint">如：传动辊面离地 1500 mm</div>
       </div>
       <div class="form-row">
-        <label>防护结构高度 A<sub>p</sub> (mm) <span style="color:var(--brand-red)">*</span></label>
+        <label>防护结构高度 A<sub>p</sub> (mm) <span style="color: var(--brand-red-deep)">*</span></label>
         <input type="number" class="form-control" id="rAp" value="1000" min="0" max="3000" step="10" oninput="calcReach()">
         <div class="hint">网格护罩上沿离地高度（应低于危险点）</div>
       </div>
@@ -273,7 +273,7 @@ var _hmt = _hmt || [];
 
     <div class="form-grid">
       <div class="form-row">
-        <label>开口尺寸 e (mm) <span style="color:var(--brand-red)">*</span></label>
+        <label>开口尺寸 e (mm) <span style="color: var(--brand-red-deep)">*</span></label>
         <input type="number" class="form-control" id="lOpen" value="40" min="1" max="300" step="1" oninput="calcLower()">
         <div class="hint">常见：格栅踏板 30 mm、机坪花纹钢板 40 mm、围栏网 50 mm</div>
       </div>
@@ -324,7 +324,7 @@ var _hmt = _hmt || [];
 
     <div class="form-grid">
       <div class="form-row">
-        <label>人体部位 <span style="color:var(--brand-red)">*</span></label>
+        <label>人体部位 <span style="color: var(--brand-red-deep)">*</span></label>
         <select class="form-control" id="cPart" onchange="calcCrush()">
           <option value="body" selected>全身（最不利部位）</option>
           <option value="head">头部（最不利位置）</option>
@@ -932,7 +932,7 @@ window.mgEx3 = function (i) {
 function mgExNote(noteId, text) {
   var el = $(noteId);
   if (!el) return;
-  var tag = '<br><span style="color:var(--tech-blue);font-weight:600;"><i class="fa-solid fa-wand-magic-sparkles"></i> ' + text + '</span>';
+  var tag = '<br><span style="color: var(--tech-blue-deep);font-weight:600;"><i class="fa-solid fa-wand-magic-sparkles"></i> ' + text + '</span>';
   if (el.innerHTML.indexOf('fa-wand-magic-sparkles') < 0) el.innerHTML += tag;
 }
 
