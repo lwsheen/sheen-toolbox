@@ -1,4 +1,5 @@
 {
+  "_note": "SHEEN Toolbox 工具页标准信息元数据。standards=标准号+名称；pub=发布日期；eff=实施日期；dataUpdated=数据更新时间(2026-08-04 统一)；hasStandard=false 的工具只显示免责声明。pub/eff 已据公开资料逐项核对（2026-08-04 核验：GB 4053/GB 12142 实为 2027-01-01 实施；GBZ/T 229.3 已更新为 2025 版；特种作业规定更新为应急管理部令第19号；危化品目录仍用 2015 版，无 2025 版）。",
   "accident-classification": {
     "hasStandard": true,
     "standards": [
@@ -177,8 +178,8 @@
     "standards": [
       "GB/T 50034-2024《建筑照明设计标准》"
     ],
-    "pub": "2024",
-    "eff": "2025-01-01",
+    "pub": "2024-03-12",
+    "eff": "2024-08-01",
     "dataUpdated": "2026-08-04"
   },
   "industry-classification": {
@@ -189,6 +190,17 @@
     "pub": "2017-06-30",
     "eff": "2017-10-01",
     "dataUpdated": "2026-08-04"
+  },
+  "occupational-risk-classification": {
+    "hasStandard": true,
+    "standards": [
+      "国卫办职健发〔2021〕5号《建设项目职业病危害风险分类管理目录》",
+      "GB/T 4754-2017《国民经济行业分类》"
+    ],
+    "pub": "2021-03-12",
+    "eff": "2021-03-12",
+    "dataUpdated": "2026-10-31",
+    "released": "2026-10-31"
   },
   "iso14001-environmental-factors": {
     "hasStandard": true,
@@ -669,6 +681,5 @@
     "eff": "2018-12-28（GB/T 37080-2018）；2009-12-01（GB/T 4888-2009）；GB/T 32857-2025 于 2025-12-02 发布、2026-07-01 实施（代替 GB/T 32857-2016）",
     "dataUpdated": "2026-10-25",
     "released": "2026-10-25"
-  },
-  "_note": "SHEEN Toolbox 工具页标准信息元数据。standards=标准号+名称；pub=发布日期；eff=实施日期；dataUpdated=数据更新时间(2026-08-04 统一)；hasStandard=false 的工具只显示免责声明。pub/eff 已据公开资料逐项核对（2026-08-04 核验：GB 4053/GB 12142 实为 2027-01-01 实施；GBZ/T 229.3 已更新为 2025 版；特种作业规定更新为应急管理部令第19号；危化品目录仍用 2015 版，无 2025 版）。"
+  }
 }
