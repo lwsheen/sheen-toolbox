@@ -57,7 +57,7 @@
             padding: 5px 8px;
             border: 1px solid var(--border, #E3E6EA);
             border-radius: var(--radius-sm, 4px);
-            background: #fff;
+            background: var(--white);
             color: var(--text-primary, #1E2126);
             outline: none;
             font-family: var(--font, system-ui, -apple-system, sans-serif);
@@ -86,7 +86,7 @@
             gap: 8px;
         }
         .guide-box p { font-size: 13px; color: var(--text-primary); line-height: 1.65; margin-bottom: 8px; }
-        .guide-box .warn { color: var(--brand-red); font-weight: 600; }
+        .guide-box .warn { color: var(--brand-red-deep); font-weight: 600; }
 
         .guide-suggest {
             background: #FFF7ED; border: 1px solid #FDBA74; border-radius: var(--radius-sm, 4px);
@@ -99,7 +99,7 @@
         .check-table { table-layout: fixed; min-width: 900px; width: 100%; }
         .check-table thead th {
             text-align: center; font-size: 11px; white-space: nowrap;
-            background: #334155; color: #fff;
+            background: #334155; color: var(--white);
         }
         .check-table tbody td {
             text-align: center; vertical-align: middle; padding: 6px 6px; font-size: 12px;
@@ -109,6 +109,8 @@
             font-size: 11px; border: 1px solid var(--border, #E3E6EA); border-radius: var(--radius-sm, 4px);
         }
         .check-table .col-seq { width: 40px; font-weight: 600; color: var(--text-secondary, #5C6470); }
+        /* 深色表头（.check-table thead th #334155）里的序号/要求列必须继承白字，否则深灰压深蓝几乎不可见（1.73:1） */
+        .check-table thead th.col-seq, .check-table thead th.col-std { color: var(--white); }
         .check-table .col-item { width: 180px; min-width: 150px; text-align: left !important; font-weight: 500; white-space: nowrap; }
         .check-table .col-std { width: 240px; text-align: left !important; font-size: 11px; color: var(--text-secondary, #5C6470); }
         .check-table .col-result { width: 150px; min-width: 130px; }
@@ -124,7 +126,7 @@
             display: inline-flex; align-items: center; gap: 3px;
             border: 1px solid var(--border, #E3E6EA); border-radius: 8px;
             padding: 3px 8px; font-size: 11px !important; cursor: pointer;
-            transition: all 0.15s; background: #fff; text-align: center;
+            transition: all 0.15s; background: var(--white); text-align: center;
             justify-content: center; min-width: auto !important; width: auto !important; border: none !important;
         }
         .res-opt.active-y  { background: #D1FAE5; color: #065F46; border-color: #34D399 !important; font-weight: 600;
@@ -133,7 +135,7 @@
         .res-opt.active-n  { background: var(--fail-soft-2); color: var(--fail-deep); border-color: #F87171 !important; font-weight: 600;
             border-radius: 8px;
         }
-        .res-opt.active-na { background: #F3F4F6; color: #4B5563; border-color: #9CA3AF !important;
+        .res-opt.active-na { background: var(--border-light); color: var(--text-secondary); border-color: #9CA3AF !important;
             border-radius: 8px;
         }
 
@@ -146,10 +148,10 @@
         .tc-i    { background: #DBEAFE !important; color: #1E40AF !important; }
         .tc-ii   { background: #E0E7FF !important; color: #3730A3 !important; }
         .tc-iii  { background: #D1FAE5 !important; color: #065F46 !important; }
-        .tc-batt { background: var(--warn-soft-2) !important; color: #92400E !important; }
+        .tc-batt { background: var(--warn-soft-2) !important; color: var(--warn-deep) !important; }
 
         /* 结论颜色 */
-        .conclusion-bad  { color: var(--brand-red, #F03752) !important; font-weight: 700; }
+        .conclusion-bad  { color: var(--brand-red-deep) !important; font-weight: 700; }
         .conclusion-good { color: var(--ok-deep) !important; font-weight: 600; }
 
         /* 综合判定卡片 */
@@ -159,7 +161,7 @@
             border: 1.5px solid var(--brand-red, #F03752); border-radius: 8px 8px;
             display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center;
         }
-        .verdict-card .vc-label { font-weight: 700; font-size: 14px; color: var(--brand-red, #F03752);
+        .verdict-card .vc-label { font-weight: 700; font-size: 14px; color: var(--brand-red-deep);
             border-radius: 8px;
         }
         .verdict-card .vc-value { font-size: 15px; font-weight: 800;
@@ -168,16 +170,16 @@
         .verdict-card .vc-good { color: var(--ok-deep);
             border-radius: 8px;
         }
-        .verdict-card .vc-bad  { color: var(--brand-red, #F03752);
+        .verdict-card .vc-bad  { color: var(--brand-red-deep);
             border-radius: 8px;
         }
-        .verdict-card .vc-warn { color: #92400E;
+        .verdict-card .vc-warn { color: var(--warn-deep);
             border-radius: 8px;
         }
 
         /* 指南内对照表 */
         .ref-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 10px 0; }
-        .ref-table th { background: #334155; color: #fff; padding: 6px 8px; }
+        .ref-table th { background: #334155; color: var(--white); padding: 6px 8px; }
         .ref-table td { padding: 6px 8px; border: 1px solid #E3E6EA; }
         .ref-table tr.highlight td { background: var(--brand-red-light, #FDEEF1); }
 
@@ -214,7 +216,7 @@
             .check-table .col-insul  { width: 8%  !important; min-width: 0 !important; }
             .check-table .col-concl  { width: 8%  !important; min-width: 0 !important; }
             .check-table .col-remark { width: 10% !important; min-width: 0 !important; }
-            .check-table thead th { background: #e5e5e5 !important; color: #000 !important; position: static !important; font-size: 8.5px !important; }
+            .check-table thead th { background: var(--border) !important; color: var(--black) !important; position: static !important; font-size: 8.5px !important; }
             .check-table tbody td { border-color: #ccc !important; font-size: 8.5px !important; padding: 2px 2px !important; }
             .check-table input, .check-table select { font-size: 8.5px !important; padding: 1px !important; min-width: 28px !important; border: 0.5pt solid #999 !important; }
             .form-header { background: transparent !important; border: none !important; padding: 4px 0 !important; font-size: 9px !important; }
@@ -225,7 +227,7 @@
         }
             .breadcrumb, .page-subtitle, .sheen-footer { display: none !important; }
             h1.page-title { font-size: 16px !important; margin-bottom: 4px !important; }
-            .verdict-card { display: block !important; border: 1pt solid #333 !important; page-break-inside: avoid; background: #f5f5f5 !important;
+            .verdict-card { display: block !important; border: 1pt solid #333 !important; page-break-inside: avoid; background: var(--border-light) !important;
             border-radius: 8px;
         }
         }
