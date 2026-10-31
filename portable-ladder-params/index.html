@@ -60,8 +60,8 @@
         }
         .lp-chip:hover { border-color: var(--brand-red, #F03752); color: var(--brand-red, #F03752); }
         .lp-chip.active {
-            background: var(--brand-red, #F03752); color: #fff;
-            border-color: var(--brand-red, #F03752);
+            background: var(--brand-red-surface); color: #fff;
+            border-color: var(--brand-red-surface);
             border-radius: 8px;
         }
 
@@ -87,7 +87,7 @@
         }
         .ladder-card .lc-icon {
             width: 44px; height: 44px; border-radius: 11px;
-            background: linear-gradient(135deg, var(--brand-red, #F03752), #d12e47);
+            background: linear-gradient(135deg, var(--brand-red-surface), var(--brand-red-surface-hover));
             color: #fff; display: flex; align-items: center; justify-content: center;
             font-size: 20px; flex-shrink: 0;
         }
@@ -240,7 +240,7 @@
             display: flex; align-items: center; justify-content: center;
             transition: all .15s;
         }
-        .diag-lb-close:hover { background: var(--brand-red, #F03752); color: #fff; }
+        .diag-lb-close:hover { background: var(--brand-red-surface); color: #fff; }
         @keyframes lb-fade-in { from{opacity:0} to{opacity:1} }
 
         /* 全部展开/收起按钮 */
