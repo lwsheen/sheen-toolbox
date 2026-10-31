@@ -29,7 +29,7 @@
 
         /* 顶部紧急提示 */
         .alert-warn.no-pr { margin-bottom: 18px; }
-        .alert-warn a.tel { color: var(--brand-red); font-weight: 700; text-decoration: underline; }
+        .alert-warn a.tel { color: var(--brand-red-deep); font-weight: 700; text-decoration: underline; }
 
         /* 分级卡片网格（单选 radio 风格） */
         .tier-grid {
@@ -67,7 +67,7 @@
             height: 22px;
             border-radius: 50%;
             background: var(--brand-red-surface);
-            color: #fff;
+            color: var(--white);
             font-size: 13px;
             font-weight: 700;
             display: flex;
@@ -86,11 +86,11 @@
             font-weight: 700;
             padding: 3px 9px;
             border-radius: 60px;
-            color: #fff;
+            color: var(--white);
             white-space: nowrap;
         }
-        .tier-badge.t1 { background: #16A34A; }
-        .tier-badge.t2 { background: var(--warn-orange); }
+        .tier-badge.t1 { background: var(--brand-green-hover); }
+        .tier-badge.t2 { background: #B45309; }
         /* 白字由 .tier-badge 基类给，所以底色必须走 surface 档（#F03752 上白字只有 3.91:1） */
         .tier-badge.t3 { background: var(--brand-red-surface); }
         .tier-badge.t4 { background: var(--brand-red-surface); }
@@ -107,8 +107,8 @@
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            background: #fff;
-            color: var(--brand-red);
+            background: var(--white);
+            color: var(--brand-red-deep);
             font-size: 10px;
             font-weight: 900;
             display: flex;
@@ -146,7 +146,7 @@
             position: absolute;
             left: 4px;
             top: 0;
-            color: var(--brand-red);
+            color: var(--brand-red-deep);
             font-weight: 700;
         }
         .tier-hint {
@@ -157,7 +157,7 @@
             align-items: center;
             gap: 4px;
         }
-        .tier-card.active .tier-hint { color: var(--brand-red); font-weight: 600; }
+        .tier-card.active .tier-hint { color: var(--brand-red-deep); font-weight: 600; }
 
         /* 处置步骤列表（工具专属组件） */
         .step-list { list-style: none; counter-reset: step; margin: 0; padding: 0; }
@@ -180,7 +180,7 @@
             height: 24px;
             border-radius: 50%;
             background: var(--brand-red-surface);
-            color: #fff;
+            color: var(--white);
             font-size: 13px;
             font-weight: 700;
             display: flex;
@@ -247,13 +247,13 @@
         <style>
             @media print {
                 @page { size: A4; margin: 18mm 15mm 20mm 15mm; }
-                body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
+                body { background: var(--white) !important; padding: 0 !important; font-size: 12pt; color: var(--black) !important; }
                 .app-wrapper { box-shadow: none !important; border-radius: 0 !important; max-width: 100% !important; border: none !important; }
                 .breadcrumb, .side-nav, .btn-primary, .btn-print, .form-card, .sheen-footer, .footnote, .disclaimer, .no-print { display: none !important; }
                 .main-body { flex-direction: column; }
                 .content-area { padding: 0 !important; }
                 @page { size: A4; margin: 18mm 15mm 20mm 15mm;
-                    @bottom-center { content: "SHEEN Toolbox · 中暑应急处置"; font-size: 8pt; color: #666; }
+                    @bottom-center { content: "SHEEN Toolbox · 中暑应急处置"; font-size: 8pt; color: var(--text-secondary); }
                 }
             }
         </style>
@@ -286,7 +286,7 @@
     <main class="app-container container-calc">
 
         <h1 class="page-title">中暑应急处置 <i class="fa-solid fa-temperature-full"></i></h1>
-        <p class="page-subtitle" style="margin-bottom:18px;">按 <b>4 级中暑分类</b> 选择伤者所属分级（<b>单选</b>），系统即时给出对应的分级处置步骤。依据 GBZ 41-2019《职业性中暑诊断标准》。</p>
+        <p class="page-subtitle" style="margin-bottom:18px;">选择伤者所属的<b>中暑分级</b>，即得对应处置步骤 · 依据 GBZ 41-2019《职业性中暑诊断标准》</p>
 
         <!-- 紧急提示 -->
         <div class="alert-warn no-pr">
@@ -331,9 +331,12 @@
         <!-- 预防贴士 -->
         <div class="card mb-24 no-pr">
             <h3>高温作业预防贴士</h3>
-            <div class="info-note br-none" style="margin-bottom:0;">
-                避开 11:00–15:00 高温时段露天作业；足量饮水（含电解质）；穿戴透气浅色工装与遮阳帽；出现头晕、多汗等先兆立即停工休息；班组间相互监护，发现异常及时互救。
-            </div>
+            <details class="fold-note" style="margin-bottom:0;">
+                <summary>预防要点（5 条，非处置步骤）</summary>
+                <div class="fn-body">
+                    <p>避开 11:00–15:00 高温时段露天作业；足量饮水（含电解质）；穿戴透气浅色工装与遮阳帽；出现头晕、多汗等先兆立即停工休息；班组间相互监护，发现异常及时互救。</p>
+                </div>
+            </details>
         </div>
 
         <!-- 底部操作（非急救功能，打印隐藏） -->
