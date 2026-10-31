@@ -19,7 +19,7 @@
     <style>
         /* 本工具特有样式（公共样式见 common.css，仅在此定义工具专属组件） */
         .breadcrumb span { color: var(--text-secondary); }
-        .page-title i { color: var(--brand-red); font-size: 22px; }
+        .page-title i { color: var(--brand-red-deep); font-size: 22px; }
 
         /* 标签页 */
         .tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 24px; gap: 4px; flex-wrap: wrap; }
@@ -27,7 +27,7 @@
             color: var(--text-secondary); cursor: pointer; transition: var(--transition);
             border-radius: 8px 8px 8px 8px; font-family: inherit; }
         .tab-btn:hover { background: var(--bg-page); color: var(--text-primary); }
-        .tab-btn.active { color: var(--brand-red); border-bottom: 3px solid var(--brand-red); background: var(--bg-card);
+        .tab-btn.active { color: var(--brand-red-deep); border-bottom: 3px solid var(--brand-red); background: var(--bg-card);
             border-radius: 8px;
         }
         .tab-content { display: none; animation: fadeIn .35s ease;
@@ -46,7 +46,7 @@
         .info-note-green { background: rgba(22,163,74,.08); padding: 14px 16px; border-left: 4px solid #16A34A;
             margin-bottom: 18px; font-size: 13px; color: var(--text-primary); line-height: 1.75;
             border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
-        .info-note-green b { color: var(--brand-red); }
+        .info-note-green b { color: var(--brand-red-deep); }
 
         /* 搜索与筛选 */
         .search-area { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
@@ -64,7 +64,7 @@
         .calc-card label { display: block; margin-bottom: 4px; font-size: 13px; color: var(--text-secondary); }
         .calc-card .form-control { margin-bottom: 12px; }
         .result-box { background: var(--bg-card); padding: 10px 12px; border-radius: var(--radius-sm);
-            border: 1px solid var(--border); margin-top: 8px; font-weight: 600; color: var(--brand-red); font-size: 15px; }
+            border: 1px solid var(--border); margin-top: 8px; font-weight: 600; color: var(--brand-red-deep); font-size: 15px; }
 
         @media (max-width: 600px) {
             .tabs { flex-wrap: wrap; }
@@ -76,13 +76,13 @@
         <style>
             @media print {
                 @page { size: A4; margin: 18mm 15mm 20mm 15mm; }
-                body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
+                body { background: var(--white) !important; padding: 0 !important; font-size: 12pt; color: var(--black) !important; }
                 .app-wrapper { box-shadow: none !important; border-radius: 0 !important; max-width: 100% !important; border: none !important; }
                 .breadcrumb, .side-nav, .btn-primary, .btn-print, .form-card, .sheen-footer, .footnote, .disclaimer, .no-print { display: none !important; }
                 .main-body { flex-direction: column; }
                 .content-area { padding: 0 !important; }
                 @page { size: A4; margin: 18mm 15mm 20mm 15mm;
-                    @bottom-center { content: "SHEEN Toolbox · 生产安全事故分类查询"; font-size: 8pt; color: #666; }
+                    @bottom-center { content: "SHEEN Toolbox · 生产安全事故分类查询"; font-size: 8pt; color: var(--text-secondary); }
                 }
             }
         </style>
@@ -114,7 +114,7 @@
     <!-- 主内容区域（查询/数据表类 → container-calc 1200px） -->
     <main class="app-container container-calc">
         <h1 class="page-title">生产安全事故分类查询 <i class="fa-solid fa-triangle-exclamation"></i></h1>
-        <p class="page-subtitle" style="margin-bottom:20px;">依据 GB 6441-2025《生产安全事故分类与编码》与 GB 15499-2025，提供 27 类基本事故类型与编码、人身伤害程度判定及相对统计指标计算。</p>
+        <p class="page-subtitle" style="margin-bottom:20px;">依据 GB 6441-2025 / GB 15499-2025 · 27 类基本事故类型与编码、人身伤害程度判定、相对统计指标计算</p>
 
         <!-- 标签页 -->
         <div class="tabs no-pr">
