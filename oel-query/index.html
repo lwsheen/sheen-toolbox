@@ -23,7 +23,7 @@
   .breadcrumb span.cur { color: var(--text-primary); font-weight: 500; }
   .page-title i { color: var(--brand-red); font-size: 22px; margin-right: 6px; }
   .page-title h1 { font-size: 22px; font-weight: 600; display: inline-block; vertical-align: middle; }
-  .page-title .std-tag { display: inline-block; margin-left: 12px; padding: 3px 10px; border-radius: 60px; background: var(--brand-red-light); color: var(--brand-red); font-size: 12px; font-weight: 500; vertical-align: middle; }
+  .page-title .std-tag { display: inline-block; margin-left: 12px; padding: 3px 10px; border-radius: 60px; background: var(--brand-red-light); color: var(--brand-red-deep); font-size: 12px; font-weight: 500; vertical-align: middle; }
   .info-card { background: linear-gradient(135deg, var(--bg-card) 0%, #fff 100%); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 20px; display: flex; gap: 24px; flex-wrap: wrap; margin-top: 16px; }
   .info-card .stat { display: flex; flex-direction: column; }
   .info-card .stat-label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .5px; }
@@ -38,7 +38,7 @@
             border-radius: 8px;
         }
   .tab-btn .count { font-size: 11px; padding: 1px 8px; background: var(--border-light); border-radius: 8px; color: var(--text-secondary); }
-  .tab-btn.active .count { background: var(--brand-red-light); color: var(--brand-red);
+  .tab-btn.active .count { background: var(--brand-red-light); color: var(--brand-red-deep);
             border-radius: 8px;
         }
   .toolbar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; padding: 16px 0; }
@@ -50,8 +50,8 @@
             border-radius: 8px;
         }
   .quick-filter { font-size: 12px; padding: 5px 12px; border-radius: 8px; background: var(--border-light); color: var(--text-secondary); cursor: pointer; border: 1px solid transparent; font-family: inherit; transition: var(--transition); }
-  .quick-filter:hover { background: var(--brand-red-light); color: var(--brand-red); border-color: var(--brand-red); }
-  .quick-filter.active { background: var(--brand-red); color: #fff; border-color: var(--brand-red);
+  .quick-filter:hover { background: var(--brand-red-light); color: var(--brand-red-deep); border-color: var(--brand-red); }
+  .quick-filter.active { background: var(--brand-red-surface); color: #fff; border-color: var(--brand-red-surface);
             border-radius: 8px;
         }
   .data-table-wrap { background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border); overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.04); margin-top: 4px; }
@@ -105,10 +105,10 @@
   }
   /* 字色用 hover 档（4.92:1）而不是主色 --tech-blue —— 主色 on 白只有 4.00:1，
      13px 粗体够不到 AA 的大字门槛（需 ≥18.66px），要么放大字号要么压深一档。 */
-  .oel-more-btn:hover { border-color: var(--tech-blue); background: var(--tech-blue-soft); }
+  .oel-more-btn:hover { border-color: var(--tech-blue); background: var(--tech-blue-soft); color: var(--tech-blue-deep); }
   .oel-more-btn:active { transform: translateY(1px); }
   .oel-more-hint { font-size: 11px; font-weight: 400; color: var(--text-secondary); }
-  .amend-flag { display: inline-block; font-size: 10px; padding: 1px 5px; background: var(--warn-orange); color: #fff; border-radius: 3px; margin-left: 4px; vertical-align: middle; }
+  .amend-flag { display: inline-block; font-size: 10px; padding: 1px 5px; background: var(--warn-deep); color: #fff; border-radius: 3px; margin-left: 4px; vertical-align: middle; }
   /* Detail panel */
   .detail-overlay { display: none; position: fixed; inset: 0; background: rgba(30,33,38,.5); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
   .detail-overlay.show { display: flex; }
