@@ -106,9 +106,9 @@
 
     .quick-filter { font-size: 12px; padding: 4px 12px; border-radius: 8px; background: var(--border-light); color: var(--text-secondary); cursor: pointer; border: none; font-family: inherit; transition: var(--transition); }
 
-    .quick-filter:hover { background: var(--brand-red-light); color: var(--brand-red); }
+    .quick-filter:hover { background: var(--brand-red-light); color: var(--brand-red-deep); }
 
-    .quick-filter.active { background: var(--brand-red); color: #fff;
+    .quick-filter.active { background: var(--brand-red-surface); color: #fff;
             border-radius: 8px;
         }
 
@@ -134,7 +134,7 @@
             border-radius: 8px;
         }
 
-    .tree-code { font-size: 12px; font-weight: 600; color: var(--brand-red); min-width: 36px; padding: 2px 6px; background: var(--brand-red-light); border-radius: 4px; text-align: center; flex: none; }
+    .tree-code { font-size: 12px; font-weight: 600; color: var(--brand-red-deep); min-width: 36px; padding: 2px 6px; background: var(--brand-red-light); border-radius: 4px; text-align: center; flex: none; }
 
     .tree-code.lv1 { min-width: 24px; }
 
@@ -164,7 +164,7 @@
 
     .detail-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
 
-    .detail-code { font-size:22px; font-weight: 700; color: var(--brand-red); padding:5px 10px; background: var(--brand-red-light); border-radius: var(--radius-sm); white-space: nowrap; }
+    .detail-code { font-size:22px; font-weight: 700; color: var(--brand-red-deep); padding:5px 10px; background: var(--brand-red-light); border-radius: var(--radius-sm); white-space: nowrap; }
 
     .detail-name { font-size:15px; font-weight: 600; color: var(--text-primary); flex: 1; }
 
@@ -188,19 +188,11 @@
 
     .detail-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
-    .btn-sm
-
-    .btn-sm
-
-    .btn-sm
-
-    .btn-sm
+    .btn-sm { border-radius: var(--radius-sm); }
 
     .result-info { font-size:11px; color: var(--text-secondary); padding: 8px 0; }
 
     .result-info strong { color: var(--brand-red); }
-
-    }
 
     @media print {
       body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
