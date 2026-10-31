@@ -48,7 +48,7 @@
 
     .breadcrumb span { color: var(--text-secondary); }
 
-    .page-title i { color: var(--brand-red); font-size:22px; }
+    .page-title i { color: var(--brand-red-deep); font-size:22px; }
 
     .main-grid { display: grid; grid-template-columns: 340px 1fr; gap: 20px; }
 
@@ -90,7 +90,7 @@
 
     .stat-row span:first-child { color: var(--text-secondary); }
 
-    .stat-row span:last-child { font-weight: 600; color: var(--brand-red); }
+    .stat-row span:last-child { font-weight: 600; color: var(--brand-red-deep); }
 
     .search-box { position: relative; margin-bottom: 16px; }
 
@@ -108,7 +108,7 @@
 
     .quick-filter:hover { background: var(--brand-red-light); color: var(--brand-red-deep); }
 
-    .quick-filter.active { background: var(--brand-red-surface); color: #fff;
+    .quick-filter.active { background: var(--brand-red-surface); color: var(--white);
             border-radius: 8px;
         }
 
@@ -170,7 +170,7 @@
 
     .detail-category { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
 
-    .breadcrumb span { cursor: pointer; color: var(--brand-red); }
+    .breadcrumb span { cursor: pointer; color: var(--brand-red-deep); }
 
     .breadcrumb span:hover { text-decoration: underline; }
 
@@ -192,26 +192,26 @@
 
     .result-info { font-size:11px; color: var(--text-secondary); padding: 8px 0; }
 
-    .result-info strong { color: var(--brand-red); }
+    .result-info strong { color: var(--brand-red-deep); }
 
     @media print {
-      body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
+      body { background: var(--white) !important; padding: 0 !important; font-size: 12pt; color: var(--black) !important; }
 
       .breadcrumb, .sheen-footer, .sidebar, .btn-sm, .page-title, .page-subtitle, .tree-container, .detail-actions { display: none !important; }
 
       .detail-panel { display: block !important; box-shadow: none !important; border: 1.5px solid #333 !important; margin-top: 0 !important; }
 
-      .breadcrumb span { color: #555 !important; }
+      .breadcrumb span { color: var(--text-secondary) !important; }
 
-      .result-heading { font-size: 20pt; color: #000 !important; border-bottom-color: #333 !important; }
+      .result-heading { font-size: 20pt; color: var(--black) !important; border-bottom-color: #333 !important; }
 
-      .detail-code { font-size: 18pt; color: #000 !important; background: #f5f5f5 !important; }
+      .detail-code { font-size: 18pt; color: var(--black) !important; background: var(--border-light) !important; }
 
       .detail-list { background: none !important; border: none !important; padding: 8px 0 !important; }
 
-      .detail-list .detail-item { font-size: 10pt; color: #333 !important; }
+      .detail-list .detail-item { font-size: 10pt; color: var(--text-primary) !important; }
 
-      .detail-list .anno-title { color: #555 !important; }
+      .detail-list .anno-title { color: var(--text-secondary) !important; }
 
       .detail-desc { background: none !important; border: 1px solid #e0e0e0 !important; }
 
@@ -917,7 +917,7 @@ fetch('gb4754_data.json')
 
   .then(function(data){startApp(data)})
 
-  .catch(function(e){treeContainer.innerHTML='<div class="tree-empty" style="color:#F03752"><i class="fa-solid fa-triangle-exclamation"></i> 数据加载失败：'+e.message+'</div>'});
+  .catch(function(e){treeContainer.innerHTML='<div class="tree-empty" style="color: #B3243B"><i class="fa-solid fa-triangle-exclamation"></i> 数据加载失败：'+e.message+'</div>'});
 
 })();
 
