@@ -76,7 +76,7 @@ var _hmt = _hmt || [];
 .subtabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
 .subtab{padding:6px 14px;border-radius: 8px;border:1px solid var(--border);background:var(--bg-card);cursor:pointer;font-size:13px;color:var(--text-secondary);transition:all .15s;}
 .subtab:hover{border-color:var(--brand-red);color:var(--brand-red);}
-.subtab.active{background:var(--brand-red);color:#fff;border-color:var(--brand-red);
+.subtab.active{background:var(--brand-red-surface);color:#fff;border-color:var(--brand-red-surface);
             border-radius: 8px;
         }
 .search-box{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
@@ -255,7 +255,7 @@ var _hmt = _hmt || [];
     <div class="picker-row">
       <label>观察距离 L (m)：</label>
       <input type="number" id="dist" min="0.1" max="40" step="0.1" placeholder="如 5.5">
-      <button type="button" onclick="pickModel()" style="padding:8px 20px;background:var(--brand-red);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px;">推荐型号</button>
+      <button type="button" onclick="pickModel()" style="padding:8px 20px;background:var(--brand-red-surface);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px;">推荐型号</button>
     </div>
     <div class="picker-result" id="pickResult" style="display:none;">
       <div class="model-num" id="pickModel"></div>
