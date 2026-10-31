@@ -29,21 +29,21 @@
         .lp-search {
             display: flex; align-items: center; gap: 10px;
             margin: 4px 0 22px;
-            background: #fff; border: 1px solid var(--border, #E3E6EA);
+            background: var(--white); border: 1px solid var(--border, #E3E6EA);
             border-radius: 60px; padding: 10px 18px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
-        .lp-search i { color: var(--brand-red, #F03752); font-size: 16px; }
+        .lp-search i { color: var(--brand-red-deep); font-size: 16px; }
         .lp-search input {
             border: none; outline: none; flex: 1; font-size: 15px;
             background: transparent; color: var(--text-primary);
         }
         .lp-search .clear-btn {
-            border: none; background: transparent; color: #9ca3af;
+            border: none; background: transparent; color: var(--text-tertiary);
             cursor: pointer; font-size: 14px; padding: 2px 6px;
             border-radius: 8px;
         }
-        .lp-search .clear-btn:hover { color: var(--brand-red, #F03752); }
+        .lp-search .clear-btn:hover { color: var(--brand-red-deep); }
 
         /* 分类筛选 chips */
         .lp-filters {
@@ -58,9 +58,9 @@
             border: 1px solid var(--border, #E3E6EA);
             transition: all .18s;
         }
-        .lp-chip:hover { border-color: var(--brand-red, #F03752); color: var(--brand-red, #F03752); }
+        .lp-chip:hover { border-color: var(--brand-red, #F03752); color: var(--brand-red-deep); }
         .lp-chip.active {
-            background: var(--brand-red-surface); color: #fff;
+            background: var(--brand-red-surface); color: var(--white);
             border-color: var(--brand-red-surface);
             border-radius: 8px;
         }
@@ -72,7 +72,7 @@
             gap: 16px;
         }
         .ladder-card {
-            background: #fff; border: 1px solid var(--border, #E3E6EA);
+            background: var(--white); border: 1px solid var(--border, #E3E6EA);
             border-radius: 14px; overflow: hidden;
             transition: box-shadow .2s, transform .2s, border-color .2s;
         }
@@ -88,13 +88,13 @@
         .ladder-card .lc-icon {
             width: 44px; height: 44px; border-radius: 11px;
             background: linear-gradient(135deg, var(--brand-red-surface), var(--brand-red-surface-hover));
-            color: #fff; display: flex; align-items: center; justify-content: center;
+            color: var(--white); display: flex; align-items: center; justify-content: center;
             font-size: 20px; flex-shrink: 0;
         }
         .ladder-card .lc-title { font-size: 16px; font-weight: 700; color: var(--text-primary); }
         .ladder-card .lc-sub { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
         .ladder-card .lc-arrow {
-            margin-left: auto; color: #9ca3af; font-size: 13px;
+            margin-left: auto; color: var(--text-tertiary); font-size: 13px;
             transition: transform .25s;
         }
         .ladder-card.open .lc-arrow { transform: rotate(180deg); }
@@ -109,7 +109,7 @@
         /* 四列参数标签页 + 图示标签页 */
         .param-tabs {
             display: flex; border-bottom: 1px solid var(--border, #E3E6EA);
-            background: #fff; overflow-x: auto;
+            background: var(--white); overflow-x: auto;
         }
         .param-tab {
             padding: 10px 14px; font-size: 12.5px; font-weight: 600;
@@ -118,19 +118,19 @@
             transition: all .15s; user-select: none;
             border-radius: 8px;
         }
-        .param-tab:hover { color: var(--brand-red, #F03752); }
+        .param-tab:hover { color: var(--brand-red-deep); }
         .param-tab.active {
-            color: var(--brand-red, #F03752);
+            color: var(--brand-red-deep);
             border-bottom-color: var(--brand-red, #F03752);
             border-radius: 8px;
         }
-        .param-tab.tab-diagram { color: var(--tech-blue, #2D7EE7);
+        .param-tab.tab-diagram { color: var(--tech-blue-deep);
             border-radius: 8px;
         }
-        .param-tab.tab-diagram.active { color: var(--tech-blue, #2D7EE7); border-bottom-color: var(--tech-blue, #2D7EE7);
+        .param-tab.tab-diagram.active { color: var(--tech-blue-deep); border-bottom-color: var(--tech-blue, #2D7EE7);
             border-radius: 8px;
         }
-        .param-tab.tab-diagram:hover { color: var(--tech-blue, #2D7EE7); }
+        .param-tab.tab-diagram:hover { color: var(--tech-blue-deep); }
         .param-content { display: none; padding: 16px 18px; }
         .param-content.active { display: block; }
 
@@ -147,11 +147,11 @@
         }
         .param-item .pi-text { flex: 1; color: var(--text-primary); }
         .param-item .pi-val {
-            color: var(--brand-red, #F03752); font-weight: 700;
+            color: var(--brand-red-deep); font-weight: 700;
             font-family: "SF Mono", Consolas, monospace;
         }
         .param-item .pi-warn {
-            color: var(--warn-orange, #F57C00); font-weight: 600;
+            color: var(--warn-deep); font-weight: 600;
         }
         .param-item .pi-note {
             font-size: 12px; color: var(--text-secondary);
@@ -160,7 +160,7 @@
 
         /* 公式/计算块 */
         .formula-block {
-            background: #fff; border: 1px solid var(--border, #E3E6EA);
+            background: var(--white); border: 1px solid var(--border, #E3E6EA);
             border-radius: 8px; padding: 12px 15px; margin: 8px 0;
             font-family: "SF Mono", Consolas, monospace; font-size: 13px;
             line-height: 1.7; color: var(--text-primary);
@@ -178,18 +178,18 @@
             margin: 10px 0; font-size: 13px; line-height: 1.6;
             color: var(--fail-deep);
         }
-        .safety-tip i { color: var(--brand-red, #F03752); margin-right: 6px; }
+        .safety-tip i { color: var(--brand-red-deep); margin-right: 6px; }
 
         /* 标准来源标注 */
         .std-ref {
             text-align: right; font-size: 11.5px; color: var(--text-secondary);
             padding: 8px 18px 0; margin-top: 4px;
         }
-        .std-ref a { color: var(--tech-blue, #2D7EE7); text-decoration: none; }
+        .std-ref a { color: var(--tech-blue-deep); text-decoration: none; }
 
         /* ===== 卡片内图示区 ===== */
         .card-diagram {
-            background: #fff; border: 1px solid var(--border, #E3E6EA);
+            background: var(--white); border: 1px solid var(--border, #E3E6EA);
             border-radius: 10px; padding: 14px; text-align: center;
             cursor: pointer; position: relative;
             transition: box-shadow .2s, transform .15s;
@@ -209,7 +209,7 @@
         }
         .card-diagram .cd-hint {
             position: absolute; bottom: 8px; right: 12px;
-            font-size: 10px; color: #9ca3af; pointer-events: none;
+            font-size: 10px; color: var(--text-tertiary); pointer-events: none;
             display: flex; align-items: center; gap: 3px;
         }
 
@@ -222,7 +222,7 @@
         }
         .diag-lightbox.show { display: flex; }
         .diag-lightbox-inner {
-            background: #fff; border-radius: 14px; padding: 20px 24px 16px;
+            background: var(--white); border-radius: 14px; padding: 20px 24px 16px;
             max-width: 92vw; max-height: 92vh; overflow: auto;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             position: relative; text-align: center;
@@ -235,12 +235,12 @@
         .diag-lb-close {
             position: absolute; top: 10px; right: 14px;
             width: 32px; height: 32px; border-radius: 50%;
-            border: none; background: #f0f0f0; color: #666;
+            border: none; background: var(--border-light); color: var(--text-secondary);
             font-size: 16px; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             transition: all .15s;
         }
-        .diag-lb-close:hover { background: var(--brand-red-surface); color: #fff; }
+        .diag-lb-close:hover { background: var(--brand-red-surface); color: var(--white); }
         @keyframes lb-fade-in { from{opacity:0} to{opacity:1} }
 
         /* 全部展开/收起按钮 */
@@ -251,11 +251,11 @@
             display: inline-flex; align-items: center; gap: 6px;
             padding: 8px 18px; border-radius: 8px; font-size: 13px;
             font-weight: 600; cursor: pointer; border: 1px solid var(--border, #E3E6EA);
-            background: #fff; color: var(--text-primary);
+            background: var(--white); color: var(--text-primary);
             transition: all .15s;
         }
         .lp-actions button:hover {
-            border-color: var(--brand-red, #F03752); color: var(--brand-red, #F03752);
+            border-color: var(--brand-red, #F03752); color: var(--brand-red-deep);
         }
 
         /* 无结果提示 */
