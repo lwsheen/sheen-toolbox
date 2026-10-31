@@ -57,7 +57,7 @@
             overflow: visible;
             clip: auto;
             white-space: normal;
-            background: var(--brand-red, #F03752);
+            background: var(--brand-red-surface);
             color: #fff;
             border-radius: 8px;
             text-decoration: none;
@@ -215,13 +215,13 @@
             align-items: center;
             justify-content: center;
             font-size: 14px;
-            background: var(--brand-red);
+            background: var(--brand-red-surface);
             color: #fff;
             flex-shrink: 0;
             transition: all 0.2s ease;
         }
         .tool-card:hover .tool-icon {
-            background: var(--brand-red-hover);
+            background: var(--brand-red-surface-hover);
         }
 
         .tool-card .card-text {
@@ -298,7 +298,7 @@
             position: absolute;
             top: -7px;
             right: -7px;
-            background: var(--brand-red, #F03752);
+            background: var(--brand-red-surface);
             color: #fff;
             font-size: 10px;
             font-weight: 700;
@@ -411,7 +411,7 @@
         }
         .ai-msg { max-width: 88%; line-height: 1.7; font-size: 14px; white-space: pre-wrap; }
         .ai-msg.user {
-            align-self: flex-end; background: var(--brand-red); color: #fff;
+            align-self: flex-end; background: var(--brand-red-surface); color: #fff;
             padding: 9px 13px; border-radius: 14px 14px 4px 14px;
         }
         .ai-msg.bot {
@@ -425,7 +425,7 @@
             white-space: normal;
         }
         .ai-msg.bot .ai-route .chip {
-            display: inline-block; background: var(--brand-red); color: #fff;
+            display: inline-block; background: var(--brand-red-surface); color: #fff;
             border-radius: 4px; padding: 1px 8px; font-size: 11px; margin-right: 6px;
         }
         .ai-msg.bot .ai-route b { color: var(--text-primary); }
@@ -454,19 +454,19 @@
         }
         .ai-modal-foot input:focus { outline: none; border-color: var(--brand-red); background: #fff; }
         .ai-ask-btn {
-            background: var(--brand-red); color: #fff; border: 0; border-radius: 10px;
+            background: var(--brand-red-surface); color: #fff; border: 0; border-radius: 10px;
             padding: 0 20px; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap;
             flex-shrink: 0;
         }
-        .ai-ask-btn:hover { background: #D12E47; }
+        .ai-ask-btn:hover { background: var(--brand-red-surface-hover); }
         .ai-ask-btn:disabled { opacity: .6; cursor: default; }
         .ai-msg.bot a.ai-link-btn {
             display: inline-flex; align-items: center; gap: 6px;
             margin-top: 10px; padding: 8px 14px;
-            background: var(--brand-red); color: #fff; text-decoration: none;
+            background: var(--brand-red-surface); color: #fff; text-decoration: none;
             border-radius: 9px; font-size: 13px; font-weight: 600;
         }
-        .ai-msg.bot a.ai-link-btn:hover { background: #D12E47; }
+        .ai-msg.bot a.ai-link-btn:hover { background: var(--brand-red-surface-hover); }
         @media (max-width: 768px) {
             .ai-modal { max-height: 90vh; }
             .ai-ask-btn { padding: 0 16px; }
@@ -474,7 +474,7 @@
         /* 搜索高亮 */
         mark.search-highlight {
             background: var(--brand-red-light);
-            color: var(--brand-red);
+            color: var(--brand-red-deep);
             padding: 1px 4px;
             border-radius: 4px;
             font-weight: 600;
@@ -540,7 +540,7 @@
         }
         .search-history-item:hover {
             background: var(--brand-red-light);
-            color: var(--brand-red);
+            color: var(--brand-red-deep);
         }
         .search-history-item i {
             font-size: 12px;
@@ -552,7 +552,7 @@
             background: none; border: none; color: var(--text-tertiary); cursor: pointer;
             font-size: 11px; padding: 2px 4px; border-radius: 4px; flex: 0 0 auto;
         }
-        .search-history-item .sh-del:hover { color: var(--brand-red); background: var(--brand-red-light); }
+        .search-history-item .sh-del:hover { color: var(--brand-red-deep); background: var(--brand-red-light); }
         .cat-chips { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
         .chip {
             border: 1.5px solid var(--border);
@@ -567,13 +567,13 @@
             font-family: var(--font);
         }
         .chip:hover { border-color: var(--brand-red); color: var(--brand-red); }
-        .chip.active { background: var(--brand-red); border-color: var(--brand-red); color: #fff; }
+        .chip.active { background: var(--brand-red-surface); border-color: var(--brand-red-surface); color: #fff; }
         .filter-hint { text-align: center; font-size: 12px; color: var(--text-secondary); margin-top: 10px; }
         .filter-hint a { color: var(--brand-red); text-decoration: none; cursor: pointer; }
         .filter-hint a:hover { text-decoration: underline; }
         /* chips 键盘焦点可达性 */
         .chip:focus-visible { outline: 2px solid var(--tech-blue); outline-offset: 2px; }
-        .chip[aria-pressed="true"] { background: var(--brand-red); border-color: var(--brand-red); color: #fff; }
+        .chip[aria-pressed="true"] { background: var(--brand-red-surface); border-color: var(--brand-red-surface); color: #fff; }
 
         /* 常用工具快捷区 */
         .recent-bar { max-width: 1160px; margin: 6px auto 0; padding: 0 24px; width: 100%; }
@@ -615,7 +615,7 @@
             cursor: pointer; transition: all 0.2s; font-family: var(--font);
         }
         .edit-toggle:hover { border-color: var(--brand-red); color: var(--brand-red); }
-        .edit-toggle.active { background: var(--brand-red); border-color: var(--brand-red); color: #fff; }
+        .edit-toggle.active { background: var(--brand-red-surface); border-color: var(--brand-red-surface); color: #fff; }
         .edit-toggle:focus-visible { outline: 2px solid var(--tech-blue); outline-offset: 2px; }
 
         /* 筛选组合上下文提示 */
@@ -1410,7 +1410,7 @@
         <input type="text" id="proxyUrlH" placeholder="代理地址" style="width:100%;padding:8px;border:1.5px solid var(--border);border-radius:8px;font-family:monospace;font-size:12px;margin-bottom:8px;">
       </div>
       <div style="display:flex;gap:8px;">
-        <button class="btn btn-primary" onclick="saveApiH()" style="padding:8px 20px;border-radius:60px;font-size:13px;background:var(--brand-red);color:#fff;border:none;cursor:pointer;">保存</button>
+        <button class="btn btn-primary" onclick="saveApiH()" style="padding:8px 20px;border-radius:60px;font-size:13px;background:var(--brand-red-surface);color:#fff;border:none;cursor:pointer;">保存</button>
         <button class="btn btn-outline" onclick="document.getElementById('apiModalH').style.display='none'" style="padding:8px 20px;border-radius:60px;font-size:13px;background:var(--bg-card);border:1.5px solid var(--border);cursor:pointer;">关闭</button>
       </div>
     </div>
@@ -1596,7 +1596,7 @@
                       '<h3 style="font-size:16px;margin-bottom:8px;color:#1E2126;">添加到桌面</h3>' +
                       '<p style="font-size:13px;color:#5C6470;margin-bottom:16px;line-height:1.6;">点击 Safari 底部 <strong>分享按钮</strong><br>选择 <strong>"添加到主屏幕"</strong></p>' +
                       '<div style="background:#F3F4F6;border-radius:12px;padding:12px;margin-bottom:12px;"><span style="font-size:12px;color:#5C6470;">↗️ 分享按钮 → 添加到主屏幕</span></div>' +
-                      '<button onclick="this.parentElement.parentElement.remove();localStorage.setItem(\'sheen_pwa_dismissed\',Date.now()+7*86400000);" style="width:100%;padding:10px;border-radius:60px;border:none;background:#F03752;color:#fff;font-size:14px;font-weight:600;cursor:pointer;">我知道了</button>' +
+                      '<button onclick="this.parentElement.parentElement.remove();localStorage.setItem(\'sheen_pwa_dismissed\',Date.now()+7*86400000);" style="width:100%;padding:10px;border-radius:60px;border:none;background:var(--brand-red-surface);color:#fff;font-size:14px;font-weight:600;cursor:pointer;">我知道了</button>' +
                       '</div></div>';
                     document.body.appendChild(guide);
                 } else {
