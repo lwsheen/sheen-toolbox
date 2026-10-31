@@ -17,24 +17,24 @@
 <link rel="stylesheet" href="/sheen-toolbox/common.css">
 <style>
   body { font-family: 'Inter', -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg-page); color: var(--text-primary); font-size: 15px; line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
-  .breadcrumb a { color: var(--tech-blue); text-decoration: none; }
+  .breadcrumb a { color: var(--tech-blue-deep); text-decoration: none; }
   .breadcrumb a:hover { opacity: .7; text-decoration: underline; }
   .breadcrumb i { color: var(--text-secondary); font-size: 10px; margin: 0 4px; }
   .breadcrumb span.cur { color: var(--text-primary); font-weight: 500; }
-  .page-title i { color: var(--brand-red); font-size: 22px; margin-right: 6px; }
+  .page-title i { color: var(--brand-red-deep); font-size: 22px; margin-right: 6px; }
   .page-title h1 { font-size: 22px; font-weight: 600; display: inline-block; vertical-align: middle; }
   .page-title .std-tag { display: inline-block; margin-left: 12px; padding: 3px 10px; border-radius: 60px; background: var(--brand-red-light); color: var(--brand-red-deep); font-size: 12px; font-weight: 500; vertical-align: middle; }
-  .info-card { background: linear-gradient(135deg, var(--bg-card) 0%, #fff 100%); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 20px; display: flex; gap: 24px; flex-wrap: wrap; margin-top: 16px; }
+  .info-card { background: linear-gradient(135deg, var(--bg-card) 0%, var(--white) 100%); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 20px; display: flex; gap: 24px; flex-wrap: wrap; margin-top: 16px; }
   .info-card .stat { display: flex; flex-direction: column; }
   .info-card .stat-label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .5px; }
-  .info-card .stat-value { font-size: 18px; font-weight: 700; color: var(--brand-red); line-height: 1.4; }
+  .info-card .stat-value { font-size: 18px; font-weight: 700; color: var(--brand-red-deep); line-height: 1.4; }
   .info-card .stat-sub { font-size: 11px; color: var(--text-secondary); }
   .tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin: 20px 0 0; flex-wrap: wrap; }
   .tab-btn { padding: 10px 18px; border: none; background: none; cursor: pointer; font-size: 14px; font-weight: 500; color: var(--text-secondary); border-bottom: 3px solid transparent; margin-bottom: -2px; transition: var(--transition); display: inline-flex; align-items: center; gap: 6px; font-family: inherit;
             border-radius: 8px;
         }
-  .tab-btn:hover { color: var(--brand-red); }
-  .tab-btn.active { color: var(--brand-red); border-bottom-color: var(--brand-red); font-weight: 600;
+  .tab-btn:hover { color: var(--brand-red-deep); }
+  .tab-btn.active { color: var(--brand-red-deep); border-bottom-color: var(--brand-red); font-weight: 600;
             border-radius: 8px;
         }
   .tab-btn .count { font-size: 11px; padding: 1px 8px; background: var(--border-light); border-radius: 8px; color: var(--text-secondary); }
@@ -51,15 +51,15 @@
         }
   .quick-filter { font-size: 12px; padding: 5px 12px; border-radius: 8px; background: var(--border-light); color: var(--text-secondary); cursor: pointer; border: 1px solid transparent; font-family: inherit; transition: var(--transition); }
   .quick-filter:hover { background: var(--brand-red-light); color: var(--brand-red-deep); border-color: var(--brand-red); }
-  .quick-filter.active { background: var(--brand-red-surface); color: #fff; border-color: var(--brand-red-surface);
+  .quick-filter.active { background: var(--brand-red-surface); color: var(--white); border-color: var(--brand-red-surface);
             border-radius: 8px;
         }
   .data-table-wrap { background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border); overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.04); margin-top: 4px; }
   .data-table { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 13px; }
   .data-table thead th { background: var(--bg-page); color: var(--text-secondary); font-weight: 600; padding: 10px 12px; text-align: left; border-bottom: 2px solid var(--border); white-space: nowrap; cursor: pointer; user-select: none; position: sticky; top: 0; z-index: 5; }
-  .data-table thead th:hover { color: var(--brand-red); }
+  .data-table thead th:hover { color: var(--brand-red-deep); }
   .data-table thead th .sort-ind { margin-left: 4px; font-size: 10px; opacity: .5; }
-  .data-table thead th.sorted .sort-ind { opacity: 1; color: var(--brand-red); }
+  .data-table thead th.sorted .sort-ind { opacity: 1; color: var(--brand-red-deep); }
   .data-table tbody td { padding: 9px 12px; border-bottom: 1px solid var(--border-light); vertical-align: top; word-break: break-word; overflow-wrap: anywhere; }
   .data-table tbody tr { transition: background .12s; }
   .data-table tbody tr:hover { background: var(--brand-red-light); cursor: pointer; }
@@ -70,7 +70,7 @@
   .data-table td.en { color: var(--text-secondary); font-style: italic; font-size: 12px; }
   .data-table td.cas { font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
   .data-table td.oel { font-family: var(--font-mono); text-align: center; white-space: nowrap; font-weight: 600; }
-  .data-table td.oel.has-val { color: var(--brand-red); }
+  .data-table td.oel.has-val { color: var(--brand-red-deep); }
   .data-table td.oel.dash { color: var(--text-secondary); opacity: .4; font-weight: 400; }
   .data-table td.effect { color: var(--text-secondary); font-size: 12px; line-height: 1.5; max-width: 280px; }
   .data-table td.note { white-space: nowrap; }
@@ -90,7 +90,7 @@
      否则右侧列被静默裁掉（原先是 overflow-x:hidden，那正是本页 174px 列不可见的根因）。 */
   @media (min-width: 901px) { .table-scroll { overflow-x: auto; } }
   .result-count { font-size: 12px; color: var(--text-secondary); padding: 8px 0; }
-  .result-count strong { color: var(--brand-red); font-weight: 700; }
+  .result-count strong { color: var(--brand-red-deep); font-weight: 700; }
   .empty-state { padding: 60px 20px; text-align: center; color: var(--text-secondary); }
   .empty-state i { font-size: 36px; color: var(--border); display: block; margin-bottom: 12px; }
   /* 渐进加载条：默认渲染 60 行，点一次再放 60 行。
@@ -108,7 +108,7 @@
   .oel-more-btn:hover { border-color: var(--tech-blue); background: var(--tech-blue-soft); color: var(--tech-blue-deep); }
   .oel-more-btn:active { transform: translateY(1px); }
   .oel-more-hint { font-size: 11px; font-weight: 400; color: var(--text-secondary); }
-  .amend-flag { display: inline-block; font-size: 10px; padding: 1px 5px; background: var(--warn-deep); color: #fff; border-radius: 3px; margin-left: 4px; vertical-align: middle; }
+  .amend-flag { display: inline-block; font-size: 10px; padding: 1px 5px; background: var(--warn-deep); color: var(--white); border-radius: 3px; margin-left: 4px; vertical-align: middle; }
   /* Detail panel */
   .detail-overlay { display: none; position: fixed; inset: 0; background: rgba(30,33,38,.5); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
   .detail-overlay.show { display: flex; }
@@ -116,7 +116,7 @@
   .detail-head { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
   .detail-head h3 { font-size: 16px; font-weight: 600; }
   .detail-head .close { background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 22px; padding: 0; line-height: 1; }
-  .detail-head .close:hover { color: var(--brand-red); }
+  .detail-head .close:hover { color: var(--brand-red-deep); }
   .detail-body { padding: 20px 24px; }
   .detail-grid { display: grid; grid-template-columns: auto 1fr; gap: 10px 16px; }
   .detail-grid dt { color: var(--text-secondary); font-size: 12px; padding-top: 2px; }
@@ -124,7 +124,7 @@
   .oel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
   .oel-cell { text-align: center; padding: 10px; background: var(--bg-page); border-radius: var(--radius-sm); }
   .oel-cell .label { font-size: 11px; color: var(--text-secondary); }
-  .oel-cell .val { font-size: 18px; font-weight: 700; color: var(--brand-red); margin-top: 4px; }
+  .oel-cell .val { font-size: 18px; font-weight: 700; color: var(--brand-red-deep); margin-top: 4px; }
   .oel-cell .val.dash { color: var(--text-secondary); opacity: .4; font-weight: 400; }
   .oel-cell .unit { font-size: 10px; color: var(--text-secondary); margin-top: 2px; }
   /* Physical factor cards */
@@ -135,10 +135,10 @@
   .phys-card table { width: 100%; font-size: 12px; }
   .phys-card table td { padding: 3px 6px; }
   .phys-card table td:first-child { color: var(--text-secondary); }
-  .phys-card table td:last-child { font-weight: 600; color: var(--brand-red); text-align: right; font-family: var(--font-mono); }
+  .phys-card table td:last-child { font-weight: 600; color: var(--brand-red-deep); text-align: right; font-family: var(--font-mono); }
   .phys-note { padding: 12px 18px; background: var(--warn-orange-soft); border-left: 3px solid var(--warn-orange); border-radius: var(--radius-sm); margin-bottom: 12px; font-size: 12px; color: var(--text-secondary); }
   .print-btn { padding: 7px 14px; border: 1px solid var(--border); background: var(--bg-card); border-radius: 8px; cursor: pointer; font-size: 12px; color: var(--text-secondary); font-family: inherit; transition: var(--transition); }
-  .print-btn:hover { border-color: var(--brand-red); color: var(--brand-red); }
+  .print-btn:hover { border-color: var(--brand-red); color: var(--brand-red-deep); }
   .print-btn i { margin-right: 4px;
             border-radius: 8px;
         }
@@ -182,8 +182,8 @@
   @media print {
     .toolbar, .tabs, .breadcrumb, .quick-filters, .no-print { display: none !important; }
     .data-table-wrap { border: none; box-shadow: none; }
-    .data-table thead th { background: #f0f0f0 !important; color: #000 !important; }
-    body { background: #fff; }
+    .data-table thead th { background: var(--border-light) !important; color: var(--black) !important; }
+    body { background: var(--white); }
   }
 </style>
     <!-- Baidu Tongji -->
@@ -228,7 +228,7 @@
     <div class="stat"><span class="stat-label">生物因素</span><span class="stat-value">3</span><span class="stat-sub">表3</span></div>
     <div class="stat"><span class="stat-label">生物接触限值</span><span class="stat-value">29</span><span class="stat-sub">表4（含第1号修改单）</span></div>
     <div class="stat"><span class="stat-label">接触等级</span><span class="stat-value">5</span><span class="stat-sub">表5（控制分级）</span></div>
-    <div class="stat"><span class="stat-label">已含修改单</span><span class="stat-value" style="color:var(--warn-orange);">苯·三甲基氯化锡</span><span class="stat-sub">2024年发布</span></div>
+    <div class="stat"><span class="stat-label">已含修改单</span><span class="stat-value" style="color: var(--warn-deep);">苯·三甲基氯化锡</span><span class="stat-sub">2024年发布</span></div>
   </div>
 
   <div class="tabs no-print" id="tabs">
@@ -550,7 +550,7 @@ window.__DATA__ = {"table1_chemicals":[{"no":"1","cn":"安妥","en":"ANTU","cas"
       body += '<dt>英文名</dt><dd>'+escapeHtml(r.en)+'</dd>';
       body += '<dt>CAS号</dt><dd>'+escapeHtml(r.cas||'—')+'</dd>';
       body += '<dt>临界不良健康效应</dt><dd style="white-space:normal">'+escapeHtml(r.effect||'—')+'</dd>';
-      body += '<dt>备注</dt><dd>'+parseBadges(r.note)+(r.amend?' <span style="color:var(--warn-orange);font-size:11px;margin-left:6px">'+escapeHtml(r.amend)+'</span>':'')+'</dd>';
+      body += '<dt>备注</dt><dd>'+parseBadges(r.note)+(r.amend?' <span style="color: var(--warn-deep);font-size:11px;margin-left:6px">'+escapeHtml(r.amend)+'</span>':'')+'</dd>';
       body += '</dl>';
       // OEL cells
       if(currentTab==='chem'){
@@ -577,13 +577,13 @@ window.__DATA__ = {"table1_chemicals":[{"no":"1","cn":"安妥","en":"ANTU","cas"
       body += '<dt>Factor (EN)</dt><dd style="font-style:italic">'+escapeHtml(r.factor_en)+'</dd>';
       body += '<dt>监测指标（中文）</dt><dd>'+escapeHtml(r.indicator_cn)+'</dd>';
       body += '<dt>Indicator (EN)</dt><dd style="font-style:italic">'+escapeHtml(r.indicator_en)+'</dd>';
-      body += '<dt>职业接触生物限值</dt><dd style="color:var(--brand-red);font-weight:700">'+escapeHtml(r.limit)+'</dd>';
+      body += '<dt>职业接触生物限值</dt><dd style="color: var(--brand-red-deep);font-weight:700">'+escapeHtml(r.limit)+'</dd>';
       body += '<dt>采样时间</dt><dd>'+escapeHtml(r.sample_time)+'</dd>';
-      if(r.amend) body += '<dt>修改单</dt><dd style="color:var(--warn-orange);font-size:12px">'+escapeHtml(r.amend)+'</dd>';
+      if(r.amend) body += '<dt>修改单</dt><dd style="color: var(--warn-deep);font-size:12px">'+escapeHtml(r.amend)+'</dd>';
       body += '</dl>';
     } else if(currentTab==='ctl'){
       body += '<dl class="detail-grid">';
-      body += '<dt>接触等级</dt><dd style="font-size:18px;color:var(--brand-red);font-weight:700">'+escapeHtml(r.level)+'</dd>';
+      body += '<dt>接触等级</dt><dd style="font-size:18px;color: var(--brand-red-deep);font-weight:700">'+escapeHtml(r.level)+'</dd>';
       body += '<dt>等级描述</dt><dd>'+escapeHtml(r.desc)+'</dd>';
       body += '<dt>推荐控制措施</dt><dd style="white-space:normal">'+escapeHtml(r.control)+'</dd>';
       body += '</dl>';
@@ -668,7 +668,7 @@ window.__DATA__ = {"table1_chemicals":[{"no":"1","cn":"安妥","en":"ANTU","cas"
   ];
 
   function renderPhys(){
-    var html = '<div class="phys-note"><i class="fa-solid fa-circle-info"></i> <strong>物理因素数据来源说明：</strong>用户提供的 GBZ 2.2—2007 为扫描件，本环境无法对扫描件做 OCR（OCR 引擎下载受网络限制）。下表数值依据<strong>国家卫健委官方发布的同一标准全文</strong>（与所提供文件为同一版本，2007年发布、至今有效）逐条核对整理，并已补全关键限值（超高频/高频分列、微波连续波/脉冲波、紫外中波/短波/电焊弧光、高温 WBGT 按接触时间率与劳动强度分级等）。<strong style="color:var(--warn-orange)">正式引用仍以原纸质标准或官方发布文本为准</strong>。</div>';
+    var html = '<div class="phys-note"><i class="fa-solid fa-circle-info"></i> <strong>物理因素数据来源说明：</strong>用户提供的 GBZ 2.2—2007 为扫描件，本环境无法对扫描件做 OCR（OCR 引擎下载受网络限制）。下表数值依据<strong>国家卫健委官方发布的同一标准全文</strong>（与所提供文件为同一版本，2007年发布、至今有效）逐条核对整理，并已补全关键限值（超高频/高频分列、微波连续波/脉冲波、紫外中波/短波/电焊弧光、高温 WBGT 按接触时间率与劳动强度分级等）。<strong style="color: var(--warn-deep)">正式引用仍以原纸质标准或官方发布文本为准</strong>。</div>';
     html += '<div class="phys-grid">';
     PHYS_DATA.forEach(function(p){
       html += '<div class="phys-card"><h4>'+escapeHtml(p.name)+'</h4><div class="sub">'+escapeHtml(p.en)+' · '+escapeHtml(p.cat)+'</div><table>';
@@ -684,7 +684,7 @@ window.__DATA__ = {"table1_chemicals":[{"no":"1","cn":"安妥","en":"ANTU","cas"
   function renderCtl(){
     var html = '<table class="data-table"><thead><tr><th>接触等级</th><th>等级描述</th><th>推荐控制措施</th></tr></thead><tbody>';
     D.table5_control_levels.forEach(function(r){
-      html += '<tr><td style="font-weight:700;color:var(--brand-red)">'+escapeHtml(r.level)+'</td><td>'+escapeHtml(r.desc)+'</td><td style="white-space:normal">'+escapeHtml(r.control)+'</td></tr>';
+      html += '<tr><td style="font-weight:700;color: var(--brand-red-deep)">'+escapeHtml(r.level)+'</td><td>'+escapeHtml(r.desc)+'</td><td style="white-space:normal">'+escapeHtml(r.control)+'</td></tr>';
     });
     html += '</tbody></table>';
     html += '<div style="margin-top:12px;font-size:12px;color:var(--text-secondary);padding:10px 14px;background:var(--bg-page);border-radius:var(--radius-sm)"><strong>注：</strong>作业管理包括对作业方法、作业时间等制定作业标准，使其标准化；改善作业方法；对作业人员进行指导培训以及改善作业条件或工作场所环境等。</div>';
