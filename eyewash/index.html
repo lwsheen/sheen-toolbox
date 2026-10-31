@@ -50,7 +50,7 @@
 
         .progress-stats b { color:var(--text-primary); }
 
-        .st-yes b { color:#16A34A; } .st-no b { color:#F03752; } .st-na b { color:#5C6470; }
+        .st-yes b { color:var(--ok-deep); } .st-no b { color: var(--brand-red-deep); } .st-na b { color:#5C6470; }
 
         .section { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); margin-bottom:12px; overflow:hidden; }
 
@@ -88,11 +88,11 @@
 
         .status-seg button:hover { background:var(--border-light); }
 
-        .status-seg button.active-yes { background:#16A34A; color:#fff; }
+        .status-seg button.active-yes { background:#16A34A; color:var(--white); }
 
-        .status-seg button.active-no { background:var(--brand-red-surface); color:#fff; }
+        .status-seg button.active-no { background:var(--brand-red-surface); color:var(--white); }
 
-        .status-seg button.active-na { background:#5C6470; color:#fff; }
+        .status-seg button.active-na { background:#5C6470; color:var(--white); }
 
         .note-input { width:240px; max-width:100%; font-size:12px; padding:5px 8px; border:1px solid var(--border); border-radius:6px; display:none; }
 
@@ -106,9 +106,9 @@
 
         .nc-item { font-size:12px; padding:8px 10px; border-left:3px solid #F03752; background:var(--bg-page); border-radius:0 6px 6px 0; margin-bottom:8px; line-height:1.6; }
 
-        .nc-item .nc-ref { color:var(--brand-red); font-family:ui-monospace,Menlo,monospace; }
+        .nc-item .nc-ref { color: var(--brand-red-deep); font-family:ui-monospace,Menlo,monospace; }
 
-        .empty-nc { font-size:12px; color:#16A34A; }
+        .empty-nc { font-size:12px; color:var(--ok-deep); }
 
         @media print {
 
@@ -606,7 +606,7 @@
 
             html += '<div style="margin:10px 0;font-size:13px;">检查项数：<b>'+t+'</b>　已检查：<b>'+done+'</b>　'+
 
-                '合格：<b style="color:#16A34A;">'+yes+'</b>　不合格：<b style="color:#F03752;">'+no+'</b>　不适用：<b style="color:#5C6470;">'+na+'</b></div>';
+                '合格：<b style="color:var(--ok-deep);">'+yes+'</b>　不合格：<b style="color: #B3243B;">'+no+'</b>　不适用：<b style="color:#5C6470;">'+na+'</b></div>';
 
             html += '<div style="font-weight:700;font-size:13px;margin:10px 0 6px;">不合格项及整改要求（'+nc.length+' 项）</div>';
 
