@@ -24,6 +24,7 @@
     'work-injury-calculator': { t: 'Work Injury Compensation Calculator', d: 'Estimate per Work Injury Insurance Regulation' },
     'jsa-lec': { t: 'JSA + LEC Risk Analysis', d: 'Job safety analysis + risk assessment' },
     'industry-classification': { t: 'Industry Classification Lookup', d: 'National economic industry classification' },
+    'occupational-risk-classification': { t: 'Occupational Hazard Risk Classification', d: 'Construction project OHS risk grading' },
     'accident-classification': { t: 'Work Accident Classification Lookup', d: 'GB 6441-2025 accident types & codes' },
     'working-height-classification': { t: 'Work at Height Classification Lookup', d: 'GB 3608-2025 grading & determination' },
     'dangerous-goods-query': { t: 'Dangerous Goods Query', d: '767 dangerous goods lookup' },
