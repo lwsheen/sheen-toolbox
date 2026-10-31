@@ -1,7 +1,7 @@
 {
   "version": "3.1",
-  "updated": "2026-10-25",
-  "note": "63 个顶级登记工具 + 5 个 PHA 聚合入口子页（risk-assessment / lopa-analysis / fault-tree-analysis / event-tree-analysis / bowtie-analysis，hub 页不单独占首页卡片，AI 仍可精确路由到对应标签页）+ 3 条兼容路由（未登记但线上可用的 environmental-impact-classification、occupational-risk-classification、以及合并页别名 vehicle-fire-extinguisher）。查询类工具支持 ?q= 预填深链；PHA 家族支持 ?tab=（early/detail/quant/model/methods）与 ?tool=（fta/eta/bowtie/lopa）深链。",
+  "updated": "2026-10-31",
+  "note": "64 个顶级登记工具 + 5 个 PHA 聚合入口子页（risk-assessment / lopa-analysis / fault-tree-analysis / event-tree-analysis / bowtie-analysis，hub 页不单独占首页卡片，AI 仍可精确路由到对应标签页）+ 2 条兼容路由（已合并页的 noindex 跳转存根 fire-extinguisher-calculator / vehicle-fire-extinguisher）。查询类工具支持 ?q= 预填深链；PHA 家族支持 ?tab=（early/detail/quant/model/methods）与 ?tool=（fta/eta/bowtie/lopa）深链。 2026-10-31：occupational-risk-classification 由兼容路由升级为正式登记工具（补 standards/copyright/触发词）；environmental-impact-classification 因仅收录《名录》33 条节选，降级为 noindex 节选页并移出路由。",
   "fallback": {
     "noTool": "未匹配到专用工具。可换更具体的表述（如工具名/标准号），或前往「SHEEN环境健康安全」IMA 知识库检索法规原文。",
     "paramMissing": "需要补充信息才能使用该工具，请补充后重试，或前往工具页手动操作。",
@@ -254,37 +254,6 @@
           "label": "资产总额(万元)",
           "required": false
         }
-      ]
-    },
-    {
-      "id": "environmental-impact-classification",
-      "title": "建设项目环境影响评价分类管理查询",
-      "desc": "依据《建设项目环境影响评价分类管理名录（2021年版）》（生态环境部令第16号），按项目代码或名称检索环评类别（报告书/报告表/登记表）及环境敏感区触发条件，用于建设项目环评等级初判。",
-      "descShort": "按环评分类名录判定项目环评类别",
-      "category": "其他",
-      "standards": [],
-      "copyright": "none",
-      "trigger": [
-        "环境影响评价",
-        "环评分类",
-        "环评",
-        "建设项目环评",
-        "环境影响",
-        "环评类别"
-      ],
-      "page": "/sheen-toolbox/environmental-impact-classification/",
-      "queryParam": "q",
-      "params": [
-        {
-          "key": "q",
-          "type": "string",
-          "label": "查询词",
-          "required": false
-        }
-      ],
-      "searchInput": "searchInput",
-      "filterFns": [
-        "doSearch"
       ]
     },
     {
@@ -1091,17 +1060,29 @@
     {
       "id": "occupational-risk-classification",
       "title": "建设项目职业病危害风险分类查询",
-      "desc": "依据《建设项目职业病危害风险分类管理目录》（2021年版），按行业编码或名称检索职业病危害风险等级，用于建设项目职业病危害预评价与控效评价分级管理。",
-      "descShort": "按职业病风险分类目录定等级",
-      "category": "其他",
-      "standards": [],
-      "copyright": "none",
+      "desc": "依据《建设项目职业病危害风险分类管理目录》（国卫办职健发〔2021〕5号）与 GB/T 4754-2017，按行业编码或名称检索建设项目职业病危害风险等级（一般/严重），用于职业病防护设施“三同时”分类监督管理与工作场所职业病危害因素定期检测频次确定。",
+      "descShort": "依据2021年版目录判定职业病危害风险等级",
+      "category": "查询",
+      "standards": [
+        "国卫办职健发〔2021〕5号《建设项目职业病危害风险分类管理目录》",
+        "GB/T 4754-2017《国民经济行业分类》"
+      ],
+      "copyright": "boundary",
       "trigger": [
         "职业病危害风险",
         "职业病危害分类",
         "建设项目职业病",
         "风险分类",
-        "危害风险"
+        "危害风险",
+        "职业病风险分类",
+        "职业病风险等级",
+        "风险分类管理目录",
+        "严重风险",
+        "一般风险",
+        "三同时",
+        "定期检测频次",
+        "国卫办职健发",
+        "职业卫生分类"
       ],
       "page": "/sheen-toolbox/occupational-risk-classification/",
       "queryParam": "q",
