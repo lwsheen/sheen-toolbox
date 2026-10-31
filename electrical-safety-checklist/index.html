@@ -43,7 +43,7 @@
             padding: 7px 10px;
             font-size: 13px;
             font-family: var(--font);
-            background: #fff;
+            background: var(--white);
             min-width: 160px;
             outline: none;
         }
@@ -67,7 +67,7 @@
         .stat-card {
             flex: 1 1 110px;
             min-width: 96px;
-            background: #fff;
+            background: var(--white);
             border: 1px solid var(--border);
             border-radius: var(--radius-md);
             padding: 12px 14px;
@@ -78,7 +78,7 @@
         .stat-card.s-ok    { border-color: var(--ok-soft-2); }
         .stat-card.s-ok .num   { color: var(--ok-deep); }
         .stat-card.s-bad   { border-color: var(--fail-soft); background: #FDEEF1; }
-        .stat-card.s-bad .num  { color: var(--brand-red); }
+        .stat-card.s-bad .num  { color: var(--brand-red-deep); }
         .stat-card.s-na    { border-color: #E3E6EA; }
         .stat-card.s-na .num   { color: #5C6470; }
         .stat-card.s-pending .num { color: var(--warn-700); }
@@ -95,7 +95,7 @@
         .guide-box h3 {
             font-size: 15px;
             font-weight: 700;
-            color: var(--brand-red-hover);
+            color: var(--brand-red-deep);
             margin-bottom: 10px;
             display: flex;
             align-items: center;
@@ -118,7 +118,7 @@
         .check-table tbody td { vertical-align: middle; padding: 6px 6px; }
         .check-table .col-seq    { width: 48px;  text-align: center; font-weight: 600; color: var(--text-secondary); white-space: nowrap; }
         .check-table .col-item   { width: 130px; font-weight: 600; color: var(--text-primary); min-width: 100px; }
-        .check-table .col-std    { /* 自适应剩余宽度 */ text-align: left; font-size: 12px; line-height: 1.5; color: #374151; }
+        .check-table .col-std    { /* 自适应剩余宽度 */ text-align: left; font-size: 12px; line-height: 1.5; color: var(--text-primary); }
         .check-table .col-result { width: 150px; min-width: 130px; }
         .check-table .col-remark { width: 140px; min-width: 120px; }
         .check-table .col-op     { width: 32px; text-align: center; }
@@ -132,7 +132,7 @@
             padding: 6px 8px;
             font-size: 12px;
             font-family: var(--font);
-            background: #fff;
+            background: var(--white);
             outline: none;
         }
         .check-table .item-input { font-weight: 600; }
@@ -149,7 +149,7 @@
             padding: 10px 12px !important;
             letter-spacing: 0.3px;
         }
-        .section-row .sec-no { color: var(--brand-red, #F03752); font-weight: 800; margin-right: 6px; }
+        .section-row .sec-no { color: var(--brand-red-deep); font-weight: 800; margin-right: 6px; }
 
         /* 结果单选药丸 */
         .res-group { display: flex; gap: 4px; justify-content: center; flex-wrap: nowrap; }
@@ -163,7 +163,7 @@
             font-size: 12px;
             cursor: pointer;
             color: var(--text-secondary);
-            background: #fff;
+            background: var(--white);
             user-select: none;
             white-space: nowrap;
             transition: all 0.15s;
@@ -173,36 +173,36 @@
         .res-opt.active-ok    { background: var(--ok-soft); border-color: #16A34A; color: var(--ok-deep); font-weight: 700;
             border-radius: 8px;
         }
-        .res-opt.active-bad   { background: var(--fail-soft-2); border-color: var(--brand-red); color: var(--brand-red); font-weight: 700;
+        .res-opt.active-bad   { background: var(--fail-soft-2); border-color: var(--brand-red); color: var(--brand-red-deep); font-weight: 700;
             border-radius: 8px;
         }
-        .res-opt.active-na    { background: #F3F4F6; border-color: #9CA3AF; color: #4B5563;
+        .res-opt.active-na    { background: var(--border-light); border-color: #9CA3AF; color: var(--text-secondary);
             border-radius: 8px;
         }
 
         /* 不符合行高亮 */
         tr.row-bad td { background: #FDEEF1 !important; }
-        tr.row-bad .col-item { color: var(--brand-red); }
+        tr.row-bad .col-item { color: var(--brand-red-deep); }
 
         /* 删除按钮 */
         .del-btn {
             width: 24px; height: 24px;
             border-radius: 50%;
             border: 1px solid var(--brand-red);
-            background: #fff; color: var(--brand-red);
+            background: var(--white); color: var(--brand-red-deep);
             font-size: 12px; line-height: 1;
             cursor: pointer;
             display: inline-flex; align-items: center; justify-content: center;
             transition: all 0.2s;
         }
-        .del-btn:hover { background: var(--brand-red-surface); color: #fff; }
+        .del-btn:hover { background: var(--brand-red-surface); color: var(--white); }
 
         /* 提示条 */
         .alert-bad {
             display: none;
             background: #FDEEF1;
             border: 1px solid var(--fail-soft);
-            color: var(--brand-red);
+            color: var(--brand-red-deep);
             border-radius: var(--radius-md);
             padding: 10px 14px;
             font-size: 13px;
@@ -220,7 +220,7 @@
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
-            .meta-bar { background: #fff !important; }
+            .meta-bar { background: var(--white) !important; }
             .guide-box { display: none !important; }
             .tool-toolbar, .summary-bar, .alert-bad { display: none !important; }
 
@@ -238,8 +238,8 @@
             .check-table .col-op     { width: 3%  !important; min-width: 0 !important; }
 
             .check-table thead th {
-                background: #e5e5e5 !important;
-                color: #000 !important;
+                background: var(--border) !important;
+                color: var(--black) !important;
                 position: static !important;
                 font-size: 9px !important;
                 padding: 3px 2px !important;
@@ -265,7 +265,7 @@
             .res-opt.active-bad { background: var(--fail-soft-2) !important;
             border-radius: 8px;
         }
-            .res-opt.active-na  { background: #F3F4F6 !important;
+            .res-opt.active-na  { background: var(--border-light) !important;
             border-radius: 8px;
         }
             /* 长表超过一页时允许跨页断行，避免整张 .card 被推到第二页造成第一页空白 */
