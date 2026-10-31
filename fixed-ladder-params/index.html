@@ -25,21 +25,21 @@
         .lp-search {
             display: flex; align-items: center; gap: 10px;
             margin: 4px 0 22px;
-            background: #fff; border: 1px solid var(--border, #E3E6EA);
+            background: var(--white); border: 1px solid var(--border, #E3E6EA);
             border-radius: 60px; padding: 10px 18px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
-        .lp-search i { color: var(--brand-red, #F03752); font-size: 16px; }
+        .lp-search i { color: var(--brand-red-deep); font-size: 16px; }
         .lp-search input {
             border: none; outline: none; flex: 1; font-size: 15px;
             background: transparent; color: var(--text-primary);
         }
         .lp-search .clear-btn {
-            border: none; background: transparent; color: #9ca3af;
+            border: none; background: transparent; color: var(--text-tertiary);
             cursor: pointer; font-size: 14px; padding: 2px 6px;
             border-radius: 8px;
         }
-        .lp-search .clear-btn:hover { color: var(--brand-red, #F03752); }
+        .lp-search .clear-btn:hover { color: var(--brand-red-deep); }
         .lp-filters {
             display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;
             border-radius: 8px;
@@ -52,9 +52,9 @@
             border: 1px solid var(--border, #E3E6EA);
             transition: all .18s;
         }
-        .lp-chip:hover { border-color: var(--brand-red, #F03752); color: var(--brand-red, #F03752); }
+        .lp-chip:hover { border-color: var(--brand-red, #F03752); color: var(--brand-red-deep); }
         .lp-chip.active {
-            background: var(--brand-red-surface); color: #fff;
+            background: var(--brand-red-surface); color: var(--white);
             border-color: var(--brand-red-surface);
             border-radius: 8px;
         }
@@ -64,7 +64,7 @@
             gap: 16px;
         }
         .ladder-card {
-            background: #fff; border: 1px solid var(--border, #E3E6EA);
+            background: var(--white); border: 1px solid var(--border, #E3E6EA);
             border-radius: 14px; overflow: hidden;
             transition: box-shadow .2s, transform .2s, border-color .2s;
         }
@@ -80,13 +80,13 @@
         .ladder-card .lc-icon {
             width: 44px; height: 44px; border-radius: 11px;
             background: linear-gradient(135deg, var(--brand-red-surface), var(--brand-red-surface-hover));
-            color: #fff; display: flex; align-items: center; justify-content: center;
+            color: var(--white); display: flex; align-items: center; justify-content: center;
             font-size: 20px; flex-shrink: 0;
         }
         .ladder-card .lc-title { font-size: 16px; font-weight: 700; color: var(--text-primary); }
         .ladder-card .lc-sub { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
         .ladder-card .lc-arrow {
-            margin-left: auto; color: #9ca3af; font-size: 13px;
+            margin-left: auto; color: var(--text-tertiary); font-size: 13px;
             transition: transform .25s;
         }
         .ladder-card.open .lc-arrow { transform: rotate(180deg); }
@@ -94,7 +94,7 @@
         .lc-body.show { display: block; }
         .param-tabs {
             display: flex; border-bottom: 1px solid var(--border, #E3E6EA);
-            background: #fff; overflow-x: auto;
+            background: var(--white); overflow-x: auto;
         }
         .param-tab {
             padding: 10px 13px; font-size: 12.5px; font-weight: 600;
@@ -103,14 +103,14 @@
             transition: all .15s; user-select: none;
             border-radius: 8px;
         }
-        .param-tab:hover { color: var(--brand-red, #F03752); }
-        .param-tab.active { color: var(--brand-red, #F03752); border-bottom-color: var(--brand-red, #F03752);
+        .param-tab:hover { color: var(--brand-red-deep); }
+        .param-tab.active { color: var(--brand-red-deep); border-bottom-color: var(--brand-red, #F03752);
             border-radius: 8px;
         }
-        .param-tab.tab-diagram { color: var(--tech-blue, #2D7EE7);
+        .param-tab.tab-diagram { color: var(--tech-blue-deep);
             border-radius: 8px;
         }
-        .param-tab.tab-diagram.active { color: var(--tech-blue, #2D7EE7); border-bottom-color: var(--tech-blue, #2D7EE7);
+        .param-tab.tab-diagram.active { color: var(--tech-blue-deep); border-bottom-color: var(--tech-blue, #2D7EE7);
             border-radius: 8px;
         }
         .param-content { display: none; padding: 16px 18px; }
@@ -123,11 +123,11 @@
         .param-item:last-child { border-bottom: none; }
         .param-item .pi-bullet { flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--brand-red, #F03752); margin-top: 8px; }
         .param-item .pi-text { flex: 1; color: var(--text-primary); }
-        .param-item .pi-val { color: var(--brand-red, #F03752); font-weight: 700; font-family: "SF Mono", Consolas, monospace; }
-        .param-item .pi-warn { color: var(--warn-orange, #F57C00); font-weight: 600; }
+        .param-item .pi-val { color: var(--brand-red-deep); font-weight: 700; font-family: "SF Mono", Consolas, monospace; }
+        .param-item .pi-warn { color: var(--warn-deep); font-weight: 600; }
         .param-item .pi-note { font-size: 12px; color: var(--text-secondary); margin-top: 3px; padding-left: 16px; }
         .formula-block {
-            background: #fff; border: 1px solid var(--border, #E3E6EA);
+            background: var(--white); border: 1px solid var(--border, #E3E6EA);
             border-radius: 8px; padding: 12px 15px; margin: 8px 0;
             font-family: "SF Mono", Consolas, monospace; font-size: 13px;
             line-height: 1.7; color: var(--text-primary);
@@ -139,11 +139,11 @@
             border-radius: 0 8px 8px 0; padding: 10px 14px;
             margin: 10px 0; font-size: 13px; line-height: 1.6; color: var(--fail-deep);
         }
-        .safety-tip i { color: var(--brand-red, #F03752); margin-right: 6px; }
+        .safety-tip i { color: var(--brand-red-deep); margin-right: 6px; }
         .std-ref { text-align: right; font-size: 11.5px; color: var(--text-secondary); padding: 8px 18px 0; margin-top: 4px; }
-        .std-ref a { color: var(--tech-blue, #2D7EE7); text-decoration: none; }
+        .std-ref a { color: var(--tech-blue-deep); text-decoration: none; }
         .card-diagram {
-            background: #fff; border: 1px solid var(--border, #E3E6EA);
+            background: var(--white); border: 1px solid var(--border, #E3E6EA);
             border-radius: 10px; padding: 14px; text-align: center;
             cursor: pointer; position: relative; transition: box-shadow .2s, transform .15s;
         }
@@ -151,34 +151,34 @@
         .card-diagram svg, .card-diagram .diag-img { width: 100%; max-width: 540px; height: auto; display: block; margin: 0 auto; pointer-events: none; }
         .card-diagram .cd-caption { font-size: 12px; font-weight: 700; color: var(--text-primary); margin-bottom: 10px; }
         .card-diagram .cd-note { font-size: 11.5px; color: var(--text-secondary); margin-top: 10px; line-height: 1.55; text-align: left; }
-        .card-diagram .cd-hint { position: absolute; bottom: 8px; right: 12px; font-size: 10px; color: #9ca3af; pointer-events: none; display: flex; align-items: center; gap: 3px; }
+        .card-diagram .cd-hint { position: absolute; bottom: 8px; right: 12px; font-size: 10px; color: var(--text-tertiary); pointer-events: none; display: flex; align-items: center; gap: 3px; }
         .diag-lightbox { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.65); backdrop-filter: blur(4px); justify-content: center; align-items: center; animation: lb-fade-in .2s ease-out; }
         .diag-lightbox.show { display: flex; }
-        .diag-lightbox-inner { background: #fff; border-radius: 14px; padding: 20px 24px 16px; max-width: 92vw; max-height: 92vh; overflow: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative; text-align: center; }
+        .diag-lightbox-inner { background: var(--white); border-radius: 14px; padding: 20px 24px 16px; max-width: 92vw; max-height: 92vh; overflow: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative; text-align: center; }
         .diag-lightbox-inner svg, .diag-lightbox-inner img { width: 680px; max-width: 90vw; height: auto; }
         .diag-lb-title { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
-        .diag-lb-close { position: absolute; top: 10px; right: 14px; width: 32px; height: 32px; border-radius: 50%; border: none; background: #f0f0f0; color: #666; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; }
-        .diag-lb-close:hover { background: var(--brand-red-surface); color: #fff; }
+        .diag-lb-close { position: absolute; top: 10px; right: 14px; width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--border-light); color: var(--text-secondary); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+        .diag-lb-close:hover { background: var(--brand-red-surface); color: var(--white); }
         @keyframes lb-fade-in { from{opacity:0} to{opacity:1} }
         .lp-actions { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
-        .lp-actions button { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--border, #E3E6EA); background: #fff; color: var(--text-primary); transition: all .15s; }
-        .lp-actions button:hover { border-color: var(--brand-red, #F03752); color: var(--brand-red, #F03752); }
+        .lp-actions button { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--border, #E3E6EA); background: var(--white); color: var(--text-primary); transition: all .15s; }
+        .lp-actions button:hover { border-color: var(--brand-red, #F03752); color: var(--brand-red-deep); }
         .no-result { text-align: center; color: var(--text-secondary); padding: 40px 20px; font-size: 14px; display: none; }
         .no-result i { font-size: 36px; margin-bottom: 10px; display: block; opacity: .3; }
         /* 小计算器 */
-        .calc-box { background: #fff; border: 1px solid var(--border, #E3E6EA); border-radius: 8px; padding: 14px 16px; margin: 10px 0; }
+        .calc-box { background: var(--white); border: 1px solid var(--border, #E3E6EA); border-radius: 8px; padding: 14px 16px; margin: 10px 0; }
         .calc-box .cb-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; flex-wrap: wrap; }
         .calc-box label { font-size: 13px; font-weight: 600; min-width: 96px; }
         .calc-box input { width: 110px; border: 1px solid var(--border, #E3E6EA); border-radius: 6px; padding: 6px 9px; font-size: 13px; font-family: "SF Mono", Consolas, monospace; }
-        .calc-box button { padding: 7px 16px; border-radius: 8px; border: none; background: var(--brand-red-surface); color: #fff; font-weight: 600; font-size: 13px; cursor: pointer; }
+        .calc-box button { padding: 7px 16px; border-radius: 8px; border: none; background: var(--brand-red-surface); color: var(--white); font-weight: 600; font-size: 13px; cursor: pointer; }
         .calc-box .cb-out { margin-top: 8px; font-size: 13px; }
-        .calc-box .cb-out b { color: var(--brand-red, #F03752); font-family: "SF Mono", Consolas, monospace; }
+        .calc-box .cb-out b { color: var(--brand-red-deep); font-family: "SF Mono", Consolas, monospace; }
         .calc-box .cb-err { color: var(--fail); }
         /* 附录表 */
-        table.gb-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12.5px; background: #fff; border: 1px solid var(--border, #E3E6EA); border-radius: 8px; overflow: hidden; }
+        table.gb-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12.5px; background: var(--white); border: 1px solid var(--border, #E3E6EA); border-radius: 8px; overflow: hidden; }
         table.gb-table th, table.gb-table td { border: 1px solid var(--border, #E3E6EA); padding: 7px 9px; text-align: center; }
         table.gb-table th { background: var(--bg-page); color: var(--text-primary); font-weight: 700; }
-        table.gb-table td:first-child { font-weight: 600; background: #fff; }
+        table.gb-table td:first-child { font-weight: 600; background: var(--white); }
         @media (max-width: 640px) {
             .ladder-grid { grid-template-columns: 1fr; }
             .param-tab { padding: 8px 10px; font-size: 11.5px;
