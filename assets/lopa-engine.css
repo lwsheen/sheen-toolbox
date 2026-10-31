@@ -38,7 +38,7 @@
             border: 1px solid #D6E4F7;
             border-radius: 4px;
             padding: 1px 5px;
-            color: var(--tech-blue);
+            color: var(--tech-blue-deep);
         }
 
         /* ===== 步骤卡片 ===== */
@@ -91,7 +91,7 @@
             font-weight: 600;
             color: var(--text-secondary);
         }
-        .lp-field > label .lp-req { color: var(--brand-red); margin-left: 2px; }
+        .lp-field > label .lp-req { color: var(--brand-red-deep); margin-left: 2px; }
         .lp-field .lp-tip {
             font-size: var(--fs-xs);
             color: var(--text-secondary);
@@ -329,7 +329,7 @@
             outline: 3px solid var(--brand-red);
             outline-offset: -3px;
             font-weight: 700;
-            color: var(--brand-red);
+            color: var(--brand-red-deep);
         }
         .lp-mx-legend {
             display: flex;
@@ -416,7 +416,7 @@
             cursor: pointer;
             transition: var(--transition);
         }
-        .lp-tab:hover { border-color: var(--tech-blue); color: var(--tech-blue); }
+        .lp-tab:hover { border-color: var(--tech-blue); color: var(--tech-blue-deep); }
         .lp-tab.on { background: var(--brand-red-surface); border-color: var(--brand-red-surface); color: #fff; font-weight: 600; }
         .lp-panel { display: none; }
         .lp-panel.on { display: block; }
