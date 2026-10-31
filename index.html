@@ -146,7 +146,7 @@
             box-shadow: 0 1px 4px rgba(0,0,0,0.06);
         }
         .pwa-install-btn:hover { background: var(--bg-card); color: var(--brand-red-deep); border-color: var(--brand-red); }
-        .pwa-install-btn i { color: var(--brand-red-deep); }
+        .pwa-install-btn i { color: var(--brand-red); }
         .pwa-install-btn.dismissed { display: none !important; }
         .sheen-header-info {
             display: flex;
@@ -215,13 +215,18 @@
             align-items: center;
             justify-content: center;
             font-size: 14px;
-            background: var(--brand-red-surface);
+            /* 图标瓦片用 **logo 红本体**，不用 surface 档。
+               这里装的是白色 FA 字形（图形），按 WCAG 1.4.11 非文本对比度门槛 3:1，
+               白 on #F03752 = 3.91:1 已达标；surface 档（#D12E47 / 5.01:1）
+               是给「白字压在红底上」的**文本**用的，套到图标上只会把品牌红压暗。
+               （2026-10-31 修正：这一处曾被 #470 的规则误伤） */
+            background: var(--brand-red);
             color: var(--white);
             flex-shrink: 0;
             transition: all 0.2s ease;
         }
         .tool-card:hover .tool-icon {
-            background: var(--brand-red-surface-hover);
+            background: var(--brand-red-hover);
         }
 
         .tool-card .card-text {
@@ -398,7 +403,7 @@
             padding: 12px 16px; border-bottom: 1px solid var(--border-light);
             font-size: 15px; font-weight: 700; color: var(--text-primary);
         }
-        .ai-modal-head i { color: var(--brand-red-deep); }
+        .ai-modal-head i { color: var(--brand-red); }
         .ai-modal-head .ai-modal-sub { font-weight: 400; font-size: 12px; color: var(--text-secondary); margin-left: 2px; }
         .ai-modal-close {
             margin-left: auto; background: transparent; border: 0; cursor: pointer;
@@ -429,8 +434,8 @@
             border-radius: 4px; padding: 1px 8px; font-size: 11px; margin-right: 6px;
         }
         .ai-msg.bot .ai-route b { color: var(--text-primary); }
-        .ai-msg.bot .ai-route i.fa-robot { color: var(--brand-red-deep); margin-right: 4px; }
-        .ai-msg.bot .ai-route i.fa-search { color: var(--tech-blue-deep); margin-right: 4px; }
+        .ai-msg.bot .ai-route i.fa-robot { color: var(--brand-red); margin-right: 4px; }
+        .ai-msg.bot .ai-route i.fa-search { color: var(--tech-blue); margin-right: 4px; }
         .ai-msg.bot .ai-route i.fa-book { color: var(--safe-green, #16A34A); margin-right: 4px; }
         .ai-msg.bot .ai-text { white-space: pre-wrap; }
         .ai-msg.bot .copyright-note { margin-top: 8px; font-size: 12px; color: var(--warn-deep); }
@@ -546,7 +551,7 @@
             font-size: 12px;
             color: var(--text-tertiary);
         }
-        .search-history-item:hover i { color: var(--brand-red-deep); }
+        .search-history-item:hover i { color: var(--brand-red); }
         .search-history-item .sh-term { flex: 1; cursor: pointer; }
         .search-history-item .sh-del {
             background: none; border: none; color: var(--text-tertiary); cursor: pointer;
@@ -591,7 +596,7 @@
             text-decoration: none; white-space: nowrap; transition: all 0.2s; cursor: pointer;
         }
         .recent-chip:hover { border-color: var(--brand-red); color: var(--brand-red-deep); }
-        .recent-chip i { font-size: 12px; color: var(--brand-red-deep); }
+        .recent-chip i { font-size: 12px; color: var(--brand-red); }
         .recent-chip:focus-visible { outline: 2px solid var(--tech-blue); outline-offset: 2px; }
 
         /* 移动端拖拽编辑态 */
@@ -662,7 +667,7 @@
             border-radius: 6px;
             transition: color 0.15s;
         }
-        .donate-btn i { color: var(--brand-red-deep); font-size: 13px; transition: transform 0.15s; }
+        .donate-btn i { color: var(--brand-red); font-size: 13px; transition: transform 0.15s; }
         .donate-btn:hover { color: var(--brand-red-deep); }
         .donate-btn:hover i { transform: scale(1.15); }
         .donate-btn:active { transform: scale(.96); }
@@ -722,7 +727,7 @@
             justify-content: center;
             gap: 6px;
         }
-        .donate-title i { color: var(--brand-red-deep); font-size: 18px; }
+        .donate-title i { color: var(--brand-red); font-size: 18px; }
         .donate-line {
             font-size: 13px;
             color: var(--text-secondary);
@@ -876,7 +881,7 @@
                 <div class="search-history-list" id="searchHistoryList"></div>
                 <div class="search-history-divider" id="searchFavDivider" style="display:none"></div>
                 <div class="search-history-header" id="searchFavHeader" style="display:none; margin-top:0;">
-                    <span><i class="fa-solid fa-star" style="color: var(--brand-red-deep);margin-right:4px"></i>常用工具</span>
+                    <span><i class="fa-solid fa-star" style="color: var(--brand-red);margin-right:4px"></i>常用工具</span>
                 </div>
                 <div class="search-history-list" id="searchFavList"></div>
             </div>
@@ -2143,7 +2148,7 @@
                 var item = document.createElement('a');
                 item.className = 'search-history-item';
                 item.href = href;
-                item.innerHTML = '<i class="fa-solid fa-arrow-right" style="color: var(--brand-red-deep)"></i><span class="sh-term" style="flex:1;cursor:pointer">' + escHtml(label) + '</span>';
+                item.innerHTML = '<i class="fa-solid fa-arrow-right" style="color: var(--brand-red)"></i><span class="sh-term" style="flex:1;cursor:pointer">' + escHtml(label) + '</span>';
                 item.addEventListener('click', function() { closeSearchHistory(); });
                 wrap.appendChild(item);
             });
