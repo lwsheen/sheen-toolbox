@@ -36,14 +36,14 @@
 .scene-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 6px; }
 .scene-card { text-align: left; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; cursor: pointer; font-family: var(--font); transition: all 0.18s; }
 .scene-card:hover { border-color: var(--brand-red); background: var(--brand-red-light); }
-.scene-card i { font-size: 16px; color: var(--brand-red); }
+.scene-card i { font-size: 16px; color: var(--brand-red-deep); }
 .scene-card b { display: block; font-size: 13px; color: var(--text-primary); margin: 6px 0 3px; line-height: 1.4; }
 .scene-card span { display: block; font-size: 11px; color: var(--text-secondary); line-height: 1.5; }
 
 .ex-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border); }
 .ex-label { font-size: 11px; color: var(--text-secondary); display: flex; align-items: center; gap: 5px; }
 .ex-chip { font-size: 11.5px; font-weight: 600; padding: 5px 12px; border-radius: 60px; background: var(--tech-blue-soft); color: var(--tech-blue-deep); border: none; cursor: pointer; font-family: var(--font); }
-.ex-chip:hover { background: var(--brand-red-surface); color: #fff; }
+.ex-chip:hover { background: var(--brand-red-surface); color: var(--white); }
 
 
 
@@ -63,7 +63,7 @@
 
 
 .data-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 14px; }
-.data-table th { background: var(--brand-red-surface); color: #fff; padding: 8px 9px; text-align: center; font-weight: 600; font-size: 11px; }
+.data-table th { background: var(--brand-red-surface); color: var(--white); padding: 8px 9px; text-align: center; font-weight: 600; font-size: 11px; }
 .data-table th:first-child { text-align: left; }
 .data-table td { padding: 7px 9px; border-bottom: 1px solid var(--border-light); text-align: center; font-variant-numeric: tabular-nums; }
 .data-table td:first-child { text-align: left; }
@@ -96,7 +96,7 @@
 <style>
 @media print {
   @page { size: A4; margin: 16mm 12mm 18mm 12mm; }
-  body { background: #fff !important; padding: 0 !important; font-size: 11pt; color: #000 !important; }
+  body { background: var(--white) !important; padding: 0 !important; font-size: 11pt; color: var(--black) !important; }
   .breadcrumb, .btn-primary, .btn-print, .sheen-footer, .no-print, .no-pr, .form-grid, .scene-grid { display: none !important; }
   .tab-panel { display: block !important; border: none !important; padding: 0 0 12pt 0 !important; page-break-inside: avoid; }
   .app-container { box-shadow: none !important; border: none !important; max-width: 100% !important; padding: 0 !important; }
@@ -126,7 +126,7 @@ var _hmt = _hmt || [];
 
 <main class="app-container container-query">
 
-  <h1 class="page-title"><i class="fa-solid fa-valve" style="color:var(--brand-red)"></i> 泄放量计算与安全阀爆破片选型</h1>
+  <h1 class="page-title"><i class="fa-solid fa-valve" style="color: var(--brand-red-deep)"></i> 泄放量计算与安全阀爆破片选型</h1>
   <p class="page-subtitle" style="margin-bottom:16px;">按现行标准公式算所需泄放量与泄放面积，再反查安全阀流道直径 / 爆破片公称口径与整定压力 — 适用于压力容器与工业管道</p>
 
   <div class="warn-bar warning">
@@ -170,12 +170,12 @@ var _hmt = _hmt || [];
         <div class="hint">⚠️ 气液两相流需按 GB/T 20801.6-2020 附录B 另算，本工具不覆盖</div>
       </div>
       <div class="form-row">
-        <label>已知泄放量 W (kg/h) <span style="color:var(--brand-red)">*</span></label>
+        <label>已知泄放量 W (kg/h) <span style="color: var(--brand-red-deep)">*</span></label>
         <input type="number" class="form-control" id="fW" value="1000" min="0" step="1" oninput="rvCalc()">
         <div class="hint">来源：GB/T 150.1-2024 附录B、或你的工艺热量衡算结果</div>
       </div>
       <div class="form-row" id="rowPf">
-        <label>泄放压力 p_f (MPa, <span id="lblPf">绝压</span>) <span style="color:var(--brand-red)">*</span></label>
+        <label>泄放压力 p_f (MPa, <span id="lblPf">绝压</span>) <span style="color: var(--brand-red-deep)">*</span></label>
         <input type="number" class="form-control" id="fPf" value="0.6" min="0.001" step="0.01" oninput="rvCalc()">
         <div class="hint" id="hintPf">气体按绝压代入公式；一般取整定压力 × 1.03~1.10（未超压的用绝压）</div>
       </div>
@@ -185,7 +185,7 @@ var _hmt = _hmt || [];
         <div class="hint">大气排放取 0.1013；排入火炬/封闭管取实际背压</div>
       </div>
       <div class="form-row" id="rowM" style="display:none;">
-        <label>介质摩尔质量 M (kg/kmol) <span style="color:var(--brand-red)">*</span></label>
+        <label>介质摩尔质量 M (kg/kmol) <span style="color: var(--brand-red-deep)">*</span></label>
         <input type="number" class="form-control" id="fM" value="28.97" min="0.1" step="0.01" oninput="rvCalc()">
         <div class="hint">或从下方气体性质表选介质自动填入</div>
       </div>
@@ -195,7 +195,7 @@ var _hmt = _hmt || [];
         <div class="hint">不明时 GB/T 567.2 表C.4 规定取 k=1.0（保守）；k=1 时 C″≈23.96</div>
       </div>
       <div class="form-row" id="rowT" style="display:none;">
-        <label>泄放温度 T_f (K) <span style="color:var(--brand-red)">*</span></label>
+        <label>泄放温度 T_f (K) <span style="color: var(--brand-red-deep)">*</span></label>
         <input type="number" class="form-control" id="fT" value="293" min="100" max="1500" step="1" oninput="rvCalc()">
         <div class="hint">常温 20 ℃ = 293 K；取介质实际温度的绝对值</div>
       </div>
@@ -210,7 +210,7 @@ var _hmt = _hmt || [];
         <div class="hint">仅过热蒸汽需要；饱和蒸汽填任意值即可</div>
       </div>
       <div class="form-row" id="rowRho" style="display:none;">
-        <label>液体密度 ρ (kg/m³) <span style="color:var(--brand-red)">*</span></label>
+        <label>液体密度 ρ (kg/m³) <span style="color: var(--brand-red-deep)">*</span></label>
         <input type="number" class="form-control" id="fRho" value="1000" min="1" step="1" oninput="rvCalc()">
         <div class="hint">取泄放温度下的密度；水 20 ℃ ≈ 998，盐水更高</div>
       </div>
@@ -225,7 +225,7 @@ var _hmt = _hmt || [];
         <div class="hint">GB/T 567.2-2012 表C.3；爆破片后接安全阀组合时 K_c=0.9</div>
       </div>
       <div class="form-row" id="rowDp" style="display:none;">
-        <label>有效压差 Δp (MPa) <span style="color:var(--brand-red)">*</span></label>
+        <label>有效压差 Δp (MPa) <span style="color: var(--brand-red-deep)">*</span></label>
         <input type="number" class="form-control" id="fDp" value="0.5" min="0.001" step="0.01" oninput="rvCalc()">
         <div class="hint">= 泄放压力 − 背压（绝压之差）</div>
       </div>
@@ -356,7 +356,7 @@ var _hmt = _hmt || [];
         <div class="hint">可从第 1 页签结果直接带入</div>
       </div>
       <div class="form-row">
-        <label>设备工作压力 p_w (MPa) <span style="color:var(--brand-red)">*</span></label>
+        <label>设备工作压力 p_w (MPa) <span style="color: var(--brand-red-deep)">*</span></label>
         <input type="number" class="form-control" id="dPw" value="1.0" min="0" step="0.01" oninput="rvDisc()">
         <div class="hint">用于反算最小爆破压力下限</div>
       </div>
@@ -443,7 +443,7 @@ var _hmt = _hmt || [];
         </select>
       </div>
       <div class="form-row">
-        <label>设计压力 / MAWP (MPa) <span style="color:var(--brand-red)">*</span></label>
+        <label>设计压力 / MAWP (MPa) <span style="color: var(--brand-red-deep)">*</span></label>
         <input type="number" class="form-control" id="pPd" value="1.6" min="0" step="0.01" oninput="rvPress()">
       </div>
       <div class="form-row">
@@ -1396,7 +1396,7 @@ window.rvEx3 = function (i) {
 function rvExNote(noteId, text) {
   var el = $(noteId); if (!el) return;
   if (el.innerHTML.indexOf('fa-wand-magic-sparkles') >= 0) return;
-  el.innerHTML += '<br><span style="color:var(--tech-blue);font-weight:600;"><i class="fa-solid fa-wand-magic-sparkles"></i> ' + text + '</span>';
+  el.innerHTML += '<br><span style="color: var(--tech-blue-deep);font-weight:600;"><i class="fa-solid fa-wand-magic-sparkles"></i> ' + text + '</span>';
 }
 
 // ===== 渲染 =====
