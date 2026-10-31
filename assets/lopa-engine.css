@@ -55,7 +55,7 @@
             flex: 0 0 auto;
             width: 24px; height: 24px;
             border-radius: 50%;
-            background: var(--brand-red);
+            background: var(--brand-red-surface);
             color: #fff;
             font-size: var(--fs-sm);
             font-weight: 700;
@@ -121,7 +121,7 @@
         .lp-radio-row label.on {
             border-color: var(--brand-red);
             background: var(--brand-red-light);
-            color: var(--brand-red);
+            color: var(--brand-red-deep);
             font-weight: 600;
         }
 
@@ -213,7 +213,7 @@
             transition: var(--transition);
             width: 100%;
         }
-        .lp-add-btn:hover { border-color: var(--tech-blue); color: var(--tech-blue); background: var(--tech-blue-soft); }
+        .lp-add-btn:hover { border-color: var(--tech-blue); color: var(--tech-blue-deep); background: var(--tech-blue-soft); }
 
         /* ===== 场景小计 ===== */
         .lp-subtotal {
@@ -417,7 +417,7 @@
             transition: var(--transition);
         }
         .lp-tab:hover { border-color: var(--tech-blue); color: var(--tech-blue); }
-        .lp-tab.on { background: var(--brand-red); border-color: var(--brand-red); color: #fff; font-weight: 600; }
+        .lp-tab.on { background: var(--brand-red-surface); border-color: var(--brand-red-surface); color: #fff; font-weight: 600; }
         .lp-panel { display: none; }
         .lp-panel.on { display: block; }
         .lp-ref-table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
