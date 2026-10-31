@@ -162,7 +162,7 @@
 
             font-weight: 600;
 
-            color: var(--brand-red);
+            color: var(--brand-red-deep);
 
         }
 
@@ -234,7 +234,7 @@
 
             font-weight: 600;
 
-            color: var(--brand-red);
+            color: var(--brand-red-deep);
 
         }
 
@@ -300,7 +300,7 @@
 
             border-color: var(--brand-red);
 
-            color: var(--brand-red);
+            color: var(--brand-red-deep);
 
         }
 
@@ -308,7 +308,7 @@
 
             background: var(--brand-red-surface);
 
-            color: #fff;
+            color: var(--white);
 
             border-color: var(--brand-red-surface);
             border-radius: 8px;
@@ -317,13 +317,13 @@
         @media print {
             body {
 
-                background: #fff !important;
+                background: var(--white) !important;
 
                 padding: 0 !important;
 
                 font-size: 12pt;
 
-                color: #000 !important;
+                color: var(--black) !important;
 
             }
 
@@ -345,13 +345,13 @@
 
             .result-table th {
 
-                background: #f9f9f9 !important;
+                background: var(--bg-page) !important;
 
             }
 
             .chemical-name {
 
-                color: #000 !important;
+                color: var(--black) !important;
 
             }
 
@@ -567,7 +567,7 @@ document.getElementById('printTime').textContent = new Date(Date.now() + 8 * 360
 
                     <tr>
 
-                        <td colspan="4" style="text-align: center; padding: 40px; color: #F03752;">
+                        <td colspan="4" style="text-align: center; padding: 40px; color: #B3243B;">
 
                             数据加载失败，请检查 data.json 文件
 
@@ -805,9 +805,9 @@ window.exportResult = function(resultId, filename) {
     '<style>body{font-family:system-ui,-apple-system,sans-serif;padding:24px;color:#1E2126;line-height:1.6;max-width:900px;margin:0 auto}' +
     'table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}th,td{border:1px solid #E3E6EA;padding:8px;text-align:left}' +
     'th{background:#F8F9FA;font-weight:600}.result-value{background:#FDEEF1;border-left:6px solid #F03752;' +
-    'padding:20px;border-radius:12px;margin:16px 0}.number{font-size:36px;font-weight:700;color:#F03752}' +
-    'h1{color:#F03752;font-size:20px;margin-bottom:4px}h4{color:#F03752;margin:16px 0 8px}' +
-    '.stats-count{color:#F03752;font-weight:700}</style></head><body>' +
+    'padding:20px;border-radius:12px;margin:16px 0}.number{font-size:36px;font-weight:700;color: #B3243B}' +
+    'h1{color: #B3243B;font-size:20px;margin-bottom:4px}h4{color: #B3243B;margin:16px 0 8px}' +
+    '.stats-count{color: #B3243B;font-weight:700}</style></head><body>' +
     '<h1 class="page-title">📋 ' + filename + '</h1>' +
     '<p style="color:#5C6470;font-size:12px;margin-top:0;">导出时间：' +
     new Date().toLocaleString('zh-CN') + '</p>' +
