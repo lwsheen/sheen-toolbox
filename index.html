@@ -20,16 +20,16 @@
     <link rel="icon" type="image/png" sizes="512x512" href="/sheen-toolbox/assets/icon-512.png">
 
     <title>SHEEN Toolbox · 环境健康安全专业工具箱</title>
-    <meta name="description" content="EHS  专业计算、查询与分析工具集 · 63 款免费在线工具">
+    <meta name="description" content="EHS  专业计算、查询与分析工具集 · 64 款免费在线工具">
     <meta property="og:title" content="SHEEN Toolbox · 环境健康安全专业工具箱">
-    <meta property="og:description" content="EHS 专业计算、查询与分析工具集 · 63 款免费在线工具">
+    <meta property="og:description" content="EHS 专业计算、查询与分析工具集 · 64 款免费在线工具">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="zh_CN">
     <meta property="og:locale:alternate" content="en_US">
     <meta property="og:url" content="https://lwsheen.pages.dev/sheen-toolbox/">
     <meta property="og:image" content="https://lwsheen.pages.dev/sheen-toolbox/assets/share/home.png">
     <link rel="canonical" href="https://lwsheen.pages.dev/sheen-toolbox/">
-    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "SHEEN Toolbox · 环境健康安全专业工具箱", "url": "https://lwsheen.pages.dev/sheen-toolbox/", "description": "EHS 专业计算、查询与分析工具集 · 63 款免费在线工具", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "inLanguage": "zh-CN", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "CNY"}, "publisher": {"@type": "Organization", "name": "SHEEN Toolbox"}}</script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "SHEEN Toolbox · 环境健康安全专业工具箱", "url": "https://lwsheen.pages.dev/sheen-toolbox/", "description": "EHS 专业计算、查询与分析工具集 · 64 款免费在线工具", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "inLanguage": "zh-CN", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "CNY"}, "publisher": {"@type": "Organization", "name": "SHEEN Toolbox"}}</script>
 
     <link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css" />
 <link rel="stylesheet" href="/sheen-toolbox/common.css">
@@ -58,7 +58,7 @@
             clip: auto;
             white-space: normal;
             background: var(--brand-red-surface);
-            color: #fff;
+            color: var(--white);
             border-radius: 8px;
             text-decoration: none;
             font-weight: 600;
@@ -90,7 +90,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            color: #fff;
+            color: var(--white);
             font-size: 16px;
             font-weight: 700;
             letter-spacing: 0.5px;
@@ -145,8 +145,8 @@
             cursor: pointer;
             box-shadow: 0 1px 4px rgba(0,0,0,0.06);
         }
-        .pwa-install-btn:hover { background: var(--bg-card); color: var(--brand-red); border-color: var(--brand-red); }
-        .pwa-install-btn i { color: var(--brand-red); }
+        .pwa-install-btn:hover { background: var(--bg-card); color: var(--brand-red-deep); border-color: var(--brand-red); }
+        .pwa-install-btn i { color: var(--brand-red-deep); }
         .pwa-install-btn.dismissed { display: none !important; }
         .sheen-header-info {
             display: flex;
@@ -216,7 +216,7 @@
             justify-content: center;
             font-size: 14px;
             background: var(--brand-red-surface);
-            color: #fff;
+            color: var(--white);
             flex-shrink: 0;
             transition: all 0.2s ease;
         }
@@ -260,7 +260,7 @@
         }
         .tool-card.placeholder:active { transform: none; }
         .tool-card.placeholder .tool-icon {
-            background: #F3F4F6;
+            background: var(--border-light);
             color: var(--text-secondary);
         }
         .tool-card.placeholder h3 {
@@ -289,9 +289,9 @@
             opacity: 0.4;
             transition: all 0.2s;
         }
-        .tool-card:hover .drag-handle { color: var(--brand-red); opacity: 1; }
+        .tool-card:hover .drag-handle { color: var(--brand-red-deep); opacity: 1; }
         .tool-grid.filtering .tool-card .drag-handle { display: none; }
-        .tool-card .core-badge{position:absolute;top:50%;right:12px;transform:translateY(-50%);color:var(--brand-red,#F03752);font-size:12px;font-weight:600;letter-spacing:1px;z-index:2}
+        .tool-card .core-badge{position:absolute;top:50%;right:12px;transform:translateY(-50%);color: var(--brand-red-deep);font-size:12px;font-weight:600;letter-spacing:1px;z-index:2}
         .tool-card .coming-badge { display: none; }
         /* 新品角标（30 天内上线） */
         .tool-card .new-badge {
@@ -299,7 +299,7 @@
             top: -7px;
             right: -7px;
             background: var(--brand-red-surface);
-            color: #fff;
+            color: var(--white);
             font-size: 10px;
             font-weight: 700;
             line-height: 1;
@@ -348,7 +348,7 @@
             font-size: 13px;
             padding: 2px 4px;
         }
-        .search-clear:hover { color: var(--brand-red); }
+        .search-clear:hover { color: var(--brand-red-deep); }
         /* ===== 首页 AI 助手入口（搜索框右侧 pill：图标 + 问 AI）+ 弹窗 ===== */
         .ai-icon-btn {
             display: inline-flex; align-items: center; justify-content: center;
@@ -358,7 +358,7 @@
             padding: 0 11px 0 9px;
             border: 1px solid rgba(240,55,82,.25);
             background: rgba(240,55,82,.06);
-            color: var(--brand-red);
+            color: var(--brand-red-deep);
             cursor: pointer;
             border-radius: 60px;
             font-size: 13px;
@@ -398,20 +398,20 @@
             padding: 12px 16px; border-bottom: 1px solid var(--border-light);
             font-size: 15px; font-weight: 700; color: var(--text-primary);
         }
-        .ai-modal-head i { color: var(--brand-red); }
+        .ai-modal-head i { color: var(--brand-red-deep); }
         .ai-modal-head .ai-modal-sub { font-weight: 400; font-size: 12px; color: var(--text-secondary); margin-left: 2px; }
         .ai-modal-close {
             margin-left: auto; background: transparent; border: 0; cursor: pointer;
             font-size: 20px; color: var(--text-secondary); line-height: 1;
         }
-        .ai-modal-close:hover { color: var(--brand-red); }
+        .ai-modal-close:hover { color: var(--brand-red-deep); }
         .ai-modal-body {
             flex: 1; overflow-y: auto; padding: 14px 16px;
             display: flex; flex-direction: column; gap: 14px;
         }
         .ai-msg { max-width: 88%; line-height: 1.7; font-size: 14px; white-space: pre-wrap; }
         .ai-msg.user {
-            align-self: flex-end; background: var(--brand-red-surface); color: #fff;
+            align-self: flex-end; background: var(--brand-red-surface); color: var(--white);
             padding: 9px 13px; border-radius: 14px 14px 4px 14px;
         }
         .ai-msg.bot {
@@ -425,15 +425,15 @@
             white-space: normal;
         }
         .ai-msg.bot .ai-route .chip {
-            display: inline-block; background: var(--brand-red-surface); color: #fff;
+            display: inline-block; background: var(--brand-red-surface); color: var(--white);
             border-radius: 4px; padding: 1px 8px; font-size: 11px; margin-right: 6px;
         }
         .ai-msg.bot .ai-route b { color: var(--text-primary); }
-        .ai-msg.bot .ai-route i.fa-robot { color: var(--brand-red); margin-right: 4px; }
-        .ai-msg.bot .ai-route i.fa-search { color: var(--tech-blue); margin-right: 4px; }
+        .ai-msg.bot .ai-route i.fa-robot { color: var(--brand-red-deep); margin-right: 4px; }
+        .ai-msg.bot .ai-route i.fa-search { color: var(--tech-blue-deep); margin-right: 4px; }
         .ai-msg.bot .ai-route i.fa-book { color: var(--safe-green, #16A34A); margin-right: 4px; }
         .ai-msg.bot .ai-text { white-space: pre-wrap; }
-        .ai-msg.bot .copyright-note { margin-top: 8px; font-size: 12px; color: var(--warn-orange); }
+        .ai-msg.bot .copyright-note { margin-top: 8px; font-size: 12px; color: var(--warn-deep); }
         .ai-msg.bot .ai-sources, .ai-msg.bot .ai-related { margin-top: 10px; }
         .ai-msg.bot .ai-sub { font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; font-weight: 600; }
         .ai-msg.bot .ai-src-item { font-size: 13px; line-height: 1.7; color: var(--text-primary); }
@@ -443,7 +443,7 @@
         .ai-msg.bot .ai-draft-row { margin-top: 12px; }
         .ai-msg.bot .ai-draft-btn { cursor: pointer; border: none; }
         .ai-msg.bot .ai-draft-ok { font-size: 12px; color: var(--safe-green, #16A34A); line-height: 1.7; }
-        .ai-msg.bot .ai-draft-err { font-size: 12px; color: var(--warn-orange, #F57C00); line-height: 1.7; }
+        .ai-msg.bot .ai-draft-err { font-size: 12px; color: var(--warn-deep); line-height: 1.7; }
         .ai-modal-foot {
             display: flex; gap: 10px; padding: 12px 16px; border-top: 1px solid var(--border-light);
         }
@@ -452,9 +452,9 @@
             border-radius: 10px; font-size: 14px; color: var(--text-primary); background: var(--bg-page);
             font-family: var(--font);
         }
-        .ai-modal-foot input:focus { outline: none; border-color: var(--brand-red); background: #fff; }
+        .ai-modal-foot input:focus { outline: none; border-color: var(--brand-red); background: var(--white); }
         .ai-ask-btn {
-            background: var(--brand-red-surface); color: #fff; border: 0; border-radius: 10px;
+            background: var(--brand-red-surface); color: var(--white); border: 0; border-radius: 10px;
             padding: 0 20px; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap;
             flex-shrink: 0;
         }
@@ -463,7 +463,7 @@
         .ai-msg.bot a.ai-link-btn {
             display: inline-flex; align-items: center; gap: 6px;
             margin-top: 10px; padding: 8px 14px;
-            background: var(--brand-red-surface); color: #fff; text-decoration: none;
+            background: var(--brand-red-surface); color: var(--white); text-decoration: none;
             border-radius: 9px; font-size: 13px; font-weight: 600;
         }
         .ai-msg.bot a.ai-link-btn:hover { background: var(--brand-red-surface-hover); }
@@ -516,7 +516,7 @@
             font-size: 12px;
             padding: 4px;
         }
-        .search-history-header button:hover { color: var(--brand-red); }
+        .search-history-header button:hover { color: var(--brand-red-deep); }
         .search-history-list {
             display: flex;
             flex-direction: column;
@@ -546,7 +546,7 @@
             font-size: 12px;
             color: var(--text-tertiary);
         }
-        .search-history-item:hover i { color: var(--brand-red); }
+        .search-history-item:hover i { color: var(--brand-red-deep); }
         .search-history-item .sh-term { flex: 1; cursor: pointer; }
         .search-history-item .sh-del {
             background: none; border: none; color: var(--text-tertiary); cursor: pointer;
@@ -566,14 +566,14 @@
             transition: all 0.2s;
             font-family: var(--font);
         }
-        .chip:hover { border-color: var(--brand-red); color: var(--brand-red); }
-        .chip.active { background: var(--brand-red-surface); border-color: var(--brand-red-surface); color: #fff; }
+        .chip:hover { border-color: var(--brand-red); color: var(--brand-red-deep); }
+        .chip.active { background: var(--brand-red-surface); border-color: var(--brand-red-surface); color: var(--white); }
         .filter-hint { text-align: center; font-size: 12px; color: var(--text-secondary); margin-top: 10px; }
-        .filter-hint a { color: var(--brand-red); text-decoration: none; cursor: pointer; }
+        .filter-hint a { color: var(--brand-red-deep); text-decoration: none; cursor: pointer; }
         .filter-hint a:hover { text-decoration: underline; }
         /* chips 键盘焦点可达性 */
         .chip:focus-visible { outline: 2px solid var(--tech-blue); outline-offset: 2px; }
-        .chip[aria-pressed="true"] { background: var(--brand-red-surface); border-color: var(--brand-red-surface); color: #fff; }
+        .chip[aria-pressed="true"] { background: var(--brand-red-surface); border-color: var(--brand-red-surface); color: var(--white); }
 
         /* 常用工具快捷区 */
         .recent-bar { max-width: 1160px; margin: 6px auto 0; padding: 0 24px; width: 100%; }
@@ -590,8 +590,8 @@
             background: var(--bg-card); color: var(--text-primary); font-size: 13px; font-weight: 500;
             text-decoration: none; white-space: nowrap; transition: all 0.2s; cursor: pointer;
         }
-        .recent-chip:hover { border-color: var(--brand-red); color: var(--brand-red); }
-        .recent-chip i { font-size: 12px; color: var(--brand-red); }
+        .recent-chip:hover { border-color: var(--brand-red); color: var(--brand-red-deep); }
+        .recent-chip i { font-size: 12px; color: var(--brand-red-deep); }
         .recent-chip:focus-visible { outline: 2px solid var(--tech-blue); outline-offset: 2px; }
 
         /* 移动端拖拽编辑态 */
@@ -607,20 +607,20 @@
             border-radius: 6px; color: var(--text-secondary); cursor: pointer; font-size: 11px;
             display: flex; align-items: center; justify-content: center; line-height: 1; padding: 0;
         }
-        .tool-card .move-btns button:hover { border-color: var(--brand-red); color: var(--brand-red); }
+        .tool-card .move-btns button:hover { border-color: var(--brand-red); color: var(--brand-red-deep); }
         .tool-card .move-btns button:disabled { opacity: 0.3; cursor: not-allowed; }
         .edit-toggle {
             margin-left: 8px; padding: 4px 12px; border-radius: 60px; border: 1.5px solid var(--border);
             background: var(--bg-card); color: var(--text-secondary); font-size: 12px; font-weight: 600;
             cursor: pointer; transition: all 0.2s; font-family: var(--font);
         }
-        .edit-toggle:hover { border-color: var(--brand-red); color: var(--brand-red); }
-        .edit-toggle.active { background: var(--brand-red-surface); border-color: var(--brand-red-surface); color: #fff; }
+        .edit-toggle:hover { border-color: var(--brand-red); color: var(--brand-red-deep); }
+        .edit-toggle.active { background: var(--brand-red-surface); border-color: var(--brand-red-surface); color: var(--white); }
         .edit-toggle:focus-visible { outline: 2px solid var(--tech-blue); outline-offset: 2px; }
 
         /* 筛选组合上下文提示 */
         .filter-context {
-            text-align: center; font-size: 12px; color: var(--brand-red); margin-top: 6px; min-height: 0;
+            text-align: center; font-size: 12px; color: var(--brand-red-deep); margin-top: 6px; min-height: 0;
             transition: all 0.2s; font-weight: 500;
         }
         .filter-context:empty { margin-top: 0; }
@@ -662,8 +662,8 @@
             border-radius: 6px;
             transition: color 0.15s;
         }
-        .donate-btn i { color: var(--brand-red); font-size: 13px; transition: transform 0.15s; }
-        .donate-btn:hover { color: var(--brand-red); }
+        .donate-btn i { color: var(--brand-red-deep); font-size: 13px; transition: transform 0.15s; }
+        .donate-btn:hover { color: var(--brand-red-deep); }
         .donate-btn:hover i { transform: scale(1.15); }
         .donate-btn:active { transform: scale(.96); }
         @media (max-width: 480px) { .donate-btn { font-size: 12px; padding: 3px 6px; } }
@@ -711,7 +711,7 @@
             border-radius: 4px;
             font-family: var(--font);
         }
-        .donate-close:hover { color: var(--brand-red); background: rgba(240,55,82,0.06); }
+        .donate-close:hover { color: var(--brand-red-deep); background: rgba(240,55,82,0.06); }
         .donate-title {
             font-size: 16px;
             font-weight: 700;
@@ -722,7 +722,7 @@
             justify-content: center;
             gap: 6px;
         }
-        .donate-title i { color: var(--brand-red); font-size: 18px; }
+        .donate-title i { color: var(--brand-red-deep); font-size: 18px; }
         .donate-line {
             font-size: 13px;
             color: var(--text-secondary);
@@ -747,7 +747,7 @@
             height: 168px;
             margin: 0 auto;
             padding: 6px;
-            background: #fff;
+            background: var(--white);
             border-radius: 8px;
             box-shadow: 0 1px 4px rgba(0,0,0,0.08);
             display: flex;
@@ -876,7 +876,7 @@
                 <div class="search-history-list" id="searchHistoryList"></div>
                 <div class="search-history-divider" id="searchFavDivider" style="display:none"></div>
                 <div class="search-history-header" id="searchFavHeader" style="display:none; margin-top:0;">
-                    <span><i class="fa-solid fa-star" style="color:var(--brand-red);margin-right:4px"></i>常用工具</span>
+                    <span><i class="fa-solid fa-star" style="color: var(--brand-red-deep);margin-right:4px"></i>常用工具</span>
                 </div>
                 <div class="search-history-list" id="searchFavList"></div>
             </div>
@@ -1008,6 +1008,13 @@
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
             <div class="tool-icon"><i class="fa-solid fa-sitemap"></i></div>
             <div class="card-text"><h3 title="行业分类查询">行业分类查询</h3></div>
+            <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+        <a href="/sheen-toolbox/occupational-risk-classification/" class="tool-card" draggable="true" data-cat="查询" data-zh-desc="职业病危害风险分级" data-slug="occupational-risk-classification">
+            <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
+            <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
+            <div class="tool-icon"><i class="fa-solid fa-industry"></i></div>
+            <div class="card-text"><h3 title="职业病风险分类查询">职业病风险分类查询</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
         <a href="/sheen-toolbox/accident-classification/" class="tool-card" draggable="true" data-cat="查询" data-zh-desc="GB 6441-2025 事故类型与编码" data-slug="accident-classification">
@@ -1388,7 +1395,7 @@
     </button>
 
     <div id="apiToggle" onclick="toggleApi()" title="API配置" style="position:fixed;bottom:24px;left:24px;z-index:99;width:28px;height:28px;border-radius:6px;background:rgba(255,255,255,0.92);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;box-shadow:0 1px 4px rgba(0,0,0,0.06);color:var(--text-secondary);"><i class="fa-solid fa-key"></i></div>
-    <span id="apiStatusH" style="position:fixed;bottom:24px;left:62px;z-index:99;display:flex;align-items:center;gap:6px;padding:6px 12px;background:rgba(255,255,255,0.92);color:#F03752;border:1px solid #F03752;border-radius:6px;font-size:12px;font-weight:500;box-shadow:0 1px 4px rgba(0,0,0,0.06);"><i class="fa-solid fa-circle-xmark" style="font-size:11px"></i><span id="apiStatusText" data-i18n="apiNotConfigured">未配置</span></span>
+    <span id="apiStatusH" style="position:fixed;bottom:24px;left:62px;z-index:99;display:flex;align-items:center;gap:6px;padding:6px 12px;background:rgba(255,255,255,0.92);color: var(--brand-red-deep);border:1px solid #F03752;border-radius:6px;font-size:12px;font-weight:500;box-shadow:0 1px 4px rgba(0,0,0,0.06);"><i class="fa-solid fa-circle-xmark" style="font-size:11px"></i><span id="apiStatusText" data-i18n="apiNotConfigured">未配置</span></span>
 
     <!-- API 配置弹窗 -->
     <div id="apiModalH" style="display:none;position:fixed;bottom:80px;left:24px;width:360px;z-index:100;background:var(--bg-card);border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.15);padding:20px;">
@@ -1404,13 +1411,13 @@
       </div>
       <div id="ownSectionH">
         <input type="text" id="apiKeyH" placeholder="API Key (xxxxxx.xxxx)" style="width:100%;padding:8px;border:1.5px solid var(--border);border-radius:8px;font-family:monospace;font-size:12px;margin-bottom:8px;">
-        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;"><a href="https://open.bigmodel.cn/" target="_blank" style="color:var(--brand-red);">获取智谱免费 Key →</a></p>
+        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;"><a href="https://open.bigmodel.cn/" target="_blank" style="color: var(--brand-red-deep);">获取智谱免费 Key →</a></p>
       </div>
       <div id="proxySectionH" style="display:none;">
         <input type="text" id="proxyUrlH" placeholder="代理地址" style="width:100%;padding:8px;border:1.5px solid var(--border);border-radius:8px;font-family:monospace;font-size:12px;margin-bottom:8px;">
       </div>
       <div style="display:flex;gap:8px;">
-        <button class="btn btn-primary" onclick="saveApiH()" style="padding:8px 20px;border-radius:60px;font-size:13px;background:var(--brand-red-surface);color:#fff;border:none;cursor:pointer;">保存</button>
+        <button class="btn btn-primary" onclick="saveApiH()" style="padding:8px 20px;border-radius:60px;font-size:13px;background:var(--brand-red-surface);color:var(--white);border:none;cursor:pointer;">保存</button>
         <button class="btn btn-outline" onclick="document.getElementById('apiModalH').style.display='none'" style="padding:8px 20px;border-radius:60px;font-size:13px;background:var(--bg-card);border:1.5px solid var(--border);cursor:pointer;">关闭</button>
       </div>
     </div>
@@ -1472,7 +1479,7 @@
         var NEW_WINDOW_DAYS = 30;
         // tool-meta.json 拉取失败时的兜底：此处仅列最近 30 天内上线的工具，
         // 与 released 判定是同一批；拉取成功则完全由 applyNew 裁决（含过期撤标）。
-        var FALLBACK_NEW_SLUGS = ['machine-guard-design', 'relief-device-sizing', 'bund-capacity-calculator', 'pha-analysis'];
+        var FALLBACK_NEW_SLUGS = ['machine-guard-design', 'relief-device-sizing', 'bund-capacity-calculator', 'pha-analysis', 'occupational-risk-classification'];
 
         function markNew(card) {
             if (!card.classList.contains('is-new')) card.classList.add('is-new');
@@ -1763,14 +1770,14 @@
           var text = document.getElementById('apiStatusText');
           var base = 'position:fixed;bottom:24px;left:62px;z-index:99;display:flex;align-items:center;gap:6px;padding:6px 12px;background:rgba(255,255,255,0.92);border-radius:6px;font-size:12px;font-weight:500;box-shadow:0 1px 4px rgba(0,0,0,0.06);';
           if (m==='proxy' && p) {
-            el.innerHTML = '<i class="fa-solid fa-circle-check" style="font-size:11px"></i><span data-i18n="apiNoKey">免Key</span>'; el.style.cssText = base + 'color:#16A34A;border-color:#16A34A;';
+            el.innerHTML = '<i class="fa-solid fa-circle-check" style="font-size:11px"></i><span data-i18n="apiNoKey">免Key</span>'; el.style.cssText = base + 'color:var(--ok-deep);border-color:#16A34A;';
             // 重新挂字典 key 以便 applyLang 翻译
             var sp = el.querySelector('[data-i18n="apiNoKey"]'); if (sp && !sp.__zh) sp.__zh = sp.textContent;
           } else if (k) {
-            el.innerHTML = '<i class="fa-solid fa-circle-check" style="font-size:11px"></i><span data-i18n="apiReady">AI就绪</span>'; el.style.cssText = base + 'color:#16A34A;border-color:#16A34A;';
+            el.innerHTML = '<i class="fa-solid fa-circle-check" style="font-size:11px"></i><span data-i18n="apiReady">AI就绪</span>'; el.style.cssText = base + 'color:var(--ok-deep);border-color:#16A34A;';
             var sp = el.querySelector('[data-i18n="apiReady"]'); if (sp && !sp.__zh) sp.__zh = sp.textContent;
           } else {
-            el.innerHTML = '<i class="fa-solid fa-circle-xmark" style="font-size:11px"></i><span data-i18n="apiNotConfigured">未配置</span>'; el.style.cssText = base + 'color:#F03752;border-color:#F03752;';
+            el.innerHTML = '<i class="fa-solid fa-circle-xmark" style="font-size:11px"></i><span data-i18n="apiNotConfigured">未配置</span>'; el.style.cssText = base + 'color: #B3243B;border-color:#F03752;';
             var sp = el.querySelector('[data-i18n="apiNotConfigured"]'); if (sp && !sp.__zh) sp.__zh = sp.textContent;
           }
           // 与当前语言同步：新插入的 span 应用当前语言
@@ -1811,6 +1818,7 @@
             'work-injury-calculator': {t:'Work Injury Compensation Calculator', d:'Estimate per Work Injury Insurance Regulation'},
             'jsa-lec': {t:'JSA + LEC Risk Analysis', d:'Job safety analysis + risk assessment'},
             'industry-classification': {t:'Industry Classification Lookup', d:'National economic industry classification'},
+            'occupational-risk-classification': {t:'Occupational Hazard Risk Classification', d:'Construction project OHS risk grading'},
             'accident-classification': {t:'Work Accident Classification Lookup', d:'GB 6441-2025 accident types & codes'},
             'working-height-classification': {t:'Work at Height Classification Lookup', d:'GB 3608-2025 grading & determination'},
             'dangerous-goods-query': {t:'Dangerous Goods Query', d:'767 dangerous goods lookup'},
@@ -1852,7 +1860,7 @@
             'pha-analysis': {t:'PHA Process Hazard Analysis Workbench', d:'HAZID / What-If / HAZOP / FMEA worksheets · LOPA embedded · FTA / ETA / Bow-Tie models · 9 risk methods'}
         };
         // ===== 工具标题拼音首字母索引（用于拼音搜索） =====
-        var PINYIN = {"pssr-checklist":"pssrkchqaqab","safety-signs":"aqcahbzcx","eyewash":"xqqaqjcxb","three-in-one-checklist":"sythzhb","fire-extinguisher":"mhqpct","carbon-footprint-calculator":"szjjs","safety-production-cost-calculator":"aqscxstzjs","safety-days-calculator":"aqtsjs","work-injury-calculator":"gsbjjs","jsa-lec":"jsalcfx","industry-classification":"hyflcx","accident-classification":"sgdjflcx","working-height-classification":"gzgdhtcx","dangerous-goods-query":"wxhpdcx","hazardous-chemicals-query":"whxpcx","special-work-query":"tzzycx","special-equipment-query":"tssbcx","hazardous-waste-query":"wfwwcx","illuminance-standard":"zmgbzcx","five-why-analysis":"whgyyfx","iso14001-environmental-factors":"hjya","heat-stress-classification":"zrgzfl","niosh-lifting-calculator":"nlzjs","explosion-venting-calculator":"bapfcal","environmental-tax-calculator":"hbbjs","noise-calculator":"zsjs","major-hazard-identification":"zdwxy","fire-separation-distance":"jzhljjl","safety-light-curtain":"mbaqmb","lifting-calculator":"szczjs","rope-chain-selector":"gslssxz","power-tool-inspection":"dydjqc","electrical-safety-checklist":"dqaqjcxb","harness-inspection":"hbhqc","grinder-inspection":"mmjqc","wire-rope-inspection":"gssqc","chain-inspection":"tslsqc","synthetic-fiber-sling-inspection":"hfbdqc","hook-shackle-inspection":"ggsqc","portable-ladder-inspection":"bdtyqc","portable-ladder-params":"bdtycsh","fixed-ladder-params":"gdtlcsh","oel-query":"zyccx","occupational-disease-query":"zybdcx","heat-index":"grswzs","heat-stroke-first-aid":"rzjzjj","chemical-burn-lookup":"hxpfsz","enterprise-size-classification":"qygmflcx","regulation-standards":"ehsfgbz","seasonal-safety-checklist":"jjxaqjcb","holiday-safety-checklist":"jjraqjcb","pha-analysis":"phgchwsygzb"};
+        var PINYIN = {"pssr-checklist":"pssrkchqaqab","safety-signs":"aqcahbzcx","eyewash":"xqqaqjcxb","three-in-one-checklist":"sythzhb","fire-extinguisher":"mhqpct","carbon-footprint-calculator":"szjjs","safety-production-cost-calculator":"aqscxstzjs","safety-days-calculator":"aqtsjs","work-injury-calculator":"gsbjjs","jsa-lec":"jsalcfx","industry-classification":"hyflcx","occupational-risk-classification":"zybfxflcx","accident-classification":"sgdjflcx","working-height-classification":"gzgdhtcx","dangerous-goods-query":"wxhpdcx","hazardous-chemicals-query":"whxpcx","special-work-query":"tzzycx","special-equipment-query":"tssbcx","hazardous-waste-query":"wfwwcx","illuminance-standard":"zmgbzcx","five-why-analysis":"whgyyfx","iso14001-environmental-factors":"hjya","heat-stress-classification":"zrgzfl","niosh-lifting-calculator":"nlzjs","explosion-venting-calculator":"bapfcal","environmental-tax-calculator":"hbbjs","noise-calculator":"zsjs","major-hazard-identification":"zdwxy","fire-separation-distance":"jzhljjl","safety-light-curtain":"mbaqmb","lifting-calculator":"szczjs","rope-chain-selector":"gslssxz","power-tool-inspection":"dydjqc","electrical-safety-checklist":"dqaqjcxb","harness-inspection":"hbhqc","grinder-inspection":"mmjqc","wire-rope-inspection":"gssqc","chain-inspection":"tslsqc","synthetic-fiber-sling-inspection":"hfbdqc","hook-shackle-inspection":"ggsqc","portable-ladder-inspection":"bdtyqc","portable-ladder-params":"bdtycsh","fixed-ladder-params":"gdtlcsh","oel-query":"zyccx","occupational-disease-query":"zybdcx","heat-index":"grswzs","heat-stroke-first-aid":"rzjzjj","chemical-burn-lookup":"hxpfsz","enterprise-size-classification":"qygmflcx","regulation-standards":"ehsfgbz","seasonal-safety-checklist":"jjxaqjcb","holiday-safety-checklist":"jjraqjcb","pha-analysis":"phgchwsygzb"};
 
         var UI = {
             heroTitle: {en:'Professional EHS Tools, All in One Place'},
@@ -1884,6 +1892,7 @@
         var ARROW_EN = 'Open Tool ';
         var ARROW_ZH = '进入工具 ';
         var AUTHORED = [
+            '/sheen-toolbox/occupational-risk-classification/',
             '/sheen-toolbox/pssr-checklist/',
             '/sheen-toolbox/fire-extinguisher/',
             '/sheen-toolbox/safety-production-cost-calculator/',
@@ -2134,7 +2143,7 @@
                 var item = document.createElement('a');
                 item.className = 'search-history-item';
                 item.href = href;
-                item.innerHTML = '<i class="fa-solid fa-arrow-right" style="color:var(--brand-red)"></i><span class="sh-term" style="flex:1;cursor:pointer">' + escHtml(label) + '</span>';
+                item.innerHTML = '<i class="fa-solid fa-arrow-right" style="color: var(--brand-red-deep)"></i><span class="sh-term" style="flex:1;cursor:pointer">' + escHtml(label) + '</span>';
                 item.addEventListener('click', function() { closeSearchHistory(); });
                 wrap.appendChild(item);
             });
@@ -2216,7 +2225,7 @@
             // 文档标题 & description
             document.title = en ? 'SHEEN Toolbox · Professional EHS Toolbox' : ORIG_TITLE;
             var metaDesc = document.querySelector('meta[name="description"]');
-            if (metaDesc) metaDesc.content = en ? 'EHS calculation, query and analysis tools · 63 free online tools' : 'EHS 专业计算、查询与分析工具集 · 63 款免费在线工具';
+            if (metaDesc) metaDesc.content = en ? 'EHS calculation, query and analysis tools · 64 free online tools' : 'EHS 专业计算、查询与分析工具集 · 64 款免费在线工具';
             // 通用 data-i18n 文本
             document.querySelectorAll('[data-i18n]').forEach(function(el) {
                 var key = el.getAttribute('data-i18n');
@@ -2550,7 +2559,7 @@
           var m = p.match(/^([一-龥]{1,4}[：:])\s*(.*)$/);
           if (m) {
             return '<p style="font-size:14px;letter-spacing:1px;line-height:1.9;color:#1E2126;margin:0 0 12px;">' +
-              '<strong style="color:#F03752;">' + escapeHtml(m[1]) + '</strong>' + escapeHtml(m[2]) + '</p>';
+              '<strong style="color: #B3243B;">' + escapeHtml(m[1]) + '</strong>' + escapeHtml(m[2]) + '</p>';
           }
           return '<p style="font-size:14px;letter-spacing:1px;line-height:1.9;color:#1E2126;margin:0 0 12px;">' + escapeHtml(p) + '</p>';
         }).join('');
@@ -2568,12 +2577,12 @@
         var html =
           '<p style="font-size:14px;letter-spacing:1px;line-height:1.9;color:#1E2126;margin:0 0 16px;">' + escapeHtml(query || 'EHS 法规问答') + '</p>' +
           body +
-          (srcHtml ? '<p style="font-size:14px;letter-spacing:1px;line-height:1.9;color:#1E2126;margin:18px 0 8px;"><strong style="color:#2D7EE7;">数据来源</strong></p>' + srcHtml : '') +
-          '<p style="font-size:14px;letter-spacing:1px;line-height:1.9;color:#5C6470;margin:18px 0 8px;"><strong style="color:#2D7EE7;">AI 协助声明</strong></p>' +
+          (srcHtml ? '<p style="font-size:14px;letter-spacing:1px;line-height:1.9;color:#1E2126;margin:18px 0 8px;"><strong style="color: var(--tech-blue-deep);">数据来源</strong></p>' + srcHtml : '') +
+          '<p style="font-size:14px;letter-spacing:1px;line-height:1.9;color:#5C6470;margin:18px 0 8px;"><strong style="color: var(--tech-blue-deep);">AI 协助声明</strong></p>' +
           '<p style="font-size:14px;letter-spacing:1px;line-height:1.9;color:#5C6470;margin:0 0 12px;">' + escapeHtml(disclaimer) + '</p>' +
-          '<p style="font-size:14px;letter-spacing:1px;line-height:1.9;color:#1E2126;margin:18px 0 8px;"><strong style="color:#2D7EE7;">关注我们</strong></p>' +
+          '<p style="font-size:14px;letter-spacing:1px;line-height:1.9;color:#1E2126;margin:18px 0 8px;"><strong style="color: var(--tech-blue-deep);">关注我们</strong></p>' +
           '<p style="font-size:14px;letter-spacing:1px;line-height:1.9;color:#5C6470;margin:0 0 12px;">欢迎关注微信公众号「SHEEN环境健康安全」，获取更多 EHS 法规标准解读与实用工具。</p>' +
-          '<p style="font-size:14px;letter-spacing:1px;line-height:1.9;color:#1E2126;margin:18px 0 8px;"><strong style="color:#2D7EE7;">SHEEN Toolbox</strong></p>';
+          '<p style="font-size:14px;letter-spacing:1px;line-height:1.9;color:#1E2126;margin:18px 0 8px;"><strong style="color: var(--tech-blue-deep);">SHEEN Toolbox</strong></p>';
         return html;
       }
 
