@@ -32,11 +32,9 @@
   --bd-blue-light: var(--tech-blue-soft);
 }
 
-.guide { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 12px 16px; background: var(--bg-page); border: 1px solid var(--border-light); border-radius: 12px; margin-bottom: 14px; }
-.guide-step { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); }
-.guide-step .gs-no { width: 20px; height: 20px; border-radius: 50%; background: var(--brand-red); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.guide-step b { color: var(--text-primary); font-weight: 600; }
-.guide-arrow { color: var(--text-tertiary); font-size: 11px; }
+/* .guide / .tab-nav / .tab-btn / .tab-panel / .sec-title / .warn-bar 已收编到
+   common.css §9d（2026-10-31）：这些组件此前在 8~16 个页面各抄一份，已裂成 4~5 种
+   变体。本页只保留页面专属样式，通用件一律吃公共版本。 */
 
 .scene-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 6px; }
 .scene-card { text-align: left; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; cursor: pointer; font-family: var(--font); transition: all 0.18s; }
@@ -47,21 +45,10 @@
 
 .ex-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border); }
 .ex-label { font-size: 11px; color: var(--text-secondary); display: flex; align-items: center; gap: 5px; }
-.ex-chip { font-size: 11.5px; font-weight: 600; padding: 5px 12px; border-radius: 60px; background: var(--tech-blue-soft); color: var(--tech-blue); border: none; cursor: pointer; font-family: var(--font); }
-.ex-chip:hover { background: var(--brand-red); color: #fff; }
+.ex-chip { font-size: 11.5px; font-weight: 600; padding: 5px 12px; border-radius: 60px; background: var(--tech-blue-soft); color: var(--tech-blue-deep); border: none; cursor: pointer; font-family: var(--font); }
+.ex-chip:hover { background: var(--brand-red-surface); color: #fff; }
 .aux-btn { display: inline-flex; align-items: center; gap: 5px; margin-top: 6px; padding: 5px 11px; font-size: 11.5px; font-weight: 600; border-radius: 8px; background: var(--bg-page); color: var(--tech-blue); border: 1px dashed var(--tech-blue); cursor: pointer; font-family: var(--font); }
-.aux-btn:hover { background: var(--tech-blue); color: #fff; }
-
-.term-hint { display: none; margin-top: 6px; font-size: 11.5px; color: var(--text-secondary); background: var(--tech-blue-soft); border-radius: 8px; padding: 10px 12px; line-height: 1.7; }
-.term-hint.on { display: block; }
-
-.tab-nav { display: flex; gap: 0; margin-bottom: 0; border-bottom: 2px solid var(--border); border-radius: 8px; }
-.tab-btn { flex: 1; padding: 13px 8px; font-size: 13px; font-weight: 600; font-family: var(--font); background: var(--bg-page); color: var(--text-secondary); border: none; cursor: pointer; transition: all 0.2s; border-bottom: 3px solid transparent; margin-bottom: -2px; display: flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; border-radius: 8px; }
-.tab-btn i { font-size: 15px; }
-.tab-btn:hover { color: var(--brand-red); background: var(--brand-red-light); }
-.tab-btn.active { color: var(--brand-red); background: var(--bg-card); border-bottom-color: var(--brand-red); }
-.tab-panel { display: none; background: var(--bg-card); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: 22px; }
-.tab-panel.active { display: block; }
+.aux-btn:hover { background: var(--tech-blue-hover); color: #fff; }
 
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .form-row label { display: block; font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
@@ -91,31 +78,20 @@
 .data-table tr.clickable:hover td { background: var(--bd-blue-light); }
 .data-table td.num { text-align: right; font-variant-numeric: tabular-nums; color: var(--text-primary); font-weight: 600; }
 
-.sec-title { font-size: 14px; font-weight: 700; color: var(--text-primary); margin: 20px 0 8px; padding-left: 9px; border-left: 3px solid var(--bd-red); }
-.sec-title:first-child { margin-top: 0; }
-
 .formula { font-family: var(--font-mono, monospace); background: var(--bg-page); border: 1px solid var(--border-light); border-radius: 8px; padding: 10px 12px; font-size: 12px; color: var(--text-primary); margin: 8px 0; line-height: 1.8; overflow-x: auto; }
 .src-note { font-size: 11px; color: var(--text-tertiary); margin-top: 6px; line-height: 1.7; }
 .src-note b { color: var(--bd-blue); }
 
-.btn-primary { display: inline-flex; align-items: center; gap: 7px; padding: 10px 20px; background: var(--brand-red); color: #fff; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 600; cursor: pointer; font-family: var(--font); }
-.btn-primary:hover { background: var(--brand-red-hover); }
+.btn-primary { display: inline-flex; align-items: center; gap: 7px; padding: 10px 20px; background: var(--brand-red-surface); color: #fff; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 600; cursor: pointer; font-family: var(--font); }
+.btn-primary:hover { background: var(--brand-red-surface-hover); }
 .btn-primary i { font-size: 14px; }
 
 .wl-chip { display: inline-block; font-size: 11px; padding: 3px 9px; border-radius: 60px; background: var(--bd-blue-light); color: var(--bd-blue); margin: 2px 4px 2px 0; font-weight: 600; }
 
-.warn-bar { display: flex; gap: 10px; padding: 12px 14px; border-radius: 10px; font-size: 12px; line-height: 1.8; margin-bottom: 12px; align-items: flex-start; }
-.warn-bar i { margin-top: 3px; flex-shrink: 0; }
-.warn-bar.info { background: var(--bd-blue-light); border: 1px solid var(--bd-blue); color: var(--bd-blue); }
-.warn-bar.warning { background: var(--bd-amber-light); border: 1px solid var(--bd-amber); color: var(--bd-amber-deep); }
-.warn-bar strong { font-weight: 700; }
 .std-badge { display: inline-block; font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 5px; background: var(--bg-card); border: 1px solid var(--bd-blue); color: var(--bd-blue); margin: 0 2px; }
 
 @media (max-width: 768px) {
   .scene-grid { grid-template-columns: repeat(2, 1fr); }
-  .tab-nav { overflow-x: auto; }
-  .tab-btn { flex: 0 0 auto; padding: 11px 12px; font-size: 12px; }
-  .tab-panel { padding: 15px; }
   .form-grid { grid-template-columns: 1fr; gap: 12px; }
   .result-block .main-value { font-size: 28px; }
   .data-table { font-size: 11px; }
@@ -126,7 +102,7 @@
 @media print {
   @page { size: A4; margin: 16mm 12mm 18mm 12mm; }
   body { background: #fff !important; padding: 0 !important; font-size: 11pt; color: #000 !important; }
-  .breadcrumb, .btn-primary, .btn-print, .sheen-footer, .no-print, .no-pr, .form-grid, .scene-grid, .guide { display: none !important; }
+  .breadcrumb, .btn-primary, .btn-print, .sheen-footer, .no-print, .no-pr, .form-grid, .scene-grid { display: none !important; }
   .tab-panel { display: block !important; border: none !important; padding: 0 0 12pt 0 !important; page-break-inside: avoid; }
   .app-container { box-shadow: none !important; border: none !important; max-width: 100% !important; padding: 0 !important; }
 }
@@ -157,56 +133,23 @@ var _hmt = _hmt || [];
 <main class="app-container container-query">
 
   <h1 class="page-title"><i class="fa-solid fa-water" style="color:var(--brand-red)"></i> 围堰有效容积计算</h1>
-  <p class="page-subtitle" style="margin-bottom:16px;">算防火堤/围堰的<strong>有效容积</strong>并与规范下限比对，同时核算应急事故池所需的消防水、泄漏物与雨水容积 — 适用于罐区、装置区、污水处理区</p>
+  <p class="page-subtitle" style="margin-bottom:16px;">算防火堤/围堰的<strong>有效容积</strong>并与规范下限比对，同时核算应急事故池所需的消防水、泄漏物与雨水容积</p>
 
-  <div class="warn-bar warning no-pr">
+  <div class="warn-bar warning">
     <i class="fa-solid fa-triangle-exclamation"></i>
-    <span><strong>两个最常见的算错点，先看这里：</strong>
-      ① <strong>有效容积 ≠ 堤内几何容积</strong>。公式 <code>V = A·H<sub>j</sub> − (V<sub>1</sub>+V<sub>2</sub>+V<sub>3</sub>+V<sub>4</sub>)</code> 里要扣掉<strong>最大罐基础体积、其他罐的液体与基础体积、堤体与内培土体积、隔堤配管设备构筑物体积</strong>——少扣这一项算出来的容积是虚高的。
-      ② <strong>规范下限分场景</strong>：固定顶罐取<strong>1 个最大罐</strong>，浮顶/内浮顶罐组可取 <strong>1/2</strong>（但全厂浮顶罐组要设事故存液池接住差额）。GB 50074 对地上罐组一律要求 1 个最大罐。
-    </span>
+    <span><strong>先看这里：</strong>有效容积 ≠ 堤内几何容积 —— 必须扣掉罐基础、其他罐液体、堤体、隔堤配管共 4 项体积。</span>
   </div>
 
-  <div class="guide no-pr">
-    <div class="guide-step"><span class="gs-no">1</span><span>点下面的<b>场景卡</b>，自动跳到对应页签并填好一组真实工况参数</span></div>
-    <span class="guide-arrow"><i class="fa-solid fa-chevron-right"></i></span>
-    <div class="guide-step"><span class="gs-no">2</span><span>第 1 页签算<b>有效容积</b>并反推所需堤高，或直接校核现有堤够不够</span></div>
-    <span class="guide-arrow"><i class="fa-solid fa-chevron-right"></i></span>
-    <div class="guide-step"><span class="gs-no">3</span><span>第 2 页签查<b>规范下限</b>，第 3 页签算<b>事故池</b>，第 4 页签校核堤高与堤距</span></div>
-  </div>
-
-  <div class="scene-grid no-pr" id="sceneGrid"></div>
-
-  <div class="no-pr" style="margin-bottom:14px;">
-    <button class="ex-chip" onclick="bdGloss()" id="glossBtn" style="background:var(--bg-page);color:var(--text-secondary);border:1px solid var(--border);"><i class="fa-solid fa-book-open"></i> 看不懂术语？点这里看白话解释</button>
-    <div class="term-hint" id="glossBox">
-      <b>围堰 / 防火堤</b>：围着储罐或设备砌一圈的不渗漏矮墙，用来在破罐、跑冒滴漏时把液体兜在原地，不让它流到外面或窜进雨水沟。罐区叫「防火堤」，装置/污水/装卸区更多叫「围堰」，作用一样。
-      <br><br>
-      <b>有效容积（V）</b>：堤内<strong>真正能装液体的空间</strong>。不是拿堤长×堤宽×堤高那么一乘就完了——罐体本身占的地方、堤墙本身占的地方都得扣掉，剩下的才算。这个数才是消防验收和环评看的数。
-      <br><br>
-      <b>A·H<sub>j</sub>（毛容积）</b>：由防火堤中心线围成的水平投影面积 × 设计液面高度。这是「算出来的」，不是「有效容积」。
-      <br><br>
-      <b>V<sub>1</sub></b>：堤内<strong>一个最大储罐</strong>在设计液面高度内的基础（露出地面部分）体积。
-      <br><br>
-      <b>V<sub>2</sub></b>：除那一个最大罐以外，<strong>其他所有罐</strong>在设计液面高度内的液体体积 + 基础体积之和。
-      <br><br>
-      <b>V<sub>3</sub></b>：防火堤中心线以内、设计液面高度内的<strong>堤墙体本身 + 内培土</strong>的体积。
-      <br><br>
-      <b>V<sub>4</sub></b>：堤内<strong>隔堤、配管、设备及其他构筑物</strong>在设计液面高度内的体积。
-      <br><br>
-      <b>H<sub>j</sub>（设计液面高度）</b>：堤内允许到的最高液面。注意立式罐组堤顶要比它再高 0.2 m 才是堤顶实际高度。
-      <br><br>
-      <b>隔堤</b>：大堤里再砌的小墙，把不同品种/性质的液体分开装（如甲B类与丙类、水溶性与非水溶性、强氧化剂与可燃液体），防止混装反应。隔堤内有效容积只需 ≥ 该隔堤内最大储罐容积的 <strong>10%</strong>，比主堤宽松得多。
-      <br><br>
-      <b>固定顶罐 / 浮顶（内浮顶）罐</b>：固定顶罐罐顶就是一块固定钢板；浮顶罐罐顶是能随液面升降的浮盘，浮盘坏了等同固定顶。<strong>规范给浮顶罐的容积下限减半</strong>，就是基于浮盘能压住油气、泄漏量小这个物理事实。
-      <br><br>
-      <b>事故存液池 / 应急事故水池</b>：浮顶罐组如果做不到「1 个最大罐」，省下的那部分得有个池子接着，这就是事故存液池。应急事故水池则是全厂级别，接消防水、泄漏物、事故雨水。
-      <br><br>
-      <b>供给强度（L/min·m²）</b>：单位罐表面积每分钟喷多少水。消防冷却水量 = 供给强度 × 冷却面积 × 延续时间 ÷ 1000。
-      <br><br>
-      <b>径流系数（ψ）</b>：下同样大的雨，有多少比例真的流走——剩下的被地面吸收/滞留。混凝土路面 ψ≈0.85~0.95，草地只有 0.10~0.20。
+  <details class="fold-note">
+    <summary>两个最常见的算错点（含规范下限的分场景说明）</summary>
+    <div class="fn-body">
+      <p><b>① 有效容积 ≠ 堤内几何容积。</b>公式 <code>V = A·H<sub>j</sub> − (V<sub>1</sub>+V<sub>2</sub>+V<sub>3</sub>+V<sub>4</sub>)</code> 里要扣掉<b>最大罐基础体积、其他罐的液体与基础体积、堤体与内培土体积、隔堤配管设备构筑物体积</b> —— 少扣这一项算出来的容积是虚高的。</p>
+      <p><b>② 规范下限分场景。</b>固定顶罐取<b>1 个最大罐</b>；浮顶/内浮顶罐组可取 <b>1/2</b>（但全厂浮顶罐组要设事故存液池接住差额）。GB 50074 对地上罐组一律要求 1 个最大罐，不对浮顶罐减半。</p>
     </div>
-  </div>
+  </details>
+
+  <p class="scene-cap"><i class="fa-solid fa-hand-pointer"></i> 点场景卡自动填好一组真实工况并跳到对应页签，也可以直接在下方页签里手填</p>
+  <div class="scene-grid no-pr" id="sceneGrid"></div>
 
   <div class="tab-nav no-pr">
     <button class="tab-btn active" onclick="bdSwitch(0)" data-tab="0"><i class="fa-solid fa-calculator"></i> 有效容积计算</button>
@@ -221,7 +164,6 @@ var _hmt = _hmt || [];
     <div class="sec-title">1. 有效容积计算与反算<span class="wl-chip">GB 50351-2014 3.2.6</span></div>
 
     <div class="formula">V = A · H<sub>j</sub> − ( V<sub>1</sub> + V<sub>2</sub> + V<sub>3</sub> + V<sub>4</sub> )</div>
-    <div class="src-note">V 有效容积(m³) · A 防火堤中心线围成的水平投影面积(m²) · H<sub>j</sub> 设计液面高度(m) · V<sub>1</sub> 一个最大罐的基础体积 · V<sub>2</sub> 其他罐液体与基础体积之和 · V<sub>3</sub> 堤体与内培土体积 · V<sub>4</sub> 隔堤配管设备构筑物体积</div>
 
     <div class="form-grid no-pr" style="margin-top:16px;">
       <div class="form-row">
@@ -588,16 +530,16 @@ var _hmt = _hmt || [];
     </table>
 
     <div class="sec-title">7. 两种口径的区别（GB 50351 与 GB 50160）</div>
-    <div class="warn-bar info no-pr" style="margin-top:4px;">
-      <i class="fa-solid fa-circle-info"></i>
-      <span><strong>这是最容易搞混的一处：</strong><br>
-      · <strong>GB 50351-2014 3.2.4</strong>（储罐区防火堤设计规范）：<strong>固定顶罐取 1 个最大罐；浮顶/内浮顶罐取 1/2</strong>；混组取两者较大值。<br>
-      · <strong>GB 50160-2008 6.2.12</strong>（石油化工企业）：<strong>防火堤内有效容积不应小于 1 个最大储罐容积</strong>；<strong>浮顶、内浮顶罐组不能满足时</strong>，应设<strong>事故存液池</strong>存剩余部分，但<strong>罐组防火堤内有效容积仍不应小于最大储罐容积的一半</strong>。<br>
-      · <strong>GB 50074-2014 6.5.1</strong>（石油库）：<strong>一律不应小于罐组内一个最大储罐的容量</strong>，未对浮顶罐减半。<br>
-      → <strong>三本标准对同一座浮顶罐可能给出三个不同下限</strong>。本工具按你选的场景取对应条款，不混用。<br>
-      · <strong>隔堤</strong>三条标准一致：隔堤内有效容积 <strong>≥ 该隔堤内 1 个最大储罐容积的 10%</strong>。
-    </span>
-    </div>
+    <details class="fold-note">
+      <summary>三本标准对同一座浮顶罐可能给出三个不同下限 — 展开看条款原文</summary>
+      <div class="fn-body">
+        <p><b>这是最容易搞混的一处。</b>本工具按你选的场景取对应条款，<b>不混用</b>：</p>
+        <p>· <b>GB 50351-2014 3.2.4</b>（储罐区防火堤设计规范）：<b>固定顶罐取 1 个最大罐；浮顶/内浮顶罐取 1/2</b>；混组取两者较大值。</p>
+        <p>· <b>GB 50160-2008 6.2.12</b>（石油化工企业）：<b>防火堤内有效容积不应小于 1 个最大储罐容积</b>；<b>浮顶、内浮顶罐组不能满足时</b>，应设<b>事故存液池</b>存剩余部分，但<b>罐组防火堤内有效容积仍不应小于最大储罐容积的一半</b>。</p>
+        <p>· <b>GB 50074-2014 6.5.1</b>（石油库）：<b>一律不应小于罐组内一个最大储罐的容量</b>，未对浮顶罐减半。</p>
+        <p>· <b>隔堤</b>三条标准一致：隔堤内有效容积 <b>≥ 该隔堤内 1 个最大储罐容积的 10%</b>。</p>
+      </div>
+    </details>
 
     <div class="sec-title">8. 常见错误纠正</div>
     <table class="data-table" id="tblTrap">
@@ -610,6 +552,25 @@ var _hmt = _hmt || [];
       <i class="fa-solid fa-triangle-exclamation"></i>
       <span>本页公式与数值均取自上述<strong>现行版</strong>国家标准条文与条文说明，未收录标准全文（受版权保护）。本页输出为<strong>设计阶段校核工具</strong>，不替代正式设计文件：堤体结构强度、稳定性验算（土压力、地震作用、基底摩擦系数，见 GB 50351-2014 第5章与附录A/B）、防渗做法、排水切换阀与雨水截油设施，均须由有资质的设计单位完成并出具计算书。标准修订后请以最新版本为准。</span>
     </div>
+
+    <details class="fold-note">
+      <summary>术语白话解释（13 条：围堰 / 有效容积 / V₁~V₄ / 隔堤 / 供给强度 / 径流系数…）</summary>
+      <div class="fn-body">
+      <p><b>围堰 / 防火堤</b>：围着储罐或设备砌一圈的不渗漏矮墙，用来在破罐、跑冒滴漏时把液体兜在原地，不让它流到外面或窜进雨水沟。罐区叫「防火堤」，装置/污水/装卸区更多叫「围堰」，作用一样。</p>
+      <p><b>有效容积（V）</b>：堤内<strong>真正能装液体的空间</strong>。不是拿堤长×堤宽×堤高那么一乘就完了——罐体本身占的地方、堤墙本身占的地方都得扣掉，剩下的才算。这个数才是消防验收和环评看的数。</p>
+      <p><b>A·H<sub>j</sub>（毛容积）</b>：由防火堤中心线围成的水平投影面积 × 设计液面高度。这是「算出来的」，不是「有效容积」。</p>
+      <p><b>V<sub>1</sub></b>：堤内<strong>一个最大储罐</strong>在设计液面高度内的基础（露出地面部分）体积。</p>
+      <p><b>V<sub>2</sub></b>：除那一个最大罐以外，<strong>其他所有罐</strong>在设计液面高度内的液体体积 + 基础体积之和。</p>
+      <p><b>V<sub>3</sub></b>：防火堤中心线以内、设计液面高度内的<strong>堤墙体本身 + 内培土</strong>的体积。</p>
+      <p><b>V<sub>4</sub></b>：堤内<strong>隔堤、配管、设备及其他构筑物</strong>在设计液面高度内的体积。</p>
+      <p><b>H<sub>j</sub>（设计液面高度）</b>：堤内允许到的最高液面。注意立式罐组堤顶要比它再高 0.2 m 才是堤顶实际高度。</p>
+      <p><b>隔堤</b>：大堤里再砌的小墙，把不同品种/性质的液体分开装（如甲B类与丙类、水溶性与非水溶性、强氧化剂与可燃液体），防止混装反应。隔堤内有效容积只需 ≥ 该隔堤内最大储罐容积的 <strong>10%</strong>，比主堤宽松得多。</p>
+      <p><b>固定顶罐 / 浮顶（内浮顶）罐</b>：固定顶罐罐顶就是一块固定钢板；浮顶罐罐顶是能随液面升降的浮盘，浮盘坏了等同固定顶。<strong>规范给浮顶罐的容积下限减半</strong>，就是基于浮盘能压住油气、泄漏量小这个物理事实。</p>
+      <p><b>事故存液池 / 应急事故水池</b>：浮顶罐组如果做不到「1 个最大罐」，省下的那部分得有个池子接着，这就是事故存液池。应急事故水池则是全厂级别，接消防水、泄漏物、事故雨水。</p>
+      <p><b>供给强度（L/min·m²）</b>：单位罐表面积每分钟喷多少水。消防冷却水量 = 供给强度 × 冷却面积 × 延续时间 ÷ 1000。</p>
+      <p><b>径流系数（ψ）</b>：下同样大的雨，有多少比例真的流走——剩下的被地面吸收/滞留。混凝土路面 ψ≈0.85~0.95，草地只有 0.10~0.20。</p>
+      </div>
+    </details>
   </section>
 
 </main>
@@ -786,9 +747,6 @@ window.bdScene = function(i) {
   document.getElementById('panel' + s.tab).scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
 
-window.bdGloss = function() {
-  document.getElementById('glossBox').classList.toggle('on');
-};
 
 function $(id) { return document.getElementById(id); }
 function num(id) { var v = parseFloat($(id).value); return isNaN(v) ? 0 : v; }
