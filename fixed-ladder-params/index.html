@@ -54,8 +54,8 @@
         }
         .lp-chip:hover { border-color: var(--brand-red, #F03752); color: var(--brand-red, #F03752); }
         .lp-chip.active {
-            background: var(--brand-red, #F03752); color: #fff;
-            border-color: var(--brand-red, #F03752);
+            background: var(--brand-red-surface); color: #fff;
+            border-color: var(--brand-red-surface);
             border-radius: 8px;
         }
         .ladder-grid {
@@ -79,7 +79,7 @@
         }
         .ladder-card .lc-icon {
             width: 44px; height: 44px; border-radius: 11px;
-            background: linear-gradient(135deg, var(--brand-red, #F03752), #d12e47);
+            background: linear-gradient(135deg, var(--brand-red-surface), var(--brand-red-surface-hover));
             color: #fff; display: flex; align-items: center; justify-content: center;
             font-size: 20px; flex-shrink: 0;
         }
@@ -158,7 +158,7 @@
         .diag-lightbox-inner svg, .diag-lightbox-inner img { width: 680px; max-width: 90vw; height: auto; }
         .diag-lb-title { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
         .diag-lb-close { position: absolute; top: 10px; right: 14px; width: 32px; height: 32px; border-radius: 50%; border: none; background: #f0f0f0; color: #666; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; }
-        .diag-lb-close:hover { background: var(--brand-red, #F03752); color: #fff; }
+        .diag-lb-close:hover { background: var(--brand-red-surface); color: #fff; }
         @keyframes lb-fade-in { from{opacity:0} to{opacity:1} }
         .lp-actions { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
         .lp-actions button { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--border, #E3E6EA); background: #fff; color: var(--text-primary); transition: all .15s; }
@@ -170,7 +170,7 @@
         .calc-box .cb-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; flex-wrap: wrap; }
         .calc-box label { font-size: 13px; font-weight: 600; min-width: 96px; }
         .calc-box input { width: 110px; border: 1px solid var(--border, #E3E6EA); border-radius: 6px; padding: 6px 9px; font-size: 13px; font-family: "SF Mono", Consolas, monospace; }
-        .calc-box button { padding: 7px 16px; border-radius: 8px; border: none; background: var(--brand-red, #F03752); color: #fff; font-weight: 600; font-size: 13px; cursor: pointer; }
+        .calc-box button { padding: 7px 16px; border-radius: 8px; border: none; background: var(--brand-red-surface); color: #fff; font-weight: 600; font-size: 13px; cursor: pointer; }
         .calc-box .cb-out { margin-top: 8px; font-size: 13px; }
         .calc-box .cb-out b { color: var(--brand-red, #F03752); font-family: "SF Mono", Consolas, monospace; }
         .calc-box .cb-err { color: var(--fail); }
