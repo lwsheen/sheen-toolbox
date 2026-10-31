@@ -32,11 +32,6 @@
   --rv-blue-light: var(--tech-blue-soft);
 }
 
-.guide { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 12px 16px; background: var(--bg-page); border: 1px solid var(--border-light); border-radius: 12px; margin-bottom: 14px; }
-.guide-step { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); }
-.guide-step .gs-no { width: 20px; height: 20px; border-radius: 50%; background: var(--brand-red); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.guide-step b { color: var(--text-primary); font-weight: 600; }
-.guide-arrow { color: var(--text-tertiary); font-size: 11px; }
 
 .scene-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 6px; }
 .scene-card { text-align: left; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; cursor: pointer; font-family: var(--font); transition: all 0.18s; }
@@ -47,19 +42,10 @@
 
 .ex-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border); }
 .ex-label { font-size: 11px; color: var(--text-secondary); display: flex; align-items: center; gap: 5px; }
-.ex-chip { font-size: 11.5px; font-weight: 600; padding: 5px 12px; border-radius: 60px; background: var(--tech-blue-soft); color: var(--tech-blue); border: none; cursor: pointer; font-family: var(--font); }
-.ex-chip:hover { background: var(--brand-red); color: #fff; }
+.ex-chip { font-size: 11.5px; font-weight: 600; padding: 5px 12px; border-radius: 60px; background: var(--tech-blue-soft); color: var(--tech-blue-deep); border: none; cursor: pointer; font-family: var(--font); }
+.ex-chip:hover { background: var(--brand-red-surface); color: #fff; }
 
-.term-hint { display: none; margin-top: 6px; font-size: 11.5px; color: var(--text-secondary); background: var(--tech-blue-soft); border-radius: 8px; padding: 10px 12px; line-height: 1.7; }
-.term-hint.on { display: block; }
 
-.tab-nav { display: flex; gap: 0; margin-bottom: 0; border-bottom: 2px solid var(--border); border-radius: 8px; }
-.tab-btn { flex: 1; padding: 13px 8px; font-size: 13px; font-weight: 600; font-family: var(--font); background: var(--bg-page); color: var(--text-secondary); border: none; cursor: pointer; transition: all 0.2s; border-bottom: 3px solid transparent; margin-bottom: -2px; display: flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; border-radius: 8px; }
-.tab-btn i { font-size: 15px; }
-.tab-btn:hover { color: var(--brand-red); background: var(--brand-red-light); }
-.tab-btn.active { color: var(--brand-red); background: var(--bg-card); border-bottom-color: var(--brand-red); }
-.tab-panel { display: none; background: var(--bg-card); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: 22px; }
-.tab-panel.active { display: block; }
 
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .form-row label { display: block; font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
@@ -75,16 +61,9 @@
 .result-sub .rs-item .rs-v { font-size: 17px; font-weight: 700; color: var(--text-primary); }
 .result-note { font-size: 12px; color: var(--text-secondary); margin-top: 12px; line-height: 1.7; }
 
-.warn-bar { padding: 10px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; display: flex; align-items: flex-start; gap: 8px; margin-top: 12px; line-height: 1.7; }
-.warn-bar.danger { background: var(--rv-red-light); color: var(--rv-red); border: 1px solid var(--rv-red); }
-.warn-bar.warning { background: var(--rv-amber-light); color: var(--rv-amber-deep); border: 1px solid var(--rv-amber); }
-.warn-bar.info { background: var(--rv-blue-light); color: var(--rv-blue); border: 1px solid var(--rv-blue); }
-.warn-bar.ok { background: var(--rv-green-light); color: var(--rv-green); border: 1px solid var(--rv-green); }
-.warn-bar span { font-weight: 400; }
-.warn-bar strong { font-weight: 700; }
 
 .data-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 14px; }
-.data-table th { background: var(--brand-red); color: #fff; padding: 8px 9px; text-align: center; font-weight: 600; font-size: 11px; }
+.data-table th { background: var(--brand-red-surface); color: #fff; padding: 8px 9px; text-align: center; font-weight: 600; font-size: 11px; }
 .data-table th:first-child { text-align: left; }
 .data-table td { padding: 7px 9px; border-bottom: 1px solid var(--border-light); text-align: center; font-variant-numeric: tabular-nums; }
 .data-table td:first-child { text-align: left; }
@@ -98,7 +77,7 @@
 .std-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 60px; background: var(--bg-page); border: 1px solid var(--border); color: var(--text-secondary); }
 .tag-good { background: var(--ok-soft); color: var(--ok-deep); }
 .tag-warn { background: var(--warn-orange-soft); color: var(--warn-deep); }
-.tag-bad { background: var(--brand-red-light); color: var(--brand-red); }
+.tag-bad { background: var(--brand-red-light); color: var(--brand-red-deep); }
 
 .disclaimer { margin-top: 24px; padding: 14px 18px; background: var(--rv-amber-light); border: 1px solid var(--rv-amber); border-radius: 12px; font-size: 12px; color: var(--text-secondary); line-height: 1.8; }
 .disclaimer strong { color: var(--rv-amber); }
@@ -118,7 +97,7 @@
 @media print {
   @page { size: A4; margin: 16mm 12mm 18mm 12mm; }
   body { background: #fff !important; padding: 0 !important; font-size: 11pt; color: #000 !important; }
-  .breadcrumb, .btn-primary, .btn-print, .sheen-footer, .no-print, .no-pr, .form-grid, .scene-grid, .guide { display: none !important; }
+  .breadcrumb, .btn-primary, .btn-print, .sheen-footer, .no-print, .no-pr, .form-grid, .scene-grid { display: none !important; }
   .tab-panel { display: block !important; border: none !important; padding: 0 0 12pt 0 !important; page-break-inside: avoid; }
   .app-container { box-shadow: none !important; border: none !important; max-width: 100% !important; padding: 0 !important; }
 }
@@ -150,35 +129,22 @@ var _hmt = _hmt || [];
   <h1 class="page-title"><i class="fa-solid fa-valve" style="color:var(--brand-red)"></i> 泄放量计算与安全阀爆破片选型</h1>
   <p class="page-subtitle" style="margin-bottom:16px;">按现行标准公式算所需泄放量与泄放面积，再反查安全阀流道直径 / 爆破片公称口径与整定压力 — 适用于压力容器与工业管道</p>
 
-  <div class="warn-bar warning no-pr">
+  <div class="warn-bar warning">
     <i class="fa-solid fa-triangle-exclamation"></i>
-    <span><strong>关于「泄放量数据表」的重要说明：</strong>现行国标<strong>不提供</strong>「公称通径 × 整定压力 → 额定泄放量」的成品数据表（GB/T 567.2 附录B 是空白选型登记表，GB/T 12243 只给公式不给数字表）。因此本工具采用<strong>标准公式正算 + 厂商样本额定排量表反查</strong>的双向结构，厂商样本数值已在页面显著标注。正式选型必须以制造厂出具的<strong>型式试验报告排量数据</strong>为准。</span>
+    <span><strong>选型边界先讲清楚：</strong>现行国标只给公式，<strong>不提供</strong>「通径 × 整定压力 → 额定泄放量」的成品数据表。</span>
   </div>
 
-  <div class="guide no-pr">
-    <div class="guide-step"><span class="gs-no">1</span><span>点下面的<b>场景卡</b>，自动跳到对应页签并填好一组真实工况参数</span></div>
-    <span class="guide-arrow"><i class="fa-solid fa-chevron-right"></i></span>
-    <div class="guide-step"><span class="gs-no">2</span><span>第 1 页签算出<b>所需泄放面积 A</b>（这是整台工具的核心输出）</span></div>
-    <span class="guide-arrow"><i class="fa-solid fa-chevron-right"></i></span>
-    <div class="guide-step"><span class="gs-no">3</span><span>拿 A 去第 2/3 页签<b>反查安全阀流道 / 爆破片口径</b>，第 4 页签定压力</span></div>
-  </div>
-
-  <div class="scene-grid no-pr" id="sceneGrid"></div>
-
-  <div class="no-pr" style="margin-bottom:14px;">
-    <button class="ex-chip" onclick="rvGloss()" id="glossBtn" style="background:var(--bg-page);color:var(--text-secondary);border:1px solid var(--border);"><i class="fa-solid fa-book-open"></i> 看不懂术语？点这里看白话解释</button>
-    <div class="term-hint" id="glossBox">
-      <b>泄放量（W）</b>：出事故时这个装置每秒（每小时）必须放掉的介质量，单位 kg/h。它由热源大小决定，不是你选的，是「必须满足的底线」。<br>
-      <b>泄放面积（A）</b>：算出泄放量后，按标准公式反推出的通流口要开多大，单位 mm²。<b>安全阀和爆破片都是按面积卖，不是按口径卖</b>，口径只是面积的离散代表。<br>
-      <b>流道直径（do）</b>：安全阀真正开孔的直径，比法兰公称通径 DN 小。查样本看的是 do 列，不是 DN 列。<br>
-      <b>整定压力（SET）</b>：安全阀自己决定「什么时候跳」的预设压力。<b>爆破压力（p_b）</b>：爆破片决定「什么时候炸」的预设压力。两者都是被保护设备的保护门槛。<br>
-      <b>设定压力 ≤ 设计压力</b>：压力容器上安全阀的整定压力一般<strong>不大于</strong>容器设计压力（不是「1.1 倍设计压力」——那是锅炉和移动式容器的规则）。<br>
-      <b>最小爆破压力</b>：爆破片能标定的最低压力。反拱型要求 ≥ 工作压力 × 1.1，正拱普通型要 ≥ ×1.43，平板型要 ×2.0。选错型式这块就卡住。<br>
-      <b>操作压力比</b>：设备工作压力 ÷ 爆破片最小爆破压力。数值越大越耐用但动作越迟。反拱带槽型 0.9 最优。<br>
-      <b>泄放系数 K</b>：接管形状对实际放流量的打折系数。插入式 0.68 最亏，平齐式 0.73，带过渡圆角 0.80 最划算，拿不准按 0.62 保守取值。<br>
-      <b>组合装置 × 0.9</b>：爆破片串在安全阀前面后，组合泄放量只能按「单个安全阀额定泄放量 × 0.9」计（GB/T 567.2-2012 4.3.2.3），所以选型要放大一档。
+  <details class="fold-note">
+    <summary>关于「泄放量数据表」的完整说明，以及为什么本工具是双向结构</summary>
+    <div class="fn-body">
+      <p><b>国标给什么、不给什么。</b>GB/T 567.2 附录 B 是一张<b>空白的选型登记表</b>（给格式，不给数字），GB/T 12243 只给计算公式、不给数字表 —— 所以市面上任何「查表即得泄放量」的说法都站不住。</p>
+      <p><b>本工具的做法。</b>按标准公式<b>正算</b>所需泄放面积 A，再拿 A 去<b>厂商样本的额定排量表反查</b>流道直径 / 公称口径。凡取自厂商样本的数值，页面都已明确标注「厂商样本值，非标准原表」。</p>
+      <p><b>正式选型以下面这个为准。</b>制造厂按中国标准出具的<b>型式试验报告排量数据</b> —— 不是本工具输出、不是厂商样本、也不是标准附录。</p>
     </div>
-  </div>
+  </details>
+
+  <p class="scene-cap"><i class="fa-solid fa-hand-pointer"></i> 点场景卡自动填好一组真实工况并跳到对应页签，也可以直接在下方页签里手填</p>
+  <div class="scene-grid no-pr" id="sceneGrid"></div>
 
   <div class="tab-nav no-pr" role="tablist">
     <button class="tab-btn active" onclick="rvSwitch(0)" data-tab="0"><i class="fa-solid fa-calculator"></i> 泄放量计算</button>
@@ -190,7 +156,7 @@ var _hmt = _hmt || [];
 
   <!-- ============ TAB 0：泄放量计算 ============ -->
   <div class="tab-panel active" id="panel0">
-    <h3 style="font-size:15px;font-weight:600;margin-bottom:4px;"><i class="fa-solid fa-calculator"></i> 泄放能力计算 — 反推所需泄放面积 A</h3>
+    <div class="sec-title"><i class="fa-solid fa-calculator"></i> 泄放能力计算 — 反推所需泄放面积 A</div>
     <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;">三种介质分别按各自的标准公式正算泄放量、再反算所需面积。若你<strong>只知道泄放量</strong>（如按 GB/T 150.1-2024 附录B 算出的 W_s），把介质参数填上、公式会给出所需面积。</p>
 
     <div class="form-grid">
@@ -297,7 +263,7 @@ var _hmt = _hmt || [];
     <div class="warn-bar danger" id="cWarn" style="display:none;"><i class="fa-solid fa-triangle-exclamation"></i><span id="cWarnText"></span></div>
     <div class="warn-bar info"><i class="fa-solid fa-circle-info"></i><span><strong>公式出处：</strong>气体临界流 W = 0.076·C″·K·A·p_f·√(M/(Z·T_f))（GB/T 567.2-2012 附录C 式C.3 对应 GB/T 150.1-2024 附录B）；蒸汽 W = 5.25·K·C′·A·√p_f（式C.5）；液体 W = 5.1·ζ·A·K′·√(ρ·Δp)（式C.6）。C″ = 39.48·√[k·(2/(k+1))^((k+1)/(k−1))]，k 未知取 23.96。</span></div>
 
-    <h4 style="font-size:14px;font-weight:600;margin:22px 0 4px;"><i class="fa-solid fa-flask"></i> 常用气体性质（GB/T 567.2-2012 表C.4）</h4>
+    <div class="sec-sub"><i class="fa-solid fa-flask"></i> 常用气体性质（GB/T 567.2-2012 表C.4）</div>
     <div class="table-scroll">
       <table class="data-table" id="gasTable">
         <caption>点击任意一行即可把该介质填入上方输入框（摩尔质量 M / 绝热指数 k / 临界压力 / 临界温度）</caption>
@@ -310,7 +276,7 @@ var _hmt = _hmt || [];
 
   <!-- ============ TAB 1：安全阀选型 ============ -->
   <div class="tab-panel" id="panel1">
-    <h3 style="font-size:15px;font-weight:600;margin-bottom:4px;"><i class="fa-solid fa-fan"></i> 安全阀选型 — 由所需面积反查流道直径与公称通径</h3>
+    <div class="sec-title"><i class="fa-solid fa-fan"></i> 安全阀选型 — 由所需面积反查流道直径与公称通径</div>
     <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;">安全阀按<strong>流道直径 do</strong> 标注排量，不是按法兰公称通径 DN。本页把第 1 页签算出的面积换算成 do，再对照厂商额定排量表核对。</p>
 
     <div class="form-grid">
@@ -380,7 +346,7 @@ var _hmt = _hmt || [];
 
   <!-- ============ TAB 2：爆破片选型 ============ -->
   <div class="tab-panel" id="panel2">
-    <h3 style="font-size:15px;font-weight:600;margin-bottom:4px;"><i class="fa-solid fa-burst"></i> 爆破片选型 — 口径、型式与爆破压力</h3>
+    <div class="sec-title"><i class="fa-solid fa-burst"></i> 爆破片选型 — 口径、型式与爆破压力</div>
     <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;">爆破片是<strong>一次性</strong>元件，动作后必须更换且容器被迫停运。选型 = 口径够流量 + 型式满足操作压力比 + 爆破压力落在可标定区间。</p>
 
     <div class="form-grid">
@@ -449,7 +415,7 @@ var _hmt = _hmt || [];
     <div class="warn-bar danger" id="dWarn" style="display:none;"><i class="fa-solid fa-triangle-exclamation"></i><span id="dWarnText"></span></div>
     <div class="warn-bar ok" id="dOk" style="display:none;"><i class="fa-solid fa-circle-check"></i><span id="dOkText"></span></div>
 
-    <h4 style="font-size:14px;font-weight:600;margin:22px 0 4px;"><i class="fa-solid fa-list"></i> 各型式规格与可标定压力区间（<strong>厂商样本值，非标准原表</strong>）</h4>
+    <div class="sec-sub"><i class="fa-solid fa-list"></i> 各型式规格与可标定压力区间（<strong>厂商样本值，非标准原表</strong>）</div>
     <div class="table-scroll">
       <table class="data-table" id="discTable">
         <thead><tr><th>泄放口径 DN (mm)</th><th>爆破压力下限 (MPa)</th><th>爆破压力上限 (MPa)</th><th>适用说明</th></tr></thead>
@@ -461,7 +427,7 @@ var _hmt = _hmt || [];
 
   <!-- ============ TAB 3：压力设定 ============ -->
   <div class="tab-panel" id="panel3">
-    <h3 style="font-size:15px;font-weight:600;margin-bottom:14px;"><i class="fa-solid fa-gauge-high"></i> 整定压力与爆破压力设定规则</h3>
+    <div class="sec-title"><i class="fa-solid fa-gauge-high"></i> 整定压力与爆破压力设定规则</div>
     <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;">这是最容易被搞错的一页。市面上流传的「整定压力 = 设计压力 × 1.1」<strong>只对锅炉和移动式容器成立</strong>，压力容器恰恰相反 —— 是不大于设计压力。</p>
 
     <div class="form-grid">
@@ -509,7 +475,7 @@ var _hmt = _hmt || [];
 
     <div class="warn-bar danger" id="pWarn" style="display:none;"><i class="fa-solid fa-triangle-exclamation"></i><span id="pWarnText"></span></div>
 
-    <h4 style="font-size:14px;font-weight:600;margin:22px 0 4px;"><i class="fa-solid fa-ruler-vertical"></i> 各设备类型设定压力规定（现行条文）</h4>
+    <div class="sec-sub"><i class="fa-solid fa-ruler-vertical"></i> 各设备类型设定压力规定（现行条文）</div>
     <div class="table-scroll">
       <table class="data-table">
         <thead><tr><th>设备 / 管道</th><th>规定</th><th>标准出处</th></tr></thead>
@@ -528,7 +494,7 @@ var _hmt = _hmt || [];
       </table>
     </div>
 
-    <h4 style="font-size:14px;font-weight:600;margin:22px 0 4px;"><i class="fa-solid fa-crosshairs"></i> 安全阀整定压力允差（GB/T 12243-2021 5.1）</h4>
+    <div class="sec-sub"><i class="fa-solid fa-crosshairs"></i> 安全阀整定压力允差（GB/T 12243-2021 5.1）</div>
     <div class="table-scroll">
       <table class="data-table">
         <thead><tr><th>用途 / 整定压力范围</th><th>允差</th></tr></thead>
@@ -546,7 +512,7 @@ var _hmt = _hmt || [];
 
   <!-- ============ TAB 4：选型对比 ============ -->
   <div class="tab-panel" id="panel4">
-    <h3 style="font-size:15px;font-weight:600;margin-bottom:14px;"><i class="fa-solid fa-scale-balanced"></i> 安全阀 vs 爆破片 — 选哪个、怎么组合</h3>
+    <div class="sec-title"><i class="fa-solid fa-scale-balanced"></i> 安全阀 vs 爆破片 — 选哪个、怎么组合</div>
 
     <div class="form-grid" style="margin-bottom:16px;">
       <div class="form-row">
@@ -581,7 +547,7 @@ var _hmt = _hmt || [];
 
     <div class="warn-bar" id="xRes" style="margin-top:0;"><i class="fa-solid fa-lightbulb"></i><span id="xResText"></span></div>
 
-    <h4 style="font-size:14px;font-weight:600;margin:22px 0 4px;"><i class="fa-solid fa-th"></i> 两者根本差异</h4>
+    <div class="sec-sub"><i class="fa-solid fa-th"></i> 两者根本差异</div>
     <div class="table-scroll">
       <table class="data-table">
         <thead><tr><th>对比项</th><th>安全阀</th><th>爆破片</th></tr></thead>
@@ -598,7 +564,7 @@ var _hmt = _hmt || [];
       </table>
     </div>
 
-    <h4 style="font-size:14px;font-weight:600;margin:22px 0 4px;"><i class="fa-solid fa-shuffle"></i> 组合使用三种形式（GB/T 567.2-2012 4.3）</h4>
+    <div class="sec-sub"><i class="fa-solid fa-shuffle"></i> 组合使用三种形式（GB/T 567.2-2012 4.3）</div>
     <div class="req-item" style="display:flex;gap:10px;padding:10px 12px;background:var(--bg-page);border:1px solid var(--border-light);border-radius:10px;margin-bottom:8px;font-size:13px;line-height:1.7;">
       <span class="tag-good" style="flex-shrink:0;height:fit-content;font-size:11px;font-weight:700;padding:2px 8px;border-radius:60px;">入口侧串联</span>
       <span>最常见。适用于：避免爆破损失大量工艺物料、安全阀不能直接用于该介质（强腐蚀）、移动式容器装毒性/强腐蚀介质。要求：组合泄放量 ≥ 设备安全泄放量；爆破片公称直径 ≥ 安全阀入口管径且设在距安全阀入口 5 倍管径内；<strong>入口管线压力损失不超过安全阀设定压力的 3%</strong>；两者之间腔体设压力指示 + 排气口 + 报警器。<strong>组合泄放量 = 单个安全阀额定泄放量 × 0.9</strong>。</span>
@@ -614,7 +580,7 @@ var _hmt = _hmt || [];
 
     <div class="warn-bar info"><i class="fa-solid fa-circle-info"></i><span><strong>组合装置另有专门标准：</strong>GB/T 38599-2020《安全阀与爆破片安全装置的组合》（2020-10-01 实施，修改采用 ISO 4126-3:2006），适用于爆破片出口侧到安全阀入口侧距离 ≤ 5 倍管径的串联结构，规定应用与设计、安装、排量修正系数的测定与应用。安全阀侧的上位一般要求见 GB/T 12241-2021。</span></div>
 
-    <h4 style="font-size:14px;font-weight:600;margin:22px 0 4px;"><i class="fa-solid fa-table-list"></i> 爆破片型式选型指南（GB/T 567.2-2012 表A.1）</h4>
+    <div class="sec-sub"><i class="fa-solid fa-table-list"></i> 爆破片型式选型指南（GB/T 567.2-2012 表A.1）</div>
     <div class="table-scroll">
       <table class="data-table" id="guideTable">
         <thead><tr><th>类别</th><th>型式</th><th>操作压力比</th><th>抗疲劳</th><th>碎片</th><th>撞击火花</th><th>工作相</th><th>与安全阀串联</th></tr></thead>
@@ -623,7 +589,7 @@ var _hmt = _hmt || [];
     </div>
     <div class="warn-bar info"><i class="fa-solid fa-circle-info"></i><span><strong>操作压力比</strong> = 设备工作压力 ÷ 爆破片最小爆破压力。表中值适合爆破温度 15~30 ℃；实际取值还与爆破片材料、压力脉动有关，应由制造和使用单位协商确定。反拱带槽型：操作压力比 0.9、无碎片无火花、抗疲劳优、<strong>是唯一明确「可以」与安全阀串联的通用型</strong>。</span></div>
 
-    <h4 style="font-size:14px;font-weight:600;margin:22px 0 4px;"><i class="fa-solid fa-draft-compass"></i> 爆破压力允差（GB/T 567.1-2012）</h4>
+    <div class="sec-sub"><i class="fa-solid fa-draft-compass"></i> 爆破压力允差（GB/T 567.1-2012）</div>
     <div class="table-scroll">
       <table class="data-table">
         <thead><tr><th>标定爆破压力 (MPa)</th><th>平板形 / 正拱形 / 反拱形</th><th>石墨型</th></tr></thead>
@@ -637,7 +603,7 @@ var _hmt = _hmt || [];
       </table>
     </div>
 
-    <h4 style="font-size:14px;font-weight:600;margin:22px 0 4px;"><i class="fa-solid fa-shield-halved"></i> 最小爆破压力下限（GB/T 567.1-2012 附录B 表B.1）</h4>
+    <div class="sec-sub"><i class="fa-solid fa-shield-halved"></i> 最小爆破压力下限（GB/T 567.1-2012 附录B 表B.1）</div>
     <div class="table-scroll">
       <table class="data-table">
         <thead><tr><th>爆破片型式</th><th>载荷性质</th><th>最小爆破压力 p_bmin</th></tr></thead>
@@ -656,6 +622,21 @@ var _hmt = _hmt || [];
     <div class="disclaimer no-pr">
       <strong>免责与数据来源说明：</strong>本页公式与系数表取自 <strong>GB/T 567.2-2012 规范性附录C</strong>、<strong>GB/T 12243-2021 资料性附录B</strong>、<strong>GB/T 150.1-2024 规范性附录B</strong>，压力设定规则取自 <strong>TSG 21-2016</strong>、<strong>TSG R0005-2011</strong>、<strong>TSG 11-2020</strong>、<strong>GB/T 20801.6-2020</strong>，均已核查为现行版。<strong>标注为「厂商样本值」的排量表与口径压力区间不是国家标准原表</strong>，仅供选型初筛。标准本身只提供计算公式，不提供成品泄放量数据表；<strong>正式选型与验收必须以制造厂按中国标准出具的型式试验报告为准</strong>。爆破片装置的制造许可、铭牌标志与定期检验另有 TSG ZF003 规定。本工具不存储标准全文，仅摘录数值表与计算式。
     </div>
+
+    <details class="fold-note">
+      <summary>术语白话解释（泄放量 / 泄放面积 / 流道直径 / 整定压力 / 泄放系数…）</summary>
+      <div class="fn-body">
+      <p><b>泄放量（W）</b>：出事故时这个装置每秒（每小时）必须放掉的介质量，单位 kg/h。它由热源大小决定，不是你选的，是「必须满足的底线」。</p>
+      <p><b>泄放面积（A）</b>：算出泄放量后，按标准公式反推出的通流口要开多大，单位 mm²。<b>安全阀和爆破片都是按面积卖，不是按口径卖</b>，口径只是面积的离散代表。</p>
+      <p><b>流道直径（do）</b>：安全阀真正开孔的直径，比法兰公称通径 DN 小。查样本看的是 do 列，不是 DN 列。</p>
+      <p><b>整定压力（SET）</b>：安全阀自己决定「什么时候跳」的预设压力。<b>爆破压力（p_b）</b>：爆破片决定「什么时候炸」的预设压力。两者都是被保护设备的保护门槛。</p>
+      <p><b>设定压力 ≤ 设计压力</b>：压力容器上安全阀的整定压力一般<strong>不大于</strong>容器设计压力（不是「1.1 倍设计压力」——那是锅炉和移动式容器的规则）。</p>
+      <p><b>最小爆破压力</b>：爆破片能标定的最低压力。反拱型要求 ≥ 工作压力 × 1.1，正拱普通型要 ≥ ×1.43，平板型要 ×2.0。选错型式这块就卡住。</p>
+      <p><b>操作压力比</b>：设备工作压力 ÷ 爆破片最小爆破压力。数值越大越耐用但动作越迟。反拱带槽型 0.9 最优。</p>
+      <p><b>泄放系数 K</b>：接管形状对实际放流量的打折系数。插入式 0.68 最亏，平齐式 0.73，带过渡圆角 0.80 最划算，拿不准按 0.62 保守取值。</p>
+      <p><b>组合装置 × 0.9</b>：爆破片串在安全阀前面后，组合泄放量只能按「单个安全阀额定泄放量 × 0.9」计（GB/T 567.2-2012 4.3.2.3），所以选型要放大一档。</p>
+      </div>
+    </details>
   </div>
 
 </main>
@@ -1301,15 +1282,6 @@ window.rvCompare = function () {
   }
   $('xRes').className = 'warn-bar ' + (rec[0] === '安全阀' && !combo ? 'ok' : 'info');
   $('xResText').innerHTML = txt;
-};
-
-// ===== 易用性：术语白话解释 =====
-window.rvGloss = function () {
-  var box = $('glossBox'), btn = $('glossBtn');
-  var on = box.classList.toggle('on');
-  btn.innerHTML = on
-    ? '<i class="fa-solid fa-chevron-up"></i> 收起解释'
-    : '<i class="fa-solid fa-book-open"></i> 看不懂术语？点这里看白话解释';
 };
 
 // ===== 易用性：场景卡 =====
