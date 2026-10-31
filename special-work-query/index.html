@@ -15,7 +15,7 @@
 
     <!-- 图标库（与 Toolbox 一致） -->
     <link rel="stylesheet" href="../assets/fa/all.min.css">
-    <link rel="stylesheet" href="../assets/common.css">
+    <link rel="stylesheet" href="/sheen-toolbox/common.css">
 
     <style>
         /* ============================================================
@@ -24,13 +24,13 @@
            圆角卡片 + 柔和阴影 + 药丸按钮，响应式适配移动端
            ============================================================ */
         :root {
-            --black: #000000;
+            --black: var(--black);
             --text-primary: #1E2126;
             --text-secondary: #5C6470;
             --bg-page: #F8F9FA;
-            --bg-card: #FFFFFF;
+            --bg-card: var(--white);
             --border: #E3E6EA;
-            --border-light: #F3F4F6;
+            --border-light: var(--border-light);
             --brand-red: #F03752;
             --brand-red-hover: #D12E47;
             --tech-blue: #2D7EE7;
@@ -70,7 +70,7 @@
 
         /* ===== 面包屑 ===== */
         .breadcrumb a {
-            color: var(--tech-blue);
+            color: var(--tech-blue-deep);
             text-decoration: none;
             font-weight: 600;
             display: inline-flex;
@@ -89,7 +89,7 @@
             width: 100%;
             max-width: 1200px; /* 查询类 */
         }
-        .page-title i { color: var(--brand-red); font-size: 22px; }
+        .page-title i { color: var(--brand-red-deep); font-size: 22px; }
 
         /* ===== 卡片（圆角 + 柔和阴影） ===== */
         .card > h2 {
@@ -101,7 +101,7 @@
             align-items: center;
             gap: 8px;
         }
-        .card > h2 i { color: var(--brand-red); font-size: 16px; }
+        .card > h2 i { color: var(--brand-red-deep); font-size: 16px; }
         .card .subtitle {
             font-size: 12.5px;
             color: var(--text-secondary);
@@ -137,10 +137,10 @@
         .tab-btn i { font-size: 0.95rem;
             border-radius: 8px;
         }
-        .tab-btn.active { color: var(--brand-red); border-bottom-color: var(--brand-red);
+        .tab-btn.active { color: var(--brand-red-deep); border-bottom-color: var(--brand-red);
             border-radius: 8px;
         }
-        .tab-btn:hover { color: var(--brand-red-hover); }
+        .tab-btn:hover { color: var(--brand-red-deep); }
 
         .tab-content { display: none;
             border-radius: 8px;
@@ -175,7 +175,7 @@
         .category h3 {
             font-size: 14.5px;
             font-weight: 700;
-            color: var(--brand-red);
+            color: var(--brand-red-deep);
             border-left: 4px solid var(--brand-red);
             padding-left: 12px;
             margin-bottom: 12px;
@@ -239,7 +239,7 @@
         button.verify-btn {
             padding: 12px 28px;
             background: var(--brand-red-surface);
-            color: #fff;
+            color: var(--white);
             border: none;
             border-radius: 8px;
             font-size: 15px;
@@ -267,26 +267,26 @@
             border-radius: var(--radius-md);
             font-size: 0.9rem;
             margin-top: 16px;
-            color: var(--brand-red-hover);
+            color: var(--brand-red-deep);
             line-height: 1.6;
         }
-        .note a { color: var(--brand-red); font-weight: 600; word-break: break-all; }
+        .note a { color: var(--brand-red-deep); font-weight: 600; word-break: break-all; }
         .note a:hover { text-decoration: underline; }
 
         /* ===== 页脚 ===== */
                 .sheen-footer i { color: var(--amber); margin-right: 4px; }
         .sheen-footer strong { color: var(--text-primary); }
         .site-stat { color: var(--text-secondary); font-size: 12px; margin-left: 8px; }
-        .site-stat b { color: var(--brand-red); font-weight: 700; }
+        .site-stat b { color: var(--brand-red-deep); font-weight: 700; }
 
         /* ===== 打印时间戳 ===== */
-        .print-time { display: none; font-size: 10pt; color: #666; text-align: right; margin-bottom: 10px; }
+        .print-time { display: none; font-size: 10pt; color: var(--text-secondary); text-align: right; margin-bottom: 10px; }
 
         /* ===== 打印样式 ===== */
         @media print {
-            body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
+            body { background: var(--white) !important; padding: 0 !important; font-size: 12pt; color: var(--black) !important; }
             .breadcrumb, .sheen-footer, .no-print, nav, .tabs, .verify-form, .note, .search-box { display: none !important; }
-            .item { border: 1px solid #999 !important; background: #f5f5f5 !important; }
+            .item { border: 1px solid #999 !important; background: var(--border-light) !important; }
         }
 
         /* ===== 响应式 ===== */
