@@ -62,20 +62,20 @@
             border-radius: 50%;
             background: var(--brand-red);
             cursor: pointer;
-            border: 2px solid #fff;
+            border: 2px solid var(--white);
             box-shadow: 0 1px 4px rgba(0,0,0,.25);
         }
         .input-group .val-display {
             text-align: center;
             font-size: 26px;
             font-weight: 700;
-            color: var(--brand-red);
+            color: var(--brand-red-deep);
             margin-top: 2px;
         }
 
         /* ---- 结果卡片（大字 + 风险色带） ---- */
         .result-panel {
-            background: linear-gradient(135deg, #fff 0%, #F8F9FA 100%);
+            background: linear-gradient(135deg, var(--white) 0%, #F8F9FA 100%);
             border: 2px solid var(--border);
             border-radius: var(--radius-lg);
             padding: 24px;
@@ -116,7 +116,7 @@
         .risk-caution   { background: #FEF08A; color: #854D0E; }       /* 黄 - 注意 */
         .risk-extreme   { background: #FED7AA; color: var(--warn-deep); }       /* 橙 - 极度注意 */
         .risk-danger    { background: var(--fail-soft); color: var(--fail-deep); }       /* 红 - 危险 */
-        .risk-extdanger{ background: #7F1D1D; color: #FFF; }           /* 深红 - 极度危险 */
+        .risk-extdanger{ background: #7F1D1D; color: var(--white); }           /* 深红 - 极度危险 */
 
         /* ---- 建议面板 ---- */
         .advice-panel {
@@ -152,7 +152,7 @@
             text-align: center;
             white-space: nowrap;
             background: #1e293b;
-            color: #fff;
+            color: var(--white);
             font-size: 11px;
         }
         .hi-table td {
@@ -176,11 +176,11 @@
         .hi-caution   { background: #FEF08A; color: #854D0E; }
         .hi-extreme   { background: #FDBA74; color: #7C2D12; }
         .hi-danger    { background: #FCA5A5; color: #7F1D1D; }
-        .hi-extdanger{ background: #7F1D1D; color: #FFFFFF; }
+        .hi-extdanger{ background: #7F1D1D; color: var(--white); }
 
         /* 当前选中高亮 */
         .hi-table td.active-cell {
-            outline: 3px solid #000 !important;
+            outline: 3px solid var(--black) !important;
             outline-offset: -2px;
             z-index: 3;
             transform: scale(1.15);
@@ -230,11 +230,11 @@
         .edu-body h4 {
             font-size: 14px;
             font-weight: 700;
-            color: var(--brand-red-hover);
+            color: var(--brand-red-deep);
             margin: 14px 0 6px;
         }
         .edu-body p { margin: 0 0 8px; }
-        .edu-body strong { color: var(--brand-red); }
+        .edu-body strong { color: var(--brand-red-deep); }
         .edu-note {
             background: #fefce8;
             border-left: 3px solid #EAB308;
@@ -250,7 +250,7 @@
             .advice-panel { display: block !important; border: 1px solid #ccc; }
             .edu-body { display: block !important; }
             .hi-table td:hover { transform: none; box-shadow: none; }
-            .hi-table td.active-cell { transform: none; outline: 2px solid #000; }
+            .hi-table td.active-cell { transform: none; outline: 2px solid var(--black); }
         }
     </style>
     <!-- Baidu Tongji -->
@@ -375,7 +375,7 @@
                         </tr>
                         <tr>
                             <td>&gt; 54</td>
-                            <td><span class="badge risk-extdanger" style="display:inline-block;padding:2px 10px;color:#fff;">Extreme Danger 极度危险</span></td>
+                            <td><span class="badge risk-extdanger" style="display:inline-block;padding:2px 10px;color:var(--white);">Extreme Danger 极度危险</span></td>
                             <td>极度危险</td>
                             <td>中暑极可能发生，属于紧急医疗状况</td>
                         </tr>
@@ -496,7 +496,7 @@
               ]},
             { max: 33,   key: 'caution',   labelCN: '注意',         labelEN: 'Caution',
               cssClass: 'risk-caution',   hiClass: 'hi-caution',
-              adviceTitle: '<i class="fa-solid fa-face-meh" style="color:#CA8A04;"></i> 注意 — 可能疲劳',
+              adviceTitle: '<i class="fa-solid fa-face-meh" style="color:var(--warn-deep);"></i> 注意 — 可能疲劳',
               advice: [
                   '长时间户外活动可能引起疲劳和热疹（痱子）。',
                   '建议减少剧烈运动，增加休息频次。',
@@ -513,7 +513,7 @@
               ]},
             { max: 55,   key: 'danger',    labelCN: '危险',         labelEN: 'Danger',
               cssClass: 'risk-danger',    hiClass: 'hi-danger',
-              adviceTitle: '<i class="fa-solid fa-skull-crossbones" style="color:#F03752;"></i> 危险 — 中暑高风险',
+              adviceTitle: '<i class="fa-solid fa-skull-crossbones" style="color: #B3243B;"></i> 危险 — 中暑高风险',
               advice: [
                   '运动或长时间户外暴露时，中暑可能性极高！',
                   '尽可能取消非必要户外活动。',
@@ -525,7 +525,7 @@
               cssClass: 'risk-extdanger', hiClass: 'hi-extdanger',
               adviceTitle: '<i class="fa-solid fa-triangle-exclamation" style="color:#fff;"></i> ⚠️ 极度危险 — 紧急医疗状态！',
               advice: [
-                  '<b style="color:#F03752;">中暑极可能发生，属于紧急医疗状况！</b>',
+                  '<b style="color: #B3243B;">中暑极可能发生，属于紧急医疗状况！</b>',
                   '任何户外活动都可能危及生命，请留在室内并开启空调。',
                   '如必须在户外：缩短至绝对最短时间，配备全程监护人员。',
                   '热射病（体温＞40℃、意识障碍）可致命，需立即拨打急救电话并物理降温。'
