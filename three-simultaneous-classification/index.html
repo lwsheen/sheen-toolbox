@@ -17,8 +17,8 @@
     <style>
         .tab-nav { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:20px; border-bottom:2px solid var(--border); padding-bottom:0; }
         .tab-btn { border:none; background:transparent; padding:10px 18px; font-size:var(--fs-base); cursor:pointer; color:var(--text-secondary); border-bottom:3px solid transparent; margin-bottom:-2px; font-weight:600; font-family:inherit; display:inline-flex; align-items:center; gap:7px; transition:color .15s; }
-        .tab-btn:hover { color:var(--brand-red); }
-        .tab-btn.active { color:var(--brand-red); border-bottom-color:var(--brand-red); }
+        .tab-btn:hover { color: var(--brand-red-deep); }
+        .tab-btn.active { color: var(--brand-red-deep); border-bottom-color:var(--brand-red); }
         .tab-panel { display:none; }
         .tab-panel.active { display:block; animation:fadeSlide .25s ease; }
         @keyframes fadeSlide { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
@@ -50,7 +50,7 @@
         .detail-col.report { border-left-color:var(--brand-red); }
         .detail-col h4 { font-size:var(--fs-sm); color:var(--text-primary); margin-bottom:6px; font-weight:600; }
         .detail-col p { font-size:var(--fs-sm); color:var(--text-primary); line-height:1.6; margin:2px 0; }
-        .toggle-btn { background:none; border:none; color:var(--tech-blue); font-weight:600; font-size:var(--fs-sm); cursor:pointer; padding:4px 0; }
+        .toggle-btn { background:none; border:none; color: var(--tech-blue-deep); font-weight:600; font-size:var(--fs-sm); cursor:pointer; padding:4px 0; }
         .toggle-btn:hover { text-decoration:underline; }
         .ssd-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
         @media (max-width:800px) { .ssd-grid { grid-template-columns:1fr; } }
@@ -60,12 +60,12 @@
         .ssd-card.normal-risk { border-left:4px solid var(--amber); }
         .ssd-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; flex-wrap:wrap; gap:6px; }
         .ssd-title { font-size:var(--fs-base); font-weight:700; color:var(--text-primary); }
-        .ssd-code { font-size:var(--fs-sm); font-weight:700; color:var(--brand-red); font-family:var(--font-mono); }
+        .ssd-code { font-size:var(--fs-sm); font-weight:700; color: var(--brand-red-deep); font-family:var(--font-mono); }
         .ssd-row { font-size:var(--fs-sm); color:var(--text-primary); line-height:1.7; margin:4px 0; }
         .ssd-row b { color:var(--text-primary); font-weight:600; }
         .ssd-ref { font-size:var(--fs-xs); color:var(--text-secondary); margin-top:8px; border-top:1px dashed var(--border); padding-top:6px; }
         .ssd-note { margin-top:16px; background:var(--bg-page); border:1px solid var(--border); border-radius:var(--radius-md); padding:14px 18px; font-size:var(--fs-sm); color:var(--text-primary); line-height:1.8; }
-        .ssd-note b { color:var(--brand-red); }
+        .ssd-note b { color: var(--brand-red-deep); }
         .no-result { text-align:center; color:var(--text-secondary); padding:40px 0; font-size:var(--fs-md); }
         @media (max-width:600px) { .result-item { flex-direction:column; align-items:flex-start; } .item-left { width:100%; } }
         /* 总览待办清单样式 */
@@ -77,7 +77,7 @@
         .todo-body { padding:12px 18px; }
         .todo-row { display:flex; align-items:flex-start; gap:10px; padding:7px 0; border-bottom:1px dashed var(--border); font-size:var(--fs-sm); }
         .todo-row:last-child { border-bottom:none; }
-        .todo-step { flex-shrink:0; width:22px; height:22px; border-radius:50%; background:var(--brand-red-surface); color:#fff; font-size:11px; font-weight:700; display:inline-flex; align-items:center; justify-content:center; margin-top:1px; }
+        .todo-step { flex-shrink:0; width:22px; height:22px; border-radius:50%; background:var(--brand-red-surface); color:var(--white); font-size:11px; font-weight:700; display:inline-flex; align-items:center; justify-content:center; margin-top:1px; }
         .todo-step.green { background:var(--brand-green); }
         .todo-step.blue { background:var(--tech-blue); }
         .todo-step.amber { background:var(--amber); }
@@ -121,8 +121,8 @@
                     <button type="button" class="btn-outline" onclick="clearSummary()"><i class="fa-solid fa-eraser"></i> 清空</button>
                 </div>
                 <div class="legend-row">
-                    <span class="lg-item"><i class="fa-solid fa-shield-heart" style="color:var(--brand-red);"></i> 职业病危害风险</span>
-                    <span class="lg-item"><i class="fa-solid fa-leaf" style="color:var(--tech-blue);"></i> 环境影响评价</span>
+                    <span class="lg-item"><i class="fa-solid fa-shield-heart" style="color: var(--brand-red-deep);"></i> 职业病危害风险</span>
+                    <span class="lg-item"><i class="fa-solid fa-leaf" style="color: var(--tech-blue-deep);"></i> 环境影响评价</span>
                     <span class="lg-item"><i class="fa-solid fa-hard-hat" style="color:var(--amber);"></i> 安全设施三同时</span>
                 </div>
                 <div class="stat-line no-pr" id="statSummary"></div>
@@ -167,7 +167,7 @@
         <div id="panel-ssd" class="tab-panel">
             <div class="form-card no-pr">
                 <div class="legend-row">
-                    <span class="lg-item"><i class="fa-solid fa-hard-hat" style="color:var(--brand-red);"></i> 依据《建设项目安全设施"三同时"监督管理办法》（安监总局令第36号，2015年修正）</span>
+                    <span class="lg-item"><i class="fa-solid fa-hard-hat" style="color: var(--brand-red-deep);"></i> 依据《建设项目安全设施"三同时"监督管理办法》（安监总局令第36号，2015年修正）</span>
                 </div>
                 <div class="stat-line">第7条：下列项目须进行安全预评价；其他项目进行综合分析形成书面报告备查（第9条）。</div>
             </div>
@@ -820,13 +820,13 @@
                 var riskLevel = occ.risk;
                 var isSevere = riskLevel === '严重';
                 var levelBadge = isSevere
-                    ? '<span style="display:inline-flex;align-items:center;padding:3px 12px;border-radius:12px;background:#FDEEF1;color:var(--brand-red);font-size:var(--fs-xs);font-weight:700;">严重</span>'
+                    ? '<span style="display:inline-flex;align-items:center;padding:3px 12px;border-radius:12px;background:#FDEEF1;color: var(--brand-red-deep);font-size:var(--fs-xs);font-weight:700;">严重</span>'
                     : '<span style="display:inline-flex;align-items:center;padding:3px 12px;border-radius:12px;background:#ECFDF5;color:var(--brand-green);font-size:var(--fs-xs);font-weight:700;">一般</span>';
                 var codeClean = occ.code;
                 var nameClean = occ.name.replace('*','');
                 html += '<div class="todo-card">' +
                     '<div class="todo-head">' +
-                        '<span class="todo-head-icon" style="color:var(--brand-red);"><i class="fa-solid fa-shield-heart"></i></span>' +
+                        '<span class="todo-head-icon" style="color: var(--brand-red-deep);"><i class="fa-solid fa-shield-heart"></i></span>' +
                         '<span class="todo-head-title">' + codeClean + ' ' + nameClean + '</span>' +
                         levelBadge +
                     '</div>' +
@@ -881,9 +881,9 @@
         var starNote = name.indexOf('*') !== -1 ? ' <span class="item-note">*</span>' : '';
         var html = '<div class="todo-card">' +
             '<div class="todo-head">' +
-                '<span class="todo-head-icon" style="color:var(--tech-blue);"><i class="fa-solid fa-leaf"></i></span>' +
+                '<span class="todo-head-icon" style="color: var(--tech-blue-deep);"><i class="fa-solid fa-leaf"></i></span>' +
                 '<span class="todo-head-title">' + code + ' ' + nameClean + starNote + '</span>' +
-                '<span style="display:inline-flex;align-items:center;padding:3px 12px;border-radius:12px;background:' + (levelCls==='red'?'#FDEEF1':levelCls==='blue'?'#EEF4FD':'#FFF8ED') + ';' + (levelCls==='red'?'color:var(--brand-red)':levelCls==='blue'?'color:var(--tech-blue)':'color:var(--amber)') + ';font-size:var(--fs-xs);font-weight:700;">' + level + '</span>' +
+                '<span style="display:inline-flex;align-items:center;padding:3px 12px;border-radius:12px;background:' + (levelCls==='red'?'#FDEEF1':levelCls==='blue'?'#EEF4FD':'#FFF8ED') + ';' + (levelCls==='red'?'color: var(--brand-red-deep)':levelCls==='blue'?'color: var(--tech-blue-deep)':'color:var(--amber)') + ';font-size:var(--fs-xs);font-weight:700;">' + level + '</span>' +
             '</div><div class="todo-body">';
         var steps = [];
         if (level === '报告书') {
@@ -912,7 +912,7 @@
         if (matches.length > 0) {
             var m = matches[0];
             var riskBadge = m.risk === '高危'
-                ? '<span style="display:inline-flex;align-items:center;padding:3px 12px;border-radius:12px;background:#FDEEF1;color:var(--brand-red);font-size:var(--fs-xs);font-weight:700;">高危 — 须安全预评价</span>'
+                ? '<span style="display:inline-flex;align-items:center;padding:3px 12px;border-radius:12px;background:#FDEEF1;color: var(--brand-red-deep);font-size:var(--fs-xs);font-weight:700;">高危 — 须安全预评价</span>'
                 : '<span style="display:inline-flex;align-items:center;padding:3px 12px;border-radius:12px;background:#FFF8ED;color:var(--amber);font-size:var(--fs-xs);font-weight:700;">一般 — 综合分析备查</span>';
             html += '<div class="todo-head">' + headIcon + headTitle + riskBadge + '</div><div class="todo-body">';
             html += '<div class="todo-row"><span class="todo-step red">1</span><div class="todo-text"><b>安全预评价（如适用）</b><div class="todo-hint">' + m.pre + '</div></div></div>';
@@ -999,7 +999,7 @@
             '<head><meta charset="UTF-8"><title>建设项目三同时分类管理查询报告</title>' +
             '<style>' +
             'body{font-family:SimSun,Microsoft YaHei,Arial,sans-serif;font-size:14px;color:#1E2126;line-height:1.8;margin:40px;}' +
-            'h1{font-size:22px;color:#F03752;text-align:center;border-bottom:2px solid #F03752;padding-bottom:12px;margin-bottom:24px;}' +
+            'h1{font-size:22px;color: #B3243B;text-align:center;border-bottom:2px solid #F03752;padding-bottom:12px;margin-bottom:24px;}' +
             'h2{font-size:16px;color:#1E2126;border-left:4px solid #F03752;padding-left:12px;margin:24px 0 12px;}' +
             '.meta{font-size:12px;color:#5C6470;text-align:center;margin-bottom:24px;}' +
             '.todo-card{border:1px solid #E3E6EA;border-radius:8px;margin-bottom:20px;overflow:hidden;}' +
@@ -1016,9 +1016,9 @@
             '.todo-text b{color:#1E2126;font-weight:600;}' +
             '.todo-hint{font-size:12px;color:#5C6470;margin-top:2px;}' +
             '.badge-red{background:#FDEEF1;color:#b3243b;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:700;}' +
-            '.badge-green{background:#ECFDF5;color:#16A34A;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:700;}' +
-            '.badge-blue{background:#EEF4FD;color:#2D7EE7;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:700;}' +
-            '.badge-amber{background:#FFF8ED;color:#F57C00;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:700;}' +
+            '.badge-green{background:#ECFDF5;color:var(--ok-deep);padding:2px 10px;border-radius:12px;font-size:12px;font-weight:700;}' +
+            '.badge-blue{background:#EEF4FD;color: var(--tech-blue-deep);padding:2px 10px;border-radius:12px;font-size:12px;font-weight:700;}' +
+            '.badge-amber{background:#FFF8ED;color: var(--warn-deep);padding:2px 10px;border-radius:12px;font-size:12px;font-weight:700;}' +
             '.disclaimer{font-size:11px;color:#5C6470;margin-top:24px;padding:12px;background:#F8F9FA;border-radius:6px;}' +
             '@media print{body{margin:20px;}}' +
             '</style></head>' +
