@@ -39,19 +39,19 @@ var _hmt = _hmt || [];
 .tab-btn{border:none;background:transparent;padding:12px 18px;font-size:14px;cursor:pointer;color:var(--text-secondary);border-bottom:2px solid transparent;transition:all .2s;font-weight:500;
             border-radius: 8px;
         }
-.tab-btn:hover{color:var(--brand-red);}
-.tab-btn.active{color:var(--brand-red);border-bottom-color:var(--brand-red);font-weight:600;
+.tab-btn:hover{color: var(--brand-red-deep);}
+.tab-btn.active{color: var(--brand-red-deep);border-bottom-color:var(--brand-red);font-weight:600;
             border-radius: 8px;
         }
 .tab-panel{display:none;}
 .tab-panel.active{display:block;}
-.page-title i{color:var(--brand-red);font-size:22px;margin-left:6px;}
+.page-title i{color: var(--brand-red-deep);font-size:22px;margin-left:6px;}
 
 /* 安全色 tab */
 .color-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;}
 .color-card{background:var(--bg-card);border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border-light);transition:transform .2s,box-shadow .2s;}
 .color-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.08);}
-.color-swatch{height:120px;display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:800;color:#fff;letter-spacing:2px;}
+.color-swatch{height:120px;display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:800;color:var(--white);letter-spacing:2px;}
 .color-info{padding:16px 18px;}
 .color-name{font-size:17px;font-weight:700;margin-bottom:6px;}
 .color-mean{font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:10px;}
@@ -75,8 +75,8 @@ var _hmt = _hmt || [];
 /* 标志样式 tab */
 .subtabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
 .subtab{padding:6px 14px;border-radius: 8px;border:1px solid var(--border);background:var(--bg-card);cursor:pointer;font-size:13px;color:var(--text-secondary);transition:all .15s;}
-.subtab:hover{border-color:var(--brand-red);color:var(--brand-red);}
-.subtab.active{background:var(--brand-red-surface);color:#fff;border-color:var(--brand-red-surface);
+.subtab:hover{border-color:var(--brand-red);color: var(--brand-red-deep);}
+.subtab.active{background:var(--brand-red-surface);color:var(--white);border-color:var(--brand-red-surface);
             border-radius: 8px;
         }
 .search-box{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
@@ -99,8 +99,8 @@ var _hmt = _hmt || [];
 .picker-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:14px;}
 .picker-row label{font-size:14px;font-weight:600;}
 .picker-row select,.picker-row input{padding:8px 14px;border:1px solid var(--border);border-radius:6px;font-size:14px;min-width:120px;}
-.picker-result{background:linear-gradient(135deg,#FDEEF1 0%,#fff 100%);padding:16px 20px;border-radius:8px;border-left:3px solid var(--brand-red);}
-.picker-result .model-num{font-size:28px;font-weight:800;color:var(--brand-red);font-family:ui-monospace,Menlo,monospace;}
+.picker-result{background:linear-gradient(135deg,#FDEEF1 0%,var(--white) 100%);padding:16px 20px;border-radius:8px;border-left:3px solid var(--brand-red);}
+.picker-result .model-num{font-size:28px;font-weight:800;color: var(--brand-red-deep);font-family:ui-monospace,Menlo,monospace;}
 .picker-result .info{font-size:14px;color:var(--text-primary);line-height:1.7;margin-top:6px;}
 .dim-table,.loc-table{width:100%;border-collapse:collapse;background:var(--bg-card);border-radius:8px;overflow:hidden;border:1px solid var(--border-light);margin-top:14px;}
 .dim-table th,.dim-table td,.loc-table th,.loc-table td{padding:10px 14px;text-align:left;font-size:13px;border-bottom:1px solid var(--border-light);}
@@ -122,7 +122,7 @@ var _hmt = _hmt || [];
 .methods h3{font-size:15px;margin:0 0 12px;color:var(--text-primary);}
 .method-list{display:grid;gap:8px;margin-bottom:18px;}
 .method-item{background:var(--bg-card);padding:10px 14px;border-radius:8px;border-left:3px solid var(--tech-blue);font-size:13px;line-height:1.6;}
-.method-item b{color:var(--tech-blue);margin-right:6px;}
+.method-item b{color: var(--tech-blue-deep);margin-right:6px;}
 .fig-card{background:var(--bg-card);border:1px solid var(--border-light);border-radius:10px;padding:16px;margin-bottom:16px;}
 .fig-card img{max-width:100%;height:auto;display:block;margin:0 auto;}
 .fig-card .caption{font-size:12px;color:var(--text-secondary);text-align:center;margin-top:8px;}
@@ -130,13 +130,13 @@ var _hmt = _hmt || [];
         <style>
             @media print {
                 @page { size: A4; margin: 18mm 15mm 20mm 15mm; }
-                body { background: #fff !important; padding: 0 !important; font-size: 12pt; color: #000 !important; }
+                body { background: var(--white) !important; padding: 0 !important; font-size: 12pt; color: var(--black) !important; }
                 .app-wrapper { box-shadow: none !important; border-radius: 0 !important; max-width: 100% !important; border: none !important; }
                 .breadcrumb, .side-nav, .btn-primary, .btn-print, .form-card, .sheen-footer, .footnote, .disclaimer, .no-print { display: none !important; }
                 .main-body { flex-direction: column; }
                 .content-area { padding: 0 !important; }
                 @page { size: A4; margin: 18mm 15mm 20mm 15mm;
-                    @bottom-center { content: "SHEEN Toolbox · 安全色和安全标志查询 | SHEEN Toolbox"; font-size: 8pt; color: #666; }
+                    @bottom-center { content: "SHEEN Toolbox · 安全色和安全标志查询 | SHEEN Toolbox"; font-size: 8pt; color: var(--text-secondary); }
                 }
             }
         </style>
@@ -164,11 +164,11 @@ var _hmt = _hmt || [];
 <section id="panel-color" class="tab-panel active">
   <div class="color-grid">
     <div class="color-card">
-      <div class="color-swatch" style="background:#E60012;color:#fff;">红</div>
+      <div class="color-swatch" style="background:#E60012;color:var(--white);">红</div>
       <div class="color-info">
         <div class="color-name">红色 Red</div>
         <div class="color-mean">传递禁止、停止或提示消防设备、设施的信息。</div>
-        <div class="color-pair"><span class="color-chip"><span class="sw" style="background:#fff;border:1px solid #ddd;"></span>对比色：白色</span></div>
+        <div class="color-pair"><span class="color-chip"><span class="sw" style="background:var(--white);border:1px solid #ddd;"></span>对比色：白色</span></div>
       </div>
     </div>
     <div class="color-card">
@@ -180,19 +180,19 @@ var _hmt = _hmt || [];
       </div>
     </div>
     <div class="color-card">
-      <div class="color-swatch" style="background:#0046AD;color:#fff;">蓝</div>
+      <div class="color-swatch" style="background:#0046AD;color:var(--white);">蓝</div>
       <div class="color-info">
         <div class="color-name">蓝色 Blue</div>
         <div class="color-mean">传递应遵守规定的指令性信息。</div>
-        <div class="color-pair"><span class="color-chip"><span class="sw" style="background:#fff;border:1px solid #ddd;"></span>对比色：白色</span></div>
+        <div class="color-pair"><span class="color-chip"><span class="sw" style="background:var(--white);border:1px solid #ddd;"></span>对比色：白色</span></div>
       </div>
     </div>
     <div class="color-card">
-      <div class="color-swatch" style="background:#009B48;color:#fff;">绿</div>
+      <div class="color-swatch" style="background:#009B48;color:var(--white);">绿</div>
       <div class="color-info">
         <div class="color-name">绿色 Green</div>
         <div class="color-mean">传递安全的提示性信息。</div>
-        <div class="color-pair"><span class="color-chip"><span class="sw" style="background:#fff;border:1px solid #ddd;"></span>对比色：白色</span></div>
+        <div class="color-pair"><span class="color-chip"><span class="sw" style="background:var(--white);border:1px solid #ddd;"></span>对比色：白色</span></div>
       </div>
     </div>
   </div>
@@ -210,21 +210,21 @@ var _hmt = _hmt || [];
       </div>
     </div>
     <div class="mark-card">
-      <div class="mark-stripe" style="background:repeating-linear-gradient(45deg,#E60012 0 26px,#ffffff 26px 52px);"></div>
+      <div class="mark-stripe" style="background:repeating-linear-gradient(45deg,#E60012 0 26px,var(--white) 26px 52px);"></div>
       <div class="mark-info">
         <div class="mark-name">4.3.3 红色与白色相间条纹</div>
         <div class="mark-mean">表示禁止或提示消防设备、设施位置的安全标记。</div>
       </div>
     </div>
     <div class="mark-card">
-      <div class="mark-stripe" style="background:repeating-linear-gradient(45deg,#0046AD 0 26px,#ffffff 26px 52px);"></div>
+      <div class="mark-stripe" style="background:repeating-linear-gradient(45deg,#0046AD 0 26px,var(--white) 26px 52px);"></div>
       <div class="mark-info">
         <div class="mark-name">4.3.4 蓝色与白色相间条纹</div>
         <div class="mark-mean">表示传递应遵守规定的安全标记。</div>
       </div>
     </div>
     <div class="mark-card">
-      <div class="mark-stripe" style="background:repeating-linear-gradient(45deg,#009B48 0 26px,#ffffff 26px 52px);"></div>
+      <div class="mark-stripe" style="background:repeating-linear-gradient(45deg,#009B48 0 26px,var(--white) 26px 52px);"></div>
       <div class="mark-info">
         <div class="mark-name">4.3.5 绿色与白色相间条纹</div>
         <div class="mark-mean">表示安全环境或安全状况的安全标记。</div>
@@ -255,7 +255,7 @@ var _hmt = _hmt || [];
     <div class="picker-row">
       <label>观察距离 L (m)：</label>
       <input type="number" id="dist" min="0.1" max="40" step="0.1" placeholder="如 5.5">
-      <button type="button" onclick="pickModel()" style="padding:8px 20px;background:var(--brand-red-surface);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px;">推荐型号</button>
+      <button type="button" onclick="pickModel()" style="padding:8px 20px;background:var(--brand-red-surface);color:var(--white);border:none;border-radius:8px;cursor:pointer;font-size:14px;">推荐型号</button>
     </div>
     <div class="picker-result" id="pickResult" style="display:none;">
       <div class="model-num" id="pickModel"></div>
