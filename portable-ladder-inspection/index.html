@@ -47,7 +47,7 @@
             transition: all 0.15s;
         }
         .type-opt input { width: 15px; height: 15px; accent-color: var(--brand-red); }
-        .type-opt.active { background: var(--brand-red); border-color: var(--brand-red); color: #fff; font-weight: 700;
+        .type-opt.active { background: var(--brand-red-surface); border-color: var(--brand-red-surface); color: #fff; font-weight: 700;
             border-radius: 8px;
         }
 
@@ -100,7 +100,7 @@
         }
         .chapter-row td i { margin-right: 8px; opacity: 0.9; }
         .section-row td {
-            background: var(--brand-red) !important; color: #fff !important;
+            background: var(--brand-red-surface) !important; color: #fff !important;
             font-weight: 700 !important; font-size: 13px !important; text-align: left !important;
             padding: 8px 12px !important;
         }
@@ -187,7 +187,7 @@
             padding: 8px 16px; font-size: 13px; cursor: pointer; background: #fff; user-select: none; transition: all 0.15s;
         }
         .verdict-opt input { display: none; }
-        .verdict-opt.active { background: var(--brand-red); border-color: var(--brand-red); color: #fff; font-weight: 700;
+        .verdict-opt.active { background: var(--brand-red-surface); border-color: var(--brand-red-surface); color: #fff; font-weight: 700;
             border-radius: 8px;
         }
         .verdict-card label.field-label { font-size: 12px; color: var(--text-secondary); font-weight: 600; display: block; margin-bottom: 6px;
@@ -250,8 +250,8 @@
             border-radius: 8px;
         }
             .chapter-row td { background: #1E2126 !important; color: #fff !important; font-size: 10px !important; padding: 4px 6px !important; }
-            .section-row td { background: #F03752 !important; color: #fff !important; font-size: 10px !important; padding: 4px 6px !important; }
-            .subsection-row td { background: #FDEEF1 !important; color: #F03752 !important; font-size: 9px !important; padding: 3px 8px !important; }
+            .section-row td { background: var(--brand-red-surface) !important; color: #fff !important; font-size: 10px !important; padding: 4px 6px !important; }
+            .subsection-row td { background: #FDEEF1 !important; color: #b3243b !important; font-size: 9px !important; padding: 3px 8px !important; }
             .verdict-card { display: block !important; background: #fff !important; margin-top: 12px; page-break-inside: auto;
             border-radius: 8px;
         }
@@ -264,7 +264,7 @@
             .verdict-opt { border: 1px solid #999 !important; padding: 2px 6px !important; font-size: 9px !important;
             border-radius: 8px;
         }
-            .verdict-opt.active { background: #F03752 !important;
+            .verdict-opt.active { background: var(--brand-red-surface) !important;
             border-radius: 8px;
         }
             .verdict-card textarea, .verdict-card .note-input { border: 1px solid #999 !important; font-size: 9px !important; min-height: 40px !important; }
@@ -992,7 +992,7 @@
                 if (blk.type === 'chapter') {
                     body += '<tr><td colspan="5" style="background:#1E2126;color:#fff;font-weight:700;">' + esc(blk.title) + '</td></tr>';
                 } else if (blk.type === 'section') {
-                    body += '<tr><td colspan="5" style="background:#F03752;color:#fff;font-weight:700;">' + esc(blk.title) + '</td></tr>';
+                    body += '<tr><td colspan="5" style="background:var(--brand-red-surface);color:#fff;font-weight:700;">' + esc(blk.title) + '</td></tr>';
                 } else if (blk.type === 'subsection') {
                     body += '<tr><td colspan="5" style="background:#FDEEF1;color:#F03752;font-weight:700;border-left:4px solid #F03752;">' + esc(blk.title) + '</td></tr>';
                 } else {
