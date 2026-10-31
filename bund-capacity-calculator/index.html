@@ -39,16 +39,16 @@
 .scene-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 6px; }
 .scene-card { text-align: left; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; cursor: pointer; font-family: var(--font); transition: all 0.18s; }
 .scene-card:hover { border-color: var(--brand-red); background: var(--brand-red-light); }
-.scene-card i { font-size: 16px; color: var(--brand-red); }
+.scene-card i { font-size: 16px; color: var(--brand-red-deep); }
 .scene-card b { display: block; font-size: 13px; color: var(--text-primary); margin: 6px 0 3px; line-height: 1.4; }
 .scene-card span { display: block; font-size: 11px; color: var(--text-secondary); line-height: 1.5; }
 
 .ex-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border); }
 .ex-label { font-size: 11px; color: var(--text-secondary); display: flex; align-items: center; gap: 5px; }
 .ex-chip { font-size: 11.5px; font-weight: 600; padding: 5px 12px; border-radius: 60px; background: var(--tech-blue-soft); color: var(--tech-blue-deep); border: none; cursor: pointer; font-family: var(--font); }
-.ex-chip:hover { background: var(--brand-red-surface); color: #fff; }
-.aux-btn { display: inline-flex; align-items: center; gap: 5px; margin-top: 6px; padding: 5px 11px; font-size: 11.5px; font-weight: 600; border-radius: 8px; background: var(--bg-page); color: var(--tech-blue); border: 1px dashed var(--tech-blue); cursor: pointer; font-family: var(--font); }
-.aux-btn:hover { background: var(--tech-blue-hover); color: #fff; }
+.ex-chip:hover { background: var(--brand-red-surface); color: var(--white); }
+.aux-btn { display: inline-flex; align-items: center; gap: 5px; margin-top: 6px; padding: 5px 11px; font-size: 11.5px; font-weight: 600; border-radius: 8px; background: var(--bg-page); color: var(--tech-blue-deep); border: 1px dashed var(--tech-blue); cursor: pointer; font-family: var(--font); }
+.aux-btn:hover { background: var(--tech-blue-hover); color: var(--white); }
 
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .form-row label { display: block; font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
@@ -69,7 +69,7 @@
 .verdict.ok { background: var(--bd-green-light); border: 1px solid var(--bd-green); color: var(--bd-green); }
 .verdict.warn { background: var(--bd-amber-light); border: 1px solid var(--bd-amber); color: var(--bd-amber-deep); }
 .verdict.bad { background: var(--bd-red-light); border: 1px solid var(--bd-red); color: var(--bd-red); }
-.verdict.info { background: var(--bd-blue-light); border: 1px solid var(--bd-blue); color: var(--bd-blue); }
+.verdict.info { background: var(--bd-blue-light); border: 1px solid var(--bd-blue); color: var(--tech-blue-deep); }
 
 .data-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 12px; }
 .data-table th { background: var(--bg-page); color: var(--text-primary); font-weight: 600; padding: 9px 10px; border: 1px solid var(--border); text-align: left; }
@@ -80,15 +80,15 @@
 
 .formula { font-family: var(--font-mono, monospace); background: var(--bg-page); border: 1px solid var(--border-light); border-radius: 8px; padding: 10px 12px; font-size: 12px; color: var(--text-primary); margin: 8px 0; line-height: 1.8; overflow-x: auto; }
 .src-note { font-size: 11px; color: var(--text-tertiary); margin-top: 6px; line-height: 1.7; }
-.src-note b { color: var(--bd-blue); }
+.src-note b { color: var(--tech-blue-deep); }
 
-.btn-primary { display: inline-flex; align-items: center; gap: 7px; padding: 10px 20px; background: var(--brand-red-surface); color: #fff; border: none; border-radius: 8px; font-size: 13.5px; font-weight: 600; cursor: pointer; font-family: var(--font); }
+.btn-primary { display: inline-flex; align-items: center; gap: 7px; padding: 10px 20px; background: var(--brand-red-surface); color: var(--white); border: none; border-radius: 8px; font-size: 13.5px; font-weight: 600; cursor: pointer; font-family: var(--font); }
 .btn-primary:hover { background: var(--brand-red-surface-hover); }
 .btn-primary i { font-size: 14px; }
 
-.wl-chip { display: inline-block; font-size: 11px; padding: 3px 9px; border-radius: 60px; background: var(--bd-blue-light); color: var(--bd-blue); margin: 2px 4px 2px 0; font-weight: 600; }
+.wl-chip { display: inline-block; font-size: 11px; padding: 3px 9px; border-radius: 60px; background: var(--bd-blue-light); color: var(--tech-blue-deep); margin: 2px 4px 2px 0; font-weight: 600; }
 
-.std-badge { display: inline-block; font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 5px; background: var(--bg-card); border: 1px solid var(--bd-blue); color: var(--bd-blue); margin: 0 2px; }
+.std-badge { display: inline-block; font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 5px; background: var(--bg-card); border: 1px solid var(--bd-blue); color: var(--tech-blue-deep); margin: 0 2px; }
 
 @media (max-width: 768px) {
   .scene-grid { grid-template-columns: repeat(2, 1fr); }
@@ -101,7 +101,7 @@
 <style>
 @media print {
   @page { size: A4; margin: 16mm 12mm 18mm 12mm; }
-  body { background: #fff !important; padding: 0 !important; font-size: 11pt; color: #000 !important; }
+  body { background: var(--white) !important; padding: 0 !important; font-size: 11pt; color: var(--black) !important; }
   .breadcrumb, .btn-primary, .btn-print, .sheen-footer, .no-print, .no-pr, .form-grid, .scene-grid { display: none !important; }
   .tab-panel { display: block !important; border: none !important; padding: 0 0 12pt 0 !important; page-break-inside: avoid; }
   .app-container { box-shadow: none !important; border: none !important; max-width: 100% !important; padding: 0 !important; }
@@ -132,7 +132,7 @@ var _hmt = _hmt || [];
 
 <main class="app-container container-query">
 
-  <h1 class="page-title"><i class="fa-solid fa-water" style="color:var(--brand-red)"></i> 围堰有效容积计算</h1>
+  <h1 class="page-title"><i class="fa-solid fa-water" style="color: var(--brand-red-deep)"></i> 围堰有效容积计算</h1>
   <p class="page-subtitle" style="margin-bottom:16px;">算防火堤/围堰的<strong>有效容积</strong>并与规范下限比对，同时核算应急事故池所需的消防水、泄漏物与雨水容积</p>
 
   <div class="warn-bar warning">
@@ -221,7 +221,7 @@ var _hmt = _hmt || [];
 
     <div class="no-pr" style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
       <button class="btn-primary" onclick="bdCalc()"><i class="fa-solid fa-calculator"></i> 计算有效容积</button>
-      <button class="btn-primary" style="background:var(--tech-blue);" onclick="bdSolveH()"><i class="fa-solid fa-arrows-up-down"></i> 反算所需 H<sub>j</sub></button>
+      <button class="btn-primary" style="background:var(--tech-blue-hover);" onclick="bdSolveH()"><i class="fa-solid fa-arrows-up-down"></i> 反算所需 H<sub>j</sub></button>
     </div>
 
     <div id="out0"></div>
@@ -714,7 +714,7 @@ function renderTables() {
 
   var t3 = document.querySelector('#tblTrap tbody');
   t3.innerHTML = TRAP_ROWS.map(function(r) {
-    return '<tr><td style="color:var(--brand-red);">' + r[0] + '</td><td>' + r[1] + '</td><td style="font-size:11px;">' + r[2] + '</td></tr>';
+    return '<tr><td style="color: var(--brand-red-deep);">' + r[0] + '</td><td>' + r[1] + '</td><td style="font-size:11px;">' + r[2] + '</td></tr>';
   }).join('');
 
   var t4 = document.querySelector('#tblSub tbody');
@@ -771,7 +771,7 @@ function bdNote0(text) {
   var el = $('note0');
   if (!el) return;
   if (el.innerHTML.indexOf('fa-wand-magic-sparkles') >= 0) return;
-  el.innerHTML += '<br><span style="color:var(--tech-blue);font-weight:600;"><i class="fa-solid fa-wand-magic-sparkles"></i> ' + text + '</span>';
+  el.innerHTML += '<br><span style="color: var(--tech-blue-deep);font-weight:600;"><i class="fa-solid fa-wand-magic-sparkles"></i> ' + text + '</span>';
 }
 
 window.bdCalc = function() {
