@@ -23,9 +23,9 @@
   /* 品牌色一律引用 common.css 令牌，页面不自定义色值 */
   --bd-red: var(--brand-red);
   --bd-red-light: var(--brand-red-light);
-  --bd-amber: var(--warn-orange);
+  --bd-amber: var(--brand-red);
   --bd-amber-light: var(--warn-orange-soft);
-  --bd-amber-deep: var(--warn-deep);
+  --bd-amber-deep: var(--brand-red);
   --bd-green: var(--ok-deep);
   --bd-green-light: var(--ok-soft);
   --bd-blue: var(--tech-blue);
@@ -46,7 +46,7 @@
 .ex-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border); }
 .ex-label { font-size: 11px; color: var(--text-secondary); display: flex; align-items: center; gap: 5px; }
 .ex-chip { font-size: 11.5px; font-weight: 600; padding: 5px 12px; border-radius: 60px; background: var(--tech-blue-soft); color: var(--tech-blue-deep); border: none; cursor: pointer; font-family: var(--font); }
-.ex-chip:hover { background: var(--brand-red-surface); color: var(--white); }
+.ex-chip:hover { background: var(--brand-red); color: var(--white); }
 .aux-btn { display: inline-flex; align-items: center; gap: 5px; margin-top: 6px; padding: 5px 11px; font-size: 11.5px; font-weight: 600; border-radius: 8px; background: var(--bg-page); color: var(--tech-blue-deep); border: 1px dashed var(--tech-blue); cursor: pointer; font-family: var(--font); }
 .aux-btn:hover { background: var(--tech-blue-hover); color: var(--white); }
 
@@ -82,8 +82,8 @@
 .src-note { font-size: 11px; color: var(--text-tertiary); margin-top: 6px; line-height: 1.7; }
 .src-note b { color: var(--tech-blue-deep); }
 
-.btn-primary { display: inline-flex; align-items: center; gap: 7px; padding: 10px 20px; background: var(--brand-red-surface); color: var(--white); border: none; border-radius: 8px; font-size: 13.5px; font-weight: 600; cursor: pointer; font-family: var(--font); }
-.btn-primary:hover { background: var(--brand-red-surface-hover); }
+.btn-primary { display: inline-flex; align-items: center; gap: 7px; padding: 10px 20px; background: var(--brand-red); color: var(--white); border: none; border-radius: 8px; font-size: 13.5px; font-weight: 600; cursor: pointer; font-family: var(--font); }
+.btn-primary:hover { background: var(--brand-red); }
 .btn-primary i { font-size: 14px; }
 
 .wl-chip { display: inline-block; font-size: 11px; padding: 3px 9px; border-radius: 60px; background: var(--bd-blue-light); color: var(--tech-blue-deep); margin: 2px 4px 2px 0; font-weight: 600; }
@@ -714,7 +714,7 @@ function renderTables() {
 
   var t3 = document.querySelector('#tblTrap tbody');
   t3.innerHTML = TRAP_ROWS.map(function(r) {
-    return '<tr><td style="color: var(--brand-red-deep);">' + r[0] + '</td><td>' + r[1] + '</td><td style="font-size:11px;">' + r[2] + '</td></tr>';
+    return '<tr><td style="color: var(--brand-red);">' + r[0] + '</td><td>' + r[1] + '</td><td style="font-size:11px;">' + r[2] + '</td></tr>';
   }).join('');
 
   var t4 = document.querySelector('#tblSub tbody');
