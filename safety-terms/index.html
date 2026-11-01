@@ -22,8 +22,8 @@
         .st-input:focus { outline: none; border-color: var(--brand-red); box-shadow: 0 0 0 3px var(--brand-red-light); }
         .st-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
         .st-chip { padding: 6px 14px; border: 1.5px solid var(--border); background: var(--bg-card); border-radius: 60px; font-size: 13px; color: var(--text-secondary); cursor: pointer; transition: .15s; white-space: nowrap; }
-        .st-chip:hover { border-color: var(--brand-red); color: var(--brand-red-deep); }
-        .st-chip.active { background: var(--brand-red-surface); border-color: var(--brand-red-surface); color: var(--white); }
+        .st-chip:hover { border-color: var(--brand-red); color: var(--brand-red); }
+        .st-chip.active { background: var(--brand-red); border-color: var(--brand-red); color: var(--white); }
         .st-chip .st-n { font-size: 11px; opacity: .75; margin-left: 4px; }
         .st-count { font-size: 12px; color: var(--text-secondary); margin: 14px 0 10px; }
         /* 分章折叠（2026-10-29）：163 条平铺 4959px（6.2 屏）→ 按 GB/T 15236 的章分组，
@@ -35,12 +35,12 @@
             padding: 5px 14px; border: 1px solid var(--border); border-radius: 60px;
             background: var(--bg-card); color: var(--text-secondary); transition: .15s;
         }
-        .st-expand:hover { border-color: var(--brand-red); color: var(--brand-red-deep); }
+        .st-expand:hover { border-color: var(--brand-red); color: var(--brand-red); }
         .st-group { grid-column: 1 / -1; margin: 0 0 10px; }
         .st-group > summary.st-cat {
             display: flex; align-items: center; gap: 8px; list-style: none; cursor: pointer;
             padding: 9px 14px; border-radius: var(--radius-md);
-            background: var(--brand-red-surface); color: var(--white); font-weight: 700; font-size: 14px;
+            background: var(--brand-red); color: var(--white); font-weight: 700; font-size: 14px;
         }
         .st-group > summary.st-cat::-webkit-details-marker { display: none; }
         .st-group > summary.st-cat::before { content: "▸"; font-size: 11px; opacity: .9; }
@@ -51,15 +51,15 @@
         .st-item { border: 1px solid var(--border-light); border-radius: var(--radius-md); background: var(--bg-card); overflow: hidden; min-width: 0; }
         .st-head { display: flex; align-items: baseline; gap: 8px; padding: 12px 14px; cursor: pointer; transition: .15s; min-width: 0; }
         .st-head:hover { background: var(--brand-red-light); }
-        .st-id { flex: 0 0 auto; font-size: 11px; font-weight: 700; color: var(--white); background: var(--brand-red-surface); border-radius: 4px; padding: 2px 6px; }
+        .st-id { flex: 0 0 auto; font-size: 11px; font-weight: 700; color: var(--white); background: var(--brand-red); border-radius: 4px; padding: 2px 6px; }
         .st-name { display: block; width: 100%; min-width: 0; }
         .st-term { font-size: 15px; font-weight: 700; color: var(--text-primary); }
         .st-en { font-size: 12px; color: var(--text-secondary); margin-left: 6px; font-weight: 400; }
         .st-mark { flex: 0 0 auto; font-size: 10px; padding: 2px 7px; border-radius: 60px; font-weight: 700; }
         /* 10px 小角标必须压深色：--brand-red on --brand-red-light 只有 3.5:1，缩到 10px 更糊；
            deep 档 5.78:1，肉眼仍是海棠红，与「修改」角标的橙色系形成红/橙区分。 */
-        .st-mark-new { background: var(--brand-red-light); color: var(--brand-red-deep); }
-        .st-mark-rev { background: var(--warn-orange-soft); color: var(--warn-deep); }
+        .st-mark-new { background: var(--brand-red-light); color: var(--brand-red); }
+        .st-mark-rev { background: var(--warn-orange-soft); color: var(--brand-red); }
         .st-body { display: none; padding: 0 14px 14px; border-top: 1px dashed var(--border-light); }
         .st-item.open .st-body { display: block; }
         .st-def { font-size: 14px; line-height: 1.85; color: var(--text-primary); margin: 12px 0 0; }
