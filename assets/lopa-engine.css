@@ -55,7 +55,7 @@
             flex: 0 0 auto;
             width: 24px; height: 24px;
             border-radius: 50%;
-            background: var(--brand-red-surface);
+            background: var(--brand-red);
             color: #fff;
             font-size: var(--fs-sm);
             font-weight: 700;
@@ -91,7 +91,7 @@
             font-weight: 600;
             color: var(--text-secondary);
         }
-        .lp-field > label .lp-req { color: var(--brand-red-deep); margin-left: 2px; }
+        .lp-field > label .lp-req { color: var(--brand-red); margin-left: 2px; }
         .lp-field .lp-tip {
             font-size: var(--fs-xs);
             color: var(--text-secondary);
@@ -121,7 +121,7 @@
         .lp-radio-row label.on {
             border-color: var(--brand-red);
             background: var(--brand-red-light);
-            color: var(--brand-red-deep);
+            color: var(--brand-red);
             font-weight: 600;
         }
 
@@ -323,13 +323,13 @@
         }
         .lp-mx-none { background: #F1F3F5; }
         .lp-mx-opt  { background: var(--ok-soft); color: var(--ok-deep); }
-        .lp-mx-act  { background: var(--warn-soft-2); color: var(--warn-700); }
+        .lp-mx-act  { background: var(--warn-soft-2); color: var(--brand-red); }
         .lp-mx-now  { background: var(--fail-soft-2); color: var(--fail-deep); }
         .lp-matrix td.lp-mx-hit {
             outline: 3px solid var(--brand-red);
             outline-offset: -3px;
             font-weight: 700;
-            color: var(--brand-red-deep);
+            color: var(--brand-red);
         }
         .lp-mx-legend {
             display: flex;
@@ -358,7 +358,7 @@
         }
         .lp-action-box.none { background: #F1F3F5; color: var(--text-secondary); }
         .lp-action-box.opt  { background: var(--ok-soft); color: var(--ok-deep); }
-        .lp-action-box.act  { background: var(--warn-soft-2); color: var(--warn-700); }
+        .lp-action-box.act  { background: var(--warn-soft-2); color: var(--brand-red); }
         .lp-action-box.now  { background: var(--fail-soft-2); color: var(--fail-deep); }
 
         /* ===== 合规校验 ===== */
@@ -386,7 +386,7 @@
         .lp-ck-ok   { border-color: #86EFAC; background: var(--ok-soft); }
         .lp-ck-ok i { color: var(--ok-deep); }
         .lp-ck-warn { border-color: #FCD34D; background: var(--warn-soft-2); }
-        .lp-ck-warn i { color: var(--warn-700); }
+        .lp-ck-warn i { color: var(--brand-red); }
         .lp-ck-bad  { border-color: #FCA5A5; background: var(--fail-soft-2); }
         .lp-ck-bad i { color: var(--fail-deep); }
 
@@ -417,7 +417,7 @@
             transition: var(--transition);
         }
         .lp-tab:hover { border-color: var(--tech-blue); color: var(--tech-blue-deep); }
-        .lp-tab.on { background: var(--brand-red-surface); border-color: var(--brand-red-surface); color: #fff; font-weight: 600; }
+        .lp-tab.on { background: var(--brand-red); border-color: var(--brand-red); color: #fff; font-weight: 600; }
         .lp-panel { display: none; }
         .lp-panel.on { display: block; }
         .lp-ref-table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
