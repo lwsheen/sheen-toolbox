@@ -37,7 +37,7 @@
             transition:all .15s; user-select:none; background:var(--bg-card);
         }
         .moc-radio input { display:none; }
-        .moc-radio:has(input:checked) { border-color:var(--brand-red); background:var(--brand-red-light); color:var(--brand-red-deep); }
+        .moc-radio:has(input:checked) { border-color:var(--brand-red); background:var(--brand-red-light); color:var(--brand-red); }
         .moc-dims { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin-top:4px; }
         .moc-chip {
             display:flex; align-items:flex-start; gap:8px; cursor:pointer;
@@ -47,7 +47,7 @@
         }
         .moc-chip input { margin-top:3px; accent-color:var(--brand-red); width:15px; height:15px; }
         .moc-chip:has(input:checked) { border-color:var(--brand-red); background:var(--brand-red-light); }
-        .moc-chip.major:has(input:checked) { border-color:#DC2626; background:#FEE2E2; }
+        .moc-chip.major:has(input:checked) { border-color:#F03752; background:#FEE2E2; }
         .moc-actions { display:flex; gap:10px; margin-top:18px; flex-wrap:wrap; }
         .moc-result-extra {
             margin-top:14px; padding:16px 18px; border-radius:var(--radius-lg);
@@ -56,8 +56,8 @@
         .moc-result-extra h3 { font-size:15px; font-weight:700; margin-bottom:8px; }
         .moc-result-extra p { font-size:14px; line-height:1.7; color:var(--text-primary); }
         .moc-result-extra .moc-triggers { margin-top:8px; display:flex; flex-wrap:wrap; gap:6px; }
-        .moc-tag { font-size:12px; padding:3px 10px; border-radius:60px; background:var(--warn-orange-soft); color:#9A3412; font-weight:600; }
-        .moc-tag.major { background:#FEE2E2; color:#991B1B; }
+        .moc-tag { font-size:12px; padding:3px 10px; border-radius:60px; background:var(--warn-orange-soft); color:#F03752; font-weight:600; }
+        .moc-tag.major { background:#FEE2E2; color:#F03752; }
 
         .moc-table { width:100%; border-collapse:collapse; margin-top:4px; }
         .moc-table th { text-align:left; font-size:12px; font-weight:700; color:var(--text-secondary); padding:9px 10px; background:var(--bg-page); border-bottom:2px solid var(--border); white-space:nowrap; }
@@ -71,7 +71,7 @@
         .moc-progress { display:flex; align-items:center; gap:10px; margin:6px 0 14px; font-size:13px; color:var(--text-secondary); }
         .moc-progress .bar { flex:1; height:8px; border-radius:4px; background:#e0e7f0; overflow:hidden; }
         .moc-progress .bar > i { display:block; height:100%; background:var(--brand-red); transition:width .3s; }
-        .moc-progress .pct { font-weight:700; color: var(--brand-red-deep); min-width:42px; text-align:right; }
+        .moc-progress .pct { font-weight:700; color: var(--brand-red); min-width:42px; text-align:right; }
 
         .moc-app { margin-top:8px; }
         .moc-app-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-bottom:12px; }
