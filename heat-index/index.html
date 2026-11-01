@@ -69,7 +69,7 @@
             text-align: center;
             font-size: 26px;
             font-weight: 700;
-            color: var(--brand-red-deep);
+            color: var(--brand-red);
             margin-top: 2px;
         }
 
@@ -113,10 +113,10 @@
         }
         /* 四级风险色（与 NWS 图表一致） */
         .risk-safe      { background: #D1FAE5; color: #065F46; }       /* 绿 - 安全 */
-        .risk-caution   { background: #FEF08A; color: #854D0E; }       /* 黄 - 注意 */
-        .risk-extreme   { background: #FED7AA; color: var(--warn-deep); }       /* 橙 - 极度注意 */
+        .risk-caution   { background: #FEF08A; color: #F03752; }       /* 黄 - 注意 */
+        .risk-extreme   { background: #FED7AA; color: var(--brand-red); }       /* 橙 - 极度注意 */
         .risk-danger    { background: var(--fail-soft); color: var(--fail-deep); }       /* 红 - 危险 */
-        .risk-extdanger{ background: #7F1D1D; color: var(--white); }           /* 深红 - 极度危险 */
+        .risk-extdanger{ background: #F03752; color: var(--white); }           /* 深红 - 极度危险 */
 
         /* ---- 建议面板 ---- */
         .advice-panel {
@@ -173,10 +173,10 @@
 
         /* 表格单元格颜色映射（匹配 NWS 原图） */
         .hi-safe      { background: #D1FAE5; color: #065F46; }
-        .hi-caution   { background: #FEF08A; color: #854D0E; }
-        .hi-extreme   { background: #FDBA74; color: #7C2D12; }
-        .hi-danger    { background: #FCA5A5; color: #7F1D1D; }
-        .hi-extdanger{ background: #7F1D1D; color: var(--white); }
+        .hi-caution   { background: #FEF08A; color: #F03752; }
+        .hi-extreme   { background: #FDBA74; color: #F03752; }
+        .hi-danger    { background: #FCA5A5; color: #F03752; }
+        .hi-extdanger{ background: #F03752; color: var(--white); }
 
         /* 当前选中高亮 */
         .hi-table td.active-cell {
@@ -230,11 +230,11 @@
         .edu-body h4 {
             font-size: 14px;
             font-weight: 700;
-            color: var(--brand-red-deep);
+            color: var(--brand-red);
             margin: 14px 0 6px;
         }
         .edu-body p { margin: 0 0 8px; }
-        .edu-body strong { color: var(--brand-red-deep); }
+        .edu-body strong { color: var(--brand-red); }
         .edu-note {
             background: #fefce8;
             border-left: 3px solid #EAB308;
@@ -496,7 +496,7 @@
               ]},
             { max: 33,   key: 'caution',   labelCN: '注意',         labelEN: 'Caution',
               cssClass: 'risk-caution',   hiClass: 'hi-caution',
-              adviceTitle: '<i class="fa-solid fa-face-meh" style="color:var(--warn-deep);"></i> 注意 — 可能疲劳',
+              adviceTitle: '<i class="fa-solid fa-face-meh" style="color:var(--brand-red);"></i> 注意 — 可能疲劳',
               advice: [
                   '长时间户外活动可能引起疲劳和热疹（痱子）。',
                   '建议减少剧烈运动，增加休息频次。',
@@ -504,7 +504,7 @@
               ]},
             { max: 41,   key: 'extreme',   labelCN: '极度注意',     labelEN: 'Extreme Caution',
               cssClass: 'risk-extreme',   hiClass: 'hi-extreme',
-              adviceTitle: '<i class="fa-solid fa-face-frown" style="color:#C2410C;"></i> 极度注意 — 有中暑风险',
+              adviceTitle: '<i class="fa-solid fa-face-frown" style="color:#F03752;"></i> 极度注意 — 有中暑风险',
               advice: [
                   '可能出现中暑、热痉挛（抽筋）、热衰竭症状。',
                   '避免在正午时段（11:00–15:00）进行户外体力劳动。',
@@ -513,7 +513,7 @@
               ]},
             { max: 55,   key: 'danger',    labelCN: '危险',         labelEN: 'Danger',
               cssClass: 'risk-danger',    hiClass: 'hi-danger',
-              adviceTitle: '<i class="fa-solid fa-skull-crossbones" style="color: #B3243B;"></i> 危险 — 中暑高风险',
+              adviceTitle: '<i class="fa-solid fa-skull-crossbones" style="color: #F03752;"></i> 危险 — 中暑高风险',
               advice: [
                   '运动或长时间户外暴露时，中暑可能性极高！',
                   '尽可能取消非必要户外活动。',
@@ -525,7 +525,7 @@
               cssClass: 'risk-extdanger', hiClass: 'hi-extdanger',
               adviceTitle: '<i class="fa-solid fa-triangle-exclamation" style="color:#fff;"></i> ⚠️ 极度危险 — 紧急医疗状态！',
               advice: [
-                  '<b style="color: #B3243B;">中暑极可能发生，属于紧急医疗状况！</b>',
+                  '<b style="color: #F03752;">中暑极可能发生，属于紧急医疗状况！</b>',
                   '任何户外活动都可能危及生命，请留在室内并开启空调。',
                   '如必须在户外：缩短至绝对最短时间，配备全程监护人员。',
                   '热射病（体温＞40℃、意识障碍）可致命，需立即拨打急救电话并物理降温。'
@@ -650,7 +650,7 @@
             // 数字颜色
             hiNumberEl.textContent = hi;
             var colors = {
-                safe:'#059669', caution:'#CA8A04', extreme:'#C2410C',
+                safe:'#059669', caution:'#CA8A04', extreme:'#F03752',
                 danger:'#F03752', extdanger:'#FFF'
             };
             hiNumberEl.style.color = colors[risk.key] || '#000';
@@ -661,7 +661,7 @@
 
             // 建议
             advicePanel.style.display = 'block';
-            advicePanel.style.background = risk.key === 'extdanger' ? '#7F1D1D' : '';
+            advicePanel.style.background = risk.key === 'extdanger' ? '#F03752' : '';
             advicePanel.style.color = risk.key === 'extdanger' ? '#FFF' : '';
             adviceTitle.innerHTML = risk.adviceTitle;
             adviceList.innerHTML = '';
