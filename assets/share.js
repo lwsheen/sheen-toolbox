@@ -56,4 +56,85 @@
         try { ok(document.execCommand('copy')); } catch (e) { ok(false); }
         document.body.removeChild(ta);
     };
+
+    // —— 全局默认免责声明注入 ——
+    // 仅当页面正文未自带免责内容时注入，避免与已有免责声明重复。
+    // 判据：正文文本含「免责 / Disclaimer / 仅供参考 / 不构成」即视为已有，跳过。
+    function ensureDisclaimer() {
+        try {
+            if (document.querySelector('[data-sheen-disc]')) return;            // 已注入，跳过
+            var bodyText = (document.body && document.body.innerText) || '';
+            if (/免责声明|免责|Disclaimer|仅供参考|不构成/.test(bodyText)) return; // 已有免责，跳过
+
+            var disc = document.createElement('section');
+            disc.className = 'sheen-disc';
+            disc.setAttribute('data-sheen-disc', '1');
+            disc.innerHTML = '<i class="fa-solid fa-circle-info"></i> <strong>免责声明：</strong>' +
+                '本工具依据公开国家标准、行业规范及官方文件整理，仅供参考与内部初步筛查之用，' +
+                '不构成任何专业法律、安全或工程意见。实际合规判定请以最新官方发布文本及具备资质的专业机构评估为准。' +
+                '使用者应自行核实相关标准的现行有效性。';
+
+            // 挂载点优先级：静态 footer 之前（footer 不会被页面 JS 重建，最稳）>
+            // main 末尾 > body 末尾。
+            var footer = document.querySelector('.sheen-footer');
+            if (footer && footer.parentNode) {
+                footer.parentNode.insertBefore(disc, footer);
+            } else {
+                var mount = document.querySelector('main') || document.querySelector('.content-area');
+                if (mount) {
+                    mount.appendChild(disc);
+                } else {
+                    document.body.appendChild(disc);
+                }
+            }
+        } catch (e) { /* 静默失败，不阻塞页面 */ }
+    }
+
+    // —— 全局静态分享按钮（非悬浮，置于「标准块 .tool-meta」上方、页面居中）——
+    // 仅当页面未自带分享按钮时注入，避免与页内已有「分享」按钮重复。
+    function ensureShareBtn() {
+        try {
+            if (document.querySelector('.share-action')) return;                                 // 已注入，跳过
+            if (document.querySelector('.fa-share, .fa-share-nodes, [onclick*="shareTool"]')) return; // 页内已有分享按钮，跳过
+
+            var wrap = document.createElement('div');
+            wrap.className = 'share-action';
+            var btn = document.createElement('button');
+            btn.className = 'btn btn-outline';
+            btn.innerHTML = '<i class="fa-solid fa-share-nodes"></i> 分享';
+            btn.addEventListener('click', function () {
+                if (typeof window.shareTool === 'function') window.shareTool();
+            });
+            wrap.appendChild(btn);
+
+            // 挂载点优先级：标准块 .tool-meta 之前（置于标准号信息上方）>
+            // 静态 footer 之前 > main 末尾 > body 末尾（兜底无 .tool-meta 的页）。
+            var tm = document.querySelector('.tool-meta');
+            if (tm && tm.parentNode) {
+                tm.parentNode.insertBefore(wrap, tm);
+            } else {
+                var footer = document.querySelector('.sheen-footer');
+                if (footer && footer.parentNode) {
+                    footer.parentNode.insertBefore(wrap, footer);
+                } else {
+                    var mount = document.querySelector('main') || document.querySelector('.content-area');
+                    if (mount) mount.appendChild(wrap);
+                    else document.body.appendChild(wrap);
+                }
+            }
+        } catch (e) { /* 静默失败，不阻塞页面 */ }
+    }
+
+    function initEnhancements() {
+        function run() {
+            ensureDisclaimer();
+            ensureShareBtn();
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', run);
+        } else {
+            run();
+        }
+    }
+    initEnhancements();
 })();
