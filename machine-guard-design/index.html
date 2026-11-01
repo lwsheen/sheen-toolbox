@@ -22,11 +22,11 @@
 <style>:root {
   /* 品牌色一律引用 common.css 令牌，页面不自定义色值（common.css 是唯一来源） */
   --mg-red: var(--brand-red);
-  --mg-red-hover: var(--brand-red-hover);
+  --mg-red-hover: var(--brand-red);
   --mg-red-light: var(--brand-red-light);
-  --mg-amber: var(--warn-orange);
+  --mg-amber: var(--brand-red);
   --mg-amber-light: var(--warn-orange-soft);
-  --mg-amber-deep: var(--warn-deep);
+  --mg-amber-deep: var(--brand-red);
   --mg-green: var(--ok-deep);
   --mg-green-light: var(--ok-soft);
   --mg-blue: var(--tech-blue);
@@ -46,7 +46,7 @@
 
 
 .data-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 14px; }
-.data-table th { background: var(--brand-red-surface); color: var(--white); padding: 8px 9px; text-align: center; font-weight: 600; font-size: 11px; }
+.data-table th { background: var(--brand-red); color: var(--white); padding: 8px 9px; text-align: center; font-weight: 600; font-size: 11px; }
 .data-table th:first-child { text-align: left; }
 .data-table td { padding: 7px 9px; border-bottom: 1px solid var(--border-light); text-align: center; font-variant-numeric: tabular-nums; }
 .data-table td:first-child { text-align: left; }
@@ -60,10 +60,10 @@
 .req-item { display: flex; gap: 10px; padding: 9px 12px; background: var(--bg-page); border: 1px solid var(--border-light); border-radius: 10px; margin-bottom: 8px; font-size: 13px; line-height: 1.7; }
 .req-item .ri-tag { flex-shrink: 0; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 60px; height: fit-content; margin-top: 2px; }
 .req-item .ri-tag.fixed { background: var(--tech-blue-soft); color: var(--tech-blue-hover); }
-.req-item .ri-tag.movable { background: var(--warn-orange-soft); color: var(--warn-deep); }
-.req-item .ri-tag.interlock { background: var(--brand-red-light); color: var(--brand-red-deep); }
+.req-item .ri-tag.movable { background: var(--warn-orange-soft); color: var(--brand-red); }
+.req-item .ri-tag.interlock { background: var(--brand-red-light); color: var(--brand-red); }
 .req-item .ri-tag.adjust { background: var(--ok-soft); color: var(--ok-deep); }
-.req-item .ri-tag.view { background: var(--warn-soft); color: var(--warn-deep); }
+.req-item .ri-tag.view { background: var(--warn-soft); color: var(--brand-red); }
 
 .std-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 60px; background: var(--bg-page); border: 1px solid var(--border); color: var(--text-secondary); }
 
@@ -92,7 +92,7 @@
 .ex-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border); }
 .ex-label { font-size: 11px; color: var(--text-secondary); display: flex; align-items: center; gap: 5px; }
 .ex-chip { font-size: 11.5px; font-weight: 600; padding: 5px 12px; border-radius: 60px; background: var(--tech-blue-soft); color: var(--tech-blue-deep); border: none; cursor: pointer; font-family: var(--font); }
-.ex-chip:hover { background: var(--brand-red-surface); color: var(--white); }
+.ex-chip:hover { background: var(--brand-red); color: var(--white); }
 
 .term { border-bottom: 1px dashed var(--tech-blue); cursor: help; }
 
@@ -163,7 +163,7 @@ var _hmt = _hmt || [];
         </select>
       </div>
       <div class="form-row">
-        <label>开口尺寸 e (mm) <span style="color: var(--brand-red-deep)">*</span></label>
+        <label>开口尺寸 e (mm) <span style="color: var(--brand-red)">*</span></label>
         <input type="number" class="form-control" id="gOpen" value="20" min="1" max="300" step="1" oninput="calcOpening()">
         <div class="hint">例：护罩网孔 20×20 → e=20；圆孔 φ12 → e=12；长缝 8×40 → e=8（最窄处）</div>
       </div>
@@ -207,12 +207,12 @@ var _hmt = _hmt || [];
 
     <div class="form-grid">
       <div class="form-row">
-        <label>危险区最近点高度 A<sub>h</sub> (mm) <span style="color: var(--brand-red-deep)">*</span></label>
+        <label>危险区最近点高度 A<sub>h</sub> (mm) <span style="color: var(--brand-red)">*</span></label>
         <input type="number" class="form-control" id="rAh" value="1500" min="0" max="3000" step="10" oninput="calcReach()">
         <div class="hint">如：传动辊面离地 1500 mm</div>
       </div>
       <div class="form-row">
-        <label>防护结构高度 A<sub>p</sub> (mm) <span style="color: var(--brand-red-deep)">*</span></label>
+        <label>防护结构高度 A<sub>p</sub> (mm) <span style="color: var(--brand-red)">*</span></label>
         <input type="number" class="form-control" id="rAp" value="1000" min="0" max="3000" step="10" oninput="calcReach()">
         <div class="hint">网格护罩上沿离地高度（应低于危险点）</div>
       </div>
@@ -273,7 +273,7 @@ var _hmt = _hmt || [];
 
     <div class="form-grid">
       <div class="form-row">
-        <label>开口尺寸 e (mm) <span style="color: var(--brand-red-deep)">*</span></label>
+        <label>开口尺寸 e (mm) <span style="color: var(--brand-red)">*</span></label>
         <input type="number" class="form-control" id="lOpen" value="40" min="1" max="300" step="1" oninput="calcLower()">
         <div class="hint">常见：格栅踏板 30 mm、机坪花纹钢板 40 mm、围栏网 50 mm</div>
       </div>
@@ -324,7 +324,7 @@ var _hmt = _hmt || [];
 
     <div class="form-grid">
       <div class="form-row">
-        <label>人体部位 <span style="color: var(--brand-red-deep)">*</span></label>
+        <label>人体部位 <span style="color: var(--brand-red)">*</span></label>
         <select class="form-control" id="cPart" onchange="calcCrush()">
           <option value="body" selected>全身（最不利部位）</option>
           <option value="head">头部（最不利位置）</option>
