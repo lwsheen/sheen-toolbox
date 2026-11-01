@@ -32,11 +32,11 @@
             --border: #E3E6EA;
             --border-light: var(--border-light);
             --brand-red: #F03752;
-            --brand-red-hover: #D12E47;
+            --brand-red-hover: #F03752;
             --tech-blue: #2D7EE7;
             --brand-red-light: #FDEEF1;
-            --amber: #F57C00;
-            --amber-text: #C2410C;
+            --amber: #F03752;
+            --amber-text: #F03752;
             --radius-lg: 20px;
             --radius-md: 12px;
             --radius-sm: 8px;
@@ -137,10 +137,10 @@
         .tab-btn i { font-size: 0.95rem;
             border-radius: 8px;
         }
-        .tab-btn.active { color: var(--brand-red-deep); border-bottom-color: var(--brand-red);
+        .tab-btn.active { color: var(--brand-red); border-bottom-color: var(--brand-red);
             border-radius: 8px;
         }
-        .tab-btn:hover { color: var(--brand-red-deep); }
+        .tab-btn:hover { color: var(--brand-red); }
 
         .tab-content { display: none;
             border-radius: 8px;
@@ -175,7 +175,7 @@
         .category h3 {
             font-size: 14.5px;
             font-weight: 700;
-            color: var(--brand-red-deep);
+            color: var(--brand-red);
             border-left: 4px solid var(--brand-red);
             padding-left: 12px;
             margin-bottom: 12px;
@@ -196,7 +196,7 @@
         }
         .item:hover {
             background: var(--brand-red-light);
-            color: var(--brand-red-deep);
+            color: var(--brand-red);
             border-color: rgba(240,55,82,0.25);
         }
         .item small { font-size: 0.78rem; color: var(--amber-text); font-weight: 600; }
@@ -238,7 +238,7 @@
         /* 药丸按钮（品牌红） */
         button.verify-btn {
             padding: 12px 28px;
-            background: var(--brand-red-surface);
+            background: var(--brand-red);
             color: var(--white);
             border: none;
             border-radius: 8px;
@@ -253,7 +253,7 @@
             gap: 8px;
         }
         button.verify-btn:hover {
-            background: var(--brand-red-surface-hover);
+            background: var(--brand-red);
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(240,55,82,0.25);
         }
@@ -267,17 +267,17 @@
             border-radius: var(--radius-md);
             font-size: 0.9rem;
             margin-top: 16px;
-            color: var(--brand-red-deep);
+            color: var(--brand-red);
             line-height: 1.6;
         }
-        .note a { color: var(--brand-red-deep); font-weight: 600; word-break: break-all; }
+        .note a { color: var(--brand-red); font-weight: 600; word-break: break-all; }
         .note a:hover { text-decoration: underline; }
 
         /* ===== 页脚 ===== */
-                .sheen-footer i { color: var(--amber); margin-right: 4px; }
+                .sheen-footer i { color: var(--brand-red); margin-right: 4px; }
         .sheen-footer strong { color: var(--text-primary); }
         .site-stat { color: var(--text-secondary); font-size: 12px; margin-left: 8px; }
-        .site-stat b { color: var(--brand-red-deep); font-weight: 700; }
+        .site-stat b { color: var(--brand-red); font-weight: 700; }
 
         /* ===== 打印时间戳 ===== */
         .print-time { display: none; font-size: 10pt; color: var(--text-secondary); text-align: right; margin-bottom: 10px; }
