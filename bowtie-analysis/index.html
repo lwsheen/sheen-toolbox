@@ -22,19 +22,19 @@
 <style>:root {
   /* 品牌色一律引用 common.css 令牌，页面不自定义色值 */
   --bt-th-bg: var(--warn-soft);
-  --bt-th-bd: var(--warn-700);
-  --bt-th-tx: var(--warn-deep);
+  --bt-th-bd: var(--brand-red);
+  --bt-th-tx: var(--brand-red);
   --bt-pv-bg: var(--tech-blue-soft);
   --bt-pv-bd: var(--tech-blue);
   --bt-pv-tx: var(--tech-blue-deep);
   --bt-top-bg: var(--space-gray);
   --bt-top-tx: var(--white);
   --bt-mt-bg: var(--warn-orange-soft);
-  --bt-mt-bd: var(--warn-orange);
-  --bt-mt-tx: var(--warn-deep);
+  --bt-mt-bd: var(--brand-red);
+  --bt-mt-tx: var(--brand-red);
   --bt-cs-bg: var(--brand-red-light);
   --bt-cs-bd: var(--brand-red);
-  --bt-cs-tx: var(--brand-red-deep);
+  --bt-cs-tx: var(--brand-red);
   --bt-fl-bg: var(--fail-soft);
   --bt-fl-bd: var(--fail);
   --bt-fl-tx: var(--fail-deep);
@@ -44,8 +44,8 @@
 .bt-toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
 .bt-tbtn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 13px; font-size: 12.5px; font-weight: 600; font-family: var(--font); border-radius: 8px; background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border); cursor: pointer; transition: all 0.18s; }
 .bt-tbtn:hover { border-color: var(--tech-blue); color: var(--tech-blue-deep); background: var(--tech-blue-soft); }
-.bt-tbtn.primary { background: var(--brand-red-surface); border-color: var(--brand-red-surface); color: var(--white); }
-.bt-tbtn.primary:hover { background: var(--brand-red-surface-hover); border-color: var(--brand-red-surface-hover); color: var(--white); }
+.bt-tbtn.primary { background: var(--brand-red); border-color: var(--brand-red); color: var(--white); }
+.bt-tbtn.primary:hover { background: var(--brand-red); border-color: var(--brand-red); color: var(--white); }
 .bt-tbtn i { font-size: 12px; }
 .bt-sep { width: 1px; height: 20px; background: var(--border); margin: 0 2px; }
 .bt-hint { font-size: 11px; color: var(--text-secondary); margin-bottom: 10px; line-height: 1.7; }
@@ -110,18 +110,18 @@
 .tab-nav { display: flex; gap: 0; margin-bottom: 0; border-bottom: 2px solid var(--border); }
 .tab-btn { flex: 1; padding: 13px 8px; font-size: 13px; font-weight: 600; font-family: var(--font); background: var(--bg-page); color: var(--text-secondary); border: none; cursor: pointer; transition: all 0.2s; border-bottom: 3px solid transparent; margin-bottom: -2px; display: flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; border-radius: 8px; }
 .tab-btn i { font-size: 15px; }
-.tab-btn:hover { color: var(--brand-red-deep); background: var(--brand-red-light); }
-.tab-btn.active { color: var(--brand-red-deep); background: var(--bg-card); border-bottom-color: var(--brand-red); }
+.tab-btn:hover { color: var(--brand-red); background: var(--brand-red-light); }
+.tab-btn.active { color: var(--brand-red); background: var(--bg-card); border-bottom-color: var(--brand-red); }
 .tab-panel { display: none; background: var(--bg-card); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: 22px; }
 .tab-panel.active { display: block; }
 
 .scene-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 .scene-card { text-align: left; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; cursor: pointer; font-family: var(--font); transition: all 0.18s; }
 .scene-card:hover { border-color: var(--brand-red); background: var(--brand-red-light); }
-.scene-card .sc-no { display: inline-flex; width: 22px; height: 22px; border-radius: 50%; background: var(--brand-red-surface); color: var(--white); font-size: 11px; font-weight: 700; align-items: center; justify-content: center; }
+.scene-card .sc-no { display: inline-flex; width: 22px; height: 22px; border-radius: 50%; background: var(--brand-red); color: var(--white); font-size: 11px; font-weight: 700; align-items: center; justify-content: center; }
 .scene-card b { display: block; font-size: 13.5px; color: var(--text-primary); margin: 8px 0 5px; line-height: 1.4; }
 .scene-card span { display: block; font-size: 11.5px; color: var(--text-secondary); line-height: 1.7; }
-.scene-card .sc-go { display: inline-block; margin-top: 9px; font-size: 11.5px; font-weight: 600; color: var(--brand-red-deep); }
+.scene-card .sc-go { display: inline-block; margin-top: 9px; font-size: 11.5px; font-weight: 600; color: var(--brand-red); }
 
 .sec-title { font-size: 14px; font-weight: 700; color: var(--text-primary); margin: 20px 0 8px; padding-left: 9px; border-left: 3px solid var(--brand-red); }
 .sec-title:first-child { margin-top: 0; }
@@ -133,7 +133,7 @@
 .std-badge { display: inline-block; font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 5px; background: var(--bg-card); border: 1px solid var(--tech-blue); color: var(--tech-blue-deep); margin: 0 2px; }
 .step-list { margin: 10px 0 0; padding: 0; list-style: none; counter-reset: st; }
 .step-list li { counter-increment: st; position: relative; padding: 0 0 0 34px; margin-bottom: 12px; font-size: 12.5px; color: var(--text-secondary); line-height: 1.9; }
-.step-list li::before { content: counter(st); position: absolute; left: 0; top: 1px; width: 22px; height: 22px; border-radius: 50%; background: var(--brand-red-surface); color: var(--white); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.step-list li::before { content: counter(st); position: absolute; left: 0; top: 1px; width: 22px; height: 22px; border-radius: 50%; background: var(--brand-red); color: var(--white); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
 .step-list li b { color: var(--text-primary); }
 
 @media (max-width: 768px) {
@@ -408,7 +408,7 @@ window.btSwitch = function(i) {
 // ============ 令牌读取（Canvas/SVG 无法直接用 CSS 变量，运行时读令牌保持单一来源） ============
 var TOKEN_LIST = ['--warn-soft','--warn-700','--warn-deep','--tech-blue','--tech-blue-soft','--tech-blue-hover','--tech-blue-deep','--brand-red-deep','--space-gray','--brand-red','--brand-red-light','--brand-red-hover','--warn-orange','--warn-orange-soft','--fail','--fail-soft','--fail-deep','--ok-deep','--text-secondary','--font'];
 var TOKEN_FALLBACK = {
-  '--warn-soft':'#FDE68A','--warn-700':'#B45309','--warn-deep':'#9A3412','--tech-blue':'#2D7EE7','--tech-blue-soft':'#EAF2FD','--tech-blue-hover':'#1B6FD4','--tech-blue-deep':'#124E9B','--space-gray':'#1E2126','--brand-red':'#F03752','--brand-red-light':'#FDEEF1','--brand-red-hover':'#D12E47','--warn-orange':'#F57C00','--warn-orange-soft':'#FEF3E2','--fail':'#DC2626','--fail-soft':'#FECACA','--fail-deep':'#991B1B','--ok-deep':'#166534','--text-secondary':'#5C6470','--font':"'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif"
+  '--warn-soft':'#FDE68A','--warn-700':'#F03752','--warn-deep':'#F03752','--tech-blue':'#2D7EE7','--tech-blue-soft':'#EAF2FD','--tech-blue-hover':'#1B6FD4','--tech-blue-deep':'#124E9B','--space-gray':'#1E2126','--brand-red':'#F03752','--brand-red-light':'#FDEEF1','--brand-red-hover':'#F03752','--warn-orange':'#F03752','--warn-orange-soft':'#FEF3E2','--fail':'#F03752','--fail-soft':'#FECACA','--fail-deep':'#F03752','--ok-deep':'#166534','--text-secondary':'#5C6470','--font':"'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif"
 };
 var TK = {};
 (function() {
