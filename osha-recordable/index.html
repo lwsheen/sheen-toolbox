@@ -67,7 +67,7 @@
             display: inline-block;
             font-size: 11px;
             font-weight: 700;
-            color: var(--brand-red-deep);
+            color: var(--brand-red);
             background: var(--brand-red-light, #FDEEF1);
             border-radius: 8px;
             padding: 2px 10px;
@@ -122,7 +122,7 @@
             justify-content: center;
             font-weight: 700;
         }
-        .opt-btn:hover .opt-mark { border-color: var(--brand-red, #F03752); color: var(--brand-red-deep); }
+        .opt-btn:hover .opt-mark { border-color: var(--brand-red, #F03752); color: var(--brand-red); }
         .opt-btn .opt-sub { display: block; font-size: 12px; color: var(--text-secondary, #5C6470); margin-top: 2px; }
 
         /* ===== 操作行 ===== */
@@ -165,7 +165,7 @@
             color: var(--text-primary, #1E2126);
             background: var(--white);
         }
-        .col-chip b { color: var(--brand-red-deep); font-size: 13px; }
+        .col-chip b { color: var(--brand-red); font-size: 13px; }
         .col-chip.active { border-color: var(--brand-red, #F03752); background: var(--brand-red-light, #FDEEF1); }
 
         /* ===== 例外清单（问题提示内小表格） ===== */
@@ -200,7 +200,7 @@
             color: var(--text-primary, #1E2126);
             font-weight: 700;
         }
-        .pyr-row.on .pyr-code, .pyr-row.on .pyr-cur { color: var(--brand-red-deep); }
+        .pyr-row.on .pyr-code, .pyr-row.on .pyr-cur { color: var(--brand-red); }
         .pyr-note { font-size: 12px; line-height: 1.75; color: var(--text-secondary, #5C6470); margin-top: 8px; }
         .pyr-note b { color: var(--text-primary, #1E2126); }
 
@@ -624,7 +624,7 @@
     // 集团口径区块（含金字塔高亮 + 基数提醒）
     function pyramidBlock(py) {
         var h = '<div class="verdict-block"><h4>集团内部口径（HSE 金字塔）</h4>';
-        h += '<p>本次判定在集团绩效口径中登记为 <b style="color: var(--brand-red-deep)">' + py + ' ' + pyLabel(py) + '</b>。' +
+        h += '<p>本次判定在集团绩效口径中登记为 <b style="color: var(--brand-red)">' + py + ' ' + pyLabel(py) + '</b>。' +
              'OSHA 300 记录义务与集团口径是<b>两套独立判定</b>：同一份事实、同一套基础数据，但要分别判、分别报。</p>';
         h += '<div class="pyramid">';
         for (var i = 0; i < PY_ORDER.length; i++) {
