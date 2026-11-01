@@ -39,7 +39,7 @@
             cursor: pointer; font-size: 14px; padding: 2px 6px;
             border-radius: 8px;
         }
-        .lp-search .clear-btn:hover { color: var(--brand-red-deep); }
+        .lp-search .clear-btn:hover { color: var(--brand-red); }
         .lp-filters {
             display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;
             border-radius: 8px;
@@ -52,10 +52,10 @@
             border: 1px solid var(--border, #E3E6EA);
             transition: all .18s;
         }
-        .lp-chip:hover { border-color: var(--brand-red, #F03752); color: var(--brand-red-deep); }
+        .lp-chip:hover { border-color: var(--brand-red, #F03752); color: var(--brand-red); }
         .lp-chip.active {
-            background: var(--brand-red-surface); color: var(--white);
-            border-color: var(--brand-red-surface);
+            background: var(--brand-red); color: var(--white);
+            border-color: var(--brand-red);
             border-radius: 8px;
         }
         .ladder-grid {
@@ -79,7 +79,7 @@
         }
         .ladder-card .lc-icon {
             width: 44px; height: 44px; border-radius: 11px;
-            background: linear-gradient(135deg, var(--brand-red-surface), var(--brand-red-surface-hover));
+            background: linear-gradient(135deg, var(--brand-red), var(--brand-red));
             color: var(--white); display: flex; align-items: center; justify-content: center;
             font-size: 20px; flex-shrink: 0;
         }
@@ -103,8 +103,8 @@
             transition: all .15s; user-select: none;
             border-radius: 8px;
         }
-        .param-tab:hover { color: var(--brand-red-deep); }
-        .param-tab.active { color: var(--brand-red-deep); border-bottom-color: var(--brand-red, #F03752);
+        .param-tab:hover { color: var(--brand-red); }
+        .param-tab.active { color: var(--brand-red); border-bottom-color: var(--brand-red, #F03752);
             border-radius: 8px;
         }
         .param-tab.tab-diagram { color: var(--tech-blue-deep);
@@ -123,8 +123,8 @@
         .param-item:last-child { border-bottom: none; }
         .param-item .pi-bullet { flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--brand-red, #F03752); margin-top: 8px; }
         .param-item .pi-text { flex: 1; color: var(--text-primary); }
-        .param-item .pi-val { color: var(--brand-red-deep); font-weight: 700; font-family: "SF Mono", Consolas, monospace; }
-        .param-item .pi-warn { color: var(--warn-deep); font-weight: 600; }
+        .param-item .pi-val { color: var(--brand-red); font-weight: 700; font-family: "SF Mono", Consolas, monospace; }
+        .param-item .pi-warn { color: var(--brand-red); font-weight: 600; }
         .param-item .pi-note { font-size: 12px; color: var(--text-secondary); margin-top: 3px; padding-left: 16px; }
         .formula-block {
             background: var(--white); border: 1px solid var(--border, #E3E6EA);
@@ -158,11 +158,11 @@
         .diag-lightbox-inner svg, .diag-lightbox-inner img { width: 680px; max-width: 90vw; height: auto; }
         .diag-lb-title { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
         .diag-lb-close { position: absolute; top: 10px; right: 14px; width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--border-light); color: var(--text-secondary); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; }
-        .diag-lb-close:hover { background: var(--brand-red-surface); color: var(--white); }
+        .diag-lb-close:hover { background: var(--brand-red); color: var(--white); }
         @keyframes lb-fade-in { from{opacity:0} to{opacity:1} }
         .lp-actions { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
         .lp-actions button { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--border, #E3E6EA); background: var(--white); color: var(--text-primary); transition: all .15s; }
-        .lp-actions button:hover { border-color: var(--brand-red, #F03752); color: var(--brand-red-deep); }
+        .lp-actions button:hover { border-color: var(--brand-red, #F03752); color: var(--brand-red); }
         .no-result { text-align: center; color: var(--text-secondary); padding: 40px 20px; font-size: 14px; display: none; }
         .no-result i { font-size: 36px; margin-bottom: 10px; display: block; opacity: .3; }
         /* 小计算器 */
@@ -170,9 +170,9 @@
         .calc-box .cb-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; flex-wrap: wrap; }
         .calc-box label { font-size: 13px; font-weight: 600; min-width: 96px; }
         .calc-box input { width: 110px; border: 1px solid var(--border, #E3E6EA); border-radius: 6px; padding: 6px 9px; font-size: 13px; font-family: "SF Mono", Consolas, monospace; }
-        .calc-box button { padding: 7px 16px; border-radius: 8px; border: none; background: var(--brand-red-surface); color: var(--white); font-weight: 600; font-size: 13px; cursor: pointer; }
+        .calc-box button { padding: 7px 16px; border-radius: 8px; border: none; background: var(--brand-red); color: var(--white); font-weight: 600; font-size: 13px; cursor: pointer; }
         .calc-box .cb-out { margin-top: 8px; font-size: 13px; }
-        .calc-box .cb-out b { color: var(--brand-red-deep); font-family: "SF Mono", Consolas, monospace; }
+        .calc-box .cb-out b { color: var(--brand-red); font-family: "SF Mono", Consolas, monospace; }
         .calc-box .cb-err { color: var(--fail); }
         /* 附录表 */
         table.gb-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12.5px; background: var(--white); border: 1px solid var(--border, #E3E6EA); border-radius: 8px; overflow: hidden; }
