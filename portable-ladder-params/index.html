@@ -43,7 +43,7 @@
             cursor: pointer; font-size: 14px; padding: 2px 6px;
             border-radius: 8px;
         }
-        .lp-search .clear-btn:hover { color: var(--brand-red-deep); }
+        .lp-search .clear-btn:hover { color: var(--brand-red); }
 
         /* 分类筛选 chips */
         .lp-filters {
@@ -58,10 +58,10 @@
             border: 1px solid var(--border, #E3E6EA);
             transition: all .18s;
         }
-        .lp-chip:hover { border-color: var(--brand-red, #F03752); color: var(--brand-red-deep); }
+        .lp-chip:hover { border-color: var(--brand-red, #F03752); color: var(--brand-red); }
         .lp-chip.active {
-            background: var(--brand-red-surface); color: var(--white);
-            border-color: var(--brand-red-surface);
+            background: var(--brand-red); color: var(--white);
+            border-color: var(--brand-red);
             border-radius: 8px;
         }
 
@@ -87,7 +87,7 @@
         }
         .ladder-card .lc-icon {
             width: 44px; height: 44px; border-radius: 11px;
-            background: linear-gradient(135deg, var(--brand-red-surface), var(--brand-red-surface-hover));
+            background: linear-gradient(135deg, var(--brand-red), var(--brand-red));
             color: var(--white); display: flex; align-items: center; justify-content: center;
             font-size: 20px; flex-shrink: 0;
         }
@@ -118,9 +118,9 @@
             transition: all .15s; user-select: none;
             border-radius: 8px;
         }
-        .param-tab:hover { color: var(--brand-red-deep); }
+        .param-tab:hover { color: var(--brand-red); }
         .param-tab.active {
-            color: var(--brand-red-deep);
+            color: var(--brand-red);
             border-bottom-color: var(--brand-red, #F03752);
             border-radius: 8px;
         }
@@ -147,11 +147,11 @@
         }
         .param-item .pi-text { flex: 1; color: var(--text-primary); }
         .param-item .pi-val {
-            color: var(--brand-red-deep); font-weight: 700;
+            color: var(--brand-red); font-weight: 700;
             font-family: "SF Mono", Consolas, monospace;
         }
         .param-item .pi-warn {
-            color: var(--warn-deep); font-weight: 600;
+            color: var(--brand-red); font-weight: 600;
         }
         .param-item .pi-note {
             font-size: 12px; color: var(--text-secondary);
@@ -240,7 +240,7 @@
             display: flex; align-items: center; justify-content: center;
             transition: all .15s;
         }
-        .diag-lb-close:hover { background: var(--brand-red-surface); color: var(--white); }
+        .diag-lb-close:hover { background: var(--brand-red); color: var(--white); }
         @keyframes lb-fade-in { from{opacity:0} to{opacity:1} }
 
         /* 全部展开/收起按钮 */
@@ -255,7 +255,7 @@
             transition: all .15s;
         }
         .lp-actions button:hover {
-            border-color: var(--brand-red, #F03752); color: var(--brand-red-deep);
+            border-color: var(--brand-red, #F03752); color: var(--brand-red);
         }
 
         /* 无结果提示 */
@@ -410,8 +410,8 @@
                             <line x1="302" y1="96" x2="420" y2="70" stroke="#5C6470" stroke-width="1.2"/>
                             <text x="424" y="74" font-size="12" fill="#1E2126">顶部伸入 &ge;1m</text>
                             <!-- 三点接触示意 -->
-                            <circle cx="218" cy="178" r="14" fill="none" stroke="#F57C00" stroke-width="1.5" stroke-dasharray="3 2"/>
-                            <text x="238" y="182" font-size="11" fill="#F57C00" font-weight="600">三点接触</text>
+                            <circle cx="218" cy="178" r="14" fill="none" stroke="#F03752" stroke-width="1.5" stroke-dasharray="3 2"/>
+                            <text x="238" y="182" font-size="11" fill="#F03752" font-weight="600">三点接触</text>
                             <!-- 图例 -->
                             <rect x="480" y="60" width="12" height="12" rx="2" fill="#2D7EE7"/>
                             <text x="498" y="71" font-size="11" fill="#5C6470">踏棍/踏板</text>
@@ -574,12 +574,12 @@
                                 <line x1="176" y1="215" x2="226" y2="215" stroke="#2D7EE7" stroke-width="3.5" stroke-linecap="round"/>
                             </g>
                             <!-- 搭接区域标注 -->
-                            <rect x="158" y="213" width="86" height="58" rx="4" fill="none" stroke="#F57C00" stroke-width="1.5" stroke-dasharray="5 3" transform="rotate(22 201 242)"/>
-                            <text x="260" y="248" font-size="11" font-weight="700" fill="#F57C00">搭接区域</text>
-                            <text x="260" y="264" font-size="11" fill="#F57C00">0.83~1.75m</text>
+                            <rect x="158" y="213" width="86" height="58" rx="4" fill="none" stroke="#F03752" stroke-width="1.5" stroke-dasharray="5 3" transform="rotate(22 201 242)"/>
+                            <text x="260" y="248" font-size="11" font-weight="700" fill="#F03752">搭接区域</text>
+                            <text x="260" y="264" font-size="11" fill="#F03752">0.83~1.75m</text>
                             <!-- 拉绳 -->
-                            <path d="M 228 310 Q 300 280 320 90" fill="none" stroke="#F57C00" stroke-width="2" stroke-dasharray="4 2"/>
-                            <text x="326" y="88" font-size="11" fill="#F57C00">拉绳 &ge;&phi;8mm</text>
+                            <path d="M 228 310 Q 300 280 320 90" fill="none" stroke="#F03752" stroke-width="2" stroke-dasharray="4 2"/>
+                            <text x="326" y="88" font-size="11" fill="#F03752">拉绳 &ge;&phi;8mm</text>
                             <!-- 限位器 -->
                             <rect x="166" y="232" width="28" height="8" rx="2" fill="#F03752" transform="rotate(22 180 236)"/>
                             <text x="100" y="260" font-size="10" fill="#F03752" font-weight="600">限位器</text>
@@ -654,8 +654,8 @@
                             <line x1="275" y1="244" x2="405" y2="244" stroke="#2D7EE7" stroke-width="4.5" stroke-linecap="round"/>
                             <line x1="255" y1="300" x2="425" y2="300" stroke="#2D7EE7" stroke-width="4.5" stroke-linecap="round"/>
                             <!-- 张开限制连杆（橙色虚线） -->
-                            <line x1="248" y1="322" x2="432" y2="322" stroke="#F57C00" stroke-width="3" stroke-dasharray="6 3"/>
-                            <text x="298" y="315" font-size="11" fill="#F57C00" font-weight="600">张开限制连杆 &le;2m（距地高度）</text>
+                            <line x1="248" y1="322" x2="432" y2="322" stroke="#F03752" stroke-width="3" stroke-dasharray="6 3"/>
+                            <text x="298" y="315" font-size="11" fill="#F03752" font-weight="600">张开限制连杆 &le;2m（距地高度）</text>
                             <!-- 扶手 -->
                             <line x1="340" y1="70" x2="340" y2="28" stroke="#1E2126" stroke-width="5" stroke-linecap="round"/>
                             <text x="350" y="34" font-size="12" fill="#1E2126">扶手 &ge;450mm</text>
@@ -664,7 +664,7 @@
                             <text x="182" y="338" font-size="14" font-weight="700" fill="#F03752">&alpha; &le;73&deg;</text>
                             <!-- 右侧横角 -->
                             <path d="M 410 355 A 50 50 0 0 1 439 310" fill="none" stroke="#F03752" stroke-width="2" stroke-dasharray="4 2"/>
-                            <text x="448" y="338" font-size="12" fill="#F03772">&beta; &le;80&deg;</text>
+                            <text x="448" y="338" font-size="12" fill="#F03752">&beta; &le;80&deg;</text>
                             <!-- 顶部警示 -->
                             <rect x="115" y="86" width="145" height="36" rx="6" fill="#FDEEF1" stroke="#F03752" stroke-width="1"/>
                             <text x="125" y="100" font-size="11" font-weight="700" fill="#F03752">&#9888; 踏帽/工具架</text>
@@ -758,8 +758,8 @@
                             <text x="264" y="172" font-size="9" fill="#fff" font-weight="700" transform="rotate(18 220 370)">OK</text>
                             <text x="330" y="175" font-size="11" fill="#16A34A" font-weight="600">锁定指示器（绿色=已锁定）</text>
                             <!-- 防挤压间隙标注 -->
-                            <line x1="207" y1="258" x2="203" y2="258" stroke="#F57C00" stroke-width="2" transform="rotate(18 220 370)"/>
-                            <text x="205" y="250" font-size="9" fill="#F57C00" transform="rotate(18 220 370)">&gt;25mm或&le;7mm</text>
+                            <line x1="207" y1="258" x2="203" y2="258" stroke="#F03752" stroke-width="2" transform="rotate(18 220 370)"/>
+                            <text x="205" y="250" font-size="9" fill="#F03752" transform="rotate(18 220 370)">&gt;25mm或&le;7mm</text>
                             <!-- 节号标注 -->
                             <text x="162" y="225" font-size="11" fill="#5C6470" transform="rotate(18 220 370)">第1节</text>
                             <text x="174" y="168" font-size="10" fill="#5C6470" transform="rotate(18 220 370)">第2节</text>
@@ -770,8 +770,8 @@
                             <!-- 缩合时间提示 -->
                             <rect x="430" y="300" width="220" height="56" rx="8" fill="#FDEEF1" stroke="#F03752" stroke-width="1"/>
                             <text x="444" y="322" font-size="12" font-weight="700" fill="#F03752">&#9888; 安全要求</text>
-                            <text x="444" y="342" font-size="11" fill="#991b1b">每节缓缩时间 &ge;1.5s</text>
-                            <text x="444" y="356" font-size="11" fill="#991b1b">间隙缝 &gt;25mm 或 &le;7mm</text>
+                            <text x="444" y="342" font-size="11" fill="#F03752">每节缓缩时间 &ge;1.5s</text>
+                            <text x="444" y="356" font-size="11" fill="#F03752">间隙缝 &gt;25mm 或 &le;7mm</text>
                         </svg>
                         <p class="cd-note">伸缩梯为多节套筒式结构，每节须有清晰可见的锁定指示器；防挤压/剪切保护要求相邻管件间隙 &gt;25mm 或 &le;7mm；每梯段缓缩时间 &ge;1.5s。</p>
                     </div>
@@ -835,10 +835,10 @@
                             <rect x="94" y="60" width="172" height="14" rx="3" fill="#2D7EE7" stroke="#1E2126" stroke-width="1.5"/>
                             <text x="170" y="52" font-size="10" fill="#2D7EE7" font-weight="600">台板件（平台）</text>
                             <!-- 铰链关节（圆圈标记） -->
-                            <circle cx="100" cy="67" r="6" fill="#F57C00" stroke="#1E2126" stroke-width="1.5"/>
-                            <circle cx="260" cy="67" r="6" fill="#F57C00" stroke="#1E2126" stroke-width="1.5"/>
-                            <text x="76" y="70" font-size="9" fill="#F57C00" font-weight="600">铰链</text>
-                            <text x="268" y="70" font-size="9" fill="#F57C00" font-weight="600">铰链</text>
+                            <circle cx="100" cy="67" r="6" fill="#F03752" stroke="#1E2126" stroke-width="1.5"/>
+                            <circle cx="260" cy="67" r="6" fill="#F03752" stroke="#1E2126" stroke-width="1.5"/>
+                            <text x="76" y="70" font-size="9" fill="#F03752" font-weight="600">铰链</text>
+                            <text x="268" y="70" font-size="9" fill="#F03752" font-weight="600">铰链</text>
                             <!-- 高度标注 -->
                             <line x1="84" y1="60" x2="84" y2="185" stroke="#F03752" stroke-width="1.2"/>
                             <text x="66" y="128" font-size="10" fill="#F03752" font-weight="600" writing-mode="tb">H&le;1m</text>
@@ -864,8 +864,8 @@
                                 <rect x="510" y="391" width="20" height="10" rx="3" fill="#F03752"/>
                             </g>
                             <!-- 支座铰链 -->
-                            <circle cx="453" cy="275" r="6" fill="#F57C00" stroke="#1E2126" stroke-width="1.5" transform="rotate(20 480 395)"/>
-                            <circle cx="507" cy="275" r="6" fill="#F57C00" stroke="#1E2126" stroke-width="1.5" transform="rotate(20 480 395)"/>
+                            <circle cx="453" cy="275" r="6" fill="#F03752" stroke="#1E2126" stroke-width="1.5" transform="rotate(20 480 395)"/>
+                            <circle cx="507" cy="275" r="6" fill="#F03752" stroke="#1E2126" stroke-width="1.5" transform="rotate(20 480 395)"/>
                             <!-- 伸出长度标注 -->
                             <line x1="440" y1="260" x2="440" y2="395" stroke="#F03752" stroke-width="1.2" transform="rotate(20 480 395)"/>
                             <text x="560" y="320" font-size="10" fill="#F03752" font-weight="600">伸出 &le;1.2m</text>
@@ -875,7 +875,7 @@
                             <!-- 外跨安装标注 -->
                             <text x="560" y="360" font-size="10" fill="#16A34A">外跨安装每侧&le;25mm</text>
                             <!-- 图例 -->
-                            <rect x="380" y="54" width="10" height="10" rx="2" fill="#F57C00"/>
+                            <rect x="380" y="54" width="10" height="10" rx="2" fill="#F03752"/>
                             <text x="396" y="63" font-size="10" fill="#5C6470">铰链关节（须能锁定）</text>
                             <rect x="380" y="72" width="10" height="10" rx="2" fill="#2D7EE7"/>
                             <text x="396" y="81" font-size="10" fill="#5C6470">台板件 / 踏棍</text>
@@ -983,15 +983,15 @@
                             <!-- 平台板 -->
                             <rect x="434" y="244" width="152" height="12" rx="3" fill="#2D7EE7" stroke="#1E2126" stroke-width="1.2"/>
                             <!-- 铰链标记 -->
-                            <circle cx="440" cy="250" r="5" fill="#F57C00" stroke="#1E2126" stroke-width="1.2"/>
-                            <circle cx="580" cy="250" r="5" fill="#F57C00" stroke="#1E2126" stroke-width="1.2"/>
+                            <circle cx="440" cy="250" r="5" fill="#F03752" stroke="#1E2126" stroke-width="1.2"/>
+                            <circle cx="580" cy="250" r="5" fill="#F03752" stroke="#1E2126" stroke-width="1.2"/>
                             <text x="590" y="280" font-size="10" fill="#5C6470">→ 按铰链梯参数</text>
 
                             <!-- 中央说明框 -->
                             <rect x="240" y="390" width="220" height="56" rx="8" fill="#FDEEF1" stroke="#F03752" stroke-width="1.2"/>
                             <text x="254" y="410" font-size="11" font-weight="700" fill="#F03752">&#9888; 关键安全规则</text>
-                            <text x="254" y="426" font-size="10" fill="#991b1b">自立模式时：严禁从支撑侧梯段攀登！</text>
-                            <text x="254" y="440" font-size="10" fill="#991b1b">各模式切换前确认所有锁扣已锁定。</text>
+                            <text x="254" y="426" font-size="10" fill="#F03752">自立模式时：严禁从支撑侧梯段攀登！</text>
+                            <text x="254" y="440" font-size="10" fill="#F03752">各模式切换前确认所有锁扣已锁定。</text>
                         </svg>
                         <p class="cd-note">组合梯无独立专属数据，根据当前实际使用形态分别满足对应梯型的全部参数要求。图中展示四种典型形态：直梯（倚靠）、延伸、人字梯（自立）、平台（铰链）。特别注意：自立状态下严禁从支撑侧梯段攀登。</p>
                     </div>
