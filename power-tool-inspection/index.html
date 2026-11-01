@@ -79,18 +79,18 @@
         .guide-box h3 {
             font-size: 15px;
             font-weight: 700;
-            color: var(--brand-red-hover, #D12E47);
+            color: var(--brand-red-hover, #F03752);
             margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
         .guide-box p { font-size: 13px; color: var(--text-primary); line-height: 1.65; margin-bottom: 8px; }
-        .guide-box .warn { color: var(--brand-red-deep); font-weight: 600; }
+        .guide-box .warn { color: var(--brand-red); font-weight: 600; }
 
         .guide-suggest {
             background: #FFF7ED; border: 1px solid #FDBA74; border-radius: var(--radius-sm, 4px);
-            padding: 10px 14px; margin-top: 12px; font-size: 13px; color: var(--warn-deep);
+            padding: 10px 14px; margin-top: 12px; font-size: 13px; color: var(--brand-red);
             display: flex; align-items: flex-start; gap: 8px;
         }
         .guide-suggest i { color: var(--warn); margin-top: 2px; }
@@ -132,7 +132,7 @@
         .res-opt.active-y  { background: #D1FAE5; color: #065F46; border-color: #34D399 !important; font-weight: 600;
             border-radius: 8px;
         }
-        .res-opt.active-n  { background: var(--fail-soft-2); color: var(--fail-deep); border-color: #F87171 !important; font-weight: 600;
+        .res-opt.active-n  { background: var(--fail-soft-2); color: var(--fail-deep); border-color: #F03752 !important; font-weight: 600;
             border-radius: 8px;
         }
         .res-opt.active-na { background: var(--border-light); color: var(--text-secondary); border-color: #9CA3AF !important;
@@ -148,10 +148,10 @@
         .tc-i    { background: #DBEAFE !important; color: #1E40AF !important; }
         .tc-ii   { background: #E0E7FF !important; color: #3730A3 !important; }
         .tc-iii  { background: #D1FAE5 !important; color: #065F46 !important; }
-        .tc-batt { background: var(--warn-soft-2) !important; color: var(--warn-deep) !important; }
+        .tc-batt { background: var(--warn-soft-2) !important; color: var(--brand-red) !important; }
 
         /* 结论颜色 */
-        .conclusion-bad  { color: var(--brand-red-deep) !important; font-weight: 700; }
+        .conclusion-bad  { color: var(--brand-red) !important; font-weight: 700; }
         .conclusion-good { color: var(--ok-deep) !important; font-weight: 600; }
 
         /* 综合判定卡片 */
@@ -161,7 +161,7 @@
             border: 1.5px solid var(--brand-red, #F03752); border-radius: 8px 8px;
             display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center;
         }
-        .verdict-card .vc-label { font-weight: 700; font-size: 14px; color: var(--brand-red-deep);
+        .verdict-card .vc-label { font-weight: 700; font-size: 14px; color: var(--brand-red);
             border-radius: 8px;
         }
         .verdict-card .vc-value { font-size: 15px; font-weight: 800;
@@ -170,10 +170,10 @@
         .verdict-card .vc-good { color: var(--ok-deep);
             border-radius: 8px;
         }
-        .verdict-card .vc-bad  { color: var(--brand-red-deep);
+        .verdict-card .vc-bad  { color: var(--brand-red);
             border-radius: 8px;
         }
-        .verdict-card .vc-warn { color: var(--warn-deep);
+        .verdict-card .vc-warn { color: var(--brand-red);
             border-radius: 8px;
         }
 
