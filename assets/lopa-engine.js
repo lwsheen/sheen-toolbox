@@ -438,7 +438,7 @@
         if (hintEl) {
             if (e.r[1] >= 1) {
                 hintEl.textContent = '表 A.13 该事件频率上限达 1 次/年，若实际取值大于 1 次/年则为高要求模式（附录 E），请在右侧确认「要求模式」。';
-                hintEl.style.color = 'var(--warn-700)';
+                hintEl.style.color = 'var(--brand-red)';
             } else {
                 hintEl.textContent = '参考范围 ' + lpSci(e.r[0]) + ' ~ ' + lpSci(e.r[1]) + ' 次/年，请按行业经验与现场实际取值。';
                 hintEl.style.color = '';
