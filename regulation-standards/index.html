@@ -569,7 +569,9 @@ async function callApi(prompt){
   if(mode==='proxy' && !proxy){ alert('请先设置代理地址'); toggleApi(); throw new Error('no proxy'); }
   var url = mode==='proxy' ? proxy : 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
   var headers = mode==='proxy' ? {'Content-Type':'application/json'} : {'Content-Type':'application/json','Authorization':'Bearer '+key};
-  var resp = await fetch(url, {method:'POST', headers:headers, body:JSON.stringify({model:'glm-4-flash', messages:[{role:'user',content:prompt}], temperature:0.3, max_tokens:3000})});
+  var _m=localStorage.getItem('sheen_5why_apimodel')||'';if(!/^glm-/.test(_m)||_m==='glm-4-flash')_m='glm-4.7-flash';
+  var _b={model:_m,messages:[{role:'user',content:prompt}],temperature:0.3,max_tokens:3000};if(/^glm-(4\.[6-9]|5)/.test(_m))_b.thinking={type:'disabled'};
+  var resp = await fetch(url, {method:'POST', headers:headers, body:JSON.stringify(_b)});
   if(!resp.ok){ throw new Error('API 返回 '+resp.status); }
   var data = await resp.json();
   return data.choices[0].message.content;
