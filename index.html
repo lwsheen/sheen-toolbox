@@ -1412,7 +1412,8 @@
     <!-- API 配置弹窗 -->
     <div id="apiModalH" style="display:none;position:fixed;bottom:80px;left:24px;width:360px;z-index:100;background:var(--bg-card);border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.15);padding:20px;">
       <h3 style="margin-bottom:12px;font-size:15px;">全局 API 配置</h3>
-      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">所有 AI 工具共享此配置</p>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:6px;">所有 AI 工具共享此配置</p>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">AI 请求统一经本站安全代理转发（解决浏览器跨域限制）；「共享代理」免填 Key，「自有 Key」仅在你的浏览器保存。</p>
       <div style="display:flex;gap:6px;margin-bottom:10px;">
         <label style="flex:1;text-align:center;padding:7px;border-radius:60px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);" id="lblOwnH">
           <input type="radio" name="apiModeH" value="own" onchange="switchApiH('own')" style="accent-color:var(--brand-red);margin-right:4px;">自有 Key
@@ -1426,7 +1427,7 @@
         <p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;"><a href="https://open.bigmodel.cn/" target="_blank" style="color: var(--brand-red);">获取智谱免费 Key →</a></p>
       </div>
       <div id="proxySectionH" style="display:none;">
-        <input type="text" id="proxyUrlH" placeholder="代理地址" style="width:100%;padding:8px;border:1.5px solid var(--border);border-radius:8px;font-family:monospace;font-size:12px;margin-bottom:8px;">
+        <input type="text" id="proxyUrlH" placeholder="留空即使用站点代理（推荐）" style="width:100%;padding:8px;border:1.5px solid var(--border);border-radius:8px;font-family:monospace;font-size:12px;margin-bottom:8px;">
       </div>
       <label style="display:block;font-size:12px;font-weight:600;margin:2px 0 6px;">模型</label>
       <select id="apiModelH" style="width:100%;padding:8px 10px;margin-bottom:6px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--bg-card);color:var(--text-primary);">
@@ -1803,7 +1804,7 @@
           var el = document.getElementById('apiStatusH');
           var text = document.getElementById('apiStatusText');
           var base = 'position:fixed;bottom:24px;left:62px;z-index:99;display:flex;align-items:center;gap:6px;padding:6px 12px;background:rgba(255,255,255,0.92);border-radius:6px;font-size:12px;font-weight:500;box-shadow:0 1px 4px rgba(0,0,0,0.06);';
-          if (m==='proxy' && p) {
+          if (m==='proxy') {
             el.innerHTML = '<i class="fa-solid fa-circle-check" style="font-size:11px"></i><span data-i18n="apiNoKey">免Key</span>'; el.style.cssText = base + 'color:var(--ok-deep);border-color:#16A34A;';
             // 重新挂字典 key 以便 applyLang 翻译
             var sp = el.querySelector('[data-i18n="apiNoKey"]'); if (sp && !sp.__zh) sp.__zh = sp.textContent;
