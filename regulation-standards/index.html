@@ -13,6 +13,7 @@
 <link rel="canonical" href="https://lwsheen.pages.dev/sheen-toolbox/regulation-standards/">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"EHS 法规标准清单","url":"https://lwsheen.pages.dev/sheen-toolbox/regulation-standards/","description":"EHS 环境健康安全法律法规与标准清单","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","inLanguage":"zh-CN","offers":{"@type":"Offer","price":"0","priceCurrency":"CNY"},"publisher":{"@type":"Organization","name":"SHEEN Toolbox"}}</script>
 <link rel="stylesheet" href="../common.css">
+<script src="/sheen-toolbox/assets/ai-proxy.js"></script>
 <link rel="stylesheet" href="../assets/fa/all.min.css">
 <style>
   .rs-tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin:18px 0 0;flex-wrap:wrap}
@@ -304,7 +305,7 @@ var _hmt = _hmt || [];
       </label>
     </div>
     <div id="secOwn"><input type="text" id="apiKey" placeholder="API Key (xxxxxx.xxxx)" style="width:100%;font-family:monospace;font-size:12px;padding:8px;border:1.5px solid var(--border);border-radius:6px;margin-bottom:6px"><p style="font-size:10px;color:var(--text-secondary);margin-bottom:8px"><a href="https://open.bigmodel.cn/" target="_blank" style="color: var(--brand-red)">获取智谱免费 Key →</a></p></div>
-    <div id="secProxy" style="display:none"><input type="text" id="proxyUrl" placeholder="代理地址 https://xxx.vercel.app" style="width:100%;font-family:monospace;font-size:12px;padding:8px;border:1.5px solid var(--border);border-radius:6px;margin-bottom:8px"></div>
+    <div id="secProxy" style="display:none"><input type="text" id="proxyUrl" placeholder="留空即使用站点代理（推荐）" style="width:100%;font-family:monospace;font-size:12px;padding:8px;border:1.5px solid var(--border);border-radius:6px;margin-bottom:8px"></div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-primary btn-sm" onclick="saveApi()">保存</button>
       <button class="btn btn-outline btn-sm" onclick="document.getElementById('apiModal').style.display='none'">关闭</button>
@@ -566,9 +567,9 @@ async function callApi(prompt){
   var d=JSON.parse(localStorage.getItem('compliance-api')||'{}');
   var key=d.key, proxy=d.proxy, mode=d.mode||'own';
   if(mode==='own' && !key){ alert('请先设置 API Key（点击「API 设置」）'); toggleApi(); throw new Error('no key'); }
-  if(mode==='proxy' && !proxy){ alert('请先设置代理地址'); toggleApi(); throw new Error('no proxy'); }
-  var url = mode==='proxy' ? proxy : 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
-  var headers = mode==='proxy' ? {'Content-Type':'application/json'} : {'Content-Type':'application/json','Authorization':'Bearer '+key};
+  /* 共享代理留空即用本站 Function，无需再填地址 */
+  var _rt=window.SHEEN_AI.resolve({mode:mode,key:key,proxyUrl:proxy});
+  var url=_rt.url, headers=_rt.headers;
   var _m=localStorage.getItem('sheen_5why_apimodel')||'';if(!/^glm-/.test(_m)||_m==='glm-4-flash')_m='glm-4.7-flash';
   var _b={model:_m,messages:[{role:'user',content:prompt}],temperature:0.3,max_tokens:3000};if(/^glm-(4\.[6-9]|5)/.test(_m))_b.thinking={type:'disabled'};
   var resp = await fetch(url, {method:'POST', headers:headers, body:JSON.stringify(_b)});
