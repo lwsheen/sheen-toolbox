@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head data-seo="sheen">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="叉车安全检查表：燃油叉车、电动叉车、LPG 叉车三套独立可切换的出车前点检表，逐项记录合格/异常与异常备注，支持必填校验、检查记录保存、历史记录查看与结果汇总 — SHEEN Toolbox">
+    <title>叉车安全检查表 — SHEEN Toolbox</title>
+    <meta property="og:title" content="叉车安全检查表 | SHEEN Toolbox">
+    <meta property="og:description" content="燃油 / 电动 / LPG 三类叉车独立点检表 · 出车前检查记录与结果汇总">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lwsheen.pages.dev/sheen-toolbox/forklift-safety-checklist/">
+    <meta property="og:image" content="https://lwsheen.pages.dev/sheen-toolbox/assets/share/forklift-safety-checklist.png">
+    <link rel="canonical" href="https://lwsheen.pages.dev/sheen-toolbox/forklift-safety-checklist/">
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "叉车安全检查表", "url": "https://lwsheen.pages.dev/sheen-toolbox/forklift-safety-checklist/", "description": "燃油 / 电动 / LPG 三类叉车独立点检表，支持记录保存、历史查看与结果汇总", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web", "inLanguage": "zh-CN", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "CNY"}, "publisher": {"@type": "Organization", "name": "SHEEN Toolbox"}}</script>
+
+    <link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
+    <link rel="stylesheet" href="/sheen-toolbox/common.css">
+    <style>
+        /* ===== 本页特有样式（公共组件由 common.css 提供） ===== */
+        .fk-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px 16px; }
+        .fk-grid .fld { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+        .fk-grid label.flab { font-size: var(--fs-sm); color: var(--text-secondary); font-weight: 600; }
+        .fk-req { color: var(--brand-red); font-weight: 700; margin-left: 2px; }
+        .fk-grid .form-control { width: 100%; }
+        .fk-current {
+            margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border);
+            font-size: var(--fs-sm); color: var(--text-secondary);
+        }
+        .fk-current strong { color: var(--text-primary); }
+
+        /* 检查表 */
+        .fk-table { table-layout: fixed; min-width: 760px; width: 100%; }
+        .fk-table thead th { text-align: center; font-size: var(--fs-sm); white-space: nowrap; }
+        .fk-table tbody td { vertical-align: middle; padding: 8px 9px; }
+        .fk-table .c-seq { width: 48px; text-align: center; font-weight: 700; color: var(--text-secondary); }
+        .fk-table .c-name { width: 132px; text-align: center; font-weight: 700; color: var(--text-primary); }
+        .fk-table .c-std { text-align: left; font-size: var(--fs-sm); line-height: 1.6; color: var(--text-primary); }
+        .fk-table .c-res { width: 132px; text-align: center; }
+        .fk-table .c-note { width: 178px; }
+        .std-list { margin: 0; padding-left: 17px; }
+        .std-list li { margin-bottom: 3px; }
+        .res-group { display: inline-flex; gap: 5px; justify-content: center; }
+        .res-opt {
+            border: 1px solid var(--border); border-radius: var(--radius-sm);
+            padding: 5px 10px; font-size: var(--fs-sm); cursor: pointer;
+            color: var(--text-secondary); background: var(--bg-card);
+            font-family: var(--font); white-space: nowrap; transition: var(--transition);
+        }
+        .res-opt:hover { border-color: var(--text-tertiary); }
+        .res-opt.active-ok { background: var(--ok-soft); border-color: var(--brand-green); color: var(--ok-deep); font-weight: 700; }
+        .res-opt.active-bad { background: var(--fail-soft-2); border-color: var(--brand-red); color: var(--fail-deep); font-weight: 700; }
+        .remark-input {
+            width: 100%; border: 1px solid var(--border); border-radius: var(--radius-sm);
+            padding: 6px 8px; font-size: var(--fs-sm); font-family: var(--font);
+            background: var(--bg-card); min-height: 40px; resize: vertical; outline: none;
+        }
+        .remark-input:focus { border-color: var(--brand-red); }
+        .remark-input.need { border-color: var(--brand-red); background: var(--brand-red-light); }
+        tr.row-bad td { background: var(--brand-red-light); }
+        tr.row-bad .c-name { color: var(--fail-deep); }
+        .fk-err-row td { outline: 2px solid var(--brand-red); outline-offset: -2px; }
+
+        /* 统计卡 */
+        .fk-stats { display: flex; flex-wrap: wrap; gap: 12px; margin: 4px 0 16px; }
+        .stat-card {
+            flex: 1 1 110px; min-width: 96px; background: var(--bg-card);
+            border: 1px solid var(--border); border-radius: var(--radius-md);
+            padding: 12px 14px; text-align: center;
+        }
+        .stat-card .num { font-size: var(--fs-lg); font-weight: 800; line-height: 1.15; color: var(--text-primary); }
+        .stat-card .lab { font-size: var(--fs-sm); color: var(--text-secondary); margin-top: 5px; }
+        .stat-card.s-ok .num { color: var(--ok-deep); }
+        .stat-card.s-bad { border-color: var(--fail-soft); background: var(--brand-red-light); }
+        .stat-card.s-bad .num { color: var(--fail-deep); }
+        .stat-card.s-pending .num { color: var(--brand-red); }
+
+        /* 结论 */
+        .fk-vlabel { font-size: var(--fs-sm); color: var(--text-secondary); font-weight: 600; display: block; margin-bottom: 8px; }
+        .verdict-opts { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 14px; }
+        .verdict-opt {
+            display: inline-flex; align-items: center; gap: 6px;
+            border: 1px solid var(--border); border-radius: var(--radius-sm);
+            padding: 8px 14px; font-size: var(--fs-sm); cursor: pointer;
+            background: var(--bg-card); color: var(--text-primary); font-family: var(--font);
+            transition: var(--transition);
+        }
+        .verdict-opt:hover { border-color: var(--brand-red); }
+        .verdict-opt.active { background: var(--brand-red-surface); border-color: var(--brand-red); color: var(--white); font-weight: 700; }
+        #fAction { width: 100%; border: 1px solid var(--border); border-radius: var(--radius-sm);
+            padding: 10px 12px; font-size: var(--fs-sm); font-family: var(--font);
+            min-height: 66px; resize: vertical; outline: none; background: var(--bg-card); }
+        #fAction:focus { border-color: var(--brand-red); }
+        .fk-hint { font-size: var(--fs-sm); color: var(--text-tertiary); margin-top: 7px; line-height: 1.6; }
+
+        /* 工具栏 / 消息 */
+        .fk-toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 0; }
+        .fk-msg { display: none; margin-top: 12px; }
+        .fk-msg.show { display: block; }
+
+        /* 历史 / 汇总 */
+        .fk-filter { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 12px; }
+        .fk-filter select { max-width: 200px; }
+        .fk-filter .spacer { flex: 1 1 auto; }
+        .fk-empty { font-size: var(--fs-sm); color: var(--text-tertiary); padding: 18px 4px; text-align: center; }
+        /* 历史表 10 列在 750px 卡片内会横滚；紧凑化后桌面宽可一屏看全 */
+        #historyTable { font-size: var(--fs-sm); }
+        #historyTable thead th, #historyTable tbody td { padding: 7px 6px; }
+        #historyTable .h-view, #historyTable .h-del { padding: 4px 8px !important; }
+        .fk-mini { font-size: var(--fs-sm); color: var(--text-secondary); }
+        .fk-top-list { margin-top: 8px; }
+        .fk-top-item {
+            display: flex; align-items: center; gap: 10px; padding: 8px 10px;
+            border-left: 3px solid var(--brand-red); background: var(--bg-page);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin-bottom: 7px;
+            font-size: var(--fs-sm); color: var(--text-primary);
+        }
+        .fk-top-item .cnt { margin-left: auto; color: var(--fail-deep); font-weight: 700; white-space: nowrap; }
+        .fk-dist { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 6px; }
+        .fk-dist .pill {
+            border: 1px solid var(--border); border-radius: 99px; padding: 6px 14px;
+            font-size: var(--fs-sm); color: var(--text-primary); background: var(--bg-page);
+        }
+        .fk-dist .pill b { color: var(--brand-red); }
+        .btn-sm { padding: 5px 11px !important; font-size: var(--fs-sm) !important; }
+
+        /* 记录详情弹层 */
+        .fk-modal {
+            display: none; position: fixed; inset: 0; z-index: 999;
+            background: rgba(0,0,0,.45); align-items: center; justify-content: center; padding: 20px;
+        }
+        .fk-modal.show { display: flex; }
+        .fk-modal .box {
+            background: var(--bg-card); border-radius: var(--radius-lg);
+            width: min(760px, 100%); max-height: 84vh; overflow: auto; padding: 22px 24px;
+        }
+        .fk-modal h3 { font-size: var(--fs-md); margin-bottom: 12px; color: var(--text-primary); }
+        .fk-modal .close { float: right; border: none; background: transparent; cursor: pointer;
+            font-size: 20px; color: var(--text-secondary); line-height: 1; }
+        .fk-modal .kv { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: var(--fs-sm);
+            color: var(--text-secondary); margin-bottom: 12px; }
+        .fk-modal .kv b { color: var(--text-primary); }
+        .fk-nc { font-size: var(--fs-sm); padding: 9px 11px; border-left: 3px solid var(--brand-red);
+            background: var(--bg-page); border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin-bottom: 8px; line-height: 1.65; color: var(--text-primary); }
+
+        /* 打印：只输出当前类型检查表 + 结论 */
+        @media print {
+            @page { size: A4 landscape; margin: 10mm 8mm 12mm 8mm; }
+            body { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            .tab-nav, #historyCard, #summaryCard, .fk-modal, .fk-filter, .fk-toolbar,
+            .fk-msg, .fk-hint, .fold-note, .scene-cap { display: none !important; }
+            /* 文档级只有一个 @page：此处覆盖 common.css 的 A4 纵向，宽表用横版 */
+            .tab-panel { display: none !important; padding: 0 !important; border: none !important; }
+            .tab-panel.active { display: block !important; }
+            .form-card { box-shadow: none !important; border: 1px solid var(--border) !important;
+                page-break-inside: auto; margin-bottom: 10px !important; }
+            .fk-table { min-width: 0 !important; width: 100% !important; font-size: 8.5pt !important; }
+            .fk-table thead th { font-size: 8.5pt !important; padding: 3px 2px !important; background: var(--border) !important; }
+            .fk-table tbody td { font-size: 8.5pt !important; padding: 2px 3px !important; }
+            .fk-table .c-seq { width: 4% !important; }
+            .fk-table .c-name { width: 13% !important; }
+            .fk-table .c-res { width: 15% !important; }
+            .fk-table .c-note { width: 20% !important; }
+            .std-list { padding-left: 12px !important; }
+            .std-list li { font-size: 8.5pt !important; margin-bottom: 1px !important; }
+            .remark-input { border: none !important; min-height: 0 !important; font-size: 8.5pt !important; background: transparent !important; resize: none; }
+            .res-opt { border: 1px solid var(--text-tertiary) !important; padding: 1px 5px !important; font-size: 8pt !important; }
+            .verdict-opt { border: 1px solid var(--text-tertiary) !important; padding: 2px 7px !important; font-size: 8.5pt !important; }
+            .verdict-opt.active { background: var(--brand-red-surface) !important; }
+            #fAction { border: 1px solid var(--text-tertiary) !important; min-height: 34px !important; font-size: 8.5pt !important; }
+            .fk-stats { margin-bottom: 8px !important; }
+            .stat-card { padding: 6px 8px !important; }
+            .stat-card .num { font-size: 13pt !important; }
+            .print-time { display: block !important; }
+        }
+        @media (max-width: 768px) {
+            .fk-table { min-width: 700px; }
+            .fk-modal .box { padding: 16px; }
+        }
+    </style>
+    <!-- Baidu Tongji -->
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9b8c3df212619adec1f70f01695f4160";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+      // github.io 镜像站统计(公众号阅读原文通道)
+      if (location.hostname.indexOf("github.io") >= 0) {
+        var hm2 = document.createElement("script");
+        hm2.src = "https://hm.baidu.com/hm.js?5ceec8bd8bf10bd9d1f4ddceaebdae6f";
+        s.parentNode.insertBefore(hm2, s);
+      }
+    })();
+    </script>
+</head>
+<body>
+    <div class="breadcrumb">
+        <a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a>
+        <span> / 叉车安全检查表</span>
+    </div>
+
+    <main class="app-container container-calc">
+        <h1 class="page-title">叉车安全检查表</h1>
+        <p class="page-subtitle">
+            依据 <strong>TSG 81—2022《场(厂)内专用机动车辆安全技术规程》</strong> 关于每日投入使用前日常检查、出车前试运行检查并形成记录的要求，
+            按 <strong>燃油叉车 / 电动叉车 / LPG 叉车</strong> 三种动力类型提供独立可切换的点检表。
+            通用项目统一维护，专属项目按动力类型区分，支持逐项记录与历史追溯。
+        </p>
+
+        <div class="warn-bar info">
+            <i class="fa-solid fa-circle-info"></i>
+            <span><b>使用范围：</b>本表为出车前（班前）日常点检记录，不替代定期检验、维护保养与专项检测。具体判定参数以该车使用说明书、企业点检制度及现行法规标准为准；发现制动、转向、货叉、气瓶、供气/供油系统等关键项异常时，应立即停用并报修。</span>
+        </div>
+
+        <details class="fold-note">
+            <summary>填写与保存说明</summary>
+            <div class="fn-body">
+                <p>① 先填写下方「检查基本信息」，再切换页签选择与实际车辆一致的动力类型；每类叉车的检查项与记录互相独立。</p>
+                <p>② 逐项点击「合格 / 异常」，异常项须在同行「异常备注」写明现象与处置；全部项目完成后选择整体检查结论。</p>
+                <p>③ 点击「保存本次检查」写入本机浏览器记录，可在「历史检查记录」中查看、筛选、导出或删除。记录仅保存在本机，不上传服务器。</p>
+            </div>
+        </details>
+
+        <!-- ===== 检查基本信息 ===== -->
+        <section class="form-card" id="metaCard">
+            <h3><i class="fa-solid fa-clipboard-user"></i> 检查基本信息</h3>
+            <div class="fk-grid">
+                <div class="fld">
+                    <label class="flab" for="fVehicle">车辆编号 / 牌照<span class="fk-req">*</span></label>
+                    <input id="fVehicle" class="form-control" type="text" placeholder="如：叉车-03 / 厂内 A12">
+                </div>
+                <div class="fld">
+                    <label class="flab" for="fDept">使用部门</label>
+                    <input id="fDept" class="form-control" type="text" placeholder="如：仓储部">
+                </div>
+                <div class="fld">
+                    <label class="flab" for="fInspector">检查人员<span class="fk-req">*</span></label>
+                    <input id="fInspector" class="form-control" type="text" placeholder="检查人姓名">
+                </div>
+                <div class="fld">
+                    <label class="flab" for="fDate">检查日期<span class="fk-req">*</span></label>
+                    <input id="fDate" class="form-control" type="date">
+                </div>
+                <div class="fld">
+                    <label class="flab" for="fShift">班次 / 时段</label>
+                    <select id="fShift" class="form-control">
+                        <option value="白班">白班</option>
+                        <option value="夜班">夜班</option>
+                        <option value="交接班">交接班</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+            </div>
+            <div class="fk-current">
+                当前检查表：<strong id="curTypeName">燃油叉车</strong> ·
+                共 <strong id="curTotal">0</strong> 项（通用 <span id="curCommon">0</span> 项 + 专属 <span id="curExtra">0</span> 项）
+            </div>
+        </section>
+
+        <!-- ===== 三套独立检查表 ===== -->
+        <div class="tab-nav" id="typeTabs" role="tablist" aria-label="叉车动力类型"></div>
+        <div class="tab-panel active" id="panel-diesel"></div>
+        <div class="tab-panel" id="panel-electric"></div>
+        <div class="tab-panel" id="panel-lpg"></div>
+
+        <!-- ===== 整体检查结果 ===== -->
+        <section class="form-card" id="resultCard">
+            <h3><i class="fa-solid fa-list-check"></i> 整体检查结果</h3>
+            <div class="fk-stats">
+                <div class="stat-card"><div class="num" id="stTotal">0</div><div class="lab">检查项</div></div>
+                <div class="stat-card s-ok"><div class="num" id="stOk">0</div><div class="lab">合格</div></div>
+                <div class="stat-card s-bad"><div class="num" id="stBad">0</div><div class="lab">异常</div></div>
+                <div class="stat-card s-pending"><div class="num" id="stPending">0</div><div class="lab">未检查</div></div>
+            </div>
+            <span class="fk-vlabel">检查结论<span class="fk-req">*</span>（可点选，保存时必填）</span>
+            <div class="verdict-opts" id="verdictOpts"></div>
+            <span class="fk-vlabel" for="fAction">异常项处理意见 / 整改措施</span>
+            <textarea id="fAction" placeholder="逐项描述异常处置、整改责任人、停机/挂牌措施与复查安排……"></textarea>
+            <p class="fk-hint">任一异常项均须在对应行的「异常备注」中写明现象与处置；未检查项、漏填备注或漏选结论时无法保存。</p>
+        </section>
+
+        <div class="fk-toolbar no-print" id="mainToolbar">
+            <button type="button" class="btn btn-primary" id="btnSave"><i class="fa-solid fa-floppy-disk"></i> 保存本次检查</button>
+            <button type="button" class="btn btn-outline" id="btnReset">重置本表</button>
+            <button type="button" class="btn btn-outline" id="btnPrint"><i class="fa-solid fa-print"></i> 打印本次检查</button>
+            <button type="button" class="btn btn-outline" id="btnExport"><i class="fa-solid fa-file-export"></i> 导出检查报告</button>
+        </div>
+        <div class="fk-msg" id="msgBox" role="alert"></div>
+
+        <!-- ===== 历史检查记录 ===== -->
+        <section class="form-card no-print" id="historyCard">
+            <h3><i class="fa-solid fa-clock-rotate-left"></i> 历史检查记录</h3>
+            <div class="fk-filter">
+                <select id="histFilter" class="form-control" aria-label="按叉车类型筛选">
+                    <option value="all">全部类型</option>
+                </select>
+                <span class="fk-mini" id="histCount"></span>
+                <span class="spacer"></span>
+                <button type="button" class="btn btn-outline btn-sm" id="btnCsv"><i class="fa-solid fa-table"></i> 导出 CSV</button>
+                <button type="button" class="btn btn-outline btn-sm" id="btnClearAll">清空全部记录</button>
+            </div>
+            <div class="table-scroll">
+                <table class="data-table" id="historyTable">
+                    <thead><tr>
+                        <th>保存时间</th><th>类型</th><th>车辆编号</th><th>检查人</th><th>检查日期</th>
+                        <th>检查项</th><th>合格</th><th>异常</th><th>检查结论</th><th>操作</th>
+                    </tr></thead>
+                    <tbody id="historyBody"></tbody>
+                </table>
+            </div>
+            <div class="fk-empty" id="historyEmpty">暂无保存记录。完成一次点检并点击「保存本次检查」后，记录会显示在这里。</div>
+        </section>
+
+        <!-- ===== 结果汇总 ===== -->
+        <section class="form-card no-print" id="summaryCard">
+            <h3><i class="fa-solid fa-chart-simple"></i> 结果汇总</h3>
+            <div class="fk-stats" id="sumStats"></div>
+            <div class="sec-sub"><i class="fa-solid fa-layer-group"></i> 按类型分布</div>
+            <div class="fk-dist" id="sumDist"></div>
+            <div class="sec-sub"><i class="fa-solid fa-triangle-exclamation"></i> 高频异常项 TOP 5</div>
+            <div class="fk-top-list" id="sumTop"></div>
+        </section>
+    </main>
+
+    <section class="tool-meta" data-toolmeta="sheen">
+        <div class="tm-head">
+            <span class="tm-std-code">TSG 81—2022</span>
+            <span class="tm-std-name">《场(厂)内专用机动车辆安全技术规程》</span>
+        </div>
+        <div class="tm-line"><span class="tm-dt"><i>发布</i><span class="tm-dt-val">2022-08-03</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>实施</i><span class="tm-dt-val">2022-12-01</span></span><span class="tm-sep">·</span><span class="tm-dt"><i>更新</i><span class="tm-dt-val">2026-11-07</span></span></div>
+    </section>
+
+    <footer class="sheen-footer">
+        <img src="../assets/sheen-logo.png" alt="SHEEN Toolbox" class="sheen-logo-sm"> &nbsp;<strong>SHEEN Toolbox</strong> · 叉车安全检查表
+    </footer>
+    <div class="print-time" id="printTime"></div>
+
+    <!-- 记录详情弹层 -->
+    <div class="fk-modal no-print" id="detailModal" role="dialog" aria-modal="true" aria-label="检查记录详情">
+        <div class="box">
+            <button type="button" class="close" id="modalClose" aria-label="关闭">&times;</button>
+            <h3>检查记录详情</h3>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="/sheen-toolbox/forklift-safety-checklist/data.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var D = window.SHEEN_FK_DATA;
+        if (!D) { return; }
+
+        var LS_DRAFT = 'sheen_forklift_drafts_v1';
+        var LS_META  = 'sheen_forklift_meta_v1';
+        var LS_REC   = 'sheen_forklift_records_v1';
+        var MAX_REC  = 200;
+
+        /* ---------- 基础工具 ---------- */
+        function esc(s) {
+            return String(s == null ? '' : s)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+        function pad2(n) { return ('0' + n).slice(-2); }
+        function todayCN() {
+            var d = new Date();
+            return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
+        }
+        /* 打印/导出时间统一 UTC+8（不能直接用 toISOString，会慢 8 小时） */
+        function stampCN() {
+            return new Date(Date.now() + 8 * 3600000).toISOString().replace('T', ' ').slice(0, 16);
+        }
+        function loadJSON(key, fallback) {
+            try { var v = JSON.parse(localStorage.getItem(key)); return v == null ? fallback : v; }
+            catch (e) { return fallback; }
+        }
+        function saveJSON(key, val) {
+            try { localStorage.setItem(key, JSON.stringify(val)); }
+            catch (e) { showMsg('本机存储写入失败（可能空间不足或隐私模式），请改用「导出检查报告」留档。', 'bad'); }
+        }
+        function $(id) { return document.getElementById(id); }
+        function closest(el, sel) {
+            while (el && el !== document) {
+                if (el.matches && el.matches(sel)) { return el; }
+                el = el.parentNode;
+            }
+            return null;
+        }
+
+        /* ---------- 数据展开：通用 + 专属，序号连续 ---------- */
+        var SPECS = {};
+        D.types.forEach(function (t) {
+            var secs = D.commonSections.concat(t.sections);
+            var out = [], n = 0, commonN = 0;
+            secs.forEach(function (s, idx) {
+                var items = s.items.map(function (it) {
+                    n++;
+                    if (idx < D.commonSections.length) { commonN++; }
+                    return { seq: n, id: it.id, name: it.name, points: it.points };
+                });
+                out.push({ title: s.title, note: s.note, items: items });
+            });
+            SPECS[t.key] = { sections: out, total: n, common: commonN, extra: n - commonN };
+        });
+
+        function typeByKey(k) {
+            for (var i = 0; i < D.types.length; i++) { if (D.types[i].key === k) { return D.types[i]; } }
+            return D.types[0];
+        }
+
+        /* ---------- 状态 ---------- */
+        var current = D.types[0].key;
+        var drafts = loadJSON(LS_DRAFT, {});
+        function newDraft() { return { items: {}, verdict: '', action: '' }; }
+        D.types.forEach(function (t) {
+            if (!drafts[t.key] || typeof drafts[t.key] !== 'object') { drafts[t.key] = newDraft(); }
+            if (!drafts[t.key].items) { drafts[t.key].items = {}; }
+        });
+        var records = loadJSON(LS_REC, []);
+        if (!Array.isArray(records)) { records = []; }
+
+        function curDraft() { return drafts[current]; }
+        function itemState(id) {
+            var it = curDraft().items[id];
+            return it || { s: '', note: '' };
+        }
+        function setItem(id, patch) {
+            var st = itemState(id);
+            Object.keys(patch).forEach(function (k) { st[k] = patch[k]; });
+            curDraft().items[id] = st;
+            saveJSON(LS_DRAFT, drafts);
+        }
+        function metaVals() {
+            return {
+                vehicle: $('fVehicle').value.trim(),
+                dept: $('fDept').value.trim(),
+                inspector: $('fInspector').value.trim(),
+                date: $('fDate').value,
+                shift: $('fShift').value
+            };
+        }
+        function persistMeta() { saveJSON(LS_META, metaVals()); }
+
+        /* ---------- 渲染：页签 + 三套检查表 ---------- */
+        function renderTabs() {
+            var html = '';
+            D.types.forEach(function (t) {
+                html += '<button type="button" class="tab-btn' + (t.key === current ? ' active' : '') +
+                    '" data-key="' + esc(t.key) + '" role="tab" aria-selected="' + (t.key === current) + '">' +
+                    '<i class="fa-solid ' + esc(t.icon) + '"></i> ' + esc(t.name) + '</button>';
+            });
+            $('typeTabs').innerHTML = html;
+        }
+
+        function renderPanel(key) {
+            var spec = SPECS[key], html = '';
+            spec.sections.forEach(function (s) {
+                html += '<div class="sec-title">' + esc(s.title) + '</div>';
+                html += '<div class="scene-cap"><i class="fa-solid fa-circle-info"></i>' + esc(s.note) + '（' + s.items.length + ' 项）</div>';
+                html += '<div class="table-scroll"><table class="data-table fk-table"><thead><tr>' +
+                    '<th class="c-seq">序号</th><th class="c-name">检查项目</th><th class="c-std">检查内容与判定要点</th>' +
+                    '<th class="c-res">检查结果</th><th class="c-note">异常备注</th></tr></thead><tbody>';
+                s.items.forEach(function (it) {
+                    var st = (drafts[key].items[it.id] || { s: '', note: '' });
+                    var pts = '';
+                    it.points.forEach(function (p) { pts += '<li>' + esc(p) + '</li>'; });
+                    html += '<tr data-id="' + esc(it.id) + '"' + (st.s === 'bad' ? ' class="row-bad"' : '') + '>' +
+                        '<td class="c-seq">' + it.seq + '</td>' +
+                        '<td class="c-name"><span class="item-name">' + esc(it.name) + '</span></td>' +
+                        '<td class="c-std"><ul class="std-list">' + pts + '</ul></td>' +
+                        '<td class="c-res"><div class="res-group">' +
+                            '<button type="button" class="res-opt' + (st.s === 'ok' ? ' active-ok' : '') +
+                                '" data-s="ok" data-id="' + esc(it.id) + '" aria-pressed="' + (st.s === 'ok') + '">合格</button>' +
+                            '<button type="button" class="res-opt' + (st.s === 'bad' ? ' active-bad' : '') +
+                                '" data-s="bad" data-id="' + esc(it.id) + '" aria-pressed="' + (st.s === 'bad') + '">异常</button>' +
+                        '</div></td>' +
+                        '<td class="c-note"><textarea class="remark-input" data-id="' + esc(it.id) +
+                            '" placeholder="异常时必填：现象 / 处置">' + esc(st.note || '') + '</textarea></td>' +
+                    '</tr>';
+                });
+                html += '</tbody></table></div>';
+            });
+            $('panel-' + key).innerHTML = html;
+        }
+
+        function renderVerdict() {
+            var v = curDraft().verdict, html = '';
+            D.conclusions.forEach(function (c, i) {
+                html += '<button type="button" class="verdict-opt' + (v === c ? ' active' : '') +
+                    '" data-v="' + i + '" aria-pressed="' + (v === c) + '">' + esc(c) + '</button>';
+            });
+            $('verdictOpts').innerHTML = html;
+            $('fAction').value = curDraft().action || '';
+        }
+
+        function updateStats() {
+            var spec = SPECS[current], ok = 0, bad = 0;
+            spec.sections.forEach(function (s) {
+                s.items.forEach(function (it) {
+                    var st = drafts[current].items[it.id] || {};
+                    if (st.s === 'ok') { ok++; } else if (st.s === 'bad') { bad++; }
+                });
+            });
+            $('stTotal').textContent = spec.total;
+            $('stOk').textContent = ok;
+            $('stBad').textContent = bad;
+            $('stPending').textContent = spec.total - ok - bad;
+            var t = typeByKey(current), spec2 = SPECS[current];
+            $('curTypeName').textContent = t.name;
+            $('curTotal').textContent = spec2.total;
+            $('curCommon').textContent = spec2.common;
+            $('curExtra').textContent = spec2.extra;
+        }
+
+        function refreshAll() {
+            renderTabs();
+            D.types.forEach(function (t) { renderPanel(t.key); });
+            renderVerdict();
+            updateStats();
+            renderHistory();
+            renderSummary();
+        }
+
+        /* ---------- 消息 ---------- */
+        function showMsg(text, kind) {
+            var box = $('msgBox');
+            box.className = 'fk-msg show warn-bar ' + (kind === 'ok' ? 'ok' : 'danger');
+            box.innerHTML = '<i class="fa-solid ' + (kind === 'ok' ? 'fa-circle-check' : 'fa-triangle-exclamation') +
+                '"></i><span>' + esc(text) + '</span>';
+        }
+        function clearMsg() { $('msgBox').className = 'fk-msg'; $('msgBox').innerHTML = ''; }
+        function focusOn(el) {
+            if (!el) { return; }
+            try { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) { el.scrollIntoView(); }
+            if (el.focus) { setTimeout(function () { try { el.focus(); } catch (e2) {} }, 260); }
+        }
+
+        /* ---------- 事件：页签 / 判定 / 备注 / 结论 ---------- */
+        $('typeTabs').addEventListener('click', function (e) {
+            var btn = closest(e.target, '.tab-btn');
+            if (!btn) { return; }
+            var k = btn.getAttribute('data-key');
+            if (!SPECS[k]) { return; }
+            current = k;
+            Array.prototype.forEach.call($('typeTabs').querySelectorAll('.tab-btn'), function (b) {
+                var on = b === btn;
+                b.classList.toggle('active', on);
+                b.setAttribute('aria-selected', on);
+            });
+            D.types.forEach(function (t) {
+                $('panel-' + t.key).classList.toggle('active', t.key === current);
+            });
+            renderVerdict();
+            updateStats();
+            clearMsg();
+        });
+
+        D.types.forEach(function (t) {
+            var panel = $('panel-' + t.key);
+            panel.addEventListener('click', function (e) {
+                var opt = closest(e.target, '.res-opt');
+                if (!opt) { return; }
+                var id = opt.getAttribute('data-id');
+                var s = opt.getAttribute('data-s');
+                var prev = itemState(id).s;
+                /* 再次点击同一状态 → 取消选择（可撤销） */
+                setItem(id, { s: prev === s ? '' : s });
+                var row = closest(opt, 'tr');
+                var now = itemState(id).s;
+                Array.prototype.forEach.call(row.querySelectorAll('.res-opt'), function (b) {
+                    var bs = b.getAttribute('data-s');
+                    b.classList.toggle('active-ok', bs === 'ok' && now === 'ok');
+                    b.classList.toggle('active-bad', bs === 'bad' && now === 'bad');
+                    b.setAttribute('aria-pressed', (bs === now));
+                });
+                row.classList.toggle('row-bad', now === 'bad');
+                row.classList.remove('fk-err-row');
+                var note = row.querySelector('.remark-input');
+                if (note) { note.classList.toggle('need', now === 'bad' && !note.value.trim()); }
+                updateStats();
+                clearMsg();
+            });
+            panel.addEventListener('input', function (e) {
+                var el = e.target;
+                if (!el.classList || !el.classList.contains('remark-input')) { return; }
+                setItem(el.getAttribute('data-id'), { note: el.value });
+                el.classList.remove('need');
+                var row = closest(el, 'tr');
+                if (row) { row.classList.remove('fk-err-row'); }
+                clearMsg();
+            });
+        });
+
+        $('verdictOpts').addEventListener('click', function (e) {
+            var btn = closest(e.target, '.verdict-opt');
+            if (!btn) { return; }
+            curDraft().verdict = D.conclusions[Number(btn.getAttribute('data-v'))];
+            saveJSON(LS_DRAFT, drafts);
+            renderVerdict();
+            clearMsg();
+        });
+        $('fAction').addEventListener('input', function () {
+            curDraft().action = this.value;
+            saveJSON(LS_DRAFT, drafts);
+        });
+        ['fVehicle', 'fDept', 'fInspector', 'fDate', 'fShift'].forEach(function (id) {
+            $(id).addEventListener('change', persistMeta);
+            $(id).addEventListener('input', persistMeta);
+        });
+
+        /* ---------- 必填校验 + 保存 ---------- */
+        function validate() {
+            var m = metaVals(), errs = [], firstEl = null;
+            if (!m.vehicle) { errs.push('车辆编号 / 牌照'); if (!firstEl) { firstEl = $('fVehicle'); } }
+            if (!m.inspector) { errs.push('检查人员'); if (!firstEl) { firstEl = $('fInspector'); } }
+            if (!m.date) { errs.push('检查日期'); if (!firstEl) { firstEl = $('fDate'); } }
+            var spec = SPECS[current], un = [], noNote = [];
+            spec.sections.forEach(function (s) {
+                s.items.forEach(function (it) {
+                    var st = drafts[current].items[it.id] || {};
+                    if (st.s !== 'ok' && st.s !== 'bad') { un.push(it.seq); }
+                    else if (st.s === 'bad' && !(st.note || '').trim()) { noNote.push(it); }
+                });
+            });
+            var panel = $('panel-' + current);
+            Array.prototype.forEach.call(panel.querySelectorAll('tr[data-id]'), function (row) {
+                row.classList.remove('fk-err-row');
+                var note = row.querySelector('.remark-input');
+                if (note) { note.classList.remove('need'); }
+            });
+            if (un.length) {
+                errs.push('还有 ' + un.length + ' 个检查项未判定（序号 ' + un.slice(0, 6).join('、') + (un.length > 6 ? ' …' : '') + '）');
+                var firstRow = panel.querySelector('tr[data-id="' + spec.sections[0].items[0].id + '"]');
+                if (!firstEl) {
+                    var target = null;
+                    spec.sections.forEach(function (s) {
+                        s.items.forEach(function (it) {
+                            if (!target && un.indexOf(it.seq) >= 0) {
+                                target = panel.querySelector('tr[data-id="' + it.id + '"]');
+                            }
+                        });
+                    });
+                    firstEl = target || firstRow;
+                }
+                un.forEach(function (seq) {
+                    spec.sections.forEach(function (s) {
+                        s.items.forEach(function (it) {
+                            if (it.seq === seq) {
+                                var r = panel.querySelector('tr[data-id="' + it.id + '"]');
+                                if (r) { r.classList.add('fk-err-row'); }
+                            }
+                        });
+                    });
+                });
+            }
+            if (noNote.length) {
+                errs.push(noNote.length + ' 个异常项未填写「异常备注」（序号 ' + noNote.slice(0, 5).map(function (x) { return x.seq; }).join('、') + '）');
+                noNote.forEach(function (it) {
+                    var r = panel.querySelector('tr[data-id="' + it.id + '"]');
+                    if (r) {
+                        r.classList.add('fk-err-row');
+                        var note = r.querySelector('.remark-input');
+                        if (note) { note.classList.add('need'); }
+                    }
+                });
+                if (!firstEl) {
+                    var nr = panel.querySelector('tr[data-id="' + noNote[0].id + '"] .remark-input');
+                    firstEl = nr;
+                }
+            }
+            if (!curDraft().verdict) {
+                errs.push('整体检查结论');
+                if (!firstEl) { firstEl = $('verdictOpts'); }
+            }
+            return { errs: errs, firstEl: firstEl };
+        }
+
+        function snapshotItems() {
+            var out = [], spec = SPECS[current];
+            spec.sections.forEach(function (s) {
+                s.items.forEach(function (it) {
+                    var st = drafts[current].items[it.id] || {};
+                    out.push({ seq: it.seq, id: it.id, name: it.name, s: st.s || '', note: (st.note || '').trim() });
+                });
+            });
+            return out;
+        }
+
+        $('btnSave').addEventListener('click', function () {
+            var v = validate();
+            if (v.errs.length) {
+                showMsg('无法保存：' + v.errs.join('；') + '。', 'bad');
+                focusOn(v.firstEl);
+                return;
+            }
+            var m = metaVals(), items = snapshotItems();
+            var ok = 0, bad = 0;
+            items.forEach(function (it) { if (it.s === 'ok') { ok++; } else if (it.s === 'bad') { bad++; } });
+            var t = typeByKey(current);
+            var rec = {
+                rid: String(Date.now()) + '-' + Math.random().toString(36).slice(2, 7),
+                savedAt: stampCN(),
+                type: current, typeName: t.name,
+                vehicle: m.vehicle, dept: m.dept, inspector: m.inspector,
+                date: m.date, shift: m.shift,
+                total: items.length, ok: ok, bad: bad,
+                verdict: curDraft().verdict, action: (curDraft().action || '').trim(),
+                items: items
+            };
+            records.unshift(rec);
+            if (records.length > MAX_REC) { records.length = MAX_REC; }
+            saveJSON(LS_REC, records);
+
+            /* 保存后清空当前类型草稿，保留检查人/日期/部门便于连续点检多台车 */
+            drafts[current] = newDraft();
+            saveJSON(LS_DRAFT, drafts);
+            $('fVehicle').value = '';
+            persistMeta();
+            refreshAll();
+            showMsg('已保存：' + t.name + ' · ' + m.vehicle + ' · ' + m.date + '（' + items.length + ' 项，合格 ' + ok + ' / 异常 ' + bad + '）。可继续录入下一台车。', 'ok');
+            focusOn($('msgBox'));
+        });
+
+        $('btnReset').addEventListener('click', function () {
+            if (!window.confirm('确定重置「' + typeByKey(current).name + '」这张检查表的全部判定、备注与结论吗？（基本信息与已保存记录不受影响）')) { return; }
+            drafts[current] = newDraft();
+            saveJSON(LS_DRAFT, drafts);
+            refreshAll();
+            showMsg('已重置「' + typeByKey(current).name + '」检查表。', 'ok');
+        });
+
+        $('btnPrint').addEventListener('click', function () { window.print(); });
+
+        /* ---------- 导出自包含检查报告（零外部依赖） ---------- */
+        function buildReportHtml() {
+            var m = metaVals(), t = typeByKey(current), spec = SPECS[current];
+            var items = snapshotItems();
+            var ok = 0, bad = 0, pending = 0;
+            items.forEach(function (it) {
+                if (it.s === 'ok') { ok++; } else if (it.s === 'bad') { bad++; } else { pending++; }
+            });
+            var css = '*{margin:0;padding:0;box-sizing:border-box}' +
+                'body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;color:#1E2126;background:#fff;padding:26px 30px;font-size:13px;line-height:1.65}' +
+                'h1{font-size:20px;border-bottom:3px solid #F03752;padding-bottom:10px;margin-bottom:6px}' +
+                '.sub{color:#5C6470;font-size:12px;margin-bottom:16px}' +
+                '.kv{display:flex;flex-wrap:wrap;gap:8px 26px;background:#F8F9FA;border:1px solid #E3E6EA;padding:12px 14px;border-radius:8px;margin-bottom:16px;font-size:12px}' +
+                '.kv b{color:#1E2126}' +
+                '.stats{display:flex;gap:12px;margin-bottom:16px}' +
+                '.stat{flex:1;border:1px solid #E3E6EA;border-radius:8px;padding:9px;text-align:center}' +
+                '.stat .n{font-size:20px;font-weight:800}.stat .l{font-size:11px;color:#5C6470}' +
+                'table{width:100%;border-collapse:collapse;margin-bottom:14px}' +
+                'th,td{border:1px solid #E3E6EA;padding:6px 8px;font-size:12px;vertical-align:top}' +
+                'th{background:#F3F4F6;text-align:center}' +
+                'td.s{text-align:center;font-weight:700;width:40px}td.nm{text-align:center;font-weight:700;width:120px}' +
+                'td.r{text-align:center;width:80px}td.nt{width:150px}' +
+                'ul{padding-left:16px}' +
+                'tr.bad td{background:#FDEEF1}' +
+                '.vd{border-left:3px solid #F03752;background:#F8F9FA;padding:11px 14px;margin:12px 0;font-size:13px}' +
+                '.foot{border-top:1px solid #E3E6EA;margin-top:18px;padding-top:10px;font-size:11px;color:#6B7280}' +
+                '.exp-print{display:inline-block;background:#F03752;color:#fff;border:0;border-radius:8px;padding:8px 18px;font-size:13px;cursor:pointer;margin-bottom:14px}' +
+                '@media print{@page{size:A4 landscape;margin:10mm 8mm}.exp-print{display:none}body{padding:0}th,td{font-size:9pt}}';
+            var body = '<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">' +
+                '<title>叉车安全检查表 · ' + esc(t.name) + ' · ' + esc(m.vehicle || '未填写') + '</title>' +
+                '<style>' + css + '</style></head><body>' +
+                '<button class="exp-print" onclick="window.print()">打印本报告</button>' +
+                '<h1>叉车安全检查表 · ' + esc(t.name) + '</h1>' +
+                '<div class="sub">依据 TSG 81—2022《场(厂)内专用机动车辆安全技术规程》5.2.1 / 5.14 出车前日常检查要求</div>' +
+                '<div class="kv">' +
+                    '<span>车辆编号：<b>' + esc(m.vehicle || '—') + '</b></span>' +
+                    '<span>使用部门：<b>' + esc(m.dept || '—') + '</b></span>' +
+                    '<span>检查人员：<b>' + esc(m.inspector || '—') + '</b></span>' +
+                    '<span>检查日期：<b>' + esc(m.date || '—') + '</b></span>' +
+                    '<span>班次：<b>' + esc(m.shift || '—') + '</b></span>' +
+                '</div>' +
+                '<div class="stats">' +
+                    '<div class="stat"><div class="n">' + spec.total + '</div><div class="l">检查项</div></div>' +
+                    '<div class="stat"><div class="n" style="color:#166534">' + ok + '</div><div class="l">合格</div></div>' +
+                    '<div class="stat"><div class="n" style="color:#F03752">' + bad + '</div><div class="l">异常</div></div>' +
+                    '<div class="stat"><div class="n">' + pending + '</div><div class="l">未检查</div></div>' +
+                '</div>';
+            spec.sections.forEach(function (s) {
+                body += '<h3 style="font-size:14px;border-left:3px solid #F03752;padding-left:9px;margin:14px 0 7px">' + esc(s.title) + '</h3>' +
+                    '<table><thead><tr><th>序号</th><th>检查项目</th><th>检查内容与判定要点</th><th>结果</th><th>异常备注</th></tr></thead><tbody>';
+                s.items.forEach(function (it) {
+                    var st = drafts[current].items[it.id] || {};
+                    var pts = '';
+                    it.points.forEach(function (p) { pts += '<li>' + esc(p) + '</li>'; });
+                    body += '<tr' + (st.s === 'bad' ? ' class="bad"' : '') + '>' +
+                        '<td class="s">' + it.seq + '</td><td class="nm">' + esc(it.name) + '</td>' +
+                        '<td><ul>' + pts + '</ul></td>' +
+                        '<td class="r">' + (st.s === 'ok' ? '合格' : (st.s === 'bad' ? '异常' : '—')) + '</td>' +
+                        '<td class="nt">' + esc((st.note || '').trim()) + '</td></tr>';
+                });
+                body += '</tbody></table>';
+            });
+            body += '<div class="vd"><b>整体检查结论：</b>' + esc(curDraft().verdict || '未选择') +
+                '<br><b>异常项处理意见：</b>' + esc((curDraft().action || '').trim() || '—') + '</div>' +
+                '<div class="foot">SHEEN Toolbox · 生成时间 ' + esc(stampCN()) + '（UTC+8） · 本记录仅供企业日常点检参考，不替代法定检验与维护保养记录。</div>' +
+                '</body></html>';
+            return body;
+        }
+
+        function download(name, content, mime) {
+            try {
+                var blob = new Blob([content], { type: mime || 'text/html;charset=utf-8' });
+                var url = URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url; a.download = name;
+                document.body.appendChild(a); a.click();
+                setTimeout(function () { document.body.removeChild(a); URL.revokeObjectURL(url); }, 400);
+                return true;
+            } catch (e) { showMsg('导出失败：' + e.message, 'bad'); return false; }
+        }
+
+        $('btnExport').addEventListener('click', function () {
+            var m = metaVals(), t = typeByKey(current);
+            var name = '叉车安全检查表_' + t.name + '_' + (m.vehicle || '未填车号').replace(/[\\/:*?"<>|]/g, '_') + '_' + (m.date || todayCN()) + '.html';
+            if (download(name, buildReportHtml())) {
+                showMsg('已导出「' + t.name + '」当前检查报告（自包含 HTML，可直接打印或存档）。', 'ok');
+            }
+        });
+
+        /* ---------- 历史记录 ---------- */
+        /* 结论在表格里用短标签（完整文案放 title，点「查看」可看全文），避免撑宽表格 */
+        function shortVerdict(v) {
+            if (/全部合格/.test(v)) { return '合格'; }
+            if (/严重|禁止使用/.test(v)) { return '停用'; }
+            return '需整改';
+        }
+        function renderHistory() {
+            var filter = $('histFilter').value || 'all';
+            var list = records.filter(function (r) { return filter === 'all' || r.type === filter; });
+            $('histCount').textContent = '共 ' + list.length + ' 条';
+            $('historyEmpty').style.display = list.length ? 'none' : 'block';
+            var html = '';
+            list.forEach(function (r) {
+                html += '<tr>' +
+                    '<td title="' + esc(r.savedAt) + '">' + esc(String(r.savedAt).slice(5)) + '</td>' +
+                    '<td>' + esc(r.typeName) + '</td>' +
+                    '<td>' + esc(r.vehicle) + '</td>' +
+                    '<td>' + esc(r.inspector) + '</td>' +
+                    '<td>' + esc(r.date) + '</td>' +
+                    '<td class="text-center">' + Number(r.total) + '</td>' +
+                    '<td class="text-center">' + Number(r.ok) + '</td>' +
+                    '<td class="text-center">' + Number(r.bad) + '</td>' +
+                    '<td title="' + esc(r.verdict) + '">' + esc(shortVerdict(r.verdict)) + '</td>' +
+                    '<td class="text-center" style="white-space:nowrap">' +
+                        '<button type="button" class="btn btn-outline btn-sm h-view" data-rid="' + esc(r.rid) + '">查看</button> ' +
+                        '<button type="button" class="btn btn-outline btn-sm h-del" data-rid="' + esc(r.rid) + '">删除</button>' +
+                    '</td></tr>';
+            });
+            $('historyBody').innerHTML = html;
+        }
+
+        $('histFilter').addEventListener('change', renderHistory);
+
+        $('historyBody').addEventListener('click', function (e) {
+            var view = closest(e.target, '.h-view'), del = closest(e.target, '.h-del');
+            if (!view && !del) { return; }
+            var rid = (view || del).getAttribute('data-rid');
+            var rec = null;
+            for (var i = 0; i < records.length; i++) { if (records[i].rid === rid) { rec = records[i]; break; } }
+            if (!rec) { return; }
+            if (del) {
+                if (!window.confirm('确定删除这条检查记录吗？删除后不可恢复。')) { return; }
+                records = records.filter(function (r) { return r.rid !== rid; });
+                saveJSON(LS_REC, records);
+                renderHistory(); renderSummary();
+                showMsg('已删除该条检查记录。', 'ok');
+                return;
+            }
+            var badItems = (rec.items || []).filter(function (it) { return it.s === 'bad'; });
+            var html = '<div class="kv">' +
+                '<span>保存时间：<b>' + esc(rec.savedAt) + '</b></span>' +
+                '<span>类型：<b>' + esc(rec.typeName) + '</b></span>' +
+                '<span>车辆编号：<b>' + esc(rec.vehicle) + '</b></span>' +
+                '<span>使用部门：<b>' + esc(rec.dept || '—') + '</b></span>' +
+                '<span>检查人员：<b>' + esc(rec.inspector) + '</b></span>' +
+                '<span>检查日期：<b>' + esc(rec.date) + '</b></span>' +
+                '<span>班次：<b>' + esc(rec.shift || '—') + '</b></span>' +
+                '</div><div class="kv">' +
+                '<span>检查项：<b>' + Number(rec.total) + '</b></span>' +
+                '<span>合格：<b>' + Number(rec.ok) + '</b></span>' +
+                '<span>异常：<b>' + Number(rec.bad) + '</b></span>' +
+                '<span>结论：<b>' + esc(rec.verdict) + '</b></span>' +
+                '</div>' +
+                '<div class="fk-nc"><b>处理意见：</b>' + esc(rec.action || '—') + '</div>';
+            if (badItems.length) {
+                html += '<div class="sec-sub"><i class="fa-solid fa-triangle-exclamation"></i> 异常项明细</div>';
+                badItems.forEach(function (it) {
+                    html += '<div class="fk-nc"><b>' + it.seq + ' · ' + esc(it.name) + '：</b>' + esc(it.note || '（未填备注）') + '</div>';
+                });
+            } else {
+                html += '<div class="fk-nc" style="border-left-color:#16A34A">本次检查全部合格，无异常项。</div>';
+            }
+            $('modalBody').innerHTML = html;
+            $('detailModal').classList.add('show');
+        });
+
+        $('modalClose').addEventListener('click', function () { $('detailModal').classList.remove('show'); });
+        $('detailModal').addEventListener('click', function (e) {
+            if (e.target === this) { this.classList.remove('show'); }
+        });
+
+        $('btnClearAll').addEventListener('click', function () {
+            if (!records.length) { showMsg('当前没有可清空的记录。', 'bad'); return; }
+            if (!window.confirm('确定清空全部 ' + records.length + ' 条检查记录吗？此操作不可恢复，建议先导出 CSV 备份。')) { return; }
+            records = [];
+            saveJSON(LS_REC, records);
+            renderHistory(); renderSummary();
+            showMsg('已清空全部检查记录。', 'ok');
+        });
+
+        $('btnCsv').addEventListener('click', function () {
+            if (!records.length) { showMsg('暂无记录可导出，请先保存一次检查。', 'bad'); return; }
+            var head = ['保存时间', '叉车类型', '车辆编号', '使用部门', '检查人员', '检查日期', '班次', '检查项数', '合格项', '异常项', '整体结论', '处理意见'];
+            function cell(v) { return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; }
+            var lines = [head.map(cell).join(',')];
+            records.forEach(function (r) {
+                lines.push([r.savedAt, r.typeName, r.vehicle, r.dept, r.inspector, r.date, r.shift,
+                    r.total, r.ok, r.bad, r.verdict, r.action].map(cell).join(','));
+            });
+            if (download('叉车安全检查_历史记录_' + todayCN() + '.csv', '\ufeff' + lines.join('\r\n'), 'text/csv;charset=utf-8')) {
+                showMsg('已导出 ' + records.length + ' 条历史记录（CSV，Excel 可直接打开）。', 'ok');
+            }
+        });
+
+        /* ---------- 结果汇总 ---------- */
+        function renderSummary() {
+            var total = records.length, sumOk = 0, sumBad = 0, sumItems = 0;
+            var byType = {}, byItem = {};
+            D.types.forEach(function (t) { byType[t.key] = { name: t.name, n: 0, bad: 0 }; });
+            records.forEach(function (r) {
+                if (byType[r.type]) { byType[r.type].n++; byType[r.type].bad += Number(r.bad) || 0; }
+                sumOk += Number(r.ok) || 0;
+                sumBad += Number(r.bad) || 0;
+                sumItems += Number(r.total) || 0;
+                (r.items || []).forEach(function (it) {
+                    if (it.s === 'bad') {
+                        if (!byItem[it.id]) { byItem[it.id] = { name: it.name, n: 0 }; }
+                        byItem[it.id].n++;
+                    }
+                });
+            });
+            var passRate = sumItems ? (sumOk / sumItems * 100).toFixed(1) + '%' : '—';
+            $('sumStats').innerHTML =
+                '<div class="stat-card"><div class="num">' + total + '</div><div class="lab">累计检查次数</div></div>' +
+                '<div class="stat-card"><div class="num">' + sumItems + '</div><div class="lab">累计检查项次</div></div>' +
+                '<div class="stat-card s-ok"><div class="num">' + passRate + '</div><div class="lab">项目合格率</div></div>' +
+                '<div class="stat-card s-bad"><div class="num">' + sumBad + '</div><div class="lab">异常项次</div></div>';
+            var dist = '';
+            D.types.forEach(function (t) {
+                dist += '<span class="pill">' + esc(t.name) + ' · <b>' + byType[t.key].n + '</b> 次 / 异常 <b>' + byType[t.key].bad + '</b> 项</span>';
+            });
+            $('sumDist').innerHTML = dist;
+            var top = Object.keys(byItem).map(function (k) { return byItem[k]; })
+                .sort(function (a, b) { return b.n - a.n; }).slice(0, 5);
+            $('sumTop').innerHTML = top.length
+                ? top.map(function (x) {
+                    return '<div class="fk-top-item"><span>' + esc(x.name) + '</span><span class="cnt">异常 ' + x.n + ' 次</span></div>';
+                }).join('')
+                : '<div class="fk-empty">暂无异常项记录。</div>';
+        }
+
+        /* ---------- 初始化 ---------- */
+        (function init() {
+            $('printTime').textContent = stampCN();
+            var savedMeta = loadJSON(LS_META, {});
+            if (savedMeta && typeof savedMeta === 'object') {
+                if (savedMeta.dept) { $('fDept').value = savedMeta.dept; }
+                if (savedMeta.inspector) { $('fInspector').value = savedMeta.inspector; }
+                if (savedMeta.shift) { $('fShift').value = savedMeta.shift; }
+                if (savedMeta.date) { $('fDate').value = savedMeta.date; }
+            }
+            if (!$('fDate').value) { $('fDate').value = todayCN(); }
+            var f = $('histFilter');
+            D.types.forEach(function (t) {
+                var o = document.createElement('option');
+                o.value = t.key; o.textContent = t.name;
+                f.appendChild(o);
+            });
+            refreshAll();
+        })();
+    })();
+    </script>
+
+    <script src="/sheen-toolbox/assets/i18n.js"></script>
+    <script src="/sheen-toolbox/assets/share.js"></script>
+</body>
+</html>
