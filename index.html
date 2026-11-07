@@ -1432,13 +1432,15 @@
       <label style="display:block;font-size:12px;font-weight:600;margin:2px 0 6px;">模型</label>
       <select id="apiModelH" style="width:100%;padding:8px 10px;margin-bottom:6px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--bg-card);color:var(--text-primary);">
         <option value="glm-4.7-flash">GLM-4.7-Flash（免费·推荐）</option>
+        <option value="glm-4-flash-250414">GLM-4-Flash-250414（免费·备用池）</option>
+        <option value="glm-4.5-flash">GLM-4.5-Flash（免费·备用池）</option>
         <option value="glm-4-air">GLM-4-Air（均衡）</option>
         <option value="glm-4">GLM-4（旗舰）</option>
         <option value="deepseek-chat">DeepSeek-V3（需代理）</option>
         <option value="__custom__">⤹ 自定义输入</option>
       </select>
       <input type="text" id="apiModelCustomH" placeholder="输入模型编码" style="display:none;width:100%;padding:8px;margin-bottom:8px;border:1.5px solid var(--border);border-radius:8px;font-family:monospace;font-size:12px;">
-      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">默认使用免费 GLM-4.7-Flash；旧版 GLM-4-Flash 会自动升级。</p>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">默认使用免费 GLM-4.7-Flash；主模型繁忙时自动切换备用免费模型池，也可在上方手动选择。旧版 GLM-4-Flash 会自动升级。</p>
       <div style="display:flex;gap:8px;">
         <button class="btn btn-primary" onclick="saveApiH()" style="padding:8px 20px;border-radius:60px;font-size:13px;background:var(--brand-red);color:var(--white);border:none;cursor:pointer;">保存</button>
         <button class="btn btn-outline" onclick="document.getElementById('apiModalH').style.display='none'" style="padding:8px 20px;border-radius:60px;font-size:13px;background:var(--bg-card);border:1.5px solid var(--border);cursor:pointer;">关闭</button>
@@ -1781,7 +1783,7 @@
           if (mdl === 'glm-4-flash') { mdl = 'glm-4.7-flash'; localStorage.setItem('sheen_5why_apimodel', mdl); }
           var selH = document.getElementById('apiModelH');
           var custH = document.getElementById('apiModelCustomH');
-          var knownH = ['glm-4.7-flash','glm-4-air','glm-4','deepseek-chat'];
+          var knownH = ['glm-4.7-flash','glm-4-flash-250414','glm-4.5-flash','glm-4-air','glm-4','deepseek-chat'];
           if (knownH.indexOf(mdl) >= 0) { selH.value = mdl; custH.style.display = 'none'; }
           else { selH.value = '__custom__'; custH.style.display = 'block'; custH.value = mdl; }
           selH.onchange = function(){ custH.style.display = this.value === '__custom__' ? 'block' : 'none'; };
