@@ -1367,7 +1367,7 @@
         <a href="/sheen-toolbox/forklift-safety-checklist/" class="tool-card" draggable="true" data-cat="检查" data-zh-title="叉车安全检查表" data-zh-desc="燃油 / 电动 / LPG 三类独立点检表 · 出车前检查 · 记录保存与结果汇总" data-slug="forklift-safety-checklist">
             <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
             <span class="move-btns"><button type="button" class="mv-up" title="上移" aria-label="上移">▲</button><button type="button" class="mv-down" title="下移" aria-label="下移">▼</button></span>
-            <div class="tool-icon"><i class="fa-solid fa-truck-moving"></i></div>
+            <div class="tool-icon"><svg viewBox="0 -960 960 960" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false" role="img" aria-label="叉车"><path d="M160-120q-50 0-85-35t-35-85q0-26 10-49.5T80-330v-150q0-17 11.5-28.5T120-520h40v-200q0-17 11.5-28.5T200-760h227q24 0 44 13t30 36l167 394q6 14 9 28t3 29q0 58-41 99t-99 41q-41 0-75.5-21.5T413-200H273q-13 36-44 58t-69 22Zm720-40H760q-17 0-28.5-11.5T720-200v-560q0-17 11.5-28.5T760-800q17 0 28.5 11.5T800-760v520h80q17 0 28.5 11.5T920-200q0 17-11.5 28.5T880-160Zm-691.5-51.5Q200-223 200-240t-11.5-28.5Q177-280 160-280t-28.5 11.5Q120-257 120-240t11.5 28.5Q143-200 160-200t28.5-11.5Zm394-6Q600-235 600-260t-17.5-42.5Q565-320 540-320t-42.5 17.5Q480-285 480-260t17.5 42.5Q515-200 540-200t42.5-17.5ZM357-400h189L427-680H240v160l117 120Z"/></svg></div>
             <div class="card-text"><h3 title="叉车安全检查表">叉车安全检查表</h3></div>
             <span class="arrow">进入工具 <i class="fa-solid fa-arrow-right"></i></span>
         </a>
@@ -1428,6 +1428,16 @@
       <div id="proxySectionH" style="display:none;">
         <input type="text" id="proxyUrlH" placeholder="代理地址" style="width:100%;padding:8px;border:1.5px solid var(--border);border-radius:8px;font-family:monospace;font-size:12px;margin-bottom:8px;">
       </div>
+      <label style="display:block;font-size:12px;font-weight:600;margin:2px 0 6px;">模型</label>
+      <select id="apiModelH" style="width:100%;padding:8px 10px;margin-bottom:6px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--bg-card);color:var(--text-primary);">
+        <option value="glm-4.7-flash">GLM-4.7-Flash（免费·推荐）</option>
+        <option value="glm-4-air">GLM-4-Air（均衡）</option>
+        <option value="glm-4">GLM-4（旗舰）</option>
+        <option value="deepseek-chat">DeepSeek-V3（需代理）</option>
+        <option value="__custom__">⤹ 自定义输入</option>
+      </select>
+      <input type="text" id="apiModelCustomH" placeholder="输入模型编码" style="display:none;width:100%;padding:8px;margin-bottom:8px;border:1.5px solid var(--border);border-radius:8px;font-family:monospace;font-size:12px;">
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">默认使用免费 GLM-4.7-Flash；旧版 GLM-4-Flash 会自动升级。</p>
       <div style="display:flex;gap:8px;">
         <button class="btn btn-primary" onclick="saveApiH()" style="padding:8px 20px;border-radius:60px;font-size:13px;background:var(--brand-red);color:var(--white);border:none;cursor:pointer;">保存</button>
         <button class="btn btn-outline" onclick="document.getElementById('apiModalH').style.display='none'" style="padding:8px 20px;border-radius:60px;font-size:13px;background:var(--bg-card);border:1.5px solid var(--border);cursor:pointer;">关闭</button>
@@ -1765,12 +1775,24 @@
           document.getElementById('proxyUrlH').value = localStorage.getItem('sheen_5why_proxy') || '';
           document.querySelector('input[name=apiModeH][value='+m+']').checked = true;
           window.switchApiH(m);
+          // 旧版免费模型 glm-4-flash 已下线，自动迁移到现行免费模型 glm-4.7-flash
+          var mdl = localStorage.getItem('sheen_5why_apimodel') || 'glm-4.7-flash';
+          if (mdl === 'glm-4-flash') { mdl = 'glm-4.7-flash'; localStorage.setItem('sheen_5why_apimodel', mdl); }
+          var selH = document.getElementById('apiModelH');
+          var custH = document.getElementById('apiModelCustomH');
+          var knownH = ['glm-4.7-flash','glm-4-air','glm-4','deepseek-chat'];
+          if (knownH.indexOf(mdl) >= 0) { selH.value = mdl; custH.style.display = 'none'; }
+          else { selH.value = '__custom__'; custH.style.display = 'block'; custH.value = mdl; }
+          selH.onchange = function(){ custH.style.display = this.value === '__custom__' ? 'block' : 'none'; };
         }
         window.saveApiH = function() {
           var m = document.querySelector('input[name=apiModeH]:checked').value;
           localStorage.setItem('sheen_5why_mode', m);
           localStorage.setItem('sheen_5why_apikey', document.getElementById('apiKeyH').value.trim());
           localStorage.setItem('sheen_5why_proxy', document.getElementById('proxyUrlH').value.trim());
+          var mh = document.getElementById('apiModelH').value;
+          if (mh === '__custom__') mh = document.getElementById('apiModelCustomH').value.trim() || 'glm-4.7-flash';
+          localStorage.setItem('sheen_5why_apimodel', mh);
           document.getElementById('apiModalH').style.display = 'none';
           updateApiStatusH();
         };
