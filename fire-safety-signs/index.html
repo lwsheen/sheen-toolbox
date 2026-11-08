@@ -111,7 +111,23 @@ var _hmt = _hmt || [];
 .fss-btn:hover{border-color:var(--tech-blue);color:var(--tech-blue)}
 .fss-btn.primary{background:var(--tech-blue);border-color:var(--tech-blue);color:#fff}
 .fss-btn.primary:hover{background:var(--tech-blue-hover);color:#fff}
-.fss-editor-layout{display:grid;grid-template-columns:1fr 250px;gap:14px;align-items:start}
+.fss-editor-layout{display:grid;grid-template-columns:196px minmax(0,1fr) 232px;gap:12px;align-items:start}
+.fss-toolbar-sep{width:1px;height:22px;background:var(--border);margin:0 2px}
+/* 左侧标志图标面板 */
+.fss-palette{border:1px solid var(--border);border-radius:var(--radius-md);background:var(--bg-card);display:flex;flex-direction:column;max-height:640px;overflow:hidden}
+.fss-palette-hd{padding:9px 11px;font-size:12px;font-weight:600;color:var(--text-primary);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px}
+.fss-palette-hd i{color:var(--text-tertiary);font-size:10px}
+#paletteKw{margin:8px 9px 4px;padding:6px 9px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-family:inherit;background:var(--bg-card);color:var(--text-primary)}
+.fss-palette-list{overflow-y:auto;padding:6px 9px 9px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;flex:1;min-height:0}
+.fss-pal{display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 2px;border:1px solid transparent;border-radius:var(--radius-sm);background:var(--bg-page);cursor:grab;user-select:none}
+.fss-pal:hover{border-color:var(--brand-red);background:#FFF8F9}
+.fss-pal.on{border-color:var(--brand-red);background:var(--brand-red-surface)}
+.fss-pal img{width:30px;height:30px;object-fit:contain;pointer-events:none;border-radius:3px}
+.fss-pal span{font-size:9.5px;color:var(--text-secondary);line-height:1.2;pointer-events:none}
+.fss-palette-ft{padding:7px 10px;border-top:1px solid var(--border);font-size:10.5px;color:var(--text-tertiary);line-height:1.5;text-align:center}
+.fss-textedit{position:fixed;z-index:9999;width:154px;padding:4px 8px;border:2px solid var(--brand-red);border-radius:4px;font-size:13px;font-family:inherit;background:#fff;color:var(--text-primary);box-shadow:0 4px 14px rgba(0,0,0,.14)}
+.fss-check{display:flex !important;align-items:center;gap:6px;font-size:11.5px;color:var(--text-secondary);margin-top:10px !important;cursor:pointer}
+.fss-check input{width:auto !important;margin:0}
 .fss-canvas-wrap{border:1px solid var(--border);border-radius:var(--radius-md);background:#fff;padding:8px;overflow:hidden}
 #planSvg{display:block;width:100%;height:auto;aspect-ratio:800/520;background:#fff;touch-action:none;cursor:crosshair}
 #planSvg[data-tool=select]{cursor:default}
@@ -130,6 +146,8 @@ var _hmt = _hmt || [];
 @media (max-width:900px){
   .fss-std-grid{grid-template-columns:1fr}
   .fss-inst-layout,.fss-editor-layout{grid-template-columns:1fr}
+  .fss-palette{max-height:230px}
+  .fss-palette-list{grid-template-columns:repeat(6,1fr)}
   .fss-item-list{flex-direction:row;overflow-x:auto;padding-bottom:4px}
   .fss-item{min-width:190px}
   .v3d-stage{height:260px}
@@ -139,7 +157,7 @@ var _hmt = _hmt || [];
   .v3d-controls input[type=range]{width:70px}
 }
 @media print{
-  .tab-nav,.fss-search,.fss-toolbar,.v3d-controls,.fss-side,.fss-count,.fss-link,.fss-msg,.fold-note,.scene-cap,.fss-consist{display:none !important}
+  .tab-nav,.fss-search,.fss-toolbar,.v3d-controls,.fss-side,.fss-count,.fss-link,.fss-msg,.fold-note,.scene-cap,.fss-consist,.fss-palette{display:none !important}
   .tab-panel{display:none !important}
   .tab-panel.active{display:block !important;border:0;padding:0}
   .fss-card,.fss-std-card{break-inside:avoid}
@@ -155,7 +173,7 @@ var _hmt = _hmt || [];
   <p class="page-subtitle">标志查询 · 安装要求 3D 示意 · 疏散图在线编辑导出</p>
 
   <div class="warn-bar warning"><i class="fa-solid fa-triangle-exclamation"></i><span>
-    <b>数据来源与性质：</b>标志编号、名称与说明转写自需求方提供的 <b>GB 13495.1—202X《消防安全标志 第1部分：标志》（报批稿）</b>正文表格，标志图形为该文本中的<b>原图</b>（提取自 PDF 内嵌位图，页面水印不在位图内，未做涂抹处理）。<b>报批稿不是正式发布文本</b>，正式发布后内容可能调整，应以正式发布文本为准。安装条目的图号（图2～图12）、条款号与设置参数按 <b>GB 13495.3-2026</b> 正文组织，数值为原文规定值、条文为要点转述；疏散平面图的版面要素与设计要求要点按 <b>GB/T 25894-2010</b> 正文及附录 A 组织，平面内容为演示数据。站内不存储标准全文，标准版权归原权利人所有，图形仅作识别与学习用途。
+    <b>数据来源：</b>标志编号、名称与说明引自 <b>GB 13495.1—202X（报批稿）</b>正文表格，图形为该文本原图，报批稿非正式发布文本，以正式发布文本为准；安装条目按 <b>GB 13495.3-2026</b> 组织，疏散图版面按 <b>GB/T 25894-2010</b> 组织，平面内容为演示数据。站内不存储标准全文，标准版权归原权利人所有。
   </span></div>
 
   <div class="sec-title">依据标准（按给定编号、版本与名称原样录入）</div>
@@ -171,7 +189,7 @@ var _hmt = _hmt || [];
 
   <!-- ============ 模块 1 ============ -->
   <div class="tab-panel active" id="panel-query" role="tabpanel">
-    <p class="fss-panel-note">按标志名称、编号、类别、含义检索（共 50 条，编号 2-01 ~ 6-04）。名称与说明引自 GB 13495.1—202X（报批稿）正文表格，图形为标准原图。</p>
+    <p class="fss-panel-note">按名称、编号、类别、含义检索（共 50 条，编号 2-01 ~ 6-04）。</p>
     <div class="fss-search">
       <input type="text" id="qKw" placeholder="输入名称 / 编号 / 含义关键词（支持中英文）" aria-label="检索关键词">
       <select id="qCat" aria-label="按类别筛选"><option value="">全部类别</option></select>
@@ -218,37 +236,48 @@ var _hmt = _hmt || [];
 
   <!-- ============ 模块 3 ============ -->
   <div class="tab-panel" id="panel-plan" role="tabpanel">
-    <p class="fss-panel-note">按 <b>GB/T 25894-2010《疏散平面图 设计原则与要求》</b>的版面组成要素编辑疏散平面图：图名区域（含「疏散平面图」字样）、总平面图、设施名称、疏散详图、安全通告、图例为固定版面；疏散详图内可添加标志、疏散路线、紧急出口、「您在此」与图例，拖拽调整位置，保存到本机并导出 SVG / PNG / JSON。默认载入的是<b>参照图 A.2 版面的示例（平面内容为演示数据）</b>。</p>
+    <p class="fss-panel-note">版面要素按 <b>GB/T 25894-2010</b> 组织，平面内容为演示数据。左侧图标可直接拖到画布，画布内元素可拖动、双击改文字。</p>
     <div class="fss-toolbar">
-      <button type="button" class="fss-tool active" data-tool="select">选择 / 拖动</button>
-      <button type="button" class="fss-tool" data-tool="sign">添加标志</button>
-      <button type="button" class="fss-tool" data-tool="corridor">添加疏散路线</button>
-      <button type="button" class="fss-tool" data-tool="exit">添加紧急出口</button>
-      <button type="button" class="fss-tool" data-tool="position">添加「您在此」</button>
-      <button type="button" class="fss-tool" data-tool="legend">添加标志清单</button>
-      <select id="toolSign" aria-label="选择要放置的标志"></select>
-      <button type="button" class="fss-btn" id="btnSample">载入标准示例版面</button>
-      <button type="button" class="fss-btn" id="btnClearPlan">清空内容</button>
+      <button type="button" class="fss-tool active" data-tool="select"><i class="fa-solid fa-arrow-pointer"></i> 选择 / 拖动</button>
+      <button type="button" class="fss-tool" data-tool="corridor"><i class="fa-solid fa-route"></i> 疏散路线</button>
+      <button type="button" class="fss-tool" data-tool="room"><i class="fa-solid fa-vector-square"></i> 房间 / 墙体</button>
+      <button type="button" class="fss-tool" data-tool="exit"><i class="fa-solid fa-door-open"></i> 紧急出口</button>
+      <button type="button" class="fss-tool" data-tool="position"><i class="fa-solid fa-location-dot"></i> 您在此</button>
+      <button type="button" class="fss-tool" data-tool="text"><i class="fa-solid fa-font"></i> 文字</button>
+      <button type="button" class="fss-tool" data-tool="legend"><i class="fa-solid fa-list"></i> 标志清单</button>
+      <span class="fss-toolbar-sep"></span>
+      <button type="button" class="fss-btn" id="btnSample">载入示例</button>
+      <button type="button" class="fss-btn" id="btnClearPlan">清空</button>
     </div>
     <div class="fss-editor-layout">
+      <aside class="fss-palette">
+        <div class="fss-palette-hd"><i class="fa-solid fa-grip-vertical"></i> 标志图标</div>
+        <input type="text" id="paletteKw" placeholder="搜索编号 / 名称" aria-label="搜索标志图标">
+        <div class="fss-palette-list" id="paletteList"></div>
+        <div class="fss-palette-ft">拖到画布放置 · 或点选后点画布</div>
+      </aside>
       <div>
         <div class="fss-canvas-wrap">
           <svg id="planSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 594" data-tool="select" role="img" aria-label="疏散平面图编辑画布"></svg>
         </div>
-        <div class="fss-plan-tip">提示：选择「添加疏散路线」后依次点击起点与终点；「选择 / 拖动」工具下点击元素可选中并拖动，按 Delete 键或点右侧「删除选中」移除。安全出口为「人形标志 + 方向箭头」成对符号，选中后可在右侧改箭头方向。图名区域、安全通告、图例、楼层平面示意底图、总平面图、设施名称为版面固定要素（按 GB/T 25894-2010 图 A.1 的分区结构）；画布图例为固定符号图例，本图所用标志另见右侧「图例（自动同步）」。</div>
+        <div class="fss-plan-tip">疏散路线：点起点再点终点。选中元素可拖动、按 Delete 删除、双击改文字；出口选中后可改箭头方向。</div>
       </div>
       <div class="fss-side">
         <div class="fss-side-box">
-          <h4>图名</h4>
+          <h4>图面信息</h4>
+          <label for="planTitle">图名</label>
           <input type="text" id="planTitle" maxlength="60" aria-label="疏散平面图名称">
           <label for="planFloor">楼层名称</label>
           <input type="text" id="planFloor" maxlength="20" aria-label="楼层名称">
+          <label for="planFacility">设施名称</label>
+          <input type="text" id="planFacility" maxlength="30" aria-label="设施名称">
+          <label class="fss-check"><input type="checkbox" id="chkBase" checked> 显示示例房间底图</label>
           <div class="fss-msg" id="planMsg"></div>
         </div>
         <div class="fss-side-box">
           <h4>选中元素</h4>
           <div id="selInfo" style="font-size:11.5px;color:var(--text-secondary);line-height:1.7">未选中</div>
-          <label for="propLabel">标签文字</label>
+          <label for="propLabel">文字</label>
           <input type="text" id="propLabel" maxlength="40" placeholder="选中元素后可编辑">
           <label for="propDir" id="propDirLabel" style="display:none">出口箭头方向</label>
           <select id="propDir" style="display:none" aria-label="出口箭头方向">
@@ -256,6 +285,15 @@ var _hmt = _hmt || [];
             <option value="down">↓ 向下</option>
             <option value="left">← 向左</option>
             <option value="up">↑ 向上</option>
+          </select>
+          <label for="propSize" id="propSizeLabel" style="display:none">字号</label>
+          <select id="propSize" style="display:none" aria-label="文字字号">
+            <option value="10">10</option>
+            <option value="12" selected>12</option>
+            <option value="14">14</option>
+            <option value="16">16</option>
+            <option value="20">20</option>
+            <option value="26">26</option>
           </select>
           <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
             <button type="button" class="fss-btn" id="btnApplyLabel">应用</button>
@@ -299,7 +337,7 @@ var _hmt = _hmt || [];
 <section class="tool-meta" data-toolmeta="sheen">
   <div id="metaHeads"></div>
   <div class="tm-line">
-    <span class="tm-dt"><i>工具数据版本</i><span class="tm-dt-val">std-2.0（报批稿原图 + 设置要求 3D + 疏散图版面）</span></span>
+    <span class="tm-dt"><i>工具数据版本</i><span class="tm-dt-val">std-2.1</span></span>
     <span class="tm-sep">·</span>
     <span class="tm-dt"><i>录入日期</i><span class="tm-dt-val">2026-11-08</span></span>
     <span class="tm-sep">·</span>
@@ -313,7 +351,7 @@ var _hmt = _hmt || [];
       <img src="/sheen-toolbox/assets/sheen-logo.png" alt="SHEEN" class="sheen-logo-sm">
       <span>SHEEN Toolbox · 工业安全工具集</span>
     </div>
-    <div class="footer-meta"><span>标志图形引自 GB 13495.1—202X（报批稿）· 安装条目与疏散图布局为演示数据</span></div>
+    <div class="footer-meta"><span>图形引自 GB 13495.1—202X（报批稿）· 安装与疏散图内容为演示数据</span></div>
   </div>
 </footer>
 <div class="print-time" id="printTime"></div>
@@ -394,10 +432,10 @@ var _hmt = _hmt || [];
   function renderStandards() {
     qs('#stdGrid').innerHTML = D.standards.map(function (s) {
       return '<div class="fss-std-card">' +
-        '<span class="fss-std-role">' + esc(s.role) + (s.draft ? ' <span class="fss-tag alt">报批稿</span>' : '') + '</span>' +
+        '<span class="fss-std-role">' + esc(s.role) + '</span>' +
         '<div class="fss-std-code">' + esc(s.code) + '</div>' +
         '<div class="fss-std-name">' + (s.titleGiven ? esc(s.title) : esc(P.title)) + '</div>' +
-        '<div class="fss-ph">发布 / 实施日期：' + esc(P.date) + '（未自行补全）。</div>' +
+        '<div class="fss-ph">发布 / 实施日期：' + esc(P.date) + '</div>' +
         '</div>';
     }).join('');
 
@@ -460,15 +498,14 @@ var _hmt = _hmt || [];
     return '<article class="fss-card">' +
       '<div class="fss-card-top">' +
         '<div class="fss-glyph">' + signImg(s, 68) + '</div>' +
-        '<div class="fss-card-hd"><span class="fss-tag">标准图示 · 报批稿</span>' +
-          '<h3>' + esc(s.name) + '</h3>' +
+        '<div class="fss-card-hd"><h3>' + esc(s.name) + '</h3>' +
           '<div class="fss-code">' + esc(s.code) + ' · ' + esc(D.categoryName(s.category)) + (s.nameEn ? ' · ' + esc(s.nameEn) : '') + '</div>' +
         '</div>' +
       '</div>' +
       '<dl class="fss-dl">' +
         '<dt>说明</dt><dd>' + esc(s.meaning) + '</dd>' +
       '</dl>' +
-      '<div class="fss-card-ft"><span>标志图形为标准原图（报批稿）</span>' +
+      '<div class="fss-card-ft"><span></span>' +
         '<button type="button" class="fss-link" data-goto="' + esc(s.id) + '">查看安装要求 →</button></div>' +
       '</article>';
   }
@@ -481,7 +518,7 @@ var _hmt = _hmt || [];
       var hay = [s.name, s.code, s.nameEn, D.categoryName(s.category), s.meaning].join(' ').toLowerCase();
       return hay.indexOf(kw) >= 0;
     });
-    qs('#qCount').textContent = '共 ' + list.length + ' 条标志（引自 GB 13495.1—202X 报批稿正文表格）';
+    qs('#qCount').textContent = '共 ' + list.length + ' 条';
     qs('#signGrid').innerHTML = list.length
       ? list.map(signCard).join('')
       : '<div class="fss-empty">没有匹配的标志。可清空关键词或切换类别。</div>';
@@ -1002,9 +1039,13 @@ var _hmt = _hmt || [];
     var bs = document.querySelectorAll('.fss-tool');
     for (var i = 0; i < bs.length; i++) bs[i].classList.toggle('active', bs[i].getAttribute('data-tool') === t);
     qs('#planSvg').setAttribute('data-tool', t);
-    toast(t === 'corridor' ? '依次点击疏散路线的起点与终点' : (t === 'select' ? '点击元素选中并拖动' : '点击画布放置「' + toolName(t) + '」'));
+    toast(t === 'corridor' ? '依次点击疏散路线的起点与终点'
+      : t === 'room' ? '依次点击房间的左上角与右下角'
+      : (t === 'select' ? '点击元素选中并拖动' : '点击画布放置「' + toolName(t) + '」'));
   }
   function toolName(t) {
+    if (t === 'text') return '文字';
+    if (t === 'room') return '房间';
     for (var i = 0; i < D.planSymbols.length; i++) if (D.planSymbols[i].type === t) return D.planSymbols[i].label;
     return t;
   }
@@ -1034,6 +1075,24 @@ var _hmt = _hmt || [];
         '" stroke="#C4EBD6" stroke-width="22" stroke-linecap="butt"/>' +
         (e.label ? '<text x="' + mx + '" y="' + (my - 15) + '" text-anchor="middle" font-size="11.5" fill="#1E2126">' + esc(e.label) + '</text>' : '') +
         '<rect x="' + (mx - 46) + '" y="' + (my - 26) + '" width="92" height="30" fill="transparent"' + selAttr + '/></g>';
+    }
+    if (e.type === 'room') {
+      /* 自绘房间 / 墙体：两次点击定义矩形，墙线宽 1.6（6.4），可双击命名 */
+      var rx = Math.min(e.x1, e.x2), ry = Math.min(e.y1, e.y2);
+      var rw = Math.abs(e.x2 - e.x1), rh = Math.abs(e.y2 - e.y1);
+      return '<g ' + hit + '>' +
+        '<rect x="' + rx + '" y="' + ry + '" width="' + rw + '" height="' + rh +
+        '" fill="#F4F6F9" stroke="#1E2126" stroke-width="1.6"' + selAttr + '/>' +
+        '</g>';
+    }
+    if (e.type === 'text') {
+      /* 自由文字（可拖动、双击改写、可调字号）——用于房间名、区域标注等 */
+      var fs = e.size || 12, txt = e.label || '文字';
+      var tw = Math.max(24, txt.length * fs * 0.98);
+      return '<g ' + hit + ' transform="translate(' + e.x + ',' + e.y + ')">' +
+        '<text x="0" y="0" font-size="' + fs + '" fill="#1E2126" xml:space="preserve">' + esc(txt) + '</text>' +
+        '<rect x="-4" y="' + (-fs - 3) + '" width="' + tw.toFixed(1) + '" height="' + (fs * 1.5) +
+        '" fill="transparent"' + selAttr + '/></g>';
     }
     if (e.type === 'legend') {
       var ids = usedSignIds(), rows = '';
@@ -1229,13 +1288,16 @@ var _hmt = _hmt || [];
     /* 疏散详图（7.3）：楼层平面示意底图 + 走廊 */
     s += '<g data-fss-frame="floorplan">';
     s += '<rect x="200" y="68" width="450" height="402" fill="#FFFFFF" stroke="#E3E6EA" stroke-width="1" stroke-dasharray="4 4"/>';
-    PLAN_ROOMS.forEach(function (r) {
-      s += '<rect x="' + r[0] + '" y="' + r[1] + '" width="' + r[2] + '" height="' + r[3] +
-        '" fill="#F4F6F9" stroke="#1E2126" stroke-width="1.6"/>';
-      s += '<text x="' + (r[0] + r[2] / 2) + '" y="' + (r[1] + r[3] / 2 + 3) +
-        '" text-anchor="middle" font-size="9.5" fill="#6B7280">' + esc(r[4]) + '</text>';
-    });
-    s += '<rect x="206" y="286" width="438" height="56" fill="#FFFFFF" stroke="#1E2126" stroke-width="1.6"/>';
+    /* 示例房间底图可关闭：关闭后用户可用「房间 / 墙体」工具自行绘制平面 */
+    if (plan.showBase !== false) {
+      PLAN_ROOMS.forEach(function (r) {
+        s += '<rect x="' + r[0] + '" y="' + r[1] + '" width="' + r[2] + '" height="' + r[3] +
+          '" fill="#F4F6F9" stroke="#1E2126" stroke-width="1.6"/>';
+        s += '<text x="' + (r[0] + r[2] / 2) + '" y="' + (r[1] + r[3] / 2 + 3) +
+          '" text-anchor="middle" font-size="9.5" fill="#6B7280">' + esc(r[4]) + '</text>';
+      });
+      s += '<rect x="206" y="286" width="438" height="56" fill="#FFFFFF" stroke="#1E2126" stroke-width="1.6"/>';
+    }
     s += '</g>';
 
     /* 总平面图（7.2）：面积不超过全图 10% */
@@ -1255,7 +1317,7 @@ var _hmt = _hmt || [];
     /* 设施名称与图纸信息（7.6） */
     s += '<g data-fss-frame="info">';
     s += '<text x="555" y="497" text-anchor="middle" font-size="11" fill="#1E2126">' + esc(plan.floor || '1 层') + '</text>';
-    s += '<text x="555" y="514" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1E2126">设施名称</text>';
+    s += '<text x="555" y="514" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1E2126">' + esc(plan.facility || '设施名称') + '</text>';
     s += '<rect x="476" y="520" width="158" height="58" fill="#FFFFFF" stroke="#1E2126" stroke-width="1.1"/>';
     var rows6 = [['设计者', plan.designer || '示例'], ['设计日期', plan.designDate || '2026-11-08'],
                  ['图编号', plan.sheetNo || 'FSS-DEMO-01'], ['修订编号', plan.revision || 'Rev.0']];
@@ -1270,8 +1332,18 @@ var _hmt = _hmt || [];
     return s;
   }
 
+  /* 房间名称单独置顶绘制：避免被后加的疏散路线色带盖住 */
+  function roomLabelSVG(e, i) {
+    if (e.type !== 'room' || !e.label) return '';
+    var rx = Math.min(e.x1, e.x2), ry = Math.min(e.y1, e.y2);
+    var rw = Math.abs(e.x2 - e.x1), rh = Math.abs(e.y2 - e.y1);
+    return '<text data-idx="' + i + '" x="' + (rx + rw / 2).toFixed(1) + '" y="' + (ry + rh / 2 + 3).toFixed(1) +
+      '" text-anchor="middle" font-size="10" fill="#6B7280" style="cursor:' +
+      (tool === 'select' ? 'move' : 'crosshair') + '">' + esc(e.label) + '</text>';
+  }
   function renderPlan() {
     qs('#planSvg').innerHTML = planFrame() + plan.elements.map(elementSVG).join('') +
+      plan.elements.map(roomLabelSVG).join('') +
       (pending ? '<circle cx="' + pending.x + '" cy="' + pending.y + '" r="6" fill="#F03752" opacity="0.7"/>' : '');
     renderLegendPanel();
     renderSelInfo();
@@ -1294,18 +1366,113 @@ var _hmt = _hmt || [];
     qs('#propDirLabel').style.display = isExit ? '' : 'none';
     qs('#propDir').style.display = isExit ? '' : 'none';
     if (isExit) qs('#propDir').value = e.dir || 'right';
+    /* 仅「文字」元素显示字号选择 */
+    var isText = !!e && e.type === 'text';
+    qs('#propSizeLabel').style.display = isText ? '' : 'none';
+    qs('#propSize').style.display = isText ? '' : 'none';
+    if (isText) qs('#propSize').value = String(e.size || 12);
   }
   function loadSample() {
     plan = clone(D.samplePlan);
     qs('#planTitle').value = plan.title || '';
     if (qs('#planFloor')) qs('#planFloor').value = plan.floor || '';
+    if (qs('#planFacility')) qs('#planFacility').value = plan.facility || '';
+    if (qs('#chkBase')) qs('#chkBase').checked = plan.showBase !== false;
     sel = -1; pending = null;
     renderPlan();
-    toast('已载入标准示例版面（平面内容为演示数据）');
+    toast('已载入示例版面（平面内容为演示数据）');
+  }
+  /* ---------- 左侧标志图标面板（点选 / 拖拽到画布） ---------- */
+  var palSign = '';
+  function renderPalette() {
+    var kw = (qs('#paletteKw').value || '').trim().toLowerCase();
+    var list = D.signs.filter(function (s) {
+      if (!kw) return true;
+      return [s.code, s.name, s.nameEn, D.categoryName(s.category)].join(' ').toLowerCase().indexOf(kw) >= 0;
+    });
+    qs('#paletteList').innerHTML = list.length
+      ? list.map(function (s) {
+          return '<div class="fss-pal' + (s.id === palSign ? ' on' : '') + '" draggable="true" data-sign="' + esc(s.id) + '" title="' + esc(s.code + ' ' + s.name) + '">' +
+            '<img src="' + esc(s.img) + '" alt="" loading="lazy" draggable="false">' +
+            '<span>' + esc(s.code) + '</span></div>';
+        }).join('')
+      : '<div style="grid-column:1/-1;padding:10px 2px;font-size:11.5px;color:var(--text-tertiary)">无匹配图标</div>';
+  }
+  function initPalette() {
+    renderPalette();
+    qs('#paletteKw').addEventListener('input', renderPalette);
+    var box = qs('#paletteList');
+    box.addEventListener('click', function (ev) {
+      var it = ev.target.closest('.fss-pal');
+      if (!it) return;
+      palSign = it.getAttribute('data-sign');
+      renderPalette();
+      setTool('sign');
+    });
+    box.addEventListener('dragstart', function (ev) {
+      var it = ev.target.closest('.fss-pal');
+      if (!it) return;
+      palSign = it.getAttribute('data-sign');
+      try {
+        ev.dataTransfer.setData('text/plain', palSign);
+        ev.dataTransfer.effectAllowed = 'copy';
+      } catch (err) {}
+    });
+  }
+  function addSignAt(signId, x, y) {
+    if (!D.byId(signId)) return;
+    var s = D.byId(signId);
+    /* 默认不带标签：图标面板已显示编号，画布上重复长名称只会造成拥挤，需要时双击加字 */
+    plan.elements.push({ type: 'sign', signId: signId, x: x, y: y, label: '' });
+    sel = plan.elements.length - 1;
+    renderPlan();
+    toast('已添加 ' + s.code + ' ' + s.name);
+  }
+  /* 双击任意自建元素 → 就地编辑文字 */
+  var textEditEl = null;
+  function startTextEdit(idx) {
+    var e = plan.elements[idx];
+    if (!e || !e.type) return;
+    if (['sign', 'exit', 'position', 'corridor', 'room', 'legend', 'text'].indexOf(e.type) < 0) return;
+    closeTextEdit();
+    var svg = qs('#planSvg'), r = svg.getBoundingClientRect(), k = r.width / CW;
+    var cx = (e.type === 'corridor' || e.type === 'room') ? (e.x1 + e.x2) / 2 : e.x;
+    var cy = (e.type === 'corridor') ? (e.y1 + e.y2) / 2
+      : (e.type === 'room') ? (Math.min(e.y1, e.y2) + Math.abs(e.y2 - e.y1) / 2) : e.y;
+    var inp = document.createElement('input');
+    inp.type = 'text';
+    inp.className = 'fss-textedit';
+    inp.value = e.label || '';
+    inp.setAttribute('aria-label', '就地编辑文字');
+    inp.style.left = Math.max(4, r.left + cx * k - 60) + 'px';
+    inp.style.top = Math.max(4, r.top + cy * k - 30) + 'px';
+    document.body.appendChild(inp);
+    textEditEl = inp;
+    inp.focus(); inp.select();
+    function commit() {
+      if (!textEditEl) return;
+      var el = textEditEl;
+      textEditEl = null;            /* 先置空，防止 remove 触发的 blur 再次进入本函数 */
+      var v = el.value.slice(0, 40);
+      el.remove();
+      plan.elements[idx].label = v;
+      renderPlan();
+    }
+    inp.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Enter') { ev.preventDefault(); commit(); }
+      else if (ev.key === 'Escape') { closeTextEdit(); }
+      ev.stopPropagation();
+    });
+    inp.addEventListener('blur', commit);
+  }
+  function closeTextEdit() {
+    if (!textEditEl) return;
+    var el = textEditEl;
+    textEditEl = null;
+    el.remove();
   }
   function initPlan() {
-    var ts = qs('#toolSign');
-    ts.innerHTML = D.signs.map(function (s) { return '<option value="' + esc(s.id) + '">' + esc(s.id + ' ' + s.name) + '</option>'; }).join('');
+    initPalette();
     qs('#planExamples').innerHTML = D.planExamples.map(function (e) {
       return '<div class="fss-plan-ex"><b>' + esc(e.no) + '</b>' + esc(e.name) + '</div>';
     }).join('');
@@ -1317,23 +1484,35 @@ var _hmt = _hmt || [];
     });
     qs('#planTitle').addEventListener('input', function () { plan.title = this.value; });
     if (qs('#planFloor')) qs('#planFloor').addEventListener('input', function () { plan.floor = this.value; renderPlan(); });
+    if (qs('#planFacility')) qs('#planFacility').addEventListener('input', function () { plan.facility = this.value; renderPlan(); });
+    if (qs('#chkBase')) qs('#chkBase').addEventListener('change', function () {
+      plan.showBase = this.checked;
+      renderPlan();
+      toast(this.checked ? '已显示示例房间底图' : '已隐藏示例底图，可用「房间 / 墙体」自绘平面');
+    });
     qs('#btnSample').addEventListener('click', loadSample);
     qs('#btnClearPlan').addEventListener('click', function () {
       plan = { title: '未命名疏散平面图', elements: [], floor: plan.floor || '1 层',
-               facility: plan.facility, designer: plan.designer, sheetNo: plan.sheetNo };
+               facility: plan.facility, designer: plan.designer, sheetNo: plan.sheetNo,
+               showBase: plan.showBase };
       qs('#planTitle').value = plan.title; sel = -1; pending = null; renderPlan();
-      toast('疏散详图内容已清空（版面要素保留）');
+      toast('内容已清空（版面要素保留）');
     });
     qs('#btnApplyLabel').addEventListener('click', function () {
       if (sel < 0 || !plan.elements[sel]) { toast('请先选中一个元素'); return; }
       plan.elements[sel].label = qs('#propLabel').value.slice(0, 40);
-      renderPlan(); toast('标签已更新');
+      renderPlan(); toast('文字已更新');
     });
     qs('#btnDeleteSel').addEventListener('click', deleteSelected);
     qs('#propDir').addEventListener('change', function () {
       if (sel < 0 || !plan.elements[sel] || plan.elements[sel].type !== 'exit') return;
       plan.elements[sel].dir = this.value;
       renderPlan(); toast('出口箭头方向已更新');
+    });
+    qs('#propSize').addEventListener('change', function () {
+      if (sel < 0 || !plan.elements[sel] || plan.elements[sel].type !== 'text') return;
+      plan.elements[sel].size = +this.value;
+      renderPlan(); toast('字号已更新');
     });
     document.addEventListener('keydown', function (e) {
       if ((e.key === 'Delete' || e.key === 'Backspace') && sel >= 0 &&
@@ -1363,23 +1542,61 @@ var _hmt = _hmt || [];
       if (tool === 'corridor') {
         if (!pending) { pending = p; renderPlan(); toast('已记录起点，请点击终点'); }
         else {
-          plan.elements.push({ type: 'corridor', x1: pending.x, y1: pending.y, x2: p.x, y2: p.y, label: '疏散路线' });
+          plan.elements.push({ type: 'corridor', x1: pending.x, y1: pending.y, x2: p.x, y2: p.y, label: '' });
           pending = null; sel = plan.elements.length - 1; renderPlan(); toast('疏散路线已添加');
         }
         return;
       }
+      if (tool === 'room') {
+        if (!pending) { pending = p; renderPlan(); toast('已记录房间左上角，请点击对角'); }
+        else {
+          plan.elements.push({ type: 'room', x1: pending.x, y1: pending.y, x2: p.x, y2: p.y, label: '' });
+          pending = null; sel = plan.elements.length - 1; renderPlan(); toast('房间已添加，双击可命名');
+        }
+        return;
+      }
       var item = null;
-      if (tool === 'sign') item = { type: 'sign', signId: ts.value, x: p.x, y: p.y, label: D.byId(ts.value) ? D.byId(ts.value).name : '标志' };
-      else if (tool === 'exit') item = { type: 'exit', x: p.x, y: p.y, dir: 'right', label: '紧急出口' };
-      else if (tool === 'position') item = { type: 'position', x: p.x, y: p.y, label: '您在此' };
+      if (tool === 'sign') {
+        if (!palSign) { toast('请先在左侧图标面板选择标志'); return; }
+        item = { type: 'sign', signId: palSign, x: p.x, y: p.y, label: '' };
+      }
+      else if (tool === 'exit') item = { type: 'exit', x: p.x, y: p.y, dir: 'right', label: '' };
+      else if (tool === 'position') item = { type: 'position', x: p.x, y: p.y, label: '' };
+      else if (tool === 'text') item = { type: 'text', x: p.x, y: p.y, size: 12, label: '文字' };
       else if (tool === 'legend') item = { type: 'legend', x: Math.min(p.x, CW - 300), y: Math.min(p.y, CH - 190), w: 282, label: '图例' };
-      if (item) { plan.elements.push(item); sel = plan.elements.length - 1; renderPlan(); toast('已添加' + toolName(tool)); }
+      if (item) {
+        plan.elements.push(item); sel = plan.elements.length - 1; renderPlan();
+        toast('已添加' + toolName(tool));
+        if (item.type === 'text') startTextEdit(sel);
+      }
+    });
+    /* 拖拽投放：从左栏图标直接拖到画布 */
+    svg.addEventListener('dragover', function (e) {
+      if (e.dataTransfer && Array.prototype.indexOf.call(e.dataTransfer.types, 'text/plain') >= 0) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'copy';
+      }
+    });
+    svg.addEventListener('drop', function (e) {
+      var id = '';
+      try { id = e.dataTransfer.getData('text/plain'); } catch (err) {}
+      if (!id || !D.byId(id)) return;
+      e.preventDefault();
+      var p = svgPoint(e);
+      addSignAt(id, p.x, p.y);
+    });
+    /* 双击 → 就地编辑文字 */
+    svg.addEventListener('dblclick', function (e) {
+      var g = e.target.closest ? e.target.closest('[data-idx]') : null;
+      if (!g) return;
+      e.preventDefault();
+      startTextEdit(+g.getAttribute('data-idx'));
     });
     svg.addEventListener('pointermove', function (e) {
       if (!dragEl) return;
       var p = svgPoint(e), t = plan.elements[dragEl.idx];
       if (!t) return;
-      if (t.type === 'corridor') {
+      if (t.type === 'corridor' || t.type === 'room') {
         if (dragEl.last) {
           var mx = p.x - dragEl.last.x, my = p.y - dragEl.last.y;
           t.x1 += mx; t.y1 += my; t.x2 += mx; t.y2 += my;
