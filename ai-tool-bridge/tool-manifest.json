@@ -2065,6 +2065,22 @@
       "page": "/sheen-toolbox/fire-safety-signs/",
       "queryParam": "q",
       "params": []
+    },
+    {
+      "id": "ppe-selector",
+      "title": "PPE 家谱图与选项查询",
+      "desc": "按 GB 39800.1-2020 附录 A 表 A.2 的 9 类防护分类与表 1 的 49 个类别编号，以家谱图层级浏览个体防护装备，并查看每种 PPE 的名称、类型、可选配置、产品标准号与适用范围。分类编号与产品标准号引自标准公开信息，类型与可选配置为本站整理的选型维度，非标准条文。",
+      "descShort": "9 类防护分类 · 49 个类别编号 · 名称 / 类型 / 可选配置",
+      "category": "查询",
+      "standards": [
+        "GB 39800.1-2020《个体防护装备配备规范 第1部分：总则》",
+        "GB/T 12903-2025《个体防护装备术语》"
+      ],
+      "copyright": "boundary",
+      "trigger": ["PPE选项", "PPE选型", "个体防护装备分类", "劳动防护用品分类", "PPE家谱图", "PPE类别编号", "安全帽类别编号", "呼吸防护选型", "防护服分类", "坠落防护装备", "GB 39800.1 表1", "PPE可选配置"],
+      "page": "/sheen-toolbox/ppe-selector/",
+      "queryParam": "q",
+      "params": []
     }
   ]
 }
