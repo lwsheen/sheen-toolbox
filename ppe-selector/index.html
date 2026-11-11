@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head data-seo="sheen">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PPE 家谱图与选项查询 | SHEEN Toolbox</title>
+<meta name="description" content="按 GB 39800.1-2020 附录 A 表 A.2 的 9 类防护分类与表 1 的 49 个类别编号，以家谱图层级浏览个体防护装备，并查看每种 PPE 的名称、类型、可选配置、产品标准号与适用范围。">
+<meta name="keywords" content="PPE,个体防护装备,家谱图,分类,GB 39800.1-2020,选型,安全帽,呼吸防护,防护服,坠落防护">
+<link rel="canonical" href="https://lwsheen.pages.dev/sheen-toolbox/ppe-selector/">
+<meta property="og:title" content="PPE 家谱图与选项查询 | SHEEN Toolbox">
+<meta property="og:description" content="9 类防护分类 · 49 个标准类别编号 · 名称 / 类型 / 可选配置一页查看">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lwsheen.pages.dev/sheen-toolbox/ppe-selector/">
+<meta property="og:image" content="https://lwsheen.pages.dev/sheen-toolbox/assets/share/ppe-selector.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"PPE 家谱图与选项查询","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0"},"inLanguage":"zh-CN"}
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?9b8c3df212619adec1f70f01695f4160";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  if (location.hostname.indexOf("github.io") >= 0) {
+    var hm2 = document.createElement("script");
+    hm2.src = "https://hm.baidu.com/hm.js?5ceec8bd8bf10bd9d1f4ddceaebdae6f";
+    s.parentNode.insertBefore(hm2, s);
+  }
+})();
+</script>
+<link rel="stylesheet" href="/sheen-toolbox/assets/fa/all.min.css">
+<link rel="stylesheet" href="/sheen-toolbox/common.css">
+<style>
+/* ===== 本页特有样式（公共组件一律吃 common.css） ===== */
+.ppe-lead{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 var(--space-block)}
+.ppe-lead-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:12px 14px;min-width:0}
+.ppe-lead-card b{display:block;font-size:var(--fs-xl);color:var(--brand-red);line-height:1.3}
+.ppe-lead-card span{display:block;font-size:var(--fs-xs);color:var(--text-secondary);line-height:1.7;margin-top:3px}
+.ppe-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.ppe-bar input[type=text]{flex:1;min-width:220px;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;background:var(--bg-card);color:var(--text-primary)}
+.ppe-bar input[type=text]:focus{outline:none;border-color:var(--brand-red)}
+.ppe-btn{padding:8px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text-primary);font-size:12.5px;font-family:inherit;cursor:pointer;white-space:nowrap}
+.ppe-btn:hover{border-color:var(--brand-red);color:var(--brand-red)}
+.ppe-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:var(--space-block)}
+.ppe-chip{padding:5px 12px;border:1.5px solid var(--border);border-radius:999px;background:var(--bg-card);color:var(--text-secondary);font-size:12px;font-family:inherit;cursor:pointer;line-height:1.6}
+.ppe-chip:hover{border-color:var(--brand-red);color:var(--brand-red)}
+.ppe-chip.active{background:var(--brand-red);border-color:var(--brand-red);color:#fff;font-weight:600}
+.ppe-chip i{font-style:normal;opacity:.72;font-size:10.5px;margin-left:4px}
+.ppe-layout{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:16px;align-items:start}
+.ppe-left{min-width:0}
+.ppe-right{min-width:0;position:sticky;top:14px}
+/* 家谱根与连线 */
+.ppe-root{position:relative;background:var(--brand-red-light);border:1.5px solid var(--brand-red);border-radius:var(--radius-md);padding:12px 16px;text-align:center;margin-bottom:26px}
+.ppe-root h2{margin:0;font-size:15px;color:var(--brand-red-deep);line-height:1.5}
+.ppe-root p{margin:3px 0 0;font-size:var(--fs-xs);color:var(--text-secondary);line-height:1.7}
+.ppe-root:after{content:"";position:absolute;left:50%;bottom:-18px;width:2px;height:18px;background:var(--border)}
+.ppe-branches{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;position:relative}
+.ppe-branches:before{content:"";position:absolute;left:16.66%;right:16.66%;top:-10px;height:2px;background:var(--border)}
+.ppe-branch{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);min-width:0;overflow:hidden}
+.ppe-branch:before{content:"";display:block;height:10px;margin:0 auto;width:2px;background:var(--border)}
+.ppe-branch-hd{display:flex;align-items:center;gap:8px;width:100%;padding:9px 11px;border:0;border-bottom:1px solid var(--border);background:var(--bg-page);font-family:inherit;text-align:left;cursor:pointer;color:var(--text-primary)}
+.ppe-branch-hd:hover{background:var(--brand-red-light)}
+.ppe-branch-hd .ppe-gicon{width:26px;height:26px;flex:0 0 26px;display:flex;align-items:center;justify-content:center;background:var(--brand-red-light);color:var(--brand-red);border-radius:var(--radius-sm);font-size:13px}
+.ppe-branch-hd .ppe-gtxt{min-width:0;flex:1}
+.ppe-branch-hd .ppe-gtxt b{display:block;font-size:12.5px;line-height:1.4}
+.ppe-branch-hd .ppe-gtxt small{display:block;font-size:10px;color:var(--text-tertiary);line-height:1.5;font-family:var(--font-mono,monospace)}
+.ppe-branch-hd .ppe-caret{font-size:11px;color:var(--text-secondary);transition:transform .15s}
+.ppe-branch.closed .ppe-caret{transform:rotate(-90deg)}
+.ppe-branch.closed .ppe-branch-body{display:none}
+.ppe-branch.closed{border-bottom:0}
+.ppe-branch-body{padding:4px 6px 7px}
+.ppe-node{display:flex;align-items:baseline;gap:6px;width:100%;padding:5px 6px;border:0;border-radius:var(--radius-sm);background:none;font-family:inherit;text-align:left;cursor:pointer;color:var(--text-primary);line-height:1.5}
+.ppe-node:hover{background:var(--brand-red-light)}
+.ppe-node.active{background:var(--brand-red);color:#fff}
+.ppe-node .ppe-ncode{flex:0 0 auto;font-family:var(--font-mono,monospace);font-size:10px;color:var(--tech-blue-deep);background:var(--tech-blue-soft);border-radius:3px;padding:0 4px;line-height:1.6}
+.ppe-node.active .ppe-ncode{background:rgba(255,255,255,.24);color:#fff}
+.ppe-node .ppe-nname{font-size:11.5px;font-weight:600;word-break:break-word}
+.ppe-node .ppe-nmark{font-size:10px;color:var(--text-tertiary);margin-left:auto;flex:0 0 auto}
+.ppe-node.active .ppe-nmark{color:rgba(255,255,255,.85)}
+.ppe-gempty{padding:12px 8px;font-size:11px;line-height:1.7;color:var(--text-secondary)}
+.ppe-empty{padding:32px 14px;text-align:center;color:var(--text-secondary);font-size:13px;border:1px dashed var(--border);border-radius:var(--radius-md)}
+/* 清单视图 */
+.ppe-table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--bg-card)}
+table.ppe-table{width:100%;border-collapse:collapse;font-size:12px;min-width:720px}
+.ppe-table th{background:var(--bg-page);text-align:left;padding:9px 11px;color:var(--text-secondary);font-weight:600;font-size:11.5px;border-bottom:1px solid var(--border);white-space:nowrap}
+.ppe-table td{padding:9px 11px;border-bottom:1px solid var(--border-light);vertical-align:top;line-height:1.6}
+.ppe-table tr:last-child td{border-bottom:0}
+.ppe-table tbody tr{cursor:pointer}
+.ppe-table tbody tr:hover{background:var(--brand-red-light)}
+.ppe-table tbody tr.active{background:var(--brand-red-light);box-shadow:inset 3px 0 0 var(--brand-red)}
+.ppe-table .ppe-code{font-family:var(--font-mono,monospace);color:var(--tech-blue-deep);font-size:11px;white-space:nowrap}
+.ppe-table .ppe-name{font-weight:600;white-space:nowrap}
+.ppe-table .ppe-std{font-family:var(--font-mono,monospace);font-size:10.5px;color:var(--text-secondary)}
+/* 详情面板 */
+.ppe-detail{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden}
+.ppe-detail-hd{padding:13px 15px;background:var(--bg-page);border-bottom:1px solid var(--border)}
+.ppe-detail-hd .ppe-dcode{display:inline-block;font-family:var(--font-mono,monospace);font-size:11px;font-weight:700;color:#fff;background:var(--brand-red);border-radius:var(--radius-sm);padding:2px 8px;margin-bottom:7px}
+.ppe-detail-hd h2{margin:0;font-size:16px;line-height:1.45;color:var(--text-primary);word-break:break-word}
+.ppe-detail-hd .ppe-dtype{margin:6px 0 0;font-size:11.5px;color:var(--tech-blue-deep);line-height:1.6}
+.ppe-detail-body{padding:13px 15px}
+.ppe-kv{margin-bottom:13px}
+.ppe-kv:last-child{margin-bottom:0}
+.ppe-kv > label{display:block;font-size:10.5px;font-weight:700;letter-spacing:.4px;color:var(--text-tertiary);margin-bottom:5px}
+.ppe-kv p{margin:0;font-size:12px;line-height:1.8;color:var(--text-primary);word-break:break-word}
+.ppe-stdbox{display:inline-block;font-family:var(--font-mono,monospace);font-size:11.5px;font-weight:700;color:var(--brand-red-deep);background:var(--brand-red-light);border-radius:var(--radius-sm);padding:3px 9px;line-height:1.6}
+.ppe-stdbox.pending{color:var(--warn-deep);background:var(--warn-soft)}
+.ppe-cfg{margin-bottom:9px}
+.ppe-cfg:last-child{margin-bottom:0}
+.ppe-cfg b{display:block;font-size:11.5px;color:var(--text-primary);margin-bottom:4px}
+.ppe-cfg .ppe-opts{display:flex;flex-wrap:wrap;gap:5px}
+.ppe-cfg .ppe-opt{font-size:10.5px;line-height:1.6;color:var(--text-secondary);background:var(--bg-page);border:1px solid var(--border-light);border-radius:999px;padding:1px 8px}
+.ppe-limit{background:var(--warn-soft);border-left:3px solid var(--warn-orange);border-radius:var(--radius-sm);padding:8px 10px;font-size:11.5px;line-height:1.75;color:var(--warn-deep)}
+.ppe-hint{font-size:11px;line-height:1.8;color:var(--text-secondary);background:var(--tech-blue-soft);border-radius:var(--radius-sm);padding:8px 10px}
+.ppe-ph{text-align:center;padding:44px 18px;color:var(--text-secondary);font-size:12.5px;line-height:1.9}
+.ppe-ph i{display:block;font-size:26px;color:var(--border);margin-bottom:10px}
+.ppe-foot-note{margin-top:var(--space-block);font-size:11px;line-height:1.8;color:var(--text-tertiary)}
+@media (max-width:1240px){
+  .ppe-layout{grid-template-columns:minmax(0,1fr) 320px}
+  .ppe-branches{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ppe-branches:before{display:none}
+}
+@media (max-width:900px){
+  .ppe-layout{grid-template-columns:1fr}
+  .ppe-right{position:static}
+  .ppe-detail-body{max-height:none}
+  .ppe-lead{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:600px){
+  .ppe-branches{grid-template-columns:1fr}
+  .ppe-lead{grid-template-columns:1fr;gap:8px}
+  .ppe-branch:before{display:none}
+}
+@media print{
+  .ppe-bar,.ppe-chips,.tab-nav,.ppe-root:after,.ppe-branches:before,.ppe-branch-hd .ppe-caret,.no-print{display:none !important}
+  .ppe-layout{display:block}
+  .ppe-right{position:static;margin-top:14px}
+  .ppe-branches{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ppe-branch.closed .ppe-branch-body{display:block !important}
+  .ppe-branch,.ppe-detail,.ppe-node{break-inside:avoid}
+  .ppe-detail-body{max-height:none;overflow:visible}
+  .tab-panel{display:block !important}
+  .ppe-node.active{background:var(--brand-red-light);color:var(--text-primary)}
+  .ppe-node.active .ppe-ncode{background:var(--tech-blue-soft);color:var(--tech-blue-deep)}
+}
+</style>
+</head>
+<body>
+<div class="breadcrumb"><a href="/sheen-toolbox/"><i class="fa-solid fa-arrow-left"></i> 返回首页</a><span> / PPE 家谱图与选项查询</span></div>
+
+<main class="app-container">
+  <h1 class="page-title">PPE 家谱图与选项查询</h1>
+  <p class="page-subtitle">个体防护装备分类脉络 · 名称 / 类型 / 可选配置一页查看</p>
+
+  <div class="ppe-lead">
+    <div class="ppe-lead-card"><b id="statGroups">9</b><span>防护分类（附录 A 表 A.2，按防护部位划分）</span></div>
+    <div class="ppe-lead-card"><b id="statItems">49</b><span>标准类别编号（第 4 章表 1，含名称与产品标准号）</span></div>
+    <div class="ppe-lead-card"><b id="statCfgs">—</b><span>可选配置维度（本站整理的选型维度）</span></div>
+  </div>
+
+  <div class="warn-bar info"><i class="fa-solid fa-circle-info"></i><span>分类骨架与编号引自 <b>GB 39800.1-2020</b>；「类型」「可选配置」是本站为便于选型整理的维度，<b>不是标准条文</b>，不能替代危害评估与配备决策。</span></div>
+  <details class="fold-note"><summary>数据边界与依据（展开查看）</summary>
+    <p>① 9 类防护分类及编号（TB / YM / TL / HX / FZ / SF / ZB / ZL / QT）来自 GB 39800.1-2020 附录 A 表 A.2；49 个类别编号、类别名称、产品标准号来自第 4 章表 1。防护说明与适用范围为要点转述，本站不存储标准全文。</p>
+    <p>② 「其他防护 QT」在附录 A 表 A.2 中列为第 9 类，但表 1 未列出具体产品类别；具体品种由 GB 39800 各行业分册按作业场景补充，本工具不自行编造。</p>
+    <p>③ FZ-03 职业用防雨服、FZ-10 熔融金属飞溅防护服，标准原文标注产品标准正在制定中，本站以「—」留空并加标记，请以现行有效版本为准。</p>
+    <p>④ 术语口径参考 GB/T 12903-2025。实际配备须先做危害辨识与危害评估，再结合防护部位、防护功能、适用范围、适合性，以及 GB 39800 各行业分册、产品标准和检测报告确定。</p>
+  </details>
+
+  <div class="ppe-bar no-print">
+    <input type="text" id="ppeQ" placeholder="搜索名称 / 编号 / 类型 / 产品标准号 / 适用范围…" aria-label="检索 PPE">
+    <button type="button" class="ppe-btn" id="ppeClear">清空</button>
+    <button type="button" class="ppe-btn" id="ppeExpand">展开全部</button>
+    <button type="button" class="ppe-btn" id="ppeCollapse">收起全部</button>
+    <button type="button" class="ppe-btn" id="ppePrint">打印</button>
+  </div>
+  <div class="ppe-chips no-print" id="ppeChips" role="group" aria-label="按防护分类筛选"></div>
+
+  <div class="tab-nav no-print" id="ppeTabs" role="tablist">
+    <button type="button" class="tab-btn active" data-tab="tree" role="tab"><i class="fa-solid fa-sitemap"></i> PPE 家谱图</button>
+    <button type="button" class="tab-btn" data-tab="list" role="tab"><i class="fa-solid fa-table-list"></i> 选项清单</button>
+  </div>
+
+  <div class="ppe-layout">
+    <div class="ppe-left">
+      <div class="tab-panel active" id="panel-tree" role="tabpanel">
+        <div class="ppe-root">
+          <h2><i class="fa-solid fa-shield-halved"></i> 个体防护装备 PPE</h2>
+          <p>按防护部位划分 9 类 · 表 1 收录 49 个类别编号</p>
+        </div>
+        <div class="ppe-branches" id="ppeTree"></div>
+        <div class="ppe-empty" id="ppeTreeEmpty" hidden>没有匹配的 PPE，试试更换关键词或点「全部」。</div>
+      </div>
+
+      <div class="tab-panel" id="panel-list" role="tabpanel">
+        <div class="ppe-table-wrap" id="ppeTableWrap">
+          <table class="ppe-table">
+            <thead><tr><th>类别编号</th><th>名称</th><th>类型</th><th>产品标准号</th><th>可选配置维度</th></tr></thead>
+            <tbody id="ppeTableBody"></tbody>
+          </table>
+        </div>
+        <div class="ppe-empty" id="ppeTableEmpty" hidden>没有匹配的 PPE，试试更换关键词或点「全部」。</div>
+        <p class="ppe-foot-note">点击任意一行，右侧即显示该 PPE 的完整选项（名称 / 类型 / 可选配置 / 产品标准 / 适用范围 / 不适用情形）。</p>
+      </div>
+    </div>
+
+    <aside class="ppe-right" id="ppeDetail" aria-live="polite">
+      <div class="ppe-detail">
+        <div class="ppe-ph"><i class="fa-solid fa-hand-pointer"></i>点击左侧任一 PPE<br>查看名称、类型与可选配置</div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<section class="tool-meta" data-toolmeta="sheen">
+  <div id="metaHeads"></div>
+  <div class="tm-line">
+    <span class="tm-dt"><i>工具数据版本</i><span class="tm-dt-val">ppe-1.0</span></span>
+    <span class="tm-sep">·</span>
+    <span class="tm-dt"><i>录入日期</i><span class="tm-dt-val">2026-11-11</span></span>
+    <span class="tm-sep">·</span>
+    <span class="tm-dt"><i>标准发布 / 实施</i><span class="tm-dt-val">2020-12-24 / 2022-01-01（GB 39800.1-2020）</span></span>
+  </div>
+</section>
+
+<footer class="sheen-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="/sheen-toolbox/assets/sheen-logo.png" alt="SHEEN" class="sheen-logo-sm">
+      <span>SHEEN Toolbox · 工业安全工具集</span>
+    </div>
+    <div class="footer-meta"><span>分类编号与产品标准号引自 GB 39800.1-2020，标准原文版权归原发布机构所有，本站仅作分类检索与学习参考 · 选型维度为本站整理，非标准条文</span></div>
+  </div>
+</footer>
+<div class="print-time" id="printTime"></div>
+
+<script src="/sheen-toolbox/ppe-selector/data.js"></script>
+<script>
+(function () {
+  'use strict';
+  var D = window.SHEEN_PPE_DATA;
+  var state = { q: '', group: '', open: {}, sel: null, tab: 'tree' };
+  D.groups.forEach(function (g) { state.open[g.code] = true; });
+
+  function qs(s) { return document.querySelector(s); }
+  function esc(v) {
+    return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function norm(v) { return String(v == null ? '' : v).toLowerCase().replace(/\s+/g, ''); }
+
+  /* ---------- 检索 ---------- */
+  function haystack(it) {
+    var g = D.groupOf(it.group);
+    var cfgText = (it.cfgs || []).map(function (c) { return c.k + c.v.join(''); }).join('');
+    return norm([it.code, it.name, it.std, it.type, it.desc, it.scope, it.limit, it.hints,
+                 g ? g.code + g.name + g.desc : '', cfgText].join(''));
+  }
+  function visible() {
+    var q = norm(state.q);
+    return D.items.filter(function (it) {
+      if (state.group && it.group !== state.group) return false;
+      if (q && haystack(it).indexOf(q) < 0) return false;
+      return true;
+    });
+  }
+  function visibleGroupCount(code) {
+    return visible().filter(function (it) { return it.group === code; }).length;
+  }
+
+  /* ---------- 顶部统计与分类芯片 ---------- */
+  function renderStats() {
+    var cfgs = 0;
+    D.items.forEach(function (it) { cfgs += it.cfgs.length; });
+    qs('#statGroups').textContent = D.groups.length;
+    qs('#statItems').textContent = D.items.length;
+    qs('#statCfgs').textContent = cfgs;
+  }
+  function renderChips() {
+    var html = '<button type="button" class="ppe-chip' + (state.group === '' ? ' active' : '') +
+      '" data-group="" aria-pressed="' + (state.group === '' ? 'true' : 'false') + '">全部<i>' + D.items.length + '</i></button>';
+    D.groups.forEach(function (g) {
+      var n = D.byGroup[g.code].length;
+      html += '<button type="button" class="ppe-chip' + (state.group === g.code ? ' active' : '') +
+        '" data-group="' + g.code + '" aria-pressed="' + (state.group === g.code ? 'true' : 'false') +
+        '" title="' + esc(g.name) + '">' + esc(g.code + ' ' + g.name) + '<i>' + n + '</i></button>';
+    });
+    qs('#ppeChips').innerHTML = html;
+  }
+
+  /* ---------- 家谱图 ---------- */
+  function renderTree() {
+    var list = visible();
+    var byG = {};
+    list.forEach(function (it) { (byG[it.group] = byG[it.group] || []).push(it); });
+    var searching = !!(norm(state.q) || state.group);
+    var html = '';
+    D.groups.forEach(function (g) {
+      if (state.group && state.group !== g.code) return;
+      var arr = byG[g.code] || [];
+      /* 搜索时自动展开命中组；QT 无条目时保留分支以说明标准口径 */
+      if (searching && arr.length === 0) return;
+      var closed = !state.open[g.code] && !searching;
+      html += '<section class="ppe-branch' + (closed ? ' closed' : '') + '" data-group="' + g.code + '">' +
+        '<button type="button" class="ppe-branch-hd" data-toggle="' + g.code + '" aria-expanded="' + (!closed) + '">' +
+          '<span class="ppe-gicon"><i class="fa-solid ' + g.icon + '"></i></span>' +
+          '<span class="ppe-gtxt"><b>' + esc(g.name) + '</b><small>' + esc(g.code) + ' · ' + arr.length + ' 项</small></span>' +
+          '<span class="ppe-caret"><i class="fa-solid fa-chevron-down"></i></span>' +
+        '</button><div class="ppe-branch-body">';
+      if (!arr.length) {
+        html += '<div class="ppe-gempty">' + esc(g.desc) + '</div>';
+      } else {
+        arr.forEach(function (it) {
+          html += '<button type="button" class="ppe-node' + (state.sel === it.code ? ' active' : '') +
+            '" data-code="' + it.code + '" aria-pressed="' + (state.sel === it.code ? 'true' : 'false') +
+            '" title="' + esc(it.type) + '">' +
+            '<span class="ppe-ncode">' + esc(it.code) + '</span>' +
+            '<span class="ppe-nname">' + esc(it.name) + '</span>' +
+            (it.pending ? '<span class="ppe-nmark">标准制定中</span>' : '') +
+          '</button>';
+        });
+      }
+      html += '</div></section>';
+    });
+    qs('#ppeTree').innerHTML = html;
+    qs('#ppeTreeEmpty').hidden = list.length > 0;
+  }
+
+  /* ---------- 选项清单 ---------- */
+  function renderTable() {
+    var list = visible();
+    qs('#ppeTableBody').innerHTML = list.map(function (it) {
+      return '<tr data-code="' + it.code + '" class="' + (state.sel === it.code ? 'active' : '') + '">' +
+        '<td class="ppe-code">' + esc(it.code) + '</td>' +
+        '<td class="ppe-name">' + esc(it.name) + '</td>' +
+        '<td>' + esc(it.type) + '</td>' +
+        '<td class="ppe-std">' + esc(it.std) + (it.pending ? ' <span title="标准原文标注产品标准正在制定中">*</span>' : '') + '</td>' +
+        '<td>' + esc(it.cfgs.map(function (c) { return c.k; }).join(' · ')) + '</td>' +
+      '</tr>';
+    }).join('');
+    qs('#ppeTableWrap').hidden = list.length === 0;
+    qs('#ppeTableEmpty').hidden = list.length > 0;
+  }
+
+  /* ---------- 详情面板：名称 / 类型 / 可选配置 ---------- */
+  function renderDetail() {
+    var host = qs('#ppeDetail');
+    if (!state.sel || !D.byCode[state.sel]) {
+      host.innerHTML = '<div class="ppe-detail"><div class="ppe-ph"><i class="fa-solid fa-hand-pointer"></i>点击左侧任一 PPE<br>查看名称、类型与可选配置</div></div>';
+      return;
+    }
+    var it = D.byCode[state.sel];
+    var g = D.groupOf(it.group);
+    var h = '<div class="ppe-detail">' +
+      '<div class="ppe-detail-hd">' +
+        '<span class="ppe-dcode">' + esc(it.code) + '</span>' +
+        '<h2>' + esc(it.name) + '</h2>' +
+        '<p class="ppe-dtype"><i class="fa-solid ' + g.icon + '"></i> ' + esc(g.name) + '（' + esc(g.code) + '）</p>' +
+        '<p class="ppe-dtype">类型：' + esc(it.type) + '</p>' +
+      '</div><div class="ppe-detail-body">' +
+      '<div class="ppe-kv"><label>可选配置（' + it.cfgs.length + ' 组选型维度 · 非标准条文）</label>';
+    it.cfgs.forEach(function (c) {
+      h += '<div class="ppe-cfg"><b>' + esc(c.k) + '</b><div class="ppe-opts">' +
+        c.v.map(function (v) { return '<span class="ppe-opt">' + esc(v) + '</span>'; }).join('') +
+      '</div></div>';
+    });
+    h += '</div>' +
+      '<div class="ppe-kv"><label>产品标准号</label><span class="ppe-stdbox' + (it.pending ? ' pending' : '') + '">' + esc(it.std) + '</span>' +
+        (it.pending ? '<p style="margin-top:6px;font-size:11px;color:var(--text-tertiary)">标准原文标注该装备的产品标准正在制定中，请以现行有效版本为准。</p>' : '') + '</div>' +
+      '<div class="ppe-kv"><label>防护装备说明（要点转述）</label><p>' + esc(it.desc) + '</p></div>' +
+      '<div class="ppe-kv"><label>参考适用范围（要点转述）</label><p>' + esc(it.scope) + '</p></div>';
+    if (it.limit) {
+      h += '<div class="ppe-kv"><label>不适用情形</label><div class="ppe-limit">' + esc(it.limit) + '</div></div>';
+    }
+    if (it.hints) h += '<div class="ppe-kv"><label>选用提示</label><div class="ppe-hint">' + esc(it.hints) + '</div></div>';
+    h += '<div class="ppe-kv"><label>数据来源</label><p style="font-size:11px;color:var(--text-tertiary)">GB 39800.1-2020 表 1 · ' + esc(it.code) +
+      '；类型与可选配置为本站整理，实际配备以危害评估、产品标准与检测报告为准。</p></div>';
+    h += '</div></div>';
+    host.innerHTML = h;
+  }
+
+  function renderAll() { renderTree(); renderTable(); renderDetail(); }
+
+  function select(code) {
+    if (!D.byCode[code]) return;
+    state.sel = code;
+    renderTree(); renderTable(); renderDetail();
+  }
+
+  /* ---------- Tab ---------- */
+  function showTab(name) {
+    state.tab = name;
+    var bs = document.querySelectorAll('#ppeTabs .tab-btn');
+    for (var i = 0; i < bs.length; i++) bs[i].classList.toggle('active', bs[i].getAttribute('data-tab') === name);
+    var ps = document.querySelectorAll('.tab-panel');
+    for (var j = 0; j < ps.length; j++) ps[j].classList.toggle('active', ps[j].id === 'panel-' + name);
+    try { localStorage.setItem('sheen_ppe_tab', name); } catch (e) {}
+  }
+
+  /* ---------- 标准抬头 ---------- */
+  function renderStandards() {
+    qs('#metaHeads').innerHTML = D.standards.map(function (s) {
+      return '<div class="tm-head"><span class="tm-std-code">' + esc(s.code) + '</span>' +
+        '<span class="tm-std-name">' + esc(s.title) + ' · ' + esc(s.role) + '</span></div>';
+    }).join('');
+    var v = D.validate();
+    if (!v.ok && window.console) console.warn('[PPE] 数据一致性校验未通过：' + v.errors.join('；'));
+  }
+
+  /* ---------- 事件 ---------- */
+  qs('#ppeQ').addEventListener('input', function () { state.q = this.value; renderAll(); });
+  qs('#ppeClear').addEventListener('click', function () {
+    state.q = ''; state.group = ''; qs('#ppeQ').value = ''; renderChips(); renderAll();
+  });
+  qs('#ppeExpand').addEventListener('click', function () {
+    D.groups.forEach(function (g) { state.open[g.code] = true; }); renderTree();
+  });
+  qs('#ppeCollapse').addEventListener('click', function () {
+    D.groups.forEach(function (g) { state.open[g.code] = false; }); renderTree();
+  });
+  qs('#ppePrint').addEventListener('click', function () { window.print(); });
+  qs('#ppeChips').addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('[data-group]') : null;
+    if (!b) return;
+    state.group = b.getAttribute('data-group');
+    renderChips(); renderAll();
+  });
+  qs('#ppeTree').addEventListener('click', function (e) {
+    var t = e.target.closest ? e.target.closest('[data-toggle]') : null;
+    if (t) {
+      var g = t.getAttribute('data-toggle');
+      state.open[g] = !state.open[g];
+      renderTree();
+      return;
+    }
+    var n = e.target.closest ? e.target.closest('[data-code]') : null;
+    if (n) select(n.getAttribute('data-code'));
+  });
+  qs('#ppeTableBody').addEventListener('click', function (e) {
+    var r = e.target.closest ? e.target.closest('[data-code]') : null;
+    if (r) select(r.getAttribute('data-code'));
+  });
+  (function () {
+    var bs = document.querySelectorAll('#ppeTabs .tab-btn');
+    for (var i = 0; i < bs.length; i++) {
+      bs[i].addEventListener('click', function () { showTab(this.getAttribute('data-tab')); });
+    }
+  })();
+
+  /* ---------- 启动 ---------- */
+  function stampCN() {
+    var d = new Date(Date.now() + 8 * 3600000).toISOString();
+    var node = qs('#printTime');
+    if (node) node.textContent = '打印时间：' + d.slice(0, 10) + ' ' + d.slice(11, 19) + '（UTC+8）';
+  }
+  renderStandards();
+  renderStats();
+  renderChips();
+  renderAll();
+  stampCN();
+  try {
+    var t = localStorage.getItem('sheen_ppe_tab');
+    if (t === 'tree' || t === 'list') showTab(t);
+  } catch (e) {}
+  /* AI 工具路由深链：?q= 预填检索词，?code= 直接定位到某个 PPE */
+  try {
+    var sp = new URLSearchParams(location.search);
+    var q = sp.get('q'), c = sp.get('code');
+    if (q) { state.q = q.slice(0, 60); qs('#ppeQ').value = state.q; }
+    if (c && D.byCode[c]) state.sel = c;
+    if (q || c) { renderAll(); if (c) showTab('tree'); }
+  } catch (e) {}
+  window.__PPE_READY__ = true;
+  window.__PPE__ = {
+    data: D,
+    state: state,
+    select: select,
+    showTab: showTab,
+    setQuery: function (v) { state.q = v; qs('#ppeQ').value = v; renderAll(); },
+    setGroup: function (g) { state.group = g; renderChips(); renderAll(); },
+    renderAll: renderAll,
+    visible: visible,
+    counts: function () { return D.validate().counts; }
+  };
+})();
+</script>
+<script src="/sheen-toolbox/assets/i18n.js"></script>
+<script src="/sheen-toolbox/assets/share.js"></script>
+</body>
+</html>
