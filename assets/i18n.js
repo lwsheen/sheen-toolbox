@@ -16,6 +16,7 @@
 
   /* ---------- 1. 各工具英文标题/简介（与首页 I18N 词典同源） ---------- */
   var PAGE_TITLES = {
+    'ppe-selector': { t: 'PPE Family Tree & Options', d: '9 categories · 49 standard codes · configs' },
     'fire-safety-signs': { t: 'Fire Safety Signs & Evacuation Plan', d: 'Sign lookup · 3D installation view · plan editor' },
     'pssr-checklist': { t: 'PSSR Pre-Startup Safety Review Checklist', d: 'Enhanced multi-industry checklist' },
     'eyewash': { t: 'Eyewash Parameters & Checklist', d: 'GB 38144-2025 lookup + on-site inspection' },
